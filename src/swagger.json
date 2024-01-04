@@ -34,7 +34,7 @@
         },
         "responses": {
           "201": {
-            "description": "created user",
+            "description": "created user info",
             "content": {
               "application/json": {
                 "schema": {
@@ -62,13 +62,85 @@
             "name": "returns",
             "text": [
               {
-                "text": "created user",
+                "text": "created user info",
                 "kind": "text"
               }
             ]
           }
         ],
         "x-nestia-method": "POST"
+      },
+      "patch": {
+        "tags": [
+          "1 user"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "UpdateUserDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartialPickUserEntityemailname"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "updated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartialPickUserEntityemailname"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "1-2 update user",
+        "description": "1-2 update user.",
+        "x-nestia-namespace": "users.patchUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "1 user",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "dto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateUserDto",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "updated user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
       }
     },
     "/competition": {
@@ -92,6 +164,60 @@
         "x-nestia-jsDocTags": [],
         "x-nestia-method": "GET"
       }
+    },
+    "/auth/kakao": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthSnsLoginDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "acessToken & refreshToken",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "1-1 auth sns login",
+        "description": "1-1 auth sns login.",
+        "x-nestia-namespace": "auth.kakao.kakaoLogin",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "auth",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "acessToken & refreshToken",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
     }
   },
   "components": {
@@ -99,8 +225,101 @@
       "CreateUserDto": {
         "type": "object",
         "properties": {
+          "snsId": {
+            "description": "SNS ID. 소셜 로그인을 위한 고유 식별자입니다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "snsProvider": {
+            "description": "SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ]
+          },
+          "role": {
+            "description": "사용자 역할. 사용자의 접근 권한을 나타냅니다.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TMPUSER"
+            ]
+          },
+          "email": {
+            "description": "사용자 이메일 주소.",
+            "x-typia-jsDocTags": [
+              {
+                "name": "minLength",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "maxLength",
+                "text": [
+                  {
+                    "text": "150",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 1,
+            "x-typia-typeTags": [
+              {
+                "target": "string",
+                "name": "MinLength<1>",
+                "kind": "minLength",
+                "value": 1,
+                "validate": "1 <= $input.length",
+                "exclusive": true
+              },
+              {
+                "target": "string",
+                "name": "MaxLength<150>",
+                "kind": "maxLength",
+                "value": 150,
+                "validate": "$input.length <= 150",
+                "exclusive": true
+              },
+              {
+                "target": "string",
+                "name": "Format<\"email\">",
+                "kind": "format",
+                "value": "email",
+                "validate": "/^(([^<>()[\\]\\.,;:\\s@\\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\\"]+)*)|(\\\".+\\\"))@(([^<>()[\\]\\.,;:\\s@\\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\\"]{2,})$/i.test($input)",
+                "exclusive": true
+              }
+            ]
+          },
           "name": {
-            "description": "user name.",
+            "description": "사용자 이름.",
             "x-typia-jsDocTags": [
               {
                 "name": "minLength",
@@ -144,10 +363,33 @@
                 "exclusive": true
               }
             ]
-          },
+          }
+        },
+        "nullable": false,
+        "required": [
+          "snsId",
+          "snsProvider",
+          "role",
+          "email",
+          "name"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "PartialPickUserEntityemailname": {
+        "type": "object",
+        "properties": {
           "email": {
-            "description": "user email.",
+            "description": "사용자 이메일 주소.",
             "x-typia-jsDocTags": [
+              {
+                "name": "minLength",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
               {
                 "name": "maxLength",
                 "text": [
@@ -167,12 +409,21 @@
                 ]
               }
             ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
+            "x-typia-required": false,
+            "x-typia-optional": true,
             "type": "string",
             "format": "email",
             "maxLength": 150,
+            "minLength": 1,
             "x-typia-typeTags": [
+              {
+                "target": "string",
+                "name": "MinLength<1>",
+                "kind": "minLength",
+                "value": 1,
+                "validate": "1 <= $input.length",
+                "exclusive": true
+              },
               {
                 "target": "string",
                 "name": "MaxLength<150>",
@@ -190,12 +441,71 @@
                 "exclusive": true
               }
             ]
+          },
+          "name": {
+            "description": "사용자 이름.",
+            "x-typia-jsDocTags": [
+              {
+                "name": "minLength",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "maxLength",
+                "text": [
+                  {
+                    "text": "150",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 1,
+            "x-typia-typeTags": [
+              {
+                "target": "string",
+                "name": "MinLength<1>",
+                "kind": "minLength",
+                "value": 1,
+                "validate": "1 <= $input.length",
+                "exclusive": true
+              },
+              {
+                "target": "string",
+                "name": "MaxLength<150>",
+                "kind": "maxLength",
+                "value": 150,
+                "validate": "$input.length <= 150",
+                "exclusive": true
+              }
+            ]
+          }
+        },
+        "nullable": false,
+        "description": "Make all properties in T optional",
+        "x-typia-jsDocTags": []
+      },
+      "AuthSnsLoginDto": {
+        "type": "object",
+        "properties": {
+          "snsAuthCode": {
+            "description": "authCode.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
           }
         },
         "nullable": false,
         "required": [
-          "name",
-          "email"
+          "snsAuthCode"
         ],
         "x-typia-jsDocTags": []
       }

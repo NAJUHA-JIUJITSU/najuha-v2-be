@@ -8,7 +8,7 @@ import type { IConnection, Primitive } from '@nestia/fetcher';
 import { PlainFetcher } from '@nestia/fetcher/lib/PlainFetcher';
 import typia from 'typia';
 
-import type { CreateUserDto } from '../../../user/dto/create-user.dto';
+import type { CreateUserDto } from '../../../users/dto/create-user.dto';
 import { NestiaSimulator } from '../../utils/NestiaSimulator';
 
 /**

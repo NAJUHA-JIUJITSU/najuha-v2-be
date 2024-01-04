@@ -1,12 +1,12 @@
 import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * 1-1 create user.
@@ -16,7 +16,7 @@ export class UserController {
    */
   @TypedRoute.Post()
   postUser(@TypedBody() dto: CreateUserDto): Promise<CreateUserDto> {
-    return this.userService.createUser(dto);
+    return this.usersService.createUser(dto);
   }
 
   /**

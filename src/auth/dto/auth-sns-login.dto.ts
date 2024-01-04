@@ -3,5 +3,5 @@ export class AuthSnsLoginDto {
    * authCode.
    *
    */
-  authCode: string;
+  snsAuthCode: string;
 }

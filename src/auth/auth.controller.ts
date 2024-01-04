@@ -13,9 +13,10 @@ export class AuthController {
    * @tag auth
    * @return acessToken & refreshToken
    */
-  @TypedRoute.Post('snsLogin')
-  snsLogin(@TypedBody() dto: AuthSnsLoginDto): Promise<any> {
-    console.log(dto);
-    return this.authService.snsLogin(dto);
+  @TypedRoute.Post('kakao')
+  kakaoLogin(
+    @TypedBody() dto: AuthSnsLoginDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.authService.kakaoLogin(dto);
   }
 }

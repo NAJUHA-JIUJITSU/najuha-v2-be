@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import * as Apis from '../src/api/functional';
-import { CreateUserDto } from '../src/user/dto/create-user.dto';
+import { CreateUserDto } from '../src/users/dto/create-user.dto';
 import typia from 'typia';
 // import assert from 'assert';
 
