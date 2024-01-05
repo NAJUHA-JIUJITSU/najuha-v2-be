@@ -28,4 +28,10 @@ export class UsersService {
   ): Promise<UserEntity | null> {
     return await this.userRepository.findOne({ where: { snsId, snsProvider } });
   }
+
+  async findUserById(userId: number): Promise<UserEntity | null> {
+    const ret = await this.userRepository.findOne({ where: { id: userId } });
+    console.log(ret);
+    return ret;
+  }
 }

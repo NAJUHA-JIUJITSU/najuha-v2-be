@@ -18,8 +18,8 @@ export class UserEntity {
   /**
    * SNS ID. 소셜 로그인을 위한 고유 식별자입니다.
    */
-  @Column('bigint')
-  snsId: number;
+  @Column('varchar', { length: 20 })
+  snsId: string;
 
   /**
    * SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다.
@@ -54,15 +54,6 @@ export class UserEntity {
   name: string;
 
   /**
-   * 사용자 별명.
-   *
-   * @minLength 1
-   * @maxLength 150
-   */
-  @Column({ length: 150, nullable: true })
-  nickname: string;
-
-  /**
    * 사용자 전화번호.
    *
    */
@@ -70,22 +61,31 @@ export class UserEntity {
   phoneNumber: string;
 
   /**
+   * 사용자 별명.
+   *
+   * @minLength 1
+   * @maxLength 150
+   */
+  @Column('varchar', { length: 150, nullable: true })
+  nickname: string | null;
+
+  /**
    * 사용자 성별.
    */
-  @Column({ nullable: true })
-  gender: string;
+  @Column('varchar', { nullable: true })
+  gender: string | null;
 
   /**
    * 사용자 벨트(경력 또는 등급을 나타내는 필드).
    */
-  @Column({ nullable: true })
-  belt: string;
+  @Column('varchar', { nullable: true })
+  belt: string | null;
 
   /**
    * 사용자 체중.
    */
   @Column('float', { nullable: true })
-  weight: number;
+  weight: number | null;
 
   // /**
   //  * 사용자 프로필 이미지 URL 키.

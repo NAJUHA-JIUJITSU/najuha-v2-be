@@ -1,5 +1,5 @@
 export interface KakaoUserResponseData {
-  id: number;
+  id: string;
   connected_at: string;
   properties: {
     nickname: string;

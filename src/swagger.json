@@ -80,7 +80,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PartialPickUserEntityemailname"
+                "$ref": "#/components/schemas/UpdateUserDto"
               }
             }
           },
@@ -93,7 +93,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PartialPickUserEntityemailname"
+                  "$ref": "#/components/schemas/UpdateUserDto"
                 }
               }
             },
@@ -143,25 +143,75 @@
         "x-nestia-method": "PATCH"
       }
     },
-    "/competition": {
+    "/users/{userId}": {
       "get": {
-        "tags": [],
-        "parameters": [],
+        "tags": [
+          "1 user"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "user id",
+            "required": true
+          }
+        ],
         "responses": {
-          "200": {
-            "description": "",
+          "201": {
+            "description": "updated user",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/ResponseFormany"
                 }
               }
             },
             "x-nestia-encrypted": false
           }
         },
-        "x-nestia-namespace": "competition.getHello",
-        "x-nestia-jsDocTags": [],
+        "summary": "1-3 get user",
+        "description": "1-3 get user.",
+        "x-nestia-namespace": "users.getUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "1 user",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "userId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "user id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "updated user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
         "x-nestia-method": "GET"
       }
     },
@@ -187,7 +237,9 @@
             "description": "acessToken & refreshToken",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/KakaoLogin"
+                }
               }
             },
             "x-nestia-encrypted": false
@@ -243,15 +295,50 @@
               "APPLE"
             ]
           },
-          "role": {
-            "description": "사용자 역할. 사용자의 접근 권한을 나타냅니다.",
+          "name": {
+            "description": "사용자 이름.",
+            "x-typia-jsDocTags": [
+              {
+                "name": "minLength",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "maxLength",
+                "text": [
+                  {
+                    "text": "150",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
             "x-typia-required": true,
             "x-typia-optional": false,
             "type": "string",
-            "enum": [
-              "ADMIN",
-              "USER",
-              "TMPUSER"
+            "maxLength": 150,
+            "minLength": 1,
+            "x-typia-typeTags": [
+              {
+                "target": "string",
+                "name": "MinLength<1>",
+                "kind": "minLength",
+                "value": 1,
+                "validate": "1 <= $input.length",
+                "exclusive": true
+              },
+              {
+                "target": "string",
+                "name": "MaxLength<150>",
+                "kind": "maxLength",
+                "value": 150,
+                "validate": "$input.length <= 150",
+                "exclusive": true
+              }
             ]
           },
           "email": {
@@ -318,66 +405,84 @@
               }
             ]
           },
-          "name": {
-            "description": "사용자 이름.",
-            "x-typia-jsDocTags": [
-              {
-                "name": "minLength",
-                "text": [
-                  {
-                    "text": "1",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "maxLength",
-                "text": [
-                  {
-                    "text": "150",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
+          "phoneNumber": {
+            "description": "사용자 전화번호.",
             "x-typia-required": true,
             "x-typia-optional": false,
-            "type": "string",
-            "maxLength": 150,
-            "minLength": 1,
-            "x-typia-typeTags": [
-              {
-                "target": "string",
-                "name": "MinLength<1>",
-                "kind": "minLength",
-                "value": 1,
-                "validate": "1 <= $input.length",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "MaxLength<150>",
-                "kind": "maxLength",
-                "value": 150,
-                "validate": "$input.length <= 150",
-                "exclusive": true
-              }
-            ]
+            "type": "string"
+          },
+          "gender": {
+            "description": "사용자 성별.",
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
           }
         },
         "nullable": false,
         "required": [
           "snsId",
           "snsProvider",
-          "role",
+          "name",
           "email",
-          "name"
+          "phoneNumber",
+          "gender"
         ],
         "x-typia-jsDocTags": []
       },
-      "PartialPickUserEntityemailname": {
+      "UpdateUserDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number"
+          },
+          "name": {
+            "description": "사용자 이름.",
+            "x-typia-jsDocTags": [
+              {
+                "name": "minLength",
+                "text": [
+                  {
+                    "text": "1",
+                    "kind": "text"
+                  }
+                ]
+              },
+              {
+                "name": "maxLength",
+                "text": [
+                  {
+                    "text": "150",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 1,
+            "x-typia-typeTags": [
+              {
+                "target": "string",
+                "name": "MinLength<1>",
+                "kind": "minLength",
+                "value": 1,
+                "validate": "1 <= $input.length",
+                "exclusive": true
+              },
+              {
+                "target": "string",
+                "name": "MaxLength<150>",
+                "kind": "maxLength",
+                "value": 150,
+                "validate": "$input.length <= 150",
+                "exclusive": true
+              }
+            ]
+          },
           "email": {
             "description": "사용자 이메일 주소.",
             "x-typia-jsDocTags": [
@@ -442,8 +547,20 @@
               }
             ]
           },
-          "name": {
-            "description": "사용자 이름.",
+          "phoneNumber": {
+            "description": "사용자 전화번호.",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "gender": {
+            "description": "사용자 성별.",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "nickname": {
+            "description": "사용자 별명.",
             "x-typia-jsDocTags": [
               {
                 "name": "minLength",
@@ -487,10 +604,56 @@
                 "exclusive": true
               }
             ]
+          },
+          "belt": {
+            "description": "사용자 벨트(경력 또는 등급을 나타내는 필드).",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "string"
+          },
+          "weight": {
+            "description": "사용자 체중.",
+            "x-typia-required": false,
+            "x-typia-optional": true,
+            "type": "number"
           }
         },
         "nullable": false,
-        "description": "Make all properties in T optional",
+        "required": [
+          "id"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "ResponseFormany": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "x-typia-required": true,
+            "x-typia-optional": false
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ],
         "x-typia-jsDocTags": []
       },
       "AuthSnsLoginDto": {
@@ -506,6 +669,27 @@
         "nullable": false,
         "required": [
           "snsAuthCode"
+        ],
+        "x-typia-jsDocTags": []
+      },
+      "KakaoLogin": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          },
+          "refreshToken": {
+            "x-typia-required": true,
+            "x-typia-optional": false,
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "accessToken",
+          "refreshToken"
         ],
         "x-typia-jsDocTags": []
       }

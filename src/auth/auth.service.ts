@@ -29,14 +29,14 @@ export class AuthService {
   ): Promise<{ accessToken: string; refreshToken: string }> {
     const sns_auth_code = authSnsLoginDto.snsAuthCode;
     const snsAccessToken = await this.getKakaoAccessToken(sns_auth_code);
-    const kakaoUserData = await this.getKakaoUserInfo(snsAccessToken);
+    const kakaoUserResponseData = await this.getKakaoUserInfo(snsAccessToken);
 
     let user = await this.usersService.findUserBySnsIdaAndSnsProvider(
-      kakaoUserData.id,
+      kakaoUserResponseData.id,
       'KAKAO',
     );
 
-    if (!user) user = await this.createKakaoUser(kakaoUserData);
+    if (!user) user = await this.createKakaoUser(kakaoUserResponseData);
 
     return {
       accessToken: this.createAccessToken(user.id, user.role),
@@ -77,20 +77,22 @@ export class AuthService {
         },
       }),
     );
+    response.data.id = response.data.id.toString();
     return response.data;
   }
 
   private async createKakaoUser(
-    kakaoUserData: KakaoUserResponseData,
+    kakaoUserResponseData: KakaoUserResponseData,
   ): Promise<UserEntity> {
     const createUserDto: CreateUserDto = {
-      snsId: kakaoUserData.id,
+      snsId: kakaoUserResponseData.id,
       snsProvider: 'KAKAO',
-      name: kakaoUserData.kakao_account.name,
-      email: kakaoUserData.kakao_account.email,
-      phoneNumber: kakaoUserData.kakao_account.phone_number,
-      gender: kakaoUserData.kakao_account.gender,
+      name: kakaoUserResponseData.kakao_account.name,
+      email: kakaoUserResponseData.kakao_account.email,
+      phoneNumber: kakaoUserResponseData.kakao_account.phone_number,
+      gender: kakaoUserResponseData.kakao_account.gender,
     };
+    console.log(createUserDto);
 
     return await this.usersService.createUser(createUserDto);
   }
