@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { NOT_FOUND_USER } from './users.controller';
+import typia from 'typia';
 
 @Injectable()
 export class UsersService {
@@ -29,8 +31,14 @@ export class UsersService {
     return await this.userRepository.findOne({ where: { snsId, snsProvider } });
   }
 
-  async findUserById(userId: number): Promise<UserEntity | null> {
+  async findUserById(userId: number): Promise<UserEntity> {
     const ret = await this.userRepository.findOne({ where: { id: userId } });
+    if (!ret) {
+      throw new HttpException(
+        typia.random<NOT_FOUND_USER>(),
+        HttpStatus.CONFLICT,
+      );
+    }
     console.log(ret);
     return ret;
   }

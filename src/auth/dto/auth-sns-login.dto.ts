@@ -1,4 +1,4 @@
-export class AuthSnsLoginDto {
+export interface AuthSnsLoginDto {
   /**
    * authCode.
    *

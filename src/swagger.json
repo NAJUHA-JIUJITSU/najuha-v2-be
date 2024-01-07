@@ -160,16 +160,33 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "updated user",
+          "200": {
+            "description": "user info",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormany"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ResponseFormUserEntity"
+                    },
+                    {
+                      "$ref": "#/components/schemas/NOT_FOUND_USER"
+                    }
+                  ]
                 }
               }
             },
             "x-nestia-encrypted": false
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFoundException"
+                }
+              }
+            }
           }
         },
         "summary": "1-3 get user",
@@ -206,7 +223,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "updated user",
+                "text": "user info",
                 "kind": "text"
               }
             ]
@@ -234,7 +251,7 @@
         },
         "responses": {
           "201": {
-            "description": "acessToken & refreshToken",
+            "description": "KakaoLogin",
             "content": {
               "application/json": {
                 "schema": {
@@ -262,7 +279,7 @@
             "name": "return",
             "text": [
               {
-                "text": "acessToken & refreshToken",
+                "text": "KakaoLogin",
                 "kind": "text"
               }
             ]
@@ -278,144 +295,40 @@
         "type": "object",
         "properties": {
           "snsId": {
-            "description": "SNS ID. 소셜 로그인을 위한 고유 식별자입니다.",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "number"
+            "type": "string",
+            "description": "SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
           },
           "snsProvider": {
-            "description": "SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다.",
-            "x-typia-required": true,
-            "x-typia-optional": false,
             "type": "string",
             "enum": [
               "KAKAO",
               "NAVER",
               "GOOGLE",
               "APPLE"
-            ]
+            ],
+            "description": "SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
           },
           "name": {
-            "description": "사용자 이름.",
-            "x-typia-jsDocTags": [
-              {
-                "name": "minLength",
-                "text": [
-                  {
-                    "text": "1",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "maxLength",
-                "text": [
-                  {
-                    "text": "150",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
             "type": "string",
             "maxLength": 150,
             "minLength": 1,
-            "x-typia-typeTags": [
-              {
-                "target": "string",
-                "name": "MinLength<1>",
-                "kind": "minLength",
-                "value": 1,
-                "validate": "1 <= $input.length",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "MaxLength<150>",
-                "kind": "maxLength",
-                "value": 150,
-                "validate": "$input.length <= 150",
-                "exclusive": true
-              }
-            ]
+            "description": "사용자 이름."
           },
           "email": {
-            "description": "사용자 이메일 주소.",
-            "x-typia-jsDocTags": [
-              {
-                "name": "minLength",
-                "text": [
-                  {
-                    "text": "1",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "maxLength",
-                "text": [
-                  {
-                    "text": "150",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "email",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": true,
-            "x-typia-optional": false,
             "type": "string",
             "format": "email",
             "maxLength": 150,
             "minLength": 1,
-            "x-typia-typeTags": [
-              {
-                "target": "string",
-                "name": "MinLength<1>",
-                "kind": "minLength",
-                "value": 1,
-                "validate": "1 <= $input.length",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "MaxLength<150>",
-                "kind": "maxLength",
-                "value": 150,
-                "validate": "$input.length <= 150",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "Format<\"email\">",
-                "kind": "format",
-                "value": "email",
-                "validate": "/^(([^<>()[\\]\\.,;:\\s@\\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\\"]+)*)|(\\\".+\\\"))@(([^<>()[\\]\\.,;:\\s@\\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\\"]{2,})$/i.test($input)",
-                "exclusive": true
-              }
-            ]
+            "description": "사용자 이메일 주소."
           },
           "phoneNumber": {
-            "description": "사용자 전화번호.",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
+            "type": "string",
+            "description": "사용자 전화번호."
           },
           "gender": {
-            "description": "사용자 성별.",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "사용자 성별."
           }
         },
         "nullable": false,
@@ -426,226 +339,91 @@
           "email",
           "phoneNumber",
           "gender"
-        ],
-        "x-typia-jsDocTags": []
+        ]
       },
       "UpdateUserDto": {
         "type": "object",
         "properties": {
           "id": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
             "type": "number"
           },
           "name": {
-            "description": "사용자 이름.",
-            "x-typia-jsDocTags": [
-              {
-                "name": "minLength",
-                "text": [
-                  {
-                    "text": "1",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "maxLength",
-                "text": [
-                  {
-                    "text": "150",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": false,
-            "x-typia-optional": true,
             "type": "string",
             "maxLength": 150,
             "minLength": 1,
-            "x-typia-typeTags": [
-              {
-                "target": "string",
-                "name": "MinLength<1>",
-                "kind": "minLength",
-                "value": 1,
-                "validate": "1 <= $input.length",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "MaxLength<150>",
-                "kind": "maxLength",
-                "value": 150,
-                "validate": "$input.length <= 150",
-                "exclusive": true
-              }
-            ]
+            "description": "사용자 이름."
           },
           "email": {
-            "description": "사용자 이메일 주소.",
-            "x-typia-jsDocTags": [
-              {
-                "name": "minLength",
-                "text": [
-                  {
-                    "text": "1",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "maxLength",
-                "text": [
-                  {
-                    "text": "150",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "email",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": false,
-            "x-typia-optional": true,
             "type": "string",
             "format": "email",
             "maxLength": 150,
             "minLength": 1,
-            "x-typia-typeTags": [
-              {
-                "target": "string",
-                "name": "MinLength<1>",
-                "kind": "minLength",
-                "value": 1,
-                "validate": "1 <= $input.length",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "MaxLength<150>",
-                "kind": "maxLength",
-                "value": 150,
-                "validate": "$input.length <= 150",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "Format<\"email\">",
-                "kind": "format",
-                "value": "email",
-                "validate": "/^(([^<>()[\\]\\.,;:\\s@\\\"]+(\\.[^<>()[\\]\\.,;:\\s@\\\"]+)*)|(\\\".+\\\"))@(([^<>()[\\]\\.,;:\\s@\\\"]+\\.)+[^<>()[\\]\\.,;:\\s@\\\"]{2,})$/i.test($input)",
-                "exclusive": true
-              }
-            ]
+            "description": "사용자 이메일 주소."
           },
           "phoneNumber": {
-            "description": "사용자 전화번호.",
-            "x-typia-required": false,
-            "x-typia-optional": true,
-            "type": "string"
+            "type": "string",
+            "description": "사용자 전화번호."
           },
           "gender": {
-            "description": "사용자 성별.",
-            "x-typia-required": false,
-            "x-typia-optional": true,
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "사용자 성별."
           },
           "nickname": {
-            "description": "사용자 별명.",
-            "x-typia-jsDocTags": [
-              {
-                "name": "minLength",
-                "text": [
-                  {
-                    "text": "1",
-                    "kind": "text"
-                  }
-                ]
-              },
-              {
-                "name": "maxLength",
-                "text": [
-                  {
-                    "text": "150",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "x-typia-required": false,
-            "x-typia-optional": true,
             "type": "string",
             "maxLength": 150,
             "minLength": 1,
-            "x-typia-typeTags": [
-              {
-                "target": "string",
-                "name": "MinLength<1>",
-                "kind": "minLength",
-                "value": 1,
-                "validate": "1 <= $input.length",
-                "exclusive": true
-              },
-              {
-                "target": "string",
-                "name": "MaxLength<150>",
-                "kind": "maxLength",
-                "value": 150,
-                "validate": "$input.length <= 150",
-                "exclusive": true
-              }
-            ]
+            "nullable": true,
+            "description": "사용자 별명."
           },
           "belt": {
-            "description": "사용자 벨트(경력 또는 등급을 나타내는 필드).",
-            "x-typia-required": false,
-            "x-typia-optional": true,
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "사용자 벨트(경력 또는 등급을 나타내는 필드)."
           },
           "weight": {
-            "description": "사용자 체중.",
-            "x-typia-required": false,
-            "x-typia-optional": true,
-            "type": "number"
+            "type": "number",
+            "nullable": true,
+            "description": "사용자 체중."
           }
         },
         "nullable": false,
         "required": [
           "id"
-        ],
-        "x-typia-jsDocTags": []
+        ]
       },
-      "ResponseFormany": {
+      "UserNotFoundException": {
+        "type": "object",
+        "properties": {
+          "cause": {},
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "stack": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "cause",
+          "name",
+          "message"
+        ]
+      },
+      "ResponseFormUserEntity": {
         "type": "object",
         "properties": {
           "result": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "boolean",
-            "enum": [
-              true
-            ]
+            "type": "boolean"
           },
           "code": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "number",
-            "enum": [
-              1000
-            ]
+            "type": "number"
           },
           "data": {
-            "x-typia-required": true,
-            "x-typia-optional": false
+            "$ref": "#/components/schemas/UserEntity"
           }
         },
         "nullable": false,
@@ -653,36 +431,163 @@
           "result",
           "code",
           "data"
-        ],
-        "x-typia-jsDocTags": []
+        ]
+      },
+      "UserEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "사용자 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "snsId": {
+            "type": "string",
+            "description": "SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+          },
+          "snsProvider": {
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
+            "description": "SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ],
+            "description": "사용자 역할. 사용자의 접근 권한을 나타냅니다."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 1,
+            "description": "사용자 이메일 주소."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 1,
+            "description": "사용자 이름."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "사용자 전화번호."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 1,
+            "nullable": true,
+            "description": "사용자 별명."
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true,
+            "description": "사용자 성별."
+          },
+          "belt": {
+            "type": "string",
+            "nullable": true,
+            "description": "사용자 벨트(경력 또는 등급을 나타내는 필드)."
+          },
+          "weight": {
+            "type": "number",
+            "nullable": true,
+            "description": "사용자 체중."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "사용자 상태. 활성, 비활성 등을 나타냅니다."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "snsId",
+          "snsProvider",
+          "role",
+          "email",
+          "name",
+          "phoneNumber",
+          "nickname",
+          "gender",
+          "belt",
+          "weight",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "NOT_FOUND_USER": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              4001
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "존재하지 않는 유저입니다."
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
       },
       "AuthSnsLoginDto": {
         "type": "object",
         "properties": {
           "snsAuthCode": {
-            "description": "authCode.",
-            "x-typia-required": true,
-            "x-typia-optional": false,
-            "type": "string"
+            "type": "string",
+            "description": "authCode."
           }
         },
         "nullable": false,
         "required": [
           "snsAuthCode"
-        ],
-        "x-typia-jsDocTags": []
+        ]
       },
       "KakaoLogin": {
         "type": "object",
         "properties": {
           "accessToken": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
             "type": "string"
           },
           "refreshToken": {
-            "x-typia-required": true,
-            "x-typia-optional": false,
             "type": "string"
           }
         },
@@ -690,8 +595,7 @@
         "required": [
           "accessToken",
           "refreshToken"
-        ],
-        "x-typia-jsDocTags": []
+        ]
       }
     },
     "securitySchemes": {

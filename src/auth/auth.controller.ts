@@ -4,7 +4,7 @@ import { TypedBody, TypedRoute } from '@nestia/core';
 
 import { AuthSnsLoginDto } from './dto/auth-sns-login.dto';
 
-interface KakaoLogin {
+export interface KakaoLogin {
   accessToken: string;
   refreshToken: string;
 }
@@ -17,7 +17,7 @@ export class AuthController {
    * 1-1 auth sns login.
    *
    * @tag auth
-   * @return acessToken & refreshToken
+   * @return KakaoLogin
    */
   @TypedRoute.Post('kakao')
   kakaoLogin(@TypedBody() dto: AuthSnsLoginDto): Promise<KakaoLogin> {

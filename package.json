@@ -38,7 +38,7 @@
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^5.0.0",
     "typeorm": "^0.3.17",
-    "typia": "^5.3.5"
+    "typia": "^5.3.8"
   },
   "devDependencies": {
     "@nestia/sdk": "^2.4.3",
