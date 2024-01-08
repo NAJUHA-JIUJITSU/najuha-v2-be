@@ -170,6 +170,12 @@
                       "$ref": "#/components/schemas/ResponseFormUserEntity"
                     },
                     {
+                      "$ref": "#/components/schemas/INTERNAL_SERVER_ERROR"
+                    },
+                    {
+                      "$ref": "#/components/schemas/EXIST_USER"
+                    },
+                    {
                       "$ref": "#/components/schemas/NOT_FOUND_USER"
                     }
                   ]
@@ -177,16 +183,6 @@
               }
             },
             "x-nestia-encrypted": false
-          },
-          "404": {
-            "description": "User not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserNotFoundException"
-                }
-              }
-            }
           }
         },
         "summary": "1-3 get user",
@@ -392,27 +388,6 @@
           "id"
         ]
       },
-      "UserNotFoundException": {
-        "type": "object",
-        "properties": {
-          "cause": {},
-          "name": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "stack": {
-            "type": "string"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "cause",
-          "name",
-          "message"
-        ]
-      },
       "ResponseFormUserEntity": {
         "type": "object",
         "properties": {
@@ -539,6 +514,78 @@
           "updatedAt"
         ]
       },
+      "INTERNAL_SERVER_ERROR": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              500
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              500
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "Internal Server Error"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ]
+      },
+      "EXIST_USER": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              400
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              4002
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "이미 존재하는 유저입니다."
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ]
+      },
       "NOT_FOUND_USER": {
         "type": "object",
         "properties": {
@@ -546,6 +593,12 @@
             "type": "boolean",
             "enum": [
               false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              404
             ]
           },
           "code": {
@@ -564,6 +617,7 @@
         "nullable": false,
         "required": [
           "result",
+          "status",
           "code",
           "data"
         ]

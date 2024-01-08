@@ -8,10 +8,11 @@ import type { IConnection, Primitive } from "@nestia/fetcher";
 import { PlainFetcher } from "@nestia/fetcher/lib/PlainFetcher";
 import typia from "typia";
 
+import type { NOT_FOUND_USER } from "../../../common/error";
+import type { ResponseForm } from "../../../common/response";
 import type { CreateUserDto } from "../../../users/dto/create-user.dto";
 import type { UpdateUserDto } from "../../../users/dto/update-user.dto";
 import type { UserEntity } from "../../../users/entities/user.entity";
-import type { NOT_FOUND_USER, ResponseForm } from "../../../users/users.controller";
 import { NestiaSimulator } from "../../utils/NestiaSimulator";
 
 /**
@@ -175,7 +176,6 @@ export namespace patchUser {
  * @tag 1 user
  * @param userId user id
  * @returns user info
- * @throws 4001 NOT_FOUND_USER
  * 
  * @controller UsersController.getUser
  * @path GET /users/:userId
@@ -199,7 +199,7 @@ export async function getUser(
           );
 }
 export namespace getUser {
-    export type Output = Primitive<NOT_FOUND_USER | ResponseForm<UserEntity>>;
+    export type Output = Primitive<ResponseForm<UserEntity> | NOT_FOUND_USER>;
 
     export const METADATA = {
         method: "GET",
@@ -215,8 +215,8 @@ export namespace getUser {
     export const path = (userId: number): string => {
         return `/users/${encodeURIComponent(userId ?? "null")}`;
     }
-    export const random = (g?: Partial<typia.IRandomGenerator>): Primitive<NOT_FOUND_USER | ResponseForm<UserEntity>> =>
-        typia.random<Primitive<NOT_FOUND_USER | ResponseForm<UserEntity>>>(g);
+    export const random = (g?: Partial<typia.IRandomGenerator>): Primitive<ResponseForm<UserEntity> | NOT_FOUND_USER> =>
+        typia.random<Primitive<ResponseForm<UserEntity> | NOT_FOUND_USER>>(g);
     export const simulate = async (
         connection: IConnection,
         userId: number,

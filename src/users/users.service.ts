@@ -1,10 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { NOT_FOUND_USER } from './users.controller';
+import { NOT_FOUND_USER } from '../common/error';
+import { HttpExceptionFactory } from '..//common/error';
 import typia from 'typia';
 
 @Injectable()
@@ -31,14 +32,9 @@ export class UsersService {
     return await this.userRepository.findOne({ where: { snsId, snsProvider } });
   }
 
-  async findUserById(userId: number): Promise<UserEntity> {
+  async findUserById(userId: UserEntity['id']): Promise<UserEntity> {
     const ret = await this.userRepository.findOne({ where: { id: userId } });
-    if (!ret) {
-      throw new HttpException(
-        typia.random<NOT_FOUND_USER>(),
-        HttpStatus.CONFLICT,
-      );
-    }
+    if (!ret) throw HttpExceptionFactory.create(typia.random<NOT_FOUND_USER>());
     console.log(ret);
     return ret;
   }

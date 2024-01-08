@@ -24,7 +24,7 @@ describe('E2E user test', () => {
     await app.close();
   });
 
-  describe('POST /user', () => {
+  describe('POST /users', () => {
     describe('회원가입시 name 타입 검증', () => {
       it('만약 0자인 경우 ', async () => {
         const userInfo = typia.random<CreateUserDto>();
@@ -38,6 +38,31 @@ describe('E2E user test', () => {
         console.log(res);
 
         // assert.notStrictEqual(res.status, 201);
+      });
+    });
+  });
+
+  describe('get /users', () => {
+    describe('유저 조회', () => {
+      it('유저 조회 성공', async () => {
+        const userId = 1;
+        const res = await Apis.users.getUser(
+          {
+            host,
+          },
+          userId,
+        );
+        console.log(res);
+      });
+      it('유저 조회 실패', async () => {
+        const userId = 999;
+        const res = await Apis.users.getUser(
+          {
+            host,
+          },
+          userId,
+        );
+        console.log(res);
       });
     });
   });

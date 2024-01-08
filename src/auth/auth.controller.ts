@@ -1,7 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { TypedBody, TypedRoute } from '@nestia/core';
-
 import { AuthSnsLoginDto } from './dto/auth-sns-login.dto';
 
 export interface KakaoLogin {

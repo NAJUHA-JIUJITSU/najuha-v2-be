@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { AuthSnsLoginDto } from './dto/auth-sns-login.dto';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
-import { UsersService } from 'src/users/users.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { JwtService } from '@nestjs/jwt';
+import { AuthSnsLoginDto } from './dto/auth-sns-login.dto';
+import { UsersService } from '..//users/users.service';
+import { CreateUserDto } from '..//users/dto/create-user.dto';
 import { KakaoUserResponseData } from './types/kakao-user-response-data.type';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from '..//users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
