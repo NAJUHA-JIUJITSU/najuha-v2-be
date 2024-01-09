@@ -1,21 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerSetting } from './configs/swagger-setting';
-import { HttpErrorFilter } from './common/exeption-filter';
+import { SwaggerSetting } from './swagger/swagger-setting';
 import * as cors from 'cors';
-// import { WinstonLogger } from './common/winston-logger.service';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // const app = await NestFactory.create(AppModule, {
-  //   logger: new WinstonLogger(),
-  // });
+
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   app.use(cors()); // TODO: cors 설정 옵션 확인하기
 
   SwaggerSetting(app);
 
-  app.useGlobalFilters(new HttpErrorFilter());
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+  console.log(`${process.env.NODE_ENV}.env`);
+
+  console.log('process.env.DB_HOST', process.env.DB_HOST);
 
   await app.listen(3000);
 }

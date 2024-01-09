@@ -35,7 +35,6 @@ export class UsersController {
    */
   @TypedRoute.Patch()
   patchUser(@TypedBody() dto: UpdateUserDto): any {
-    console.log('--------------------------', dto);
     return this.usersService.updateUser(dto);
   }
 

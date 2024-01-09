@@ -20,10 +20,11 @@ export class AuthService {
 
   refreshTokens: string[] = []; // TODO: redis로 변경
 
-  // TODO: 에러처리
-  // TODO: logging
-  // TODO: 다른 SNS 로그인 추가 및 모듈화 (passport 사용)
+  // TODO: 에러처리 *
+  // TODO: logging *
   // TODO: test code 작성
+  // TODO: 다른 SNS 로그인 추가 및 모듈화 (passport 사용)
+  // TODO: refresh token redis로 관리
   async kakaoLogin(
     authSnsLoginDto: AuthSnsLoginDto,
   ): Promise<{ accessToken: string; refreshToken: string }> {

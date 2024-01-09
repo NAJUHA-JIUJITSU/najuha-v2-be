@@ -92,9 +92,7 @@
             "description": "updated user",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateUserDto"
-                }
+                "schema": {}
               }
             },
             "x-nestia-encrypted": false
@@ -512,7 +510,8 @@
           "status",
           "createdAt",
           "updatedAt"
-        ]
+        ],
+        "description": "사용자 엔티티."
       },
       "INTERNAL_SERVER_ERROR": {
         "type": "object",

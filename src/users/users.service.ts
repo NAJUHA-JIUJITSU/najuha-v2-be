@@ -4,9 +4,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { NOT_FOUND_USER } from '../common/error';
-import { HttpExceptionFactory } from '..//common/error';
-import typia from 'typia';
+import { ExpectedError } from '../common/error';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +20,8 @@ export class UsersService {
 
   async updateUser(dto: UpdateUserDto): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: dto.id } });
+    // dto.email =
+    //   'ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt';
     return await this.userRepository.save({ ...user, ...dto });
   }
 
@@ -34,8 +34,8 @@ export class UsersService {
 
   async findUserById(userId: UserEntity['id']): Promise<UserEntity> {
     const ret = await this.userRepository.findOne({ where: { id: userId } });
-    if (!ret) throw HttpExceptionFactory.create(typia.random<NOT_FOUND_USER>());
-    console.log(ret);
+    // if (!ret) throw new Error('not found user');
+    if (!ret) throw new ExpectedError('NOT_FOUND_USER');
     return ret;
   }
 }
