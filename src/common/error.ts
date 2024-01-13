@@ -8,6 +8,13 @@ export interface ErrorForm {
   data: string;
 }
 
+export interface KAKAO_USER_INFO_ERROR extends ErrorForm {
+  result: false;
+  status: HttpStatus.INTERNAL_SERVER_ERROR; // Choose an appropriate status code
+  code: 5001; // Choose a unique code for this error
+  data: '카카오 사용자 정보를 가져오는 중 오류가 발생했습니다.';
+}
+
 export interface NOT_FOUND_USER extends ErrorForm {
   result: false;
   status: HttpStatus.NOT_FOUND;
@@ -33,6 +40,7 @@ const errorMap = {
   NOT_FOUND_USER: typia.random<NOT_FOUND_USER>(),
   EXIST_USER: typia.random<EXIST_USER>(),
   INTERNAL_SERVER_ERROR: typia.random<INTERNAL_SERVER_ERROR>(),
+  KAKAO_USER_INFO_ERROR: typia.random<KAKAO_USER_INFO_ERROR>(),
 };
 
 export class ExpectedError extends HttpException {

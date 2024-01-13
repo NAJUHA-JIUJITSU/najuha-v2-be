@@ -34,6 +34,7 @@ export class CoustomExceptionFilter implements ExceptionFilter {
           req.body,
         )} ${JSON.stringify(responseBody)}`,
       );
+
     } else {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
       this.logger.error(
@@ -41,6 +42,7 @@ export class CoustomExceptionFilter implements ExceptionFilter {
           req.body,
         )} ${JSON.stringify(exception)}`,
       );
+      
       responseBody = typia.random<INTERNAL_SERVER_ERROR>();
     }
 

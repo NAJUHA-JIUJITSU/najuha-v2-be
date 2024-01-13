@@ -36,8 +36,10 @@ export class AuthService {
       kakaoUserResponseData.id,
       'KAKAO',
     );
-
-    if (!user) user = await this.createKakaoUser(kakaoUserResponseData);
+    
+    if (!user) { 
+      user = await this.createKakaoUser(kakaoUserResponseData);
+    }
 
     return {
       accessToken: this.createAccessToken(user.id, user.role),

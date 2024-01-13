@@ -4,6 +4,7 @@ import { SwaggerSetting } from './swagger/swagger-setting';
 import * as cors from 'cors';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
