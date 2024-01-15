@@ -20,6 +20,7 @@ export class AuthController {
    */
   @TypedRoute.Post('kakao')
   kakaoLogin(@TypedBody() dto: AuthSnsLoginDto): Promise<KakaoLogin> {
+
     return this.authService.kakaoLogin(dto);
   }
 }

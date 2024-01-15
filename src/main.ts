@@ -4,6 +4,7 @@ import { SwaggerSetting } from './swagger/swagger-setting';
 import * as cors from 'cors';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -18,6 +19,6 @@ async function bootstrap() {
 
   console.log('process.env.DB_HOST', process.env.DB_HOST);
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();

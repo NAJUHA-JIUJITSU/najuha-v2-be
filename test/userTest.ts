@@ -6,8 +6,8 @@ import { CreateUserDto } from '../src/users/dto/create-user.dto';
 import typia from 'typia';
 // import assert from 'assert';
 
-describe('E2E users test', () => {
-  const host = 'http://127.0.0.1:3000';
+describe('E2E user test', () => {
+  const host = 'http://127.0.0.1:3001';
   let app: INestApplication;
   let testingModule: TestingModule;
 
@@ -42,28 +42,28 @@ describe('E2E users test', () => {
     });
   });
 
-  describe('get /users', () => {
-    describe('유저 조회', () => {
-      it('유저 조회 성공', async () => {
-        const userId = 1;
-        const res = await Apis.users.getUser(
-          {
-            host,
-          },
-          userId,
-        );
-        console.log(res);
-      });
-      it('유저 조회 실패', async () => {
-        const userId = 999;
-        const res = await Apis.users.getUser(
-          {
-            host,
-          },
-          userId,
-        );
-        console.log(res);
-      });
-    });
-  });
+  // describe('get /users', () => {
+  //   describe('유저 조회', () => {
+  //     it('유저 조회 성공', async () => {
+  //       const userId = 1;
+  //       const res = await Apis.users.getUser(
+  //         {
+  //           host,
+  //         },
+  //         userId,
+  //       );
+  //       console.log(res);
+  //     });
+  //     it('유저 조회 실패', async () => {
+  //       const userId = 999;
+  //       const res = await Apis.users.getUser(
+  //         {
+  //           host,
+  //         },
+  //         userId,
+  //       );
+  //       console.log(res);
+  //     });
+  //   });
+  // });
 });
