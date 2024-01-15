@@ -1,11 +1,10 @@
-import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
-import { KakaoUserResponseData } from '../src/auth/types/kakao-user-response-data.type';
-import { AuthService } from '../src/auth/auth.service';
-import { UsersService } from '../src/users/users.service';
-import { UserEntity } from '../src/users/entities/user.entity';
+import { AppModule } from '../../src/app.module';
+import { KakaoUserResponseData } from '../../src/auth/types/kakao-user-response-data.type';
+import { AuthService } from '../../src/auth/auth.service';
+import { UsersService } from '../../src/users/users.service';
+import { UserEntity } from '../../src/users/entities/user.entity';
 
 const mockedKakaoUserInfo: KakaoUserResponseData = {
   id: '4400',
@@ -75,7 +74,7 @@ describe('AuthService kakaoLogin', () => {
       .mockResolvedValue('mocked-access-token');
 
     jest
-      .spyOn(authService as any, 'getKakaoUserInfo')
+      .spyOn(authService as any, 'getKakaoUserData')
       .mockResolvedValue(mockedKakaoUserInfo);
 
     const response = await authService.kakaoLogin(dto);
@@ -84,7 +83,7 @@ describe('AuthService kakaoLogin', () => {
       refreshToken: expect.any(String),
     });
 
-    const user = await usersService.findUserBySnsIdaAndSnsProvider(
+    const user = await usersService.findUserBySnsIdAndProvider(
       mockedKakaoUserInfo.id,
       'KAKAO',
     );
@@ -99,7 +98,7 @@ describe('AuthService kakaoLogin', () => {
       .mockResolvedValue('mocked-access-token');
 
     jest
-      .spyOn(authService as any, 'getKakaoUserInfo')
+      .spyOn(authService as any, 'getKakaoUserData')
       .mockResolvedValue(mockedKakaoUserInfo);
 
     jest
@@ -129,7 +128,7 @@ describe('AuthService kakaoLogin', () => {
       });
 
     jest
-      .spyOn(UsersService.prototype, 'findUserBySnsIdaAndSnsProvider')
+      .spyOn(UsersService.prototype, 'findUserBySnsIdAndProvider')
       .mockImplementation((snsId, snsProvider) => {
         const user = fakeDatabase.find(
           (u) => u.snsId === snsId && u.snsProvider === snsProvider,
@@ -143,7 +142,7 @@ describe('AuthService kakaoLogin', () => {
       refreshToken: expect.any(String),
     });
     console.log(response);
-    const user = await usersService.findUserBySnsIdaAndSnsProvider(
+    const user = await usersService.findUserBySnsIdAndProvider(
       mockedKakaoUserInfo.id,
       'KAKAO',
     );

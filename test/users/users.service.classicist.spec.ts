@@ -2,13 +2,13 @@ import typia from 'typia';
 import { Test, TestingModule } from '@nestjs/testing';
 // import { TypeOrmModule } from '@nestjs/typeorm';
 // import { ConfigModule } from '@nestjs/config';
-import { CreateUserDto } from '../src/users/dto/create-user.dto';
-import { UserEntity } from '../src/users/entities/user.entity';
-import { UsersService } from '../src/users/users.service';
+import { CreateUserDto } from '../../src/users/dto/create-user.dto';
+import { UserEntity } from '../../src/users/entities/user.entity';
+import { UsersService } from '../../src/users/users.service';
 // import { typeOrmConfigAsync } from '../src/typeorm.config';
 import { DataSource } from 'typeorm';
-import { ExpectedError } from '../src/common/error';
-import { AppModule } from '../src/app.module';
+import { ExpectedError } from '../../src/common/error';
+import { AppModule } from '../../src/app.module';
 
 describe('Classicist TEST UsersService', () => {
   let module: TestingModule;

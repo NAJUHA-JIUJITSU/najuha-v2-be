@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AuthService } from '../src/auth/auth.service';
-import { AppModule } from '../src/app.module';
+import { AuthService } from '../../src/auth/auth.service';
+import { AppModule } from '../../src/app.module';
 import { KakaoUserResponseData } from 'src/auth/types/kakao-user-response-data.type';
-import { ExpectedError } from '../src/common/error';
-import { UserEntity } from '../src/users/entities/user.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ExpectedError } from '../../src/common/error';
+import { UserEntity } from '../../src/users/entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';
 
@@ -90,7 +89,7 @@ describe('AuthService (e2e)', () => {
     jest
       .spyOn(authService as any, 'getKakaoAccessToken')
       .mockResolvedValue('mocked-access-token');
-    jest.spyOn(authService as any, 'getKakaoUserInfo').mockResolvedValue(data);
+    jest.spyOn(authService as any, 'getKakaoUserData').mockResolvedValue(data);
   };
 
   // 특정 상황에서 유저가 존재하는지 검증하는 함수
@@ -144,7 +143,7 @@ describe('AuthService (e2e)', () => {
       name: 'Mocked User',
       email: 'mocked-user@example.com',
       phoneNumber: '123-456-7890',
-      gender: 'male',
+      gender: 'MALE',
     });
 
     mockKakaoUser();
@@ -168,7 +167,7 @@ describe('AuthService (e2e)', () => {
       .spyOn(authService as any, 'getKakaoAccessToken')
       .mockResolvedValue('mocked-access-token');
     jest
-      .spyOn(authService as any, 'getKakaoUserInfo')
+      .spyOn(authService as any, 'getKakaoUserData')
       .mockRejectedValue(new Error('Invalid snsAuthCode'));
 
     const response = await request(app.getHttpServer())
@@ -182,7 +181,7 @@ describe('AuthService (e2e)', () => {
   it('/auth/kakao (POST) - Kakao 유저 정보 가져오기 실패로 INTERNAL_SERVER_ERROR 응답 확인', async () => {
     mockKakaoUser();
     jest
-      .spyOn(authService as any, 'getKakaoUserInfo')
+      .spyOn(authService as any, 'getKakaoUserData')
       .mockRejectedValue(new ExpectedError('KAKAO_USER_INFO_ERROR'));
 
     const response = await request(app.getHttpServer())
@@ -197,105 +196,3 @@ describe('AuthService (e2e)', () => {
     );
   });
 });
-
-// describe('AuthService (e2e)', () => {
-//     let app: INestApplication;
-//     let authService: AuthService;
-//     let moduleFixture: TestingModule;
-
-//     beforeAll(async () => {
-//       moduleFixture = await Test.createTestingModule({
-//         imports: [
-//             AppModule,
-//           ]
-//         }).compile();
-
-//       app = moduleFixture.createNestApplication();
-//       await app.init();
-
-//       authService = moduleFixture.get<AuthService>(AuthService);
-//     });
-
-//     it('/auth/kakao (POST)', async () => {
-//         // 여기에서 외부 API 호출을 목(mock)으로 대체
-//         jest.
-//         spyOn(authService as any, 'getKakaoAccessToken').
-//         mockResolvedValue('mocked-access-token');
-
-//         jest
-//         .spyOn(authService as any, 'getKakaoUserInfo')
-//         .mockResolvedValue(mockedKakaoUserResponseData);
-
-//         const response = await request(app.getHttpServer())
-//           .post('/auth/kakao')
-//           .send({ snsAuthCode: 'mocked-auth-code' })
-
-//         // 테스트에 필요한 다른 검증 로직 추가
-//         expect(response.status).toBe(201);
-//         expect(response.body.accessToken).toBeDefined();
-//         expect(response.body.refreshToken).toBeDefined();
-
-//         // 테스트 데이터베이스에서 사용자 정보 확인
-//         const userRepository = moduleFixture.get<Repository<UserEntity>>(
-//             getRepositoryToken(UserEntity)
-//           );
-//         const user = await userRepository.findOne({
-//             where: { snsId: 'mocked-user-id', snsProvider: 'KAKAO' },
-//           });
-
-//         // 테스트 데이터베이스에서 확인하는 검증 로직 추가
-//         if (user) {
-//             expect(user.snsId).toBe('mocked-user-id');
-//             expect(user.snsProvider).toBe('KAKAO');
-//         } else {
-//             // user가 null인 경우, 테스트 데이터베이스에 해당 사용자가 존재하지 않는 경우
-//             console.warn('테스트 데이터베이스에 해당 사용자가 존재하지 않습니다.');
-//         }
-//     });
-
-//     it('/auth/kakao (POST) - 사용자 에러 INTERNAL_SERVER_ERROR', async () => {
-//         // 여기에서 외부 API 호출을 목(mock)으로 대체
-//         jest
-//             .spyOn(authService as any, 'getKakaoAccessToken')
-//             .mockResolvedValue('mocked-access-token');
-
-//         // 유효하지 않은 snsAuthCode일 때 에러를 발생시키는 목(mock) 설정
-//         jest
-//             .spyOn(authService as any, 'getKakaoUserInfo')
-//             .mockRejectedValue(new Error('Invalid snsAuthCode'));
-
-//         const response = await request(app.getHttpServer())
-//             .post('/auth/kakao')
-//             .send({ snsAuthCode: 'invalid-auth-code' });
-
-//         // 테스트에 필요한 다른 검증 로직 추가
-//         expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
-//     });
-
-//     it('/auth/kakao (POST) - 개발자 에러 KAKAO_USER_INFO_ERROR', async () => {
-//         // 여기에서 외부 API 호출을 목(mock)으로 대체
-//         jest
-//             .spyOn(authService as any, 'getKakaoAccessToken')
-//             .mockResolvedValue('mocked-access-token');
-
-//         // NOT_FOUND_USER 에러를 발생시키는 목(mock) 설정
-//         jest
-//             .spyOn(authService as any, 'getKakaoUserInfo')
-//             .mockRejectedValue(new ExpectedError('KAKAO_USER_INFO_ERROR'));
-
-//         const response = await request(app.getHttpServer())
-//             .post('/auth/kakao')
-//             .send({ snsAuthCode: 'valid-auth-code' });
-
-//         // 테스트에 필요한 다른 검증 로직 추가
-//         expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
-//         expect(response.body.result).toBeFalsy();
-//         expect(response.body.code).toBe(5001);
-//         expect(response.body.data).toBe('카카오 사용자 정보를 가져오는 중 오류가 발생했습니다.');
-//     });
-
-//     afterAll(async () => {
-//       await app.close();
-//     });
-
-//   });
