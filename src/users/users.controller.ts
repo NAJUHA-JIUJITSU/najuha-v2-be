@@ -5,55 +5,51 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { ResponseForm, createResponseForm } from '../common/response';
-import {
-  EXIST_USER,
-  INTERNAL_SERVER_ERROR,
-  NOT_FOUND_USER,
-} from '../common/error';
+import { NOT_FOUND_USER } from '../common/error';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   /**
-   * 1-1 create user.
+   * 2-1 create user.
    *
-   * @tag 1 user
+   * @tag 2 user
    * @returns created user info
    */
   @TypedRoute.Post()
-  postUser(@TypedBody() dto: CreateUserDto): Promise<CreateUserDto> {
-    return this.usersService.createUser(dto);
+  async postUser(
+    @TypedBody() dto: CreateUserDto,
+  ): Promise<ResponseForm<UserEntity>> {
+    return createResponseForm(await this.usersService.createUser(dto));
   }
 
   /**
-   * 1-2 update user.
+   * 2-2 update user.
    *
-   * @tag 1 user
+   * @tag 2 user
    * @param dto UpdateUserDto
    * @returns updated user
    */
   @TypedRoute.Patch()
-  patchUser(@TypedBody() dto: UpdateUserDto): any {
-    return this.usersService.updateUser(dto);
+  async patchUser(
+    @TypedParam('userId') userId: UserEntity['id'],
+    @TypedBody() dto: UpdateUserDto,
+  ): Promise<ResponseForm<UserEntity> | NOT_FOUND_USER> {
+    return createResponseForm(await this.usersService.updateUser(userId, dto));
   }
 
   /**
-   * 1-3 get user.
+   * 2-3 find user.
    *
-   * @tag 1 user
-   * @param userId user id
-   * @returns user info
+   * @tag 2 user
+   * @param userId userId
+   * @returns user data
    */
   @TypedRoute.Get('/:userId')
   async getUser(
-    @TypedParam('userId') userId: number,
-  ): Promise<
-    | ResponseForm<UserEntity>
-    | NOT_FOUND_USER
-    | EXIST_USER
-    | INTERNAL_SERVER_ERROR
-  > {
+    @TypedParam('userId') userId: UserEntity['id'],
+  ): Promise<ResponseForm<UserEntity | null>> {
     return createResponseForm(await this.usersService.findUserById(userId));
   }
 }

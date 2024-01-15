@@ -18,7 +18,7 @@
     "/users": {
       "post": {
         "tags": [
-          "1 user"
+          "2 user"
         ],
         "parameters": [],
         "requestBody": {
@@ -38,22 +38,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateUserDto"
+                  "$ref": "#/components/schemas/ResponseFormUserEntity"
                 }
               }
             },
             "x-nestia-encrypted": false
           }
         },
-        "summary": "1-1 create user",
-        "description": "1-1 create user.",
+        "summary": "2-1 create user",
+        "description": "2-1 create user.",
         "x-nestia-namespace": "users.postUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "1 user",
+                "text": "2 user",
                 "kind": "text"
               }
             ]
@@ -72,7 +72,7 @@
       },
       "patch": {
         "tags": [
-          "1 user"
+          "2 user"
         ],
         "parameters": [],
         "requestBody": {
@@ -92,21 +92,30 @@
             "description": "updated user",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ResponseFormUserEntity"
+                    },
+                    {
+                      "$ref": "#/components/schemas/NOT_FOUND_USER"
+                    }
+                  ]
+                }
               }
             },
             "x-nestia-encrypted": false
           }
         },
-        "summary": "1-2 update user",
-        "description": "1-2 update user.",
+        "summary": "2-2 update user",
+        "description": "2-2 update user.",
         "x-nestia-namespace": "users.patchUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "1 user",
+                "text": "2 user",
                 "kind": "text"
               }
             ]
@@ -144,7 +153,7 @@
     "/users/{userId}": {
       "get": {
         "tags": [
-          "1 user"
+          "2 user"
         ],
         "parameters": [
           {
@@ -153,45 +162,32 @@
             "schema": {
               "type": "number"
             },
-            "description": "user id",
+            "description": "userId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "user info",
+            "description": "user data",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/ResponseFormUserEntity"
-                    },
-                    {
-                      "$ref": "#/components/schemas/INTERNAL_SERVER_ERROR"
-                    },
-                    {
-                      "$ref": "#/components/schemas/EXIST_USER"
-                    },
-                    {
-                      "$ref": "#/components/schemas/NOT_FOUND_USER"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/ResponseFormUserEntity"
                 }
               }
             },
             "x-nestia-encrypted": false
           }
         },
-        "summary": "1-3 get user",
-        "description": "1-3 get user.",
+        "summary": "2-3 find user",
+        "description": "2-3 find user.",
         "x-nestia-namespace": "users.getUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "1 user",
+                "text": "2 user",
                 "kind": "text"
               }
             ]
@@ -208,7 +204,7 @@
                 "kind": "space"
               },
               {
-                "text": "user id",
+                "text": "userId",
                 "kind": "text"
               }
             ]
@@ -217,7 +213,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "user info",
+                "text": "user data",
                 "kind": "text"
               }
             ]
@@ -333,57 +329,6 @@
           "email",
           "phoneNumber",
           "gender"
-        ]
-      },
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 150,
-            "minLength": 1,
-            "description": "사용자 이름."
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 150,
-            "minLength": 1,
-            "description": "사용자 이메일 주소."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "description": "사용자 전화번호."
-          },
-          "gender": {
-            "type": "string",
-            "nullable": true,
-            "description": "사용자 성별."
-          },
-          "nickname": {
-            "type": "string",
-            "maxLength": 150,
-            "minLength": 1,
-            "nullable": true,
-            "description": "사용자 별명."
-          },
-          "belt": {
-            "type": "string",
-            "nullable": true,
-            "description": "사용자 벨트(경력 또는 등급을 나타내는 필드)."
-          },
-          "weight": {
-            "type": "number",
-            "nullable": true,
-            "description": "사용자 체중."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id"
         ]
       },
       "ResponseFormUserEntity": {
@@ -510,79 +455,57 @@
           "status",
           "createdAt",
           "updatedAt"
-        ],
-        "description": "사용자 엔티티."
-      },
-      "INTERNAL_SERVER_ERROR": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              false
-            ]
-          },
-          "status": {
-            "type": "number",
-            "enum": [
-              500
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              500
-            ]
-          },
-          "data": {
-            "type": "string",
-            "enum": [
-              "Internal Server Error"
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "status",
-          "code",
-          "data"
         ]
       },
-      "EXIST_USER": {
+      "UpdateUserDto": {
         "type": "object",
         "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              false
-            ]
+          "id": {
+            "type": "number"
           },
-          "status": {
-            "type": "number",
-            "enum": [
-              400
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              4002
-            ]
-          },
-          "data": {
+          "name": {
             "type": "string",
-            "enum": [
-              "이미 존재하는 유저입니다."
-            ]
+            "maxLength": 150,
+            "minLength": 1,
+            "description": "사용자 이름."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 150,
+            "minLength": 1,
+            "description": "사용자 이메일 주소."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "사용자 전화번호."
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true,
+            "description": "사용자 성별."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 1,
+            "nullable": true,
+            "description": "사용자 별명."
+          },
+          "belt": {
+            "type": "string",
+            "nullable": true,
+            "description": "사용자 벨트(경력 또는 등급을 나타내는 필드)."
+          },
+          "weight": {
+            "type": "number",
+            "nullable": true,
+            "description": "사용자 체중."
           }
         },
         "nullable": false,
         "required": [
-          "result",
-          "status",
-          "code",
-          "data"
+          "id"
         ]
       },
       "NOT_FOUND_USER": {

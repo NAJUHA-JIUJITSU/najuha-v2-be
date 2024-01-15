@@ -6,7 +6,7 @@ import { CreateUserDto } from '../src/users/dto/create-user.dto';
 import typia from 'typia';
 // import assert from 'assert';
 
-describe('E2E user test', () => {
+describe('E2E users test', () => {
   const host = 'http://127.0.0.1:3000';
   let app: INestApplication;
   let testingModule: TestingModule;

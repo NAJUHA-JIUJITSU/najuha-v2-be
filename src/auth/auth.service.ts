@@ -28,16 +28,20 @@ export class AuthService {
   async kakaoLogin(
     authSnsLoginDto: AuthSnsLoginDto,
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const sns_auth_code = authSnsLoginDto.snsAuthCode;
-    const snsAccessToken = await this.getKakaoAccessToken(sns_auth_code);
-    const kakaoUserResponseData = await this.getKakaoUserInfo(snsAccessToken);
+    const snsAuthCode = authSnsLoginDto.snsAuthCode;
+    const snsAccessToken = await this.getKakaoAccessToken(snsAuthCode);
+    const kakaoUserData = await this.getKakaoUserData(snsAccessToken);
+    console.log(kakaoUserData);
 
-    let user = await this.usersService.findUserBySnsIdaAndSnsProvider(
-      kakaoUserResponseData.id,
+    let user = await this.usersService.findUserBySnsIdAndProvider(
+      kakaoUserData.id,
       'KAKAO',
     );
 
-    if (!user) user = await this.createKakaoUser(kakaoUserResponseData);
+    if (!user) {
+      const createUserDto = this.parseKakaoUserResponseData(kakaoUserData);
+      user = await this.usersService.createUser(createUserDto);
+    }
 
     return {
       accessToken: this.createAccessToken(user.id, user.role),
@@ -62,13 +66,13 @@ export class AuthService {
     );
 
     if (!response.data || !response.data.access_token) {
-      throw new Error('Failed to retrieve access token');
+      throw new Error('Failed to retrieve access token'); // TODO: 에러표준화
     }
 
     return response.data.access_token;
   }
 
-  private async getKakaoUserInfo(
+  private async getKakaoUserData(
     acessToken: string,
   ): Promise<KakaoUserResponseData> {
     const response = await lastValueFrom(
@@ -82,20 +86,18 @@ export class AuthService {
     return response.data;
   }
 
-  private async createKakaoUser(
-    kakaoUserResponseData: KakaoUserResponseData,
-  ): Promise<UserEntity> {
-    const createUserDto: CreateUserDto = {
-      snsId: kakaoUserResponseData.id,
+  private parseKakaoUserResponseData(
+    data: KakaoUserResponseData,
+  ): CreateUserDto {
+    const dto: CreateUserDto = {
+      snsId: data.id,
       snsProvider: 'KAKAO',
-      name: kakaoUserResponseData.kakao_account.name,
-      email: kakaoUserResponseData.kakao_account.email,
-      phoneNumber: kakaoUserResponseData.kakao_account.phone_number,
-      gender: kakaoUserResponseData.kakao_account.gender,
+      name: data.kakao_account.name,
+      email: data.kakao_account.email,
+      phoneNumber: data.kakao_account.phone_number,
+      gender: data.kakao_account.gender === 'male' ? 'MALE' : 'FEMALE',
     };
-    console.log(createUserDto);
-
-    return await this.usersService.createUser(createUserDto);
+    return dto;
   }
 
   private createAccessToken(

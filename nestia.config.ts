@@ -12,9 +12,9 @@ const NESTIA_CONFIG: INestiaConfig = {
     // })
     return app;
   },
-  simulate: true, // supports simulation mode
+  // simulate: true, // supports simulation mode
   output: 'src/api',
-  e2e: 'test',
+  // e2e: 'test',
   distribute: 'packages/api',
   swagger: {
     // output: 'dist/swagger.json',

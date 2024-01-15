@@ -35,6 +35,7 @@ const errorMap = {
   INTERNAL_SERVER_ERROR: typia.random<INTERNAL_SERVER_ERROR>(),
 };
 
+// TODO: custorm Exception 만들기?, 내가 만든 에러가 아닌 경우에 htptException 사용 할수도 있나?
 export class ExpectedError extends HttpException {
   constructor(exceptionType: keyof typeof errorMap) {
     super(errorMap[exceptionType], errorMap[exceptionType].status);

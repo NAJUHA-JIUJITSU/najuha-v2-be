@@ -12,6 +12,4 @@ export interface UpdateUserDto
       | 'belt'
       | 'weight'
     >
-  > {
-  id: UserEntity['id'];
-}
+  > {}

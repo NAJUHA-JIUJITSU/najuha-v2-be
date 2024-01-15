@@ -57,8 +57,8 @@ export class UserEntity {
    * 사용자 전화번호.
    *
    */
-  @Column({ nullable: true })
-  phoneNumber: string;
+  @Column('varchar', { length: 20, nullable: true })
+  phoneNumber: string | null;
 
   /**
    * 사용자 별명.
@@ -73,7 +73,7 @@ export class UserEntity {
    * 사용자 성별.
    */
   @Column('varchar', { nullable: true })
-  gender: string | null;
+  gender: 'MALE' | 'FEMALE' | null;
 
   /**
    * 사용자 벨트(경력 또는 등급을 나타내는 필드).
