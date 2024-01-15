@@ -93,7 +93,6 @@ export class AuthService {
       phoneNumber: kakaoUserResponseData.kakao_account.phone_number,
       gender: kakaoUserResponseData.kakao_account.gender,
     };
-    console.log(createUserDto);
 
     return await this.usersService.createUser(createUserDto);
   }

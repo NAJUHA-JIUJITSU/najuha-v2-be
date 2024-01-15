@@ -18,6 +18,6 @@ async function bootstrap() {
 
   console.log('process.env.DB_HOST', process.env.DB_HOST);
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();
