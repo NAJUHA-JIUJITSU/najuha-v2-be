@@ -18,7 +18,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>();
@@ -26,23 +26,22 @@ export class CustomExceptionFilter implements ExceptionFilter {
     let status: number;
     let responseBody: any;
 
+    const errorInfo = {
+      requestBody: req.body,
+      error: {
+        message: exception.message,
+        name: exception.name,
+        stack: exception.stack,
+      },
+    };
+
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       responseBody = exception.getResponse();
-      this.logger.error(
-        `${req.method} ${req.originalUrl} ${status} ${JSON.stringify(
-          req.body,
-        )} ${JSON.stringify(responseBody)}`,
-      );
-
+      this.logger.error('Http Exception', errorInfo);
     } else {
+      this.logger.error('Internal Server Error', errorInfo);
       status = HttpStatus.INTERNAL_SERVER_ERROR;
-      this.logger.error(
-        `${req.method} ${req.originalUrl} ${status} ${JSON.stringify(
-          req.body,
-        )} ${JSON.stringify(exception)}`,
-      );
-      
       responseBody = typia.random<INTERNAL_SERVER_ERROR>();
     }
 
