@@ -6,17 +6,19 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { ResponseForm, createResponseForm } from '../common/response';
 import { NOT_FOUND_USER } from '../common/error';
+import { SetAuthLevel, AuthLevel } from '../auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   /**
-   * 2-1 create user.
+   * 2-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
    *
    * @tag 2 user
    * @returns created user info
    */
+  @SetAuthLevel(AuthLevel.USER)
   @TypedRoute.Post()
   async postUser(
     @TypedBody() dto: CreateUserDto,
@@ -31,6 +33,7 @@ export class UsersController {
    * @param dto UpdateUserDto
    * @returns updated user
    */
+  @SetAuthLevel(AuthLevel.USER)
   @TypedRoute.Patch('/:userId')
   async patchUser(
     @TypedParam('userId') userId: UserEntity['id'],
@@ -46,6 +49,7 @@ export class UsersController {
    * @param userId userId
    * @returns user data
    */
+  @SetAuthLevel(AuthLevel.USER)
   @TypedRoute.Get('/:userId')
   async getUser(
     @TypedParam('userId') userId: UserEntity['id'],

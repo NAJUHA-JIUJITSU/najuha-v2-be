@@ -235,7 +235,7 @@
     "/auth/snsLogin": {
       "post": {
         "tags": [
-          "auth"
+          "1 auth"
         ],
         "parameters": [],
         "requestBody": {
@@ -270,7 +270,7 @@
             "name": "tag",
             "text": [
               {
-                "text": "auth",
+                "text": "1 auth",
                 "kind": "text"
               }
             ]

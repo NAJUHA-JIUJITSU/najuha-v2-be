@@ -5,11 +5,13 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { LoggerModule } from './logger/logger.module';
-import { APP_FILTER } from '@nestjs/core';
 import { Logger } from 'winston';
 import { CustomExceptionFilter } from './exeption-filters/custom-exception-filter';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { typeOrmConfigAsync } from './typeorm.config';
+import { AuthGuard } from './auth/auth.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -17,6 +19,9 @@ import { typeOrmConfigAsync } from './typeorm.config';
     ConfigModule.forRoot({
       isGlobal: true, // 전체적으로 사용하기 위해
       envFilePath: `.env.${process.env.NODE_ENV}` || '.env.dev',
+    }),
+    JwtModule.register({
+      global: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     UsersModule,
@@ -27,6 +32,10 @@ import { typeOrmConfigAsync } from './typeorm.config';
       provide: APP_FILTER,
       useFactory: (logger: Logger) => new CustomExceptionFilter(logger),
       inject: [WINSTON_MODULE_PROVIDER],
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })

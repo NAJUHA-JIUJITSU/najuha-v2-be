@@ -4,6 +4,7 @@ import { TypedBody, TypedRoute } from '@nestia/core';
 import { SnsAuthDto } from '../sns-auth/dto/sns-auth.dto';
 import { AuthTokensDto } from './dto/auth-tokens.dto';
 import { ResponseForm, createResponseForm } from 'src/common/response';
+import { AuthLevel, SetAuthLevel } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -12,9 +13,10 @@ export class AuthController {
   /**
    * 1-1 auth sns login.
    *
-   * @tag auth
-   * @return access token and refresh token
+   * @tag 1 auth
+   * @return accessToken and refreshToken
    */
+  @SetAuthLevel(AuthLevel.PUBLIC)
   @TypedRoute.Post('snsLogin')
   async snsLogin(
     @TypedBody() dto: SnsAuthDto,
