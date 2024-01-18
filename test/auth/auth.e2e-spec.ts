@@ -3,7 +3,7 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AuthService } from '../../src/auth/auth.service';
 import { AppModule } from '../../src/app.module';
-import { KakaoUserResponseData } from 'src/auth/types/kakao-user-response-data.type';
+import { KakaoUserResponseData } from 'src/sns-auth/types/kakao-user-data.interface';
 import { ExpectedError } from '../../src/common/error';
 import { UserEntity } from '../../src/users/entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';

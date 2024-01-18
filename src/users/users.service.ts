@@ -28,10 +28,12 @@ export class UsersService {
   }
 
   async findUserBySnsIdAndProvider(
+    snsAuthProvider: UserEntity['snsAuthProvider'],
     snsId: UserEntity['snsId'],
-    snsProvider: UserEntity['snsProvider'],
   ): Promise<UserEntity | null> {
-    return await this.userRepository.findOne({ where: { snsId, snsProvider } });
+    return await this.userRepository.findOne({
+      where: { snsId, snsAuthProvider },
+    });
   }
 
   async findUserById(userId: UserEntity['id']): Promise<UserEntity | null> {

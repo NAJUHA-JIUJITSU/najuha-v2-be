@@ -18,14 +18,14 @@ export class UserEntity {
   /**
    * SNS ID. 소셜 로그인을 위한 고유 식별자입니다.
    */
-  @Column('varchar', { length: 20 })
+  @Column('varchar', { length: 128 })
   snsId: string;
 
   /**
    * SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다.
    */
   @Column('varchar', { length: 30 })
-  snsProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';
+  snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE'; //TODO: enum으로 변경
 
   /**
    * 사용자 역할. 사용자의 접근 권한을 나타냅니다.

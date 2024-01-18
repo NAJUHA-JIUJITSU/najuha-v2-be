@@ -1,12 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { TypedBody, TypedRoute } from '@nestia/core';
-import { AuthSnsLoginDto } from './dto/auth-sns-login.dto';
-
-export interface KakaoLogin {
-  accessToken: string;
-  refreshToken: string;
-}
+import { SnsAuthDto } from '../sns-auth/dto/sns-auth.dto';
+import { AuthTokensDto } from './dto/auth-tokens.dto';
+import { ResponseForm, createResponseForm } from 'src/common/response';
 
 @Controller('auth')
 export class AuthController {
@@ -16,11 +13,12 @@ export class AuthController {
    * 1-1 auth sns login.
    *
    * @tag auth
-   * @return KakaoLogin
+   * @return access token and refresh token
    */
-  @TypedRoute.Post('kakao')
-  kakaoLogin(@TypedBody() dto: AuthSnsLoginDto): Promise<KakaoLogin> {
-
-    return this.authService.kakaoLogin(dto);
+  @TypedRoute.Post('snsLogin')
+  async snsLogin(
+    @TypedBody() dto: SnsAuthDto,
+  ): Promise<ResponseForm<AuthTokensDto>> {
+    return createResponseForm(await this.authService.snsLogin(dto));
   }
 }

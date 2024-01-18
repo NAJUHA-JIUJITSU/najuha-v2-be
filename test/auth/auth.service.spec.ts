@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../src/app.module';
-import { KakaoUserResponseData } from '../../src/auth/types/kakao-user-response-data.type';
+import { KakaoUserResponseData } from '../../src/sns-auth/types/kakao-user-data.interface';
 import { AuthService } from '../../src/auth/auth.service';
 import { UsersService } from '../../src/users/users.service';
 import { UserEntity } from '../../src/users/entities/user.entity';

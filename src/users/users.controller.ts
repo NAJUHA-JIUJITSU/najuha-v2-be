@@ -31,7 +31,7 @@ export class UsersController {
    * @param dto UpdateUserDto
    * @returns updated user
    */
-  @TypedRoute.Patch()
+  @TypedRoute.Patch('/:userId')
   async patchUser(
     @TypedParam('userId') userId: UserEntity['id'],
     @TypedBody() dto: UpdateUserDto,

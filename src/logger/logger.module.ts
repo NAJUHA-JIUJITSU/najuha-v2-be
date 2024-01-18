@@ -15,7 +15,8 @@ import {
           format: winston.format.combine(
             winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
             winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike('NJH', {
+            winston.format.errors({ stack: true }),
+            nestWinstonModuleUtilities.format.nestLike('Nest', {
               colors: true,
               prettyPrint: true,
             }),
