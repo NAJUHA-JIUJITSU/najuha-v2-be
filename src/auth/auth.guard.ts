@@ -10,15 +10,15 @@ import { Request } from 'express';
 import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-export enum AuthLevel {
-  ADMIN = 4,
-  USER = 3,
-  TEMPORARY_USER = 2,
+const GUARD_LEVEL_KEY = 'gaurdLevel';
+export enum GuardLevel {
   PUBLIC = 1,
+  TEMPORARY_USER = 2,
+  USER = 3,
+  ADMIN = 4,
 }
-export const AUTH_LEVEL_KEY = 'authLevel';
-export const SetAuthLevel = (authLevel: AuthLevel) =>
-  SetMetadata(AUTH_LEVEL_KEY, authLevel);
+export const SetGuardLevel = (authLevel: GuardLevel) =>
+  SetMetadata(GUARD_LEVEL_KEY, authLevel);
 
 // TODO: 에러 표준화
 @Injectable()
@@ -30,23 +30,29 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredAuthLevel = this.reflector.getAllAndOverride<AuthLevel>(
-      AUTH_LEVEL_KEY,
+    const requiredGuardLevel = this.reflector.getAllAndOverride<GuardLevel>(
+      GUARD_LEVEL_KEY,
       [context.getHandler(), context.getClass()],
     );
-    if (requiredAuthLevel === AuthLevel.PUBLIC) {
-      return true; // PUBLIC 인 경우 accessToken 불필요, 인증 불필요
+    if (requiredGuardLevel === GuardLevel.PUBLIC) {
+      return true;
     }
 
     const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromHeader(request);
     if (!accessToken) throw new UnauthorizedException();
 
-    const payload = await this.jwtService.verifyAsync(accessToken, {
-      secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
-    });
+    let payload: any;
+    // TODO: 에러표준화, 함수로 분리
+    try {
+      payload = await this.jwtService.verifyAsync(accessToken, {
+        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      });
+    } catch (e) {
+      throw new UnauthorizedException();
+    }
     // 사용자의 인증 레벨 검증
-    this.validateAuthLevel(payload.userRole, requiredAuthLevel);
+    this.validateGuardLevel(payload.userRole, requiredGuardLevel);
 
     request['userId'] = payload.userId;
     request['userRole'] = payload.userRole;
@@ -54,11 +60,11 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private validateAuthLevel(
+  private validateGuardLevel(
     userRole: string,
-    requiredAuthLevel: AuthLevel,
+    requiredGuardLevel: GuardLevel,
   ): any {
-    if (requiredAuthLevel > AuthLevel[userRole]) {
+    if (requiredGuardLevel > GuardLevel[userRole]) {
       throw new UnauthorizedException();
     }
   }

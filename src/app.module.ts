@@ -12,6 +12,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { typeOrmConfigAsync } from './typeorm.config';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
       global: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    RedisModule,
     UsersModule,
     AuthModule,
   ],

@@ -18,7 +18,7 @@ export class UserEntity {
   /**
    * SNS ID. 소셜 로그인을 위한 고유 식별자입니다.
    */
-  @Column('varchar', { length: 128 })
+  @Column('varchar', { length: 64 })
   snsId: string;
 
   /**
