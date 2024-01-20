@@ -6,7 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { LoggerModule } from './logger/logger.module';
 import { Logger } from 'winston';
-import { CustomExceptionFilter } from './exeption-filters/custom-exception-filter';
+import { CustomExceptionFilter } from './exception-filters/custom-exception-filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { typeOrmConfigAsync } from './typeorm.config';

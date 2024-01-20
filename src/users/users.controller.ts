@@ -4,9 +4,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { ResponseForm, createResponseForm } from '../common/response';
-import { NOT_FOUND_USER } from '../common/error';
+import { ResponseForm, createResponseForm } from '../response/response';
 import { SetGuardLevel, GuardLevel } from '../auth/auth.guard';
+import { USERS_NOT_FOUND_ERROR } from './users.error';
 
 @Controller('users')
 export class UsersController {
@@ -33,12 +33,12 @@ export class UsersController {
    * @param dto UpdateUserDto
    * @returns updated user
    */
-  @SetGuardLevel(GuardLevel.USER)
+  @SetGuardLevel(GuardLevel.TEMPORARY_USER) //TODO: USER 로 변경
   @TypedRoute.Patch('/:userId')
   async patchUser(
     @TypedParam('userId') userId: UserEntity['id'],
     @TypedBody() dto: UpdateUserDto,
-  ): Promise<ResponseForm<UserEntity> | NOT_FOUND_USER> {
+  ): Promise<ResponseForm<UserEntity> | USERS_NOT_FOUND_ERROR> {
     return createResponseForm(await this.usersService.updateUser(userId, dto));
   }
 

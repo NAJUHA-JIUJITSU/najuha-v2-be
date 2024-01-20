@@ -7,7 +7,7 @@ import { UserEntity } from '../../src/users/entities/user.entity';
 import { UsersService } from '../../src/users/users.service';
 // import { typeOrmConfigAsync } from '../src/typeorm.config';
 import { DataSource } from 'typeorm';
-import { ExpectedError } from '../../src/common/error';
+import { ExpectedError } from '../../src/response/errorResponse';
 import { AppModule } from '../../src/app.module';
 
 describe('Classicist TEST UsersService', () => {

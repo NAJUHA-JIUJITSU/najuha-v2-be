@@ -2,15 +2,17 @@ import {
   ExceptionFilter,
   Catch,
   ArgumentsHost,
-  HttpException,
   Inject,
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { INTERNAL_SERVER_ERROR } from '../common/error';
-import typia from 'typia';
+import {
+  BusinessException,
+  INTERNAL_SERVER_ERROR,
+} from '../response/errorResponse';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import typia from 'typia';
 
 @Catch()
 export class CustomExceptionFilter implements ExceptionFilter {
@@ -27,17 +29,19 @@ export class CustomExceptionFilter implements ExceptionFilter {
     let responseBody: any;
 
     const errorInfo = {
-      requestBody: req.body,
       error: {
         message: exception.message,
         name: exception.name,
         stack: exception.stack,
       },
+      path: req.path,
+      requestBody: req.body,
     };
 
-    if (exception instanceof HttpException) {
+    if (exception instanceof BusinessException) {
       status = exception.getStatus();
       responseBody = exception.getResponse();
+      errorInfo['responseBody'] = responseBody;
       this.logger.error('Http Exception', errorInfo);
     } else {
       this.logger.error('Internal Server Error', errorInfo);
