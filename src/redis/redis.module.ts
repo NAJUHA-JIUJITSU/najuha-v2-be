@@ -2,6 +2,7 @@
 import { Module } from '@nestjs/common';
 import Redis from 'ioredis';
 
+// TODO: 환경변수로 관환
 @Module({
   providers: [
     {
