@@ -3,9 +3,10 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { SnsAuthModule } from '../sns-auth/sns-auth.module';
+import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
-  imports: [UsersModule, SnsAuthModule],
+  imports: [RedisModule, UsersModule, SnsAuthModule],
   controllers: [AuthController],
   providers: [AuthService],
 })

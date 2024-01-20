@@ -1,12 +1,12 @@
 import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
-import { Controller } from '@nestjs/common';
+import { Controller, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { ResponseForm, createResponseForm } from '../common/response';
 import { NOT_FOUND_USER } from '../common/error';
-import { SetAuthLevel, AuthLevel } from '../auth/auth.guard';
+import { SetGuardLevel, GuardLevel } from '../auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -15,10 +15,10 @@ export class UsersController {
   /**
    * 2-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
    *
-   * @tag 2 user
+   * @tag 2 users
    * @returns created user info
    */
-  @SetAuthLevel(AuthLevel.USER)
+  @SetGuardLevel(GuardLevel.USER)
   @TypedRoute.Post()
   async postUser(
     @TypedBody() dto: CreateUserDto,
@@ -29,11 +29,11 @@ export class UsersController {
   /**
    * 2-2 update user.
    *
-   * @tag 2 user
+   * @tag 2 users
    * @param dto UpdateUserDto
    * @returns updated user
    */
-  @SetAuthLevel(AuthLevel.USER)
+  @SetGuardLevel(GuardLevel.USER)
   @TypedRoute.Patch('/:userId')
   async patchUser(
     @TypedParam('userId') userId: UserEntity['id'],
@@ -43,17 +43,15 @@ export class UsersController {
   }
 
   /**
-   * 2-3 find user.
+   * 2-3 get me.
    *
-   * @tag 2 user
-   * @param userId userId
-   * @returns user data
+   * @tag 2 users
+   * @returns me
    */
-  @SetAuthLevel(AuthLevel.USER)
-  @TypedRoute.Get('/:userId')
-  async getUser(
-    @TypedParam('userId') userId: UserEntity['id'],
-  ): Promise<ResponseForm<UserEntity | null>> {
+  @SetGuardLevel(GuardLevel.TEMPORARY_USER) // TODO: USER 로 변경
+  @TypedRoute.Get('/me')
+  async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
+    const userId = req['userId'];
     return createResponseForm(await this.usersService.findUserById(userId));
   }
 }
