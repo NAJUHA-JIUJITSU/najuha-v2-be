@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateUserDto } from '../../src/users/dto/create-user.dto';
 import { UserEntity } from '../../src/users/entities/user.entity';
 import { UsersService } from '../../src/users/users.service';
-import { ExpectedError } from '../../src/response/errorResponse';
+import { ExpectedError } from '../../src/common/response/errorResponse';
 
 describe('Mockist TEST UsersService (Mockist)', () => {
   let service: UsersService;

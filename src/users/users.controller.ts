@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { ResponseForm, createResponseForm } from '../response/response';
+import { ResponseForm, createResponseForm } from '../common/response/response';
 import { SetGuardLevel, GuardLevel } from '../auth/auth.guard';
 import { USERS_NOT_FOUND_ERROR } from './users.error';
 

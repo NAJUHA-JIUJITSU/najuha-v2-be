@@ -8,6 +8,8 @@ import { AuthTokensDto } from './dto/auth-tokens.dto';
 import { SnsAuthService } from 'src/sns-auth/sns-auth.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import Redis from 'ioredis';
+import { BusinessException } from 'src/common/response/errorResponse';
+import { AuthErrorMap } from './auth.error';
 
 // TODO: 에러처리 *
 // TODO: logging *
@@ -16,7 +18,7 @@ import Redis from 'ioredis';
 // TODO: AuthGuard 로 인증처리 *
 // TODO: token refresh 로직 구현 *
 // TODO: refresh token redis로 관리 *
-// TODO: 에러 표준화
+// TODO: 에러 표준화 *
 // TODO: 타입 정의
 // TODO: 토큰 탈취 테스트 작성
 @Injectable()
@@ -54,7 +56,7 @@ export class AuthService {
    * 1) refreshToken이 유효한지 검증
    *  1-1) redis에 저장된 refreshToken과 일치하는지 검증
    *  1-2) refreshToken이 만료 및 위조되었는지 검조
-   *  1-3) 검증 실패시 redis에 userId:refreshToken 삭제 - 유저, 해커 둘다 로그인 해제
+   *  1-3) 검증 실패시 redis에 userId:refreshToken 삭제 - 유저, 해커 둘다 로그인 해제 - 없어도 될듯
    * 2) 검증 성공시 새로운 accessToken, refreshToken 발급
    */
   async refreshToken(refreshTokenDto: RefreshTokenDto): Promise<AuthTokensDto> {
@@ -112,16 +114,14 @@ export class AuthService {
     );
 
     try {
-      if (!storedRefreshToken) throw new Error('refreshToken not found');
-
-      if (storedRefreshToken !== refreshToken)
-        throw new Error('refreshToken not matched');
+      if (!storedRefreshToken || storedRefreshToken !== refreshToken)
+        throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_NOT_FOUND);
 
       this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       });
     } catch (e) {
-      await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
+      // await this.redisClient.del(`userId:${payload.userId}:refreshToken`); // 없어도될듯
       throw new UnauthorizedException(e.message);
     }
 

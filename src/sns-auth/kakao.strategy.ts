@@ -5,6 +5,8 @@ import { lastValueFrom } from 'rxjs';
 import { KakaoUserData } from './types/kakao-user-data.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { SnsAuthStrategy } from './types/sns-auth.strategy.interface';
+import { BusinessException } from 'src/common/response/errorResponse';
+import { SnsAuthErrorMap } from './sns-auth.error';
 
 @Injectable()
 export class KakaoStrategy implements SnsAuthStrategy {
@@ -27,23 +29,26 @@ export class KakaoStrategy implements SnsAuthStrategy {
     const clientId = this.configService.get<string>('KAKAO_REST_API_KEY');
     const redirectUri = this.configService.get<string>('KAKAO_CALLBACK_URL');
 
-    const response = await lastValueFrom(
-      this.httpService.post(
-        'https://kauth.kakao.com/oauth/token',
-        `grant_type=authorization_code&client_id=${clientId}&redirect_uri=${redirectUri}&code=${snsAuthCode}&state=${authState}`,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+    try {
+      const response = await lastValueFrom(
+        this.httpService.post(
+          'https://kauth.kakao.com/oauth/token',
+          `grant_type=authorization_code&client_id=${clientId}&redirect_uri=${redirectUri}&code=${snsAuthCode}&state=${authState}`,
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           },
-        },
-      ),
-    );
+        ),
+      );
 
-    if (!response.data || !response.data.access_token) {
-      throw new Error('Failed to retrieve access token'); // TODO: 에러표준화
+      return response.data.access_token;
+    } catch (e) {
+      throw new BusinessException(
+        SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_ERROR,
+        e.response.data,
+      );
     }
-
-    return response.data.access_token;
   }
 
   private async getUserData(acessToken: string): Promise<KakaoUserData> {
