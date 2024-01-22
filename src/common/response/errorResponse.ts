@@ -5,6 +5,7 @@ export interface ErrorResponse {
   status: HttpStatus;
   code: number;
   data: string;
+  detail?: any;
 }
 
 export interface INTERNAL_SERVER_ERROR extends ErrorResponse {
@@ -15,7 +16,8 @@ export interface INTERNAL_SERVER_ERROR extends ErrorResponse {
 }
 
 export class BusinessException extends HttpException {
-  constructor(errorResponse: ErrorResponse) {
+  constructor(errorResponse: ErrorResponse, errorDetail?: string) {
+    errorResponse.detail = errorDetail;
     super(errorResponse, errorResponse.status);
   }
 }

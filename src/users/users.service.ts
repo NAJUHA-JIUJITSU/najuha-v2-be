@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { BusinessException } from 'src/response/errorResponse';
+import { BusinessException } from 'src/common/response/errorResponse';
 import { UsersErrorMap } from './users.error';
 
 @Injectable()

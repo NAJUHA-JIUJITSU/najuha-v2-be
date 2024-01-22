@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   Inject,
   HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
@@ -38,11 +39,14 @@ export class CustomExceptionFilter implements ExceptionFilter {
       requestBody: req.body,
     };
 
-    if (exception instanceof BusinessException) {
+    if (
+      exception instanceof BusinessException ||
+      exception instanceof HttpException
+    ) {
       status = exception.getStatus();
       responseBody = exception.getResponse();
-      errorInfo['responseBody'] = responseBody;
-      this.logger.error('Http Exception', errorInfo);
+      errorInfo.requestBody = responseBody;
+      this.logger.error('Business Exception', errorInfo);
     } else {
       this.logger.error('Internal Server Error', errorInfo);
       status = HttpStatus.INTERNAL_SERVER_ERROR;

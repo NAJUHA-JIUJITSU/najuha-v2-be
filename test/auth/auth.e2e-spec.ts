@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { AuthService } from '../../src/auth/auth.service';
 import { AppModule } from '../../src/app.module';
 import { KakaoUserResponseData } from 'src/sns-auth/types/kakao-user-data.interface';
-import { ExpectedError } from '../../src/response/errorResponse';
+import { ExpectedError } from '../../src/common/response/errorResponse';
 import { UserEntity } from '../../src/users/entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository, EntityManager } from 'typeorm';

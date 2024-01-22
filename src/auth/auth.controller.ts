@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { TypedBody, TypedRoute } from '@nestia/core';
 import { SnsAuthDto } from '../sns-auth/dto/sns-auth.dto';
 import { AuthTokensDto } from './dto/auth-tokens.dto';
-import { ResponseForm, createResponseForm } from 'src/response/response';
+import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { GuardLevel, SetGuardLevel } from './auth.guard';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 

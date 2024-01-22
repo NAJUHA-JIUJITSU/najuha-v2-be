@@ -42,14 +42,13 @@ export class AuthGuard implements CanActivate {
     const accessToken = this.extractTokenFromHeader(request);
     if (!accessToken) throw new UnauthorizedException();
 
-    let payload: any;
-    // TODO: 에러표준화, 함수로 분리
+    let payload: any; //TODO: 타입 정의
     try {
       payload = await this.jwtService.verifyAsync(accessToken, {
         secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
       });
     } catch (e) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(e.message);
     }
     // 사용자의 인증 레벨 검증
     this.validateGuardLevel(payload.userRole, requiredGuardLevel);

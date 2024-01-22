@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { ErrorResponse } from 'src/response/errorResponse';
+import { ErrorResponse } from 'src/common/response/errorResponse';
 import typia from 'typia';
 
 export interface USERS_NOT_FOUND_ERROR extends ErrorResponse {
