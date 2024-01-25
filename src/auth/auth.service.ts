@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { SnsAuthDto } from '../sns-auth/dto/sns-auth.dto';
@@ -7,9 +7,11 @@ import { UserEntity } from '..//users/entities/user.entity';
 import { AuthTokensDto } from './dto/auth-tokens.dto';
 import { SnsAuthService } from 'src/sns-auth/sns-auth.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import {
+  AuthErrorMap,
+  BusinessException,
+} from 'src/common/response/errorResponse';
 import Redis from 'ioredis';
-import { BusinessException } from 'src/common/response/errorResponse';
-import { AuthErrorMap } from './auth.error';
 
 // TODO: 에러처리 *
 // TODO: logging *
@@ -113,16 +115,19 @@ export class AuthService {
       `userId:${payload.userId}:refreshToken`,
     );
 
-    try {
-      if (!storedRefreshToken || storedRefreshToken !== refreshToken)
-        throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_NOT_FOUND);
+    if (!storedRefreshToken || storedRefreshToken !== refreshToken)
+      throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
 
+    try {
       this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       });
     } catch (e) {
-      // await this.redisClient.del(`userId:${payload.userId}:refreshToken`); // 없어도될듯
-      throw new UnauthorizedException(e.message);
+      await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
+      throw new BusinessException(
+        AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED,
+        e.message,
+      );
     }
 
     return payload;

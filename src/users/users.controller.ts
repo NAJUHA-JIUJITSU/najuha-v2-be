@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { ResponseForm, createResponseForm } from '../common/response/response';
 import { SetGuardLevel, GuardLevel } from '../auth/auth.guard';
-import { USERS_NOT_FOUND_ERROR } from './users.error';
+import { USERS_NOT_FOUND } from 'src/common/response/errorResponse';
 
 @Controller('users')
 export class UsersController {
@@ -38,7 +38,7 @@ export class UsersController {
   async patchUser(
     @TypedParam('userId') userId: UserEntity['id'],
     @TypedBody() dto: UpdateUserDto,
-  ): Promise<ResponseForm<UserEntity> | USERS_NOT_FOUND_ERROR> {
+  ): Promise<ResponseForm<UserEntity> | USERS_NOT_FOUND> {
     return createResponseForm(await this.usersService.updateUser(userId, dto));
   }
 

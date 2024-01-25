@@ -18,7 +18,7 @@
     "/users": {
       "post": {
         "tags": [
-          "2 user"
+          "2 users"
         ],
         "parameters": [],
         "requestBody": {
@@ -46,14 +46,14 @@
           }
         },
         "summary": "2-1 create user",
-        "description": "2-1 create user.",
+        "description": "2-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))",
         "x-nestia-namespace": "users.postUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "2 user",
+                "text": "2 users",
                 "kind": "text"
               }
             ]
@@ -74,7 +74,7 @@
     "/users/{userId}": {
       "patch": {
         "tags": [
-          "2 user"
+          "2 users"
         ],
         "parameters": [
           {
@@ -110,7 +110,7 @@
                       "$ref": "#/components/schemas/ResponseFormUserEntity"
                     },
                     {
-                      "$ref": "#/components/schemas/NOT_FOUND_USER"
+                      "$ref": "#/components/schemas/USERS_NOT_FOUND_ERROR"
                     }
                   ]
                 }
@@ -127,7 +127,7 @@
             "name": "tag",
             "text": [
               {
-                "text": "2 user",
+                "text": "2 users",
                 "kind": "text"
               }
             ]
@@ -160,25 +160,17 @@
           }
         ],
         "x-nestia-method": "PATCH"
-      },
+      }
+    },
+    "/users/me": {
       "get": {
         "tags": [
-          "2 user"
+          "2 users"
         ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "userId",
-            "required": true
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
-            "description": "user data",
+            "description": "me",
             "content": {
               "application/json": {
                 "schema": {
@@ -189,32 +181,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "2-3 find user",
-        "description": "2-3 find user.",
-        "x-nestia-namespace": "users.getUser",
+        "summary": "2-3 get me",
+        "description": "2-3 get me.",
+        "x-nestia-namespace": "users.me.getMe",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "2 user",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "userId",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "userId",
+                "text": "2 users",
                 "kind": "text"
               }
             ]
@@ -223,7 +198,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "user data",
+                "text": "me",
                 "kind": "text"
               }
             ]
@@ -251,7 +226,7 @@
         },
         "responses": {
           "201": {
-            "description": "access token and refresh token",
+            "description": "accessToken and refreshToken",
             "content": {
               "application/json": {
                 "schema": {
@@ -279,7 +254,80 @@
             "name": "return",
             "text": [
               {
-                "text": "access token and refresh token",
+                "text": "accessToken and refreshToken",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "1 auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "accessToken and refreshToken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ResponseFormAuthTokensDto"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AUTH_REFRESH_TOKEN_NOT_FOUND"
+                    }
+                  ]
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          },
+          "4001": {
+            "description": "AUTH_REFRESH_TOKEN_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AUTH_REFRESH_TOKEN_NOT_FOUND"
+                }
+              }
+            }
+          }
+        },
+        "summary": "1-2 auth toekn refresh",
+        "description": "1-2 auth toekn refresh.",
+        "x-nestia-namespace": "auth.refresh.refreshToken",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "1 auth",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "accessToken and refreshToken",
                 "kind": "text"
               }
             ]
@@ -527,7 +575,7 @@
         },
         "nullable": false
       },
-      "NOT_FOUND_USER": {
+      "USERS_NOT_FOUND_ERROR": {
         "type": "object",
         "properties": {
           "result": {
@@ -545,7 +593,7 @@
           "code": {
             "type": "number",
             "enum": [
-              4001
+              5001
             ]
           },
           "data": {
@@ -553,7 +601,8 @@
             "enum": [
               "존재하지 않는 유저입니다."
             ]
-          }
+          },
+          "detail": {}
         },
         "nullable": false,
         "required": [
@@ -757,6 +806,55 @@
         "required": [
           "accessToken",
           "refreshToken"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "AUTH_REFRESH_TOKEN_NOT_FOUND": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              401
+            ]
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "AUTH_REFRESH_TOKEN_NOT_FOUND"
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "존재하지 않는 리프레시 토큰입니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
         ]
       }
     },
