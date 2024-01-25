@@ -90,11 +90,20 @@ export interface SNS_AUTH_NAVER_LOGIN_FAIL extends ErrorResponse {
   data: '네이버 로그인에 실패했습니다.';
 }
 
+export interface SNS_AUTH_NAVER_GOOLE_LOGIN_FAIL extends ErrorResponse {
+  result: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 5003;
+  data: '구글 로그인에 실패했습니다.';
+}
+
 export const SnsAuthErrorMap = {
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER:
     typia.random<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(),
   SNS_AUTH_KAKAO_LOGIN_FAIL: typia.random<SNS_AUTH_KAKAO_LOGIN_FAIL>(),
   SNS_AUTH_NAVER_LOGIN_FAIL: typia.random<SNS_AUTH_NAVER_LOGIN_FAIL>(),
+  SNS_AUTH_NAVER_GOOLE_LOGIN_FAIL:
+    typia.random<SNS_AUTH_NAVER_GOOLE_LOGIN_FAIL>(),
 };
 
 /** ----------------------------------------------------------------------------
