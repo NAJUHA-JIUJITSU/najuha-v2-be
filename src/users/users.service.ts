@@ -5,7 +5,7 @@ import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BusinessException } from 'src/common/response/errorResponse';
-import { UsersErrorMap } from './users.error';
+import { UsersErrorMap } from 'src/common/response/errorResponse';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +24,7 @@ export class UsersService {
     dto: UpdateUserDto,
   ): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND_ERROR);
+    if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND);
     return await this.userRepository.save({ ...user, ...dto });
   }
 

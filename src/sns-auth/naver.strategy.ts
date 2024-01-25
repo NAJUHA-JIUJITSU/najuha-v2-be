@@ -5,6 +5,10 @@ import { lastValueFrom } from 'rxjs';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { SnsAuthStrategy } from './types/sns-auth.strategy.interface';
 import { NaverUserData } from './types/naver-user-data.interface';
+import {
+  BusinessException,
+  SnsAuthErrorMap,
+} from 'src/common/response/errorResponse';
 
 @Injectable()
 export class NaverStrategy implements SnsAuthStrategy {
@@ -28,35 +32,45 @@ export class NaverStrategy implements SnsAuthStrategy {
     const clientSecret = this.configService.get<string>('NAVER_CLIENT_SECRET');
     const redirectUri = this.configService.get<string>('NAVER_CALLBACK_URL');
 
-    const response = await lastValueFrom(
-      this.httpService.post(
-        'https://nid.naver.com/oauth2.0/token',
-        `grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectUri}&code=${snsAuthCode}&state=${authState}`,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+    try {
+      const response = await lastValueFrom(
+        this.httpService.post(
+          'https://nid.naver.com/oauth2.0/token',
+          `grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectUri}&code=${snsAuthCode}&state=${authState}`,
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           },
-        },
-      ),
-    );
+        ),
+      );
 
-    if (!response.data || !response.data.access_token) {
-      throw new Error('Failed to retrieve access token'); // TODO: 에러표준화
+      return response.data.access_token;
+    } catch (e) {
+      throw new BusinessException(
+        SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL,
+        e.response.data,
+      );
     }
-
-    return response.data.access_token;
   }
 
   private async getUserData(accessToken: string): Promise<NaverUserData> {
-    const response = await lastValueFrom(
-      this.httpService.get('https://openapi.naver.com/v1/nid/me', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }),
-    );
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get('https://openapi.naver.com/v1/nid/me', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      );
 
-    return response.data.response;
+      return response.data.response;
+    } catch (e) {
+      throw new BusinessException(
+        SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL,
+        e.response.data,
+      );
+    }
   }
 
   private convertUserDataToCreateUserDto(data: NaverUserData): CreateUserDto {

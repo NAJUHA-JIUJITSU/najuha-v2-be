@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { KakaoStrategy } from './kakao.strategy';
 import { SnsAuthDto } from './dto/sns-auth.dto';
 import { NaverStrategy } from './naver.strategy';
+import {
+  BusinessException,
+  SnsAuthErrorMap,
+} from 'src/common/response/errorResponse';
 
 @Injectable()
 export class SnsAuthService {
@@ -26,7 +30,9 @@ export class SnsAuthService {
       //   'APPLE':
       //     return await this.appleStrategy.getUserData(snsAuthCode, snsAuthState);
       default:
-        throw new Error('Not supported sns provider'); //TODO: 에러표준화
+        throw new BusinessException(
+          SnsAuthErrorMap.SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
+        );
     }
   }
 }

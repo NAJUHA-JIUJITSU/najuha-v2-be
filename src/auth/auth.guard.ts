@@ -1,14 +1,13 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import {
+  AuthErrorMap,
+  BusinessException,
+} from 'src/common/response/errorResponse';
 
 const GUARD_LEVEL_KEY = 'gaurdLevel';
 export enum GuardLevel {
@@ -40,16 +39,11 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromHeader(request);
-    if (!accessToken) throw new UnauthorizedException();
+    if (!accessToken)
+      throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_MISSING);
 
-    let payload: any; //TODO: 타입 정의
-    try {
-      payload = await this.jwtService.verifyAsync(accessToken, {
-        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
-      });
-    } catch (e) {
-      throw new UnauthorizedException(e.message);
-    }
+    const payload = await this.verifyToken(accessToken);
+
     // 사용자의 인증 레벨 검증
     this.validateGuardLevel(payload.userRole, requiredGuardLevel);
 
@@ -59,12 +53,26 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
+  //TODO: payload 타입 정의
+  private async verifyToken(accessToken: string): Promise<any> {
+    try {
+      return await this.jwtService.verifyAsync(accessToken, {
+        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      });
+    } catch (e) {
+      throw new BusinessException(
+        AuthErrorMap.AUTH_ACCESS_TOKEN_UNAUTHORIZED,
+        e.message,
+      );
+    }
+  }
+
   private validateGuardLevel(
     userRole: string,
     requiredGuardLevel: GuardLevel,
   ): any {
     if (requiredGuardLevel > GuardLevel[userRole]) {
-      throw new UnauthorizedException();
+      throw new BusinessException(AuthErrorMap.AUTH_LEVEL_FORBIDDEN);
     }
   }
 

@@ -5,8 +5,10 @@ import { lastValueFrom } from 'rxjs';
 import { KakaoUserData } from './types/kakao-user-data.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { SnsAuthStrategy } from './types/sns-auth.strategy.interface';
-import { BusinessException } from 'src/common/response/errorResponse';
-import { SnsAuthErrorMap } from './sns-auth.error';
+import {
+  BusinessException,
+  SnsAuthErrorMap,
+} from 'src/common/response/errorResponse';
 
 @Injectable()
 export class KakaoStrategy implements SnsAuthStrategy {
@@ -28,7 +30,6 @@ export class KakaoStrategy implements SnsAuthStrategy {
   ): Promise<string> {
     const clientId = this.configService.get<string>('KAKAO_REST_API_KEY');
     const redirectUri = this.configService.get<string>('KAKAO_CALLBACK_URL');
-
     try {
       const response = await lastValueFrom(
         this.httpService.post(
@@ -45,21 +46,28 @@ export class KakaoStrategy implements SnsAuthStrategy {
       return response.data.access_token;
     } catch (e) {
       throw new BusinessException(
-        SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_ERROR,
+        SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL,
         e.response.data,
       );
     }
   }
 
   private async getUserData(acessToken: string): Promise<KakaoUserData> {
-    const response = await lastValueFrom(
-      this.httpService.get('https://kapi.kakao.com/v2/user/me', {
-        headers: {
-          Authorization: `Bearer ${acessToken}`,
-        },
-      }),
-    );
-    return response.data;
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get('https://kapi.kakao.com/v2/user/me', {
+          headers: {
+            Authorization: `Bearer ${acessToken}`,
+          },
+        }),
+      );
+      return response.data;
+    } catch (e) {
+      throw new BusinessException(
+        SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL,
+        e.response.data,
+      );
+    }
   }
 
   private convertUserDataToCreateUserDto(data: KakaoUserData): CreateUserDto {
