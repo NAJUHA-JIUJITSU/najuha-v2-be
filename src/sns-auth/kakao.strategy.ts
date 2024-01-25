@@ -17,57 +17,47 @@ export class KakaoStrategy implements SnsAuthStrategy {
     private readonly httpService: HttpService,
   ) {}
 
-  async validate(snsAuthCode: string, authState: string) {
-    const snsAccessToken = await this.getAccessToken(snsAuthCode, authState);
-    const kakaoUserData = await this.getUserData(snsAccessToken);
-
-    return this.convertUserDataToCreateUserDto(kakaoUserData);
-  }
-
-  private async getAccessToken(
-    snsAuthCode: string,
-    authState: string,
-  ): Promise<string> {
-    const clientId = this.configService.get<string>('KAKAO_REST_API_KEY');
-    const redirectUri = this.configService.get<string>('KAKAO_CALLBACK_URL');
+  async validate(snsAuthCode: string): Promise<CreateUserDto> {
     try {
-      const response = await lastValueFrom(
-        this.httpService.post(
-          'https://kauth.kakao.com/oauth/token',
-          `grant_type=authorization_code&client_id=${clientId}&redirect_uri=${redirectUri}&code=${snsAuthCode}&state=${authState}`,
-          {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-          },
-        ),
-      );
+      const snsAccessToken = await this.getAccessToken(snsAuthCode);
+      const kakaoUserData = await this.getUserData(snsAccessToken);
 
-      return response.data.access_token;
+      return this.convertUserDataToCreateUserDto(kakaoUserData);
     } catch (e) {
       throw new BusinessException(
         SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL,
         e.response.data,
       );
     }
+  }
+
+  private async getAccessToken(snsAuthCode: string): Promise<string> {
+    const clientId = this.configService.get<string>('KAKAO_REST_API_KEY');
+    const redirectUri = this.configService.get<string>('KAKAO_CALLBACK_URL');
+    const response = await lastValueFrom(
+      this.httpService.post(
+        'https://kauth.kakao.com/oauth/token',
+        `grant_type=authorization_code&client_id=${clientId}&redirect_uri=${redirectUri}&code=${snsAuthCode}`,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      ),
+    );
+
+    return response.data.access_token;
   }
 
   private async getUserData(acessToken: string): Promise<KakaoUserData> {
-    try {
-      const response = await lastValueFrom(
-        this.httpService.get('https://kapi.kakao.com/v2/user/me', {
-          headers: {
-            Authorization: `Bearer ${acessToken}`,
-          },
-        }),
-      );
-      return response.data;
-    } catch (e) {
-      throw new BusinessException(
-        SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL,
-        e.response.data,
-      );
-    }
+    const response = await lastValueFrom(
+      this.httpService.get('https://kapi.kakao.com/v2/user/me', {
+        headers: {
+          Authorization: `Bearer ${acessToken}`,
+        },
+      }),
+    );
+    return response.data;
   }
 
   private convertUserDataToCreateUserDto(data: KakaoUserData): CreateUserDto {

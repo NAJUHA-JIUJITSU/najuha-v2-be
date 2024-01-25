@@ -16,10 +16,10 @@ export enum GuardLevel {
   USER = 3,
   ADMIN = 4,
 }
+
 export const SetGuardLevel = (authLevel: GuardLevel) =>
   SetMetadata(GUARD_LEVEL_KEY, authLevel);
 
-// TODO: 에러 표준화
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -53,7 +53,6 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  //TODO: payload 타입 정의
   private async verifyToken(accessToken: string): Promise<any> {
     try {
       return await this.jwtService.verifyAsync(accessToken, {

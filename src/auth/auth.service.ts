@@ -21,7 +21,6 @@ import Redis from 'ioredis';
 // TODO: token refresh 로직 구현 *
 // TODO: refresh token redis로 관리 *
 // TODO: 에러 표준화 *
-// TODO: 타입 정의
 // TODO: 토큰 탈취 테스트 작성
 @Injectable()
 export class AuthService {
