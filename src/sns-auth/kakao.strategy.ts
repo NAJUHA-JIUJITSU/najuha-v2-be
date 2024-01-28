@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 import { KakaoUserData } from 'src/sns-auth/types/kakao-user-data.interface';
 import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
@@ -9,13 +8,11 @@ import {
   BusinessException,
   SnsAuthErrorMap,
 } from 'src/common/response/errorResponse';
+import appConfig from 'src/common/appConfig';
 
 @Injectable()
 export class KakaoStrategy implements SnsAuthStrategy {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async validate(snsAuthCode: string): Promise<CreateUserDto> {
     try {
@@ -32,8 +29,9 @@ export class KakaoStrategy implements SnsAuthStrategy {
   }
 
   private async getAccessToken(snsAuthCode: string): Promise<string> {
-    const clientId = this.configService.get<string>('KAKAO_REST_API_KEY');
-    const redirectUri = this.configService.get<string>('KAKAO_CALLBACK_URL');
+    const clientId = appConfig.kakaoRestApiKey;
+    const redirectUri = appConfig.kakaoCallbackUrl;
+
     const response = await lastValueFrom(
       this.httpService.post(
         'https://kauth.kakao.com/oauth/token',

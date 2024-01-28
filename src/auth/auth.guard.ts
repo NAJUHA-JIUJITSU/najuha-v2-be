@@ -1,14 +1,13 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { SetMetadata } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-
 import {
   AuthErrorMap,
   BusinessException,
-} from '../../src/common/response/errorResponse';
+} from 'src/common/response/errorResponse';
+import appCnfig from 'src/common/appConfig';
 
 const GUARD_LEVEL_KEY = 'gaurdLevel';
 export enum GuardLevel {
@@ -24,7 +23,6 @@ export const SetGuardLevel = (authLevel: GuardLevel) =>
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private configService: ConfigService,
     private jwtService: JwtService,
     private reflector: Reflector,
   ) {}
@@ -57,7 +55,7 @@ export class AuthGuard implements CanActivate {
   private async verifyToken(accessToken: string): Promise<any> {
     try {
       return await this.jwtService.verifyAsync(accessToken, {
-        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+        secret: appCnfig.jwtAccessTokenSecret,
       });
     } catch (e) {
       throw new BusinessException(

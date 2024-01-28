@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -16,10 +15,6 @@ import { CustomExceptionFilter } from 'src/common/exception-filters/custom-excep
 @Module({
   imports: [
     LoggerModule,
-    ConfigModule.forRoot({
-      isGlobal: true, // 전체적으로 사용하기 위해
-      envFilePath: `.env.${process.env.NODE_ENV}` || '.env.dev',
-    }),
     JwtModule.register({
       global: true,
     }),

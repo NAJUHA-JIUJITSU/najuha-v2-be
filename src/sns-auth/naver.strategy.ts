@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 import { NaverUserData } from 'src/sns-auth/types/naver-user-data.interface';
 import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
@@ -9,13 +8,11 @@ import {
   BusinessException,
   SnsAuthErrorMap,
 } from 'src/common/response/errorResponse';
+import appConfig from 'src/common/appConfig';
 
 @Injectable()
 export class NaverStrategy implements SnsAuthStrategy {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async validate(snsAuthCode: string): Promise<CreateUserDto> {
     try {
@@ -32,9 +29,9 @@ export class NaverStrategy implements SnsAuthStrategy {
   }
 
   private async getAccessToken(snsAuthCode: string): Promise<string> {
-    const clientId = this.configService.get<string>('NAVER_CLIENT_ID');
-    const clientSecret = this.configService.get<string>('NAVER_CLIENT_SECRET');
-    const redirectUri = this.configService.get<string>('NAVER_CALLBACK_URL');
+    const clientId = appConfig.naverClientId;
+    const clientSecret = appConfig.naverClientSecret;
+    const redirectUri = appConfig.naverCallbackUrl;
 
     const response = await lastValueFrom(
       this.httpService.post(

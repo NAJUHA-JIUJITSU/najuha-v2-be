@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 import { GoogleUserData } from 'src/sns-auth/types/google-user-data.interface';
 import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
@@ -9,13 +8,11 @@ import {
   BusinessException,
   SnsAuthErrorMap,
 } from 'src/common/response/errorResponse';
+import appConfig from 'src/common/appConfig';
 
 @Injectable()
 export class GoogleStrategy implements SnsAuthStrategy {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async validate(snsAuthCode: string): Promise<CreateUserDto> {
     try {
@@ -33,9 +30,9 @@ export class GoogleStrategy implements SnsAuthStrategy {
   }
 
   private async getAccessToken(snsAuthCode: string): Promise<string> {
-    const clientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
-    const clientSecret = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
-    const redirectUri = this.configService.get<string>('GOOGLE_CALLBACK_URL');
+    const clientId = appConfig.googleClientId;
+    const clientSecret = appConfig.googleClientSecret;
+    const redirectUri = appConfig.googleCallbackUrl;
 
     const response = await lastValueFrom(
       this.httpService.post(

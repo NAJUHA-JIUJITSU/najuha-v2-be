@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import Redis from 'ioredis';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
@@ -12,6 +11,7 @@ import {
   AuthErrorMap,
   BusinessException,
 } from 'src/common/response/errorResponse';
+import appConfig from 'src/common/appConfig';
 
 // TODO: 에러처리 *
 // TODO: logging *
@@ -26,7 +26,6 @@ import {
 export class AuthService {
   constructor(
     @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
-    private readonly configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly snsAuthService: SnsAuthService,
@@ -87,10 +86,8 @@ export class AuthService {
   ): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: this.configService.get<string>(
-        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-      ),
+      secret: appConfig.jwtAccessTokenSecret,
+      expiresIn: appConfig.jwtAccessTokenExpirationTime,
     });
   }
 
@@ -100,10 +97,8 @@ export class AuthService {
   ): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: this.configService.get<string>(
-        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-      ),
+      secret: appConfig.jwtRefreshTokenSecret,
+      expiresIn: appConfig.jwtRefreshTokenExpirationTime,
     });
   }
 
@@ -119,7 +114,7 @@ export class AuthService {
 
     try {
       this.jwtService.verify(refreshToken, {
-        secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+        secret: appConfig.jwtRefreshTokenSecret,
       });
     } catch (e) {
       await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
