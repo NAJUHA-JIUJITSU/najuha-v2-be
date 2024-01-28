@@ -1,8 +1,8 @@
+import { ConfigService } from '@nestjs/config';
 import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
 
 export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
@@ -18,10 +18,4 @@ export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
     autoLoadEntities: true,
     synchronize: configService.get<boolean>('TYPEORM_SYNCHRONIZE', false),
   }),
-  // {
-  //   type: 'sqlite',
-  //   database: ':memory:',
-  //   autoLoadEntities: true,
-  //   synchronize: true,
-  // }
 };

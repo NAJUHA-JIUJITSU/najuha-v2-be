@@ -1,8 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { SwaggerSetting } from './swagger/swagger-setting';
 import * as cors from 'cors';
+import { NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { AppModule } from 'src/app.module';
+import { SwaggerSetting } from 'src/swagger-setting';
+
+const APP_PORT = process.env.APP_PORT || 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +20,6 @@ async function bootstrap() {
 
   console.log('process.env.DB_HOST', process.env.DB_HOST);
 
-  await app.listen(3000); //TODO: 환경변수로 변환
+  await app.listen(APP_PORT);
 }
 bootstrap();

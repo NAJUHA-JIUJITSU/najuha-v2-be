@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { UsersModule } from '../users/users.module';
-import { SnsAuthModule } from '../sns-auth/sns-auth.module';
+import { AuthController } from 'src/auth/auth.controller';
+import { AuthService } from 'src/auth/auth.service';
 import { RedisModule } from 'src/redis/redis.module';
+import { SnsAuthModule } from 'src/sns-auth/sns-auth.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [RedisModule, UsersModule, SnsAuthModule],

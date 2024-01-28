@@ -1,12 +1,12 @@
 import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './entities/user.entity';
-import { ResponseForm, createResponseForm } from '../common/response/response';
-import { SetGuardLevel, GuardLevel } from '../auth/auth.guard';
+import { SetGuardLevel, GuardLevel } from 'src/auth/auth.guard';
 import { USERS_NOT_FOUND } from 'src/common/response/errorResponse';
+import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('users')
 export class UsersController {

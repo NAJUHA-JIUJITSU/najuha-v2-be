@@ -1,13 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../src/app.module';
 import { INestApplication } from '@nestjs/common';
-import * as Apis from '../../src/api/functional';
-import { CreateUserDto } from '../../src/users/dto/create-user.dto';
+import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
+
+import * as Apis from '../../src/api/functional';
+import { AppModule } from '../../src/app.module';
+import { CreateUserDto } from '../../src/users/dto/create-user.dto';
+
 // import assert from 'assert';
 
 describe('E2E user test', () => {
-  const host = 'http://127.0.0.1:3001';
+  const host = 'http://127.0.0.1:4000';
   let app: INestApplication;
   let testingModule: TestingModule;
 
@@ -17,7 +19,7 @@ describe('E2E user test', () => {
     }).compile();
 
     app = testingModule.createNestApplication();
-    await (await app.init()).listen(4000);
+    await app.init();
   });
 
   afterAll(async () => {

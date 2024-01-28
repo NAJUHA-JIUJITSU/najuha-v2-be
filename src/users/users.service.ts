@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Repository } from 'typeorm';
-import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { BusinessException } from 'src/common/response/errorResponse';
 import { UsersErrorMap } from 'src/common/response/errorResponse';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {

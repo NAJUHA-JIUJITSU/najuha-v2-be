@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { SnsAuthDto } from './dto/sns-auth.dto';
 import {
   BusinessException,
   SnsAuthErrorMap,
 } from 'src/common/response/errorResponse';
-import { NaverStrategy } from './naver.strategy';
-import { KakaoStrategy } from './kakao.strategy';
-import { GoogleStrategy } from './google.strategy';
+import { GoogleStrategy } from 'src/sns-auth/google.strategy';
+import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
+import { NaverStrategy } from 'src/sns-auth/naver.strategy';
+import { SnsAuthDto } from 'src/sns-auth/dto/sns-auth.dto';
 
 @Injectable()
 export class SnsAuthService {

@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { SnsAuthDto } from '../sns-auth/dto/sns-auth.dto';
-import { UsersService } from '..//users/users.service';
-import { UserEntity } from '..//users/entities/user.entity';
-import { AuthTokensDto } from './dto/auth-tokens.dto';
+import Redis from 'ioredis';
+import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
+import { RefreshTokenDto } from 'src/auth/dto/refresh-token.dto';
+import { SnsAuthDto } from 'src/sns-auth/dto/sns-auth.dto';
 import { SnsAuthService } from 'src/sns-auth/sns-auth.service';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import {
   AuthErrorMap,
   BusinessException,
 } from 'src/common/response/errorResponse';
-import Redis from 'ioredis';
 
 // TODO: 에러처리 *
 // TODO: logging *

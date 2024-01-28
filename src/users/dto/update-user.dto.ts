@@ -1,4 +1,4 @@
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 export interface UpdateUserDto
   extends Partial<

@@ -1,12 +1,12 @@
-import { Controller } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
-import { SnsAuthDto } from '../sns-auth/dto/sns-auth.dto';
-import { AuthTokensDto } from './dto/auth-tokens.dto';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { Controller } from '@nestjs/common';
+import { SnsAuthDto } from 'src//sns-auth/dto/sns-auth.dto';
+import { AuthService } from 'src/auth/auth.service';
+import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { AUTH_REFRESH_TOKEN_UNAUTHORIZED } from 'src/common/response/errorResponse';
-import { GuardLevel, SetGuardLevel } from './auth.guard';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { GuardLevel, SetGuardLevel } from './auth.guard';
+import { ResponseForm, createResponseForm } from 'src/common/response/response';
 
 @Controller('auth')
 export class AuthController {

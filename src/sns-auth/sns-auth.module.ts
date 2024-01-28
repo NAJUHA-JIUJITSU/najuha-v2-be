@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { SnsAuthService } from './sns-auth.service';
-import { KakaoStrategy } from './kakao.strategy';
-import { NaverStrategy } from './naver.strategy';
-import { GoogleStrategy } from './google.strategy';
+import { Module } from '@nestjs/common';
+import { GoogleStrategy } from 'src/sns-auth/google.strategy';
+import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
+import { NaverStrategy } from 'src/sns-auth/naver.strategy';
+import { SnsAuthService } from 'src/sns-auth/sns-auth.service';
 
 @Module({
   imports: [HttpModule],

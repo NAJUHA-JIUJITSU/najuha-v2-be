@@ -1,10 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+
 import { AppModule } from '../../src/app.module';
-import { KakaoUserResponseData } from '../../src/sns-auth/types/kakao-user-data.interface';
 import { AuthService } from '../../src/auth/auth.service';
-import { UsersService } from '../../src/users/users.service';
+import { KakaoUserResponseData } from '../../src/sns-auth/types/kakao-user-data.interface';
 import { UserEntity } from '../../src/users/entities/user.entity';
+import { UsersService } from '../../src/users/users.service';
 
 const mockedKakaoUserInfo: KakaoUserResponseData = {
   id: '4400',

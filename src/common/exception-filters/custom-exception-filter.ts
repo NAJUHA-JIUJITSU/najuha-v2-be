@@ -7,13 +7,13 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import {
   BusinessException,
   INTERNAL_SERVER_ERROR,
-} from '../response/errorResponse';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
+} from 'src/common/response/errorResponse';
 import typia from 'typia';
+import { Logger } from 'winston';
 
 @Catch()
 export class CustomExceptionFilter implements ExceptionFilter {

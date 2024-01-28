@@ -2,9 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
+import { NaverUserData } from 'src/sns-auth/types/naver-user-data.interface';
+import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { SnsAuthStrategy } from './types/sns-auth.strategy.interface';
-import { NaverUserData } from './types/naver-user-data.interface';
 import {
   BusinessException,
   SnsAuthErrorMap,

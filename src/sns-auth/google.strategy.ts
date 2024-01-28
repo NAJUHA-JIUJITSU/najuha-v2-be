@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
-import { SnsAuthStrategy } from './types/sns-auth.strategy.interface';
+import { GoogleUserData } from 'src/sns-auth/types/google-user-data.interface';
+import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { GoogleUserData } from './types/google-user-data.interface';
 import {
   BusinessException,
   SnsAuthErrorMap,

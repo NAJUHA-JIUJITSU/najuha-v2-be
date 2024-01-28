@@ -1,18 +1,17 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { LoggerMiddleware } from './common/middlewares/logger.middleware';
-import { LoggerModule } from './common/logger/logger.module';
-import { Logger } from 'winston';
-import { CustomExceptionFilter } from './common/exception-filters/custom-exception-filter';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { typeOrmConfigAsync } from './typeorm.config';
-import { AuthGuard } from './auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
-import { RedisModule } from './redis/redis.module';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthModule } from 'src/auth/auth.module';
+import { LoggerModule } from 'src/common/logger/logger.module';
+import { LoggerMiddleware } from 'src/common/middlewares/logger.middleware';
+import { typeOrmConfigAsync } from 'src/typeorm.config';
+import { UsersModule } from 'src/users/users.module';
+import { Logger } from 'winston';
+import { CustomExceptionFilter } from 'src/common/exception-filters/custom-exception-filter';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { RedisModule } from './redis/redis.module';
       global: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
-    RedisModule,
     UsersModule,
     AuthModule,
   ],

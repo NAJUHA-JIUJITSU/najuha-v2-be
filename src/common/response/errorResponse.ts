@@ -73,7 +73,7 @@ export interface SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER extends ErrorResponse {
   result: false;
   status: HttpStatus.BAD_REQUEST;
   code: 5000;
-  data: '지원하지 않는 SNS PROVIDER 입니다.';
+  data: '지원하지 않는 SNS AUTH PROVIDER 입니다.';
 }
 
 export interface SNS_AUTH_KAKAO_LOGIN_FAIL extends ErrorResponse {

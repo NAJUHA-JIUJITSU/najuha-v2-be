@@ -5,7 +5,7 @@ services:
     image: postgres
     container_name: test_postgres_container
     ports:
-      - '5433:5432'
+      - '${DB_PORT}:5432'
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
@@ -13,6 +13,13 @@ services:
 
     volumes:
       - postgres-data:/var/lib/postgresql/data
+  redis:
+    image: redis
+    ports:
+      - '${REDIS_PORT}:6379'
+    volumes:
+      - redis_data:/data
 
 volumes:
   postgres-data:
+  redis_data:

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import * as winston from 'winston';
-import * as DailyRotateFile from 'winston-daily-rotate-file';
 import {
   utilities as nestWinstonModuleUtilities,
   WinstonModule,
 } from 'nest-winston';
+import * as winston from 'winston';
+import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 @Module({
   imports: [

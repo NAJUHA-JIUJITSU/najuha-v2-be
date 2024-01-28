@@ -1,13 +1,14 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
 import { SetMetadata } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
+
 import {
   AuthErrorMap,
   BusinessException,
-} from 'src/common/response/errorResponse';
+} from '../../src/common/response/errorResponse';
 
 const GUARD_LEVEL_KEY = 'gaurdLevel';
 export enum GuardLevel {

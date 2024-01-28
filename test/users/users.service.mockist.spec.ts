@@ -1,10 +1,11 @@
-import typia from 'typia';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import typia from 'typia';
+
+import { ExpectedError } from '../../src/common/response/errorResponse';
 import { CreateUserDto } from '../../src/users/dto/create-user.dto';
 import { UserEntity } from '../../src/users/entities/user.entity';
 import { UsersService } from '../../src/users/users.service';
-import { ExpectedError } from '../../src/common/response/errorResponse';
 
 describe('Mockist TEST UsersService (Mockist)', () => {
   let service: UsersService;
