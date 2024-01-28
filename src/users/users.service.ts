@@ -28,6 +28,15 @@ export class UsersService {
     return await this.userRepository.save({ ...user, ...dto });
   }
 
+  async updateUserRole(
+    userId: UserEntity['id'],
+    role: UserEntity['role'],
+  ): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND);
+    return await this.userRepository.save({ ...user, role });
+  }
+
   async findUserBySnsIdAndProvider(
     snsAuthProvider: UserEntity['snsAuthProvider'],
     snsId: UserEntity['snsId'],

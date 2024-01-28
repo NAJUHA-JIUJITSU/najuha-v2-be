@@ -7,6 +7,7 @@ import { GoogleStrategy } from 'src/sns-auth/google.strategy';
 import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
 import { NaverStrategy } from 'src/sns-auth/naver.strategy';
 import { SnsAuthDto } from 'src/sns-auth/dto/sns-auth.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class SnsAuthService {
@@ -17,7 +18,7 @@ export class SnsAuthService {
     // private readonly appleStrategy: AppleStrategy,
   ) {}
 
-  async validate(snsAuthDto: SnsAuthDto) {
+  async validate(snsAuthDto: SnsAuthDto): Promise<CreateUserDto> {
     const { snsAuthProvider, snsAuthCode } = snsAuthDto;
 
     switch (snsAuthProvider) {

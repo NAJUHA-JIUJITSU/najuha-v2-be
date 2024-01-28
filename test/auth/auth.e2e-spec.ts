@@ -1,23 +1,37 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Res } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
-
-import * as Apis from '../../src/api/functional';
+import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { SnsAuthDto } from '../../src/sns-auth/dto/sns-auth.dto';
-
-// import assert from 'assert';
+import appConfig from '../../src/common/appConfig';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { ResponseForm } from 'src/common/response/response';
+import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
+import {
+  BusinessException,
+  SNS_AUTH_GOOGLE_LOGIN_FAIL,
+  SNS_AUTH_KAKAO_LOGIN_FAIL,
+  SNS_AUTH_NAVER_LOGIN_FAIL,
+  SnsAuthErrorMap,
+} from 'src/common/response/errorResponse';
+import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
+import { NaverStrategy } from 'src/sns-auth/naver.strategy';
+import { GoogleStrategy } from 'src/sns-auth/google.strategy';
+import { DataSource } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
+import { JwtService } from '@nestjs/jwt';
+// import * as Apis from '../../src/api/functional';
 
 describe('E2E Auth test', () => {
-  const NODE_ENV = process.env.NODE_ENV || 'test';
-  const APP_PORT = process.env.APP_PORT || 9000;
-
-  console.log('NODE_ENV: ', NODE_ENV);
-  console.log('APP_PORT: ', APP_PORT);
-
-  const END_POINT = `http://127.0.0.1:${APP_PORT}`;
   let app: INestApplication;
   let testingModule: TestingModule;
+  let dataSource: DataSource;
+  let jwtService: JwtService;
+  let userService: UsersService;
+  let kakaoStrategy: KakaoStrategy;
+  let naverStrategy: NaverStrategy;
+  let googleStrategy: GoogleStrategy;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -25,7 +39,22 @@ describe('E2E Auth test', () => {
     }).compile();
 
     app = testingModule.createNestApplication();
-    (await app.init()).listen(APP_PORT);
+    dataSource = testingModule.get<DataSource>(DataSource);
+    jwtService = testingModule.get<JwtService>(JwtService);
+    userService = testingModule.get<UsersService>(UsersService);
+    kakaoStrategy = testingModule.get<KakaoStrategy>(KakaoStrategy);
+    naverStrategy = testingModule.get<NaverStrategy>(NaverStrategy);
+    googleStrategy = testingModule.get<GoogleStrategy>(GoogleStrategy);
+    (await app.init()).listen(appConfig.appPort);
+  });
+
+  beforeEach(async () => {
+    const entities = dataSource.entityMetadatas;
+
+    for (const entity of entities) {
+      const repository = dataSource.getRepository(entity.name);
+      await repository.clear();
+    }
   });
 
   afterAll(async () => {
@@ -33,41 +62,258 @@ describe('E2E Auth test', () => {
   });
 
   describe('POST /auth/snsLogin', () => {
-    it('SNS 로그인 성공 시', async () => {
-      const loginInfo = typia.random<SnsAuthDto>();
-      console.log(loginInfo);
-      const res = await Apis.auth.snsLogin(
-        {
-          host: END_POINT,
-        },
-        loginInfo,
-      );
-      console.log(res);
+    it('기존 유저 KAKAO 로그인 성공 시', async () => {
+      const snsAuthProvider = 'KAKAO';
+      const user = typia.random<CreateUserDto>();
+      user.snsAuthProvider = snsAuthProvider;
 
-      // assert.strictEqual(res.status, 201);
-      // assert property checks for accessToken and refreshToken
+      const userEntity = await userService.createUser(user);
+      await userService.updateUserRole(userEntity.id, 'USER');
+
+      jest
+        .spyOn(kakaoStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          const ret: CreateUserDto = {
+            snsId: userEntity.snsId,
+            snsAuthProvider: userEntity.snsAuthProvider,
+            name: userEntity.name,
+            email: userEntity.email,
+            phoneNumber: userEntity.phoneNumber,
+            gender: userEntity.gender,
+          };
+          return ret;
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('USER');
     });
 
-    // Additional test cases for snsLogin can be added here
+    it('신규 유저 KAKAO 로그인 성공 시', async () => {
+      const snsAuthProvider = 'KAKAO';
+      jest
+        .spyOn(naverStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          const ret = typia.random<CreateUserDto>();
+          ret.snsAuthProvider = snsAuthProvider;
+          return ret;
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('TEMPORARY_USER');
+    });
+
+    it('KAKAO 로그인 실패 시', async () => {
+      const snsAuthProvider = 'KAKAO';
+      jest
+        .spyOn(kakaoStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          throw new BusinessException(
+            SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL,
+            'test error message',
+          );
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<SNS_AUTH_KAKAO_LOGIN_FAIL>(res.body)).toBe(true);
+    });
+
+    it('기존 유저 NAVER 로그인 성공 시', async () => {
+      const snsAuthProvider = 'NAVER';
+      const user = typia.random<CreateUserDto>();
+      user.snsAuthProvider = snsAuthProvider;
+
+      let userEntity = await userService.createUser(user);
+      userEntity = await userService.updateUserRole(userEntity.id, 'USER');
+
+      jest
+        .spyOn(naverStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          const ret: CreateUserDto = {
+            snsId: userEntity.snsId,
+            snsAuthProvider: userEntity.snsAuthProvider,
+            name: userEntity.name,
+            email: userEntity.email,
+            phoneNumber: userEntity.phoneNumber,
+            gender: userEntity.gender,
+          };
+          return ret;
+        });
+
+      const snsAuthDto: SnsAuthDto = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider: snsAuthProvider,
+      };
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('USER');
+    });
+
+    it('신규 유저 NAVER 로그인 성공 시', async () => {
+      const snsAuthProvider = 'NAVER';
+      jest
+        .spyOn(naverStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          const ret = typia.random<CreateUserDto>();
+          ret.snsAuthProvider = snsAuthProvider;
+          return ret;
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('TEMPORARY_USER');
+    });
+
+    it('NAVER 로그인 실패 시', async () => {
+      const snsAuthProvider = 'NAVER';
+      jest
+        .spyOn(naverStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          throw new BusinessException(
+            SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL,
+            'test error message',
+          );
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<SNS_AUTH_NAVER_LOGIN_FAIL>(res.body)).toBe(true);
+    });
+
+    it('기존 유저 GOOGLE 로그인 성공 시', async () => {
+      const snsAuthProvider = 'GOOGLE';
+      const user = typia.random<CreateUserDto>();
+      user.snsAuthProvider = snsAuthProvider;
+
+      const userEntity = await userService.createUser(user);
+      await userService.updateUserRole(userEntity.id, 'USER');
+
+      jest
+        .spyOn(googleStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          const ret: CreateUserDto = {
+            snsId: userEntity.snsId,
+            snsAuthProvider: userEntity.snsAuthProvider,
+            name: userEntity.name,
+            email: userEntity.email,
+            phoneNumber: userEntity.phoneNumber,
+            gender: userEntity.gender,
+          };
+          return ret;
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('USER');
+    });
+
+    it('신규 유저 GOOGLE 로그인 성공 시', async () => {
+      const snsAuthProvider = 'GOOGLE';
+      jest
+        .spyOn(googleStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          const ret = typia.random<CreateUserDto>();
+          ret.snsAuthProvider = snsAuthProvider;
+          return ret;
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('TEMPORARY_USER');
+    });
+
+    it('GOOGLE 로그인 실패 시', async () => {
+      const snsAuthProvider = 'GOOGLE';
+      jest
+        .spyOn(googleStrategy, 'validate')
+        .mockImplementation(async (snsAuthCode: string) => {
+          throw new BusinessException(
+            SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL,
+            'test error message',
+          );
+        });
+
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
+
+      const res = await request(app.getHttpServer())
+        .post('/auth/snsLogin')
+        .send(snsAuthDto);
+
+      expect(typia.is<SNS_AUTH_GOOGLE_LOGIN_FAIL>(res.body)).toBe(true);
+    });
   });
 
-  //   describe('POST /auth/refresh', () => {
-  //     it('토큰 리프레시 성공 시', async () => {
-  //       const refreshTokenInfo = typia.random<RefreshTokenDto>();
-  //       const res = await Apis.auth.refreshToken(
-  //         {
-  //           host,
-  //         },
-  //         refreshTokenInfo,
-  //       );
-  //       console.log(res);
+  describe('POST /auth/refresh', () => {
+    it('refresh token이 없을 경우', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/auth/refresh')
+        .send({});
 
-  //       // assert.strictEqual(res.status, 201);
-  //       // assert property checks for accessToken and refreshToken
-  //     });
+      expect(res.status).toBe(400);
+    });
 
-  //     // Additional test cases for refreshToken can be added here
-  //   });
+    it('refresh token이 유효하지 않을 경우', async () => {});
 
-  // Additional test suites can be added here
+    it('refresh token이 유효할 경우', async () => {});
+
+    it('refresh token이 만료될 경우', async () => {});
+
+    it('refresh token이 위조될 경우', async () => {});
+  });
 });

@@ -23,7 +23,7 @@ export class GoogleStrategy implements SnsAuthStrategy {
       return this.convertUserDataToCreateUserDto(userData);
     } catch (e) {
       throw new BusinessException(
-        SnsAuthErrorMap.SNS_AUTH_NAVER_GOOLE_LOGIN_FAIL,
+        SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL,
         e.response.data,
       );
     }
