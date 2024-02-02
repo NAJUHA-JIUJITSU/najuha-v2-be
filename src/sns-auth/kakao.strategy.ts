@@ -4,10 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { KakaoUserData } from 'src/sns-auth/types/kakao-user-data.interface';
 import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import {
-  BusinessException,
-  SnsAuthErrorMap,
-} from 'src/common/response/errorResponse';
+import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import appConfig from 'src/common/appConfig';
 
 @Injectable()
@@ -21,10 +18,7 @@ export class KakaoStrategy implements SnsAuthStrategy {
 
       return this.convertUserDataToCreateUserDto(kakaoUserData);
     } catch (e) {
-      throw new BusinessException(
-        SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL,
-        e.response.data,
-      );
+      throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL, e.response.data);
     }
   }
 

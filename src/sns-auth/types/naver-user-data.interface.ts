@@ -1,7 +1,7 @@
 /**
  * 네이버 사용자 데이터를 나타내는 인터페이스
- * 네이버 로그인 회원의 프로필 정보 - https://developers.naver.com/docs/login/devguide/devguide.md#3-3-1-%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%ED%9A%8C%EC%9B%90%EC%9D%98-%ED%94%84%EB%A1%9C%ED%95%84-%EC%A0%95%EB%B3%B4
- * 회원 프로필 조회 API 명세 - https://developers.naver.com/docs/login/profile/profile.md#:~:text=/QlJAgUukpp1OGkG0vzi16hcRNYX6RcQ6kPxB0oAvqfUPJiJw%3D%3D-,5.%20%EC%B6%9C%EB%A0%A5%20%EA%B2%B0%EA%B3%BC,-%ED%9A%8C%EC%9B%90%EC%9D%98%20%EB%84%A4%EC%9D%B4%EB%B2%84%EC%95%84%EC%9D%B4%EB%94%94%EB%8A%94%20%EC%B6%9C%EB%A0%A5%EA%B2%B0%EA%B3%BC%EC%97%90
+ * 네이버 로그인 회원의 프로필 정보 : https://developers.naver.com/docs/login/devguide/devguide.md#3-3-1-%EB%84%A4%EC%9D%B4%EB%B2%84-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%ED%9A%8C%EC%9B%90%EC%9D%98-%ED%94%84%EB%A1%9C%ED%95%84-%EC%A0%95%EB%B3%B4
+ * 회원 프로필 조회 API 명세 : https://developers.naver.com/docs/login/profile/profile.md#:~:text=/QlJAgUukpp1OGkG0vzi16hcRNYX6RcQ6kPxB0oAvqfUPJiJw%3D%3D-,5.%20%EC%B6%9C%EB%A0%A5%20%EA%B2%B0%EA%B3%BC,-%ED%9A%8C%EC%9B%90%EC%9D%98%20%EB%84%A4%EC%9D%B4%EB%B2%84%EC%95%84%EC%9D%B4%EB%94%94%EB%8A%94%20%EC%B6%9C%EB%A0%A5%EA%B2%B0%EA%B3%BC%EC%97%90
  */
 export interface NaverUserData {
   /** 네이버 아이디마다 고유하게 발급되는 유니크한 일련번호 값.
@@ -32,6 +32,9 @@ export interface NaverUserData {
 
   /** 휴대전화번호: 대쉬(-)를 포함한 휴대전화번호 문자열 (010-0000-0000). */
   mobile: string;
+
+  /** 휴대전화번호: 국제전화번호 E.164 규격을 따르는 휴대전화번호 문자열 (+821012345678). */
+  mobile_e164: string;
 
   /** 사용자 생일(MM-DD 형식). */
   birthday: string;

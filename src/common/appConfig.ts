@@ -9,7 +9,7 @@ const envPathMap = {
 
 dotenv.config({ path: envPathMap[`${process.env.NODE_ENV}`] });
 
-interface AppConfigSchema {
+interface IAppConfig {
   // NODE_ENV ---------------------------------------------------------------------
   nodeEnv: string;
   // APP --------------------------------------------------------------------------
@@ -33,6 +33,9 @@ interface AppConfigSchema {
   dbpassword: string;
   dbDatabase: string;
   dbSynchronize: boolean;
+  // REDIS ----------------------------------------------------------------------------
+  redisHost: string;
+  redisPort: number;
   // JWT ---------------------------------------------------------------------------
   jwtAccessTokenSecret: string;
   jwtAccessTokenExpirationTime: string;
@@ -40,7 +43,7 @@ interface AppConfigSchema {
   jwtRefreshTokenExpirationTime: string;
 }
 
-const loadConfig = (): AppConfigSchema => {
+const loadConfig = (): IAppConfig => {
   const rawConfig = {
     // NODE_ENV ---------------------------------------------------------------------
     nodeEnv: process.env.NODE_ENV,
@@ -65,16 +68,18 @@ const loadConfig = (): AppConfigSchema => {
     dbpassword: process.env.DB_PASSWORD,
     dbDatabase: process.env.DB_DATABASE,
     dbSynchronize: process.env.DB_SYNCHRONIZE === 'true',
+    // REDIS ----------------------------------------------------------------------------
+    redisHost: process.env.REDIS_HOST,
+    redisPort: Number(process.env.REDIS_PORT),
     // JWT ---------------------------------------------------------------------------
     jwtAccessTokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET,
     jwtAccessTokenExpirationTime: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
     jwtRefreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET,
-    jwtRefreshTokenExpirationTime:
-      process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+    jwtRefreshTokenExpirationTime: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
   };
 
   // Validate the config
-  return typia.assert<AppConfigSchema>(rawConfig);
+  return typia.assert<IAppConfig>(rawConfig);
 };
 
 const appCnfig = loadConfig();

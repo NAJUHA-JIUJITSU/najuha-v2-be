@@ -1,17 +1,20 @@
 import { Module, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
 import Redis from 'ioredis';
+import appConfig from '../common/appConfig';
 
-const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
-const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379');
-
+/**
+ * nestjs provider 생명주기 메서드를 사용해서 Redis 클라이언트를 생성하고 종료하는 방법
+ *
+ * TODO: redis 보안 연결 설정하기
+ */
 @Module({
   providers: [
     {
       provide: 'REDIS_CLIENT',
       useFactory: () => {
         const client = new Redis({
-          host: REDIS_HOST,
-          port: REDIS_PORT,
+          host: appConfig.redisHost,
+          port: appConfig.redisPort,
         });
 
         // client.on('connect', () => console.log('Connected to Redis'));

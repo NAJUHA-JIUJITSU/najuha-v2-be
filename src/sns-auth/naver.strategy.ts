@@ -4,10 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { NaverUserData } from 'src/sns-auth/types/naver-user-data.interface';
 import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import {
-  BusinessException,
-  SnsAuthErrorMap,
-} from 'src/common/response/errorResponse';
+import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import appConfig from 'src/common/appConfig';
 
 @Injectable()
@@ -21,10 +18,7 @@ export class NaverStrategy implements SnsAuthStrategy {
 
       return this.convertUserDataToCreateUserDto(naverUserData);
     } catch (e) {
-      throw new BusinessException(
-        SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL,
-        e.response.data,
-      );
+      throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL, e.response.data);
     }
   }
 
@@ -65,7 +59,7 @@ export class NaverStrategy implements SnsAuthStrategy {
       snsId: data.id,
       name: data.name,
       email: data.email,
-      phoneNumber: data.mobile,
+      phoneNumber: data.mobile_e164,
       gender: data.gender === 'M' ? 'MALE' : 'FEMALE', // TODO: type으로 관리
     };
     return dto;
