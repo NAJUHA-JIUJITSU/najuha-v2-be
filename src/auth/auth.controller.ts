@@ -20,6 +20,7 @@ export class AuthController {
 
   /**
    * 1-1 auth sns login.
+   * - GuardLevel: PUBLIC
    *
    * @tag 1 auth
    * @return accessToken and refreshToken
@@ -36,11 +37,12 @@ export class AuthController {
 
   /**
    * 1-2 auth toekn refresh.
+   * - GuardLevel: TEMPORARY_USER
    *
    * @tag 1 auth
    * @return accessToken and refreshToken
    */
-  @SetGuardLevel(GuardLevel.PUBLIC)
+  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
   @TypedRoute.Post('refresh')
   async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
     return createResponseForm(await this.authService.refreshToken(dto));

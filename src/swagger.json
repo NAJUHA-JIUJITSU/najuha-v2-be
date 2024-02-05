@@ -46,7 +46,7 @@
           }
         },
         "summary": "2-1 create user",
-        "description": "2-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))",
+        "description": "2-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- GuardLevel: USER",
         "x-nestia-namespace": "users.postUser",
         "x-nestia-jsDocTags": [
           {
@@ -105,14 +105,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/ResponseFormUserEntity"
-                    },
-                    {
-                      "$ref": "#/components/schemas/USERS_NOT_FOUND"
-                    }
-                  ]
+                  "$ref": "#/components/schemas/ResponseFormUserEntity"
                 }
               }
             },
@@ -120,7 +113,7 @@
           }
         },
         "summary": "2-2 update user",
-        "description": "2-2 update user.",
+        "description": "2-2 update user.\n- GuardLevel: USER",
         "x-nestia-namespace": "users.patchUser",
         "x-nestia-jsDocTags": [
           {
@@ -182,7 +175,7 @@
           }
         },
         "summary": "2-3 get me",
-        "description": "2-3 get me.",
+        "description": "2-3 get me.\n- GuardLevel: USER",
         "x-nestia-namespace": "users.me.getMe",
         "x-nestia-jsDocTags": [
           {
@@ -278,7 +271,7 @@
           }
         },
         "summary": "1-1 auth sns login",
-        "description": "1-1 auth sns login.",
+        "description": "1-1 auth sns login.\n- GuardLevel: PUBLIC",
         "x-nestia-namespace": "auth.snsLogin.snsLogin",
         "x-nestia-jsDocTags": [
           {
@@ -334,7 +327,7 @@
           }
         },
         "summary": "1-2 auth toekn refresh",
-        "description": "1-2 auth toekn refresh.",
+        "description": "1-2 auth toekn refresh.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "auth.refresh.refreshToken",
         "x-nestia-jsDocTags": [
           {
@@ -357,6 +350,465 @@
           }
         ],
         "x-nestia-method": "POST"
+      }
+    },
+    "/policy": {
+      "post": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePolicyDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-1 create policy",
+        "description": "3-1 create policy.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.createPolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created policy",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "get": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all policies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormArrayPolicyEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-2 get all policies",
+        "description": "3-2 get all policies.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.findAllPolicies",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "all policies",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/policy/{id}": {
+      "get": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "policy id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "one policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyEntitynull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-3 get one policy",
+        "description": "3-3 get one policy.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.findOnePolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "policy id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "one policy",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      },
+      "patch": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "policy id",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartialPickPolicyEntitytypetitlecontent"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "updated policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-4 update policy",
+        "description": "3-4 update policy.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.updatePolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "policy id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "updated policy",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      },
+      "delete": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormnull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-5 delete policy",
+        "description": "3-5 delete policy.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.deletePolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "null",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
+    },
+    "/policy/consent": {
+      "post": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePolicyConsentDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created policy consent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-6 create policy consent",
+        "description": "3-6 create policy consent.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.consent.createPolicyConsent",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created policy consent",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "get": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all policy consents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormArrayPolicyConsentEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-7 get all policy consents",
+        "description": "3-7 get all policy consents.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.consent.findAllPolicyConsents",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "all policy consents",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/policy/consent/{id}": {
+      "get": {
+        "tags": [
+          "3 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "one policy consent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntitynull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-8 get one policy consent",
+        "description": "3-8 get one policy consent.\n- GuardLevel: USER",
+        "x-nestia-namespace": "policy.consent.findOnePolicyConsent",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "one policy consent",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
       }
     }
   },
@@ -381,10 +833,10 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 256,
+            "maxLength": 64,
             "minLength": 1,
             "nullable": true,
-            "description": "- 사용자 이름."
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "email": {
             "type": "string",
@@ -422,10 +874,16 @@
         "type": "object",
         "properties": {
           "result": {
-            "type": "boolean"
+            "type": "boolean",
+            "enum": [
+              true
+            ]
           },
           "code": {
-            "type": "number"
+            "type": "number",
+            "enum": [
+              1000
+            ]
           },
           "data": {
             "$ref": "#/components/schemas/UserEntity"
@@ -477,10 +935,10 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 256,
+            "maxLength": 64,
             "minLength": 1,
             "nullable": true,
-            "description": "- 사용자 이름."
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "phoneNumber": {
             "type": "string",
@@ -492,7 +950,7 @@
             "maxLength": 64,
             "minLength": 1,
             "nullable": true,
-            "description": "사용자 별명."
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
           },
           "gender": {
             "type": "string",
@@ -525,7 +983,7 @@
             "maxLength": 1024,
             "minLength": 1,
             "nullable": true,
-            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할)\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
+            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
           },
           "status": {
             "type": "string",
@@ -564,17 +1022,17 @@
           "createdAt",
           "updatedAt"
         ],
-        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email.\n- apple  : snsId, email, name."
+        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
       },
       "UpdateUserDto": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "maxLength": 256,
+            "maxLength": 64,
             "minLength": 1,
             "nullable": true,
-            "description": "- 사용자 이름."
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "email": {
             "type": "string",
@@ -602,7 +1060,7 @@
             "maxLength": 64,
             "minLength": 1,
             "nullable": true,
-            "description": "사용자 별명."
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
           },
           "belt": {
             "type": "string",
@@ -624,52 +1082,20 @@
         },
         "nullable": false
       },
-      "USERS_NOT_FOUND": {
+      "ResponseFormUserEntitynull": {
         "type": "object",
         "properties": {
           "result": {
             "type": "boolean",
             "enum": [
-              false
-            ]
-          },
-          "status": {
-            "type": "number",
-            "enum": [
-              404
+              true
             ]
           },
           "code": {
             "type": "number",
             "enum": [
-              6001
+              1000
             ]
-          },
-          "data": {
-            "type": "string",
-            "enum": [
-              "존재하지 않는 유저입니다."
-            ]
-          },
-          "detail": {}
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "status",
-          "code",
-          "data"
-        ],
-        "description": "----------------------------------------------------------------------------\nUsers 6000 ~ 6999"
-      },
-      "ResponseFormUserEntitynull": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean"
-          },
-          "code": {
-            "type": "number"
           },
           "data": {
             "$ref": "#/components/schemas/UserEntity.Nullable"
@@ -721,10 +1147,10 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 256,
+            "maxLength": 64,
             "minLength": 1,
             "nullable": true,
-            "description": "- 사용자 이름."
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "phoneNumber": {
             "type": "string",
@@ -736,7 +1162,7 @@
             "maxLength": 64,
             "minLength": 1,
             "nullable": true,
-            "description": "사용자 별명."
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
           },
           "gender": {
             "type": "string",
@@ -769,7 +1195,7 @@
             "maxLength": 1024,
             "minLength": 1,
             "nullable": true,
-            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할)\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
+            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
           },
           "status": {
             "type": "string",
@@ -808,7 +1234,7 @@
           "createdAt",
           "updatedAt"
         ],
-        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email.\n- apple  : snsId, email, name."
+        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
       },
       "SnsAuthDto": {
         "type": "object",
@@ -987,10 +1413,16 @@
         "type": "object",
         "properties": {
           "result": {
-            "type": "boolean"
+            "type": "boolean",
+            "enum": [
+              true
+            ]
           },
           "code": {
-            "type": "number"
+            "type": "number",
+            "enum": [
+              1000
+            ]
           },
           "data": {
             "$ref": "#/components/schemas/AuthTokensDto"
@@ -1030,6 +1462,436 @@
         "required": [
           "refreshToken"
         ]
+      },
+      "CreatePolicyDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY_POLICY",
+              "REFUND_POLICY"
+            ],
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "title",
+          "content"
+        ]
+      },
+      "ResponseFormPolicyEntity": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/PolicyEntity"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "PolicyEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "- 약관 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY_POLICY",
+              "REFUND_POLICY"
+            ],
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "type",
+          "title",
+          "content",
+          "createdAt"
+        ],
+        "description": "- 약관 테이블.\n- 서비스 이용 약관, 개인정보 처리 방침, 환불 정책 등을 저장합니다."
+      },
+      "ResponseFormArrayPolicyEntity": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyEntity"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "ResponseFormPolicyEntitynull": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/PolicyEntity.Nullable"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "PolicyEntity.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "- 약관 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY_POLICY",
+              "REFUND_POLICY"
+            ],
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "type",
+          "title",
+          "content",
+          "createdAt"
+        ],
+        "description": "- 약관 테이블.\n- 서비스 이용 약관, 개인정보 처리 방침, 환불 정책 등을 저장합니다."
+      },
+      "PartialPickPolicyEntitytypetitlecontent": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY_POLICY",
+              "REFUND_POLICY"
+            ],
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          }
+        },
+        "nullable": false,
+        "description": "Make all properties in T optional"
+      },
+      "ResponseFormnull": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "type": "null"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "CreatePolicyConsentDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number",
+            "description": "사용자 Id."
+          },
+          "policyId": {
+            "type": "number",
+            "description": "약관 ID."
+          },
+          "consentedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "동의 날짜."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "userId",
+          "policyId",
+          "consentedAt"
+        ]
+      },
+      "ResponseFormPolicyConsentEntity": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/PolicyConsentEntity"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "PolicyConsentEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "약관 동의 ID."
+          },
+          "userId": {
+            "type": "number",
+            "description": "사용자 Id."
+          },
+          "policyId": {
+            "type": "number",
+            "description": "약관 ID."
+          },
+          "consentedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "동의 날짜."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserEntity"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyEntity"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "userId",
+          "policyId",
+          "consentedAt",
+          "user",
+          "policy"
+        ],
+        "description": "- 사용자가 동의한 약관 정보"
+      },
+      "ResponseFormArrayPolicyConsentEntity": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyConsentEntity"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "ResponseFormPolicyConsentEntitynull": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/PolicyConsentEntity.Nullable"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "PolicyConsentEntity.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "약관 동의 ID."
+          },
+          "userId": {
+            "type": "number",
+            "description": "사용자 Id."
+          },
+          "policyId": {
+            "type": "number",
+            "description": "약관 ID."
+          },
+          "consentedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "동의 날짜."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserEntity"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyEntity"
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "userId",
+          "policyId",
+          "consentedAt",
+          "user",
+          "policy"
+        ],
+        "description": "- 사용자가 동의한 약관 정보"
       }
     },
     "securitySchemes": {

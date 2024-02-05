@@ -14,24 +14,18 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  public async createUser(dto: CreateUserDto): Promise<UserEntity> {
+  async createUser(dto: CreateUserDto): Promise<UserEntity> {
     const user = this.userRepository.create(dto);
     return await this.userRepository.save(user);
   }
 
-  async updateUser(
-    userId: UserEntity['id'],
-    dto: UpdateUserDto,
-  ): Promise<UserEntity> {
+  async updateUser(userId: UserEntity['id'], dto: UpdateUserDto): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND);
     return await this.userRepository.save({ ...user, ...dto });
   }
 
-  async updateUserRole(
-    userId: UserEntity['id'],
-    role: UserEntity['role'],
-  ): Promise<UserEntity> {
+  async updateUserRole(userId: UserEntity['id'], role: UserEntity['role']): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND);
     return await this.userRepository.save({ ...user, role });

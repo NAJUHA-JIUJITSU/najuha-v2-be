@@ -11,13 +11,13 @@ import {
  * - 각 snsAuthProvider 마다 제공되는 정보.
  * - kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
  * - naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
- * - google : snsId, email.
+ * - google : snsId, email, name.
  * - apple  : snsId, email, name.
  */
 @Entity('user')
 export class UserEntity {
-  /** - 사용자 ID. 데이터베이스에서 자동 생성됩니다.*/
-  @PrimaryGeneratedColumn('uuid')
+  /** - 사용자 ID. 데이터베이스에서 자동 생성됩니다. */
+  @PrimaryGeneratedColumn()
   id: number;
 
   /** - 사용자 역할. 사용자의 접근 권한을 나타냅니다. */
@@ -42,9 +42,10 @@ export class UserEntity {
   email: string;
 
   /**
-   * - 사용자 이름.
+   * // TODO: 정규식으로 유효성 검사를 해야할듯
+   * - 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)
    * @minLength 1
-   * @maxLength 256
+   * @maxLength 64
    */
   @Column('varchar', { length: 256, nullable: true })
   name: string | null;
@@ -54,6 +55,7 @@ export class UserEntity {
   phoneNumber: string | null;
 
   /**
+   * // TODO: 정규식으로 유효성 검사를 해야할듯
    * 사용자 별명.
    * @minLength 1
    * @maxLength 64
@@ -74,7 +76,7 @@ export class UserEntity {
   weight: number | null;
 
   /**
-   * - 사용자 프로필 이미지 키. (썸네일 이미지 역할)
+   * - 사용자 프로필 이미지 키. (썸네일 이미지 역할).
    * - 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
    * @minLength 1
    * @maxLength 1024
@@ -94,6 +96,3 @@ export class UserEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-
-// 약관 동의 테이블
-// 약관 테이블

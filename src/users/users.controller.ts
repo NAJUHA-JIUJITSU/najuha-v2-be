@@ -14,20 +14,20 @@ export class UsersController {
 
   /**
    * 2-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
+   * - GuardLevel: USER
    *
    * @tag 2 users
    * @returns created user info
    */
   @SetGuardLevel(GuardLevel.USER)
   @TypedRoute.Post()
-  async postUser(
-    @TypedBody() dto: CreateUserDto,
-  ): Promise<ResponseForm<UserEntity>> {
+  async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<UserEntity>> {
     return createResponseForm(await this.usersService.createUser(dto));
   }
 
   /**
    * 2-2 update user.
+   * - GuardLevel: USER
    *
    * @tag 2 users
    * @param dto UpdateUserDto
@@ -38,12 +38,13 @@ export class UsersController {
   async patchUser(
     @TypedParam('userId') userId: UserEntity['id'],
     @TypedBody() dto: UpdateUserDto,
-  ): Promise<ResponseForm<UserEntity> | USERS_NOT_FOUND> {
+  ): Promise<ResponseForm<UserEntity>> {
     return createResponseForm(await this.usersService.updateUser(userId, dto));
   }
 
   /**
    * 2-3 get me.
+   * - GuardLevel: USER
    *
    * @tag 2 users
    * @returns me

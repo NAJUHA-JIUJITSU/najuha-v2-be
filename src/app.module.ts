@@ -11,6 +11,7 @@ import { typeOrmConfigAsync } from 'src/typeorm.config';
 import { UsersModule } from 'src/users/users.module';
 import { Logger } from 'winston';
 import { CustomExceptionFilter } from 'src/common/exception-filters/custom-exception-filter';
+import { PolicyModule } from './policy/policy.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CustomExceptionFilter } from 'src/common/exception-filters/custom-excep
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     UsersModule,
     AuthModule,
+    PolicyModule,
   ],
   providers: [
     {

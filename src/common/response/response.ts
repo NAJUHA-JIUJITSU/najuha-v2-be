@@ -1,6 +1,6 @@
 export interface ResponseForm<T> {
-  result: boolean;
-  code: number;
+  result: true;
+  code: 1000;
   data: T;
 }
 
