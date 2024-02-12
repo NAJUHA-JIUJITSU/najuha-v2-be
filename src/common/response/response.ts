@@ -4,10 +4,10 @@ export interface ResponseForm<T> {
   data: T;
 }
 
-export function createResponseForm<T>(data: T): ResponseForm<T> {
+export const createResponseForm = <T>(data: T): ResponseForm<T> => {
   return {
     result: true,
     code: 1000,
     data,
   };
-}
+};
