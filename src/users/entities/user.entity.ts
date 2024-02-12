@@ -67,6 +67,13 @@ export class UserEntity {
   @Column('varchar', { nullable: true })
   gender: 'MALE' | 'FEMALE' | null;
 
+  /**
+   * 사용자 생년월일 (YYYYMMDD).
+   * @pattern ^\d{8}$
+   */
+  @Column('varchar', { length: 8, nullable: true })
+  birth: string | null;
+
   /** 사용자 주짓수 벨트. */
   @Column('varchar', { nullable: true })
   belt: '화이트' | '블루' | '퍼플' | '브라운' | '블랙' | null;
