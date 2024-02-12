@@ -61,6 +61,7 @@ export class NaverStrategy implements SnsAuthStrategy {
       email: data.email,
       phoneNumber: data.mobile_e164,
       gender: data.gender === 'M' ? 'MALE' : 'FEMALE', // TODO: type으로 관리
+      birth: data.birthyear + data.birthday.split('-').join(''),
     };
     return dto;
   }

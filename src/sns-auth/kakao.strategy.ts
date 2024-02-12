@@ -58,8 +58,9 @@ export class KakaoStrategy implements SnsAuthStrategy {
       snsId: data.id.toString(),
       name: data.kakao_account.name,
       email: data.kakao_account.email,
-      phoneNumber: data.kakao_account.phone_number,
+      phoneNumber: data.kakao_account.phone_number.replace(/[-\s]/g, ''), //'-', ' ' 제거
       gender: data.kakao_account.gender === 'male' ? 'MALE' : 'FEMALE', // TODO: type으로 관리
+      birth: data.kakao_account.birthyear + data.kakao_account.birthday,
     };
     return dto;
   }

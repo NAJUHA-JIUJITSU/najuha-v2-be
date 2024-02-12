@@ -4,10 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { GoogleUserData } from 'src/sns-auth/types/google-user-data.interface';
 import { SnsAuthStrategy } from 'src/sns-auth/types/sns-auth.strategy.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import {
-  BusinessException,
-  SnsAuthErrorMap,
-} from 'src/common/response/errorResponse';
+import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import appConfig from 'src/common/appConfig';
 
 @Injectable()
@@ -22,10 +19,7 @@ export class GoogleStrategy implements SnsAuthStrategy {
 
       return this.convertUserDataToCreateUserDto(userData);
     } catch (e) {
-      throw new BusinessException(
-        SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL,
-        e.response.data,
-      );
+      throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL, e.response.data);
     }
   }
 
@@ -68,6 +62,7 @@ export class GoogleStrategy implements SnsAuthStrategy {
       email: data.email,
       phoneNumber: null,
       gender: null,
+      birth: null,
     };
 
     return dto;
