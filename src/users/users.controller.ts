@@ -8,6 +8,7 @@ import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 
+// TODO: GaurdLevel 설설
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -20,9 +21,10 @@ export class UsersController {
    * @returns created user info
    */
   @SetGuardLevel(GuardLevel.USER)
-  @TypedRoute.Post()
+  @TypedRoute.Post('/')
   async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<UserEntity>> {
-    return createResponseForm(await this.usersService.createUser(dto));
+    const user = await this.usersService.createUser(dto);
+    return createResponseForm(user);
   }
 
   /**
@@ -33,13 +35,12 @@ export class UsersController {
    * @param dto UpdateUserDto
    * @returns updated user
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER) //TODO: USER 로 변경
-  @TypedRoute.Patch('/:userId')
-  async patchUser(
-    @TypedParam('userId') userId: UserEntity['id'],
-    @TypedBody() dto: UpdateUserDto,
-  ): Promise<ResponseForm<UserEntity>> {
-    return createResponseForm(await this.usersService.updateUser(userId, dto));
+  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @TypedRoute.Patch('/')
+  async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
+    const userId = req['userId'];
+    const user = await this.usersService.updateUser(userId, dto);
+    return createResponseForm(user);
   }
 
   /**
@@ -49,10 +50,27 @@ export class UsersController {
    * @tag 2 users
    * @returns me
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER) // TODO: USER 로 변경
+  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
     const userId = req['userId'];
-    return createResponseForm(await this.usersService.findUserById(userId));
+    const user = await this.usersService.findUserById(userId);
+    return createResponseForm(user);
+  }
+
+  /**
+   * 2-4 get user by nickname.
+   * - GuardLevel: USER
+   *
+   * @tag 2 users
+   * @returns user
+   */
+  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @TypedRoute.Get('/:nickname')
+  async getUserByNickname(
+    @TypedParam('nickname') nickname: string,
+  ): Promise<ResponseForm<Pick<UserEntity, 'nickname'> | null>> {
+    const user = await this.usersService.findUserByNickname(nickname);
+    return createResponseForm(user);
   }
 }
