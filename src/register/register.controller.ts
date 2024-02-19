@@ -34,6 +34,9 @@ export class RegisterController {
   /**
    * 2-2 check duplicated nickname.
    * - GuardLevel: TEMPORARY_USER
+   * - 닉네임이 중복되면 true, 중복되지 않으면 false를 반환
+   * - 본인이 사용중인 닉네임이면 false를 반환
+   * - 이미 사용중인 닉네임이면 true를 반환
    *
    * @tag 2 register
    * @returns user

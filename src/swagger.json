@@ -139,6 +139,16 @@
               }
             },
             "x-nestia-encrypted": false
+          },
+          "4002": {
+            "description": "AUTH_REFRESH_TOKEN_UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AUTH_REFRESH_TOKEN_UNAUTHORIZED"
+                }
+              }
+            }
           }
         },
         "summary": "1-2 auth toekn refresh",
@@ -468,6 +478,26 @@
               }
             },
             "x-nestia-encrypted": false
+          },
+          "6000": {
+            "description": "REGISTER_NICKNAME_DUPLICATED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/REGISTER_NICKNAME_DUPLICATED"
+                }
+              }
+            }
+          },
+          "6001": {
+            "description": "USERS_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_NOT_FOUND"
+                }
+              }
+            }
           }
         },
         "summary": "2-3 register user",
@@ -1185,6 +1215,43 @@
           "refreshToken"
         ]
       },
+      "AUTH_REFRESH_TOKEN_UNAUTHORIZED": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              401
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              4002
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "유효하지 않은 refreshToken 입니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ]
+      },
       "CreateUserDto": {
         "type": "object",
         "properties": {
@@ -1206,8 +1273,9 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "email": {
             "type": "string",
@@ -1228,13 +1296,13 @@
               "FEMALE"
             ],
             "nullable": true,
-            "description": "사용자 성별."
+            "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
             "pattern": "^\\d{8}$",
             "nullable": true,
-            "description": "사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (YYYYMMDD)."
           }
         },
         "nullable": false,
@@ -1315,8 +1383,9 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "phoneNumber": {
             "type": "string",
@@ -1327,8 +1396,9 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "gender": {
             "type": "string",
@@ -1337,13 +1407,13 @@
               "FEMALE"
             ],
             "nullable": true,
-            "description": "사용자 성별."
+            "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
             "pattern": "^\\d{8}$",
             "nullable": true,
-            "description": "사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (YYYYMMDD)."
           },
           "belt": {
             "type": "string",
@@ -1355,12 +1425,12 @@
               "블랙"
             ],
             "nullable": true,
-            "description": "사용자 주짓수 벨트."
+            "description": "- 사용자 주짓수 벨트."
           },
           "weight": {
             "type": "number",
             "nullable": true,
-            "description": "사용자 체중."
+            "description": "- 사용자 체중."
           },
           "profileImageUrlKey": {
             "type": "string",
@@ -1416,8 +1486,9 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "gender": {
             "type": "string",
@@ -1426,20 +1497,21 @@
               "FEMALE"
             ],
             "nullable": true,
-            "description": "사용자 성별."
+            "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
             "pattern": "^\\d{8}$",
             "nullable": true,
-            "description": "사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (YYYYMMDD)."
           },
           "nickname": {
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "belt": {
             "type": "string",
@@ -1451,7 +1523,7 @@
               "블랙"
             ],
             "nullable": true,
-            "description": "사용자 주짓수 벨트."
+            "description": "- 사용자 주짓수 벨트."
           }
         },
         "nullable": false
@@ -1523,8 +1595,9 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "phoneNumber": {
             "type": "string",
@@ -1535,8 +1608,9 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "gender": {
             "type": "string",
@@ -1545,13 +1619,13 @@
               "FEMALE"
             ],
             "nullable": true,
-            "description": "사용자 성별."
+            "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
             "pattern": "^\\d{8}$",
             "nullable": true,
-            "description": "사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (YYYYMMDD)."
           },
           "belt": {
             "type": "string",
@@ -1563,12 +1637,12 @@
               "블랙"
             ],
             "nullable": true,
-            "description": "사용자 주짓수 벨트."
+            "description": "- 사용자 주짓수 벨트."
           },
           "weight": {
             "type": "number",
             "nullable": true,
-            "description": "사용자 체중."
+            "description": "- 사용자 체중."
           },
           "profileImageUrlKey": {
             "type": "string",
@@ -1653,20 +1727,21 @@
               "FEMALE"
             ],
             "nullable": true,
-            "description": "사용자 성별."
+            "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
             "pattern": "^\\d{8}$",
             "nullable": true,
-            "description": "사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (YYYYMMDD)."
           },
           "nickname": {
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "belt": {
             "type": "string",
@@ -1678,10 +1753,86 @@
               "블랙"
             ],
             "nullable": true,
-            "description": "사용자 주짓수 벨트."
+            "description": "- 사용자 주짓수 벨트."
           }
         },
         "nullable": false
+      },
+      "REGISTER_NICKNAME_DUPLICATED": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              409
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              6000
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "이미 사용중인 닉네임입니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ],
+        "description": "----------------------------------------------------------------------------\nRegister 6000 ~ 6999"
+      },
+      "USERS_NOT_FOUND": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              404
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              6001
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "존재하지 않는 유저입니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ],
+        "description": "----------------------------------------------------------------------------\nUsers 7000 ~ 7999"
       },
       "CreatePolicyDto": {
         "type": "object",
