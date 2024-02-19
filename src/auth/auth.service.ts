@@ -7,10 +7,7 @@ import { SnsAuthDto } from 'src/sns-auth/dto/sns-auth.dto';
 import { SnsAuthService } from 'src/sns-auth/sns-auth.service';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
-import {
-  AuthErrorMap,
-  BusinessException,
-} from 'src/common/response/errorResponse';
+import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appConfig from 'src/common/appConfig';
 
 // TODO: 에러처리 *
@@ -34,10 +31,7 @@ export class AuthService {
   async snsLogin(snsAuthDto: SnsAuthDto): Promise<AuthTokensDto> {
     const userData = await this.snsAuthService.validate(snsAuthDto);
 
-    let user = await this.usersService.findUserBySnsIdAndProvider(
-      userData.snsAuthProvider,
-      userData.snsId,
-    );
+    let user = await this.usersService.findUserBySnsIdAndProvider(userData.snsAuthProvider, userData.snsId);
 
     if (!user) user = await this.usersService.createUser(userData);
 
@@ -63,27 +57,15 @@ export class AuthService {
     const { refreshToken } = refreshTokenDto;
     const payload = await this.verifyRefreshToken(refreshToken);
 
-    const newAccessToken = this.createAccessToken(
-      payload.userId,
-      payload.userRole,
-    );
-    const newRefreshToken = this.createRefreshToken(
-      payload.userId,
-      payload.userRole,
-    );
+    const newAccessToken = this.createAccessToken(payload.userId, payload.userRole);
+    const newRefreshToken = this.createRefreshToken(payload.userId, payload.userRole);
 
-    await this.redisClient.set(
-      `userId:${payload.userId}:refreshToken`,
-      newRefreshToken,
-    );
+    await this.redisClient.set(`userId:${payload.userId}:refreshToken`, newRefreshToken);
 
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   }
 
-  private createAccessToken(
-    userId: UserEntity['id'],
-    userRole: UserEntity['role'],
-  ): string {
+  createAccessToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appConfig.jwtAccessTokenSecret,
@@ -91,10 +73,7 @@ export class AuthService {
     });
   }
 
-  private createRefreshToken(
-    userId: UserEntity['id'],
-    userRole: UserEntity['role'],
-  ): string {
+  createRefreshToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appConfig.jwtRefreshTokenSecret,
@@ -105,9 +84,7 @@ export class AuthService {
   private async verifyRefreshToken(refreshToken: string): Promise<any> {
     const payload = this.jwtService.decode(refreshToken);
 
-    const storedRefreshToken = await this.redisClient.get(
-      `userId:${payload.userId}:refreshToken`,
-    );
+    const storedRefreshToken = await this.redisClient.get(`userId:${payload.userId}:refreshToken`);
 
     if (!storedRefreshToken || storedRefreshToken !== refreshToken)
       throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
@@ -118,10 +95,7 @@ export class AuthService {
       });
     } catch (e) {
       await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
-      throw new BusinessException(
-        AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED,
-        e.message,
-      );
+      throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
     }
 
     return payload;

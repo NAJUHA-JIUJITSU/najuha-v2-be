@@ -45,10 +45,9 @@ export class UsersService {
     return user;
   }
 
-  async findUserByNickname(nickname: string): Promise<Pick<UserEntity, 'nickname'> | null> {
+  async findUserByNickname(nickname: string): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({
       where: { nickname },
-      select: ['nickname'],
     });
     return user;
   }

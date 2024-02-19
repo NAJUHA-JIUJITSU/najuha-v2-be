@@ -15,192 +15,7 @@
     }
   },
   "paths": {
-    "/users": {
-      "post": {
-        "tags": [
-          "2 users"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "created user info",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "2-1 create user",
-        "description": "2-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- GuardLevel: USER",
-        "x-nestia-namespace": "users.postUser",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "2 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "created user info",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      }
-    },
-    "/users/{userId}": {
-      "patch": {
-        "tags": [
-          "2 users"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "",
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "description": "UpdateUserDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "updated user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "2-2 update user",
-        "description": "2-2 update user.\n- GuardLevel: USER",
-        "x-nestia-namespace": "users.patchUser",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "2 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "dto",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "UpdateUserDto",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "updated user",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "PATCH"
-      }
-    },
-    "/users/me": {
-      "get": {
-        "tags": [
-          "2 users"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "me",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserEntitynull"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "2-3 get me",
-        "description": "2-3 get me.\n- GuardLevel: USER",
-        "x-nestia-namespace": "users.me.getMe",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "2 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "me",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
-    "/auth/snsLogin": {
+    "/auth/sns-login": {
       "post": {
         "tags": [
           "1 auth"
@@ -272,7 +87,7 @@
         },
         "summary": "1-1 auth sns login",
         "description": "1-1 auth sns login.\n- GuardLevel: PUBLIC",
-        "x-nestia-namespace": "auth.snsLogin.snsLogin",
+        "x-nestia-namespace": "auth.sns-login.snsLogin",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -296,7 +111,7 @@
         "x-nestia-method": "POST"
       }
     },
-    "/auth/refresh": {
+    "/auth/token": {
       "post": {
         "tags": [
           "1 auth"
@@ -328,7 +143,7 @@
         },
         "summary": "1-2 auth toekn refresh",
         "description": "1-2 auth toekn refresh.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "auth.refresh.refreshToken",
+        "x-nestia-namespace": "auth.token.refreshToken",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -352,10 +167,339 @@
         "x-nestia-method": "POST"
       }
     },
+    "/users": {
+      "post": {
+        "tags": [
+          "3 users"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created user info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUserEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-1 create user",
+        "description": "3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- GuardLevel: USER",
+        "x-nestia-namespace": "users.postUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 users",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created user info",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "patch": {
+        "tags": [
+          "3 users"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "UpdateUserDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "updated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUserEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-2 update user",
+        "description": "3-2 update user.\n- GuardLevel: USER",
+        "x-nestia-namespace": "users.patchUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 users",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "dto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateUserDto",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "updated user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "3 users"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUserEntitynull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "3-3 get me",
+        "description": "3-3 get me.\n- GuardLevel: USER",
+        "x-nestia-namespace": "users.me.getMe",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "3 users",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/register/users/me": {
+      "get": {
+        "tags": [
+          "2 register"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUserEntitynull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "2-1 get temporary user info",
+        "description": "2-1 get temporary user info.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "register.users.me.getMe",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "2 register",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/register/users/{nickname}/is-duplicated": {
+      "get": {
+        "tags": [
+          "2 register"
+        ],
+        "parameters": [
+          {
+            "name": "nickname",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormboolean"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "2-2 check duplicated nickname",
+        "description": "2-2 check duplicated nickname.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "register.users.is-duplicated.getIsDuplicatedNickname",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "2 register",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/register": {
+      "patch": {
+        "tags": [
+          "2 register"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "accessToken & refreshToken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormAuthTokensDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "2-3 register user",
+        "description": "2-3 register user.\n- GuardLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
+        "x-nestia-namespace": "register.registerUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "2 register",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "accessToken & refreshToken",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      }
+    },
     "/policy": {
       "post": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [],
         "requestBody": {
@@ -382,15 +526,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-1 create policy",
-        "description": "3-1 create policy.\n- GuardLevel: USER",
+        "summary": "4-1 create policy",
+        "description": "4-1 create policy.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.createPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -409,7 +553,7 @@
       },
       "get": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [],
         "responses": {
@@ -425,15 +569,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-2 get all policies",
-        "description": "3-2 get all policies.\n- GuardLevel: USER",
+        "summary": "4-2 get all policies",
+        "description": "4-2 get all policies.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.findAllPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -454,7 +598,7 @@
     "/policy/{id}": {
       "get": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [
           {
@@ -480,15 +624,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-3 get one policy",
-        "description": "3-3 get one policy.\n- GuardLevel: USER",
+        "summary": "4-3 get one policy",
+        "description": "4-3 get one policy.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.findOnePolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -524,7 +668,7 @@
       },
       "patch": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [
           {
@@ -561,15 +705,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-4 update policy",
-        "description": "3-4 update policy.\n- GuardLevel: USER",
+        "summary": "4-4 update policy",
+        "description": "4-4 update policy.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.updatePolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -605,7 +749,7 @@
       },
       "delete": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [
           {
@@ -631,15 +775,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-5 delete policy",
-        "description": "3-5 delete policy.\n- GuardLevel: USER",
+        "summary": "4-5 delete policy",
+        "description": "4-5 delete policy.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.deletePolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -660,7 +804,7 @@
     "/policy/consent": {
       "post": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [],
         "requestBody": {
@@ -687,15 +831,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-6 create policy consent",
-        "description": "3-6 create policy consent.\n- GuardLevel: USER",
+        "summary": "4-6 create policy consent",
+        "description": "4-6 create policy consent.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.consent.createPolicyConsent",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -714,7 +858,7 @@
       },
       "get": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [],
         "responses": {
@@ -730,15 +874,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-7 get all policy consents",
-        "description": "3-7 get all policy consents.\n- GuardLevel: USER",
+        "summary": "4-7 get all policy consents",
+        "description": "4-7 get all policy consents.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.consent.findAllPolicyConsents",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -759,7 +903,7 @@
     "/policy/consent/{id}": {
       "get": {
         "tags": [
-          "3 policy"
+          "4 policy"
         ],
         "parameters": [
           {
@@ -785,15 +929,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-8 get one policy consent",
-        "description": "3-8 get one policy consent.\n- GuardLevel: USER",
+        "summary": "4-8 get one policy consent",
+        "description": "4-8 get one policy consent.\n- GuardLevel: TEMPORARY_USER",
         "x-nestia-namespace": "policy.consent.findOnePolicyConsent",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 policy",
+                "text": "4 policy",
                 "kind": "text"
               }
             ]
@@ -814,428 +958,6 @@
   },
   "components": {
     "schemas": {
-      "CreateUserDto": {
-        "type": "object",
-        "properties": {
-          "snsId": {
-            "type": "string",
-            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
-          },
-          "snsAuthProvider": {
-            "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
-            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 320,
-            "minLength": 1,
-            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true,
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
-            "nullable": true,
-            "description": "사용자 성별."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "snsId",
-          "snsAuthProvider",
-          "name",
-          "email",
-          "phoneNumber",
-          "gender"
-        ]
-      },
-      "ResponseFormUserEntity": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              1000
-            ]
-          },
-          "data": {
-            "$ref": "#/components/schemas/UserEntity"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "code",
-          "data"
-        ]
-      },
-      "UserEntity": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "ADMIN",
-              "USER",
-              "TEMPORARY_USER"
-            ],
-            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
-          },
-          "snsAuthProvider": {
-            "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
-            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
-          },
-          "snsId": {
-            "type": "string",
-            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 320,
-            "minLength": 1,
-            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true,
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
-          },
-          "nickname": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
-            "nullable": true,
-            "description": "사용자 성별."
-          },
-          "belt": {
-            "type": "string",
-            "enum": [
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
-            "nullable": true,
-            "description": "사용자 주짓수 벨트."
-          },
-          "weight": {
-            "type": "number",
-            "nullable": true,
-            "description": "사용자 체중."
-          },
-          "profileImageUrlKey": {
-            "type": "string",
-            "maxLength": 1024,
-            "minLength": 1,
-            "nullable": true,
-            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
-            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "role",
-          "snsAuthProvider",
-          "snsId",
-          "email",
-          "name",
-          "phoneNumber",
-          "nickname",
-          "gender",
-          "belt",
-          "weight",
-          "profileImageUrlKey",
-          "status",
-          "createdAt",
-          "updatedAt"
-        ],
-        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
-      },
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 320,
-            "minLength": 1,
-            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true,
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
-            "nullable": true,
-            "description": "사용자 성별."
-          },
-          "nickname": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
-          },
-          "belt": {
-            "type": "string",
-            "enum": [
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
-            "nullable": true,
-            "description": "사용자 주짓수 벨트."
-          },
-          "weight": {
-            "type": "number",
-            "nullable": true,
-            "description": "사용자 체중."
-          }
-        },
-        "nullable": false
-      },
-      "ResponseFormUserEntitynull": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              1000
-            ]
-          },
-          "data": {
-            "$ref": "#/components/schemas/UserEntity.Nullable"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "code",
-          "data"
-        ]
-      },
-      "UserEntity.Nullable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "ADMIN",
-              "USER",
-              "TEMPORARY_USER"
-            ],
-            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
-          },
-          "snsAuthProvider": {
-            "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
-            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
-          },
-          "snsId": {
-            "type": "string",
-            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 320,
-            "minLength": 1,
-            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true,
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
-          },
-          "nickname": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "nullable": true,
-            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
-            "nullable": true,
-            "description": "사용자 성별."
-          },
-          "belt": {
-            "type": "string",
-            "enum": [
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
-            "nullable": true,
-            "description": "사용자 주짓수 벨트."
-          },
-          "weight": {
-            "type": "number",
-            "nullable": true,
-            "description": "사용자 체중."
-          },
-          "profileImageUrlKey": {
-            "type": "string",
-            "maxLength": 1024,
-            "minLength": 1,
-            "nullable": true,
-            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
-            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
-          }
-        },
-        "nullable": true,
-        "required": [
-          "id",
-          "role",
-          "snsAuthProvider",
-          "snsId",
-          "email",
-          "name",
-          "phoneNumber",
-          "nickname",
-          "gender",
-          "belt",
-          "weight",
-          "profileImageUrlKey",
-          "status",
-          "createdAt",
-          "updatedAt"
-        ],
-        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
-      },
       "SnsAuthDto": {
         "type": "object",
         "properties": {
@@ -1462,6 +1184,504 @@
         "required": [
           "refreshToken"
         ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "snsId": {
+            "type": "string",
+            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+          },
+          "snsAuthProvider": {
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
+            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "minLength": 1,
+            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "nullable": true,
+            "description": "사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^\\d{8}$",
+            "nullable": true,
+            "description": "사용자 생년월일 (YYYYMMDD)."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "snsId",
+          "snsAuthProvider",
+          "name",
+          "email",
+          "phoneNumber",
+          "gender",
+          "birth"
+        ]
+      },
+      "ResponseFormUserEntity": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserEntity"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "UserEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ],
+            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
+          },
+          "snsAuthProvider": {
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
+            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+          },
+          "snsId": {
+            "type": "string",
+            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "minLength": 1,
+            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "nullable": true,
+            "description": "사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^\\d{8}$",
+            "nullable": true,
+            "description": "사용자 생년월일 (YYYYMMDD)."
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "nullable": true,
+            "description": "사용자 주짓수 벨트."
+          },
+          "weight": {
+            "type": "number",
+            "nullable": true,
+            "description": "사용자 체중."
+          },
+          "profileImageUrlKey": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "nullable": true,
+            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "role",
+          "snsAuthProvider",
+          "snsId",
+          "email",
+          "name",
+          "phoneNumber",
+          "nickname",
+          "gender",
+          "birth",
+          "belt",
+          "weight",
+          "profileImageUrlKey",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "nullable": true,
+            "description": "사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^\\d{8}$",
+            "nullable": true,
+            "description": "사용자 생년월일 (YYYYMMDD)."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "nullable": true,
+            "description": "사용자 주짓수 벨트."
+          }
+        },
+        "nullable": false
+      },
+      "ResponseFormUserEntitynull": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserEntity.Nullable"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "UserEntity.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ],
+            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
+          },
+          "snsAuthProvider": {
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
+            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+          },
+          "snsId": {
+            "type": "string",
+            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "minLength": 1,
+            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "nullable": true,
+            "description": "사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^\\d{8}$",
+            "nullable": true,
+            "description": "사용자 생년월일 (YYYYMMDD)."
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "nullable": true,
+            "description": "사용자 주짓수 벨트."
+          },
+          "weight": {
+            "type": "number",
+            "nullable": true,
+            "description": "사용자 체중."
+          },
+          "profileImageUrlKey": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "nullable": true,
+            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "role",
+          "snsAuthProvider",
+          "snsId",
+          "email",
+          "name",
+          "phoneNumber",
+          "nickname",
+          "gender",
+          "birth",
+          "belt",
+          "weight",
+          "profileImageUrlKey",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
+      },
+      "ResponseFormboolean": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "type": "boolean"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "RegisterUserDto": {
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "nullable": true,
+            "description": "사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^\\d{8}$",
+            "nullable": true,
+            "description": "사용자 생년월일 (YYYYMMDD)."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "nullable": true,
+            "description": "// TODO: 정규식으로 유효성 검사를 해야할듯\n사용자 별명."
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "nullable": true,
+            "description": "사용자 주짓수 벨트."
+          }
+        },
+        "nullable": false
       },
       "CreatePolicyDto": {
         "type": "object",

@@ -30,7 +30,7 @@
          *   - "equals": Use typia.equals() function
          *   - "validateEquals": Use typia.validateEquals() function
          */
-        "validate": "assert",
+        "validate": "assertEquals",
         /**
          * Validate JSON typed response body.
          *
@@ -45,6 +45,6 @@
       {
         "transform": "typia/lib/transform"
       }
-    ],
-  },
+    ]
+  }
 }

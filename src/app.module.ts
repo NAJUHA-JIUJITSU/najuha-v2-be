@@ -12,6 +12,7 @@ import { UsersModule } from 'src/users/users.module';
 import { Logger } from 'winston';
 import { CustomExceptionFilter } from 'src/common/exception-filters/custom-exception-filter';
 import { PolicyModule } from './policy/policy.module';
+import { RegisterModule } from './register/register.module';
 
 @Module({
   imports: [
@@ -20,8 +21,9 @@ import { PolicyModule } from './policy/policy.module';
       global: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
-    UsersModule,
     AuthModule,
+    RegisterModule,
+    UsersModule,
     PolicyModule,
   ],
   providers: [

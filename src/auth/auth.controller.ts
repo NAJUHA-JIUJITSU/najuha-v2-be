@@ -30,7 +30,7 @@ export class AuthController {
   @TypedException<SNS_AUTH_NAVER_LOGIN_FAIL>(5002, 'SNS_AUTH_NAVER_LOGIN_FAIL')
   @TypedException<SNS_AUTH_GOOGLE_LOGIN_FAIL>(5003, 'SNS_AUTH_GOOGLE_LOGIN_FAIL')
   @SetGuardLevel(GuardLevel.PUBLIC)
-  @TypedRoute.Post('snsLogin')
+  @TypedRoute.Post('sns-login')
   async snsLogin(@TypedBody() dto: SnsAuthDto): Promise<ResponseForm<AuthTokensDto>> {
     return createResponseForm(await this.authService.snsLogin(dto));
   }
@@ -43,7 +43,7 @@ export class AuthController {
    * @return accessToken and refreshToken
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
-  @TypedRoute.Post('refresh')
+  @TypedRoute.Post('token')
   async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
     return createResponseForm(await this.authService.refreshToken(dto));
   }

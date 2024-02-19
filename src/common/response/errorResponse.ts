@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import exp from 'constants';
 import typia from 'typia';
 
 export interface ErrorResponse {
@@ -59,10 +60,8 @@ export interface AUTH_LEVEL_FORBIDDEN extends ErrorResponse {
 
 export const AuthErrorMap = {
   AUTH_ACCESS_TOKEN_MISSING: typia.random<AUTH_ACCESS_TOKEN_MISSING>(),
-  AUTH_ACCESS_TOKEN_UNAUTHORIZED:
-    typia.random<AUTH_ACCESS_TOKEN_UNAUTHORIZED>(),
-  AUTH_REFRESH_TOKEN_UNAUTHORIZED:
-    typia.random<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(),
+  AUTH_ACCESS_TOKEN_UNAUTHORIZED: typia.random<AUTH_ACCESS_TOKEN_UNAUTHORIZED>(),
+  AUTH_REFRESH_TOKEN_UNAUTHORIZED: typia.random<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(),
   AUTH_LEVEL_FORBIDDEN: typia.random<AUTH_LEVEL_FORBIDDEN>(),
 };
 
@@ -98,15 +97,29 @@ export interface SNS_AUTH_GOOGLE_LOGIN_FAIL extends ErrorResponse {
 }
 
 export const SnsAuthErrorMap = {
-  SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER:
-    typia.random<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(),
+  SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER: typia.random<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(),
   SNS_AUTH_KAKAO_LOGIN_FAIL: typia.random<SNS_AUTH_KAKAO_LOGIN_FAIL>(),
   SNS_AUTH_NAVER_LOGIN_FAIL: typia.random<SNS_AUTH_NAVER_LOGIN_FAIL>(),
   SNS_AUTH_GOOGLE_LOGIN_FAIL: typia.random<SNS_AUTH_GOOGLE_LOGIN_FAIL>(),
 };
 
 /** ----------------------------------------------------------------------------
- * Users 6000 ~ 6999
+ * Register 6000 ~ 6999
+ */
+
+export interface REGISTER_NICKNAME_DUPLICATED extends ErrorResponse {
+  result: false;
+  status: HttpStatus.CONFLICT;
+  code: 6000;
+  data: '이미 사용중인 닉네임입니다.';
+}
+
+export const RegisterErrorMap = {
+  REGISTER_NICKNAME_DUPLICATED: typia.random<REGISTER_NICKNAME_DUPLICATED>(),
+};
+
+/** ----------------------------------------------------------------------------
+ * Users 7000 ~ 7999
  */
 export interface USERS_NOT_FOUND extends ErrorResponse {
   result: false;

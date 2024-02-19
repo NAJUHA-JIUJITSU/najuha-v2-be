@@ -3,10 +3,7 @@ import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import {
-  AuthErrorMap,
-  BusinessException,
-} from 'src/common/response/errorResponse';
+import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appCnfig from 'src/common/appConfig';
 
 const GUARD_LEVEL_KEY = 'gaurdLevel';
@@ -17,8 +14,7 @@ export enum GuardLevel {
   ADMIN = 4,
 }
 
-export const SetGuardLevel = (authLevel: GuardLevel) =>
-  SetMetadata(GUARD_LEVEL_KEY, authLevel);
+export const SetGuardLevel = (authLevel: GuardLevel) => SetMetadata(GUARD_LEVEL_KEY, authLevel);
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -28,18 +24,17 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredGuardLevel = this.reflector.getAllAndOverride<GuardLevel>(
-      GUARD_LEVEL_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+    const requiredGuardLevel = this.reflector.getAllAndOverride<GuardLevel>(GUARD_LEVEL_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
     if (requiredGuardLevel === GuardLevel.PUBLIC) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromHeader(request);
-    if (!accessToken)
-      throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_MISSING);
+    if (!accessToken) throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_MISSING);
 
     const payload = await this.verifyToken(accessToken);
 
@@ -58,17 +53,11 @@ export class AuthGuard implements CanActivate {
         secret: appCnfig.jwtAccessTokenSecret,
       });
     } catch (e) {
-      throw new BusinessException(
-        AuthErrorMap.AUTH_ACCESS_TOKEN_UNAUTHORIZED,
-        e.message,
-      );
+      throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_UNAUTHORIZED, e.message);
     }
   }
 
-  private validateGuardLevel(
-    userRole: string,
-    requiredGuardLevel: GuardLevel,
-  ): any {
+  private validateGuardLevel(userRole: string, requiredGuardLevel: GuardLevel): any {
     if (requiredGuardLevel > GuardLevel[userRole]) {
       throw new BusinessException(AuthErrorMap.AUTH_LEVEL_FORBIDDEN);
     }

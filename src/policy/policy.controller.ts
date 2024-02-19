@@ -19,10 +19,10 @@ export class PolicyController {
   ) {}
 
   /**
-   * 3-1 create policy.
+   * 4-1 create policy.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @returns created policy
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
@@ -33,10 +33,10 @@ export class PolicyController {
   }
 
   /**
-   * 3-2 get all policies.
+   * 4-2 get all policies.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @returns all policies
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
@@ -47,10 +47,10 @@ export class PolicyController {
   }
 
   /**
-   * 3-3 get one policy.
+   * 4-3 get one policy.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @param id policy id
    * @returns one policy
    */
@@ -62,10 +62,10 @@ export class PolicyController {
   }
 
   /**
-   * 3-4 update policy.
+   * 4-4 update policy.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @param id policy id
    * @returns updated policy
    */
@@ -80,10 +80,10 @@ export class PolicyController {
   }
 
   /**
-   * 3-5 delete policy.
+   * 4-5 delete policy.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @returns null
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
@@ -94,10 +94,10 @@ export class PolicyController {
   }
 
   /**
-   * 3-6 create policy consent.
+   * 4-6 create policy consent.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @returns created policy consent
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
@@ -110,10 +110,10 @@ export class PolicyController {
   }
 
   /**
-   *  3-7 get all policy consents.
+   *  4-7 get all policy consents.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @returns all policy consents
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
@@ -124,10 +124,10 @@ export class PolicyController {
   }
 
   /**
-   * 3-8 get one policy consent.
+   * 4-8 get one policy consent.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 3 policy
+   * @tag 4 policy
    * @returns one policy consent
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
