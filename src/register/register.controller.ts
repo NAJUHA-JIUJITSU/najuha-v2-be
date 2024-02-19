@@ -1,4 +1,4 @@
-import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
+import { TypedBody, TypedException, TypedParam, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { SetGuardLevel, GuardLevel } from 'src/auth/auth.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
@@ -7,6 +7,7 @@ import { RegisterService } from './register.service';
 import { RegisterUserDto } from './dto/registerUser.dto';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { UsersService } from 'src/users/users.service';
+import { REGISTER_NICKNAME_DUPLICATED, USERS_NOT_FOUND } from 'src/common/response/errorResponse';
 
 @Controller('register')
 export class RegisterController {
@@ -57,6 +58,8 @@ export class RegisterController {
    * @tag 2 register
    * @returns accessToken & refreshToken
    */
+  @TypedException<REGISTER_NICKNAME_DUPLICATED>(6000, 'REGISTER_NICKNAME_DUPLICATED')
+  @TypedException<USERS_NOT_FOUND>(6001, 'USERS_NOT_FOUND')
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
   @TypedRoute.Patch()
   async registerUser(@Req() req: Request, @TypedBody() dto: RegisterUserDto): Promise<ResponseForm<AuthTokensDto>> {

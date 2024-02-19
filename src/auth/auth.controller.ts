@@ -42,6 +42,7 @@ export class AuthController {
    * @tag 1 auth
    * @return accessToken and refreshToken
    */
+  @TypedException<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(4002, 'AUTH_REFRESH_TOKEN_UNAUTHORIZED')
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
   @TypedRoute.Post('token')
   async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
