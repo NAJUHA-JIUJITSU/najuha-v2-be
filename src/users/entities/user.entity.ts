@@ -42,10 +42,10 @@ export class UserEntity {
   email: string;
 
   /**
-   * // TODO: 정규식으로 유효성 검사를 해야할듯
    * - 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)
    * @minLength 1
    * @maxLength 64
+   * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$
    */
   @Column('varchar', { length: 256, nullable: true })
   name: null | string;
@@ -55,30 +55,31 @@ export class UserEntity {
   phoneNumber: null | string;
 
   /**
-   * // TODO: 정규식으로 유효성 검사를 해야할듯
-   * 사용자 별명.
+   * - 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)
+   *
    * @minLength 1
    * @maxLength 64
+   * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$
    */
   @Column('varchar', { length: 64, nullable: true })
   nickname: null | string;
 
-  /** 사용자 성별. */
+  /** - 사용자 성별. */
   @Column('varchar', { nullable: true })
   gender: null | 'MALE' | 'FEMALE';
 
   /**
-   * 사용자 생년월일 (YYYYMMDD).
+   * - 사용자 생년월일 (YYYYMMDD).
    * @pattern ^\d{8}$
    */
   @Column('varchar', { length: 8, nullable: true })
   birth: null | string;
 
-  /** 사용자 주짓수 벨트. */
+  /** - 사용자 주짓수 벨트. */
   @Column('varchar', { nullable: true })
   belt: null | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
-  /** 사용자 체중. */
+  /** - 사용자 체중. */
   @Column('float', { nullable: true })
   weight: null | number;
 
