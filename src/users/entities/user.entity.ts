@@ -76,8 +76,8 @@ export class UserEntity {
   birth: null | string;
 
   /** - 사용자 주짓수 벨트. */
-  @Column('varchar', { nullable: true })
-  belt: null | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
+  @Column('varchar', { length: 10, nullable: true })
+  belt: null | '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
   /** - 사용자 체중. */
   @Column('float', { nullable: true })
