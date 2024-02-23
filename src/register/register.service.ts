@@ -35,8 +35,7 @@ export class RegisterService {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
 
-    await this.usersService.updateUser(userId, dto);
-    const user = await this.usersService.updateUserRole(userId, 'USER');
+    const user = await this.usersService.updateUser(userId, { ...dto, role: 'USER' });
 
     const accessToken = this.authService.createAccessToken(user.id, user.role);
     const refreshToken = this.authService.createRefreshToken(user.id, user.role);

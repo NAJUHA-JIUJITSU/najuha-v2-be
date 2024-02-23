@@ -6,6 +6,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { UpdateUserWithRoleDto } from './dto/update-user-with-role.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,16 +20,10 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
-  async updateUser(userId: UserEntity['id'], dto: UpdateUserDto): Promise<UserEntity> {
+  async updateUser(userId: UserEntity['id'], dto: UpdateUserDto | UpdateUserWithRoleDto): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND);
     return await this.userRepository.save({ ...user, ...dto });
-  }
-
-  async updateUserRole(userId: UserEntity['id'], role: UserEntity['role']): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND);
-    return await this.userRepository.save({ ...user, role });
   }
 
   async findUserBySnsIdAndProvider(
