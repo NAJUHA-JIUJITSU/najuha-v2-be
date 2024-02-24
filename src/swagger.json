@@ -15,10 +15,10 @@
     }
   },
   "paths": {
-    "/auth/sns-login": {
+    "/user/auth/sns-login": {
       "post": {
         "tags": [
-          "1 auth"
+          "u-1 auth"
         ],
         "parameters": [],
         "requestBody": {
@@ -85,15 +85,15 @@
             }
           }
         },
-        "summary": "1-1 auth sns login",
-        "description": "1-1 auth sns login.\n- GuardLevel: PUBLIC",
-        "x-nestia-namespace": "auth.sns-login.snsLogin",
+        "summary": "u-1-1 auth sns login",
+        "description": "u-1-1 auth sns login.\n- GuardLevel: PUBLIC",
+        "x-nestia-namespace": "user.auth.sns-login.snsLogin",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "1 auth",
+                "text": "u-1 auth",
                 "kind": "text"
               }
             ]
@@ -111,10 +111,10 @@
         "x-nestia-method": "POST"
       }
     },
-    "/auth/token": {
+    "/user/auth/token": {
       "post": {
         "tags": [
-          "1 auth"
+          "u-1 auth"
         ],
         "parameters": [],
         "requestBody": {
@@ -151,15 +151,15 @@
             }
           }
         },
-        "summary": "1-2 auth toekn refresh",
-        "description": "1-2 auth toekn refresh.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "auth.token.refreshToken",
+        "summary": "u-1-2 auth toekn refresh",
+        "description": "u-1-2 auth toekn refresh.\n- GuardLevel: PUBLIC",
+        "x-nestia-namespace": "user.auth.token.refreshToken",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "1 auth",
+                "text": "u-1 auth",
                 "kind": "text"
               }
             ]
@@ -177,10 +177,10 @@
         "x-nestia-method": "POST"
       }
     },
-    "/users": {
+    "/user/users": {
       "post": {
         "tags": [
-          "3 users"
+          "u-3 users"
         ],
         "parameters": [],
         "requestBody": {
@@ -207,15 +207,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-1 create user",
-        "description": "3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- GuardLevel: USER",
-        "x-nestia-namespace": "users.postUser",
+        "summary": "u-3-1 create user",
+        "description": "u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- GuardLevel: USER",
+        "x-nestia-namespace": "user.users.postUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 users",
+                "text": "u-3 users",
                 "kind": "text"
               }
             ]
@@ -234,7 +234,7 @@
       },
       "patch": {
         "tags": [
-          "3 users"
+          "u-3 users"
         ],
         "parameters": [],
         "requestBody": {
@@ -262,15 +262,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-2 update user",
-        "description": "3-2 update user.\n- GuardLevel: USER",
-        "x-nestia-namespace": "users.patchUser",
+        "summary": "u-3-2 update user",
+        "description": "u-3-2 update user.\n- GuardLevel: USER",
+        "x-nestia-namespace": "user.users.patchUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 users",
+                "text": "u-3 users",
                 "kind": "text"
               }
             ]
@@ -305,10 +305,10 @@
         "x-nestia-method": "PATCH"
       }
     },
-    "/users/me": {
+    "/user/users/me": {
       "get": {
         "tags": [
-          "3 users"
+          "u-3 users"
         ],
         "parameters": [],
         "responses": {
@@ -324,15 +324,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "3-3 get me",
-        "description": "3-3 get me.\n- GuardLevel: USER",
-        "x-nestia-namespace": "users.me.getMe",
+        "summary": "u-3-3 get me",
+        "description": "u-3-3 get me.\n- GuardLevel: USER",
+        "x-nestia-namespace": "user.users.me.getMe",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "3 users",
+                "text": "u-3 users",
                 "kind": "text"
               }
             ]
@@ -350,10 +350,10 @@
         "x-nestia-method": "GET"
       }
     },
-    "/register/users/me": {
+    "/user/register/users/me": {
       "get": {
         "tags": [
-          "2 register"
+          "u-2 register"
         ],
         "parameters": [],
         "responses": {
@@ -369,15 +369,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "2-1 get temporary user info",
-        "description": "2-1 get temporary user info.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "register.users.me.getMe",
+        "summary": "u-2-1 get temporary user info",
+        "description": "u-2-1 get temporary user info.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.register.users.me.getMe",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "2 register",
+                "text": "u-2 register",
                 "kind": "text"
               }
             ]
@@ -395,10 +395,10 @@
         "x-nestia-method": "GET"
       }
     },
-    "/register/users/{nickname}/is-duplicated": {
+    "/user/register/users/{nickname}/is-duplicated": {
       "get": {
         "tags": [
-          "2 register"
+          "u-2 register"
         ],
         "parameters": [
           {
@@ -424,15 +424,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "2-2 check duplicated nickname",
-        "description": "2-2 check duplicated nickname.\n- GuardLevel: TEMPORARY_USER\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환\n- 본인이 사용중인 닉네임이면 false를 반환\n- 이미 사용중인 닉네임이면 true를 반환",
-        "x-nestia-namespace": "register.users.is-duplicated.getIsDuplicatedNickname",
+        "summary": "u-2-2 check duplicated nickname",
+        "description": "u-2-2 check duplicated nickname.\n- GuardLevel: TEMPORARY_USER\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환\n- 본인이 사용중인 닉네임이면 false를 반환\n- 이미 사용중인 닉네임이면 true를 반환",
+        "x-nestia-namespace": "user.register.users.is-duplicated.getIsDuplicatedNickname",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "2 register",
+                "text": "u-2 register",
                 "kind": "text"
               }
             ]
@@ -450,10 +450,10 @@
         "x-nestia-method": "GET"
       }
     },
-    "/register": {
+    "/user/register": {
       "patch": {
         "tags": [
-          "2 register"
+          "u-2 register"
         ],
         "parameters": [],
         "requestBody": {
@@ -500,15 +500,15 @@
             }
           }
         },
-        "summary": "2-3 register user",
-        "description": "2-3 register user.\n- GuardLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
-        "x-nestia-namespace": "register.registerUser",
+        "summary": "u-2-3 register user",
+        "description": "u-2-3 register user.\n- GuardLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
+        "x-nestia-namespace": "user.register.registerUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "2 register",
+                "text": "u-2 register",
                 "kind": "text"
               }
             ]
@@ -526,10 +526,10 @@
         "x-nestia-method": "PATCH"
       }
     },
-    "/policy": {
+    "/user/policy": {
       "post": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [],
         "requestBody": {
@@ -556,15 +556,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-1 create policy",
-        "description": "4-1 create policy.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.createPolicy",
+        "summary": "u-4-1 create policy",
+        "description": "u-4-1 create policy.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.createPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
                 "kind": "text"
               }
             ]
@@ -583,7 +583,7 @@
       },
       "get": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [],
         "responses": {
@@ -599,15 +599,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-2 get all policies",
-        "description": "4-2 get all policies.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.findAllPolicies",
+        "summary": "u-4-2 get all policies",
+        "description": "u-4-2 get all policies.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.findAllPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
                 "kind": "text"
               }
             ]
@@ -625,10 +625,10 @@
         "x-nestia-method": "GET"
       }
     },
-    "/policy/{id}": {
+    "/user/policy/{id}": {
       "get": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [
           {
@@ -654,15 +654,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-3 get one policy",
-        "description": "4-3 get one policy.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.findOnePolicy",
+        "summary": "u-4-3 get one policy",
+        "description": "u-4-3 get one policy.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.findOnePolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
                 "kind": "text"
               }
             ]
@@ -698,7 +698,7 @@
       },
       "patch": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [
           {
@@ -735,15 +735,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-4 update policy",
-        "description": "4-4 update policy.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.updatePolicy",
+        "summary": "u-4-4 update policy",
+        "description": "u-4-4 update policy.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.updatePolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
                 "kind": "text"
               }
             ]
@@ -779,7 +779,7 @@
       },
       "delete": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [
           {
@@ -805,15 +805,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-5 delete policy",
-        "description": "4-5 delete policy.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.deletePolicy",
+        "summary": "u-4-5 delete policy",
+        "description": "u-4-5 delete policy.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.deletePolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
                 "kind": "text"
               }
             ]
@@ -831,10 +831,10 @@
         "x-nestia-method": "DELETE"
       }
     },
-    "/policy/consent": {
+    "/user/policy/consent": {
       "post": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [],
         "requestBody": {
@@ -861,15 +861,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-6 create policy consent",
-        "description": "4-6 create policy consent.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.consent.createPolicyConsent",
+        "summary": "u-4-6 create policy consent",
+        "description": "u-4-6 create policy consent.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.consent.createPolicyConsent",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
                 "kind": "text"
               }
             ]
@@ -888,7 +888,7 @@
       },
       "get": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [],
         "responses": {
@@ -904,15 +904,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-7 get all policy consents",
-        "description": "4-7 get all policy consents.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.consent.findAllPolicyConsents",
+        "summary": "u-4-7 get all policy consents",
+        "description": "u-4-7 get all policy consents.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.consent.findAllPolicyConsents",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
                 "kind": "text"
               }
             ]
@@ -930,10 +930,10 @@
         "x-nestia-method": "GET"
       }
     },
-    "/policy/consent/{id}": {
+    "/user/policy/consent/{id}": {
       "get": {
         "tags": [
-          "4 policy"
+          "u-4 policy"
         ],
         "parameters": [
           {
@@ -959,15 +959,474 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "4-8 get one policy consent",
-        "description": "4-8 get one policy consent.\n- GuardLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "policy.consent.findOnePolicyConsent",
+        "summary": "u-4-8 get one policy consent",
+        "description": "u-4-8 get one policy consent.\n- GuardLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.policy.consent.findOnePolicyConsent",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "4 policy",
+                "text": "u-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "one policy consent",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/admin/policy": {
+      "post": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePolicyDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-1 create policy",
+        "description": "a-4-1 create policy.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.createPolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created policy",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "get": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all policies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormArrayPolicyEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-2 get all policies",
+        "description": "a-4-2 get all policies.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.findAllPolicies",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "all policies",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/admin/policy/{id}": {
+      "get": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "policy id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "one policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyEntitynull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-3 get one policy",
+        "description": "a-4-3 get one policy.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.findOnePolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "policy id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "one policy",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      },
+      "patch": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "policy id",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartialPickPolicyEntitytypetitlecontent"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "updated policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-4 update policy",
+        "description": "a-4-4 update policy.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.updatePolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "policy id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "updated policy",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      },
+      "delete": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormnull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-5 delete policy",
+        "description": "a-4-5 delete policy.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.deletePolicy",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "null",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
+    },
+    "/admin/policy/consent": {
+      "post": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePolicyConsentDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created policy consent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-6 create policy consent",
+        "description": "a-4-6 create policy consent.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.consent.createPolicyConsent",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created policy consent",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "get": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "all policy consents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormArrayPolicyConsentEntity"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-7 get all policy consents",
+        "description": "a-4-7 get all policy consents.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.consent.findAllPolicyConsents",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "all policy consents",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/admin/policy/consent/{id}": {
+      "get": {
+        "tags": [
+          "a-4 policy"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "one policy consent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntitynull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-4-8 get one policy consent",
+        "description": "a-4-8 get one policy consent.\n- GuardLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.consent.findOnePolicyConsent",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-4 policy",
                 "kind": "text"
               }
             ]
@@ -1418,6 +1877,7 @@
           "belt": {
             "type": "string",
             "enum": [
+              "선택없음",
               "화이트",
               "블루",
               "퍼플",
@@ -1516,6 +1976,7 @@
           "belt": {
             "type": "string",
             "enum": [
+              "선택없음",
               "화이트",
               "블루",
               "퍼플",
@@ -1630,6 +2091,7 @@
           "belt": {
             "type": "string",
             "enum": [
+              "선택없음",
               "화이트",
               "블루",
               "퍼플",
@@ -1746,6 +2208,7 @@
           "belt": {
             "type": "string",
             "enum": [
+              "선택없음",
               "화이트",
               "블루",
               "퍼플",

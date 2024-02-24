@@ -14,15 +14,15 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { GuardLevel, SetGuardLevel } from './auth.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 
-@Controller('auth')
-export class AuthController {
+@Controller('user/auth')
+export class UserAuthController {
   constructor(private readonly authService: AuthService) {}
 
   /**
-   * 1-1 auth sns login.
+   * u-1-1 auth sns login.
    * - GuardLevel: PUBLIC
    *
-   * @tag 1 auth
+   * @tag u-1 auth
    * @return accessToken and refreshToken
    */
   @TypedException<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(5000, 'SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER')
@@ -36,10 +36,10 @@ export class AuthController {
   }
 
   /**
-   * 1-2 auth toekn refresh.
-   * - GuardLevel: TEMPORARY_USER
+   * u-1-2 auth toekn refresh.
+   * - GuardLevel: PUBLIC
    *
-   * @tag 1 auth
+   * @tag u-1 auth
    * @return accessToken and refreshToken
    */
   @TypedException<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(4002, 'AUTH_REFRESH_TOKEN_UNAUTHORIZED')

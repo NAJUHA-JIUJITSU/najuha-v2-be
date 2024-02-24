@@ -10,22 +10,21 @@ import { SetGuardLevel, GuardLevel } from 'src/auth/auth.guard';
 import { PolicyEntity } from './entities/policy.entity';
 import { PolicyConsentEntity } from './entities/policy-consent.entity';
 
-// TODO: api 권한 설정
-@Controller('policy')
-export class PolicyController {
+@Controller('admin/policy')
+export class AdminPolicyController {
   constructor(
     private readonly policyService: PolicyService,
     private readonly policyConsentService: PolicyConsentService,
   ) {}
 
   /**
-   * 4-1 create policy.
-   * - GuardLevel: TEMPORARY_USER
+   * a-4-1 create policy.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @returns created policy
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Post('/')
   async createPolicy(@TypedBody() createPolicyDto: CreatePolicyDto): Promise<ResponseForm<PolicyEntity>> {
     const policy = await this.policyService.createPolicy(createPolicyDto);
@@ -33,13 +32,13 @@ export class PolicyController {
   }
 
   /**
-   * 4-2 get all policies.
-   * - GuardLevel: TEMPORARY_USER
+   * a-4-2 get all policies.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @returns all policies
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Get('/')
   async findAllPolicies(): Promise<ResponseForm<PolicyEntity[]>> {
     const policies = await this.policyService.findAllPolicies();
@@ -47,14 +46,14 @@ export class PolicyController {
   }
 
   /**
-   * 4-3 get one policy.
-   * - GuardLevel: TEMPORARY_USER
+   * a-4-3 get one policy.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @param id policy id
    * @returns one policy
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Get('/:id')
   async findOnePolicy(@TypedParam('id') id: number): Promise<ResponseForm<PolicyEntity | null>> {
     const policy = await this.policyService.findOnePolicy(id);
@@ -62,14 +61,14 @@ export class PolicyController {
   }
 
   /**
-   * 4-4 update policy.
-   * - GuardLevel: TEMPORARY_USER
+   * a-4-4 update policy.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @param id policy id
    * @returns updated policy
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Patch('/:id')
   async updatePolicy(
     @TypedParam('id') id: PolicyEntity['id'],
@@ -80,13 +79,13 @@ export class PolicyController {
   }
 
   /**
-   * 4-5 delete policy.
-   * - GuardLevel: TEMPORARY_USER
+   * a-4-5 delete policy.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @returns null
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Delete('/:id')
   async deletePolicy(@TypedParam('id') id: PolicyEntity['id']): Promise<ResponseForm<null>> {
     await this.policyService.deletePolicy(id);
@@ -94,13 +93,13 @@ export class PolicyController {
   }
 
   /**
-   * 4-6 create policy consent.
-   * - GuardLevel: TEMPORARY_USER
+   * a-4-6 create policy consent.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @returns created policy consent
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Post('/consent')
   async createPolicyConsent(
     @TypedBody() createPolicyConsentDto: CreatePolicyConsentDto,
@@ -110,13 +109,13 @@ export class PolicyController {
   }
 
   /**
-   *  4-7 get all policy consents.
-   * - GuardLevel: TEMPORARY_USER
+   *  a-4-7 get all policy consents.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @returns all policy consents
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Get('/consent')
   async findAllPolicyConsents(): Promise<ResponseForm<PolicyConsentEntity[]>> {
     const consents = await this.policyConsentService.findAllPolicyConsents();
@@ -124,13 +123,13 @@ export class PolicyController {
   }
 
   /**
-   * 4-8 get one policy consent.
-   * - GuardLevel: TEMPORARY_USER
+   * a-4-8 get one policy consent.
+   * - GuardLevel: ADMIN
    *
-   * @tag 4 policy
+   * @tag a-4 policy
    * @returns one policy consent
    */
-  @SetGuardLevel(GuardLevel.TEMPORARY_USER)
+  @SetGuardLevel(GuardLevel.ADMIN)
   @TypedRoute.Get('/consent/:id')
   async findOnePolicyConsent(
     @TypedParam('id') id: PolicyConsentEntity['id'],

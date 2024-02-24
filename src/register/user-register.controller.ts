@@ -9,18 +9,18 @@ import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { UsersService } from 'src/users/users.service';
 import { REGISTER_NICKNAME_DUPLICATED, USERS_NOT_FOUND } from 'src/common/response/errorResponse';
 
-@Controller('register')
-export class RegisterController {
+@Controller('user/register')
+export class UserRegisterController {
   constructor(
     private readonly registerService: RegisterService,
     private readonly usersService: UsersService,
   ) {}
 
   /**
-   * 2-1 get temporary user info.
+   * u-2-1 get temporary user info.
    * - GuardLevel: TEMPORARY_USER
    *
-   * @tag 2 register
+   * @tag u-2 register
    * @returns user
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
@@ -32,13 +32,13 @@ export class RegisterController {
   }
 
   /**
-   * 2-2 check duplicated nickname.
+   * u-2-2 check duplicated nickname.
    * - GuardLevel: TEMPORARY_USER
    * - 닉네임이 중복되면 true, 중복되지 않으면 false를 반환
    * - 본인이 사용중인 닉네임이면 false를 반환
    * - 이미 사용중인 닉네임이면 true를 반환
    *
-   * @tag 2 register
+   * @tag u-2 register
    * @returns user
    */
   @SetGuardLevel(GuardLevel.TEMPORARY_USER)
@@ -53,12 +53,12 @@ export class RegisterController {
   }
 
   /**
-   * 2-3 register user.
+   * u-2-3 register user.
    * - GuardLevel: TEMPORARY_USER
    * - 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.
    * - USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.
    *
-   * @tag 2 register
+   * @tag u-2 register
    * @returns accessToken & refreshToken
    */
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(6000, 'REGISTER_NICKNAME_DUPLICATED')
@@ -72,10 +72,10 @@ export class RegisterController {
   }
 
   // /**
-  //  * 2-4 update temporary user policy consent.
+  //  * u-2-4 update temporary user policy consent.
   //  * - GuardLevel: TEMPORARY_USER
   //  *
-  //  * @tag 2 register
+  //  * @tag u-2 register
   //  * @returns updated user
   //  */
   //   @SetGuardLevel(GuardLevel.TEMPORARY_USER)

@@ -1,4 +1,4 @@
-import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
+import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { SetGuardLevel, GuardLevel } from 'src/auth/auth.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
@@ -8,15 +8,15 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 
 // TODO: GaurdLevel 설설
-@Controller('users')
-export class UsersController {
+@Controller('user/users')
+export class UserUsersController {
   constructor(private readonly usersService: UsersService) {}
 
   /**
-   * 3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
+   * u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
    * - GuardLevel: USER
    *
-   * @tag 3 users
+   * @tag u-3 users
    * @returns created user info
    */
   @SetGuardLevel(GuardLevel.USER)
@@ -27,10 +27,10 @@ export class UsersController {
   }
 
   /**
-   * 3-2 update user.
+   * u-3-2 update user.
    * - GuardLevel: USER
    *
-   * @tag 3 users
+   * @tag u-3 users
    * @param dto UpdateUserDto
    * @returns updated user
    */
@@ -43,10 +43,10 @@ export class UsersController {
   }
 
   /**
-   * 3-3 get me.
+   * u-3-3 get me.
    * - GuardLevel: USER
    *
-   * @tag 3 users
+   * @tag u-3 users
    * @returns user
    */
   @SetGuardLevel(GuardLevel.USER)
