@@ -17,7 +17,7 @@ export class UserRegisterController {
   ) {}
 
   /**
-   * u-2-1 get temporary user info.
+   * u-2-1 get temporary user.
    * - RoleLevel: TEMPORARY_USER
    *
    * @tag u-2 register
@@ -25,9 +25,9 @@ export class UserRegisterController {
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
-  async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
+  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
     const userId = req['userId'];
-    const user = await this.usersService.findUserById(userId);
+    const user = await this.usersService.getUserById(userId);
     return createResponseForm(user);
   }
 
@@ -43,7 +43,7 @@ export class UserRegisterController {
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/:nickname/is-duplicated')
-  async getIsDuplicatedNickname(
+  async checkDuplicateNickname(
     @Req() req: Request,
     @TypedParam('nickname') nickname: string,
   ): Promise<ResponseForm<boolean>> {

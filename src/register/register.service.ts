@@ -21,7 +21,7 @@ export class RegisterService {
    * - 존재하는 닉네임이면 true를 반환
    */
   async checkDuplicateNickname(userId: UserEntity['id'], nickname: string): Promise<boolean> {
-    const user = await this.usersService.findUserByNickname(nickname);
+    const user = await this.usersService.getUserByNickname(nickname);
     if (user === null) return false;
     if (user.id === userId) return false;
     return true;

@@ -53,7 +53,7 @@ export class UserUsersController {
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
     const userId = req['userId'];
-    const user = await this.usersService.findUserById(userId);
+    const user = await this.usersService.getUserById(userId);
     return createResponseForm(user);
   }
 }

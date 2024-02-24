@@ -26,7 +26,7 @@ export class UsersService {
     return await this.userRepository.save({ ...user, ...dto });
   }
 
-  async findUserBySnsIdAndProvider(
+  async getUserBySnsIdAndProvider(
     snsAuthProvider: UserEntity['snsAuthProvider'],
     snsId: UserEntity['snsId'],
   ): Promise<UserEntity | null> {
@@ -35,12 +35,12 @@ export class UsersService {
     });
   }
 
-  async findUserById(userId: UserEntity['id']): Promise<UserEntity | null> {
+  async getUserById(userId: UserEntity['id']): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     return user;
   }
 
-  async findUserByNickname(nickname: string): Promise<UserEntity | null> {
+  async getUserByNickname(nickname: string): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({
       where: { nickname },
     });

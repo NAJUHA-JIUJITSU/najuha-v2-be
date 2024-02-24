@@ -10,15 +10,6 @@ import { UsersService } from 'src/users/users.service';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appConfig from 'src/common/appConfig';
 
-// TODO: 에러처리 *
-// TODO: logging *
-// TODO: test code 작성 *
-// TODO: 다른 SNS 로그인 추가 및 모듈화 kakao, naver *
-// TODO: AuthGuard 로 인증처리 *
-// TODO: token refresh 로직 구현 *
-// TODO: refresh token redis로 관리 *
-// TODO: 에러 표준화 *
-// TODO: 테스트 작성 *
 @Injectable()
 export class AuthService {
   constructor(
@@ -31,7 +22,7 @@ export class AuthService {
   async snsLogin(snsAuthDto: SnsAuthDto): Promise<AuthTokensDto> {
     const userData = await this.snsAuthService.validate(snsAuthDto);
 
-    let user = await this.usersService.findUserBySnsIdAndProvider(userData.snsAuthProvider, userData.snsId);
+    let user = await this.usersService.getUserBySnsIdAndProvider(userData.snsAuthProvider, userData.snsId);
 
     if (!user) user = await this.usersService.createUser(userData);
 
