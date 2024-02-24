@@ -16,11 +16,15 @@ export class PolicyService {
     return await this.policyRepository.save(newPolicy);
   }
 
-  async findAllPolicies(): Promise<PolicyEntity[]> {
+  async getAllPolicies(): Promise<PolicyEntity[]> {
     return this.policyRepository.find();
   }
 
-  async findOnePolicy(id: number): Promise<PolicyEntity | null> {
+  async getAllTypesOfPolicies(): Promise<PolicyEntity[]> {
+    return this.policyRepository.find();
+  }
+
+  async getPolicy(id: number): Promise<PolicyEntity | null> {
     return this.policyRepository.findOne({ where: { id } });
   }
 

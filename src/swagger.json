@@ -527,60 +527,6 @@
       }
     },
     "/user/policy": {
-      "post": {
-        "tags": [
-          "u-4 policy"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePolicyDto"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "created policy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-4-1 create policy",
-        "description": "u-4-1 create policy.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.createPolicy",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "created policy",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      },
       "get": {
         "tags": [
           "u-4 policy"
@@ -588,7 +534,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "all policies",
+            "description": "recent policies",
             "content": {
               "application/json": {
                 "schema": {
@@ -599,9 +545,9 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-2 get all policies",
-        "description": "u-4-2 get all policies.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.findAllPolicies",
+        "summary": "u-4-1 getAllTypesOfPolicies\n- RoleLevel: USER",
+        "description": "u-4-1 getAllTypesOfPolicies\n- RoleLevel: USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
+        "x-nestia-namespace": "user.policy.getAllTypesOfPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -616,7 +562,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "all policies",
+                "text": "recent policies",
                 "kind": "text"
               }
             ]
@@ -643,7 +589,7 @@
         ],
         "responses": {
           "200": {
-            "description": "one policy",
+            "description": "policy",
             "content": {
               "application/json": {
                 "schema": {
@@ -654,9 +600,9 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-3 get one policy",
-        "description": "u-4-3 get one policy.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.findOnePolicy",
+        "summary": "u-4-2 getPolicy\n- RoleLevel: USER",
+        "description": "u-4-2 getPolicy\n- RoleLevel: USER.\n- 약관 ID로 약관을 가져옵니다.",
+        "x-nestia-namespace": "user.policy.getPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -688,295 +634,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "one policy",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      },
-      "patch": {
-        "tags": [
-          "u-4 policy"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "policy id",
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PartialPickPolicyEntitytypetitlecontent"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "updated policy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-4-4 update policy",
-        "description": "u-4-4 update policy.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.updatePolicy",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "id",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "policy id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "updated policy",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "PATCH"
-      },
-      "delete": {
-        "tags": [
-          "u-4 policy"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "null",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormnull"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-4-5 delete policy",
-        "description": "u-4-5 delete policy.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.deletePolicy",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "null",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "DELETE"
-      }
-    },
-    "/user/policy/consent": {
-      "post": {
-        "tags": [
-          "u-4 policy"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePolicyConsentDto"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "created policy consent",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-4-6 create policy consent",
-        "description": "u-4-6 create policy consent.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.consent.createPolicyConsent",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "created policy consent",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      },
-      "get": {
-        "tags": [
-          "u-4 policy"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "all policy consents",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormArrayPolicyConsentEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-4-7 get all policy consents",
-        "description": "u-4-7 get all policy consents.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.consent.findAllPolicyConsents",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "all policy consents",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
-    "/user/policy/consent/{id}": {
-      "get": {
-        "tags": [
-          "u-4 policy"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "one policy consent",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntitynull"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-4-8 get one policy consent",
-        "description": "u-4-8 get one policy consent.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.policy.consent.findOnePolicyConsent",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "one policy consent",
+                "text": "policy",
                 "kind": "text"
               }
             ]
@@ -1015,9 +673,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-1 create policy",
-        "description": "a-4-1 create policy.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.createPolicy",
+        "description": "a-4-1 postPolicy\n- RoleLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.postPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1058,9 +715,9 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-2 get all policies",
-        "description": "a-4-2 get all policies.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.findAllPolicies",
+        "summary": "a-4-2 getAllPolicies",
+        "description": "a-4-2 getAllPolicies.\n- RoleLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.getAllPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1113,9 +770,9 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-3 get one policy",
-        "description": "a-4-3 get one policy.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.findOnePolicy",
+        "summary": "a-4-3 getPolicy",
+        "description": "a-4-3 getPolicy.\n- RoleLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.getPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1194,9 +851,9 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-4 update policy",
-        "description": "a-4-4 update policy.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.updatePolicy",
+        "summary": "a-4-4 patchPolicy",
+        "description": "a-4-4 patchPolicy.\n- RoleLevel: ADMIN",
+        "x-nestia-namespace": "admin.policy.patchPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1247,7 +904,7 @@
             "schema": {
               "type": "number"
             },
-            "description": "",
+            "description": "policy id",
             "required": true
           }
         ],
@@ -1264,8 +921,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-5 delete policy",
-        "description": "a-4-5 delete policy.\n- RoleLevel: ADMIN",
+        "summary": "a-4-5 deletePolicy",
+        "description": "a-4-5 deletePolicy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.deletePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1273,6 +930,23 @@
             "text": [
               {
                 "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "id",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "policy id",
                 "kind": "text"
               }
             ]
@@ -1288,160 +962,6 @@
           }
         ],
         "x-nestia-method": "DELETE"
-      }
-    },
-    "/admin/policy/consent": {
-      "post": {
-        "tags": [
-          "a-4 policy"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePolicyConsentDto"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "created policy consent",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "a-4-6 create policy consent",
-        "description": "a-4-6 create policy consent.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.consent.createPolicyConsent",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "a-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "created policy consent",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      },
-      "get": {
-        "tags": [
-          "a-4 policy"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "all policy consents",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormArrayPolicyConsentEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "a-4-7 get all policy consents",
-        "description": "a-4-7 get all policy consents.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.consent.findAllPolicyConsents",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "a-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "all policy consents",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
-    "/admin/policy/consent/{id}": {
-      "get": {
-        "tags": [
-          "a-4 policy"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "one policy consent",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyConsentEntitynull"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "a-4-8 get one policy consent",
-        "description": "a-4-8 get one policy consent.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.consent.findOnePolicyConsent",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "a-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "one policy consent",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
       }
     }
   },
@@ -2297,38 +1817,7 @@
         ],
         "description": "----------------------------------------------------------------------------\nUsers 7000 ~ 7999"
       },
-      "CreatePolicyDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "TERMS_OF_SERVICE",
-              "PRIVACY_POLICY",
-              "REFUND_POLICY"
-            ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1,
-            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "title",
-          "content"
-        ]
-      },
-      "ResponseFormPolicyEntity": {
+      "ResponseFormArrayPolicyEntity": {
         "type": "object",
         "properties": {
           "result": {
@@ -2344,7 +1833,10 @@
             ]
           },
           "data": {
-            "$ref": "#/components/schemas/PolicyEntity"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyEntity"
+            }
           }
         },
         "nullable": false,
@@ -2395,35 +1887,6 @@
           "createdAt"
         ],
         "description": "- 약관 테이블.\n- 서비스 이용 약관, 개인정보 처리 방침, 환불 정책 등을 저장합니다."
-      },
-      "ResponseFormArrayPolicyEntity": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              1000
-            ]
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PolicyEntity"
-            }
-          }
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "code",
-          "data"
-        ]
       },
       "ResponseFormPolicyEntitynull": {
         "type": "object",
@@ -2493,6 +1956,63 @@
         ],
         "description": "- 약관 테이블.\n- 서비스 이용 약관, 개인정보 처리 방침, 환불 정책 등을 저장합니다."
       },
+      "CreatePolicyDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY_POLICY",
+              "REFUND_POLICY"
+            ],
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "title",
+          "content"
+        ]
+      },
+      "ResponseFormPolicyEntity": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              1000
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/PolicyEntity"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
       "PartialPickPolicyEntitytypetitlecontent": {
         "type": "object",
         "properties": {
@@ -2545,187 +2065,6 @@
           "code",
           "data"
         ]
-      },
-      "CreatePolicyConsentDto": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "number",
-            "description": "사용자 Id."
-          },
-          "policyId": {
-            "type": "number",
-            "description": "약관 ID."
-          },
-          "consentedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "동의 날짜."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "userId",
-          "policyId",
-          "consentedAt"
-        ]
-      },
-      "ResponseFormPolicyConsentEntity": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              1000
-            ]
-          },
-          "data": {
-            "$ref": "#/components/schemas/PolicyConsentEntity"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "code",
-          "data"
-        ]
-      },
-      "PolicyConsentEntity": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "description": "약관 동의 ID."
-          },
-          "userId": {
-            "type": "number",
-            "description": "사용자 Id."
-          },
-          "policyId": {
-            "type": "number",
-            "description": "약관 ID."
-          },
-          "consentedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "동의 날짜."
-          },
-          "user": {
-            "$ref": "#/components/schemas/UserEntity"
-          },
-          "policy": {
-            "$ref": "#/components/schemas/PolicyEntity"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "userId",
-          "policyId",
-          "consentedAt",
-          "user",
-          "policy"
-        ],
-        "description": "- 사용자가 동의한 약관 정보"
-      },
-      "ResponseFormArrayPolicyConsentEntity": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              1000
-            ]
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PolicyConsentEntity"
-            }
-          }
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "code",
-          "data"
-        ]
-      },
-      "ResponseFormPolicyConsentEntitynull": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              1000
-            ]
-          },
-          "data": {
-            "$ref": "#/components/schemas/PolicyConsentEntity.Nullable"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "code",
-          "data"
-        ]
-      },
-      "PolicyConsentEntity.Nullable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "description": "약관 동의 ID."
-          },
-          "userId": {
-            "type": "number",
-            "description": "사용자 Id."
-          },
-          "policyId": {
-            "type": "number",
-            "description": "약관 ID."
-          },
-          "consentedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "동의 날짜."
-          },
-          "user": {
-            "$ref": "#/components/schemas/UserEntity"
-          },
-          "policy": {
-            "$ref": "#/components/schemas/PolicyEntity"
-          }
-        },
-        "nullable": true,
-        "required": [
-          "id",
-          "userId",
-          "policyId",
-          "consentedAt",
-          "user",
-          "policy"
-        ],
-        "description": "- 사용자가 동의한 약관 정보"
       }
     },
     "securitySchemes": {
