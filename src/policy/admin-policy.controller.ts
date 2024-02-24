@@ -16,7 +16,7 @@ export class AdminPolicyController {
   ) {}
 
   /**
-   * a-4-1 postPolicy
+   * a-4-1 create policy
    * - RoleLevel: ADMIN
    *
    * @tag a-4 policy
@@ -30,7 +30,7 @@ export class AdminPolicyController {
   }
 
   /**
-   * a-4-2 getAllPolicies.
+   * a-4-2 get all policies.
    * - RoleLevel: ADMIN
    *
    * @tag a-4 policy
@@ -44,7 +44,7 @@ export class AdminPolicyController {
   }
 
   /**
-   * a-4-3 getPolicy.
+   * a-4-3 get policy.
    * - RoleLevel: ADMIN
    *
    * @tag a-4 policy
@@ -59,7 +59,7 @@ export class AdminPolicyController {
   }
 
   /**
-   * a-4-4 patchPolicy.
+   * a-4-4 patch policy.
    * - RoleLevel: ADMIN
    *
    * @tag a-4 policy
@@ -77,7 +77,7 @@ export class AdminPolicyController {
   }
 
   /**
-   * a-4-5 deletePolicy.
+   * a-4-5 delete policy.
    * - RoleLevel: ADMIN
    *
    * @tag a-4 policy
