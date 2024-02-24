@@ -11,7 +11,7 @@ import {
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
 } from 'src/common/response/errorResponse';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { GuardLevel, SetGuardLevel } from './auth.guard';
+import { RoleLevel, RoleLevels } from '../common/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 
 @Controller('user/auth')
@@ -20,7 +20,7 @@ export class UserAuthController {
 
   /**
    * u-1-1 auth sns login.
-   * - GuardLevel: PUBLIC
+   * - RoleLevel: PUBLIC
    *
    * @tag u-1 auth
    * @return accessToken and refreshToken
@@ -29,7 +29,7 @@ export class UserAuthController {
   @TypedException<SNS_AUTH_KAKAO_LOGIN_FAIL>(5001, 'SNS_AUTH_KAKAO_LOGIN_FAIL')
   @TypedException<SNS_AUTH_NAVER_LOGIN_FAIL>(5002, 'SNS_AUTH_NAVER_LOGIN_FAIL')
   @TypedException<SNS_AUTH_GOOGLE_LOGIN_FAIL>(5003, 'SNS_AUTH_GOOGLE_LOGIN_FAIL')
-  @SetGuardLevel(GuardLevel.PUBLIC)
+  @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('sns-login')
   async snsLogin(@TypedBody() dto: SnsAuthDto): Promise<ResponseForm<AuthTokensDto>> {
     return createResponseForm(await this.authService.snsLogin(dto));
@@ -37,13 +37,13 @@ export class UserAuthController {
 
   /**
    * u-1-2 auth toekn refresh.
-   * - GuardLevel: PUBLIC
+   * - RoleLevel: PUBLIC
    *
    * @tag u-1 auth
    * @return accessToken and refreshToken
    */
   @TypedException<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(4002, 'AUTH_REFRESH_TOKEN_UNAUTHORIZED')
-  @SetGuardLevel(GuardLevel.PUBLIC)
+  @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('token')
   async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
     return createResponseForm(await this.authService.refreshToken(dto));

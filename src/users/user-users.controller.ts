@@ -1,6 +1,6 @@
 import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { SetGuardLevel, GuardLevel } from 'src/auth/auth.guard';
+import { RoleLevels, RoleLevel } from 'src/common/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
@@ -14,12 +14,12 @@ export class UserUsersController {
 
   /**
    * u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
-   * - GuardLevel: USER
+   * - RoleLevel: USER
    *
    * @tag u-3 users
    * @returns created user info
    */
-  @SetGuardLevel(GuardLevel.USER)
+  @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
   async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<UserEntity>> {
     const user = await this.usersService.createUser(dto);
@@ -28,13 +28,13 @@ export class UserUsersController {
 
   /**
    * u-3-2 update user.
-   * - GuardLevel: USER
+   * - RoleLevel: USER
    *
    * @tag u-3 users
    * @param dto UpdateUserDto
    * @returns updated user
    */
-  @SetGuardLevel(GuardLevel.USER)
+  @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
   async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
     const userId = req['userId'];
@@ -44,12 +44,12 @@ export class UserUsersController {
 
   /**
    * u-3-3 get me.
-   * - GuardLevel: USER
+   * - RoleLevel: USER
    *
    * @tag u-3 users
    * @returns user
    */
-  @SetGuardLevel(GuardLevel.USER)
+  @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
     const userId = req['userId'];

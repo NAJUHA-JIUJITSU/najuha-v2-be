@@ -86,7 +86,7 @@
           }
         },
         "summary": "u-1-1 auth sns login",
-        "description": "u-1-1 auth sns login.\n- GuardLevel: PUBLIC",
+        "description": "u-1-1 auth sns login.\n- RoleLevel: PUBLIC",
         "x-nestia-namespace": "user.auth.sns-login.snsLogin",
         "x-nestia-jsDocTags": [
           {
@@ -152,7 +152,7 @@
           }
         },
         "summary": "u-1-2 auth toekn refresh",
-        "description": "u-1-2 auth toekn refresh.\n- GuardLevel: PUBLIC",
+        "description": "u-1-2 auth toekn refresh.\n- RoleLevel: PUBLIC",
         "x-nestia-namespace": "user.auth.token.refreshToken",
         "x-nestia-jsDocTags": [
           {
@@ -208,7 +208,7 @@
           }
         },
         "summary": "u-3-1 create user",
-        "description": "u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- GuardLevel: USER",
+        "description": "u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- RoleLevel: USER",
         "x-nestia-namespace": "user.users.postUser",
         "x-nestia-jsDocTags": [
           {
@@ -263,7 +263,7 @@
           }
         },
         "summary": "u-3-2 update user",
-        "description": "u-3-2 update user.\n- GuardLevel: USER",
+        "description": "u-3-2 update user.\n- RoleLevel: USER",
         "x-nestia-namespace": "user.users.patchUser",
         "x-nestia-jsDocTags": [
           {
@@ -325,7 +325,7 @@
           }
         },
         "summary": "u-3-3 get me",
-        "description": "u-3-3 get me.\n- GuardLevel: USER",
+        "description": "u-3-3 get me.\n- RoleLevel: USER",
         "x-nestia-namespace": "user.users.me.getMe",
         "x-nestia-jsDocTags": [
           {
@@ -370,7 +370,7 @@
           }
         },
         "summary": "u-2-1 get temporary user info",
-        "description": "u-2-1 get temporary user info.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-2-1 get temporary user info.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.register.users.me.getMe",
         "x-nestia-jsDocTags": [
           {
@@ -425,7 +425,7 @@
           }
         },
         "summary": "u-2-2 check duplicated nickname",
-        "description": "u-2-2 check duplicated nickname.\n- GuardLevel: TEMPORARY_USER\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환\n- 본인이 사용중인 닉네임이면 false를 반환\n- 이미 사용중인 닉네임이면 true를 반환",
+        "description": "u-2-2 check duplicated nickname.\n- RoleLevel: TEMPORARY_USER\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환\n- 본인이 사용중인 닉네임이면 false를 반환\n- 이미 사용중인 닉네임이면 true를 반환",
         "x-nestia-namespace": "user.register.users.is-duplicated.getIsDuplicatedNickname",
         "x-nestia-jsDocTags": [
           {
@@ -501,7 +501,7 @@
           }
         },
         "summary": "u-2-3 register user",
-        "description": "u-2-3 register user.\n- GuardLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
+        "description": "u-2-3 register user.\n- RoleLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
         "x-nestia-namespace": "user.register.registerUser",
         "x-nestia-jsDocTags": [
           {
@@ -557,7 +557,7 @@
           }
         },
         "summary": "u-4-1 create policy",
-        "description": "u-4-1 create policy.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-1 create policy.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.createPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -600,7 +600,7 @@
           }
         },
         "summary": "u-4-2 get all policies",
-        "description": "u-4-2 get all policies.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-2 get all policies.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.findAllPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -655,7 +655,7 @@
           }
         },
         "summary": "u-4-3 get one policy",
-        "description": "u-4-3 get one policy.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-3 get one policy.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.findOnePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -736,7 +736,7 @@
           }
         },
         "summary": "u-4-4 update policy",
-        "description": "u-4-4 update policy.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-4 update policy.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.updatePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -806,7 +806,7 @@
           }
         },
         "summary": "u-4-5 delete policy",
-        "description": "u-4-5 delete policy.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-5 delete policy.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.deletePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -862,7 +862,7 @@
           }
         },
         "summary": "u-4-6 create policy consent",
-        "description": "u-4-6 create policy consent.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-6 create policy consent.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.consent.createPolicyConsent",
         "x-nestia-jsDocTags": [
           {
@@ -905,7 +905,7 @@
           }
         },
         "summary": "u-4-7 get all policy consents",
-        "description": "u-4-7 get all policy consents.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-7 get all policy consents.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.consent.findAllPolicyConsents",
         "x-nestia-jsDocTags": [
           {
@@ -960,7 +960,7 @@
           }
         },
         "summary": "u-4-8 get one policy consent",
-        "description": "u-4-8 get one policy consent.\n- GuardLevel: TEMPORARY_USER",
+        "description": "u-4-8 get one policy consent.\n- RoleLevel: TEMPORARY_USER",
         "x-nestia-namespace": "user.policy.consent.findOnePolicyConsent",
         "x-nestia-jsDocTags": [
           {
@@ -1016,7 +1016,7 @@
           }
         },
         "summary": "a-4-1 create policy",
-        "description": "a-4-1 create policy.\n- GuardLevel: ADMIN",
+        "description": "a-4-1 create policy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.createPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1059,7 +1059,7 @@
           }
         },
         "summary": "a-4-2 get all policies",
-        "description": "a-4-2 get all policies.\n- GuardLevel: ADMIN",
+        "description": "a-4-2 get all policies.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.findAllPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -1114,7 +1114,7 @@
           }
         },
         "summary": "a-4-3 get one policy",
-        "description": "a-4-3 get one policy.\n- GuardLevel: ADMIN",
+        "description": "a-4-3 get one policy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.findOnePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1195,7 +1195,7 @@
           }
         },
         "summary": "a-4-4 update policy",
-        "description": "a-4-4 update policy.\n- GuardLevel: ADMIN",
+        "description": "a-4-4 update policy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.updatePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1265,7 +1265,7 @@
           }
         },
         "summary": "a-4-5 delete policy",
-        "description": "a-4-5 delete policy.\n- GuardLevel: ADMIN",
+        "description": "a-4-5 delete policy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.deletePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1321,7 +1321,7 @@
           }
         },
         "summary": "a-4-6 create policy consent",
-        "description": "a-4-6 create policy consent.\n- GuardLevel: ADMIN",
+        "description": "a-4-6 create policy consent.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.consent.createPolicyConsent",
         "x-nestia-jsDocTags": [
           {
@@ -1364,7 +1364,7 @@
           }
         },
         "summary": "a-4-7 get all policy consents",
-        "description": "a-4-7 get all policy consents.\n- GuardLevel: ADMIN",
+        "description": "a-4-7 get all policy consents.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.consent.findAllPolicyConsents",
         "x-nestia-jsDocTags": [
           {
@@ -1419,7 +1419,7 @@
           }
         },
         "summary": "a-4-8 get one policy consent",
-        "description": "a-4-8 get one policy consent.\n- GuardLevel: ADMIN",
+        "description": "a-4-8 get one policy consent.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.consent.findOnePolicyConsent",
         "x-nestia-jsDocTags": [
           {

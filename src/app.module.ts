@@ -3,7 +3,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { RoleGuard } from 'src/common/guard/role.guard';
 import { AuthModule } from 'src/auth/auth.module';
 import { LoggerModule } from 'src/common/logger/logger.module';
 import { LoggerMiddleware } from 'src/common/middlewares/logger.middleware';
@@ -34,7 +34,7 @@ import { RegisterModule } from './register/register.module';
     },
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: RoleGuard,
     },
   ],
 })

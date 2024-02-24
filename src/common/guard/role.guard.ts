@@ -6,29 +6,30 @@ import { Request } from 'express';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appCnfig from 'src/common/appConfig';
 
-const GUARD_LEVEL_KEY = 'gaurdLevel';
-export enum GuardLevel {
+const ROLE_LEVEL_KEY = Symbol('roleLevel');
+
+export enum RoleLevel {
   PUBLIC = 1,
   TEMPORARY_USER = 2,
   USER = 3,
   ADMIN = 4,
 }
 
-export const SetGuardLevel = (authLevel: GuardLevel) => SetMetadata(GUARD_LEVEL_KEY, authLevel);
+export const RoleLevels = (roleLevel: RoleLevel) => SetMetadata(ROLE_LEVEL_KEY, roleLevel);
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredGuardLevel = this.reflector.getAllAndOverride<GuardLevel>(GUARD_LEVEL_KEY, [
+    const requiredRoleLevel = this.reflector.getAllAndOverride<RoleLevel>(ROLE_LEVEL_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-    if (requiredGuardLevel === GuardLevel.PUBLIC) {
+    if (requiredRoleLevel === RoleLevel.PUBLIC) {
       return true;
     }
 
@@ -39,7 +40,7 @@ export class AuthGuard implements CanActivate {
     const payload = await this.verifyToken(accessToken);
 
     // 사용자의 인증 레벨 검증
-    this.validateGuardLevel(payload.userRole, requiredGuardLevel);
+    this.validateRoleLevel(payload.userRole, requiredRoleLevel);
 
     request['userId'] = payload.userId;
     request['userRole'] = payload.userRole;
@@ -57,8 +58,8 @@ export class AuthGuard implements CanActivate {
     }
   }
 
-  private validateGuardLevel(userRole: string, requiredGuardLevel: GuardLevel): any {
-    if (requiredGuardLevel > GuardLevel[userRole]) {
+  private validateRoleLevel(userRole: string, requiredRoleLevel: RoleLevel): any {
+    if (requiredRoleLevel > RoleLevel[userRole]) {
       throw new BusinessException(AuthErrorMap.AUTH_LEVEL_FORBIDDEN);
     }
   }
