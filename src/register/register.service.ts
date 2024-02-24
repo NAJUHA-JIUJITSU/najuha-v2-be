@@ -16,17 +16,14 @@ export class RegisterService {
   /**
    * 닉네임 중복 체크
    * - 닉네임이 중복되면 true, 중복되지 않으면 false를 반환
-   * - 본인이 사용중인 닉네임이면 false를 반환
-   * - 이미 사용중인 닉네임이면 true를 반환
+   * - 존재하지 않는 닉네임이면 false를 반존
+   * - 존재하는 닉네임 이지만 본인이 사용중이면 false를 반환
+   * - 존재하는 닉네임이면 true를 반환
    */
   async checkDuplicateNickname(userId: UserEntity['id'], nickname: string): Promise<boolean> {
     const user = await this.usersService.findUserByNickname(nickname);
-    if (user === null) {
-      return false;
-    }
-    if (user.id === userId) {
-      return false;
-    }
+    if (user === null) return false;
+    if (user.id === userId) return false;
     return true;
   }
 
