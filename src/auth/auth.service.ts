@@ -42,19 +42,28 @@ export class AuthService {
 
     await this.redisClient.set(`userId:${userId}:refreshToken`, refreshToken);
 
+    this.testPrintAllRedisData('createAuthTokens');
+
     return {
       accessToken,
       refreshToken,
     };
   }
 
-  // async aquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensDto> {
-  //   const user = await this.usersService.getUserById(userId);
-  //   if (!user) throw new BusinessException(AuthErrorMap.USER_NOT_FOUND);
+  async acquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensDto> {
+    const user = await this.usersService.getUserById(userId);
 
-  //   const authTokens = await this.createAuthTokens(user.id, user.role);
-  //   return authTokens;
-  // }
+    const isCurrentAdmin = appConfig.adminCredentials.some(
+      (adminCredential) =>
+        adminCredential.snsId === user.snsId && adminCredential.snsAuthProvider === user.snsAuthProvider,
+    );
+
+    if (!isCurrentAdmin) throw new BusinessException(AuthErrorMap.AUTH_UNREGISTERED_ADMIN_CREDENTIALS);
+
+    const updatedUser = await this.usersService.updateUser(userId, { role: 'ADMIN' });
+
+    return await this.createAuthTokens(updatedUser.id, updatedUser.role);
+  }
 
   private createAccessToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
     const payload = { userId, userRole };

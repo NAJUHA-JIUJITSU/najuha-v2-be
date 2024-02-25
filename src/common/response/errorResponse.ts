@@ -57,11 +57,19 @@ export type AUTH_LEVEL_FORBIDDEN = ErrorResponse & {
   data: '권한이 없습니다.';
 };
 
+export type AUTH_UNREGISTERED_ADMIN_CREDENTIALS = ErrorResponse & {
+  result: false;
+  status: HttpStatus.FORBIDDEN;
+  code: 4004;
+  data: '등록되지 않은 관리자 계정입니다.';
+};
+
 export const AuthErrorMap = {
   AUTH_ACCESS_TOKEN_MISSING: typia.random<AUTH_ACCESS_TOKEN_MISSING>(),
   AUTH_ACCESS_TOKEN_UNAUTHORIZED: typia.random<AUTH_ACCESS_TOKEN_UNAUTHORIZED>(),
   AUTH_REFRESH_TOKEN_UNAUTHORIZED: typia.random<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(),
   AUTH_LEVEL_FORBIDDEN: typia.random<AUTH_LEVEL_FORBIDDEN>(),
+  AUTH_UNREGISTERED_ADMIN_CREDENTIALS: typia.random<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(),
 };
 
 /** ----------------------------------------------------------------------------

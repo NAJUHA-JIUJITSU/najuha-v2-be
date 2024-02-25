@@ -41,6 +41,9 @@ type AppConfig = {
   jwtAccessTokenExpirationTime: string;
   jwtRefreshTokenSecret: string;
   jwtRefreshTokenExpirationTime: string;
+
+  // ADMIN CREDENTIALS -------------------------------------------------------------
+  adminCredentials: { snsId: string; snsAuthProvider: string }[];
 };
 
 const loadConfig = (): AppConfig => {
@@ -76,6 +79,8 @@ const loadConfig = (): AppConfig => {
     jwtAccessTokenExpirationTime: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
     jwtRefreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET,
     jwtRefreshTokenExpirationTime: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+    // ADMIN CREDENTIALS -------------------------------------------------------------
+    adminCredentials: JSON.parse(process.env.ADMIN_CREDENTIALS_JSON || '[]'),
   };
 
   // Validate the config

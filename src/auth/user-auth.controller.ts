@@ -53,16 +53,18 @@ export class UserAuthController {
 
   /**
    * u-1-3 auth acquire admin role.
-   * - RoleLevel: PUBLIC
+   * - RoleLevel: USER
+   * - 관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.
+   * - ADMIN 역할을 가진 accessToken 과 refreshToken 을 발급합니다.
    *
    * @tag u-1 auth
    * @return accessToken and refreshToken
    */
-  // @RoleLevels(RoleLevel.USER)
-  // @TypedRoute.Post('aqure-admin-role')
-  // async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<null>> {
-  //   const userId = req['userId'];
-  //   const authTokens = await this.authService.aqureAdminRole(userId);
-  //   return createResponseForm(authTokens);
-  // }
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Patch('aqure-admin-role')
+  async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {
+    const userId = req['userId'];
+    const authTokens = await this.authService.acquireAdminRole(userId);
+    return createResponseForm(authTokens);
+  }
 }
