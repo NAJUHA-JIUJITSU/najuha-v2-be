@@ -34,12 +34,8 @@ export class RegisterService {
 
     const user = await this.usersService.updateUser(userId, { ...dto, role: 'USER' });
 
-    const accessToken = this.authService.createAccessToken(user.id, user.role);
-    const refreshToken = this.authService.createRefreshToken(user.id, user.role);
+    const authTokens = await this.authService.createAuthTokens(user.id, user.role);
 
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return authTokens;
   }
 }

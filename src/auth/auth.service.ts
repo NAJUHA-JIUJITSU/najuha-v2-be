@@ -21,15 +21,26 @@ export class AuthService {
 
   async snsLogin(snsAuthDto: SnsAuthDto): Promise<AuthTokensDto> {
     const userData = await this.snsAuthService.validate(snsAuthDto);
-
     let user = await this.usersService.getUserBySnsIdAndProvider(userData.snsAuthProvider, userData.snsId);
 
     if (!user) user = await this.usersService.createUser(userData);
+    const authTokens = await this.createAuthTokens(user.id, user.role);
+    return authTokens;
+  }
 
-    const accessToken = this.createAccessToken(user.id, user.role);
-    const refreshToken = this.createRefreshToken(user.id, user.role);
+  async refreshToken(refreshTokenDto: RefreshTokenDto): Promise<AuthTokensDto> {
+    const { refreshToken } = refreshTokenDto;
+    const payload = await this.verifyRefreshToken(refreshToken);
+    const authTokens = await this.createAuthTokens(payload.userId, payload.userRole);
 
-    await this.redisClient.set(`userId:${user.id}:refreshToken`, refreshToken);
+    return authTokens;
+  }
+
+  async createAuthTokens(userId: UserEntity['id'], userRole: UserEntity['role']): Promise<AuthTokensDto> {
+    const accessToken = this.createAccessToken(userId, userRole);
+    const refreshToken = this.createRefreshToken(userId, userRole);
+
+    await this.redisClient.set(`userId:${userId}:refreshToken`, refreshToken);
 
     return {
       accessToken,
@@ -37,26 +48,7 @@ export class AuthService {
     };
   }
 
-  /**
-   * 1) refreshToken이 유효한지 검증
-   *  1-1) redis에 저장된 refreshToken과 일치하는지 검증
-   *  1-2) refreshToken이 만료 및 위조되었는지 검조
-   *  1-3) 검증 실패시 redis에 userId:refreshToken 삭제 - 유저, 해커 둘다 로그인 해제 - 없어도 될듯
-   * 2) 검증 성공시 새로운 accessToken, refreshToken 발급
-   */
-  async refreshToken(refreshTokenDto: RefreshTokenDto): Promise<AuthTokensDto> {
-    const { refreshToken } = refreshTokenDto;
-    const payload = await this.verifyRefreshToken(refreshToken);
-
-    const newAccessToken = this.createAccessToken(payload.userId, payload.userRole);
-    const newRefreshToken = this.createRefreshToken(payload.userId, payload.userRole);
-
-    await this.redisClient.set(`userId:${payload.userId}:refreshToken`, newRefreshToken);
-
-    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
-  }
-
-  createAccessToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
+  private createAccessToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appConfig.jwtAccessTokenSecret,
@@ -64,7 +56,7 @@ export class AuthService {
     });
   }
 
-  createRefreshToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
+  private createRefreshToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appConfig.jwtRefreshTokenSecret,
@@ -72,13 +64,23 @@ export class AuthService {
     });
   }
 
+  /**
+   * refreshToken의 유효성 검사
+   * 1. refreshToken이 redis에 저장된 값과 일치하는지 확인
+   * 2. refreshToken이 만료되지 않았는지 확인
+   * 3. refreshToken의 payload 반환
+   *
+   * 오류 발생시 redis에 저장된 refreshToken 삭제(로그아웃 처리)
+   */
   private async verifyRefreshToken(refreshToken: string): Promise<any> {
     const payload = this.jwtService.decode(refreshToken);
 
     const storedRefreshToken = await this.redisClient.get(`userId:${payload.userId}:refreshToken`);
 
-    if (!storedRefreshToken || storedRefreshToken !== refreshToken)
+    if (!storedRefreshToken || storedRefreshToken !== refreshToken) {
+      await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
       throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
+    }
 
     try {
       this.jwtService.verify(refreshToken, {
