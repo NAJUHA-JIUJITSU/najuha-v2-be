@@ -13,6 +13,7 @@ import { Logger } from 'winston';
 import { CustomExceptionFilter } from 'src/common/exception-filters/custom-exception-filter';
 import { PolicyModule } from './policy/policy.module';
 import { RegisterModule } from './register/register.module';
+import { ApiConventionsModule } from './api-conventions/api-conventions.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RegisterModule } from './register/register.module';
       global: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    ApiConventionsModule,
     AuthModule,
     RegisterModule,
     UsersModule,
