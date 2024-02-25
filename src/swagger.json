@@ -323,6 +323,71 @@
         "x-nestia-method": "POST"
       }
     },
+    "/user/auth/aqure-admin-role": {
+      "patch": {
+        "tags": [
+          "u-1 auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "accessToken and refreshToken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormAuthTokensDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          },
+          "4004": {
+            "description": "AUTH_UNREGISTERED_ADMIN_CREDENTIALS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AUTH_UNREGISTERED_ADMIN_CREDENTIALS"
+                }
+              }
+            }
+          },
+          "6001": {
+            "description": "USERS_USER_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                }
+              }
+            }
+          }
+        },
+        "summary": "u-1-3 auth acquire admin role",
+        "description": "u-1-3 auth acquire admin role.\n- RoleLevel: USER\n- 관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.\n- ADMIN 역할을 가진 accessToken 과 refreshToken 을 발급합니다.",
+        "x-nestia-namespace": "user.auth.aqure-admin-role.aqureAdminRole",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-1 auth",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "return",
+            "text": [
+              {
+                "text": "accessToken and refreshToken",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      }
+    },
     "/user/users": {
       "post": {
         "tags": [
@@ -406,6 +471,16 @@
               }
             },
             "x-nestia-encrypted": false
+          },
+          "6001": {
+            "description": "USERS_USER_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                }
+              }
+            }
           }
         },
         "summary": "u-3-2 update user",
@@ -468,6 +543,16 @@
               }
             },
             "x-nestia-encrypted": false
+          },
+          "6001": {
+            "description": "USERS_USER_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                }
+              }
+            }
           }
         },
         "summary": "u-3-3 get me",
@@ -513,6 +598,16 @@
               }
             },
             "x-nestia-encrypted": false
+          },
+          "6001": {
+            "description": "USERS_USER_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                }
+              }
+            }
           }
         },
         "summary": "u-2-1 get temporary user",
@@ -1419,6 +1514,81 @@
           "data"
         ]
       },
+      "AUTH_UNREGISTERED_ADMIN_CREDENTIALS": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              403
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              4004
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "등록되지 않은 관리자 계정입니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ]
+      },
+      "USERS_USER_NOT_FOUND": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              404
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              6001
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "존재하지 않는 유저입니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ],
+        "description": "----------------------------------------------------------------------------\nUsers 7000 ~ 7999"
+      },
       "CreateUserDto": {
         "type": "object",
         "properties": {
@@ -1804,44 +1974,6 @@
           "data"
         ],
         "description": "----------------------------------------------------------------------------\nRegister 6000 ~ 6999"
-      },
-      "USERS_USER_NOT_FOUND": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "boolean",
-            "enum": [
-              false
-            ]
-          },
-          "status": {
-            "type": "number",
-            "enum": [
-              404
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              6001
-            ]
-          },
-          "data": {
-            "type": "string",
-            "enum": [
-              "존재하지 않는 유저입니다."
-            ]
-          },
-          "detail": {}
-        },
-        "nullable": false,
-        "required": [
-          "result",
-          "status",
-          "code",
-          "data"
-        ],
-        "description": "----------------------------------------------------------------------------\nUsers 7000 ~ 7999"
       },
       "ResponseFormArrayPolicyEntity": {
         "type": "object",

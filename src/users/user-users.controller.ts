@@ -1,6 +1,7 @@
-import { TypedBody, TypedRoute } from '@nestia/core';
+import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/common/guard/role.guard';
+import { USERS_USER_NOT_FOUND } from 'src/common/response/errorResponse';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
@@ -34,6 +35,7 @@ export class UserUsersController {
    * @param dto UpdateUserDto
    * @returns updated user
    */
+  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
   async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
@@ -49,6 +51,7 @@ export class UserUsersController {
    * @tag u-3 users
    * @returns user
    */
+  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity>> {

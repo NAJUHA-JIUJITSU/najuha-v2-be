@@ -23,6 +23,7 @@ export class UserRegisterController {
    * @tag u-2 register
    * @returns user
    */
+  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity>> {

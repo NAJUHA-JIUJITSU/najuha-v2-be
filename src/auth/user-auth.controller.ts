@@ -5,10 +5,12 @@ import { AuthService } from 'src/auth/auth.service';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
+  AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
   SNS_AUTH_GOOGLE_LOGIN_FAIL,
   SNS_AUTH_KAKAO_LOGIN_FAIL,
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
+  USERS_USER_NOT_FOUND,
 } from 'src/common/response/errorResponse';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RoleLevel, RoleLevels } from '../common/guard/role.guard';
@@ -60,6 +62,8 @@ export class UserAuthController {
    * @tag u-1 auth
    * @return accessToken and refreshToken
    */
+  @TypedException<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(4004, 'AUTH_UNREGISTERED_ADMIN_CREDENTIALS')
+  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('aqure-admin-role')
   async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {
