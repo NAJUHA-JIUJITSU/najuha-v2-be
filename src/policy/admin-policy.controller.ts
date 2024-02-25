@@ -26,7 +26,7 @@ export class AdminPolicyController {
   }
 
   /**
-   * a-4-2 get all policies.
+   * a-4-2 find all policies.
    * - RoleLevel: ADMIN
    *
    * @tag a-4 policy
@@ -40,7 +40,7 @@ export class AdminPolicyController {
   }
 
   /**
-   * a-4-3 get policy.
+   * a-4-3 find policy.
    * - RoleLevel: ADMIN
    *
    * @tag a-4 policy

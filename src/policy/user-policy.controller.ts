@@ -10,7 +10,7 @@ export class UserPolicyController {
   constructor(private readonly policyService: PolicyService) {}
 
   /**
-   * u-4-1 get all types of policies
+   * u-4-1 find all types of policies
    * - RoleLevel: USER.
    * - 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.
    *
@@ -25,7 +25,7 @@ export class UserPolicyController {
   }
 
   /**
-   * u-4-2 get policy
+   * u-4-2 find policy
    * - RoleLevel: USER.
    * - 약관 ID로 약관을 가져옵니다.
    *
