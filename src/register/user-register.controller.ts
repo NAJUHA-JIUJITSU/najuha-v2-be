@@ -23,7 +23,7 @@ export class UserRegisterController {
    * @tag u-2 register
    * @returns user
    */
-  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
+  @TypedException<USERS_USER_NOT_FOUND>(7001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
@@ -63,7 +63,7 @@ export class UserRegisterController {
    * @returns accessToken & refreshToken
    */
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(6000, 'REGISTER_NICKNAME_DUPLICATED')
-  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
+  @TypedException<USERS_USER_NOT_FOUND>(7001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Patch()
   async registerUser(@Req() req: Request, @TypedBody() dto: RegisterUserDto): Promise<ResponseForm<AuthTokensDto>> {

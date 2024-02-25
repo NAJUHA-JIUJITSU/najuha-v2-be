@@ -63,7 +63,7 @@ export class UserAuthController {
    * @return accessToken and refreshToken
    */
   @TypedException<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(4004, 'AUTH_UNREGISTERED_ADMIN_CREDENTIALS')
-  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
+  @TypedException<USERS_USER_NOT_FOUND>(7001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('aqure-admin-role')
   async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {

@@ -131,7 +131,7 @@ export const RegisterErrorMap = {
 export type USERS_USER_NOT_FOUND = ErrorResponse & {
   result: false;
   status: HttpStatus.NOT_FOUND;
-  code: 6001;
+  code: 7001;
   data: '존재하지 않는 유저입니다.';
 };
 

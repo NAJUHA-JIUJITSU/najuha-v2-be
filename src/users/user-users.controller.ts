@@ -35,7 +35,7 @@ export class UserUsersController {
    * @param dto UpdateUserDto
    * @returns updated user
    */
-  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
+  @TypedException<USERS_USER_NOT_FOUND>(7001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
   async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
@@ -51,7 +51,7 @@ export class UserUsersController {
    * @tag u-3 users
    * @returns user
    */
-  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
+  @TypedException<USERS_USER_NOT_FOUND>(7001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
