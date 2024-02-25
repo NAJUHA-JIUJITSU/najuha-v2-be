@@ -16,18 +16,6 @@ export class PolicyService {
     return await this.policyRepository.save(newPolicy);
   }
 
-  async getAllPolicies(): Promise<PolicyEntity[]> {
-    return this.policyRepository.find();
-  }
-
-  async getAllTypesOfPolicies(): Promise<PolicyEntity[]> {
-    return this.policyRepository.find();
-  }
-
-  async getPolicy(id: number): Promise<PolicyEntity | null> {
-    return this.policyRepository.findOne({ where: { id } });
-  }
-
   async updatePolicy(id: number, updatePolicyDto: any): Promise<PolicyEntity> {
     const policy = await this.policyRepository.findOne({ where: { id } });
     if (!policy) {
@@ -36,7 +24,15 @@ export class PolicyService {
     return this.policyRepository.save({ ...policy, ...updatePolicyDto });
   }
 
-  async deletePolicy(id: number): Promise<void> {
-    await this.policyRepository.delete(id);
+  async findAllPolicies(): Promise<PolicyEntity[]> {
+    return this.policyRepository.find();
+  }
+
+  async findAllTypesOfPolicies(): Promise<PolicyEntity[]> {
+    return this.policyRepository.find();
+  }
+
+  async findPolicy(id: number): Promise<PolicyEntity | null> {
+    return this.policyRepository.findOne({ where: { id } });
   }
 }

@@ -1,5 +1,5 @@
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
-import { Controller } from '@nestjs/common';
+import { Controller, Req } from '@nestjs/common';
 import { SnsAuthDto } from 'src//sns-auth/dto/sns-auth.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
@@ -32,7 +32,8 @@ export class UserAuthController {
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('sns-login')
   async snsLogin(@TypedBody() dto: SnsAuthDto): Promise<ResponseForm<AuthTokensDto>> {
-    return createResponseForm(await this.authService.snsLogin(dto));
+    const authTokens = await this.authService.snsLogin(dto);
+    return createResponseForm(authTokens);
   }
 
   /**
@@ -46,6 +47,22 @@ export class UserAuthController {
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('token')
   async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
-    return createResponseForm(await this.authService.refreshToken(dto));
+    const authTokens = await this.authService.refreshToken(dto);
+    return createResponseForm(authTokens);
   }
+
+  /**
+   * u-1-3 auth acquire admin role.
+   * - RoleLevel: PUBLIC
+   *
+   * @tag u-1 auth
+   * @return accessToken and refreshToken
+   */
+  // @RoleLevels(RoleLevel.USER)
+  // @TypedRoute.Post('aqure-admin-role')
+  // async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<null>> {
+  //   const userId = req['userId'];
+  //   const authTokens = await this.authService.aqureAdminRole(userId);
+  //   return createResponseForm(authTokens);
+  // }
 }

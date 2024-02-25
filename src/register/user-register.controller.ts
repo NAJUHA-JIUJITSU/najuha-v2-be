@@ -7,7 +7,7 @@ import { RegisterService } from './register.service';
 import { RegisterUserDto } from './dto/registerUser.dto';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { UsersService } from 'src/users/users.service';
-import { REGISTER_NICKNAME_DUPLICATED, USERS_NOT_FOUND } from 'src/common/response/errorResponse';
+import { REGISTER_NICKNAME_DUPLICATED, USERS_USER_NOT_FOUND } from 'src/common/response/errorResponse';
 
 @Controller('user/register')
 export class UserRegisterController {
@@ -25,7 +25,7 @@ export class UserRegisterController {
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
-  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
+  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
     const userId = req['userId'];
     const user = await this.usersService.getUserById(userId);
     return createResponseForm(user);
@@ -62,7 +62,7 @@ export class UserRegisterController {
    * @returns accessToken & refreshToken
    */
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(6000, 'REGISTER_NICKNAME_DUPLICATED')
-  @TypedException<USERS_NOT_FOUND>(6001, 'USERS_NOT_FOUND')
+  @TypedException<USERS_USER_NOT_FOUND>(6001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Patch()
   async registerUser(@Req() req: Request, @TypedBody() dto: RegisterUserDto): Promise<ResponseForm<AuthTokensDto>> {

@@ -21,7 +21,7 @@ export class AuthService {
 
   async snsLogin(snsAuthDto: SnsAuthDto): Promise<AuthTokensDto> {
     const userData = await this.snsAuthService.validate(snsAuthDto);
-    let user = await this.usersService.getUserBySnsIdAndProvider(userData.snsAuthProvider, userData.snsId);
+    let user = await this.usersService.findUserBySnsIdAndProvider(userData.snsAuthProvider, userData.snsId);
 
     if (!user) user = await this.usersService.createUser(userData);
     const authTokens = await this.createAuthTokens(user.id, user.role);
@@ -47,6 +47,14 @@ export class AuthService {
       refreshToken,
     };
   }
+
+  // async aquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensDto> {
+  //   const user = await this.usersService.getUserById(userId);
+  //   if (!user) throw new BusinessException(AuthErrorMap.USER_NOT_FOUND);
+
+  //   const authTokens = await this.createAuthTokens(user.id, user.role);
+  //   return authTokens;
+  // }
 
   private createAccessToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
     const payload = { userId, userRole };

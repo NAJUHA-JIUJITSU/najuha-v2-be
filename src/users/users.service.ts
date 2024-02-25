@@ -22,11 +22,17 @@ export class UsersService {
 
   async updateUser(userId: UserEntity['id'], dto: UpdateUserDto | UpdateUserWithRoleDto): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user) throw new BusinessException(UsersErrorMap.USERS_NOT_FOUND);
+    if (!user) throw new BusinessException(UsersErrorMap.USERS_USER_NOT_FOUND);
     return await this.userRepository.save({ ...user, ...dto });
   }
 
-  async getUserBySnsIdAndProvider(
+  async getUserById(userId: UserEntity['id']): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) throw new BusinessException(UsersErrorMap.USERS_USER_NOT_FOUND);
+    return user;
+  }
+
+  async findUserBySnsIdAndProvider(
     snsAuthProvider: UserEntity['snsAuthProvider'],
     snsId: UserEntity['snsId'],
   ): Promise<UserEntity | null> {
@@ -35,12 +41,12 @@ export class UsersService {
     });
   }
 
-  async getUserById(userId: UserEntity['id']): Promise<UserEntity | null> {
+  async findUserById(userId: UserEntity['id']): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     return user;
   }
 
-  async getUserByNickname(nickname: string): Promise<UserEntity | null> {
+  async findUserByNickname(nickname: string): Promise<UserEntity | null> {
     const user = await this.userRepository.findOne({
       where: { nickname },
     });

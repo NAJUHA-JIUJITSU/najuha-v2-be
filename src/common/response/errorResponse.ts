@@ -120,7 +120,7 @@ export const RegisterErrorMap = {
 /** ----------------------------------------------------------------------------
  * Users 7000 ~ 7999
  */
-export type USERS_NOT_FOUND = ErrorResponse & {
+export type USERS_USER_NOT_FOUND = ErrorResponse & {
   result: false;
   status: HttpStatus.NOT_FOUND;
   code: 6001;
@@ -128,5 +128,5 @@ export type USERS_NOT_FOUND = ErrorResponse & {
 };
 
 export const UsersErrorMap = {
-  USERS_NOT_FOUND: typia.random<USERS_NOT_FOUND>(),
+  USERS_USER_NOT_FOUND: typia.random<USERS_USER_NOT_FOUND>(),
 };

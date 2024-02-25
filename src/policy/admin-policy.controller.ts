@@ -34,8 +34,8 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
-  async getAllPolicies(): Promise<ResponseForm<PolicyEntity[]>> {
-    const policies = await this.policyService.getAllPolicies();
+  async findAllPolicies(): Promise<ResponseForm<PolicyEntity[]>> {
+    const policies = await this.policyService.findAllPolicies();
     return createResponseForm(policies);
   }
 
@@ -49,8 +49,8 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:id')
-  async getPolicy(@TypedParam('id') id: number): Promise<ResponseForm<PolicyEntity | null>> {
-    const policy = await this.policyService.getPolicy(id);
+  async findPolicy(@TypedParam('id') id: number): Promise<ResponseForm<PolicyEntity | null>> {
+    const policy = await this.policyService.findPolicy(id);
     return createResponseForm(policy);
   }
 
@@ -70,20 +70,5 @@ export class AdminPolicyController {
   ): Promise<ResponseForm<PolicyEntity>> {
     const policy = await this.policyService.updatePolicy(id, updatePolicyDto);
     return createResponseForm(policy);
-  }
-
-  /**
-   * a-4-5 delete policy.
-   * - RoleLevel: ADMIN
-   *
-   * @tag a-4 policy
-   * @param id policy id
-   * @returns null
-   */
-  @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Delete('/:id')
-  async deletePolicy(@TypedParam('id') id: PolicyEntity['id']): Promise<ResponseForm<null>> {
-    await this.policyService.deletePolicy(id);
-    return createResponseForm(null);
   }
 }

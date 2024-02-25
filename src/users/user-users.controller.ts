@@ -51,7 +51,7 @@ export class UserUsersController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
-  async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity | null>> {
+  async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
     const userId = req['userId'];
     const user = await this.usersService.getUserById(userId);
     return createResponseForm(user);
