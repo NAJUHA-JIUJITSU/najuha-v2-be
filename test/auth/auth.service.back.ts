@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppModule } from '../../src/app.module';
 import { AuthService } from '../../src/auth/auth.service';
-import { KakaoUserResponseData } from '../../src/sns-auth/types/kakao-user-data.interface';
+import { KakaoUserResponseData } from '../../src/sns-auth/types/kakao-user-data.type';
 import { UserEntity } from '../../src/users/entities/user.entity';
 import { UsersService } from '../../src/users/users.service';
 
@@ -70,13 +70,9 @@ describe('AuthService kakaoLogin', () => {
   it('kakaoLogin with realDB', async () => {
     const dto = { snsAuthCode: 'dummy-code' };
 
-    jest
-      .spyOn(authService as any, 'getKakaoAccessToken')
-      .mockResolvedValue('mocked-access-token');
+    jest.spyOn(authService as any, 'getKakaoAccessToken').mockResolvedValue('mocked-access-token');
 
-    jest
-      .spyOn(authService as any, 'getKakaoUserData')
-      .mockResolvedValue(mockedKakaoUserInfo);
+    jest.spyOn(authService as any, 'getKakaoUserData').mockResolvedValue(mockedKakaoUserInfo);
 
     const response = await authService.kakaoLogin(dto);
     expect(response).toMatchObject({
@@ -84,58 +80,45 @@ describe('AuthService kakaoLogin', () => {
       refreshToken: expect.any(String),
     });
 
-    const user = await usersService.findUserBySnsIdAndProvider(
-      mockedKakaoUserInfo.id,
-      'KAKAO',
-    );
+    const user = await usersService.findUserBySnsIdAndProvider(mockedKakaoUserInfo.id, 'KAKAO');
     expect(user).toBeDefined();
   });
 
   it('kakaoLogin with mocked DB', async () => {
     const dto = { snsAuthCode: 'dummy-code' };
 
-    jest
-      .spyOn(authService as any, 'getKakaoAccessToken')
-      .mockResolvedValue('mocked-access-token');
+    jest.spyOn(authService as any, 'getKakaoAccessToken').mockResolvedValue('mocked-access-token');
 
-    jest
-      .spyOn(authService as any, 'getKakaoUserData')
-      .mockResolvedValue(mockedKakaoUserInfo);
+    jest.spyOn(authService as any, 'getKakaoUserData').mockResolvedValue(mockedKakaoUserInfo);
 
-    jest
-      .spyOn(UsersService.prototype, 'createUser')
-      .mockImplementation((createUserDto) => {
-        const newUser = new UserEntity();
-        newUser.snsId = createUserDto.snsId;
-        newUser.snsProvider = createUserDto.snsProvider;
-        newUser.name = createUserDto.name;
-        newUser.email = createUserDto.email;
-        newUser.phoneNumber = createUserDto.phoneNumber;
-        newUser.gender = createUserDto.gender;
+    jest.spyOn(UsersService.prototype, 'createUser').mockImplementation((createUserDto) => {
+      const newUser = new UserEntity();
+      newUser.snsId = createUserDto.snsId;
+      newUser.snsProvider = createUserDto.snsProvider;
+      newUser.name = createUserDto.name;
+      newUser.email = createUserDto.email;
+      newUser.phoneNumber = createUserDto.phoneNumber;
+      newUser.gender = createUserDto.gender;
 
-        // UserEntity에 필요한 추가적인 속성들 설정
-        newUser.id = fakeDatabase.length + 4;
-        newUser.role = 'ADMIN'; // 또는 다른 기본값
-        newUser.status = 'ACTIVE'; // 기본 상태
-        newUser.createdAt = new Date(); // 현재 날짜/시간
-        newUser.updatedAt = new Date(); // 현재 날짜/시간
+      // UserEntity에 필요한 추가적인 속성들 설정
+      newUser.id = fakeDatabase.length + 4;
+      newUser.role = 'ADMIN'; // 또는 다른 기본값
+      newUser.status = 'ACTIVE'; // 기본 상태
+      newUser.createdAt = new Date(); // 현재 날짜/시간
+      newUser.updatedAt = new Date(); // 현재 날짜/시간
 
-        // 선택적인 속성들 (nickname, belt, weight 등)
-        newUser.nickname = null;
-        newUser.belt = null;
-        newUser.weight = null;
-        fakeDatabase.push(newUser);
-        return Promise.resolve(newUser);
-      });
+      // 선택적인 속성들 (nickname, belt, weight 등)
+      newUser.nickname = null;
+      newUser.belt = null;
+      newUser.weight = null;
+      fakeDatabase.push(newUser);
+      return Promise.resolve(newUser);
+    });
 
-    jest
-      .spyOn(UsersService.prototype, 'findUserBySnsIdAndProvider')
-      .mockImplementation((snsId, snsProvider) => {
-        const user = fakeDatabase.find(
-          (u) => u.snsId === snsId && u.snsProvider === snsProvider,
-        );
-        return Promise.resolve(user ? user : null);
-      });
+    jest.spyOn(UsersService.prototype, 'findUserBySnsIdAndProvider').mockImplementation((snsId, snsProvider) => {
+      const user = fakeDatabase.find((u) => u.snsId === snsId && u.snsProvider === snsProvider);
+      return Promise.resolve(user ? user : null);
+    });
 
     const response = await authService.kakaoLogin(dto);
     expect(response).toMatchObject({
@@ -143,10 +126,7 @@ describe('AuthService kakaoLogin', () => {
       refreshToken: expect.any(String),
     });
     console.log(response);
-    const user = await usersService.findUserBySnsIdAndProvider(
-      mockedKakaoUserInfo.id,
-      'KAKAO',
-    );
+    const user = await usersService.findUserBySnsIdAndProvider(mockedKakaoUserInfo.id, 'KAKAO');
     console.log(fakeDatabase);
     expect(user).toBeDefined();
   });

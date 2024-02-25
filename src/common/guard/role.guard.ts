@@ -4,7 +4,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
-import appCnfig from 'src/common/appConfig';
+import appConfig from 'src/common/appConfig';
 
 const ROLE_LEVEL_KEY = Symbol('roleLevel');
 
@@ -51,7 +51,7 @@ export class RoleGuard implements CanActivate {
   private async verifyToken(accessToken: string): Promise<any> {
     try {
       return await this.jwtService.verifyAsync(accessToken, {
-        secret: appCnfig.jwtAccessTokenSecret,
+        secret: appConfig.jwtAccessTokenSecret,
       });
     } catch (e) {
       throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_UNAUTHORIZED, e.message);

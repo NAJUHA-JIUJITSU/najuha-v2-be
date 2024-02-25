@@ -242,7 +242,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "$ref": "#/components/schemas/PartialPickUserEntitynamegenderbirthnicknamebelt"
               }
             }
           },
@@ -369,9 +369,9 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-2-1 get temporary user info",
-        "description": "u-2-1 get temporary user info.\n- RoleLevel: TEMPORARY_USER",
-        "x-nestia-namespace": "user.register.users.me.getMe",
+        "summary": "u-2-1 get temporary user",
+        "description": "u-2-1 get temporary user.\n- RoleLevel: TEMPORARY_USER",
+        "x-nestia-namespace": "user.register.users.me.getTemporaryUser",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -426,7 +426,7 @@
         },
         "summary": "u-2-2 check duplicated nickname",
         "description": "u-2-2 check duplicated nickname.\n- RoleLevel: TEMPORARY_USER\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환\n- 본인이 사용중인 닉네임이면 false를 반환\n- 이미 사용중인 닉네임이면 true를 반환",
-        "x-nestia-namespace": "user.register.users.is-duplicated.getIsDuplicatedNickname",
+        "x-nestia-namespace": "user.register.users.is-duplicated.checkDuplicateNickname",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -460,7 +460,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterUserDto"
+                "$ref": "#/components/schemas/PartialPickUserEntitygenderbirthnicknamebelt"
               }
             }
           },
@@ -545,8 +545,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-1 getAllTypesOfPolicies\n- RoleLevel: USER",
-        "description": "u-4-1 getAllTypesOfPolicies\n- RoleLevel: USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
+        "summary": "u-4-1 get all types of policies\n- RoleLevel: USER",
+        "description": "u-4-1 get all types of policies\n- RoleLevel: USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
         "x-nestia-namespace": "user.policy.getAllTypesOfPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -600,8 +600,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-2 getPolicy\n- RoleLevel: USER",
-        "description": "u-4-2 getPolicy\n- RoleLevel: USER.\n- 약관 ID로 약관을 가져옵니다.",
+        "summary": "u-4-2 get policy\n- RoleLevel: USER",
+        "description": "u-4-2 get policy\n- RoleLevel: USER.\n- 약관 ID로 약관을 가져옵니다.",
         "x-nestia-namespace": "user.policy.getPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -673,7 +673,7 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "a-4-1 postPolicy\n- RoleLevel: ADMIN",
+        "description": "a-4-1 create policy\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.postPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -715,8 +715,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-2 getAllPolicies",
-        "description": "a-4-2 getAllPolicies.\n- RoleLevel: ADMIN",
+        "summary": "a-4-2 get all policies",
+        "description": "a-4-2 get all policies.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.getAllPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -770,8 +770,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-3 getPolicy",
-        "description": "a-4-3 getPolicy.\n- RoleLevel: ADMIN",
+        "summary": "a-4-3 get policy",
+        "description": "a-4-3 get policy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.getPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -851,8 +851,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-4 patchPolicy",
-        "description": "a-4-4 patchPolicy.\n- RoleLevel: ADMIN",
+        "summary": "a-4-4 patch policy",
+        "description": "a-4-4 patch policy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.patchPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -921,8 +921,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-5 deletePolicy",
-        "description": "a-4-5 deletePolicy.\n- RoleLevel: ADMIN",
+        "summary": "a-4-5 delete policy",
+        "description": "a-4-5 delete policy.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.deletePolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1459,7 +1459,7 @@
         ],
         "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
       },
-      "UpdateUserDto": {
+      "PartialPickUserEntitynamegenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "name": {
@@ -1507,7 +1507,8 @@
             "description": "- 사용자 주짓수 벨트."
           }
         },
-        "nullable": false
+        "nullable": false,
+        "description": "Make all properties in T optional"
       },
       "ResponseFormUserEntitynull": {
         "type": "object",
@@ -1699,7 +1700,7 @@
           "data"
         ]
       },
-      "RegisterUserDto": {
+      "PartialPickUserEntitygenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
@@ -1739,7 +1740,8 @@
             "description": "- 사용자 주짓수 벨트."
           }
         },
-        "nullable": false
+        "nullable": false,
+        "description": "Make all properties in T optional"
       },
       "REGISTER_NICKNAME_DUPLICATED": {
         "type": "object",

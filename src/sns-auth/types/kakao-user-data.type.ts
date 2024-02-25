@@ -2,7 +2,7 @@
  * 카카오 사용자 데이터 인터페이스
  * 참조 : https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#req-user-info
  */
-export interface KakaoUserData {
+export type KakaoUserData = {
   /** 회원번호, API 호출을 통해 얻은 사용자의 고유 ID / Long 최대값 9,223,372,036,854,775,807 최대 19자리. */
   id: number;
 
@@ -34,4 +34,4 @@ export interface KakaoUserData {
     /** 출생연도 / YYYY 형식. */
     birthyear: string;
   };
-}
+};

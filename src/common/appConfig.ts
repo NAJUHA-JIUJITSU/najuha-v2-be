@@ -9,7 +9,7 @@ const envPathMap = {
 
 dotenv.config({ path: envPathMap[`${process.env.NODE_ENV}`] });
 
-interface IAppConfig {
+type AppConfig = {
   // NODE_ENV ---------------------------------------------------------------------
   nodeEnv: string;
   // APP --------------------------------------------------------------------------
@@ -41,9 +41,9 @@ interface IAppConfig {
   jwtAccessTokenExpirationTime: string;
   jwtRefreshTokenSecret: string;
   jwtRefreshTokenExpirationTime: string;
-}
+};
 
-const loadConfig = (): IAppConfig => {
+const loadConfig = (): AppConfig => {
   const rawConfig = {
     // NODE_ENV ---------------------------------------------------------------------
     nodeEnv: process.env.NODE_ENV,
@@ -79,9 +79,9 @@ const loadConfig = (): IAppConfig => {
   };
 
   // Validate the config
-  return typia.assert<IAppConfig>(rawConfig);
+  return typia.assert<AppConfig>(rawConfig);
 };
 
-const appCnfig = loadConfig();
+const appConfig = loadConfig();
 
-export default appCnfig;
+export default appConfig;

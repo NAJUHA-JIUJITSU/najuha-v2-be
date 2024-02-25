@@ -1,7 +1,7 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { KakaoUserResponseData } from 'src/sns-auth/types/kakao-user-data.interface';
+import { KakaoUserResponseData } from 'src/sns-auth/types/kakao-user-data.type';
 import * as request from 'supertest';
 import { Repository, EntityManager } from 'typeorm';
 
@@ -68,9 +68,7 @@ describe('AuthService (e2e)', () => {
 
     authService = moduleFixture.get<AuthService>(AuthService);
     entityManager = moduleFixture.get<EntityManager>(EntityManager);
-    userRepository = moduleFixture.get<Repository<UserEntity>>(
-      getRepositoryToken(UserEntity),
-    );
+    userRepository = moduleFixture.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
   });
 
   // 각 테스트 후에 데이터베이스 초기화
@@ -84,12 +82,8 @@ describe('AuthService (e2e)', () => {
   });
 
   // Kakao 유저 정보 모킹을 위한 함수
-  const mockKakaoUser = (
-    data: KakaoUserResponseData = mockedKakaoUserResponseData,
-  ) => {
-    jest
-      .spyOn(authService as any, 'getKakaoAccessToken')
-      .mockResolvedValue('mocked-access-token');
+  const mockKakaoUser = (data: KakaoUserResponseData = mockedKakaoUserResponseData) => {
+    jest.spyOn(authService as any, 'getKakaoAccessToken').mockResolvedValue('mocked-access-token');
     jest.spyOn(authService as any, 'getKakaoUserData').mockResolvedValue(data);
   };
 
@@ -124,9 +118,7 @@ describe('AuthService (e2e)', () => {
   it('/auth/kakao (POST) - 존재하지 않는 유저일 경우 생성하고 응답 확인', async () => {
     mockKakaoUser();
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/kakao')
-      .send({ snsAuthCode: 'mocked-auth-code' });
+    const response = await request(app.getHttpServer()).post('/auth/kakao').send({ snsAuthCode: 'mocked-auth-code' });
 
     expect(response.status).toBe(HttpStatus.CREATED);
     expect(response.body.accessToken).toBeDefined();
@@ -149,9 +141,7 @@ describe('AuthService (e2e)', () => {
 
     mockKakaoUser();
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/kakao')
-      .send({ snsAuthCode: 'mocked-auth-code' });
+    const response = await request(app.getHttpServer()).post('/auth/kakao').send({ snsAuthCode: 'mocked-auth-code' });
 
     expect(response.status).toBe(201);
     expect(response.body.accessToken).toBeDefined();
@@ -164,16 +154,10 @@ describe('AuthService (e2e)', () => {
 
   // 테스트 케이스 3: 유효하지 않은 Kakao 인증 코드로 인증 시도
   it('/auth/kakao (POST) - 유효하지 않은 인증 코드로 INTERNAL_SERVER_ERROR 응답 확인', async () => {
-    jest
-      .spyOn(authService as any, 'getKakaoAccessToken')
-      .mockResolvedValue('mocked-access-token');
-    jest
-      .spyOn(authService as any, 'getKakaoUserData')
-      .mockRejectedValue(new Error('Invalid snsAuthCode'));
+    jest.spyOn(authService as any, 'getKakaoAccessToken').mockResolvedValue('mocked-access-token');
+    jest.spyOn(authService as any, 'getKakaoUserData').mockRejectedValue(new Error('Invalid snsAuthCode'));
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/kakao')
-      .send({ snsAuthCode: 'invalid-auth-code' });
+    const response = await request(app.getHttpServer()).post('/auth/kakao').send({ snsAuthCode: 'invalid-auth-code' });
 
     await assertErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR);
   });
@@ -181,13 +165,9 @@ describe('AuthService (e2e)', () => {
   // 테스트 케이스 4: Kakao 유저 정보 가져오기 실패로 INTERNAL_SERVER_ERROR 응답 확인
   it('/auth/kakao (POST) - Kakao 유저 정보 가져오기 실패로 INTERNAL_SERVER_ERROR 응답 확인', async () => {
     mockKakaoUser();
-    jest
-      .spyOn(authService as any, 'getKakaoUserData')
-      .mockRejectedValue(new ExpectedError('KAKAO_USER_INFO_ERROR'));
+    jest.spyOn(authService as any, 'getKakaoUserData').mockRejectedValue(new ExpectedError('KAKAO_USER_INFO_ERROR'));
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/kakao')
-      .send({ snsAuthCode: 'valid-auth-code' });
+    const response = await request(app.getHttpServer()).post('/auth/kakao').send({ snsAuthCode: 'valid-auth-code' });
 
     await assertErrorResponse(
       response,

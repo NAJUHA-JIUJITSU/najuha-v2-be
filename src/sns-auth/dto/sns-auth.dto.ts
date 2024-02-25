@@ -1,6 +1,6 @@
 import { UserEntity } from 'src/users/entities/user.entity';
 
-export interface SnsAuthDto {
+export type SnsAuthDto = {
   /**
    * snsProvider.
    */
@@ -10,4 +10,4 @@ export interface SnsAuthDto {
    * authCode.
    */
   snsAuthCode: string;
-}
+};

@@ -2,7 +2,7 @@
  * google 사용자 정보를 담는 인터페이스
  * 참조 : https://developers.google.com/admin-sdk/directory/reference/rest/v1/users?hl=ko
  */
-export interface GoogleUserData {
+export type GoogleUserData = {
   /**
    * https://community.auth0.com/t/is-256-a-safe-max-length-for-a-user-id/34040
    * 256 자면 충분할듯
@@ -16,4 +16,4 @@ export interface GoogleUserData {
   email: string;
   email_verified: boolean;
   locale: string;
-}
+};

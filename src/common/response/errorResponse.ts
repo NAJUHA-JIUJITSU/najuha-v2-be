@@ -1,14 +1,13 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import exp from 'constants';
 import typia from 'typia';
 
-export interface ErrorResponse {
+export type ErrorResponse = {
   result: boolean;
   status: HttpStatus;
   code: number | string;
   data: string;
   detail?: any;
-}
+};
 
 export class BusinessException extends HttpException {
   constructor(errorResponse: ErrorResponse, errorDetail?: string) {
@@ -20,43 +19,43 @@ export class BusinessException extends HttpException {
 /** ----------------------------------------------------------------------------
  * Internal Server Error 500
  */
-export interface INTERNAL_SERVER_ERROR extends ErrorResponse {
+export type INTERNAL_SERVER_ERROR = ErrorResponse & {
   result: false;
   status: HttpStatus.INTERNAL_SERVER_ERROR;
   code: 500;
   data: 'Internal Server Error';
-}
+};
 
 /** ----------------------------------------------------------------------------
  * Auth 4000 ~ 4999
  */
-export interface AUTH_ACCESS_TOKEN_MISSING extends ErrorResponse {
+export type AUTH_ACCESS_TOKEN_MISSING = ErrorResponse & {
   result: false;
   status: HttpStatus.BAD_REQUEST;
   code: 4000;
   data: 'accssToken이 없습니다.';
-}
+};
 
-export interface AUTH_ACCESS_TOKEN_UNAUTHORIZED extends ErrorResponse {
+export type AUTH_ACCESS_TOKEN_UNAUTHORIZED = ErrorResponse & {
   result: false;
   status: HttpStatus.UNAUTHORIZED;
   code: 4001;
   data: '유효하지 않은 accessToken 입니다.';
-}
+};
 
-export interface AUTH_REFRESH_TOKEN_UNAUTHORIZED extends ErrorResponse {
+export type AUTH_REFRESH_TOKEN_UNAUTHORIZED = ErrorResponse & {
   result: false;
   status: HttpStatus.UNAUTHORIZED;
   code: 4002;
   data: '유효하지 않은 refreshToken 입니다.';
-}
+};
 
-export interface AUTH_LEVEL_FORBIDDEN extends ErrorResponse {
+export type AUTH_LEVEL_FORBIDDEN = ErrorResponse & {
   result: false;
   status: HttpStatus.FORBIDDEN;
   code: 4003;
   data: '권한이 없습니다.';
-}
+};
 
 export const AuthErrorMap = {
   AUTH_ACCESS_TOKEN_MISSING: typia.random<AUTH_ACCESS_TOKEN_MISSING>(),
@@ -68,33 +67,33 @@ export const AuthErrorMap = {
 /** ----------------------------------------------------------------------------
  * SnsAuth 5000 ~ 5999
  */
-export interface SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER extends ErrorResponse {
+export type SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER = ErrorResponse & {
   result: false;
   status: HttpStatus.BAD_REQUEST;
   code: 5000;
   data: '지원하지 않는 SNS AUTH PROVIDER 입니다.';
-}
+};
 
-export interface SNS_AUTH_KAKAO_LOGIN_FAIL extends ErrorResponse {
+export type SNS_AUTH_KAKAO_LOGIN_FAIL = ErrorResponse & {
   result: false;
   status: HttpStatus.BAD_REQUEST;
   code: 5001;
   data: '카카오 로그인에 실패했습니다.';
-}
+};
 
-export interface SNS_AUTH_NAVER_LOGIN_FAIL extends ErrorResponse {
+export type SNS_AUTH_NAVER_LOGIN_FAIL = ErrorResponse & {
   result: false;
   status: HttpStatus.BAD_REQUEST;
   code: 5002;
   data: '네이버 로그인에 실패했습니다.';
-}
+};
 
-export interface SNS_AUTH_GOOGLE_LOGIN_FAIL extends ErrorResponse {
+export type SNS_AUTH_GOOGLE_LOGIN_FAIL = ErrorResponse & {
   result: false;
   status: HttpStatus.BAD_REQUEST;
   code: 5003;
   data: '구글 로그인에 실패했습니다.';
-}
+};
 
 export const SnsAuthErrorMap = {
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER: typia.random<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(),
@@ -107,12 +106,12 @@ export const SnsAuthErrorMap = {
  * Register 6000 ~ 6999
  */
 
-export interface REGISTER_NICKNAME_DUPLICATED extends ErrorResponse {
+export type REGISTER_NICKNAME_DUPLICATED = ErrorResponse & {
   result: false;
   status: HttpStatus.CONFLICT;
   code: 6000;
   data: '이미 사용중인 닉네임입니다.';
-}
+};
 
 export const RegisterErrorMap = {
   REGISTER_NICKNAME_DUPLICATED: typia.random<REGISTER_NICKNAME_DUPLICATED>(),
@@ -121,12 +120,12 @@ export const RegisterErrorMap = {
 /** ----------------------------------------------------------------------------
  * Users 7000 ~ 7999
  */
-export interface USERS_NOT_FOUND extends ErrorResponse {
+export type USERS_NOT_FOUND = ErrorResponse & {
   result: false;
   status: HttpStatus.NOT_FOUND;
   code: 6001;
   data: '존재하지 않는 유저입니다.';
-}
+};
 
 export const UsersErrorMap = {
   USERS_NOT_FOUND: typia.random<USERS_NOT_FOUND>(),

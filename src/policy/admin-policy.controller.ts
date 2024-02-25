@@ -1,7 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
 import { PolicyService } from './policy.service';
-import { PolicyConsentService } from './policy-consent.service';
 import { CreatePolicyDto } from './dto/create-policy.dto';
 import { UpdatePolicyDto } from './dto/update-policy.dto';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
@@ -10,10 +9,7 @@ import { PolicyEntity } from './entities/policy.entity';
 
 @Controller('admin/policy')
 export class AdminPolicyController {
-  constructor(
-    private readonly policyService: PolicyService,
-    private readonly policyConsentService: PolicyConsentService,
-  ) {}
+  constructor(private readonly policyService: PolicyService) {}
 
   /**
    * a-4-1 create policy
