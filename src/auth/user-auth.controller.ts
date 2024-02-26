@@ -27,10 +27,10 @@ export class UserAuthController {
    * @tag u-1 auth
    * @return accessToken and refreshToken
    */
-  @TypedException<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(5000, 'SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER')
-  @TypedException<SNS_AUTH_KAKAO_LOGIN_FAIL>(5001, 'SNS_AUTH_KAKAO_LOGIN_FAIL')
-  @TypedException<SNS_AUTH_NAVER_LOGIN_FAIL>(5002, 'SNS_AUTH_NAVER_LOGIN_FAIL')
-  @TypedException<SNS_AUTH_GOOGLE_LOGIN_FAIL>(5003, 'SNS_AUTH_GOOGLE_LOGIN_FAIL')
+  @TypedException<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(2000, 'SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER')
+  @TypedException<SNS_AUTH_KAKAO_LOGIN_FAIL>(2001, 'SNS_AUTH_KAKAO_LOGIN_FAIL')
+  @TypedException<SNS_AUTH_NAVER_LOGIN_FAIL>(2002, 'SNS_AUTH_NAVER_LOGIN_FAIL')
+  @TypedException<SNS_AUTH_GOOGLE_LOGIN_FAIL>(2003, 'SNS_AUTH_GOOGLE_LOGIN_FAIL')
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('sns-login')
   async snsLogin(@TypedBody() dto: SnsAuthDto): Promise<ResponseForm<AuthTokensDto>> {
@@ -45,7 +45,7 @@ export class UserAuthController {
    * @tag u-1 auth
    * @return accessToken and refreshToken
    */
-  @TypedException<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(4002, 'AUTH_REFRESH_TOKEN_UNAUTHORIZED')
+  @TypedException<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(1002, 'AUTH_REFRESH_TOKEN_UNAUTHORIZED')
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('token')
   async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
@@ -62,8 +62,8 @@ export class UserAuthController {
    * @tag u-1 auth
    * @return accessToken and refreshToken
    */
-  @TypedException<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(4004, 'AUTH_UNREGISTERED_ADMIN_CREDENTIALS')
-  @TypedException<USERS_USER_NOT_FOUND>(7001, 'USERS_USER_NOT_FOUND')
+  @TypedException<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(1004, 'AUTH_UNREGISTERED_ADMIN_CREDENTIALS')
+  @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('aqure-admin-role')
   async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {

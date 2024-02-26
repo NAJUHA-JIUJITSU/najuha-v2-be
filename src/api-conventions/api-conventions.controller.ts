@@ -23,9 +23,9 @@ export class ApiConventionsController {
    *
    * @tag api-conventions
    */
-  @TypedException<AUTH_ACCESS_TOKEN_MISSING>(4000, 'AUTH_ACCESS_TOKEN_MISSING')
-  @TypedException<AUTH_ACCESS_TOKEN_UNAUTHORIZED>(4001, 'AUTH_ACCESS_TOKEN_UNAUTHORIZED')
-  @TypedException<AUTH_LEVEL_FORBIDDEN>(4003, 'AUTH_LEVEL_FORBIDDEN')
+  @TypedException<AUTH_ACCESS_TOKEN_MISSING>(1000, 'AUTH_ACCESS_TOKEN_MISSING')
+  @TypedException<AUTH_ACCESS_TOKEN_UNAUTHORIZED>(1001, 'AUTH_ACCESS_TOKEN_UNAUTHORIZED')
+  @TypedException<AUTH_LEVEL_FORBIDDEN>(1003, 'AUTH_LEVEL_FORBIDDEN')
   @TypedRoute.Get('auth-guard')
   auth() {
     return;

@@ -26,7 +26,7 @@
             "description": "",
             "x-nestia-encrypted": false
           },
-          "4000": {
+          "1000": {
             "description": "AUTH_ACCESS_TOKEN_MISSING",
             "content": {
               "application/json": {
@@ -36,7 +36,7 @@
               }
             }
           },
-          "4001": {
+          "1001": {
             "description": "AUTH_ACCESS_TOKEN_UNAUTHORIZED",
             "content": {
               "application/json": {
@@ -46,7 +46,7 @@
               }
             }
           },
-          "4003": {
+          "1003": {
             "description": "AUTH_LEVEL_FORBIDDEN",
             "content": {
               "application/json": {
@@ -190,7 +190,7 @@
             },
             "x-nestia-encrypted": false
           },
-          "5000": {
+          "2000": {
             "description": "SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER",
             "content": {
               "application/json": {
@@ -200,7 +200,7 @@
               }
             }
           },
-          "5001": {
+          "2001": {
             "description": "SNS_AUTH_KAKAO_LOGIN_FAIL",
             "content": {
               "application/json": {
@@ -210,7 +210,7 @@
               }
             }
           },
-          "5002": {
+          "2002": {
             "description": "SNS_AUTH_NAVER_LOGIN_FAIL",
             "content": {
               "application/json": {
@@ -220,7 +220,7 @@
               }
             }
           },
-          "5003": {
+          "2003": {
             "description": "SNS_AUTH_GOOGLE_LOGIN_FAIL",
             "content": {
               "application/json": {
@@ -286,7 +286,7 @@
             },
             "x-nestia-encrypted": false
           },
-          "4002": {
+          "1002": {
             "description": "AUTH_REFRESH_TOKEN_UNAUTHORIZED",
             "content": {
               "application/json": {
@@ -341,7 +341,7 @@
             },
             "x-nestia-encrypted": false
           },
-          "4004": {
+          "1004": {
             "description": "AUTH_UNREGISTERED_ADMIN_CREDENTIALS",
             "content": {
               "application/json": {
@@ -351,7 +351,7 @@
               }
             }
           },
-          "6001": {
+          "4001": {
             "description": "USERS_USER_NOT_FOUND",
             "content": {
               "application/json": {
@@ -472,7 +472,7 @@
             },
             "x-nestia-encrypted": false
           },
-          "6001": {
+          "4001": {
             "description": "USERS_USER_NOT_FOUND",
             "content": {
               "application/json": {
@@ -544,7 +544,7 @@
             },
             "x-nestia-encrypted": false
           },
-          "6001": {
+          "4001": {
             "description": "USERS_USER_NOT_FOUND",
             "content": {
               "application/json": {
@@ -599,7 +599,7 @@
             },
             "x-nestia-encrypted": false
           },
-          "6001": {
+          "4001": {
             "description": "USERS_USER_NOT_FOUND",
             "content": {
               "application/json": {
@@ -720,7 +720,7 @@
             },
             "x-nestia-encrypted": false
           },
-          "6000": {
+          "3000": {
             "description": "REGISTER_NICKNAME_DUPLICATED",
             "content": {
               "application/json": {
@@ -730,7 +730,7 @@
               }
             }
           },
-          "6001": {
+          "4001": {
             "description": "USERS_USER_NOT_FOUND",
             "content": {
               "application/json": {
@@ -1156,7 +1156,7 @@
           "code": {
             "type": "number",
             "enum": [
-              4000
+              1000
             ]
           },
           "data": {
@@ -1174,7 +1174,7 @@
           "code",
           "data"
         ],
-        "description": "----------------------------------------------------------------------------\nAuth 4000 ~ 4999"
+        "description": "----------------------------------------------------------------------------\nAuth 1000 ~ 1999"
       },
       "AUTH_ACCESS_TOKEN_UNAUTHORIZED": {
         "type": "object",
@@ -1194,7 +1194,7 @@
           "code": {
             "type": "number",
             "enum": [
-              4001
+              1001
             ]
           },
           "data": {
@@ -1231,7 +1231,7 @@
           "code": {
             "type": "number",
             "enum": [
-              4003
+              1003
             ]
           },
           "data": {
@@ -1292,7 +1292,7 @@
           "code": {
             "type": "number",
             "enum": [
-              5000
+              2000
             ]
           },
           "data": {
@@ -1310,7 +1310,7 @@
           "code",
           "data"
         ],
-        "description": "----------------------------------------------------------------------------\nSnsAuth 5000 ~ 5999"
+        "description": "----------------------------------------------------------------------------\nSnsAuth 2000 ~ 2999"
       },
       "SNS_AUTH_KAKAO_LOGIN_FAIL": {
         "type": "object",
@@ -1330,7 +1330,7 @@
           "code": {
             "type": "number",
             "enum": [
-              5001
+              2001
             ]
           },
           "data": {
@@ -1367,7 +1367,7 @@
           "code": {
             "type": "number",
             "enum": [
-              5002
+              2002
             ]
           },
           "data": {
@@ -1404,7 +1404,7 @@
           "code": {
             "type": "number",
             "enum": [
-              5003
+              2003
             ]
           },
           "data": {
@@ -1435,7 +1435,7 @@
           "code": {
             "type": "number",
             "enum": [
-              1000
+              200
             ]
           },
           "data": {
@@ -1495,7 +1495,7 @@
           "code": {
             "type": "number",
             "enum": [
-              4002
+              1002
             ]
           },
           "data": {
@@ -1532,7 +1532,7 @@
           "code": {
             "type": "number",
             "enum": [
-              4004
+              1004
             ]
           },
           "data": {
@@ -1569,7 +1569,7 @@
           "code": {
             "type": "number",
             "enum": [
-              6001
+              4001
             ]
           },
           "data": {
@@ -1587,7 +1587,7 @@
           "code",
           "data"
         ],
-        "description": "----------------------------------------------------------------------------\nUsers 7000 ~ 7999"
+        "description": "----------------------------------------------------------------------------\nUsers 4000 ~ 4999"
       },
       "CreateUserDto": {
         "type": "object",
@@ -1665,7 +1665,7 @@
           "code": {
             "type": "number",
             "enum": [
-              1000
+              200
             ]
           },
           "data": {
@@ -1880,7 +1880,7 @@
           "code": {
             "type": "number",
             "enum": [
-              1000
+              200
             ]
           },
           "data": {
@@ -1955,7 +1955,7 @@
           "code": {
             "type": "number",
             "enum": [
-              6000
+              3000
             ]
           },
           "data": {
@@ -1973,7 +1973,7 @@
           "code",
           "data"
         ],
-        "description": "----------------------------------------------------------------------------\nRegister 6000 ~ 6999"
+        "description": "----------------------------------------------------------------------------\nRegister 3000 ~ 3999"
       },
       "ResponseFormArrayPolicyEntity": {
         "type": "object",
@@ -1987,7 +1987,7 @@
           "code": {
             "type": "number",
             "enum": [
-              1000
+              200
             ]
           },
           "data": {
@@ -2058,7 +2058,7 @@
           "code": {
             "type": "number",
             "enum": [
-              1000
+              200
             ]
           },
           "data": {
@@ -2157,7 +2157,7 @@
           "code": {
             "type": "number",
             "enum": [
-              1000
+              200
             ]
           },
           "data": {
