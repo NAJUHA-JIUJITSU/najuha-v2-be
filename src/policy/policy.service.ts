@@ -12,34 +12,36 @@ export class PolicyService {
   ) {}
 
   async createPolicy(createPolicyDto: CreatePolicyDto): Promise<PolicyEntity> {
-    const newPolicy = this.policyRepository.create(createPolicyDto);
+    // 같은 타입의 약관이 이미 존재하는지 확인, 가장 최근에 등록된 약관을 가져을
+    const existingPolicy = await this.policyRepository.findOne({
+      where: { type: createPolicyDto.type },
+      order: { createdAt: 'DESC' },
+    });
+    // 같은 타입의 약관이 존재하면 버전을 1 증가시킴
+    const newVersion = existingPolicy ? existingPolicy.version + 1 : 1;
+
+    const newPolicy = this.policyRepository.create({
+      ...createPolicyDto,
+      version: newVersion,
+    });
     return await this.policyRepository.save(newPolicy);
   }
 
-  async savePolicy(id: number, updatePolicyDto: any): Promise<PolicyEntity> {
-    const policy = await this.policyRepository.findOne({ where: { id } });
-    if (!policy) {
-      throw new Error('Policy not found'); //TODO : 에러표준화
-    }
-    return this.policyRepository.save({ ...policy, ...updatePolicyDto });
-  }
-
-  async updatePolicy(id: number, updatePolicyDto: any): Promise<void> {
-    const result = await this.policyRepository.update({ id }, updatePolicyDto);
-    if (!result.affected) {
-      throw new Error('Policy not found'); //TODO : 에러표준화
-    }
-  }
-
-  async findAllPolicies(): Promise<PolicyEntity[]> {
-    return this.policyRepository.find();
-  }
-
-  async findAllTypesOfPolicies(): Promise<PolicyEntity[]> {
-    return this.policyRepository.find();
+  async findAllPolicies(type?: PolicyEntity['type']): Promise<PolicyEntity[]> {
+    return this.policyRepository.find({ where: { type } });
   }
 
   async findPolicy(id: number): Promise<PolicyEntity | null> {
     return this.policyRepository.findOne({ where: { id } });
+  }
+
+  async findAllTypesOfRecentPolicies(): Promise<PolicyEntity[]> {
+    // 모든 타입의 가장 최근에 등록된 약관을 가져옴
+    return this.policyRepository
+      .createQueryBuilder('policy')
+      .distinctOn(['policy.type'])
+      .orderBy('policy.type')
+      .addOrderBy('policy.createdAt', 'DESC')
+      .getMany();
   }
 }
