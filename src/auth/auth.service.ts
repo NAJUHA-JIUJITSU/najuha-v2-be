@@ -83,29 +83,28 @@ export class AuthService {
 
   /**
    * refreshToken의 유효성 검사
-   * 1. refreshToken이 redis에 저장된 값과 일치하는지 확인
-   * 2. refreshToken이 만료되지 않았는지 확인
-   * 3. refreshToken의 payload 반환
+   * 1. refreshToken의 유효성 검사
+   * 2. redis에 저장된 refreshToken과 비교
    *
    * 오류 발생시 redis에 저장된 refreshToken 삭제(로그아웃 처리)
    */
   private async verifyRefreshToken(refreshToken: string): Promise<any> {
-    const payload = this.jwtService.decode(refreshToken);
+    let payload;
+
+    try {
+      payload = this.jwtService.verify(refreshToken, {
+        secret: appConfig.jwtRefreshTokenSecret,
+      });
+    } catch (e) {
+      if (payload?.userId) await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
+      throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
+    }
 
     const storedRefreshToken = await this.redisClient.get(`userId:${payload.userId}:refreshToken`);
 
     if (!storedRefreshToken || storedRefreshToken !== refreshToken) {
       await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
       throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
-    }
-
-    try {
-      this.jwtService.verify(refreshToken, {
-        secret: appConfig.jwtRefreshTokenSecret,
-      });
-    } catch (e) {
-      await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
-      throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
     }
 
     return payload;
