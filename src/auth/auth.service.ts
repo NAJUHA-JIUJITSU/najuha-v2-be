@@ -60,9 +60,9 @@ export class AuthService {
 
     if (!isCurrentAdmin) throw new BusinessException(AuthErrorMap.AUTH_UNREGISTERED_ADMIN_CREDENTIALS);
 
-    const updatedUser = await this.usersService.updateUser(userId, { role: 'ADMIN' });
+    await this.usersService.updateUser(userId, { role: 'ADMIN' });
 
-    return await this.createAuthTokens(updatedUser.id, updatedUser.role);
+    return await this.createAuthTokens(userId, 'ADMIN');
   }
 
   private createAccessToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {

@@ -32,7 +32,7 @@ export class RegisterService {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
 
-    const user = await this.usersService.updateUser(userId, { ...dto, role: 'USER' });
+    const user = await this.usersService.saveUser(userId, { ...dto, role: 'USER' });
 
     const authTokens = await this.authService.createAuthTokens(user.id, user.role);
 

@@ -20,10 +20,15 @@ export class UsersService {
     return await this.userRepository.save(user);
   }
 
-  async updateUser(userId: UserEntity['id'], dto: UpdateUserDto | UpdateUserWithRoleDto): Promise<UserEntity> {
+  async saveUser(userId: UserEntity['id'], dto: Partial<UserEntity>): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(UsersErrorMap.USERS_USER_NOT_FOUND);
     return await this.userRepository.save({ ...user, ...dto });
+  }
+
+  async updateUser(userId: UserEntity['id'], dto: Partial<UserEntity>): Promise<void> {
+    const result = await this.userRepository.update({ id: userId }, dto);
+    if (!result.affected) throw new BusinessException(UsersErrorMap.USERS_USER_NOT_FOUND);
   }
 
   async getUserById(userId: UserEntity['id']): Promise<UserEntity> {

@@ -40,7 +40,7 @@ export class UserUsersController {
   @TypedRoute.Patch('/')
   async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
     const userId = req['userId'];
-    const user = await this.usersService.updateUser(userId, dto);
+    const user = await this.usersService.saveUser(userId, dto);
     return createResponseForm(user);
   }
 
