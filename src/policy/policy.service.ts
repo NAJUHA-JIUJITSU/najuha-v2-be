@@ -16,12 +16,19 @@ export class PolicyService {
     return await this.policyRepository.save(newPolicy);
   }
 
-  async updatePolicy(id: number, updatePolicyDto: any): Promise<PolicyEntity> {
+  async savePolicy(id: number, updatePolicyDto: any): Promise<PolicyEntity> {
     const policy = await this.policyRepository.findOne({ where: { id } });
     if (!policy) {
       throw new Error('Policy not found'); //TODO : 에러표준화
     }
     return this.policyRepository.save({ ...policy, ...updatePolicyDto });
+  }
+
+  async updatePolicy(id: number, updatePolicyDto: any): Promise<void> {
+    const result = await this.policyRepository.update({ id }, updatePolicyDto);
+    if (!result.affected) {
+      throw new Error('Policy not found'); //TODO : 에러표준화
+    }
   }
 
   async findAllPolicies(): Promise<PolicyEntity[]> {

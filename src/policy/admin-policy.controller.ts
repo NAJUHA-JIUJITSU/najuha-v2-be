@@ -68,7 +68,7 @@ export class AdminPolicyController {
     @TypedParam('id') id: PolicyEntity['id'],
     @TypedBody() updatePolicyDto: UpdatePolicyDto,
   ): Promise<ResponseForm<PolicyEntity>> {
-    const policy = await this.policyService.updatePolicy(id, updatePolicyDto);
+    const policy = await this.policyService.savePolicy(id, updatePolicyDto);
     return createResponseForm(policy);
   }
 }
