@@ -5,7 +5,6 @@ import { RegisterDto } from './dto/register.dto';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { PolicyEntity } from 'src/policy/entities/policy.entity';
 import { PolicyService } from 'src/policy/policy.service';
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';

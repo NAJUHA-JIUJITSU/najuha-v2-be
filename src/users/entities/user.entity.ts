@@ -51,8 +51,11 @@ export class UserEntity {
   @Column('varchar', { length: 256, nullable: true })
   name: string;
 
-  /** - 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678. */
-  @Column('varchar', { length: 100, nullable: true })
+  /**
+   * - 사용자 전화번호. 01012345678
+   * @pattern ^01[0-9]{8,9}$
+   */
+  @Column('varchar', { length: 20, nullable: true })
   phoneNumber: string;
 
   /**
