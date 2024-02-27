@@ -3,10 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException } from 'src/common/response/errorResponse';
 import { UsersErrorMap } from 'src/common/response/errorResponse';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { UpdateUserWithRoleDto } from './dto/update-user-with-role.dto';
 
 @Injectable()
 export class UsersService {

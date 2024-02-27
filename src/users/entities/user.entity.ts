@@ -1,3 +1,4 @@
+import { BirthDate } from 'src/custom-tags/date-of-birth.tag';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -33,7 +34,7 @@ export class UserEntity {
   snsId: string;
 
   /**
-   * - 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠).
+   * - 사용자 이메일 주소.
    * @minLength 1
    * @maxLength 320
    * @format email
@@ -48,11 +49,11 @@ export class UserEntity {
    * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$
    */
   @Column('varchar', { length: 256, nullable: true })
-  name: null | string;
+  name: string;
 
   /** - 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678. */
   @Column('varchar', { length: 100, nullable: true })
-  phoneNumber: null | string;
+  phoneNumber: string;
 
   /**
    * - 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)
@@ -62,26 +63,23 @@ export class UserEntity {
    * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$
    */
   @Column('varchar', { length: 64, nullable: true })
-  nickname: null | string;
+  nickname: string;
 
   /** - 사용자 성별. */
   @Column('varchar', { nullable: true })
-  gender: null | 'MALE' | 'FEMALE';
+  gender: 'MALE' | 'FEMALE';
 
-  /**
-   * - 사용자 생년월일 (YYYYMMDD).
-   * @pattern ^\d{8}$
-   */
+  /** - 사용자 생년월일 (BirtDate YYYYMMDD). */
   @Column('varchar', { length: 8, nullable: true })
-  birth: null | string;
+  birth: string & BirthDate;
 
   /** - 사용자 주짓수 벨트. */
   @Column('varchar', { length: 10, nullable: true })
-  belt: null | '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
+  belt: '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
-  /** - 사용자 체중. */
-  @Column('float', { nullable: true })
-  weight: null | number;
+  // /** - 사용자 체중. */
+  // @Column('float', { nullable: true })
+  // weight: null | number;
 
   /**
    * - 사용자 프로필 이미지 키. (썸네일 이미지 역할).

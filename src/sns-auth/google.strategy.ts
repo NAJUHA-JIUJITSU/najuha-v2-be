@@ -60,9 +60,6 @@ export class GoogleStrategy implements SnsAuthStrategy {
       snsId: data.sub,
       name: data.name,
       email: data.email,
-      phoneNumber: null,
-      gender: null,
-      birth: null,
     };
 
     return dto;
