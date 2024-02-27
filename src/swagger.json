@@ -593,7 +593,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserEntity"
+                  "$ref": "#/components/schemas/ResponseFormTemporaryUserDto"
                 }
               }
             },
@@ -648,7 +648,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "",
+            "description": "닉네임",
             "required": true
           }
         ],
@@ -679,6 +679,23 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "nickname",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "닉네임",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
@@ -691,8 +708,8 @@
         "x-nestia-method": "GET"
       }
     },
-    "/user/register": {
-      "patch": {
+    "/user/register/phone-number/auth-code": {
+      "post": {
         "tags": [
           "u-2 register"
         ],
@@ -701,7 +718,147 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PartialPickUserEntitygenderbirthnicknamebelt"
+                "$ref": "#/components/schemas/RegisterPhoneNumberDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormstringnull"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-2-3 send auth code to phone number",
+        "description": "u-2-3 send auth code to phone number.\n- RoleLevel: TEMPORARY_USER\n- 전화번호로 인증코드를 전송한다.",
+        "x-nestia-namespace": "user.register.phone-number.auth-code.sendPhoneNumberAuthCode",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-2 register",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/user/register/phone-number/auth-code/{authCode}/confirm": {
+      "post": {
+        "tags": [
+          "u-2 register"
+        ],
+        "parameters": [
+          {
+            "name": "authCode",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]{6}$"
+            },
+            "description": "인증코드",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "true or false",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormboolean"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          },
+          "4001": {
+            "description": "USERS_USER_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                }
+              }
+            }
+          }
+        },
+        "summary": "u-2-4 confirm auth code",
+        "description": "u-2-4 confirm auth code.\n- RoleLevel: TEMPORARY_USER\n- 전화번호로 전송된 인증코드를 확인한다.\n- 인증성공시 UserEntity의 phoneNumber를 업데이트한다.\n- 인증성공시 true, 실패시 false를 반환한다.",
+        "x-nestia-namespace": "user.register.phone-number.auth-code.confirm.confirmAuthCode",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-2 register",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "authCode",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "인증코드",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "true or false",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/user/register": {
+      "patch": {
+        "tags": [
+          "u-2 register"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "RegisterDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
               }
             }
           },
@@ -730,6 +887,26 @@
               }
             }
           },
+          "3002": {
+            "description": "REGISTER_POLICY_CONSENT_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/REGISTER_POLICY_CONSENT_REQUIRED"
+                }
+              }
+            }
+          },
+          "3003": {
+            "description": "REGISTER_PHONE_NUMBER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/REGISTER_PHONE_NUMBER_REQUIRED"
+                }
+              }
+            }
+          },
           "4001": {
             "description": "USERS_USER_NOT_FOUND",
             "content": {
@@ -741,8 +918,8 @@
             }
           }
         },
-        "summary": "u-2-3 register user",
-        "description": "u-2-3 register user.\n- RoleLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
+        "summary": "u-2-5 register user",
+        "description": "u-2-5 register user.\n- RoleLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
         "x-nestia-namespace": "user.register.registerUser",
         "x-nestia-jsDocTags": [
           {
@@ -750,6 +927,23 @@
             "text": [
               {
                 "text": "u-2 register",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "dto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "RegisterDto",
                 "kind": "text"
               }
             ]
@@ -767,7 +961,7 @@
         "x-nestia-method": "PATCH"
       }
     },
-    "/user/policy": {
+    "/user/policy/recent": {
       "get": {
         "tags": [
           "u-4 policy"
@@ -786,9 +980,9 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-1 find all types of policies\n- RoleLevel: USER",
-        "description": "u-4-1 find all types of policies\n- RoleLevel: USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
-        "x-nestia-namespace": "user.policy.findAllTypesOfPolicies",
+        "summary": "u-4-1 find all types of recent policies",
+        "description": "u-4-1 find all types of recent policies.\n- RoleLevel: USER\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
+        "x-nestia-namespace": "user.policy.recent.findAllRecentPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -830,7 +1024,7 @@
         ],
         "responses": {
           "200": {
-            "description": "policy",
+            "description": "one policy",
             "content": {
               "application/json": {
                 "schema": {
@@ -841,8 +1035,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-2 find policy\n- RoleLevel: USER",
-        "description": "u-4-2 find policy\n- RoleLevel: USER.\n- 약관 ID로 약관을 가져옵니다.",
+        "summary": "u-4-2 find policy by id",
+        "description": "u-4-2 find policy by id.\n- RoleLevel: USER",
         "x-nestia-namespace": "user.policy.findPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -875,7 +1069,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "policy",
+                "text": "one policy",
                 "kind": "text"
               }
             ]
@@ -942,7 +1136,17 @@
         "tags": [
           "a-4 policy"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PolicyTypeQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "all policies",
@@ -956,8 +1160,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "a-4-2 find all policies",
-        "description": "a-4-2 find all policies.\n- RoleLevel: ADMIN",
+        "summary": "a-4-1 find all policies",
+        "description": "a-4-1 find all policies.\n- RoleLevel: USER",
         "x-nestia-namespace": "admin.policy.findAllPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -965,6 +1169,23 @@
             "text": [
               {
                 "text": "a-4 policy",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "type",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "policy type",
                 "kind": "text"
               }
             ]
@@ -980,159 +1201,6 @@
           }
         ],
         "x-nestia-method": "GET"
-      }
-    },
-    "/admin/policy/{id}": {
-      "get": {
-        "tags": [
-          "a-4 policy"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "policy id",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "one policy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyEntitynull"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "a-4-3 find policy",
-        "description": "a-4-3 find policy.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.findPolicy",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "a-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "id",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "policy id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "one policy",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      },
-      "patch": {
-        "tags": [
-          "a-4 policy"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "schema": {
-              "type": "number"
-            },
-            "description": "policy id",
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PartialPickPolicyEntitytypetitlecontent"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "updated policy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "a-4-4 patch policy",
-        "description": "a-4-4 patch policy.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.patchPolicy",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "a-4 policy",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "id",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "policy id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "updated policy",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "PATCH"
       }
     }
   },
@@ -1611,7 +1679,6 @@
             "maxLength": 64,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
-            "nullable": true,
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "email": {
@@ -1619,11 +1686,10 @@
             "format": "email",
             "maxLength": 320,
             "minLength": 1,
-            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
+            "description": "- 사용자 이메일 주소."
           },
           "phoneNumber": {
             "type": "string",
-            "nullable": true,
             "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
           },
           "gender": {
@@ -1632,14 +1698,11 @@
               "MALE",
               "FEMALE"
             ],
-            "nullable": true,
             "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
-            "pattern": "^\\d{8}$",
-            "nullable": true,
-            "description": "- 사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           }
         },
         "nullable": false,
@@ -1647,10 +1710,7 @@
           "snsId",
           "snsAuthProvider",
           "name",
-          "email",
-          "phoneNumber",
-          "gender",
-          "birth"
+          "email"
         ]
       },
       "ResponseFormUserEntity": {
@@ -1714,19 +1774,17 @@
             "format": "email",
             "maxLength": 320,
             "minLength": 1,
-            "description": "- 사용자 이메일 주소 (일단 필요없으나 수집이 쉽고, 추후에 필요할수도 있으니 일단 넣어둠)."
+            "description": "- 사용자 이메일 주소."
           },
           "name": {
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
-            "nullable": true,
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "phoneNumber": {
             "type": "string",
-            "nullable": true,
             "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
           },
           "nickname": {
@@ -1734,7 +1792,6 @@
             "maxLength": 64,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
-            "nullable": true,
             "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "gender": {
@@ -1743,14 +1800,11 @@
               "MALE",
               "FEMALE"
             ],
-            "nullable": true,
             "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
-            "pattern": "^\\d{8}$",
-            "nullable": true,
-            "description": "- 사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           },
           "belt": {
             "type": "string",
@@ -1762,13 +1816,7 @@
               "브라운",
               "블랙"
             ],
-            "nullable": true,
             "description": "- 사용자 주짓수 벨트."
-          },
-          "weight": {
-            "type": "number",
-            "nullable": true,
-            "description": "- 사용자 체중."
           },
           "profileImageUrlKey": {
             "type": "string",
@@ -1809,7 +1857,6 @@
           "gender",
           "birth",
           "belt",
-          "weight",
           "profileImageUrlKey",
           "status",
           "createdAt",
@@ -1825,8 +1872,125 @@
             "maxLength": 64,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
-            "nullable": true,
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "description": "- 사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "description": "- 사용자 주짓수 벨트."
+          }
+        },
+        "nullable": false,
+        "description": "Make all properties in T optional"
+      },
+      "ResponseFormTemporaryUserDto": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/TemporaryUserDto"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "TemporaryUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ],
+            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
+          },
+          "snsAuthProvider": {
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
+            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+          },
+          "snsId": {
+            "type": "string",
+            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "minLength": 1,
+            "description": "- 사용자 이메일 주소."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true,
+            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "nullable": true,
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "gender": {
             "type": "string",
@@ -1839,17 +2003,8 @@
           },
           "birth": {
             "type": "string",
-            "pattern": "^\\d{8}$",
             "nullable": true,
-            "description": "- 사용자 생년월일 (YYYYMMDD)."
-          },
-          "nickname": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
-            "nullable": true,
-            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           },
           "belt": {
             "type": "string",
@@ -1863,10 +2018,51 @@
             ],
             "nullable": true,
             "description": "- 사용자 주짓수 벨트."
+          },
+          "profileImageUrlKey": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "nullable": true,
+            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
           }
         },
         "nullable": false,
-        "description": "Make all properties in T optional"
+        "required": [
+          "id",
+          "role",
+          "snsAuthProvider",
+          "snsId",
+          "email",
+          "name",
+          "phoneNumber",
+          "nickname",
+          "gender",
+          "birth",
+          "belt",
+          "profileImageUrlKey",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "ResponseFormboolean": {
         "type": "object",
@@ -1894,7 +2090,72 @@
           "data"
         ]
       },
-      "PartialPickUserEntitygenderbirthnicknamebelt": {
+      "RegisterPhoneNumberDto": {
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": "string",
+            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "phoneNumber"
+        ]
+      },
+      "ResponseFormstringnull": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "code",
+          "data"
+        ]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/PickUserEntitygenderbirthnicknamebelt"
+          },
+          "consentPolicyTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "TERMS_OF_SERVICE",
+                "PRIVACY",
+                "REFUND",
+                "ADVERTISEMENT"
+              ]
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "user",
+          "consentPolicyTypes"
+        ]
+      },
+      "PickUserEntitygenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
@@ -1903,21 +2164,17 @@
               "MALE",
               "FEMALE"
             ],
-            "nullable": true,
             "description": "- 사용자 성별."
           },
           "birth": {
             "type": "string",
-            "pattern": "^\\d{8}$",
-            "nullable": true,
-            "description": "- 사용자 생년월일 (YYYYMMDD)."
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           },
           "nickname": {
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
-            "nullable": true,
             "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "belt": {
@@ -1930,12 +2187,17 @@
               "브라운",
               "블랙"
             ],
-            "nullable": true,
             "description": "- 사용자 주짓수 벨트."
           }
         },
         "nullable": false,
-        "description": "Make all properties in T optional"
+        "required": [
+          "gender",
+          "birth",
+          "nickname",
+          "belt"
+        ],
+        "description": "From T, pick a set of properties whose keys are in the union K"
       },
       "REGISTER_NICKNAME_DUPLICATED": {
         "type": "object",
@@ -1975,6 +2237,80 @@
         ],
         "description": "----------------------------------------------------------------------------\nRegister 3000 ~ 3999"
       },
+      "REGISTER_POLICY_CONSENT_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              400
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              3002
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "필수 동의 항목을 모두 동의해야 합니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ]
+      },
+      "REGISTER_PHONE_NUMBER_REQUIRED": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              400
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              3003
+            ]
+          },
+          "data": {
+            "type": "string",
+            "enum": [
+              "회원가입을 위해서는 휴대폰 번호인증이 필요합니다."
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "result",
+          "status",
+          "code",
+          "data"
+        ]
+      },
       "ResponseFormArrayPolicyEntity": {
         "type": "object",
         "properties": {
@@ -2009,16 +2345,25 @@
         "properties": {
           "id": {
             "type": "number",
-            "description": "- 약관 ID. 데이터베이스에서 자동 생성됩니다."
+            "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
+          },
+          "version": {
+            "type": "number",
+            "description": "- 약관의 버전.\n- 버전이 변경될 때마다 새로운 약관으로 간주합니다."
           },
           "type": {
             "type": "string",
             "enum": [
               "TERMS_OF_SERVICE",
-              "PRIVACY_POLICY",
-              "REFUND_POLICY"
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
             ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
+          },
+          "isMandatory": {
+            "type": "boolean",
+            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
           },
           "title": {
             "type": "string",
@@ -2039,12 +2384,14 @@
         "nullable": false,
         "required": [
           "id",
+          "version",
           "type",
+          "isMandatory",
           "title",
           "content",
           "createdAt"
         ],
-        "description": "- 약관 테이블.\n- 서비스 이용 약관, 개인정보 처리 방침, 환불 정책 등을 저장합니다."
+        "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
       "ResponseFormPolicyEntitynull": {
         "type": "object",
@@ -2077,16 +2424,25 @@
         "properties": {
           "id": {
             "type": "number",
-            "description": "- 약관 ID. 데이터베이스에서 자동 생성됩니다."
+            "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
+          },
+          "version": {
+            "type": "number",
+            "description": "- 약관의 버전.\n- 버전이 변경될 때마다 새로운 약관으로 간주합니다."
           },
           "type": {
             "type": "string",
             "enum": [
               "TERMS_OF_SERVICE",
-              "PRIVACY_POLICY",
-              "REFUND_POLICY"
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
             ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
+          },
+          "isMandatory": {
+            "type": "boolean",
+            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
           },
           "title": {
             "type": "string",
@@ -2107,12 +2463,14 @@
         "nullable": true,
         "required": [
           "id",
+          "version",
           "type",
+          "isMandatory",
           "title",
           "content",
           "createdAt"
         ],
-        "description": "- 약관 테이블.\n- 서비스 이용 약관, 개인정보 처리 방침, 환불 정책 등을 저장합니다."
+        "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
       "CreatePolicyDto": {
         "type": "object",
@@ -2121,10 +2479,15 @@
             "type": "string",
             "enum": [
               "TERMS_OF_SERVICE",
-              "PRIVACY_POLICY",
-              "REFUND_POLICY"
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
             ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
+          },
+          "isMandatory": {
+            "type": "boolean",
+            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
           },
           "title": {
             "type": "string",
@@ -2141,6 +2504,7 @@
         "nullable": false,
         "required": [
           "type",
+          "isMandatory",
           "title",
           "content"
         ]
@@ -2171,32 +2535,20 @@
           "data"
         ]
       },
-      "PartialPickPolicyEntitytypetitlecontent": {
+      "PolicyTypeQuery": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
             "enum": [
               "TERMS_OF_SERVICE",
-              "PRIVACY_POLICY",
-              "REFUND_POLICY"
-            ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY_POLICY: 개인정보 처리 방침.\n- REFUND_POLICY: 환불 정책."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1,
-            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ]
           }
         },
-        "nullable": false,
-        "description": "Make all properties in T optional"
+        "nullable": false
       }
     },
     "securitySchemes": {

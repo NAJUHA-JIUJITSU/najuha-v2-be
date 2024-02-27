@@ -4,7 +4,12 @@ import { RoleLevels, RoleLevel } from 'src/common/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RegisterService } from './register.service';
 import { RegisterDto } from './dto/register.dto';
-import { REGISTER_NICKNAME_DUPLICATED, USERS_USER_NOT_FOUND } from 'src/common/response/errorResponse';
+import {
+  REGISTER_NICKNAME_DUPLICATED,
+  REGISTER_PHONE_NUMBER_REQUIRED,
+  REGISTER_POLICY_CONSENT_REQUIRED,
+  USERS_USER_NOT_FOUND,
+} from 'src/common/response/errorResponse';
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
@@ -72,7 +77,6 @@ export class UserRegisterController {
     return createResponseForm(authCode);
   }
 
-  // 전화번호 인증코드 확화
   /**
    * u-2-4 confirm auth code.
    * - RoleLevel: TEMPORARY_USER
@@ -84,6 +88,7 @@ export class UserRegisterController {
    * @param authCode 인증코드
    * @returns true or false
    */
+  @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code/:authCode/confirm')
   async confirmAuthCode(
@@ -106,6 +111,8 @@ export class UserRegisterController {
    * @returns accessToken & refreshToken
    */
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(3000, 'REGISTER_NICKNAME_DUPLICATED')
+  @TypedException<REGISTER_POLICY_CONSENT_REQUIRED>(3002, 'REGISTER_POLICY_CONSENT_REQUIRED')
+  @TypedException<REGISTER_PHONE_NUMBER_REQUIRED>(3003, 'REGISTER_PHONE_NUMBER_REQUIRED')
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Patch()
