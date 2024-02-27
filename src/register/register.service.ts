@@ -50,8 +50,9 @@ export class RegisterService {
     this.validatePolicyConsent(dto.consentPolicyTypes, mandatoryPolicies);
 
     const user = await this.usersService.getUserById(userId);
-    // if (!user.phoneNumber)
-    //   throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
+    if (!user.phoneNumber) {
+      throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
+    }
 
     await this.usersService.updateUser(userId, { ...dto.user, role: 'USER' });
 

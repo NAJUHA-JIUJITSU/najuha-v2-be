@@ -136,10 +136,18 @@ export type REGISTER_POLICY_CONSENT_REQUIRED = ErrorResponse & {
   data: '필수 동의 항목을 모두 동의해야 합니다.';
 };
 
+export type REGISTER_PHONE_NUMBER_REQUIRED = ErrorResponse & {
+  result: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 3003;
+  data: '회원가입을 위해서는 휴대폰 번호인증이 필요합니다.';
+};
+
 export const RegisterErrorMap = {
   REGISTER_NICKNAME_DUPLICATED: typia.random<REGISTER_NICKNAME_DUPLICATED>(),
   REGISTER_BIRTH_INVALID: typia.random<REGISTER_BIRTH_INVALID>(),
   REGISTER_POLICY_CONSENT_REQUIRED: typia.random<REGISTER_POLICY_CONSENT_REQUIRED>(),
+  REGISTER_PHONE_NUMBER_REQUIRED: typia.random<REGISTER_PHONE_NUMBER_REQUIRED>(),
 };
 
 /** ----------------------------------------------------------------------------
