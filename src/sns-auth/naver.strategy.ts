@@ -69,7 +69,6 @@ export class NaverStrategy implements SnsAuthStrategy {
       // 예) +82 10-1234-5678 -> 01012345678
       dto.phoneNumber = data.mobile_e164.replace('+82', '0').replace(/-/g, '');
     }
-    console.log(dto);
     return dto;
   }
 }
