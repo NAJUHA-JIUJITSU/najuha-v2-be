@@ -8,6 +8,7 @@ import { REGISTER_NICKNAME_DUPLICATED, USERS_USER_NOT_FOUND } from 'src/common/r
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
+import { PhoneNumberAuthCode } from './types/phone-number-auth-code.type';
 
 @Controller('user/register')
 export class UserRegisterController {
@@ -61,18 +62,41 @@ export class UserRegisterController {
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code')
-  async sendAuthCodeToPhoneNumber(
+  async sendPhoneNumberAuthCode(
     @Req() req: Request,
     @TypedBody() dto: RegisterPhoneNumberDto,
   ): Promise<ResponseForm<null | string>> {
     // TODO: smsService 개발후 null 반환으로 변환
     const userId = req['userId'];
-    const authCode = await this.registerService.sendAuthCodeToPhoneNumber(userId, dto);
+    const authCode = await this.registerService.sendPhoneNumberAuthCode(userId, dto);
     return createResponseForm(authCode);
   }
 
+  // 전화번호 인증코드 확화
   /**
-   * u-2-4 register user.
+   * u-2-4 confirm auth code.
+   * - RoleLevel: TEMPORARY_USER
+   * - 전화번호로 전송된 인증코드를 확인한다.
+   * - 인증성공시 UserEntity의 phoneNumber를 업데이트한다.
+   * - 인증성공시 true, 실패시 false를 반환한다.
+   *
+   * @tag u-2 register
+   * @param authCode 인증코드
+   * @returns true or false
+   */
+  @RoleLevels(RoleLevel.TEMPORARY_USER)
+  @TypedRoute.Post('phone-number/auth-code/:authCode/confirm')
+  async confirmAuthCode(
+    @Req() req: Request,
+    @TypedParam('authCode') authCode: PhoneNumberAuthCode,
+  ): Promise<ResponseForm<boolean>> {
+    const userId = req['userId'];
+    const isConfirmed = await this.registerService.confirmAuthCode(userId, authCode);
+    return createResponseForm(isConfirmed);
+  }
+
+  /**
+   * u-2-5 register user.
    * - RoleLevel: TEMPORARY_USER
    * - 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.
    * - USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.

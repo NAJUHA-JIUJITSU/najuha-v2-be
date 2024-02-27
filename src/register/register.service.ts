@@ -9,11 +9,9 @@ import { PolicyEntity } from 'src/policy/entities/policy.entity';
 import { PolicyService } from 'src/policy/policy.service';
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
-import typia from 'typia';
 import { Redis } from 'ioredis';
-import { auth } from 'src/api/functional/user';
-
-type PhoneNumberAuthCode = string & typia.tags.Pattern<'^[0-9]{6}$'>;
+import typia from 'typia';
+import { PhoneNumberAuthCode } from './types/phone-number-auth-code.type';
 
 @Injectable()
 export class RegisterService {
@@ -60,7 +58,15 @@ export class RegisterService {
     return await this.authService.createAuthTokens(user.id, 'USER');
   }
 
-  async sendAuthCodeToPhoneNumber(
+  private validatePolicyConsent(types: PolicyEntity['type'][], mandatoryPolicies: PolicyEntity[]): void {
+    mandatoryPolicies.forEach((policy) => {
+      if (!types.includes(policy.type)) {
+        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
+      }
+    });
+  }
+
+  async sendPhoneNumberAuthCode(
     userId: UserEntity['id'],
     dto: RegisterPhoneNumberDto,
   ): Promise<null | PhoneNumberAuthCode> {
@@ -78,11 +84,11 @@ export class RegisterService {
     return authCode;
   }
 
-  private validatePolicyConsent(types: PolicyEntity['type'][], mandatoryPolicies: PolicyEntity[]): void {
-    mandatoryPolicies.forEach((policy) => {
-      if (!types.includes(policy.type)) {
-        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
-      }
-    });
+  async confirmAuthCode(userId: UserEntity['id'], authCode: PhoneNumberAuthCode): Promise<boolean> {
+    const phoneNumber = await this.redisClient.get(`userId:${userId}-authCode:${authCode}`);
+    if (!phoneNumber) return false;
+
+    await this.usersService.updateUser(userId, { phoneNumber });
+    return true;
   }
 }
