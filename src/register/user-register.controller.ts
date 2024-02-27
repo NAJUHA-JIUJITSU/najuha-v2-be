@@ -2,19 +2,15 @@ import { TypedBody, TypedException, TypedParam, TypedRoute } from '@nestia/core'
 import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/common/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { UserEntity } from 'src/users/entities/user.entity';
 import { RegisterService } from './register.service';
-import { RegisterUserDto } from './dto/registerUser.dto';
-import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
-import { UsersService } from 'src/users/users.service';
+import { RegisterDto } from './dto/register.dto';
 import { REGISTER_NICKNAME_DUPLICATED, USERS_USER_NOT_FOUND } from 'src/common/response/errorResponse';
+import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
+import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 
 @Controller('user/register')
 export class UserRegisterController {
-  constructor(
-    private readonly registerService: RegisterService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly registerService: RegisterService) {}
 
   /**
    * u-2-1 get temporary user.
@@ -26,9 +22,10 @@ export class UserRegisterController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
-  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
+  // async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
+  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserDto>> {
     const userId = req['userId'];
-    const user = await this.usersService.getUserById(userId);
+    const user = await this.registerService.getTemporaryUser(userId);
     return createResponseForm(user);
   }
 
@@ -66,27 +63,9 @@ export class UserRegisterController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Patch()
-  async registerUser(@Req() req: Request, @TypedBody() dto: RegisterUserDto): Promise<ResponseForm<AuthTokensDto>> {
+  async registerUser(@Req() req: Request, @TypedBody() dto: RegisterDto): Promise<ResponseForm<AuthTokensDto>> {
     const userId = req['userId'];
     const authTokens = await this.registerService.registerUser(userId, dto);
     return createResponseForm(authTokens);
   }
-
-  // /**
-  //  * u-2-4 update temporary user policy consent.
-  //  * - RoleLevel: TEMPORARY_USER
-  //  *
-  //  * @tag u-2 register
-  //  * @returns updated user
-  //  */
-  //   @RoleLevels(RoleLevel.TEMPORARY_USER)
-  //   @TypedRoute.Patch('policy-consent')
-  //   async patchTemporaryUserPolicyConsent(
-  //     @Req() req: Request,
-  //     @TypedBody() dto: UpdateTemporaryUserDto,
-  //   ): Promise<ResponseForm<UserEntity>> {
-  //     const userId = req['userId'];
-  //     const user = await this.registerService.updateUser(userId, dto);
-  //     return createResponseForm(user);
-  //   }
 }

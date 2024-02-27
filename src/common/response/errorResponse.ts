@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import exp from 'constants';
 import typia from 'typia';
 
 export type ErrorResponse = {
@@ -121,8 +122,24 @@ export type REGISTER_NICKNAME_DUPLICATED = ErrorResponse & {
   data: '이미 사용중인 닉네임입니다.';
 };
 
+export type REGISTER_BIRTH_INVALID = ErrorResponse & {
+  result: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 3001;
+  data: '생년월일이 유효하지 않습니다.';
+};
+
+export type REGISTER_POLICY_CONSENT_REQUIRED = ErrorResponse & {
+  result: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 3002;
+  data: '필수 동의 항목을 모두 동의해야 합니다.';
+};
+
 export const RegisterErrorMap = {
   REGISTER_NICKNAME_DUPLICATED: typia.random<REGISTER_NICKNAME_DUPLICATED>(),
+  REGISTER_BIRTH_INVALID: typia.random<REGISTER_BIRTH_INVALID>(),
+  REGISTER_POLICY_CONSENT_REQUIRED: typia.random<REGISTER_POLICY_CONSENT_REQUIRED>(),
 };
 
 /** ----------------------------------------------------------------------------

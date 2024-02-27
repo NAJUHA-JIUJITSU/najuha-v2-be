@@ -19,7 +19,6 @@ export class PolicyService {
     });
     // 같은 타입의 약관이 존재하면 버전을 1 증가시킴
     const newVersion = existingPolicy ? existingPolicy.version + 1 : 1;
-
     const newPolicy = this.policyRepository.create({
       ...createPolicyDto,
       version: newVersion,
@@ -27,6 +26,7 @@ export class PolicyService {
     return await this.policyRepository.save(newPolicy);
   }
 
+  // TODO content 는 제외
   async findAllPolicies(type?: PolicyEntity['type']): Promise<PolicyEntity[]> {
     return this.policyRepository.find({ where: { type } });
   }
@@ -35,6 +35,7 @@ export class PolicyService {
     return this.policyRepository.findOne({ where: { id } });
   }
 
+  // TODO content 는 제외
   async findAllTypesOfRecentPolicies(): Promise<PolicyEntity[]> {
     // 모든 타입의 가장 최근에 등록된 약관을 가져옴
     return this.policyRepository

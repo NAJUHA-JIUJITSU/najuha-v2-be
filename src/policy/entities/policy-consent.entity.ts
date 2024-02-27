@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { PolicyEntity } from 'src/policy/entities/policy.entity';
 
@@ -20,7 +20,7 @@ export class PolicyConsentEntity {
   policyId: number;
 
   /** 동의 날짜. */
-  @Column()
+  @CreateDateColumn()
   consentedAt: Date;
 
   @ManyToOne(() => UserEntity)

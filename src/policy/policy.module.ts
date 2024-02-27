@@ -12,5 +12,6 @@ import { AdminPolicyController } from './admin-policy.controller';
   imports: [TypeOrmModule.forFeature([PolicyEntity, PolicyConsentEntity, UserEntity])],
   controllers: [UserPolicyController, AdminPolicyController],
   providers: [PolicyService, PolicyConsentService],
+  exports: [PolicyService, PolicyConsentService],
 })
 export class PolicyModule {}
