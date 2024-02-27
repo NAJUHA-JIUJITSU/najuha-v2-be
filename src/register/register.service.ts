@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
@@ -7,12 +7,18 @@ import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { PolicyEntity } from 'src/policy/entities/policy.entity';
 import { PolicyService } from 'src/policy/policy.service';
-import { users } from 'src/api/functional/user';
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
+import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
+import typia from 'typia';
+import { Redis } from 'ioredis';
+import { auth } from 'src/api/functional/user';
+
+type PhoneNumberAuthCode = string & typia.tags.Pattern<'^[0-9]{6}$'>;
 
 @Injectable()
 export class RegisterService {
   constructor(
+    @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly policyService: PolicyService,
@@ -46,15 +52,30 @@ export class RegisterService {
     this.validatePolicyConsent(dto.consentPolicyTypes, mandatoryPolicies);
 
     const user = await this.usersService.getUserById(userId);
-    // check phone number is verified
-
-    // if (dto.user.phoneNumber && !user.phoneNumberVerified) {
-    //   throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_NOT_VERIFIED);
-    // }
+    // if (!user.phoneNumber)
+    //   throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
 
     await this.usersService.updateUser(userId, { ...dto.user, role: 'USER' });
 
     return await this.authService.createAuthTokens(user.id, 'USER');
+  }
+
+  async sendAuthCodeToPhoneNumber(
+    userId: UserEntity['id'],
+    dto: RegisterPhoneNumberDto,
+  ): Promise<null | PhoneNumberAuthCode> {
+    // TODO: smsService 개발후 void 반환으로 변환
+    const phoneNumber = dto.phoneNumber;
+    // 인증 코드 생성 6자리
+    const authCode = typia.random<PhoneNumberAuthCode>();
+    console.log(authCode);
+
+    // 레디스에 인증코드 저장 (5분)
+    this.redisClient.set(`userId:${userId}-authCode:${authCode}`, phoneNumber, 'EX', 300);
+
+    // TODO: 인증코드를 전송
+    // await this.smsService.sendAuthCode(phoneNumber, authCode);
+    return authCode;
   }
 
   private validatePolicyConsent(types: PolicyEntity['type'][], mandatoryPolicies: PolicyEntity[]): void {

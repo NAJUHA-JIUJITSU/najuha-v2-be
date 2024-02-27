@@ -7,6 +7,7 @@ import { RegisterDto } from './dto/register.dto';
 import { REGISTER_NICKNAME_DUPLICATED, USERS_USER_NOT_FOUND } from 'src/common/response/errorResponse';
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
+import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
 
 @Controller('user/register')
 export class UserRegisterController {
@@ -22,7 +23,6 @@ export class UserRegisterController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
-  // async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserDto>> {
     const userId = req['userId'];
     const user = await this.registerService.getTemporaryUser(userId);
@@ -37,6 +37,7 @@ export class UserRegisterController {
    * - 이미 사용중인 닉네임이면 true를 반환
    *
    * @tag u-2 register
+   * @param nickname 닉네임
    * @returns user
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
@@ -51,12 +52,33 @@ export class UserRegisterController {
   }
 
   /**
-   * u-2-3 register user.
+   * u-2-3 send auth code to phone number.
+   * - RoleLevel: TEMPORARY_USER
+   * - 전화번호로 인증코드를 전송한다.
+   *
+   * @tag u-2 register
+   * @returns void
+   */
+  @RoleLevels(RoleLevel.TEMPORARY_USER)
+  @TypedRoute.Post('phone-number/auth-code')
+  async sendAuthCodeToPhoneNumber(
+    @Req() req: Request,
+    @TypedBody() dto: RegisterPhoneNumberDto,
+  ): Promise<ResponseForm<null | string>> {
+    // TODO: smsService 개발후 null 반환으로 변환
+    const userId = req['userId'];
+    const authCode = await this.registerService.sendAuthCodeToPhoneNumber(userId, dto);
+    return createResponseForm(authCode);
+  }
+
+  /**
+   * u-2-4 register user.
    * - RoleLevel: TEMPORARY_USER
    * - 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.
    * - USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.
    *
    * @tag u-2 register
+   * @param dto RegisterDto
    * @returns accessToken & refreshToken
    */
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(3000, 'REGISTER_NICKNAME_DUPLICATED')
