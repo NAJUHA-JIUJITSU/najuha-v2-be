@@ -47,24 +47,20 @@ export class RegisterService {
     // check mandatory policy consent
     const recentPolicies = await this.policyService.findAllTypesOfRecentPolicies();
     const mandatoryPolicies = recentPolicies.filter((policy) => policy.isMandatory);
-    this.validatePolicyConsent(dto.consentPolicyTypes, mandatoryPolicies);
+    mandatoryPolicies.forEach((policy) => {
+      if (!dto.consentPolicyTypes.includes(policy.type)) {
+        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
+      }
+    });
 
+    // check phone number
     const user = await this.usersService.getUserById(userId);
     if (!user.phoneNumber) {
       throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
     }
 
     await this.usersService.updateUser(userId, { ...dto.user, role: 'USER' });
-
     return await this.authService.createAuthTokens(user.id, 'USER');
-  }
-
-  private validatePolicyConsent(types: PolicyEntity['type'][], mandatoryPolicies: PolicyEntity[]): void {
-    mandatoryPolicies.forEach((policy) => {
-      if (!types.includes(policy.type)) {
-        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
-      }
-    });
   }
 
   async sendPhoneNumberAuthCode(
