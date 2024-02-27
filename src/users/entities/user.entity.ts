@@ -1,4 +1,4 @@
-import { BirthDate } from 'src/custom-tags/date-of-birth.tag';
+import { BirthDate } from 'src/custom-tags/birth-date.tag';
 import {
   Entity,
   PrimaryGeneratedColumn,
