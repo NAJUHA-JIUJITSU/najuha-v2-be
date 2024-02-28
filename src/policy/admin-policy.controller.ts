@@ -28,13 +28,13 @@ export class AdminPolicyController {
 
   /**
    * a-4-1 find all policies.
-   * - RoleLevel: USER
+   * - RoleLevel: ADMIN
    *
    * @tag a-4 policy
    * @param type policy type
    * @returns all policies
    */
-  @RoleLevels(RoleLevel.USER)
+  @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
   async findAllPolicies(@TypedQuery() query: PolicyTypeQuery): Promise<ResponseForm<PolicyEntity[]>> {
     const policies = await this.policyService.findAllPolicies(query.type);

@@ -52,7 +52,8 @@ export class UserEntity {
   name: string;
 
   /**
-   * - 사용자 전화번호. 01012345678
+   * - 사용자 전화번호. 01012345678.
+   * - 전화번호가 저장되어 있으면 인증된 전화번호 입니다.
    * @pattern ^01[0-9]{8,9}$
    */
   @Column('varchar', { length: 20, nullable: true })
