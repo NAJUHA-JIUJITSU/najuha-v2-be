@@ -65,7 +65,7 @@ export class UserAuthController {
   @TypedException<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(1004, 'AUTH_UNREGISTERED_ADMIN_CREDENTIALS')
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Patch('aqure-admin-role')
+  @TypedRoute.Patch('acquire-admin-role')
   async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {
     const userId = req['userId'];
     const authTokens = await this.authService.acquireAdminRole(userId);
