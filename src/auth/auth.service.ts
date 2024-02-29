@@ -42,7 +42,7 @@ export class AuthService {
 
     await this.redisClient.set(`userId:${userId}:refreshToken`, refreshToken);
 
-    this.testPrintAllRedisData('createAuthTokens');
+    // this.testPrintAllRedisData('createAuthTokens');
 
     return {
       accessToken,

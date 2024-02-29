@@ -5,8 +5,7 @@ import { CreatePolicyDto } from './dto/create-policy.dto';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/common/guard/role.guard';
 import { PolicyEntity } from './entities/policy.entity';
-
-type PolicyTypeQuery = { type?: PolicyEntity['type'] };
+import { PolicyTypeQuery } from './types/PolicyTypeQuery.type';
 
 @Controller('admin/policy')
 export class AdminPolicyController {

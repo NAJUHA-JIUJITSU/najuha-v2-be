@@ -29,7 +29,12 @@ export class UserEntity {
   @Column('varchar', { length: 50 })
   snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE'; //TODO: enum으로 변경?
 
-  /** - SNS ID. 소셜 로그인을 위한 고유 식별자입니다. */
+  /**
+   * - SNS ID. 소셜 로그인을 위한 고유 식별자입니다.
+   *
+   * @minLength 1
+   * @maxLength 256
+   */
   @Column('varchar', { length: 256 })
   snsId: string;
 
@@ -54,7 +59,7 @@ export class UserEntity {
   /**
    * - 사용자 전화번호. 01012345678.
    * - 전화번호가 저장되어 있으면 인증된 전화번호 입니다.
-   * @pattern ^01[0-9]{8,9}$
+   * @pattern ^010[0-9]{8}$
    */
   @Column('varchar', { length: 20, nullable: true })
   phoneNumber: string;
@@ -73,7 +78,10 @@ export class UserEntity {
   @Column('varchar', { nullable: true })
   gender: 'MALE' | 'FEMALE';
 
-  /** - 사용자 생년월일 (BirtDate YYYYMMDD). */
+  /**
+   * - 사용자 생년월일 (BirtDate YYYYMMDD).
+   * @pattern ^[0-9]{8}$
+   * */
   @Column('varchar', { length: 8, nullable: true })
   birth: string & BirthDate;
 
