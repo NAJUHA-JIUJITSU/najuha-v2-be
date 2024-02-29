@@ -283,8 +283,6 @@ describe('E2E u-1 user-auth test', () => {
         .post('/user/auth/token')
         .send({ refreshToken: authorizedRefreshToken });
 
-      console.log(res.body);
-
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.data.accessToken);
       expect(decodedToken.userRole).toBe('USER');
@@ -328,7 +326,11 @@ describe('E2E u-1 user-auth test', () => {
     });
   });
 
-  describe('u-1-3 POST /user/auth/acquire-admin-role -----------------------------------', () => {
+  describe('u-1-3 PATCH /user/auth/acquire-admin-role -----------------------------------', () => {
+    afterEach(async () => {
+      await redisClient.flushall();
+    });
+
     it('관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.', async () => {
       const user = typia.random<CreateUserDto>();
       user.snsId = 'test-sns-id';
