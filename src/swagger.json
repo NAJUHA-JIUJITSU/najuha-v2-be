@@ -323,7 +323,7 @@
         "x-nestia-method": "POST"
       }
     },
-    "/user/auth/aqure-admin-role": {
+    "/user/auth/acquire-admin-role": {
       "patch": {
         "tags": [
           "u-1 auth"
@@ -364,7 +364,7 @@
         },
         "summary": "u-1-3 auth acquire admin role",
         "description": "u-1-3 auth acquire admin role.\n- RoleLevel: USER\n- 관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.\n- ADMIN 역할을 가진 accessToken 과 refreshToken 을 발급합니다.",
-        "x-nestia-namespace": "user.auth.aqure-admin-role.aqureAdminRole",
+        "x-nestia-namespace": "user.auth.acquire-admin-role.aqureAdminRole",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1161,7 +1161,7 @@
           }
         },
         "summary": "a-4-1 find all policies",
-        "description": "a-4-1 find all policies.\n- RoleLevel: USER",
+        "description": "a-4-1 find all policies.\n- RoleLevel: ADMIN",
         "x-nestia-namespace": "admin.policy.findAllPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -1305,7 +1305,7 @@
           "data": {
             "type": "string",
             "enum": [
-              "권한이 없습니다."
+              "API 호출 권한이 없습니다."
             ]
           },
           "detail": {}
@@ -1662,6 +1662,8 @@
         "properties": {
           "snsId": {
             "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
             "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
           },
           "snsAuthProvider": {
@@ -1690,7 +1692,8 @@
           },
           "phoneNumber": {
             "type": "string",
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+            "pattern": "^010[0-9]{8}$",
+            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           },
           "gender": {
             "type": "string",
@@ -1702,6 +1705,7 @@
           },
           "birth": {
             "type": "string",
+            "pattern": "^[0-9]{8}$",
             "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           }
         },
@@ -1767,6 +1771,8 @@
           },
           "snsId": {
             "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
             "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
           },
           "email": {
@@ -1785,7 +1791,8 @@
           },
           "phoneNumber": {
             "type": "string",
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+            "pattern": "^010[0-9]{8}$",
+            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           },
           "nickname": {
             "type": "string",
@@ -1804,6 +1811,7 @@
           },
           "birth": {
             "type": "string",
+            "pattern": "^[0-9]{8}$",
             "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           },
           "belt": {
@@ -1884,6 +1892,7 @@
           },
           "birth": {
             "type": "string",
+            "pattern": "^[0-9]{8}$",
             "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           },
           "nickname": {
@@ -1963,6 +1972,8 @@
           },
           "snsId": {
             "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
             "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
           },
           "email": {
@@ -1981,8 +1992,9 @@
           },
           "phoneNumber": {
             "type": "string",
+            "pattern": "^010[0-9]{8}$",
             "nullable": true,
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           },
           "nickname": {
             "type": "string",
@@ -2003,6 +2015,7 @@
           },
           "birth": {
             "type": "string",
+            "pattern": "^[0-9]{8}$",
             "nullable": true,
             "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           },
@@ -2095,7 +2108,8 @@
         "properties": {
           "phoneNumber": {
             "type": "string",
-            "description": "- 사용자 전화번호. 국제전화번호 E.164 규격을 따릅니다. ex) +821012345678."
+            "pattern": "^010[0-9]{8}$",
+            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           }
         },
         "nullable": false,
@@ -2168,6 +2182,7 @@
           },
           "birth": {
             "type": "string",
+            "pattern": "^[0-9]{8}$",
             "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
           },
           "nickname": {
