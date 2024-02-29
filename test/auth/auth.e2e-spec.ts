@@ -10,6 +10,7 @@ import { ResponseForm } from 'src/common/response/response';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
+  AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
   BusinessException,
   SNS_AUTH_GOOGLE_LOGIN_FAIL,
   SNS_AUTH_KAKAO_LOGIN_FAIL,
@@ -68,7 +69,7 @@ describe('E2E Auth test', () => {
     await app.close();
   });
 
-  describe('POST /user/auth/sns-login', () => {
+  describe('u-1-1 POST /user/auth/sns-login ------------------------------------------', () => {
     it('기존 유저 KAKAO 로그인 성공 시', async () => {
       const snsAuthProvider = 'KAKAO';
       const user = typia.random<CreateUserDto>();
@@ -261,67 +262,111 @@ describe('E2E Auth test', () => {
     });
   });
 
-  // describe('POST /user/auth/refresh', () => {
-  //   afterEach(async () => {
-  //     await redisClient.flushall();
-  //   });
+  describe('u-1-2 POST /user/auth/token -------------------------------------------------', () => {
+    afterEach(async () => {
+      await redisClient.flushall();
+    });
 
-  //   it('refresh token이 유효한 경우', async () => {
-  //     const payload = {
-  //       userId: 1,
-  //       userRole: 'USER',
-  //     };
-  //     const authorizedRefreshToken = jwtService.sign(payload, {
-  //       secret: appConfig.jwtRefreshTokenSecret,
-  //       expiresIn: appConfig.jwtRefreshTokenExpirationTime,
-  //     });
+    it('refresh token이 유효한 경우', async () => {
+      const payload = {
+        userId: 1,
+        userRole: 'USER',
+      };
+      const authorizedRefreshToken = jwtService.sign(payload, {
+        secret: appConfig.jwtRefreshTokenSecret,
+        expiresIn: appConfig.jwtRefreshTokenExpirationTime,
+      });
 
-  //     await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
+      await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
 
-  //     const res = await request(app.getHttpServer())
-  //       .post('/user/auth/refresh')
-  //       .send({ refreshToken: authorizedRefreshToken });
+      const res = await request(app.getHttpServer())
+        .post('/user/auth/token')
+        .send({ refreshToken: authorizedRefreshToken });
 
-  //     expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
-  //     const decodedToken = jwtService.decode(res.body.data.accessToken);
-  //     expect(decodedToken.userRole).toBe('USER');
-  //   });
+      console.log(res.body);
 
-  //   it('refresh token이 redis에 저장되어있지 않은 경우', async () => {
-  //     const payload = {
-  //       userId: 1,
-  //       userRole: 'USER',
-  //     };
-  //     const authorizedRefreshToken = jwtService.sign(payload, {
-  //       secret: appConfig.jwtRefreshTokenSecret,
-  //       expiresIn: appConfig.jwtRefreshTokenExpirationTime,
-  //     });
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('USER');
+    });
 
-  //     const res = await request(app.getHttpServer())
-  //       .post('/user/auth/refresh')
-  //       .send({ refreshToken: authorizedRefreshToken });
+    it('refresh token이 redis에 저장되어있지 않은 경우', async () => {
+      const payload = {
+        userId: 1,
+        userRole: 'USER',
+      };
+      const authorizedRefreshToken = jwtService.sign(payload, {
+        secret: appConfig.jwtRefreshTokenSecret,
+        expiresIn: appConfig.jwtRefreshTokenExpirationTime,
+      });
 
-  //     expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
-  //   });
+      const res = await request(app.getHttpServer())
+        .post('/user/auth/token')
+        .send({ refreshToken: authorizedRefreshToken });
 
-  //   it('refresh token이 만료된 경우', async () => {
-  //     const payload = {
-  //       userId: 1,
-  //       userRole: 'USER',
-  //     };
-  //     const authorizedRefreshToken = jwtService.sign(payload, {
-  //       secret: appConfig.jwtRefreshTokenSecret,
-  //       expiresIn: '1ms',
-  //     });
+      expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
+    });
 
-  //     await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
+    it('refresh token이 만료된 경우', async () => {
+      const payload = {
+        userId: 1,
+        userRole: 'USER',
+      };
+      const authorizedRefreshToken = jwtService.sign(payload, {
+        secret: appConfig.jwtRefreshTokenSecret,
+        expiresIn: '1ms',
+      });
 
-  //     await new Promise((resolve) => setTimeout(resolve, 2));
-  //     const res = await request(app.getHttpServer())
-  //       .post('/user/auth/refresh')
-  //       .send({ refreshToken: authorizedRefreshToken });
+      await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
 
-  //     expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
-  //   });
-  // });
+      await new Promise((resolve) => setTimeout(resolve, 2));
+      const res = await request(app.getHttpServer())
+        .post('/user/auth/token')
+        .send({ refreshToken: authorizedRefreshToken });
+
+      expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-1-3 POST /user/auth/acquire-admin-role -----------------------------------', () => {
+    it('관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.', async () => {
+      const user = typia.random<CreateUserDto>();
+      user.snsId = 'test-sns-id';
+      user.snsAuthProvider = 'KAKAO';
+      const userEntity = await userService.createUser(user);
+
+      const res = await request(app.getHttpServer())
+        .patch('/user/auth/acquire-admin-role')
+        .set(
+          'Authorization',
+          `Bearer ${jwtService.sign(
+            { userId: userEntity.id, userRole: 'USER' },
+            { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+          )}`,
+        );
+
+      expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
+      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      expect(decodedToken.userRole).toBe('ADMIN');
+    });
+
+    it('등록되지 않은 관리자 계정입니다.', async () => {
+      const user = typia.random<CreateUserDto>();
+      user.snsId = 'unregistered-admin-sns-id';
+      user.snsAuthProvider = 'KAKAO';
+      const userEntity = await userService.createUser(user);
+
+      const res = await request(app.getHttpServer())
+        .patch('/user/auth/acquire-admin-role')
+        .set(
+          'Authorization',
+          `Bearer ${jwtService.sign(
+            { userId: userEntity.id, userRole: 'USER' },
+            { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+          )}`,
+        );
+
+      expect(typia.is<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(res.body)).toBe(true);
+    });
+  });
 });
