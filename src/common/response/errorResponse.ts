@@ -55,7 +55,7 @@ export type AUTH_LEVEL_FORBIDDEN = ErrorResponse & {
   result: false;
   status: HttpStatus.FORBIDDEN;
   code: 1003;
-  data: '권한이 없습니다.';
+  data: 'API 호출 권한이 없습니다.';
 };
 
 export type AUTH_UNREGISTERED_ADMIN_CREDENTIALS = ErrorResponse & {
