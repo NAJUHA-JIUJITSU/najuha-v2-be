@@ -26,7 +26,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 // import * as Apis from '../../src/api/functional';
 
-describe('E2E Auth test', () => {
+describe('E2E u-1 user-auth test', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let dataSource: DataSource;
