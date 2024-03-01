@@ -53,7 +53,7 @@ export class UserRegisterController {
     @TypedParam('nickname') nickname: string,
   ): Promise<ResponseForm<boolean>> {
     const userId = req['userId'];
-    const isDuplicated = await this.registerService.checkDuplicateNickname(userId, nickname);
+    const isDuplicated = await this.registerService.isDuplicateNickname(userId, nickname);
     return createResponseForm(isDuplicated);
   }
 
@@ -70,8 +70,8 @@ export class UserRegisterController {
   async sendPhoneNumberAuthCode(
     @Req() req: Request,
     @TypedBody() dto: RegisterPhoneNumberDto,
-  ): Promise<ResponseForm<null | string>> {
-    // TODO: smsService 개발후 null 반환으로 변환
+  ): Promise<ResponseForm<PhoneNumberAuthCode>> {
+    // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
     const userId = req['userId'];
     const authCode = await this.registerService.sendPhoneNumberAuthCode(userId, dto);
     return createResponseForm(authCode);

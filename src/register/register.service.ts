@@ -31,7 +31,7 @@ export class RegisterService {
    * - 존재하는 닉네임 이지만 본인이 사용중이면 false를 반환
    * - 존재하는 닉네임이면 true를 반환
    */
-  async checkDuplicateNickname(userId: UserEntity['id'], nickname: string): Promise<boolean> {
+  async isDuplicateNickname(userId: UserEntity['id'], nickname: string): Promise<boolean> {
     const user = await this.usersService.findUserByNickname(nickname);
     if (user === null) return false;
     if (user.id === userId) return false;
@@ -39,7 +39,7 @@ export class RegisterService {
   }
 
   async registerUser(userId: UserEntity['id'], dto: RegisterDto): Promise<AuthTokensDto> {
-    if (dto.user.nickname && (await this.checkDuplicateNickname(userId, dto.user.nickname))) {
+    if (await this.isDuplicateNickname(userId, dto.user.nickname)) {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
 
@@ -62,15 +62,11 @@ export class RegisterService {
     return await this.authService.createAuthTokens(user.id, 'USER');
   }
 
-  async sendPhoneNumberAuthCode(
-    userId: UserEntity['id'],
-    dto: RegisterPhoneNumberDto,
-  ): Promise<null | PhoneNumberAuthCode> {
-    // TODO: smsService 개발후 void 반환으로 변환
+  async sendPhoneNumberAuthCode(userId: UserEntity['id'], dto: RegisterPhoneNumberDto): Promise<PhoneNumberAuthCode> {
+    // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
     const phoneNumber = dto.phoneNumber;
     // 인증 코드 생성 6자리
     const authCode = typia.random<PhoneNumberAuthCode>();
-    console.log(authCode);
 
     // 레디스에 인증코드 저장 (5분)
     this.redisClient.set(`userId:${userId}-authCode:${authCode}`, phoneNumber, 'EX', 300);
