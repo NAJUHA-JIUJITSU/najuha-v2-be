@@ -199,14 +199,16 @@ describe('E2E u-2 register test', () => {
   describe('u-2-5 PATCH /user/register ------------------------------------------------', () => {
     it('유저 등록 성공 시', async () => {
       const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      policyTypes.forEach(async (type) => {
-        await policyService.createPolicy({
-          type: type,
-          isMandatory: true,
-          title: `${type} 제목`,
-          content: `${type} 내용`,
-        });
-      });
+      await Promise.all(
+        policyTypes.map((type) => {
+          return policyService.createPolicy({
+            type: type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+          });
+        }),
+      );
 
       const temporaryUserDto = typia.random<CreateUserDto>();
       temporaryUserDto.birth = '19980101';
@@ -234,14 +236,16 @@ describe('E2E u-2 register test', () => {
 
     it('유저 등록 실패 시 - 닉네임 중복', async () => {
       const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      policyTypes.forEach(async (type) => {
-        await policyService.createPolicy({
-          type: type,
-          isMandatory: true,
-          title: `${type} 제목`,
-          content: `${type} 내용`,
-        });
-      });
+      await Promise.all(
+        policyTypes.map((type) => {
+          return policyService.createPolicy({
+            type: type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+          });
+        }),
+      );
 
       const existUserDto = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt'>>();
       existUserDto.role = 'USER';
@@ -273,14 +277,16 @@ describe('E2E u-2 register test', () => {
 
     it('유저 등록 실패 시 - 필수 약관 미동의', async () => {
       const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      policyTypes.forEach(async (type) => {
-        await policyService.createPolicy({
-          type: type,
-          isMandatory: true,
-          title: `${type} 제목`,
-          content: `${type} 내용`,
-        });
-      });
+      await Promise.all(
+        policyTypes.map((type) => {
+          return policyService.createPolicy({
+            type: type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+          });
+        }),
+      );
 
       const temporaryUserDto = typia.random<CreateUserDto>();
       temporaryUserDto.phoneNumber = '01012345678';
@@ -307,14 +313,16 @@ describe('E2E u-2 register test', () => {
 
     it('유저 등록 실패 시 - 전화번호 미등록', async () => {
       const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      policyTypes.forEach(async (type) => {
-        await policyService.createPolicy({
-          type: type,
-          isMandatory: true,
-          title: `${type} 제목`,
-          content: `${type} 내용`,
-        });
-      });
+      await Promise.all(
+        policyTypes.map((type) => {
+          return policyService.createPolicy({
+            type: type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+          });
+        }),
+      );
 
       const temporaryUserDto = typia.random<CreateUserDto>();
       delete temporaryUserDto.phoneNumber;
