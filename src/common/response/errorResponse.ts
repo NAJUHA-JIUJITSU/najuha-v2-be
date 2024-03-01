@@ -3,7 +3,7 @@ import exp from 'constants';
 import typia from 'typia';
 
 export type ErrorResponse = {
-  result: boolean;
+  result: false;
   status: HttpStatus;
   code: number | string;
   data: string;
