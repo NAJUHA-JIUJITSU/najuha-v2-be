@@ -21,7 +21,7 @@ export class PolicyConsentEntity {
 
   /** 동의 날짜. */
   @CreateDateColumn()
-  consentedAt: Date;
+  createdAt: Date | string;
 
   @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'userId' })

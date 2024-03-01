@@ -53,5 +53,5 @@ export class PolicyEntity {
   content: string; // 약관의 내용
 
   @CreateDateColumn()
-  createdAt: Date; // 약관 생성 날짜
+  createdAt: Date | string; // 약관 생성 날짜
 }
