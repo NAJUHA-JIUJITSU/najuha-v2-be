@@ -20,17 +20,19 @@ import {
 import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
 import { NaverStrategy } from 'src/sns-auth/naver.strategy';
 import { GoogleStrategy } from 'src/sns-auth/google.strategy';
-import { DataSource, QueryRunner } from 'typeorm';
+import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
+import { UserEntity } from 'src/users/entities/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let dataSource: DataSource;
-  let queryRunner: QueryRunner;
+  let entityManager: EntityManager;
+  let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
   let userService: UsersService;
@@ -45,6 +47,8 @@ describe('E2E u-1 user-auth test', () => {
 
     app = testingModule.createNestApplication();
     dataSource = testingModule.get<DataSource>(DataSource);
+    entityManager = testingModule.get<EntityManager>(EntityManager);
+    tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersService>(UsersService);
@@ -54,15 +58,9 @@ describe('E2E u-1 user-auth test', () => {
     (await app.init()).listen(appConfig.appPort);
   });
 
-  beforeEach(async () => {
-    queryRunner = dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-  });
-
   afterEach(async () => {
-    await queryRunner.rollbackTransaction();
-    await queryRunner.release();
+    await entityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+    await redisClient.flushall();
   });
 
   afterAll(async () => {
@@ -72,20 +70,20 @@ describe('E2E u-1 user-auth test', () => {
   describe('u-1-1 POST /user/auth/sns-login ------------------------------------------', () => {
     it('기존 유저 KAKAO 로그인 성공 시', async () => {
       const snsAuthProvider = 'KAKAO';
-      const user = typia.random<CreateUserDto>();
-      user.snsAuthProvider = snsAuthProvider;
-
-      const userEntity = await userService.createUser(user);
-      await userService.updateUser(userEntity.id, { role: 'USER' });
+      const existUserDto = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
+      existUserDto.role = 'USER';
+      existUserDto.birth = '19980101';
+      existUserDto.snsAuthProvider = snsAuthProvider;
+      const existUser = await userService.createUser(existUserDto);
 
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         const ret: CreateUserDto = {
-          snsId: userEntity.snsId,
-          snsAuthProvider: userEntity.snsAuthProvider,
-          name: userEntity.name,
-          email: userEntity.email,
-          phoneNumber: userEntity.phoneNumber,
-          gender: userEntity.gender,
+          snsId: existUser.snsId,
+          snsAuthProvider: existUser.snsAuthProvider,
+          name: existUser.name,
+          email: existUser.email,
+          phoneNumber: existUser.phoneNumber,
+          gender: existUser.gender,
         };
         return ret;
       });
@@ -135,28 +133,26 @@ describe('E2E u-1 user-auth test', () => {
 
     it('기존 유저 NAVER 로그인 성공 시', async () => {
       const snsAuthProvider = 'NAVER';
-      const user = typia.random<CreateUserDto>();
-      user.snsAuthProvider = snsAuthProvider;
-
-      let userEntity = await userService.createUser(user);
-      await userService.updateUser(userEntity.id, { role: 'USER' });
+      const existUserDto = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
+      existUserDto.role = 'USER';
+      existUserDto.birth = '19980101';
+      existUserDto.snsAuthProvider = snsAuthProvider;
+      const existUser = await userService.createUser(existUserDto);
 
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         const ret: CreateUserDto = {
-          snsId: userEntity.snsId,
-          snsAuthProvider: userEntity.snsAuthProvider,
-          name: userEntity.name,
-          email: userEntity.email,
-          phoneNumber: userEntity.phoneNumber,
-          gender: userEntity.gender,
+          snsId: existUser.snsId,
+          snsAuthProvider: existUser.snsAuthProvider,
+          name: existUser.name,
+          email: existUser.email,
+          phoneNumber: existUser.phoneNumber,
+          gender: existUser.gender,
         };
         return ret;
       });
 
-      const snsAuthDto: SnsAuthDto = {
-        snsAuthCode: 'test-sns-auth-code',
-        snsAuthProvider: snsAuthProvider,
-      };
+      const snsAuthDto = typia.random<SnsAuthDto>();
+      snsAuthDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsAuthDto);
 
@@ -200,20 +196,18 @@ describe('E2E u-1 user-auth test', () => {
 
     it('기존 유저 GOOGLE 로그인 성공 시', async () => {
       const snsAuthProvider = 'GOOGLE';
-      const user = typia.random<CreateUserDto>();
-      user.snsAuthProvider = snsAuthProvider;
-
-      const userEntity = await userService.createUser(user);
-      await userService.updateUser(userEntity.id, { role: 'USER' });
+      const existUserDto = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
+      existUserDto.role = 'USER';
+      existUserDto.birth = '19980101';
+      existUserDto.snsAuthProvider = snsAuthProvider;
+      const exiDtostUser = await userService.createUser(existUserDto);
 
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         const ret: CreateUserDto = {
-          snsId: userEntity.snsId,
-          snsAuthProvider: userEntity.snsAuthProvider,
-          name: userEntity.name,
-          email: userEntity.email,
-          phoneNumber: userEntity.phoneNumber,
-          gender: userEntity.gender,
+          snsId: exiDtostUser.snsId,
+          snsAuthProvider: exiDtostUser.snsAuthProvider,
+          name: exiDtostUser.name,
+          email: exiDtostUser.email,
         };
         return ret;
       });
@@ -263,10 +257,6 @@ describe('E2E u-1 user-auth test', () => {
   });
 
   describe('u-1-2 POST /user/auth/token -------------------------------------------------', () => {
-    afterEach(async () => {
-      await redisClient.flushall();
-    });
-
     it('refresh token이 유효한 경우', async () => {
       const payload = {
         userId: 1,
@@ -327,10 +317,6 @@ describe('E2E u-1 user-auth test', () => {
   });
 
   describe('u-1-3 PATCH /user/auth/acquire-admin-role -----------------------------------', () => {
-    afterEach(async () => {
-      await redisClient.flushall();
-    });
-
     it('관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.', async () => {
       const user = typia.random<CreateUserDto>();
       user.snsId = 'test-sns-id';
