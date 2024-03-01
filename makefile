@@ -15,3 +15,7 @@ test:
 
 test-fclean:
 	docker-compose --env-file .env.test -f docker-compose.test.yml down -v
+
+test-re:
+	docker-compose --env-file .env.test -f docker-compose.test.yml down -v
+	docker-compose --env-file .env.test -f docker-compose.test.yml up -d
