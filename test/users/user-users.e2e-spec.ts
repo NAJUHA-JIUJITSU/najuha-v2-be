@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appConfig from '../../src/common/appConfig';
 import { ResponseForm } from 'src/common/response/response';
-import { DataSource, QueryRunner } from 'typeorm';
+import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
@@ -17,7 +17,8 @@ describe('E2E u-3 user-users test', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let dataSource: DataSource;
-  let queryRunner: QueryRunner;
+  let entityManager: EntityManager;
+  let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
   let userService: UsersService;
@@ -29,21 +30,17 @@ describe('E2E u-3 user-users test', () => {
 
     app = testingModule.createNestApplication();
     dataSource = testingModule.get<DataSource>(DataSource);
+    entityManager = testingModule.get<EntityManager>(EntityManager);
+    tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersService>(UsersService);
     (await app.init()).listen(appConfig.appPort);
   });
 
-  beforeEach(async () => {
-    queryRunner = dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-  });
-
   afterEach(async () => {
-    await queryRunner.rollbackTransaction();
-    await queryRunner.release();
+    await entityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+    await redisClient.flushall();
   });
 
   afterAll(async () => {
@@ -52,8 +49,9 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-2 PATCH /user/users --------------------------------------------------', () => {
     it('유저 정보 수정 성공 시', async () => {
-      const user = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
       user.role = 'USER';
+      user.birth = '19980101';
       const userEntity = await userService.createUser(user);
       const accessToken = jwtService.sign(
         { userId: userEntity.id, userRole: userEntity.role },
@@ -81,7 +79,7 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-3 GET /user/users/me --------------------------------------------------', () => {
     it('내 정보 조회 성공 시', async () => {
-      const user = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
       user.role = 'USER';
       user.birth = '19980101';
       const userEntity = await userService.createUser(user);
