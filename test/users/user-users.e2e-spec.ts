@@ -92,7 +92,7 @@ describe('E2E u-3 user-users test', () => {
         .get('/user/users/me')
         .set('Authorization', `Bearer ${accessToken}`);
       expect(typia.is<ResponseForm<UserEntity>>(res.body)).toBe(true);
-      expect(res.body.data.id).toEqual(userEntity.id);
+      expect(res.body.result.id).toEqual(userEntity.id);
     });
   });
 });

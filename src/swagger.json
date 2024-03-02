@@ -731,7 +731,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormstringnull"
+                  "$ref": "#/components/schemas/ResponseFormPhoneNumberAuthCode"
                 }
               }
             },
@@ -1209,7 +1209,7 @@
       "AUTH_ACCESS_TOKEN_MISSING": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1227,7 +1227,7 @@
               1000
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "accssToken이 없습니다."
@@ -1237,17 +1237,17 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ],
         "description": "----------------------------------------------------------------------------\nAuth 1000 ~ 1999"
       },
       "AUTH_ACCESS_TOKEN_UNAUTHORIZED": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1265,7 +1265,7 @@
               1001
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "유효하지 않은 accessToken 입니다."
@@ -1275,16 +1275,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "AUTH_LEVEL_FORBIDDEN": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1302,7 +1302,7 @@
               1003
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "API 호출 권한이 없습니다."
@@ -1312,10 +1312,10 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "SnsAuthDto": {
@@ -1345,7 +1345,7 @@
       "SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1363,7 +1363,7 @@
               2000
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "지원하지 않는 SNS AUTH PROVIDER 입니다."
@@ -1373,17 +1373,17 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ],
         "description": "----------------------------------------------------------------------------\nSnsAuth 2000 ~ 2999"
       },
       "SNS_AUTH_KAKAO_LOGIN_FAIL": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1401,7 +1401,7 @@
               2001
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "카카오 로그인에 실패했습니다."
@@ -1411,16 +1411,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "SNS_AUTH_NAVER_LOGIN_FAIL": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1438,7 +1438,7 @@
               2002
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "네이버 로그인에 실패했습니다."
@@ -1448,16 +1448,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "SNS_AUTH_GOOGLE_LOGIN_FAIL": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1475,7 +1475,7 @@
               2003
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "구글 로그인에 실패했습니다."
@@ -1485,16 +1485,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "ResponseFormAuthTokensDto": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -1506,15 +1506,15 @@
               200
             ]
           },
-          "data": {
+          "result": {
             "$ref": "#/components/schemas/AuthTokensDto"
           }
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
       },
       "AuthTokensDto": {
@@ -1548,7 +1548,7 @@
       "AUTH_REFRESH_TOKEN_UNAUTHORIZED": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1566,7 +1566,7 @@
               1002
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "유효하지 않은 refreshToken 입니다."
@@ -1576,16 +1576,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "AUTH_UNREGISTERED_ADMIN_CREDENTIALS": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1603,7 +1603,7 @@
               1004
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "등록되지 않은 관리자 계정입니다."
@@ -1613,16 +1613,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "USERS_USER_NOT_FOUND": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -1640,7 +1640,7 @@
               4001
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "존재하지 않는 유저입니다."
@@ -1650,10 +1650,10 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ],
         "description": "----------------------------------------------------------------------------\nUsers 4000 ~ 4999"
       },
@@ -1678,8 +1678,6 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
@@ -1720,7 +1718,7 @@
       "ResponseFormUserEntity": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -1732,22 +1730,22 @@
               200
             ]
           },
-          "data": {
+          "result": {
             "$ref": "#/components/schemas/UserEntity"
           }
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
       },
       "UserEntity": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "number",
+            "type": "integer",
             "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
           },
           "role": {
@@ -1784,8 +1782,6 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
@@ -1798,7 +1794,7 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "gender": {
@@ -1842,13 +1838,27 @@
             "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time",
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
             "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
           },
           "updatedAt": {
-            "type": "string",
-            "format": "date-time",
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
             "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
           }
         },
@@ -1877,8 +1887,6 @@
         "properties": {
           "name": {
             "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
@@ -1899,7 +1907,7 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "belt": {
@@ -1921,7 +1929,7 @@
       "ResponseFormTemporaryUserDto": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -1933,22 +1941,22 @@
               200
             ]
           },
-          "data": {
+          "result": {
             "$ref": "#/components/schemas/TemporaryUserDto"
           }
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
       },
       "TemporaryUserDto": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "number",
+            "type": "integer",
             "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
           },
           "role": {
@@ -1985,8 +1993,6 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
@@ -2000,7 +2006,7 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "nullable": true,
             "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
@@ -2048,13 +2054,27 @@
             "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time",
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
             "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
           },
           "updatedAt": {
-            "type": "string",
-            "format": "date-time",
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
             "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
           }
         },
@@ -2080,7 +2100,7 @@
       "ResponseFormboolean": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -2092,15 +2112,15 @@
               200
             ]
           },
-          "data": {
+          "result": {
             "type": "boolean"
           }
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
       },
       "RegisterPhoneNumberDto": {
@@ -2117,10 +2137,10 @@
           "phoneNumber"
         ]
       },
-      "ResponseFormstringnull": {
+      "ResponseFormPhoneNumberAuthCode": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -2132,17 +2152,20 @@
               200
             ]
           },
-          "data": {
-            "type": "string",
-            "nullable": true
+          "result": {
+            "$ref": "#/components/schemas/PhoneNumberAuthCode"
           }
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
+      },
+      "PhoneNumberAuthCode": {
+        "type": "string",
+        "pattern": "^[0-9]{6}$"
       },
       "RegisterDto": {
         "type": "object",
@@ -2189,7 +2212,7 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
           },
           "belt": {
@@ -2217,7 +2240,7 @@
       "REGISTER_NICKNAME_DUPLICATED": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -2235,7 +2258,7 @@
               3000
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "이미 사용중인 닉네임입니다."
@@ -2245,17 +2268,17 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ],
         "description": "----------------------------------------------------------------------------\nRegister 3000 ~ 3999"
       },
       "REGISTER_POLICY_CONSENT_REQUIRED": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -2273,7 +2296,7 @@
               3002
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "필수 동의 항목을 모두 동의해야 합니다."
@@ -2283,16 +2306,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "REGISTER_PHONE_NUMBER_REQUIRED": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               false
@@ -2310,7 +2333,7 @@
               3003
             ]
           },
-          "data": {
+          "result": {
             "type": "string",
             "enum": [
               "회원가입을 위해서는 휴대폰 번호인증이 필요합니다."
@@ -2320,16 +2343,16 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "status",
           "code",
-          "data"
+          "result"
         ]
       },
       "ResponseFormArrayPolicyEntity": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -2341,7 +2364,7 @@
               200
             ]
           },
-          "data": {
+          "result": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PolicyEntity"
@@ -2350,9 +2373,9 @@
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
       },
       "PolicyEntity": {
@@ -2392,8 +2415,15 @@
             "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time"
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "nullable": false,
@@ -2411,7 +2441,7 @@
       "ResponseFormPolicyEntitynull": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -2423,15 +2453,15 @@
               200
             ]
           },
-          "data": {
+          "result": {
             "$ref": "#/components/schemas/PolicyEntity.Nullable"
           }
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
       },
       "PolicyEntity.Nullable": {
@@ -2471,8 +2501,15 @@
             "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time"
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "nullable": true,
@@ -2527,7 +2564,7 @@
       "ResponseFormPolicyEntity": {
         "type": "object",
         "properties": {
-          "result": {
+          "isSuccess": {
             "type": "boolean",
             "enum": [
               true
@@ -2539,15 +2576,15 @@
               200
             ]
           },
-          "data": {
+          "result": {
             "$ref": "#/components/schemas/PolicyEntity"
           }
         },
         "nullable": false,
         "required": [
-          "result",
+          "isSuccess",
           "code",
-          "data"
+          "result"
         ]
       },
       "PolicyTypeQuery": {

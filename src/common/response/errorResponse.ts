@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import exp from 'constants';
 import typia from 'typia';
 
 export type ErrorResponse = {
-  result: false;
+  isSuccess: false;
   status: HttpStatus;
   code: number | string;
-  data: string;
+  result: string;
   detail?: any;
 };
 
@@ -21,48 +20,48 @@ export class BusinessException extends HttpException {
  * Internal Server Error 500
  */
 export type INTERNAL_SERVER_ERROR = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.INTERNAL_SERVER_ERROR;
   code: 500;
-  data: 'Internal Server Error';
+  result: 'Internal Server Error';
 };
 
 /** ----------------------------------------------------------------------------
  * Auth 1000 ~ 1999
  */
 export type AUTH_ACCESS_TOKEN_MISSING = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 1000;
-  data: 'accssToken이 없습니다.';
+  result: 'accssToken이 없습니다.';
 };
 
 export type AUTH_ACCESS_TOKEN_UNAUTHORIZED = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.UNAUTHORIZED;
   code: 1001;
-  data: '유효하지 않은 accessToken 입니다.';
+  result: '유효하지 않은 accessToken 입니다.';
 };
 
 export type AUTH_REFRESH_TOKEN_UNAUTHORIZED = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.UNAUTHORIZED;
   code: 1002;
-  data: '유효하지 않은 refreshToken 입니다.';
+  result: '유효하지 않은 refreshToken 입니다.';
 };
 
 export type AUTH_LEVEL_FORBIDDEN = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.FORBIDDEN;
   code: 1003;
-  data: 'API 호출 권한이 없습니다.';
+  result: 'API 호출 권한이 없습니다.';
 };
 
 export type AUTH_UNREGISTERED_ADMIN_CREDENTIALS = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.FORBIDDEN;
   code: 1004;
-  data: '등록되지 않은 관리자 계정입니다.';
+  result: '등록되지 않은 관리자 계정입니다.';
 };
 
 export const AuthErrorMap = {
@@ -77,31 +76,31 @@ export const AuthErrorMap = {
  * SnsAuth 2000 ~ 2999
  */
 export type SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2000;
-  data: '지원하지 않는 SNS AUTH PROVIDER 입니다.';
+  result: '지원하지 않는 SNS AUTH PROVIDER 입니다.';
 };
 
 export type SNS_AUTH_KAKAO_LOGIN_FAIL = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2001;
-  data: '카카오 로그인에 실패했습니다.';
+  result: '카카오 로그인에 실패했습니다.';
 };
 
 export type SNS_AUTH_NAVER_LOGIN_FAIL = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2002;
-  data: '네이버 로그인에 실패했습니다.';
+  result: '네이버 로그인에 실패했습니다.';
 };
 
 export type SNS_AUTH_GOOGLE_LOGIN_FAIL = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2003;
-  data: '구글 로그인에 실패했습니다.';
+  result: '구글 로그인에 실패했습니다.';
 };
 
 export const SnsAuthErrorMap = {
@@ -116,31 +115,31 @@ export const SnsAuthErrorMap = {
  */
 
 export type REGISTER_NICKNAME_DUPLICATED = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.CONFLICT;
   code: 3000;
-  data: '이미 사용중인 닉네임입니다.';
+  result: '이미 사용중인 닉네임입니다.';
 };
 
 export type REGISTER_BIRTH_INVALID = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 3001;
-  data: '생년월일이 유효하지 않습니다.';
+  result: '생년월일이 유효하지 않습니다.';
 };
 
 export type REGISTER_POLICY_CONSENT_REQUIRED = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 3002;
-  data: '필수 동의 항목을 모두 동의해야 합니다.';
+  result: '필수 동의 항목을 모두 동의해야 합니다.';
 };
 
 export type REGISTER_PHONE_NUMBER_REQUIRED = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 3003;
-  data: '회원가입을 위해서는 휴대폰 번호인증이 필요합니다.';
+  result: '회원가입을 위해서는 휴대폰 번호인증이 필요합니다.';
 };
 
 export const RegisterErrorMap = {
@@ -154,10 +153,10 @@ export const RegisterErrorMap = {
  * Users 4000 ~ 4999
  */
 export type USERS_USER_NOT_FOUND = ErrorResponse & {
-  result: false;
+  isSuccess: false;
   status: HttpStatus.NOT_FOUND;
   code: 4001;
-  data: '존재하지 않는 유저입니다.';
+  result: '존재하지 않는 유저입니다.';
 };
 
 export const UsersErrorMap = {

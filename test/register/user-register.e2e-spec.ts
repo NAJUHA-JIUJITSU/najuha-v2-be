@@ -71,7 +71,7 @@ describe('E2E u-2 register test', () => {
         .set('Authorization', `Bearer ${accessToken}`);
 
       expect(typia.is<ResponseForm<TemporaryUserDto>>(res.body)).toBe(true);
-      expect(res.body.data.id).toEqual(temporaryUser.id);
+      expect(res.body.result.id).toEqual(temporaryUser.id);
     });
   });
 
@@ -96,7 +96,7 @@ describe('E2E u-2 register test', () => {
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`);
 
       expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.data).toEqual(true);
+      expect(res.body.result).toEqual(true);
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
@@ -114,7 +114,7 @@ describe('E2E u-2 register test', () => {
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`);
 
       expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.data).toEqual(false);
+      expect(res.body.result).toEqual(false);
     });
 
     it('닉네임 중복검사 - 중복되지 않은 닉네임(사용가능)', async () => {
@@ -128,7 +128,7 @@ describe('E2E u-2 register test', () => {
         .get(`/user/register/users/${unusedNickname}/is-duplicated`)
         .set('Authorization', `Bearer ${accessToken}`);
       expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.data).toEqual(false);
+      expect(res.body.result).toEqual(false);
     });
   });
 
@@ -169,7 +169,7 @@ describe('E2E u-2 register test', () => {
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
         .send();
       expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.data).toEqual(true);
+      expect(res.body.result).toEqual(true);
     });
 
     it('전화번호로 인증코드 확인 실패 시', async () => {
@@ -192,7 +192,7 @@ describe('E2E u-2 register test', () => {
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
         .send();
       expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.data).toEqual(false);
+      expect(res.body.result).toEqual(false);
     });
   });
 

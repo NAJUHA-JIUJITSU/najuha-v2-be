@@ -95,7 +95,7 @@ describe('E2E u-1 user-auth test', () => {
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
 
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -113,7 +113,7 @@ describe('E2E u-1 user-auth test', () => {
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsAuthDto);
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
@@ -158,7 +158,7 @@ describe('E2E u-1 user-auth test', () => {
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
 
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -176,7 +176,7 @@ describe('E2E u-1 user-auth test', () => {
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsAuthDto);
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
@@ -219,7 +219,7 @@ describe('E2E u-1 user-auth test', () => {
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
 
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -237,7 +237,7 @@ describe('E2E u-1 user-auth test', () => {
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsAuthDto);
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
@@ -274,7 +274,7 @@ describe('E2E u-1 user-auth test', () => {
         .send({ refreshToken: authorizedRefreshToken });
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -334,7 +334,7 @@ describe('E2E u-1 user-auth test', () => {
         );
 
       expect(typia.is<ResponseForm<AuthTokensDto>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.data.accessToken);
+      const decodedToken = jwtService.decode(res.body.result.accessToken);
       expect(decodedToken.userRole).toBe('ADMIN');
     });
 

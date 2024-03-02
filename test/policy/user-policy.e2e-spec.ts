@@ -66,7 +66,7 @@ describe('E2E u-4 user-policy test', () => {
 
       const res = await request(app.getHttpServer()).get('/user/policy/recent');
       expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
-      expect(res.body.data.length).toEqual(policyTypes.length);
+      expect(res.body.result.length).toEqual(policyTypes.length);
     });
   });
 
@@ -81,7 +81,7 @@ describe('E2E u-4 user-policy test', () => {
 
       const res = await request(app.getHttpServer()).get(`/user/policy/${policy.id}`);
       expect(typia.is<ResponseForm<PolicyEntity>>(res.body)).toBe(true);
-      expect(res.body.data.id).toEqual(policy.id);
+      expect(res.body.result.id).toEqual(policy.id);
     });
   });
 });

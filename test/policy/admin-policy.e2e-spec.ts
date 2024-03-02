@@ -91,7 +91,7 @@ describe('E2E a-4 admin-policy test', () => {
 
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
       expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
-      expect(res.body.data.length).toEqual(policyTypes.length * maxVersion);
+      expect(res.body.result.length).toEqual(policyTypes.length * maxVersion);
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
@@ -123,8 +123,8 @@ describe('E2E a-4 admin-policy test', () => {
         .set('Authorization', `Bearer ${accessToken}`);
 
       expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
-      expect(res.body.data.length).toEqual(maxVersion);
-      expect(res.body.data[0].type).toEqual(query.type);
+      expect(res.body.result.length).toEqual(maxVersion);
+      expect(res.body.result[0].type).toEqual(query.type);
     });
   });
 });
