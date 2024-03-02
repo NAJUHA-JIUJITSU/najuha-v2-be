@@ -14,6 +14,7 @@ import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
 import { PhoneNumberAuthCode } from './types/phone-number-auth-code.type';
+import { PhoneNumberAuthCodeDto } from './dto/phone-number-auth-code.dto';
 
 @Controller('user/register')
 export class UserRegisterController {
@@ -85,18 +86,15 @@ export class UserRegisterController {
    * - 인증성공시 true, 실패시 false를 반환한다.
    *
    * @tag u-2 register
-   * @param authCode 인증코드
+   * @param dto PhoneNumberAuthCodeDto
    * @returns true or false
    */
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
-  @TypedRoute.Post('phone-number/auth-code/:authCode/confirm')
-  async confirmAuthCode(
-    @Req() req: Request,
-    @TypedParam('authCode') authCode: PhoneNumberAuthCode,
-  ): Promise<ResponseForm<boolean>> {
+  @TypedRoute.Post('phone-number/auth-code/confirm')
+  async confirmAuthCode(@Req() req: Request, @TypedBody() dto: PhoneNumberAuthCodeDto): Promise<ResponseForm<boolean>> {
     const userId = req['userId'];
-    const isConfirmed = await this.registerService.confirmAuthCode(userId, authCode);
+    const isConfirmed = await this.registerService.confirmAuthCode(userId, dto.authCode);
     return createResponseForm(isConfirmed);
   }
 

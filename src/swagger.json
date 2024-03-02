@@ -764,23 +764,24 @@
         "x-nestia-method": "POST"
       }
     },
-    "/user/register/phone-number/auth-code/{authCode}/confirm": {
+    "/user/register/phone-number/auth-code/confirm": {
       "post": {
         "tags": [
           "u-2 register"
         ],
-        "parameters": [
-          {
-            "name": "authCode",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "pattern": "^[0-9]{6}$"
-            },
-            "description": "인증코드",
-            "required": true
-          }
-        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "PhoneNumberAuthCodeDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneNumberAuthCodeDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
         "responses": {
           "201": {
             "description": "true or false",
@@ -821,7 +822,7 @@
             "name": "param",
             "text": [
               {
-                "text": "authCode",
+                "text": "dto",
                 "kind": "parameterName"
               },
               {
@@ -829,7 +830,7 @@
                 "kind": "space"
               },
               {
-                "text": "인증코드",
+                "text": "PhoneNumberAuthCodeDto",
                 "kind": "text"
               }
             ]
@@ -2166,6 +2167,19 @@
       "PhoneNumberAuthCode": {
         "type": "string",
         "pattern": "^[0-9]{6}$"
+      },
+      "PhoneNumberAuthCodeDto": {
+        "type": "object",
+        "properties": {
+          "authCode": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "authCode"
+        ]
       },
       "RegisterDto": {
         "type": "object",
