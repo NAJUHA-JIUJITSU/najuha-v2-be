@@ -150,7 +150,7 @@ describe('E2E u-2 register test', () => {
     });
   });
 
-  describe('u-2-4 POST /user/register/phone-number/authcode/:authCode/confirm --------', () => {
+  describe('u-2-4 POST /user/register/phone-number/authcode/confirm --------', () => {
     it('전화번호로 인증코드 확인 성공 시', async () => {
       const temporaryUserDto = typia.random<CreateUserDto>();
       const temporaryUser = await usersService.createUser(temporaryUserDto);
@@ -165,9 +165,9 @@ describe('E2E u-2 register test', () => {
       redisClient.set(`userId:${temporaryUser.id}-authCode:${authCode}`, phoneNumber, 'EX', 300);
 
       const res = await request(app.getHttpServer())
-        .post(`/user/register/phone-number/auth-code/${authCode}/confirm`)
+        .post(`/user/register/phone-number/auth-code/confirm`)
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
-        .send();
+        .send({ authCode });
       expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
       expect(res.body.result).toEqual(true);
     });
@@ -188,9 +188,9 @@ describe('E2E u-2 register test', () => {
 
       const wrongCode = '999999';
       const res = await request(app.getHttpServer())
-        .post(`/user/register/phone-number/auth-code/${wrongCode}/confirm`)
+        .post(`/user/register/phone-number/auth-code/confirm`)
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
-        .send();
+        .send({ authCode: wrongCode });
       expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
       expect(res.body.result).toEqual(false);
     });
