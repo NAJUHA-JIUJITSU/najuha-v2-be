@@ -1,28 +1,28 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { PolicyService } from 'src/policy/policy.service';
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
 import { Redis } from 'ioredis';
-import typia from 'typia';
 import { PhoneNumberAuthCode } from './types/phone-number-auth-code.type';
+import { UsersRepository } from 'src/users/users.repository';
+import { PolicyRepository } from 'src/policy/policy.repository';
+import typia from 'typia';
 
 @Injectable()
 export class RegisterService {
   constructor(
     @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
-    private readonly usersService: UsersService,
+    private readonly usersRepository: UsersRepository,
+    private readonly policyRepository: PolicyRepository,
     private readonly authService: AuthService,
-    private readonly policyService: PolicyService,
   ) {}
 
   async getTemporaryUser(userId: UserEntity['id']): Promise<TemporaryUserDto> {
-    return await this.usersService.getUserById(userId);
+    return await this.usersRepository.getOneOrFail({ id: userId });
   }
 
   /**
@@ -32,7 +32,7 @@ export class RegisterService {
    * - 존재하는 닉네임이면 true를 반환
    */
   async isDuplicateNickname(userId: UserEntity['id'], nickname: string): Promise<boolean> {
-    const user = await this.usersService.findUserByNickname(nickname);
+    const user = await this.usersRepository.findOneBy({ nickname });
     if (user === null) return false;
     if (user.id === userId) return false;
     return true;
@@ -44,7 +44,7 @@ export class RegisterService {
     }
 
     // check mandatory policy consent
-    const recentPolicies = await this.policyService.findAllTypesOfRecentPolicies();
+    const recentPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
     const mandatoryPolicies = recentPolicies.filter((policy) => policy.isMandatory);
     mandatoryPolicies.forEach((policy) => {
       if (!dto.consentPolicyTypes.includes(policy.type)) {
@@ -53,12 +53,12 @@ export class RegisterService {
     });
 
     // check phone number
-    const user = await this.usersService.getUserById(userId);
+    const user = await this.usersRepository.getOneOrFail({ id: userId });
     if (!user.phoneNumber) {
       throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
     }
 
-    await this.usersService.updateUser(userId, { ...dto.user, role: 'USER' });
+    await this.usersRepository.updateOrFail({ id: userId, ...dto.user });
     return await this.authService.createAuthTokens(user.id, 'USER');
   }
 
@@ -80,7 +80,7 @@ export class RegisterService {
     const phoneNumber = await this.redisClient.get(`userId:${userId}-authCode:${authCode}`);
     if (!phoneNumber) return false;
 
-    await this.usersService.updateUser(userId, { phoneNumber });
+    await this.usersRepository.updateOrFail({ id: userId, phoneNumber });
     return true;
   }
 }

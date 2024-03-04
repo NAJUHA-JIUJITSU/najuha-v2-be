@@ -20,7 +20,7 @@ export class UserPolicyController {
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/recent')
   async findAllRecentPolicies(): Promise<ResponseForm<PolicyEntity[]>> {
-    const policies = await this.policyService.findAllTypesOfRecentPolicies();
+    const policies = await this.policyService.findAllTypesOfLatestPolicies();
     return createResponseForm(policies);
   }
 
@@ -35,7 +35,7 @@ export class UserPolicyController {
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:id')
   async findPolicy(@TypedParam('id') id: number): Promise<ResponseForm<PolicyEntity | null>> {
-    const policy = await this.policyService.findPolicy(id);
+    const policy = await this.policyService.findOnePolicy(id);
     return createResponseForm(policy);
   }
 }

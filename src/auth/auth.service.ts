@@ -6,24 +6,27 @@ import { RefreshTokenDto } from 'src/auth/dto/refresh-token.dto';
 import { SnsAuthDto } from 'src/sns-auth/dto/sns-auth.dto';
 import { SnsAuthService } from 'src/sns-auth/sns-auth.service';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appConfig from 'src/common/appConfig';
+import { UsersRepository } from 'src/users/users.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
-    private readonly usersService: UsersService,
+    private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
     private readonly snsAuthService: SnsAuthService,
   ) {}
 
   async snsLogin(snsAuthDto: SnsAuthDto): Promise<AuthTokensDto> {
     const userData = await this.snsAuthService.validate(snsAuthDto);
-    let user = await this.usersService.findUserBySnsIdAndProvider(userData.snsAuthProvider, userData.snsId);
+    let user = await this.usersRepository.findOneBy({
+      snsId: userData.snsId,
+      snsAuthProvider: userData.snsAuthProvider,
+    });
 
-    if (!user) user = await this.usersService.createUser(userData);
+    if (!user) user = await this.usersRepository.create(userData);
     const authTokens = await this.createAuthTokens(user.id, user.role);
     return authTokens;
   }
@@ -51,7 +54,7 @@ export class AuthService {
   }
 
   async acquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensDto> {
-    const user = await this.usersService.getUserById(userId);
+    const user = await this.usersRepository.getOneOrFail({ id: userId });
 
     const isCurrentAdmin = appConfig.adminCredentials.some(
       (adminCredential) =>
@@ -60,7 +63,7 @@ export class AuthService {
 
     if (!isCurrentAdmin) throw new BusinessException(AuthErrorMap.AUTH_UNREGISTERED_ADMIN_CREDENTIALS);
 
-    await this.usersService.updateUser(userId, { role: 'ADMIN' });
+    await this.usersRepository.updateOrFail({ id: userId, role: 'ADMIN' });
 
     return await this.createAuthTokens(userId, 'ADMIN');
   }

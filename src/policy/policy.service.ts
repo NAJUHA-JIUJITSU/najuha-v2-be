@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { PolicyEntity } from 'src/policy/entities/policy.entity';
 import { CreatePolicyDto } from './dto/create-policy.dto';
+import { PolicyRepository } from './policy.repository';
 
 @Injectable()
 export class PolicyService {
   constructor(
     @InjectRepository(PolicyEntity)
-    private policyRepository: Repository<PolicyEntity>,
+    private readonly policyRepository: PolicyRepository,
   ) {}
 
   async createPolicy(createPolicyDto: CreatePolicyDto): Promise<PolicyEntity> {
@@ -31,18 +31,12 @@ export class PolicyService {
     return this.policyRepository.find({ where: { type } });
   }
 
-  async findPolicy(id: number): Promise<PolicyEntity | null> {
+  async findOnePolicy(id: number): Promise<PolicyEntity | null> {
     return this.policyRepository.findOne({ where: { id } });
   }
 
   // TODO content 는 제외
-  async findAllTypesOfRecentPolicies(): Promise<PolicyEntity[]> {
-    // 모든 타입의 가장 최근에 등록된 약관을 가져옴
-    return this.policyRepository
-      .createQueryBuilder('policy')
-      .distinctOn(['policy.type'])
-      .orderBy('policy.type')
-      .addOrderBy('policy.createdAt', 'DESC')
-      .getMany();
+  async findAllTypesOfLatestPolicies(): Promise<PolicyEntity[]> {
+    return this.policyRepository.findAllTypesOfLatestPolicies();
   }
 }

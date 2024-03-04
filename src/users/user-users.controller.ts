@@ -40,7 +40,7 @@ export class UserUsersController {
   @TypedRoute.Patch('/')
   async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
     const userId = req['userId'];
-    const user = await this.usersService.saveUser(userId, dto);
+    const user = await this.usersService.updateUser(userId, dto);
     return createResponseForm(user);
   }
 
@@ -56,7 +56,7 @@ export class UserUsersController {
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
     const userId = req['userId'];
-    const user = await this.usersService.getUserById(userId);
+    const user = await this.usersService.getUser(userId);
     return createResponseForm(user);
   }
 }
