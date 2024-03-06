@@ -26,11 +26,27 @@ export class PolicyRepository extends Repository<PolicyEntity> {
     return policy;
   }
 
+  async getOneLatestPolicyByTypeOrFail(type: PolicyEntity['type']): Promise<PolicyEntity> {
+    const policy = await this.createQueryBuilder('policy')
+      .where('policy.type = :type', { type })
+      .orderBy('policy.createdAt', 'DESC')
+      .getOne();
+    if (!policy) throw new Error('Policy not found');
+    return policy;
+  }
+
   async findAllTypesOfLatestPolicies(): Promise<PolicyEntity[]> {
     return this.createQueryBuilder('policy')
       .distinctOn(['policy.type'])
       .orderBy('policy.type')
       .addOrderBy('policy.createdAt', 'DESC')
+      .getMany();
+  }
+
+  async findAllLatestMandatoryPolicies(): Promise<PolicyEntity[]> {
+    return this.createQueryBuilder('policy')
+      .where('policy.isMandatory = true')
+      .orderBy('policy.createdAt', 'DESC')
       .getMany();
   }
 }

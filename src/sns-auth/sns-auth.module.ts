@@ -3,11 +3,11 @@ import { Module } from '@nestjs/common';
 import { GoogleStrategy } from 'src/sns-auth/google.strategy';
 import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
 import { NaverStrategy } from 'src/sns-auth/naver.strategy';
-import { SnsAuthService } from 'src/sns-auth/sns-auth.service';
+import { SnsAuthClient } from './sns-auth.client';
 
 @Module({
   imports: [HttpModule],
-  providers: [SnsAuthService, KakaoStrategy, NaverStrategy, GoogleStrategy],
-  exports: [SnsAuthService],
+  providers: [SnsAuthClient, KakaoStrategy, NaverStrategy, GoogleStrategy],
+  exports: [SnsAuthClient],
 })
 export class SnsAuthModule {}

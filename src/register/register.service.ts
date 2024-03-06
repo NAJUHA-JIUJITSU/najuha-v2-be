@@ -1,24 +1,27 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
-import { AuthService } from 'src/auth/auth.service';
 import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
-import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
-import { Redis } from 'ioredis';
-import { PhoneNumberAuthCode } from './types/phone-number-auth-code.type';
 import { UsersRepository } from 'src/users/users.repository';
 import { PolicyRepository } from 'src/policy/policy.repository';
-import typia from 'typia';
+import { AuthTokenProvider } from 'src/auth/auth-token.provider';
+import { PhoneNumberAuthCodeProvider } from './pooneNumberAuthCode.provider';
+import { PolicyConsentRepository } from 'src/policy-consents/policy-consent.repository';
+import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
+import { PhoneNumberAuthCode } from './types/phone-number-auth-code.type';
+import { RegisterUserEntity } from './entities/registerUser.entity';
+import { PolicyConsentEntity } from 'src/policy-consents/entity/policy-consent.entity';
 
 @Injectable()
 export class RegisterService {
   constructor(
-    @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
+    private readonly authTokenProvider: AuthTokenProvider,
+    private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeProvider,
     private readonly usersRepository: UsersRepository,
     private readonly policyRepository: PolicyRepository,
-    private readonly authService: AuthService,
+    private readonly policyConsetRepository: PolicyConsentRepository,
   ) {}
 
   async getTemporaryUser(userId: UserEntity['id']): Promise<TemporaryUserDto> {
@@ -38,49 +41,87 @@ export class RegisterService {
     return true;
   }
 
+  // TODO: transaction 필요
   async registerUser(userId: UserEntity['id'], dto: RegisterDto): Promise<AuthTokensDto> {
     if (await this.isDuplicateNickname(userId, dto.user.nickname)) {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
 
-    // check mandatory policy consent
-    const recentPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
-    const mandatoryPolicies = recentPolicies.filter((policy) => policy.isMandatory);
-    mandatoryPolicies.forEach((policy) => {
-      if (!dto.consentPolicyTypes.includes(policy.type)) {
-        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
-      }
-    });
-
-    // check phone number
     const user = await this.usersRepository.getOneOrFail({ id: userId });
-    if (!user.phoneNumber) {
-      throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
-    }
+    const latestPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
+    const policyConsents = latestPolicies.reduce((acc, policy) => {
+      if (dto.consentPolicyTypes.includes(policy.type)) {
+        const consent = this.policyConsetRepository.create({ userId, policyId: policy.id });
+        acc.push(consent);
+      }
+      return acc;
+    }, [] as PolicyConsentEntity[]);
+    const registerUser = new RegisterUserEntity(user, dto.user, policyConsents);
 
-    await this.usersRepository.updateOrFail({ id: userId, ...dto.user });
-    return await this.authService.createAuthTokens(user.id, 'USER');
+    registerUser.verifyPhoneNumberRegistered();
+
+    const mandatoryPolicies = latestPolicies.filter((policy) => policy.isMandatory);
+    registerUser.verifyMandatoryPolicyConsents(mandatoryPolicies);
+
+    await this.usersRepository.updateOrFail(registerUser.user);
+    await this.policyConsetRepository.save(registerUser.policyConsents);
+
+    return await this.authTokenProvider.createAuthTokens(user.id, 'USER');
   }
 
+  // async registerUser(userId: UserEntity['id'], dto: RegisterDto): Promise<AuthTokensDto> {
+  //   if (await this.isDuplicateNickname(userId, dto.user.nickname)) {
+  //     throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
+  //   }
+
+  //   const user = await this.usersRepository.saveOrFail({ id: userId, ...dto.user });
+
+  //   user.verifyPhoneNumberRegistered();
+
+  //   dto.consentPolicyTypes.forEach(async (consentPolicyType) => {
+  //     const policy = await this.policyRepository.getOneLatestPolicyByTypeOrFail(consentPolicyType);
+  //     const policyConsent = await this.policyConsetRepository.save({ userId, policyId: policy.id });
+  //     user.setPolicyConsent(policyConsent);
+  //   });
+
+  //   const mandatoryPolicies = await this.policyRepository.findAllLatestMandatoryPolicies();
+  //   user.verifyMandatoryPolicyConsents(mandatoryPolicies);
+
+  //   return await this.authTokenProvider.createAuthTokens(user.id, 'USER');
+  // }
+
+  // async registerUser(userId: UserEntity['id'], dto: RegisterDto): Promise<AuthTokensDto> {
+  //   if (await this.isDuplicateNickname(userId, dto.user.nickname)) {
+  //     throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
+  //   }
+
+  //   // check mandatory policy consent
+  //   const user = await this.usersRepository.getOneOrFail({ id: userId });
+  //   const recentPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
+
+  //   dto.consentPolicyTypes.forEach((consentPolicyType) => {
+  //     if (!recentPolicies.some((policy) => policy.type === consentPolicyType)) {
+  //       throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
+  //     }
+  //   });
+
+  //   // check phone number
+  //   if (!user.phoneNumber) {
+  //     throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
+  //   }
+
+  //   await this.usersRepository.updateOrFail({ id: userId, ...dto.user });
+  //   return await this.authTokenProvider.createAuthTokens(user.id, 'USER');
+  // }
+
+  // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
   async sendPhoneNumberAuthCode(userId: UserEntity['id'], dto: RegisterPhoneNumberDto): Promise<PhoneNumberAuthCode> {
-    // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
-    const phoneNumber = dto.phoneNumber;
-    // 인증 코드 생성 6자리
-    const authCode = typia.random<PhoneNumberAuthCode>();
-
-    // 레디스에 인증코드 저장 (5분)
-    this.redisClient.set(`userId:${userId}-authCode:${authCode}`, phoneNumber, 'EX', 300);
-
-    // TODO: 인증코드를 전송
-    // await this.smsService.sendAuthCode(phoneNumber, authCode);
+    const authCode = await this.phoneAuthCodeProvider.issueAuthCode(userId, dto.phoneNumber);
+    // TODO: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
     return authCode;
   }
 
   async confirmAuthCode(userId: UserEntity['id'], authCode: PhoneNumberAuthCode): Promise<boolean> {
-    const phoneNumber = await this.redisClient.get(`userId:${userId}-authCode:${authCode}`);
-    if (!phoneNumber) return false;
-
-    await this.usersRepository.updateOrFail({ id: userId, phoneNumber });
-    return true;
+    return await this.phoneAuthCodeProvider.isAuthCodeValid(userId, authCode);
   }
 }

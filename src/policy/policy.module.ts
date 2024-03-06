@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { PolicyEntity } from './entities/policy.entity';
-import { PolicyConsentEntity } from './entities/policy-consent.entity';
+import { PolicyConsentEntity } from '../policy-consents/entity/policy-consent.entity';
 import { PolicyService } from './policy.service';
 import { UserPolicyController } from './user-policy.controller';
 import { AdminPolicyController } from './admin-policy.controller';

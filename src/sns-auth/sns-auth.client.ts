@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  BusinessException,
-  SnsAuthErrorMap,
-} from 'src/common/response/errorResponse';
+import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import { GoogleStrategy } from 'src/sns-auth/google.strategy';
 import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
 import { NaverStrategy } from 'src/sns-auth/naver.strategy';
@@ -10,7 +7,7 @@ import { SnsAuthDto } from 'src/sns-auth/dto/sns-auth.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
-export class SnsAuthService {
+export class SnsAuthClient {
   constructor(
     private readonly kakaoStrategy: KakaoStrategy,
     private readonly naverStrategy: NaverStrategy,
@@ -30,9 +27,7 @@ export class SnsAuthService {
       case 'GOOGLE':
         return await this.googleStrategy.validate(snsAuthCode);
       default:
-        throw new BusinessException(
-          SnsAuthErrorMap.SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
-        );
+        throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER);
     }
   }
 }

@@ -1,14 +1,16 @@
-import { time } from 'console';
+import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { BirthDate } from 'src/custom-tags/birth-date.tag';
+import { PolicyConsentEntity } from 'src/policy-consents/entity/policy-consent.entity';
+import { PolicyEntity } from 'src/policy/entities/policy.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
   // Index,
 } from 'typeorm';
-import { tags } from 'typia';
 
 /**
  * - 각 snsAuthProvider 마다 제공되는 정보.
@@ -72,7 +74,7 @@ export class UserEntity {
    * @maxLength 64
    * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$
    */
-  @Column('varchar', { length: 128, nullable: true })
+  @Column('varchar', { length: 128, nullable: true, unique: true })
   nickname: string;
 
   /** - 사용자 성별. */
@@ -89,10 +91,6 @@ export class UserEntity {
   /** - 사용자 주짓수 벨트. */
   @Column('varchar', { length: 10, nullable: true })
   belt: '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
-
-  // /** - 사용자 체중. */
-  // @Column('float', { nullable: true })
-  // weight: null | number;
 
   /**
    * - 사용자 프로필 이미지 키. (썸네일 이미지 역할).
@@ -114,4 +112,25 @@ export class UserEntity {
   /** - 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다. */
   @UpdateDateColumn()
   updatedAt: Date | string;
+
+  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user)
+  policyConsents: PolicyConsentEntity[];
+
+  setPolicyConsent(policyConsent: PolicyConsentEntity) {
+    this.policyConsents.push(policyConsent);
+  }
+
+  verifyPhoneNumberRegistered() {
+    if (!this.phoneNumber) {
+      throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
+    }
+  }
+
+  verifyMandatoryPolicyConsents(mandatoryPolicies: PolicyEntity[]) {
+    mandatoryPolicies.forEach((policy) => {
+      if (!this.policyConsents.some((policyConsent) => policyConsent.policyId === policy.id)) {
+        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
+      }
+    });
+  }
 }
