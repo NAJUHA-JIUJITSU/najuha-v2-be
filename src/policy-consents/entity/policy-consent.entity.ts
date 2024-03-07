@@ -7,19 +7,22 @@ import { PolicyEntity } from 'src/policy/entities/policy.entity';
  */
 @Entity('policy_consent')
 export class PolicyConsentEntity {
-  /** 약관 동의 ID. */
+  /**
+   * - 약관 동의 ID.
+   * @type uint32
+   */
   @PrimaryGeneratedColumn()
   id: number;
 
-  /** 동의 날짜. */
+  /** - 동의 날짜. */
   @CreateDateColumn()
   createdAt: Date | string;
 
-  /** 사용자 ID. */
+  /** - 사용자 ID. */
   @Column({ name: 'userId' })
   userId: number;
 
-  /** 약관 ID. */
+  /** - 약관 ID. */
   @Column({ name: 'policyId' })
   policyId: number;
 

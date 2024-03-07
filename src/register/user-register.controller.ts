@@ -32,7 +32,6 @@ export class UserRegisterController {
   @TypedRoute.Get('users/me')
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserDto>> {
     const user = await this.registerService.getTemporaryUser(req['userId']);
-    console.log('user', user);
     return createResponseForm(user);
   }
 
@@ -53,8 +52,7 @@ export class UserRegisterController {
     @Req() req: Request,
     @TypedParam('nickname') nickname: string,
   ): Promise<ResponseForm<boolean>> {
-    const userId = req['userId'];
-    const isDuplicated = await this.registerService.isDuplicateNickname(userId, nickname);
+    const isDuplicated = await this.registerService.isDuplicateNickname(req['userId'], nickname);
     return createResponseForm(isDuplicated);
   }
 
@@ -73,8 +71,7 @@ export class UserRegisterController {
     @TypedBody() dto: RegisterPhoneNumberDto,
   ): Promise<ResponseForm<PhoneNumberAuthCode>> {
     // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
-    const userId = req['userId'];
-    const authCode = await this.registerService.sendPhoneNumberAuthCode(userId, dto);
+    const authCode = await this.registerService.sendPhoneNumberAuthCode(req['userId'], dto);
     return createResponseForm(authCode);
   }
 
@@ -93,8 +90,7 @@ export class UserRegisterController {
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code/confirm')
   async confirmAuthCode(@Req() req: Request, @TypedBody() dto: PhoneNumberAuthCodeDto): Promise<ResponseForm<boolean>> {
-    const userId = req['userId'];
-    const isConfirmed = await this.registerService.confirmAuthCode(userId, dto.authCode);
+    const isConfirmed = await this.registerService.confirmAuthCode(req['userId'], dto);
     return createResponseForm(isConfirmed);
   }
 

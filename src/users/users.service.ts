@@ -13,7 +13,7 @@ export class UsersService {
   }
 
   async updateUser(userId: UserEntity['id'], dto: UpdateUserDto): Promise<UserEntity> {
-    return await this.usersRepository.save({ id: userId, ...dto });
+    return await this.usersRepository.saveOrFail({ id: userId, ...dto });
   }
 
   async getUser(userId: UserEntity['id']): Promise<UserEntity> {

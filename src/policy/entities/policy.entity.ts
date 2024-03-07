@@ -8,7 +8,10 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, Jo
  */
 @Entity('policy')
 export class PolicyEntity {
-  /** - 약관 id. 데이터베이스에서 자동 생성됩니다. */
+  /**
+   * - 약관 id. 데이터베이스에서 자동 생성됩니다.
+   * @type uint32
+   */
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,14 +1,6 @@
 import { BirthDate } from 'src/custom-tags/birth-date.tag';
 import { PolicyConsentEntity } from 'src/policy-consents/entity/policy-consent.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 /**
  * - 각 snsAuthProvider 마다 제공되는 정보.

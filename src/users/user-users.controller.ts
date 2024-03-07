@@ -39,8 +39,7 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
   async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
-    const userId = req['userId'];
-    const user = await this.usersService.updateUser(userId, dto);
+    const user = await this.usersService.updateUser(req['userId'], dto);
     return createResponseForm(user);
   }
 
@@ -55,8 +54,7 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
-    const userId = req['userId'];
-    const user = await this.usersService.getUser(userId);
+    const user = await this.usersService.getUser(req['userId']);
     return createResponseForm(user);
   }
 }

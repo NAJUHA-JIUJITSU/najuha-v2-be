@@ -12,6 +12,7 @@ import { PolicyConsentRepository } from 'src/policy-consents/policy-consent.repo
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
 import { PhoneNumberAuthCode } from './types/phone-number-auth-code.type';
 import { RegisterUserEntity } from './entities/registerUser.entity';
+import { PhoneNumberAuthCodeDto } from './dto/phone-number-auth-code.dto';
 
 @Injectable()
 export class RegisterService {
@@ -65,7 +66,7 @@ export class RegisterService {
     return authCode;
   }
 
-  async confirmAuthCode(userId: UserEntity['id'], authCode: PhoneNumberAuthCode): Promise<boolean> {
-    return await this.phoneAuthCodeProvider.isAuthCodeValid(userId, authCode);
+  async confirmAuthCode(userId: UserEntity['id'], dto: PhoneNumberAuthCodeDto): Promise<boolean> {
+    return await this.phoneAuthCodeProvider.isAuthCodeValid(userId, dto.authCode);
   }
 }

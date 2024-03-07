@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PolicyEntity } from 'src/policy/entities/policy.entity';
 import { CreatePolicyDto } from './dto/create-policy.dto';
 import { PolicyRepository } from './policy.repository';
 
 @Injectable()
 export class PolicyService {
-  constructor(
-    @InjectRepository(PolicyEntity)
-    private readonly policyRepository: PolicyRepository,
-  ) {}
+  constructor(private readonly policyRepository: PolicyRepository) {}
 
   async createPolicy(createPolicyDto: CreatePolicyDto): Promise<PolicyEntity> {
     // 같은 타입의 약관이 이미 존재하는지 확인, 가장 최근에 등록된 약관을 가져을

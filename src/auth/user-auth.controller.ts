@@ -67,8 +67,7 @@ export class UserAuthController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('acquire-admin-role')
   async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {
-    const userId = req['userId'];
-    const authTokens = await this.authService.acquireAdminRole(userId);
+    const authTokens = await this.authService.acquireAdminRole(req['userId']);
     return createResponseForm(authTokens);
   }
 }
