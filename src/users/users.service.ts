@@ -17,6 +17,6 @@ export class UsersService {
   }
 
   async getUser(userId: UserEntity['id']): Promise<UserEntity> {
-    return await this.usersRepository.getOneOrFail({ id: userId });
+    return await this.usersRepository.getOneOrFail({ where: { id: userId } });
   }
 }

@@ -1,7 +1,5 @@
-import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { BirthDate } from 'src/custom-tags/birth-date.tag';
 import { PolicyConsentEntity } from 'src/policy-consents/entity/policy-consent.entity';
-import { PolicyEntity } from 'src/policy/entities/policy.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,7 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  // Index,
+  JoinColumn,
 } from 'typeorm';
 
 /**
@@ -114,23 +112,5 @@ export class UserEntity {
   updatedAt: Date | string;
 
   @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user)
-  policyConsents: PolicyConsentEntity[];
-
-  setPolicyConsent(policyConsent: PolicyConsentEntity) {
-    this.policyConsents.push(policyConsent);
-  }
-
-  verifyPhoneNumberRegistered() {
-    if (!this.phoneNumber) {
-      throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
-    }
-  }
-
-  verifyMandatoryPolicyConsents(mandatoryPolicies: PolicyEntity[]) {
-    mandatoryPolicies.forEach((policy) => {
-      if (!this.policyConsents.some((policyConsent) => policyConsent.policyId === policy.id)) {
-        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
-      }
-    });
-  }
+  policyConsents?: PolicyConsentEntity[];
 }

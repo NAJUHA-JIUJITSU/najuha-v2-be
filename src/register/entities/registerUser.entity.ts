@@ -7,14 +7,12 @@ import { RegisterDto } from '../dto/register.dto';
 export class RegisterUserEntity {
   user: UserEntity;
   policyConsents: PolicyConsentEntity[];
+  private latestPolicies: PolicyEntity[];
 
-  constructor(user: UserEntity, registerUserInfo: RegisterDto['user'], policyConsents: PolicyConsentEntity[] = []) {
-    this.user = Object.assign(user, registerUserInfo);
-    this.policyConsents = policyConsents;
-  }
-
-  setPolicyConsents(policyConsents: PolicyConsentEntity[] = []) {
-    this.policyConsents = policyConsents;
+  constructor(user: UserEntity, registerUserInfo: RegisterDto['user'], latestPolicies: PolicyEntity[]) {
+    this.user = { ...user, ...registerUserInfo };
+    this.latestPolicies = latestPolicies;
+    this.policyConsents = user.policyConsents || [];
   }
 
   verifyPhoneNumberRegistered() {
@@ -23,13 +21,38 @@ export class RegisterUserEntity {
     }
   }
 
-  verifyMandatoryPolicyConsents(mandatoryPolicies: PolicyEntity[]) {
-    mandatoryPolicies.forEach((policy) => {
-      if (!this.policyConsents.some((policyConsent) => policyConsent.policyId === policy.id)) {
-        throw new BusinessException(RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED);
-      }
-    });
+  verifyMandatoryPoliciesConseted() {
+    const mandatoryPolicies = this.latestPolicies.filter((policy) => policy.isMandatory);
+    const missingConsents = mandatoryPolicies.filter(
+      (policy) => !this.policyConsents.some((consent) => consent.policyId === policy.id),
+    );
+    if (missingConsents.length > 0) {
+      const missingPolicyTypes = missingConsents.map((policy) => policy.type).join(', ');
+      throw new BusinessException(
+        RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED,
+        `다음 필수 약관에 동의하지 않았습니다: ${missingPolicyTypes}`,
+      );
+    }
   }
 
-  // Additional registration-specific methods...
+  setPolicyConsents(latestPolicies: PolicyEntity[], consentPolicyTypes: string[]): void {
+    const unconsetedPolicies = latestPolicies.filter(
+      (policy) => !this.policyConsents.some((consent) => consent.policyId === policy.id),
+    );
+    const policyConsents = unconsetedPolicies.reduce((acc, policy) => {
+      if (
+        consentPolicyTypes.includes(policy.type) &&
+        this.policyConsents.every((consent) => consent.policyId !== policy.id)
+      ) {
+        const consent = new PolicyConsentEntity();
+        consent.user = this.user;
+        consent.policy = policy;
+        consent.userId = this.user.id;
+        consent.policyId = policy.id;
+        acc.push(consent);
+      }
+      return acc;
+    }, [] as PolicyConsentEntity[]);
+    this.policyConsents = [...this.policyConsents, ...policyConsents];
+  }
 }

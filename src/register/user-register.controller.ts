@@ -31,8 +31,8 @@ export class UserRegisterController {
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserDto>> {
-    const userId = req['userId'];
-    const user = await this.registerService.getTemporaryUser(userId);
+    const user = await this.registerService.getTemporaryUser(req['userId']);
+    console.log('user', user);
     return createResponseForm(user);
   }
 

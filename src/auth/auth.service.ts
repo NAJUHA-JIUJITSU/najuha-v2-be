@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   async acquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensDto> {
-    const user = await this.usersRepository.getOneOrFail({ id: userId });
+    const user = await this.usersRepository.getOneOrFail({ where: { id: userId } });
 
     const isCurrentAdmin = appConfig.adminCredentials.some(
       (adminCredential) =>

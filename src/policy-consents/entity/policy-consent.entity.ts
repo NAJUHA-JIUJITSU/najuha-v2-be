@@ -11,23 +11,23 @@ export class PolicyConsentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  /** 사용자 Id. */
-  @Column()
-  userId: number;
-
-  /** 약관 ID. */
-  @Column()
-  policyId: number;
-
   /** 동의 날짜. */
   @CreateDateColumn()
   createdAt: Date | string;
 
-  @ManyToOne(() => UserEntity)
+  /** 사용자 ID. */
+  @Column({ name: 'userId' })
+  userId: number;
+
+  /** 약관 ID. */
+  @Column({ name: 'policyId' })
+  policyId: number;
+
+  @ManyToOne(() => UserEntity, (user) => user.policyConsents)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
-  @ManyToOne(() => PolicyEntity)
+  @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)
   @JoinColumn({ name: 'policyId' })
   policy: PolicyEntity;
 }

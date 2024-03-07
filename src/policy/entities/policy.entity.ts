@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { PolicyConsentEntity } from 'src/policy-consents/entity/policy-consent.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 /**
  * - 약관 테이블.
@@ -55,7 +56,6 @@ export class PolicyEntity {
   @CreateDateColumn()
   createdAt: Date | string; // 약관 생성 날짜
 
-  @ManyToOne(() => PolicyEntity)
-  @JoinColumn({ name: 'policyId' })
-  policy: PolicyEntity;
+  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.policy)
+  policyConsents?: PolicyConsentEntity[];
 }

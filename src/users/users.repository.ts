@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BusinessException } from 'src/common/response/errorResponse';
 import { UsersErrorMap } from 'src/common/response/errorResponse';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, FindOptions, FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersRepository extends Repository<UserEntity> {
@@ -21,8 +21,8 @@ export class UsersRepository extends Repository<UserEntity> {
     if (!result.affected) throw new BusinessException(UsersErrorMap.USERS_USER_NOT_FOUND);
   }
 
-  async getOneOrFail(where: FindOptionsWhere<UserEntity>): Promise<UserEntity> {
-    const user = await this.findOne({ where });
+  async getOneOrFail({ where, relations }: FindOneOptions<UserEntity>): Promise<UserEntity> {
+    const user = await this.findOne({ where, relations });
     if (!user) throw new BusinessException(UsersErrorMap.USERS_USER_NOT_FOUND);
     return user;
   }
