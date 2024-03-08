@@ -14,6 +14,7 @@ import { CustomExceptionFilter } from 'src/common/exception-filters/custom-excep
 import { PolicyModule } from './policy/policy.module';
 import { RegisterModule } from './register/register.module';
 import { ApiConventionsModule } from './api-conventions/api-conventions.module';
+import { CompetitionsModule } from './competitions/competitions.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ApiConventionsModule } from './api-conventions/api-conventions.module';
     RegisterModule,
     UsersModule,
     PolicyModule,
+    CompetitionsModule,
   ],
   providers: [
     {
