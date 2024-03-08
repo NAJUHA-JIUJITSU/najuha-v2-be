@@ -1861,6 +1861,12 @@
               }
             ],
             "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          },
+          "policyConsents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyConsentEntity"
+            }
           }
         },
         "nullable": false,
@@ -1882,6 +1888,117 @@
           "updatedAt"
         ],
         "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
+      },
+      "PolicyConsentEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- 약관 동의 ID."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 동의 날짜."
+          },
+          "userId": {
+            "type": "number",
+            "description": "- 사용자 ID."
+          },
+          "policyId": {
+            "type": "number",
+            "description": "- 약관 ID."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserEntity"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyEntity"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "createdAt",
+          "userId",
+          "policyId",
+          "user",
+          "policy"
+        ],
+        "description": "- 사용자가 동의한 약관 정보"
+      },
+      "PolicyEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
+          },
+          "version": {
+            "type": "number",
+            "description": "- 약관의 버전.\n- 버전이 변경될 때마다 새로운 약관으로 간주합니다."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ],
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
+          },
+          "isMandatory": {
+            "type": "boolean",
+            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "policyConsents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyConsentEntity"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "version",
+          "type",
+          "isMandatory",
+          "title",
+          "content",
+          "createdAt"
+        ],
+        "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
       "PartialPickUserEntitynamegenderbirthnicknamebelt": {
         "type": "object",
@@ -2077,6 +2194,12 @@
               }
             ],
             "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          },
+          "policyConsents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyConsentEntity"
+            }
           }
         },
         "nullable": false,
@@ -2392,66 +2515,6 @@
           "result"
         ]
       },
-      "PolicyEntity": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "number",
-            "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
-          },
-          "version": {
-            "type": "number",
-            "description": "- 약관의 버전.\n- 버전이 변경될 때마다 새로운 약관으로 간주합니다."
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "TERMS_OF_SERVICE",
-              "PRIVACY",
-              "REFUND",
-              "ADVERTISEMENT"
-            ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
-          },
-          "isMandatory": {
-            "type": "boolean",
-            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1,
-            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "version",
-          "type",
-          "isMandatory",
-          "title",
-          "content",
-          "createdAt"
-        ],
-        "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
-      },
       "ResponseFormPolicyEntitynull": {
         "type": "object",
         "properties": {
@@ -2482,7 +2545,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number",
+            "type": "integer",
             "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
           },
           "version": {
@@ -2524,6 +2587,12 @@
                 "type": "string"
               }
             ]
+          },
+          "policyConsents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyConsentEntity"
+            }
           }
         },
         "nullable": true,
