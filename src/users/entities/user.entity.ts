@@ -45,7 +45,9 @@ export class UserEntity {
 
   /**
    * - 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)
-   * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$
+   * @minLength 1
+   * @maxLength 64
+   * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$
    */
   @Column('varchar', { length: 256, nullable: true })
   name: string;
@@ -53,7 +55,7 @@ export class UserEntity {
   /**
    * - 사용자 전화번호. 01012345678.
    * - 전화번호가 저장되어 있으면 인증된 전화번호 입니다.
-   * @pattern ^010[0-9]{8}$
+   * @pattern ^01[0-9]{8}$
    */
   @Column('varchar', { length: 20, nullable: true })
   phoneNumber: string;
