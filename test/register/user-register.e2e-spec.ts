@@ -3,19 +3,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import appConfig from '../../src/common/appConfig';
+import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
 import { EntityManager } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/modules/users/application/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src/users/entities/user.entity';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { TemporaryUserDto } from 'src/users/dto/temporary-user.dto';
-import { PhoneNumberAuthCode } from 'src/register/types/phone-number-auth-code.type';
-import { PolicyService } from 'src/policy/policy.service';
-import { PolicyEntity } from 'src/policy/entities/policy.entity';
-import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
+import { UserEntity } from 'src/infra/database/entities/user.entity';
+import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { TemporaryUserDto } from 'src/modules/users/dto/temporary-user.dto';
+import { PhoneNumberAuthCode } from 'src/modules/register/dto/phone-number-auth-code.type';
+import { PolicyService } from 'src/modules/policy/application/policy.service';
+import { PolicyEntity } from 'src/infra/database/entities/policy.entity';
+import { AuthTokensDto } from 'src/modules/auth/dto/auth-tokens.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
@@ -44,7 +44,7 @@ describe('E2E u-2 register test', () => {
     jwtService = testingModule.get<JwtService>(JwtService);
     usersService = testingModule.get<UsersService>(UsersService);
     policyService = testingModule.get<PolicyService>(PolicyService);
-    (await app.init()).listen(appConfig.appPort);
+    (await app.init()).listen(appEnv.appPort);
   });
 
   afterEach(async () => {
@@ -63,7 +63,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const accessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
@@ -88,7 +88,7 @@ describe('E2E u-2 register test', () => {
 
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
@@ -106,7 +106,7 @@ describe('E2E u-2 register test', () => {
 
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
@@ -120,7 +120,7 @@ describe('E2E u-2 register test', () => {
     it('닉네임 중복검사 - 중복되지 않은 닉네임(사용가능)', async () => {
       const accessToken = jwtService.sign(
         { userId: 1, userRole: 'TEMPORARY_USER' },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       const unusedNickname = 'unusedNickname';
 
@@ -139,7 +139,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       const res = await request(app.getHttpServer())
         .post('/user/register/phone-number/auth-code')
@@ -156,7 +156,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       // 이전에 전화번호로 전송된 인증코드가 레디스에 저장되어 있다고 가정.
@@ -178,7 +178,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       // 이전에 전화번호로 전송된 인증코드가 레디스에 저장되어 있다고 가정.
@@ -216,7 +216,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
@@ -257,7 +257,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
@@ -293,7 +293,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
@@ -329,7 +329,7 @@ describe('E2E u-2 register test', () => {
       const temporaryUser = await usersService.createUser(temporaryUserDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())

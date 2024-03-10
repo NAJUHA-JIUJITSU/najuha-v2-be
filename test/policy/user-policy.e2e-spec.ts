@@ -3,15 +3,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import appConfig from '../../src/common/appConfig';
+import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
 import { DataSource, EntityManager } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/modules/users/application/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src/users/entities/user.entity';
-import { PolicyEntity } from 'src/policy/entities/policy.entity';
-import { PolicyService } from 'src/policy/policy.service';
+import { UserEntity } from 'src/infra/database/entities/user.entity';
+import { PolicyEntity } from 'src/infra/database/entities/policy.entity';
+import { PolicyService } from 'src/modules/policy/application/policy.service';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {
@@ -38,7 +38,7 @@ describe('E2E u-4 user-policy test', () => {
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersService>(UsersService);
     policyService = testingModule.get<PolicyService>(PolicyService);
-    (await app.init()).listen(appConfig.appPort);
+    (await app.init()).listen(appEnv.appPort);
   });
 
   afterEach(async () => {

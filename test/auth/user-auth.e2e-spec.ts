@@ -3,11 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { SnsAuthDto } from '../../src/sns-auth/dto/sns-auth.dto';
-import appConfig from '../../src/common/appConfig';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { SnsAuthDto } from '../../src/modules/auth/dto/sns-auth.dto';
+import appEnv from '../../src/common/app-env';
+import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 import { ResponseForm } from 'src/common/response/response';
-import { AuthTokensDto } from 'src/auth/dto/auth-tokens.dto';
+import { AuthTokensDto } from 'src/modules/auth/dto/auth-tokens.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -17,14 +17,14 @@ import {
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SnsAuthErrorMap,
 } from 'src/common/response/errorResponse';
-import { KakaoStrategy } from 'src/sns-auth/kakao.strategy';
-import { NaverStrategy } from 'src/sns-auth/naver.strategy';
-import { GoogleStrategy } from 'src/sns-auth/google.strategy';
+import { KakaoStrategy } from 'src/infra/sns-auth-client/application/kakao.strategy';
+import { NaverStrategy } from 'src/infra/sns-auth-client/application/naver.strategy';
+import { GoogleStrategy } from 'src/infra/sns-auth-client/application/google.strategy';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/modules/users/application/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/infra/database/entities/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {
@@ -55,7 +55,7 @@ describe('E2E u-1 user-auth test', () => {
     kakaoStrategy = testingModule.get<KakaoStrategy>(KakaoStrategy);
     naverStrategy = testingModule.get<NaverStrategy>(NaverStrategy);
     googleStrategy = testingModule.get<GoogleStrategy>(GoogleStrategy);
-    (await app.init()).listen(appConfig.appPort);
+    (await app.init()).listen(appEnv.appPort);
   });
 
   afterEach(async () => {
@@ -263,8 +263,8 @@ describe('E2E u-1 user-auth test', () => {
         userRole: 'USER',
       };
       const authorizedRefreshToken = jwtService.sign(payload, {
-        secret: appConfig.jwtRefreshTokenSecret,
-        expiresIn: appConfig.jwtRefreshTokenExpirationTime,
+        secret: appEnv.jwtRefreshTokenSecret,
+        expiresIn: appEnv.jwtRefreshTokenExpirationTime,
       });
 
       await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
@@ -284,8 +284,8 @@ describe('E2E u-1 user-auth test', () => {
         userRole: 'USER',
       };
       const authorizedRefreshToken = jwtService.sign(payload, {
-        secret: appConfig.jwtRefreshTokenSecret,
-        expiresIn: appConfig.jwtRefreshTokenExpirationTime,
+        secret: appEnv.jwtRefreshTokenSecret,
+        expiresIn: appEnv.jwtRefreshTokenExpirationTime,
       });
 
       const res = await request(app.getHttpServer())
@@ -301,7 +301,7 @@ describe('E2E u-1 user-auth test', () => {
         userRole: 'USER',
       };
       const authorizedRefreshToken = jwtService.sign(payload, {
-        secret: appConfig.jwtRefreshTokenSecret,
+        secret: appEnv.jwtRefreshTokenSecret,
         expiresIn: '1ms',
       });
 
@@ -329,7 +329,7 @@ describe('E2E u-1 user-auth test', () => {
           'Authorization',
           `Bearer ${jwtService.sign(
             { userId: userEntity.id, userRole: 'USER' },
-            { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+            { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
           )}`,
         );
 
@@ -350,7 +350,7 @@ describe('E2E u-1 user-auth test', () => {
           'Authorization',
           `Bearer ${jwtService.sign(
             { userId: userEntity.id, userRole: 'USER' },
-            { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+            { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
           )}`,
         );
 

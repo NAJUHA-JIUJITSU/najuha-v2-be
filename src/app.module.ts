@@ -1,49 +1,41 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { JwtModule } from '@nestjs/jwt';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { RoleGuard } from 'src/common/guard/role.guard';
-import { AuthModule } from 'src/auth/auth.module';
-import { LoggerModule } from 'src/common/logger/logger.module';
-import { LoggerMiddleware } from 'src/common/middlewares/logger.middleware';
-import { typeOrmConfigAsync } from 'src/typeorm.config';
-import { UsersModule } from 'src/users/users.module';
-import { Logger } from 'winston';
-import { CustomExceptionFilter } from 'src/common/exception-filters/custom-exception-filter';
-import { PolicyModule } from './policy/policy.module';
-import { RegisterModule } from './register/register.module';
-import { ApiConventionsModule } from './api-conventions/api-conventions.module';
-import { CompetitionsModule } from './competitions/competitions.module';
+import { Module } from '@nestjs/common';
+import { JwtModule } from './infra/jwt/jwt.module';
+import { LoggerModule } from 'src/infra/logger/logger.module';
+import { ApiConventionsModule } from './modules/api-conventions/api-conventions.module';
+import { FilterModule } from './infra/filter/filter.module';
+import { GuardModule } from './infra/guard/guard.module';
+import { DatabaseModule } from './infra/database/database.module';
+import { MiddlewareModule } from './infra/middleware/middleware.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { UsersModule } from 'src/modules/users/users.module';
+import { PolicyModule } from './modules/policy/policy.module';
+import { RegisterModule } from './modules/register/register.module';
+import { CompetitionsModule } from './modules/competitions/competitions.module';
+import { RedisModule } from './infra/redis/redis.module';
 
 @Module({
   imports: [
-    LoggerModule,
-    JwtModule.register({
-      global: true,
-    }),
-    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    /**
+     * Infra Modules: These modules ard used to provide the basic functionality to the application
+     */
     ApiConventionsModule,
+    DatabaseModule,
+    FilterModule,
+    GuardModule,
+    JwtModule,
+    LoggerModule,
+    MiddlewareModule,
+    RedisModule,
+
+    /**
+     * Domain Modules: These modules arr used to provide the business logic to the application
+     */
     AuthModule,
     RegisterModule,
     UsersModule,
     PolicyModule,
     CompetitionsModule,
   ],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useFactory: (logger: Logger) => new CustomExceptionFilter(logger),
-      inject: [WINSTON_MODULE_PROVIDER],
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RoleGuard,
-    },
-  ],
+  providers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}

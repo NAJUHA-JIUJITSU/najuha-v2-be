@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from 'src/app.module';
 import { SwaggerSetting } from 'src/swagger-setting';
-import appConfig from 'src/common/appConfig';
+import appEnv from 'src/common/app-env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +14,6 @@ async function bootstrap() {
 
   SwaggerSetting(app);
 
-  await app.listen(appConfig.appPort);
+  await app.listen(appEnv.appPort);
 }
 bootstrap();

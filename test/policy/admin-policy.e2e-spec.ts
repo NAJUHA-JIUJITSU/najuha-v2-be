@@ -3,15 +3,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import appConfig from '../../src/common/appConfig';
+import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
 import { DataSource, EntityManager } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/modules/users/application/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { PolicyEntity } from 'src/policy/entities/policy.entity';
-import { PolicyService } from 'src/policy/policy.service';
-import { CreatePolicyDto } from 'src/policy/dto/create-policy.dto';
+import { PolicyEntity } from 'src/infra/database/entities/policy.entity';
+import { PolicyService } from 'src/modules/policy/application/policy.service';
+import { CreatePolicyDto } from 'src/modules/policy/dto/create-policy.dto';
 import exp from 'constants';
 // import * as Apis from '../../src/api/functional';
 
@@ -39,7 +39,7 @@ describe('E2E a-4 admin-policy test', () => {
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersService>(UsersService);
     policyService = testingModule.get<PolicyService>(PolicyService);
-    (await app.init()).listen(appConfig.appPort);
+    (await app.init()).listen(appEnv.appPort);
   });
 
   afterEach(async () => {
@@ -56,7 +56,7 @@ describe('E2E a-4 admin-policy test', () => {
       const createPolicyDto = typia.random<CreatePolicyDto>();
       const accessToken = jwtService.sign(
         { userId: 1, userRole: 'ADMIN' },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
@@ -86,7 +86,7 @@ describe('E2E a-4 admin-policy test', () => {
 
       const accessToken = jwtService.sign(
         { userId: 1, userRole: 'ADMIN' },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
@@ -114,7 +114,7 @@ describe('E2E a-4 admin-policy test', () => {
 
       const accessToken = jwtService.sign(
         { userId: 1, userRole: 'ADMIN' },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())

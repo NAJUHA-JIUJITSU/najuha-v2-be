@@ -3,14 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import appConfig from '../../src/common/appConfig';
+import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/modules/users/application/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UpdateUserDto } from 'src/modules/users/dto/update-user.dto';
+import { UserEntity } from 'src/infra/database/entities/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-3 user-users test', () => {
@@ -35,7 +35,7 @@ describe('E2E u-3 user-users test', () => {
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersService>(UsersService);
-    (await app.init()).listen(appConfig.appPort);
+    (await app.init()).listen(appEnv.appPort);
   });
 
   afterEach(async () => {
@@ -55,7 +55,7 @@ describe('E2E u-3 user-users test', () => {
       const userEntity = await userService.createUser(user);
       const accessToken = jwtService.sign(
         { userId: userEntity.id, userRole: userEntity.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const updateUserDto: UpdateUserDto = {
@@ -85,7 +85,7 @@ describe('E2E u-3 user-users test', () => {
       const userEntity = await userService.createUser(user);
       const accessToken = jwtService.sign(
         { userId: userEntity.id, userRole: userEntity.role },
-        { secret: appConfig.jwtAccessTokenSecret, expiresIn: appConfig.jwtAccessTokenExpirationTime },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
