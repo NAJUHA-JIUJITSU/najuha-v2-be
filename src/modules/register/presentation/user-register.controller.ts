@@ -1,24 +1,24 @@
 import { TypedBody, TypedException, TypedParam, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { RoleLevels, RoleLevel } from 'src/infra/guard/role.guard';
+import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { RegisterService } from '../application/register.service';
-import { RegisterDto } from '../dto/register.dto';
+import { RegisterAppService } from '../application/register.app.service';
+import { RegisterDto } from './dto/register.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
   USERS_USER_NOT_FOUND,
 } from 'src/common/response/errorResponse';
-import { TemporaryUserDto } from 'src/modules/users/dto/temporary-user.dto';
-import { AuthTokensDto } from 'src/modules/auth/dto/auth-tokens.dto';
-import { RegisterPhoneNumberDto } from '../dto/register-phone-number.dto';
-import { PhoneNumberAuthCode } from '../dto/phone-number-auth-code.type';
-import { PhoneNumberAuthCodeDto } from '../dto/phone-number-auth-code.dto';
+import { TemporaryUserDto } from 'src/modules/users/presentation/dto/temporary-user.dto';
+import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
+import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
+import { PhoneNumberAuthCode } from './dto/phone-number-auth-code.type';
+import { PhoneNumberAuthCodeDto } from './dto/phone-number-auth-code.dto';
 
 @Controller('user/register')
 export class UserRegisterController {
-  constructor(private readonly registerService: RegisterService) {}
+  constructor(private readonly RegisterAppService: RegisterAppService) {}
 
   /**
    * u-2-1 get temporary user.
@@ -31,7 +31,7 @@ export class UserRegisterController {
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserDto>> {
-    const user = await this.registerService.getTemporaryUser(req['userId']);
+    const user = await this.RegisterAppService.getTemporaryUser(req['userId']);
     return createResponseForm(user);
   }
 
@@ -52,7 +52,7 @@ export class UserRegisterController {
     @Req() req: Request,
     @TypedParam('nickname') nickname: string,
   ): Promise<ResponseForm<boolean>> {
-    const isDuplicated = await this.registerService.isDuplicateNickname(req['userId'], nickname);
+    const isDuplicated = await this.RegisterAppService.isDuplicateNickname(req['userId'], nickname);
     return createResponseForm(isDuplicated);
   }
 
@@ -71,7 +71,7 @@ export class UserRegisterController {
     @TypedBody() dto: RegisterPhoneNumberDto,
   ): Promise<ResponseForm<PhoneNumberAuthCode>> {
     // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
-    const authCode = await this.registerService.sendPhoneNumberAuthCode(req['userId'], dto);
+    const authCode = await this.RegisterAppService.sendPhoneNumberAuthCode(req['userId'], dto);
     return createResponseForm(authCode);
   }
 
@@ -90,7 +90,7 @@ export class UserRegisterController {
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code/confirm')
   async confirmAuthCode(@Req() req: Request, @TypedBody() dto: PhoneNumberAuthCodeDto): Promise<ResponseForm<boolean>> {
-    const isConfirmed = await this.registerService.confirmAuthCode(req['userId'], dto);
+    const isConfirmed = await this.RegisterAppService.confirmAuthCode(req['userId'], dto);
     return createResponseForm(isConfirmed);
   }
 
@@ -112,7 +112,7 @@ export class UserRegisterController {
   @TypedRoute.Patch()
   async registerUser(@Req() req: Request, @TypedBody() dto: RegisterDto): Promise<ResponseForm<AuthTokensDto>> {
     const userId = req['userId'];
-    const authTokens = await this.registerService.registerUser(userId, dto);
+    const authTokens = await this.RegisterAppService.registerUser(userId, dto);
     return createResponseForm(authTokens);
   }
 }

@@ -3,11 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { SnsAuthDto } from '../../src/modules/auth/dto/sns-auth.dto';
+import { SnsAuthDto } from '../../src/modules/auth/presentation/dto/sns-auth.dto';
 import appEnv from '../../src/common/app-env';
-import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { CreateUserDto } from 'src/modules/users/presentation/dto/create-user.dto';
 import { ResponseForm } from 'src/common/response/response';
-import { AuthTokensDto } from 'src/modules/auth/dto/auth-tokens.dto';
+import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -17,14 +17,14 @@ import {
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SnsAuthErrorMap,
 } from 'src/common/response/errorResponse';
-import { KakaoStrategy } from 'src/infra/sns-auth-client/application/kakao.strategy';
-import { NaverStrategy } from 'src/infra/sns-auth-client/application/naver.strategy';
-import { GoogleStrategy } from 'src/infra/sns-auth-client/application/google.strategy';
+import { KakaoStrategy } from 'src/infrastructure/sns-auth-client/application/kakao.strategy';
+import { NaverStrategy } from 'src/infrastructure/sns-auth-client/application/naver.strategy';
+import { GoogleStrategy } from 'src/infrastructure/sns-auth-client/application/google.strategy';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
-import { UsersService } from 'src/modules/users/application/users.service';
+import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src/infra/database/entities/user.entity';
+import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {
@@ -35,7 +35,7 @@ describe('E2E u-1 user-auth test', () => {
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
-  let userService: UsersService;
+  let userService: UsersAppService;
   let kakaoStrategy: KakaoStrategy;
   let naverStrategy: NaverStrategy;
   let googleStrategy: GoogleStrategy;
@@ -51,7 +51,7 @@ describe('E2E u-1 user-auth test', () => {
     tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
-    userService = testingModule.get<UsersService>(UsersService);
+    userService = testingModule.get<UsersAppService>(UsersAppService);
     kakaoStrategy = testingModule.get<KakaoStrategy>(KakaoStrategy);
     naverStrategy = testingModule.get<NaverStrategy>(NaverStrategy);
     googleStrategy = testingModule.get<GoogleStrategy>(GoogleStrategy);

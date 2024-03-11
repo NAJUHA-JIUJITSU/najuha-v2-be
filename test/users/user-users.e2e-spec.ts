@@ -6,11 +6,11 @@ import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
-import { UsersService } from 'src/modules/users/application/users.service';
+import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UpdateUserDto } from 'src/modules/users/dto/update-user.dto';
-import { UserEntity } from 'src/infra/database/entities/user.entity';
+import { UpdateUserDto } from 'src/modules/users/presentation/dto/update-user.dto';
+import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-3 user-users test', () => {
@@ -21,7 +21,7 @@ describe('E2E u-3 user-users test', () => {
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
-  let userService: UsersService;
+  let userService: UsersAppService;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -34,7 +34,7 @@ describe('E2E u-3 user-users test', () => {
     tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
-    userService = testingModule.get<UsersService>(UsersService);
+    userService = testingModule.get<UsersAppService>(UsersAppService);
     (await app.init()).listen(appEnv.appPort);
   });
 

@@ -6,12 +6,12 @@ import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
 import { DataSource, EntityManager } from 'typeorm';
-import { UsersService } from 'src/modules/users/application/users.service';
+import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src/infra/database/entities/user.entity';
-import { PolicyEntity } from 'src/infra/database/entities/policy.entity';
-import { PolicyService } from 'src/modules/policy/application/policy.service';
+import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {
@@ -22,8 +22,8 @@ describe('E2E u-4 user-policy test', () => {
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
-  let userService: UsersService;
-  let policyService: PolicyService;
+  let userService: UsersAppService;
+  let PolicyAppService: PolicyAppService;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -36,8 +36,8 @@ describe('E2E u-4 user-policy test', () => {
     tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
-    userService = testingModule.get<UsersService>(UsersService);
-    policyService = testingModule.get<PolicyService>(PolicyService);
+    userService = testingModule.get<UsersAppService>(UsersAppService);
+    PolicyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -55,7 +55,7 @@ describe('E2E u-4 user-policy test', () => {
       const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return policyService.createPolicy({
+          return PolicyAppService.createPolicy({
             type: type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -72,7 +72,7 @@ describe('E2E u-4 user-policy test', () => {
 
   describe('u-4-2 GET /user/policy/:id --------------------------------------------------', () => {
     it('약관 ID로 약관을 가져오기 성공 시', async () => {
-      const policy = await policyService.createPolicy({
+      const policy = await PolicyAppService.createPolicy({
         type: 'TERMS_OF_SERVICE',
         isMandatory: true,
         title: `TERMS_OF_SERVICE 제목`,

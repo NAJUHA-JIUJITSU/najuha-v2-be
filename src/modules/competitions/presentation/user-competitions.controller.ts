@@ -1,12 +1,12 @@
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { RoleLevels, RoleLevel } from 'src/infra/guard/role.guard';
+import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { CompetitionsService } from '../application/competitions.service';
+import { CompetitionsAppService } from '../application/competitions.app.service';
 
 @Controller('user/competitions')
 export class UserCompetitionsController {
-  constructor(private readonly competitionsService: CompetitionsService) {}
+  constructor(private readonly CompetitionsAppService: CompetitionsAppService) {}
 
   //   /**
   //    * u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
@@ -18,7 +18,7 @@ export class UserCompetitionsController {
   //   @RoleLevels(RoleLevel.USER)
   //   @TypedRoute.Post('/')
   //   async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<UserEntity>> {
-  //     const user = await this.usersService.createUser(dto);
+  //     const user = await this. UsersAppService.createUser(dto);
   //     return createResponseForm(user);
   //   }
 }

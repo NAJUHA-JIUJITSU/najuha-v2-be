@@ -1,8 +1,8 @@
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { SnsAuthDto } from 'src/modules/auth/dto/sns-auth.dto';
-import { AuthService } from 'src/modules/auth/application/auth.service';
-import { AuthTokensDto } from 'src/modules/auth/dto/auth-tokens.dto';
+import { SnsAuthDto } from 'src/modules/auth/presentation/dto/sns-auth.dto';
+import { AuthAppService } from 'src/modules/auth/application/auth.app.service';
+import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -12,13 +12,13 @@ import {
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
   USERS_USER_NOT_FOUND,
 } from 'src/common/response/errorResponse';
-import { RefreshTokenDto } from '../dto/refresh-token.dto';
-import { RoleLevel, RoleLevels } from '../../../infra/guard/role.guard';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 
 @Controller('user/auth')
 export class UserAuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly AuthAppService: AuthAppService) {}
 
   /**
    * u-1-1 auth sns login.
@@ -34,7 +34,7 @@ export class UserAuthController {
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('sns-login')
   async snsLogin(@TypedBody() dto: SnsAuthDto): Promise<ResponseForm<AuthTokensDto>> {
-    const authTokens = await this.authService.snsLogin(dto);
+    const authTokens = await this.AuthAppService.snsLogin(dto);
     return createResponseForm(authTokens);
   }
 
@@ -49,7 +49,7 @@ export class UserAuthController {
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('token')
   async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
-    const authTokens = await this.authService.refreshToken(dto);
+    const authTokens = await this.AuthAppService.refreshToken(dto);
     return createResponseForm(authTokens);
   }
 
@@ -67,7 +67,7 @@ export class UserAuthController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('acquire-admin-role')
   async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {
-    const authTokens = await this.authService.acquireAdminRole(req['userId']);
+    const authTokens = await this.AuthAppService.acquireAdminRole(req['userId']);
     return createResponseForm(authTokens);
   }
 }

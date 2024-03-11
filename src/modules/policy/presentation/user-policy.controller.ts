@@ -1,13 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
-import { PolicyService } from '../application/policy.service';
+import { PolicyAppService } from '../application/policy.app.service';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { RoleLevels, RoleLevel } from 'src/infra/guard/role.guard';
-import { PolicyEntity } from '../../../infra/database/entities/policy.entity';
+import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
+import { PolicyEntity } from '../../../infrastructure/database/entities/policy.entity';
+import { IPolicy } from 'src/interfaces/policy.interface';
 
 @Controller('user/policy')
 export class UserPolicyController {
-  constructor(private readonly policyService: PolicyService) {}
+  constructor(private readonly PolicyAppService: PolicyAppService) {}
 
   /**
    * u-4-1 find all types of recent policies.
@@ -19,8 +20,8 @@ export class UserPolicyController {
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/recent')
-  async findAllRecentPolicies(): Promise<ResponseForm<PolicyEntity[]>> {
-    const policies = await this.policyService.findAllTypesOfLatestPolicies();
+  async findAllRecentPolicies(): Promise<ResponseForm<IPolicy[]>> {
+    const policies = await this.PolicyAppService.findAllTypesOfLatestPolicies();
     return createResponseForm(policies);
   }
 
@@ -35,7 +36,7 @@ export class UserPolicyController {
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:id')
   async findPolicy(@TypedParam('id') id: number): Promise<ResponseForm<PolicyEntity | null>> {
-    const policy = await this.policyService.findOnePolicy(id);
+    const policy = await this.PolicyAppService.findOnePolicy(id);
     return createResponseForm(policy);
   }
 }
