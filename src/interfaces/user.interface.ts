@@ -47,7 +47,7 @@ export interface IUser {
   /**
    * - 사용자 전화번호. 01012345678.
    * - 전화번호가 저장되어 있으면 인증된 전화번호 입니다.
-   * @pattern ^01[0-9]{8}$
+   * @pattern ^01[0-9]{9}$
    */
   phoneNumber: string;
 

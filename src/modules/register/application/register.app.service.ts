@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 import { RegisterDto } from '../presentation/dto/register.dto';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
-import { TemporaryUserDto } from 'src/modules/users/presentation/dto/temporary-user.dto';
 import { UsersRepository } from 'src/infrastructure/database/repositories/users.repository';
 import { PolicyRepository } from 'src/infrastructure/database/repositories/policy.repository';
 import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
@@ -13,6 +11,8 @@ import { RegisterPhoneNumberDto } from '../presentation/dto/register-phone-numbe
 import { PhoneNumberAuthCode } from '../presentation/dto/phone-number-auth-code.type';
 import { RegisterUser } from '../domain/registerUser.entity';
 import { PhoneNumberAuthCodeDto } from '../presentation/dto/phone-number-auth-code.dto';
+import { ITemporaryUser } from 'src/interfaces/temporary-user.interface';
+import { IUser } from 'src/interfaces/user.interface';
 
 @Injectable()
 export class RegisterAppService {
@@ -24,8 +24,8 @@ export class RegisterAppService {
     private readonly policyConsetRepository: PolicyConsentRepository,
   ) {}
 
-  async getTemporaryUser(userId: UserEntity['id']): Promise<TemporaryUserDto> {
-    return await this.usersRepository.getOneOrFail({ where: { id: userId } });
+  async getTemporaryUser(userId: IUser['id']): Promise<ITemporaryUser> {
+    return await this.usersRepository.getTemporaryUserOrFail(userId);
   }
 
   /**
@@ -34,7 +34,7 @@ export class RegisterAppService {
    * - 존재하는 닉네임 이지만 본인이 사용중이면 false를 반환
    * - 존재하는 닉네임이면 true를 반환
    */
-  async isDuplicateNickname(userId: UserEntity['id'], nickname: string): Promise<boolean> {
+  async isDuplicateNickname(userId: IUser['id'], nickname: string): Promise<boolean> {
     const user = await this.usersRepository.findOneBy({ nickname });
     if (user === null) return false;
     if (user.id === userId) return false;
@@ -42,7 +42,7 @@ export class RegisterAppService {
   }
 
   // TODO: transaction 필요
-  async registerUser(userId: UserEntity['id'], dto: RegisterDto): Promise<AuthTokensDto> {
+  async registerUser(userId: IUser['id'], dto: RegisterDto): Promise<AuthTokensDto> {
     if (await this.isDuplicateNickname(userId, dto.user.nickname)) {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
@@ -58,13 +58,13 @@ export class RegisterAppService {
   }
 
   // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
-  async sendPhoneNumberAuthCode(userId: UserEntity['id'], dto: RegisterPhoneNumberDto): Promise<PhoneNumberAuthCode> {
+  async sendPhoneNumberAuthCode(userId: IUser['id'], dto: RegisterPhoneNumberDto): Promise<PhoneNumberAuthCode> {
     const authCode = await this.phoneAuthCodeProvider.issueAuthCode(userId, dto.phoneNumber);
     // TODO: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
     return authCode;
   }
 
-  async confirmAuthCode(userId: UserEntity['id'], dto: PhoneNumberAuthCodeDto): Promise<boolean> {
+  async confirmAuthCode(userId: IUser['id'], dto: PhoneNumberAuthCodeDto): Promise<boolean> {
     return await this.phoneAuthCodeProvider.isAuthCodeValid(userId, dto.authCode);
   }
 }

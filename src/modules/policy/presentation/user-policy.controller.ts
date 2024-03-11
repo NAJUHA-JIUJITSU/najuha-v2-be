@@ -3,7 +3,6 @@ import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { PolicyAppService } from '../application/policy.app.service';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { PolicyEntity } from '../../../infrastructure/database/entities/policy.entity';
 import { IPolicy } from 'src/interfaces/policy.interface';
 
 @Controller('user/policy')
@@ -35,7 +34,7 @@ export class UserPolicyController {
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:id')
-  async findPolicy(@TypedParam('id') id: number): Promise<ResponseForm<PolicyEntity | null>> {
+  async findPolicy(@TypedParam('id') id: number): Promise<ResponseForm<IPolicy | null>> {
     const policy = await this.PolicyAppService.findOnePolicy(id);
     return createResponseForm(policy);
   }

@@ -5,8 +5,8 @@ import { USERS_USER_NOT_FOUND } from 'src/common/response/errorResponse';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CreateUserDto } from 'src/modules/users/presentation/dto/create-user.dto';
 import { UpdateUserDto } from 'src/modules/users/presentation/dto/update-user.dto';
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
+import { IUser } from 'src/interfaces/user.interface';
 
 // TODO: GaurdLevel 설설
 @Controller('user/users')
@@ -22,7 +22,7 @@ export class UserUsersController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
-  async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<UserEntity>> {
+  async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<IUser>> {
     const user = await this.UsersAppService.createUser(dto);
     return createResponseForm(user);
   }
@@ -38,7 +38,7 @@ export class UserUsersController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
-  async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<UserEntity>> {
+  async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<IUser>> {
     const user = await this.UsersAppService.updateUser(req['userId'], dto);
     return createResponseForm(user);
   }
@@ -53,7 +53,7 @@ export class UserUsersController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
-  async getMe(@Req() req: Request): Promise<ResponseForm<UserEntity>> {
+  async getMe(@Req() req: Request): Promise<ResponseForm<IUser>> {
     const user = await this.UsersAppService.getMe(req['userId']);
     return createResponseForm(user);
   }

@@ -10,11 +10,11 @@ import {
   REGISTER_POLICY_CONSENT_REQUIRED,
   USERS_USER_NOT_FOUND,
 } from 'src/common/response/errorResponse';
-import { TemporaryUserDto } from 'src/modules/users/presentation/dto/temporary-user.dto';
 import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
 import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
 import { PhoneNumberAuthCode } from './dto/phone-number-auth-code.type';
 import { PhoneNumberAuthCodeDto } from './dto/phone-number-auth-code.dto';
+import { ITemporaryUser } from 'src/interfaces/temporary-user.interface';
 
 @Controller('user/register')
 export class UserRegisterController {
@@ -30,7 +30,7 @@ export class UserRegisterController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
-  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserDto>> {
+  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<ITemporaryUser>> {
     const user = await this.RegisterAppService.getTemporaryUser(req['userId']);
     return createResponseForm(user);
   }

@@ -4,8 +4,8 @@ import { PolicyAppService } from '../application/policy.app.service';
 import { CreatePolicyDto } from './dto/create-policy.dto';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { PolicyEntity } from '../../../infrastructure/database/entities/policy.entity';
 import { PolicyTypeQuery } from './dto/PolicyTypeQuery.type';
+import { IPolicy } from 'src/interfaces/policy.interface';
 
 @Controller('admin/policy')
 export class AdminPolicyController {
@@ -20,7 +20,7 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
-  async postPolicy(@TypedBody() createPolicyDto: CreatePolicyDto): Promise<ResponseForm<PolicyEntity>> {
+  async postPolicy(@TypedBody() createPolicyDto: CreatePolicyDto): Promise<ResponseForm<IPolicy>> {
     const policy = await this.PolicyAppService.createPolicy(createPolicyDto);
     return createResponseForm(policy);
   }
@@ -35,7 +35,7 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
-  async findAllPolicies(@TypedQuery() query: PolicyTypeQuery): Promise<ResponseForm<PolicyEntity[]>> {
+  async findAllPolicies(@TypedQuery() query: PolicyTypeQuery): Promise<ResponseForm<IPolicy[]>> {
     const policies = await this.PolicyAppService.findAllPolicies(query.type);
     return createResponseForm(policies);
   }

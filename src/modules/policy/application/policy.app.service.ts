@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
 import { CreatePolicyDto } from '../presentation/dto/create-policy.dto';
 import { PolicyRepository } from '../../../infrastructure/database/repositories/policy.repository';
 import { IPolicy } from 'src/interfaces/policy.interface';
@@ -8,7 +7,7 @@ import { IPolicy } from 'src/interfaces/policy.interface';
 export class PolicyAppService {
   constructor(private readonly policyRepository: PolicyRepository) {}
 
-  async createPolicy(createPolicyDto: CreatePolicyDto): Promise<PolicyEntity> {
+  async createPolicy(createPolicyDto: CreatePolicyDto): Promise<IPolicy> {
     // 같은 타입의 약관이 이미 존재하는지 확인, 가장 최근에 등록된 약관을 가져을
     const existingPolicy = await this.policyRepository.findOne({
       where: { type: createPolicyDto.type },
@@ -24,11 +23,11 @@ export class PolicyAppService {
   }
 
   // TODO content 는 제외
-  async findAllPolicies(type?: PolicyEntity['type']): Promise<PolicyEntity[]> {
+  async findAllPolicies(type?: IPolicy['type']): Promise<IPolicy[]> {
     return this.policyRepository.find({ where: { type } });
   }
 
-  async findOnePolicy(id: number): Promise<PolicyEntity | null> {
+  async findOnePolicy(id: number): Promise<IPolicy | null> {
     return this.policyRepository.findOne({ where: { id } });
   }
 
