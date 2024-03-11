@@ -1,3 +1,3 @@
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { IPolicy } from 'src/interfaces/policy.interface';
 
-export type CreatePolicyDto = Pick<PolicyEntity, 'type' | 'isMandatory' | 'title' | 'content'>;
+export type CreatePolicyDto = Pick<IPolicy, 'type' | 'isMandatory' | 'title' | 'content'>;

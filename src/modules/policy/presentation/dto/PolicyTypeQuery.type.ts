@@ -1,3 +1,3 @@
-import { PolicyEntity } from '../../../../infrastructure/database/entities/policy.entity';
+import { IPolicy } from 'src/interfaces/policy.interface';
 
-export type PolicyTypeQuery = { type?: PolicyEntity['type'] };
+export type PolicyTypeQuery = { type?: IPolicy['type'] };

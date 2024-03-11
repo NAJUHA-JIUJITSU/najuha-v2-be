@@ -1,3 +1,3 @@
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
+import { IUser } from 'src/interfaces/user.interface';
 
-export type RegisterPhoneNumberDto = Pick<UserEntity, 'phoneNumber'>;
+export type RegisterPhoneNumberDto = Pick<IUser, 'phoneNumber'>;

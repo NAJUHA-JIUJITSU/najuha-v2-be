@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
+import { IUser } from 'src/interfaces/user.interface';
 
-export type CreateUserDto = Pick<UserEntity, 'snsId' | 'snsAuthProvider' | 'name' | 'email'> &
-  Partial<Pick<UserEntity, 'phoneNumber' | 'gender' | 'birth'>>;
+export type CreateUserDto = Pick<IUser, 'snsId' | 'snsAuthProvider' | 'name' | 'email'> &
+  Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>>;

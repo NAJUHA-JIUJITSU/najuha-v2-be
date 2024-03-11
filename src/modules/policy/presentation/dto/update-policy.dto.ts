@@ -1,3 +1,3 @@
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { IPolicy } from 'src/interfaces/policy.interface';
 
-export type UpdatePolicyDto = Partial<Pick<PolicyEntity, 'type' | 'title' | 'content'>>;
+export type UpdatePolicyDto = Partial<Pick<IPolicy, 'type' | 'title' | 'content'>>;
