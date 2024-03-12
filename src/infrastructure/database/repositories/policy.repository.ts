@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
 import { PolicyEntity } from '../entities/policy.entity';
-import { IPolicy } from 'src/interfaces/policy.interface';
 
 // TODO 에러 표준화
 @Injectable()
@@ -10,24 +9,24 @@ export class PolicyRepository extends Repository<PolicyEntity> {
     super(PolicyEntity, dataSource.createEntityManager());
   }
 
-  async saveOrFail(dto: Pick<IPolicy, 'id'> & Partial<IPolicy>): Promise<IPolicy> {
+  async saveOrFail(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<PolicyEntity> {
     const policy = await this.findOne({ where: { id: dto.id } });
     if (!policy) throw new Error('Policy not found');
     return await this.save({ ...policy, ...dto });
   }
 
-  async updateOrFail(dto: Pick<IPolicy, 'id'> & Partial<IPolicy>): Promise<void> {
+  async updateOrFail(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<void> {
     const result = await this.update({ id: dto.id }, dto);
     if (!result.affected) throw new Error('Policy not found');
   }
 
-  async getOneOrFail(where: FindOptionsWhere<IPolicy>): Promise<IPolicy> {
+  async getOneOrFail(where: FindOptionsWhere<PolicyEntity>): Promise<PolicyEntity> {
     const policy = await this.findOne({ where });
     if (!policy) throw new Error('Policy not found');
     return policy;
   }
 
-  async getOneLatestPolicyByTypeOrFail(type: IPolicy['type']): Promise<IPolicy> {
+  async getOneLatestPolicyByTypeOrFail(type: PolicyEntity['type']): Promise<PolicyEntity> {
     const policy = await this.createQueryBuilder('policy')
       .where('policy.type = :type', { type })
       .orderBy('policy.createdAt', 'DESC')
@@ -36,7 +35,7 @@ export class PolicyRepository extends Repository<PolicyEntity> {
     return policy;
   }
 
-  async findAllTypesOfLatestPolicies(): Promise<IPolicy[]> {
+  async findAllTypesOfLatestPolicies(): Promise<PolicyEntity[]> {
     return this.createQueryBuilder('policy')
       .distinctOn(['policy.type'])
       .orderBy('policy.type')
@@ -44,7 +43,7 @@ export class PolicyRepository extends Repository<PolicyEntity> {
       .getMany();
   }
 
-  async findAllLatestMandatoryPolicies(): Promise<IPolicy[]> {
+  async findAllLatestMandatoryPolicies(): Promise<PolicyEntity[]> {
     return this.createQueryBuilder('policy')
       .where('policy.isMandatory = true')
       .orderBy('policy.createdAt', 'DESC')

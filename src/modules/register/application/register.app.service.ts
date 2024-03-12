@@ -25,7 +25,7 @@ export class RegisterAppService {
   ) {}
 
   async getTemporaryUser(userId: IUser['id']): Promise<ITemporaryUser> {
-    return await this.usersRepository.getTemporaryUserOrFail(userId);
+    return await this.usersRepository.getOneOrFail({ where: { id: userId } });
   }
 
   /**
