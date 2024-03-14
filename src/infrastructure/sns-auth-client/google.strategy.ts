@@ -58,7 +58,7 @@ export class GoogleStrategy implements SnsAuthStrategy {
     const dto: CreateUserReqDto = {
       snsAuthProvider: 'GOOGLE',
       snsId: data.sub,
-      name: data.name,
+      name: data.name.replace(/\s/g, ''),
       email: data.email,
     };
 
