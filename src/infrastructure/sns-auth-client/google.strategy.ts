@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { GoogleUserData } from 'src/infrastructure/sns-auth-client/types/google-user-data.type';
 import { SnsAuthStrategy } from 'src/infrastructure/sns-auth-client/types/sns-auth.strategy.type';
-import { CreateUserDto } from 'src/modules/users/presentation/dto/create-user.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 
@@ -11,13 +11,13 @@ import appEnv from 'src/common/app-env';
 export class GoogleStrategy implements SnsAuthStrategy {
   constructor(private readonly httpService: HttpService) {}
 
-  async validate(snsAuthCode: string): Promise<CreateUserDto> {
+  async validate(snsAuthCode: string): Promise<CreateUserReqDto> {
     try {
       const accessToken = await this.getAccessToken(snsAuthCode);
       const userData = await this.getUserData(accessToken);
       console.log(userData);
 
-      return this.convertUserDataToCreateUserDto(userData);
+      return this.convertUserDataToCreateUserReqDto(userData);
     } catch (e) {
       throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL, e.response.data);
     }
@@ -54,8 +54,8 @@ export class GoogleStrategy implements SnsAuthStrategy {
     return response.data;
   }
 
-  convertUserDataToCreateUserDto(data: any): CreateUserDto {
-    const dto: CreateUserDto = {
+  convertUserDataToCreateUserReqDto(data: any): CreateUserReqDto {
+    const dto: CreateUserReqDto = {
       snsAuthProvider: 'GOOGLE',
       snsId: data.sub,
       name: data.name,

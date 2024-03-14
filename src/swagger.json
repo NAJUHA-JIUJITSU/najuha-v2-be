@@ -171,7 +171,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SnsAuthDto"
+                "$ref": "#/components/schemas/SnsLoginReqDto"
               }
             }
           },
@@ -184,7 +184,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormAuthTokensDto"
+                  "$ref": "#/components/schemas/ResponseFormAuthTokensResDto"
                 }
               }
             },
@@ -267,7 +267,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RefreshTokenDto"
+                "$ref": "#/components/schemas/RefreshTokenReqDto"
               }
             }
           },
@@ -280,7 +280,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormAuthTokensDto"
+                  "$ref": "#/components/schemas/ResponseFormAuthTokensResDto"
                 }
               }
             },
@@ -335,7 +335,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormAuthTokensDto"
+                  "$ref": "#/components/schemas/ResponseFormAuthTokensResDto"
                 }
               }
             },
@@ -398,7 +398,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
+                "$ref": "#/components/schemas/CreateUserReqDto"
               }
             }
           },
@@ -411,7 +411,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserEntity"
+                  "$ref": "#/components/schemas/ResponseFormUserResDto"
                 }
               }
             },
@@ -449,11 +449,11 @@
         ],
         "parameters": [],
         "requestBody": {
-          "description": "UpdateUserDto",
+          "description": "UpdateUserReqDto",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PartialPickUserEntitynamegenderbirthnicknamebelt"
+                "$ref": "#/components/schemas/PartialPickIUsernamegenderbirthnicknamebelt"
               }
             }
           },
@@ -466,7 +466,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserEntity"
+                  "$ref": "#/components/schemas/ResponseFormUserResDto"
                 }
               }
             },
@@ -508,7 +508,7 @@
                 "kind": "space"
               },
               {
-                "text": "UpdateUserDto",
+                "text": "UpdateUserReqDto",
                 "kind": "text"
               }
             ]
@@ -538,7 +538,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserEntity"
+                  "$ref": "#/components/schemas/ResponseFormUserResDto"
                 }
               }
             },
@@ -593,7 +593,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormTemporaryUserDto"
+                  "$ref": "#/components/schemas/ResponseFormTemporaryUserResDto"
                 }
               }
             },
@@ -667,7 +667,7 @@
         },
         "summary": "u-2-2 check duplicated nickname",
         "description": "u-2-2 check duplicated nickname.\n- RoleLevel: TEMPORARY_USER\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환\n- 본인이 사용중인 닉네임이면 false를 반환\n- 이미 사용중인 닉네임이면 true를 반환",
-        "x-nestia-namespace": "user.register.users.is-duplicated.checkDuplicateNickname",
+        "x-nestia-namespace": "user.register.users.is-duplicated.isDuplicateNickname",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -718,7 +718,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterPhoneNumberDto"
+                "$ref": "#/components/schemas/RegisterPhoneNumberReqDto"
               }
             }
           },
@@ -771,11 +771,11 @@
         ],
         "parameters": [],
         "requestBody": {
-          "description": "PhoneNumberAuthCodeDto",
+          "description": "confirmAuthCodeReqDto",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PhoneNumberAuthCodeDto"
+                "$ref": "#/components/schemas/confirmAuthCodeReqDto"
               }
             }
           },
@@ -830,7 +830,7 @@
                 "kind": "space"
               },
               {
-                "text": "PhoneNumberAuthCodeDto",
+                "text": "confirmAuthCodeReqDto",
                 "kind": "text"
               }
             ]
@@ -855,11 +855,11 @@
         ],
         "parameters": [],
         "requestBody": {
-          "description": "RegisterDto",
+          "description": "RegisterReqDto",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterDto"
+                "$ref": "#/components/schemas/RegisterReqDto"
               }
             }
           },
@@ -872,7 +872,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormAuthTokensDto"
+                  "$ref": "#/components/schemas/ResponseFormAuthTokensResDto"
                 }
               }
             },
@@ -944,7 +944,7 @@
                 "kind": "space"
               },
               {
-                "text": "RegisterDto",
+                "text": "RegisterReqDto",
                 "kind": "text"
               }
             ]
@@ -974,7 +974,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormArrayPolicyEntity"
+                  "$ref": "#/components/schemas/ResponseFormFindAllPoliciesResDto"
                 }
               }
             },
@@ -1029,7 +1029,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyEntitynull"
+                  "$ref": "#/components/schemas/ResponseFormFindOnePolicyResDto"
                 }
               }
             },
@@ -1038,7 +1038,7 @@
         },
         "summary": "u-4-2 find policy by id",
         "description": "u-4-2 find policy by id.\n- RoleLevel: USER",
-        "x-nestia-namespace": "user.policy.findPolicy",
+        "x-nestia-namespace": "user.policy.findOnePolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1089,7 +1089,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePolicyDto"
+                "$ref": "#/components/schemas/CreatePolicyReqDto"
               }
             }
           },
@@ -1102,7 +1102,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
+                  "$ref": "#/components/schemas/ResponseFormIPolicy"
                 }
               }
             },
@@ -1142,7 +1142,7 @@
             "name": "query",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/PolicyTypeQuery"
+              "$ref": "#/components/schemas/FindAllPoliciesReqDto"
             },
             "description": "",
             "required": true
@@ -1154,7 +1154,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormArrayPolicyEntity"
+                  "$ref": "#/components/schemas/ResponseFormFindAllPoliciesResDto"
                 }
               }
             },
@@ -1319,7 +1319,7 @@
           "result"
         ]
       },
-      "SnsAuthDto": {
+      "SnsLoginReqDto": {
         "type": "object",
         "properties": {
           "snsAuthProvider": {
@@ -1492,7 +1492,7 @@
           "result"
         ]
       },
-      "ResponseFormAuthTokensDto": {
+      "ResponseFormAuthTokensResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -1508,7 +1508,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/AuthTokensDto"
+            "$ref": "#/components/schemas/AuthTokensResDto"
           }
         },
         "nullable": false,
@@ -1518,7 +1518,7 @@
           "result"
         ]
       },
-      "AuthTokensDto": {
+      "AuthTokensResDto": {
         "type": "object",
         "properties": {
           "accessToken": {
@@ -1534,7 +1534,7 @@
           "refreshToken"
         ]
       },
-      "RefreshTokenDto": {
+      "RefreshTokenReqDto": {
         "type": "object",
         "properties": {
           "refreshToken": {
@@ -1658,7 +1658,7 @@
         ],
         "description": "----------------------------------------------------------------------------\nUsers 4000 ~ 4999"
       },
-      "CreateUserDto": {
+      "CreateUserReqDto": {
         "type": "object",
         "properties": {
           "snsId": {
@@ -1679,7 +1679,9 @@
           },
           "name": {
             "type": "string",
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "email": {
@@ -1691,7 +1693,7 @@
           },
           "phoneNumber": {
             "type": "string",
-            "pattern": "^010[0-9]{8}$",
+            "pattern": "^01[0-9]{9}$",
             "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           },
           "gender": {
@@ -1716,7 +1718,7 @@
           "email"
         ]
       },
-      "ResponseFormUserEntity": {
+      "ResponseFormUserResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -1732,7 +1734,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/UserEntity"
+            "$ref": "#/components/schemas/UserResDto"
           }
         },
         "nullable": false,
@@ -1742,7 +1744,7 @@
           "result"
         ]
       },
-      "UserEntity": {
+      "UserResDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1783,12 +1785,14 @@
           },
           "name": {
             "type": "string",
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "phoneNumber": {
             "type": "string",
-            "pattern": "^010[0-9]{8}$",
+            "pattern": "^01[0-9]{9}$",
             "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           },
           "nickname": {
@@ -1865,8 +1869,203 @@
           "policyConsents": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PolicyConsentEntity"
-            }
+              "$ref": "#/components/schemas/IPolicyConsent"
+            },
+            "description": "- 사용자가 동의한 약관 정보\n- OneToMany: User(1) -> PolicyConsent(*)"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "role",
+          "snsAuthProvider",
+          "snsId",
+          "email",
+          "name",
+          "phoneNumber",
+          "nickname",
+          "gender",
+          "birth",
+          "belt",
+          "profileImageUrlKey",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "IPolicyConsent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- 약관 동의 ID."
+          },
+          "userId": {
+            "type": "number",
+            "description": "- 사용자 ID."
+          },
+          "policyId": {
+            "type": "number",
+            "description": "- 약관 ID."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 동의 날짜."
+          },
+          "user": {
+            "$ref": "#/components/schemas/IUser",
+            "description": "- 사용자 정보\n- ManyToOne: User(1) -> PolicyConsent(*)\n- JoinColumn: userId"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/IPolicy",
+            "description": "- 약관 정보\n- ManyToOne: Policy(1) -> PolicyConsent(*)\n- JoinColumn: policyId"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "userId",
+          "policyId",
+          "createdAt"
+        ],
+        "description": "- 사용자가 동의한 약관 정보"
+      },
+      "IUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ],
+            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
+          },
+          "snsAuthProvider": {
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
+            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+          },
+          "snsId": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "minLength": 1,
+            "description": "- 사용자 이메일 주소."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^01[0-9]{9}$",
+            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "description": "- 사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "description": "- 사용자 주짓수 벨트."
+          },
+          "profileImageUrlKey": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "nullable": true,
+            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          },
+          "policyConsents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IPolicyConsent"
+            },
+            "description": "- 사용자가 동의한 약관 정보\n- OneToMany: User(1) -> PolicyConsent(*)"
           }
         },
         "nullable": false,
@@ -1889,52 +2088,7 @@
         ],
         "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
       },
-      "PolicyConsentEntity": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "- 약관 동의 ID."
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string"
-              }
-            ],
-            "description": "- 동의 날짜."
-          },
-          "userId": {
-            "type": "number",
-            "description": "- 사용자 ID."
-          },
-          "policyId": {
-            "type": "number",
-            "description": "- 약관 ID."
-          },
-          "user": {
-            "$ref": "#/components/schemas/UserEntity"
-          },
-          "policy": {
-            "$ref": "#/components/schemas/PolicyEntity"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "createdAt",
-          "userId",
-          "policyId",
-          "user",
-          "policy"
-        ],
-        "description": "- 사용자가 동의한 약관 정보"
-      },
-      "PolicyEntity": {
+      "IPolicy": {
         "type": "object",
         "properties": {
           "id": {
@@ -1979,13 +2133,15 @@
               {
                 "type": "string"
               }
-            ]
+            ],
+            "description": "- 약관 생성 날짜"
           },
           "policyConsents": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PolicyConsentEntity"
-            }
+              "$ref": "#/components/schemas/IPolicyConsent"
+            },
+            "description": "- 사용자가 동의한 약관 정보\nOneToMany: Policy(1) -> PolicyConsent(*)"
           }
         },
         "nullable": false,
@@ -2000,12 +2156,14 @@
         ],
         "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
-      "PartialPickUserEntitynamegenderbirthnicknamebelt": {
+      "PartialPickIUsernamegenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
           "gender": {
@@ -2044,7 +2202,7 @@
         "nullable": false,
         "description": "Make all properties in T optional"
       },
-      "ResponseFormTemporaryUserDto": {
+      "ResponseFormTemporaryUserResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -2060,7 +2218,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/TemporaryUserDto"
+            "$ref": "#/components/schemas/TemporaryUserResDto"
           }
         },
         "nullable": false,
@@ -2070,12 +2228,11 @@
           "result"
         ]
       },
-      "TemporaryUserDto": {
+      "TemporaryUserResDto": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
+            "type": "number"
           },
           "role": {
             "type": "string",
@@ -2083,8 +2240,7 @@
               "ADMIN",
               "USER",
               "TEMPORARY_USER"
-            ],
-            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
+            ]
           },
           "snsAuthProvider": {
             "type": "string",
@@ -2093,40 +2249,24 @@
               "NAVER",
               "GOOGLE",
               "APPLE"
-            ],
-            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+            ]
           },
           "snsId": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+            "type": "string"
           },
           "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 320,
-            "minLength": 1,
-            "description": "- 사용자 이메일 주소."
+            "type": "string"
           },
           "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]*$",
-            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+            "type": "string"
           },
           "phoneNumber": {
             "type": "string",
-            "pattern": "^010[0-9]{8}$",
-            "nullable": true,
-            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
+            "nullable": true
           },
           "nickname": {
             "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "nullable": true,
-            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
+            "nullable": true
           },
           "gender": {
             "type": "string",
@@ -2134,14 +2274,11 @@
               "MALE",
               "FEMALE"
             ],
-            "nullable": true,
-            "description": "- 사용자 성별."
+            "nullable": true
           },
           "birth": {
             "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "nullable": true,
-            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
+            "nullable": true
           },
           "belt": {
             "type": "string",
@@ -2153,23 +2290,18 @@
               "브라운",
               "블랙"
             ],
-            "nullable": true,
-            "description": "- 사용자 주짓수 벨트."
+            "nullable": true
           },
           "profileImageUrlKey": {
             "type": "string",
-            "maxLength": 1024,
-            "minLength": 1,
-            "nullable": true,
-            "description": "- 사용자 프로필 이미지 키. (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
+            "nullable": true
           },
           "status": {
             "type": "string",
             "enum": [
               "ACTIVE",
               "INACTIVE"
-            ],
-            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
+            ]
           },
           "createdAt": {
             "oneOf": [
@@ -2180,8 +2312,7 @@
               {
                 "type": "string"
               }
-            ],
-            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+            ]
           },
           "updatedAt": {
             "oneOf": [
@@ -2192,14 +2323,7 @@
               {
                 "type": "string"
               }
-            ],
-            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
-          },
-          "policyConsents": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PolicyConsentEntity"
-            }
+            ]
           }
         },
         "nullable": false,
@@ -2247,12 +2371,12 @@
           "result"
         ]
       },
-      "RegisterPhoneNumberDto": {
+      "RegisterPhoneNumberReqDto": {
         "type": "object",
         "properties": {
           "phoneNumber": {
             "type": "string",
-            "pattern": "^010[0-9]{8}$",
+            "pattern": "^01[0-9]{9}$",
             "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           }
         },
@@ -2291,7 +2415,7 @@
         "type": "string",
         "pattern": "^[0-9]{6}$"
       },
-      "PhoneNumberAuthCodeDto": {
+      "confirmAuthCodeReqDto": {
         "type": "object",
         "properties": {
           "authCode": {
@@ -2304,11 +2428,11 @@
           "authCode"
         ]
       },
-      "RegisterDto": {
+      "RegisterReqDto": {
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/PickUserEntitygenderbirthnicknamebelt"
+            "$ref": "#/components/schemas/PickIUsergenderbirthnicknamebelt"
           },
           "consentPolicyTypes": {
             "type": "array",
@@ -2329,7 +2453,7 @@
           "consentPolicyTypes"
         ]
       },
-      "PickUserEntitygenderbirthnicknamebelt": {
+      "PickIUsergenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
@@ -2486,7 +2610,7 @@
           "result"
         ]
       },
-      "ResponseFormArrayPolicyEntity": {
+      "ResponseFormFindAllPoliciesResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -2502,10 +2626,7 @@
             ]
           },
           "result": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PolicyEntity"
-            }
+            "$ref": "#/components/schemas/FindAllPoliciesResDto"
           }
         },
         "nullable": false,
@@ -2515,7 +2636,13 @@
           "result"
         ]
       },
-      "ResponseFormPolicyEntitynull": {
+      "FindAllPoliciesResDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IPolicy"
+        }
+      },
+      "ResponseFormFindOnePolicyResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -2531,7 +2658,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/PolicyEntity.Nullable"
+            "$ref": "#/components/schemas/IPolicy"
           }
         },
         "nullable": false,
@@ -2541,73 +2668,7 @@
           "result"
         ]
       },
-      "PolicyEntity.Nullable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
-          },
-          "version": {
-            "type": "number",
-            "description": "- 약관의 버전.\n- 버전이 변경될 때마다 새로운 약관으로 간주합니다."
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "TERMS_OF_SERVICE",
-              "PRIVACY",
-              "REFUND",
-              "ADVERTISEMENT"
-            ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
-          },
-          "isMandatory": {
-            "type": "boolean",
-            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1,
-            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string"
-              }
-            ]
-          },
-          "policyConsents": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PolicyConsentEntity"
-            }
-          }
-        },
-        "nullable": true,
-        "required": [
-          "id",
-          "version",
-          "type",
-          "isMandatory",
-          "title",
-          "content",
-          "createdAt"
-        ],
-        "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
-      },
-      "CreatePolicyDto": {
+      "CreatePolicyReqDto": {
         "type": "object",
         "properties": {
           "type": {
@@ -2644,7 +2705,7 @@
           "content"
         ]
       },
-      "ResponseFormPolicyEntity": {
+      "ResponseFormIPolicy": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -2660,7 +2721,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/PolicyEntity"
+            "$ref": "#/components/schemas/IPolicy"
           }
         },
         "nullable": false,
@@ -2670,7 +2731,7 @@
           "result"
         ]
       },
-      "PolicyTypeQuery": {
+      "FindAllPoliciesReqDto": {
         "type": "object",
         "properties": {
           "type": {

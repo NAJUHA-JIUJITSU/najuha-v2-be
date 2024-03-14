@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
-import { GoogleStrategy } from 'src/infrastructure/sns-auth-client/application/google.strategy';
-import { KakaoStrategy } from 'src/infrastructure/sns-auth-client/application/kakao.strategy';
-import { NaverStrategy } from 'src/infrastructure/sns-auth-client/application/naver.strategy';
-import { SnsAuthDto } from 'src/modules/auth/presentation/dto/sns-auth.dto';
-import { CreateUserDto } from 'src/modules/users/presentation/dto/create-user.dto';
+import { GoogleStrategy } from 'src/infrastructure/sns-auth-client/google.strategy';
+import { KakaoStrategy } from 'src/infrastructure/sns-auth-client/kakao.strategy';
+import { NaverStrategy } from 'src/infrastructure/sns-auth-client/naver.strategy';
+import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 
 @Injectable()
 export class SnsAuthClient {
@@ -15,8 +15,8 @@ export class SnsAuthClient {
     // private readonly appleStrategy: AppleStrategy,
   ) {}
 
-  async validate(snsAuthDto: SnsAuthDto): Promise<CreateUserDto> {
-    const { snsAuthProvider, snsAuthCode } = snsAuthDto;
+  async validate(SnsLoginReqDto: SnsLoginReqDto): Promise<CreateUserReqDto> {
+    const { snsAuthProvider, snsAuthCode } = SnsLoginReqDto;
 
     switch (snsAuthProvider) {
       // TODO: enum 으로 변경후 하나로 관리하기 (case UserEntity['snsProvider'].KAKAO:)

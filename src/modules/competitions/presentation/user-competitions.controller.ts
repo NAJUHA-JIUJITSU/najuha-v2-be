@@ -17,7 +17,7 @@ export class UserCompetitionsController {
   //    */
   //   @RoleLevels(RoleLevel.USER)
   //   @TypedRoute.Post('/')
-  //   async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<UserEntity>> {
+  //   async postUser(@TypedBody() dto: CreateUserReqDto): Promise<ResponseForm<UserEntity>> {
   //     const user = await this. UsersAppService.createUser(dto);
   //     return createResponseForm(user);
   //   }

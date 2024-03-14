@@ -1,5 +1,5 @@
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
-import { RegisterDto } from '../presentation/dto/register.dto';
+import { RegisterReqDto } from '../dto/request/register.req.dto';
 import { IUser } from 'src/interfaces/user.interface';
 import { IPolicyConsent } from 'src/interfaces/policy-consent.interface';
 import { IPolicy } from 'src/interfaces/policy.interface';
@@ -11,7 +11,7 @@ export class RegisterUser {
 
   constructor(
     user: IUser,
-    registerUserInfo: RegisterDto['user'],
+    registerUserInfo: RegisterReqDto['user'],
     registerUserConsentPolicyTypes: IPolicy['type'][],
     latestPolicies: IPolicy[],
   ) {

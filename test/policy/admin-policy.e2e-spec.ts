@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { CreatePolicyDto } from 'src/modules/policy/presentation/dto/create-policy.dto';
+import { CreatePolicyReqDto } from 'src/modules/policy/dto/request/create-policy.req.dto';
 import exp from 'constants';
 // import * as Apis from '../../src/api/functional';
 
@@ -53,7 +53,7 @@ describe('E2E a-4 admin-policy test', () => {
 
   describe('a-4-1 POST /admin/policy -----------------------------------------------------', () => {
     it('약관 생성하기 성공 시', async () => {
-      const createPolicyDto = typia.random<CreatePolicyDto>();
+      const CreatePolicyReqDto = typia.random<CreatePolicyReqDto>();
       const accessToken = jwtService.sign(
         { userId: 1, userRole: 'ADMIN' },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -62,7 +62,7 @@ describe('E2E a-4 admin-policy test', () => {
       const res = await request(app.getHttpServer())
         .post('/admin/policy')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(createPolicyDto);
+        .send(CreatePolicyReqDto);
     });
   });
 

@@ -3,10 +3,10 @@ import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { USERS_USER_NOT_FOUND } from 'src/common/response/errorResponse';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { CreateUserDto } from 'src/modules/users/presentation/dto/create-user.dto';
-import { UpdateUserDto } from 'src/modules/users/presentation/dto/update-user.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
+import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
-import { IUser } from 'src/interfaces/user.interface';
+import { UserResDto } from '../dto/response/user.res.dto';
 
 // TODO: GaurdLevel 설설
 @Controller('user/users')
@@ -22,9 +22,9 @@ export class UserUsersController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
-  async postUser(@TypedBody() dto: CreateUserDto): Promise<ResponseForm<IUser>> {
-    const user = await this.UsersAppService.createUser(dto);
-    return createResponseForm(user);
+  async postUser(@TypedBody() dto: CreateUserReqDto): Promise<ResponseForm<UserResDto>> {
+    const ret = await this.UsersAppService.createUser(dto);
+    return createResponseForm(ret);
   }
 
   /**
@@ -32,15 +32,15 @@ export class UserUsersController {
    * - RoleLevel: USER
    *
    * @tag u-3 users
-   * @param dto UpdateUserDto
+   * @param dto UpdateUserReqDto
    * @returns updated user
    */
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
-  async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserDto): Promise<ResponseForm<IUser>> {
-    const user = await this.UsersAppService.updateUser(req['userId'], dto);
-    return createResponseForm(user);
+  async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserReqDto): Promise<ResponseForm<UserResDto>> {
+    const ret = await this.UsersAppService.updateUser(req['userId'], dto);
+    return createResponseForm(ret);
   }
 
   /**
@@ -53,8 +53,8 @@ export class UserUsersController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
-  async getMe(@Req() req: Request): Promise<ResponseForm<IUser>> {
-    const user = await this.UsersAppService.getMe(req['userId']);
-    return createResponseForm(user);
+  async getMe(@Req() req: Request): Promise<ResponseForm<UserResDto>> {
+    const ret = await this.UsersAppService.getMe(req['userId']);
+    return createResponseForm(ret);
   }
 }

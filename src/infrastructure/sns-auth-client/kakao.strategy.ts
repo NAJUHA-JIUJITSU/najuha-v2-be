@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { KakaoUserData } from 'src/infrastructure/sns-auth-client/types/kakao-user-data.type';
 import { SnsAuthStrategy } from 'src/infrastructure/sns-auth-client/types/sns-auth.strategy.type';
-import { CreateUserDto } from 'src/modules/users/presentation/dto/create-user.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 
@@ -11,12 +11,12 @@ import appEnv from 'src/common/app-env';
 export class KakaoStrategy implements SnsAuthStrategy {
   constructor(private readonly httpService: HttpService) {}
 
-  async validate(snsAuthCode: string): Promise<CreateUserDto> {
+  async validate(snsAuthCode: string): Promise<CreateUserReqDto> {
     try {
       const snsAccessToken = await this.getAccessToken(snsAuthCode);
       const kakaoUserData = await this.getUserData(snsAccessToken);
 
-      return this.convertUserDataToCreateUserDto(kakaoUserData);
+      return this.convertUserDataToCreateUserReqDto(kakaoUserData);
     } catch (e) {
       throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL, e.response.data);
     }
@@ -52,8 +52,8 @@ export class KakaoStrategy implements SnsAuthStrategy {
     return response.data;
   }
 
-  private convertUserDataToCreateUserDto(data: KakaoUserData): CreateUserDto {
-    const dto: CreateUserDto = {
+  private convertUserDataToCreateUserReqDto(data: KakaoUserData): CreateUserReqDto {
+    const dto: CreateUserReqDto = {
       snsAuthProvider: 'KAKAO', // TODO: type으로 관리
       snsId: data.id.toString(),
       name: data.kakao_account.name,

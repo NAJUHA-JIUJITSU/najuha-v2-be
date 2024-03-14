@@ -1,8 +1,8 @@
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { SnsAuthDto } from 'src/modules/auth/presentation/dto/sns-auth.dto';
+import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
 import { AuthAppService } from 'src/modules/auth/application/auth.app.service';
-import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -12,7 +12,7 @@ import {
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
   USERS_USER_NOT_FOUND,
 } from 'src/common/response/errorResponse';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { RefreshTokenReqDto } from '../dto/request/refresh-token.dto';
 import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 
@@ -33,7 +33,7 @@ export class UserAuthController {
   @TypedException<SNS_AUTH_GOOGLE_LOGIN_FAIL>(2003, 'SNS_AUTH_GOOGLE_LOGIN_FAIL')
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('sns-login')
-  async snsLogin(@TypedBody() dto: SnsAuthDto): Promise<ResponseForm<AuthTokensDto>> {
+  async snsLogin(@TypedBody() dto: SnsLoginReqDto): Promise<ResponseForm<AuthTokensResDto>> {
     const authTokens = await this.AuthAppService.snsLogin(dto);
     return createResponseForm(authTokens);
   }
@@ -48,7 +48,7 @@ export class UserAuthController {
   @TypedException<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(1002, 'AUTH_REFRESH_TOKEN_UNAUTHORIZED')
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('token')
-  async refreshToken(@TypedBody() dto: RefreshTokenDto): Promise<ResponseForm<AuthTokensDto>> {
+  async refreshToken(@TypedBody() dto: RefreshTokenReqDto): Promise<ResponseForm<AuthTokensResDto>> {
     const authTokens = await this.AuthAppService.refreshToken(dto);
     return createResponseForm(authTokens);
   }
@@ -66,7 +66,7 @@ export class UserAuthController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('acquire-admin-role')
-  async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensDto>> {
+  async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensResDto>> {
     const authTokens = await this.AuthAppService.acquireAdminRole(req['userId']);
     return createResponseForm(authTokens);
   }

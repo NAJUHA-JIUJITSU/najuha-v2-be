@@ -9,7 +9,7 @@ import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UpdateUserDto } from 'src/modules/users/presentation/dto/update-user.dto';
+import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
 import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 // import * as Apis from '../../src/api/functional';
 
@@ -58,7 +58,7 @@ describe('E2E u-3 user-users test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
-      const updateUserDto: UpdateUserDto = {
+      const UpdateUserReqDto: UpdateUserReqDto = {
         name: 'updateName',
         nickname: 'updateNickname',
         gender: 'MALE',
@@ -66,12 +66,12 @@ describe('E2E u-3 user-users test', () => {
         birth: '19980101',
       };
 
-      console.log('updateUserDto:', updateUserDto);
+      console.log('UpdateUserReqDto:', UpdateUserReqDto);
 
       const res = await request(app.getHttpServer())
         .patch('/user/users')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(updateUserDto);
+        .send(UpdateUserReqDto);
 
       expect(typia.is<ResponseForm<UserEntity>>(res.body)).toBe(true);
     });

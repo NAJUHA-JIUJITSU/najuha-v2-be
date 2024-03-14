@@ -1,3 +1,5 @@
+import { IEarlyBirdDiscountStrategy } from './early-bird-discount-strategy.interface';
+
 export interface ICompetition {
   /**
    * - 대회의 고유 식별자. 데이터베이스에서 자동으로 생성됩니다.
@@ -17,43 +19,43 @@ export interface ICompetition {
   /**
    * - 대회 날짜.
    */
-  competitionDate: Date;
+  competitionDate: Date | string;
 
   /**
    * - 참가 신청 시작일.
    */
-  registrationStartDate: Date;
+  registrationStartDate: Date | string;
 
   /**
    * - 참가 신청 마감일.
    */
-  registrationEndDate: Date;
+  registrationEndDate: Date | string;
 
   /**
    * - 환불 가능 기간 마감일.
    */
-  refundDeadlineDate: Date;
+  refundDeadlineDate: Date | string;
 
   /**
    * - 단독 참가자의 부문 조정 시작일.
    * - 부문에 참가자가 한 명만 있는 경우, 해당 참가자를 다른 체급이나 부문으로 조정할 수 있는 기간의 시작을 나타냅니다.
    */
-  soloRegistrationAdjustmentStartDate: Date;
+  soloRegistrationAdjustmentStartDate: Date | string;
 
   /**
    * - 단독 참가자의 부문 조정 마감일.
    */
-  soloRegistrationAdjustmentEndDate: Date;
+  soloRegistrationAdjustmentEndDate: Date | string;
 
   /**
    * - 참가자 명단 공개일.
    */
-  registrationListOpenDate: Date;
+  registrationListOpenDate: Date | string;
 
   /**
    * - 대진표 공개일.
    */
-  bracketOpenDate: Date;
+  bracketOpenDate: Date | string;
 
   /**
    * - 대회 상세 정보.
@@ -75,4 +77,11 @@ export interface ICompetition {
    * - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간.
    */
   updatedAt: Date | string;
+
+  /**
+   * - 대회의 얼리버드 할인 전략.
+   * - OneToOne: Competition(1) -> EarlyBirdDiscountStrategy(1)
+   * - JoinColumn: competitionId
+   */
+  earlyBirdDiscountStrategy?: IEarlyBirdDiscountStrategy;
 }

@@ -1,0 +1,1 @@
+export type IsDuplicatedNicknameResDto = boolean;

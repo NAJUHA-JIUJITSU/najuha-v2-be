@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
-import { RefreshTokenDto } from 'src/modules/auth/presentation/dto/refresh-token.dto';
-import { SnsAuthDto } from 'src/modules/auth/presentation/dto/sns-auth.dto';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
+import { RefreshTokenReqDto } from 'src/modules/auth/dto/request/refresh-token.dto';
+import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
 import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import { UsersRepository } from 'src/infrastructure/database/repositories/users.repository';
@@ -17,8 +17,8 @@ export class AuthAppService {
     private readonly AuthTokenDomainService: AuthTokenDomainService,
   ) {}
 
-  async snsLogin(snsAuthDto: SnsAuthDto): Promise<AuthTokensDto> {
-    const userData = await this.snsAuthClient.validate(snsAuthDto);
+  async snsLogin(SnsLoginReqDto: SnsLoginReqDto): Promise<AuthTokensResDto> {
+    const userData = await this.snsAuthClient.validate(SnsLoginReqDto);
     let user = await this.usersRepository.findOneBy({
       snsId: userData.snsId,
       snsAuthProvider: userData.snsAuthProvider,
@@ -31,15 +31,15 @@ export class AuthAppService {
     return authTokens;
   }
 
-  async refreshToken(refreshTokenDto: RefreshTokenDto): Promise<AuthTokensDto> {
-    const { refreshToken } = refreshTokenDto;
+  async refreshToken(RefreshTokenReqDto: RefreshTokenReqDto): Promise<AuthTokensResDto> {
+    const { refreshToken } = RefreshTokenReqDto;
     const payload = await this.AuthTokenDomainService.verifyRefreshToken(refreshToken);
     const authTokens = await this.AuthTokenDomainService.createAuthTokens(payload.userId, payload.userRole);
 
     return authTokens;
   }
 
-  async acquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensDto> {
+  async acquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensResDto> {
     const user = await this.usersRepository.getOneOrFail({ where: { id: userId } });
 
     const isCurrentAdmin = appEnv.adminCredentials.some(

@@ -3,18 +3,20 @@ import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RegisterAppService } from '../application/register.app.service';
-import { RegisterDto } from './dto/register.dto';
+import { RegisterReqDto } from '../dto/request/register.req.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
   USERS_USER_NOT_FOUND,
 } from 'src/common/response/errorResponse';
-import { AuthTokensDto } from 'src/modules/auth/presentation/dto/auth-tokens.dto';
-import { RegisterPhoneNumberDto } from './dto/register-phone-number.dto';
-import { PhoneNumberAuthCode } from './dto/phone-number-auth-code.type';
-import { PhoneNumberAuthCodeDto } from './dto/phone-number-auth-code.dto';
-import { ITemporaryUser } from 'src/interfaces/temporary-user.interface';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
+import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.req..dto';
+import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
+import { TemporaryUserResDto } from 'src/modules/users/dto/response/temporary-user.res.dto';
+import { IsDuplicatedNicknameResDto } from '../dto/response/is-duplicated-nickname.res.dto';
+import { ConfirmedAuthCodeResDto } from '../dto/response/confirm-auth-code.res.dto';
+import { SendPhoneNumberAuthCodeResDto } from '../dto/response/send-phone-number-auth-code.res';
 
 @Controller('user/register')
 export class UserRegisterController {
@@ -30,9 +32,9 @@ export class UserRegisterController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
-  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<ITemporaryUser>> {
-    const user = await this.RegisterAppService.getTemporaryUser(req['userId']);
-    return createResponseForm(user);
+  async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserResDto>> {
+    const ret = await this.RegisterAppService.getTemporaryUser(req['userId']);
+    return createResponseForm(ret);
   }
 
   /**
@@ -48,12 +50,12 @@ export class UserRegisterController {
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/:nickname/is-duplicated')
-  async checkDuplicateNickname(
+  async isDuplicateNickname(
     @Req() req: Request,
     @TypedParam('nickname') nickname: string,
-  ): Promise<ResponseForm<boolean>> {
-    const isDuplicated = await this.RegisterAppService.isDuplicateNickname(req['userId'], nickname);
-    return createResponseForm(isDuplicated);
+  ): Promise<ResponseForm<IsDuplicatedNicknameResDto>> {
+    const ret = await this.RegisterAppService.isDuplicateNickname(req['userId'], nickname);
+    return createResponseForm(ret);
   }
 
   /**
@@ -68,11 +70,11 @@ export class UserRegisterController {
   @TypedRoute.Post('phone-number/auth-code')
   async sendPhoneNumberAuthCode(
     @Req() req: Request,
-    @TypedBody() dto: RegisterPhoneNumberDto,
-  ): Promise<ResponseForm<PhoneNumberAuthCode>> {
+    @TypedBody() dto: RegisterPhoneNumberReqDto,
+  ): Promise<ResponseForm<SendPhoneNumberAuthCodeResDto>> {
     // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
-    const authCode = await this.RegisterAppService.sendPhoneNumberAuthCode(req['userId'], dto);
-    return createResponseForm(authCode);
+    const ret = await this.RegisterAppService.sendPhoneNumberAuthCode(req['userId'], dto);
+    return createResponseForm(ret);
   }
 
   /**
@@ -83,15 +85,18 @@ export class UserRegisterController {
    * - 인증성공시 true, 실패시 false를 반환한다.
    *
    * @tag u-2 register
-   * @param dto PhoneNumberAuthCodeDto
+   * @param dto confirmAuthCodeReqDto
    * @returns true or false
    */
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code/confirm')
-  async confirmAuthCode(@Req() req: Request, @TypedBody() dto: PhoneNumberAuthCodeDto): Promise<ResponseForm<boolean>> {
-    const isConfirmed = await this.RegisterAppService.confirmAuthCode(req['userId'], dto);
-    return createResponseForm(isConfirmed);
+  async confirmAuthCode(
+    @Req() req: Request,
+    @TypedBody() dto: confirmAuthCodeReqDto,
+  ): Promise<ResponseForm<ConfirmedAuthCodeResDto>> {
+    const ret = await this.RegisterAppService.confirmAuthCode(req['userId'], dto);
+    return createResponseForm(ret);
   }
 
   /**
@@ -101,7 +106,7 @@ export class UserRegisterController {
    * - USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.
    *
    * @tag u-2 register
-   * @param dto RegisterDto
+   * @param dto RegisterReqDto
    * @returns accessToken & refreshToken
    */
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(3000, 'REGISTER_NICKNAME_DUPLICATED')
@@ -110,9 +115,8 @@ export class UserRegisterController {
   @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Patch()
-  async registerUser(@Req() req: Request, @TypedBody() dto: RegisterDto): Promise<ResponseForm<AuthTokensDto>> {
-    const userId = req['userId'];
-    const authTokens = await this.RegisterAppService.registerUser(userId, dto);
+  async registerUser(@Req() req: Request, @TypedBody() dto: RegisterReqDto): Promise<ResponseForm<AuthTokensResDto>> {
+    const authTokens = await this.RegisterAppService.registerUser(req['userId'], dto);
     return createResponseForm(authTokens);
   }
 }

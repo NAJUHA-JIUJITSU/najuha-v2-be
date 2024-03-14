@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { NaverUserData } from 'src/infrastructure/sns-auth-client/types/naver-user-data.type';
 import { SnsAuthStrategy } from 'src/infrastructure/sns-auth-client/types/sns-auth.strategy.type';
-import { CreateUserDto } from 'src/modules/users/presentation/dto/create-user.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 
@@ -11,12 +11,12 @@ import appEnv from 'src/common/app-env';
 export class NaverStrategy implements SnsAuthStrategy {
   constructor(private readonly httpService: HttpService) {}
 
-  async validate(snsAuthCode: string): Promise<CreateUserDto> {
+  async validate(snsAuthCode: string): Promise<CreateUserReqDto> {
     try {
       const snsAccessToken = await this.getAccessToken(snsAuthCode);
       const naverUserData = await this.getUserData(snsAccessToken);
 
-      return this.convertUserDataToCreateUserDto(naverUserData);
+      return this.convertUserDataToCreateUserReqDto(naverUserData);
     } catch (e) {
       throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL, e.response.data);
     }
@@ -53,8 +53,8 @@ export class NaverStrategy implements SnsAuthStrategy {
     return response.data.response;
   }
 
-  private convertUserDataToCreateUserDto(data: NaverUserData): CreateUserDto {
-    const dto: CreateUserDto = {
+  private convertUserDataToCreateUserReqDto(data: NaverUserData): CreateUserReqDto {
+    const dto: CreateUserReqDto = {
       snsAuthProvider: 'NAVER', // TODO: type으로 관리
       snsId: data.id,
       name: data.name,
