@@ -11,14 +11,11 @@ export interface IPolicyConsent {
    */
   id: number;
 
-  /** - 사용자 ID. */
-  userId: number;
-
-  /** - 약관 ID. */
-  policyId: number;
-
   /** - 동의 날짜. */
   createdAt: Date | string;
+
+  /** - 사용자 ID. */
+  userId: number;
 
   /**
    * - 사용자 정보
@@ -26,6 +23,9 @@ export interface IPolicyConsent {
    * - JoinColumn: userId
    */
   user?: IUser;
+
+  /** - 약관 ID. */
+  policyId: number;
 
   /**
    * - 약관 정보

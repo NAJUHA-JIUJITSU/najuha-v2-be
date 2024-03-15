@@ -1,8 +1,9 @@
-import { IEarlyBirdDiscountStrategy } from './early-bird-discount-strategy.interface';
+import { IApplication } from './application.interface';
+import { ICompetition } from './competition.interface';
 
 export interface IDivision {
   /**
-   * - 부문 id.
+   * - divison id.
    */
   id: number;
 
@@ -60,4 +61,22 @@ export interface IDivision {
    * - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간.
    */
   updatedAt: Date | string;
+
+  /**
+   * - 대회 id.
+   */
+  competitionId: number;
+
+  /**
+   * - 대회 정보.
+   * - ManyToOne: Competition(1) -> Division(1)
+   * - JoinColumn: competitionId
+   */
+  competition?: ICompetition;
+
+  /**
+   * - 부문에 대한 신청 목록.
+   * - OneToMany: Division(1) -> Application(*)
+   */
+  applications: IApplication[];
 }

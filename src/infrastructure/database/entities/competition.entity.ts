@@ -15,40 +15,49 @@ export class CompetitionEntity implements ICompetition {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 256, default: 'DEFAULT TITLE' })
   title: string;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 256, default: 'DEFAULT ADDRESS' })
   address: string;
 
-  @Column('date')
-  competitionDate: Date | string;
+  @Column('date', { nullable: true })
+  competitionDate: null | Date | string;
 
-  @Column('date')
-  registrationStartDate: Date | string;
+  @Column('date', { nullable: true })
+  registrationStartDate: null | Date | string;
 
-  @Column('date')
-  registrationEndDate: Date | string;
+  @Column('date', { nullable: true })
+  registrationEndDate: null | Date | string;
 
-  @Column('date')
-  refundDeadlineDate: Date | string;
+  @Column('date', { nullable: true })
+  refundDeadlineDate: null | Date | string;
 
-  @Column('date')
-  soloRegistrationAdjustmentStartDate: Date | string;
+  @Column('date', { nullable: true })
+  soloRegistrationAdjustmentStartDate: null | Date | string;
 
-  @Column('date')
-  soloRegistrationAdjustmentEndDate: Date | string;
+  @Column('date', { nullable: true })
+  soloRegistrationAdjustmentEndDate: null | Date | string;
 
-  @Column('date')
-  registrationListOpenDate: Date | string;
+  @Column('date', { nullable: true })
+  registrationListOpenDate: null | Date | string;
 
-  @Column('date')
-  bracketOpenDate: Date | string;
+  @Column('date', { nullable: true })
+  bracketOpenDate: null | Date | string;
 
-  @Column('text')
+  @Column('text', { default: 'DEFAULT DESCRIPTION' })
   description: string;
 
-  @Column('varchar', { length: 10, default: 'INACTIVE' })
+  @Column('boolean', { default: false })
+  isPartnership: boolean;
+
+  @Column('int', { default: 0 })
+  viewCount: number;
+
+  @Column('varchar', { length: 256, nullable: true })
+  posterImgUrlKey: null | string;
+
+  @Column('varchar', { length: 16, default: 'INACTIVE' })
   status: 'ACTIVE' | 'INACTIVE';
 
   @CreateDateColumn()

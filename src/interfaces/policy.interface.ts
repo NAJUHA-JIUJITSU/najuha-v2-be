@@ -37,7 +37,7 @@ export interface IPolicy {
   /**
    * - 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책.
    * @minLength 1
-   * @maxLength 255
+   * @maxLength 128
    */
   title: string; // 약관의 제목
 
@@ -48,9 +48,7 @@ export interface IPolicy {
    */
   content: string;
 
-  /**
-   * - 약관 생성 날짜
-   */
+  /** - 약관 생성 날짜 */
   createdAt: Date | string;
 
   /**

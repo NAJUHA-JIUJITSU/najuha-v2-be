@@ -10,13 +10,13 @@ export class PolicyEntity implements IPolicy {
   @Column('int', { default: 1 })
   version: number;
 
-  @Column('varchar', { length: 50 })
+  @Column('varchar', { length: 64 })
   type: 'TERMS_OF_SERVICE' | 'PRIVACY' | 'REFUND' | 'ADVERTISEMENT';
 
   @Column('boolean', { default: false })
   isMandatory: boolean;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 128 })
   title: string;
 
   @Column('text')

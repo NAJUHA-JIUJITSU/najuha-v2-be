@@ -1,3 +1,3 @@
 import { IPolicy } from 'src/interfaces/policy.interface';
 
-export type FindAllPoliciesResDto = IPolicy[];
+export type PolicyResDto = IPolicy;

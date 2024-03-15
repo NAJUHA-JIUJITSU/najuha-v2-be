@@ -11,7 +11,7 @@ import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.
 import { RegisterUser } from '../domain/registerUser.entity';
 import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
 import { IUser } from 'src/interfaces/user.interface';
-import { TemporaryUserResDto } from 'src/modules/users/dto/response/temporary-user.res.dto';
+import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
 import { IsDuplicatedNicknameResDto } from '../dto/response/is-duplicated-nickname.res.dto';
 import { ConfirmedAuthCodeResDto } from '../dto/response/confirm-auth-code.res.dto';
 import { SendPhoneNumberAuthCodeResDto } from '../dto/response/send-phone-number-auth-code.res';

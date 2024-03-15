@@ -1,25 +1,19 @@
 import { Injectable } from '@nestjs/common';
-// import { CompetitionEntity } from 'src/Competitions/entities/Competition.entity';
 import { CompetitionsRepository } from '../../../infrastructure/database/repositories/competitions.repository';
-// import { UpdateCompetitionDto } from './dto/update-Competition.dto';
+import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
+import { CompetitionResDto } from '../dto/response/competition.res.dto';
+import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
 
 @Injectable()
 export class CompetitionsAppService {
   constructor(private readonly CompetitionsRepository: CompetitionsRepository) {}
 
-  //   async createCompetition(dto: CreateCompetitionDto): Promise<CompetitionEntity> {
-  //     const Competition = this.CompetitionsRepository.create(dto);
-  //     return await this.CompetitionsRepository.save(Competition);
-  //   }
+  async createCompetition(dto: CreateCompetitionReqDto): Promise<CompetitionResDto> {
+    const competition = this.CompetitionsRepository.create(dto);
+    return await this.CompetitionsRepository.save(competition);
+  }
 
-  //   async updateCompetition(
-  //     CompetitionId: CompetitionEntity['id'],
-  //     dto: UpdateCompetitionDto,
-  //   ): Promise<CompetitionEntity> {
-  //     return await this.CompetitionsRepository.saveOrFail({ id: CompetitionId, ...dto });
-  //   }
-
-  //   async getMe(CompetitionId: CompetitionEntity['id']): Promise<CompetitionEntity> {
-  //     return await this.CompetitionsRepository.getOneOrFail({ where: { id: CompetitionId } });
-  //   }
+  async updateCompetition(dto: UpdateCompetitionReqDto): Promise<CompetitionResDto> {
+    return await this.CompetitionsRepository.saveOrFail(dto);
+  }
 }

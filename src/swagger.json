@@ -17,9 +17,7 @@
   "paths": {
     "/api-conventions/auth-guard": {
       "get": {
-        "tags": [
-          "api-conventions"
-        ],
+        "tags": ["api-conventions"],
         "parameters": [],
         "responses": {
           "200": {
@@ -76,9 +74,7 @@
     },
     "/api-conventions/user-api-vs-admin-api": {
       "get": {
-        "tags": [
-          "api-conventions"
-        ],
+        "tags": ["api-conventions"],
         "parameters": [],
         "responses": {
           "200": {
@@ -105,9 +101,7 @@
     },
     "/api-conventions/find-vs-get": {
       "get": {
-        "tags": [
-          "api-conventions"
-        ],
+        "tags": ["api-conventions"],
         "parameters": [],
         "responses": {
           "200": {
@@ -134,9 +128,7 @@
     },
     "/api-conventions/update": {
       "get": {
-        "tags": [
-          "api-conventions"
-        ],
+        "tags": ["api-conventions"],
         "parameters": [],
         "responses": {
           "200": {
@@ -163,9 +155,7 @@
     },
     "/user/auth/sns-login": {
       "post": {
-        "tags": [
-          "u-1 auth"
-        ],
+        "tags": ["u-1 auth"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -259,9 +249,7 @@
     },
     "/user/auth/token": {
       "post": {
-        "tags": [
-          "u-1 auth"
-        ],
+        "tags": ["u-1 auth"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -325,9 +313,7 @@
     },
     "/user/auth/acquire-admin-role": {
       "patch": {
-        "tags": [
-          "u-1 auth"
-        ],
+        "tags": ["u-1 auth"],
         "parameters": [],
         "responses": {
           "201": {
@@ -390,9 +376,7 @@
     },
     "/user/users": {
       "post": {
-        "tags": [
-          "u-3 users"
-        ],
+        "tags": ["u-3 users"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -444,9 +428,7 @@
         "x-nestia-method": "POST"
       },
       "patch": {
-        "tags": [
-          "u-3 users"
-        ],
+        "tags": ["u-3 users"],
         "parameters": [],
         "requestBody": {
           "description": "UpdateUserReqDto",
@@ -528,9 +510,7 @@
     },
     "/user/users/me": {
       "get": {
-        "tags": [
-          "u-3 users"
-        ],
+        "tags": ["u-3 users"],
         "parameters": [],
         "responses": {
           "200": {
@@ -583,9 +563,7 @@
     },
     "/user/register/users/me": {
       "get": {
-        "tags": [
-          "u-2 register"
-        ],
+        "tags": ["u-2 register"],
         "parameters": [],
         "responses": {
           "200": {
@@ -593,7 +571,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormTemporaryUserResDto"
+                  "$ref": "#/components/schemas/ResponseFormGetTemporaryUserResDto"
                 }
               }
             },
@@ -638,9 +616,7 @@
     },
     "/user/register/users/{nickname}/is-duplicated": {
       "get": {
-        "tags": [
-          "u-2 register"
-        ],
+        "tags": ["u-2 register"],
         "parameters": [
           {
             "name": "nickname",
@@ -710,9 +686,7 @@
     },
     "/user/register/phone-number/auth-code": {
       "post": {
-        "tags": [
-          "u-2 register"
-        ],
+        "tags": ["u-2 register"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -766,9 +740,7 @@
     },
     "/user/register/phone-number/auth-code/confirm": {
       "post": {
-        "tags": [
-          "u-2 register"
-        ],
+        "tags": ["u-2 register"],
         "parameters": [],
         "requestBody": {
           "description": "confirmAuthCodeReqDto",
@@ -850,9 +822,7 @@
     },
     "/user/register": {
       "patch": {
-        "tags": [
-          "u-2 register"
-        ],
+        "tags": ["u-2 register"],
         "parameters": [],
         "requestBody": {
           "description": "RegisterReqDto",
@@ -964,9 +934,7 @@
     },
     "/user/policy/recent": {
       "get": {
-        "tags": [
-          "u-4 policy"
-        ],
+        "tags": ["u-4 policy"],
         "parameters": [],
         "responses": {
           "200": {
@@ -974,7 +942,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindAllPoliciesResDto"
+                  "$ref": "#/components/schemas/ResponseFormFindPoliciesResDto"
                 }
               }
             },
@@ -1009,9 +977,7 @@
     },
     "/user/policy/{id}": {
       "get": {
-        "tags": [
-          "u-4 policy"
-        ],
+        "tags": ["u-4 policy"],
         "parameters": [
           {
             "name": "id",
@@ -1029,7 +995,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindOnePolicyResDto"
+                  "$ref": "#/components/schemas/ResponseFormFindPolicyResDto"
                 }
               }
             },
@@ -1038,7 +1004,7 @@
         },
         "summary": "u-4-2 find policy by id",
         "description": "u-4-2 find policy by id.\n- RoleLevel: USER",
-        "x-nestia-namespace": "user.policy.findOnePolicy",
+        "x-nestia-namespace": "user.policy.findPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1081,9 +1047,7 @@
     },
     "/admin/policy": {
       "post": {
-        "tags": [
-          "a-4 policy"
-        ],
+        "tags": ["a-4 policy"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1134,15 +1098,13 @@
         "x-nestia-method": "POST"
       },
       "get": {
-        "tags": [
-          "a-4 policy"
-        ],
+        "tags": ["a-4 policy"],
         "parameters": [
           {
             "name": "query",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/FindAllPoliciesReqDto"
+              "$ref": "#/components/schemas/FindPoliciesReqDto"
             },
             "description": "",
             "required": true
@@ -1154,7 +1116,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindAllPoliciesResDto"
+                  "$ref": "#/components/schemas/ResponseFormFindPoliciesResDto"
                 }
               }
             },
@@ -1163,7 +1125,7 @@
         },
         "summary": "a-4-1 find all policies",
         "description": "a-4-1 find all policies.\n- RoleLevel: ADMIN",
-        "x-nestia-namespace": "admin.policy.findAllPolicies",
+        "x-nestia-namespace": "admin.policy.findPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1212,37 +1174,24 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              400
-            ]
+            "enum": [400]
           },
           "code": {
             "type": "number",
-            "enum": [
-              1000
-            ]
+            "enum": [1000]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "accssToken이 없습니다."
-            ]
+            "enum": ["accssToken이 없습니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ],
+        "required": ["isSuccess", "status", "code", "result"],
         "description": "----------------------------------------------------------------------------\nAuth 1000 ~ 1999"
       },
       "AUTH_ACCESS_TOKEN_UNAUTHORIZED": {
@@ -1250,86 +1199,55 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              401
-            ]
+            "enum": [401]
           },
           "code": {
             "type": "number",
-            "enum": [
-              1001
-            ]
+            "enum": [1001]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "유효하지 않은 accessToken 입니다."
-            ]
+            "enum": ["유효하지 않은 accessToken 입니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "AUTH_LEVEL_FORBIDDEN": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              403
-            ]
+            "enum": [403]
           },
           "code": {
             "type": "number",
-            "enum": [
-              1003
-            ]
+            "enum": [1003]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "API 호출 권한이 없습니다."
-            ]
+            "enum": ["API 호출 권한이 없습니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "SnsLoginReqDto": {
         "type": "object",
         "properties": {
           "snsAuthProvider": {
             "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
+            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"],
             "description": "snsProvider."
           },
           "snsAuthCode": {
@@ -1338,47 +1256,31 @@
           }
         },
         "nullable": false,
-        "required": [
-          "snsAuthProvider",
-          "snsAuthCode"
-        ]
+        "required": ["snsAuthProvider", "snsAuthCode"]
       },
       "SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              400
-            ]
+            "enum": [400]
           },
           "code": {
             "type": "number",
-            "enum": [
-              2000
-            ]
+            "enum": [2000]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "지원하지 않는 SNS AUTH PROVIDER 입니다."
-            ]
+            "enum": ["지원하지 않는 SNS AUTH PROVIDER 입니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ],
+        "required": ["isSuccess", "status", "code", "result"],
         "description": "----------------------------------------------------------------------------\nSnsAuth 2000 ~ 2999"
       },
       "SNS_AUTH_KAKAO_LOGIN_FAIL": {
@@ -1386,137 +1288,90 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              400
-            ]
+            "enum": [400]
           },
           "code": {
             "type": "number",
-            "enum": [
-              2001
-            ]
+            "enum": [2001]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "카카오 로그인에 실패했습니다."
-            ]
+            "enum": ["카카오 로그인에 실패했습니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "SNS_AUTH_NAVER_LOGIN_FAIL": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              400
-            ]
+            "enum": [400]
           },
           "code": {
             "type": "number",
-            "enum": [
-              2002
-            ]
+            "enum": [2002]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "네이버 로그인에 실패했습니다."
-            ]
+            "enum": ["네이버 로그인에 실패했습니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "SNS_AUTH_GOOGLE_LOGIN_FAIL": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              400
-            ]
+            "enum": [400]
           },
           "code": {
             "type": "number",
-            "enum": [
-              2003
-            ]
+            "enum": [2003]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "구글 로그인에 실패했습니다."
-            ]
+            "enum": ["구글 로그인에 실패했습니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "ResponseFormAuthTokensResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
             "$ref": "#/components/schemas/AuthTokensResDto"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
       "AuthTokensResDto": {
         "type": "object",
@@ -1529,10 +1384,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "accessToken",
-          "refreshToken"
-        ]
+        "required": ["accessToken", "refreshToken"]
       },
       "RefreshTokenReqDto": {
         "type": "object",
@@ -1542,120 +1394,79 @@
           }
         },
         "nullable": false,
-        "required": [
-          "refreshToken"
-        ]
+        "required": ["refreshToken"]
       },
       "AUTH_REFRESH_TOKEN_UNAUTHORIZED": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              401
-            ]
+            "enum": [401]
           },
           "code": {
             "type": "number",
-            "enum": [
-              1002
-            ]
+            "enum": [1002]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "유효하지 않은 refreshToken 입니다."
-            ]
+            "enum": ["유효하지 않은 refreshToken 입니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "AUTH_UNREGISTERED_ADMIN_CREDENTIALS": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              403
-            ]
+            "enum": [403]
           },
           "code": {
             "type": "number",
-            "enum": [
-              1004
-            ]
+            "enum": [1004]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "등록되지 않은 관리자 계정입니다."
-            ]
+            "enum": ["등록되지 않은 관리자 계정입니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "USERS_USER_NOT_FOUND": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              404
-            ]
+            "enum": [404]
           },
           "code": {
             "type": "number",
-            "enum": [
-              4001
-            ]
+            "enum": [4001]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "존재하지 않는 유저입니다."
-            ]
+            "enum": ["존재하지 않는 유저입니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ],
+        "required": ["isSuccess", "status", "code", "result"],
         "description": "----------------------------------------------------------------------------\nUsers 4000 ~ 4999"
       },
       "CreateUserReqDto": {
@@ -1669,12 +1480,7 @@
           },
           "snsAuthProvider": {
             "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
+            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"],
             "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
           },
           "name": {
@@ -1698,10 +1504,7 @@
           },
           "gender": {
             "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
+            "enum": ["MALE", "FEMALE"],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -1711,38 +1514,25 @@
           }
         },
         "nullable": false,
-        "required": [
-          "snsId",
-          "snsAuthProvider",
-          "name",
-          "email"
-        ]
+        "required": ["snsId", "snsAuthProvider", "name", "email"]
       },
       "ResponseFormUserResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
             "$ref": "#/components/schemas/UserResDto"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
       "UserResDto": {
         "type": "object",
@@ -1755,12 +1545,7 @@
           },
           "snsAuthProvider": {
             "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
+            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"],
             "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
           },
           "name": {
@@ -1784,10 +1569,7 @@
           },
           "gender": {
             "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
+            "enum": ["MALE", "FEMALE"],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -1804,14 +1586,7 @@
           },
           "belt": {
             "type": "string",
-            "enum": [
-              "선택없음",
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
+            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
             "description": "- 사용자 주짓수 벨트."
           },
           "id": {
@@ -1820,11 +1595,7 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "ADMIN",
-              "USER",
-              "TEMPORARY_USER"
-            ],
+            "enum": ["ADMIN", "USER", "TEMPORARY_USER"],
             "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
           },
           "profileImageUrlKey": {
@@ -1836,10 +1607,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
+            "enum": ["ACTIVE", "INACTIVE"],
             "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
           },
           "createdAt": {
@@ -1898,10 +1666,7 @@
           },
           "gender": {
             "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
+            "enum": ["MALE", "FEMALE"],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -1918,45 +1683,30 @@
           },
           "belt": {
             "type": "string",
-            "enum": [
-              "선택없음",
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
+            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
             "description": "- 사용자 주짓수 벨트."
           }
         },
         "nullable": false,
         "description": "Make all properties in T optional"
       },
-      "ResponseFormTemporaryUserResDto": {
+      "ResponseFormGetTemporaryUserResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
             "$ref": "#/components/schemas/TemporaryUserResDto"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
       "TemporaryUserResDto": {
         "type": "object",
@@ -1966,20 +1716,11 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "ADMIN",
-              "USER",
-              "TEMPORARY_USER"
-            ]
+            "enum": ["ADMIN", "USER", "TEMPORARY_USER"]
           },
           "snsAuthProvider": {
             "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ]
+            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"]
           },
           "snsId": {
             "type": "string"
@@ -2000,10 +1741,7 @@
           },
           "gender": {
             "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
+            "enum": ["MALE", "FEMALE"],
             "nullable": true
           },
           "birth": {
@@ -2012,14 +1750,7 @@
           },
           "belt": {
             "type": "string",
-            "enum": [
-              "선택없음",
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
+            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
             "nullable": true
           },
           "profileImageUrlKey": {
@@ -2028,10 +1759,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ]
+            "enum": ["ACTIVE", "INACTIVE"]
           },
           "createdAt": {
             "oneOf": [
@@ -2080,26 +1808,18 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
             "type": "boolean"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
       "RegisterPhoneNumberReqDto": {
         "type": "object",
@@ -2111,35 +1831,25 @@
           }
         },
         "nullable": false,
-        "required": [
-          "phoneNumber"
-        ]
+        "required": ["phoneNumber"]
       },
       "ResponseFormPhoneNumberAuthCode": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
             "$ref": "#/components/schemas/PhoneNumberAuthCode"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
       "PhoneNumberAuthCode": {
         "type": "string",
@@ -2154,9 +1864,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "authCode"
-        ]
+        "required": ["authCode"]
       },
       "RegisterReqDto": {
         "type": "object",
@@ -2168,30 +1876,19 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": [
-                "TERMS_OF_SERVICE",
-                "PRIVACY",
-                "REFUND",
-                "ADVERTISEMENT"
-              ]
+              "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"]
             }
           }
         },
         "nullable": false,
-        "required": [
-          "user",
-          "consentPolicyTypes"
-        ]
+        "required": ["user", "consentPolicyTypes"]
       },
       "PickIUsergenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
             "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
+            "enum": ["MALE", "FEMALE"],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -2208,24 +1905,12 @@
           },
           "belt": {
             "type": "string",
-            "enum": [
-              "선택없음",
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
+            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
             "description": "- 사용자 주짓수 벨트."
           }
         },
         "nullable": false,
-        "required": [
-          "gender",
-          "birth",
-          "nickname",
-          "belt"
-        ],
+        "required": ["gender", "birth", "nickname", "belt"],
         "description": "From T, pick a set of properties whose keys are in the union K"
       },
       "REGISTER_NICKNAME_DUPLICATED": {
@@ -2233,37 +1918,24 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              409
-            ]
+            "enum": [409]
           },
           "code": {
             "type": "number",
-            "enum": [
-              3000
-            ]
+            "enum": [3000]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "이미 사용중인 닉네임입니다."
-            ]
+            "enum": ["이미 사용중인 닉네임입니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ],
+        "required": ["isSuccess", "status", "code", "result"],
         "description": "----------------------------------------------------------------------------\nRegister 3000 ~ 3999"
       },
       "REGISTER_POLICY_CONSENT_REQUIRED": {
@@ -2271,102 +1943,68 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              400
-            ]
+            "enum": [400]
           },
           "code": {
             "type": "number",
-            "enum": [
-              3002
-            ]
+            "enum": [3002]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "필수 동의 항목을 모두 동의해야 합니다."
-            ]
+            "enum": ["필수 동의 항목을 모두 동의해야 합니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
       "REGISTER_PHONE_NUMBER_REQUIRED": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              false
-            ]
+            "enum": [false]
           },
           "status": {
             "type": "number",
-            "enum": [
-              400
-            ]
+            "enum": [400]
           },
           "code": {
             "type": "number",
-            "enum": [
-              3003
-            ]
+            "enum": [3003]
           },
           "result": {
             "type": "string",
-            "enum": [
-              "회원가입을 위해서는 휴대폰 번호인증이 필요합니다."
-            ]
+            "enum": ["회원가입을 위해서는 휴대폰 번호인증이 필요합니다."]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "status", "code", "result"]
       },
-      "ResponseFormFindAllPoliciesResDto": {
+      "ResponseFormFindPoliciesResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
-            "$ref": "#/components/schemas/FindAllPoliciesResDto"
+            "$ref": "#/components/schemas/FindPoliciesResDto"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
-      "FindAllPoliciesResDto": {
+      "FindPoliciesResDto": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/IPolicy"
@@ -2385,12 +2023,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "TERMS_OF_SERVICE",
-              "PRIVACY",
-              "REFUND",
-              "ADVERTISEMENT"
-            ],
+            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"],
             "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
           "isMandatory": {
@@ -2429,15 +2062,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "id",
-          "version",
-          "type",
-          "isMandatory",
-          "title",
-          "content",
-          "createdAt"
-        ],
+        "required": ["id", "version", "type", "isMandatory", "title", "content", "createdAt"],
         "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
       "IPolicyConsent": {
@@ -2477,12 +2102,7 @@
           }
         },
         "nullable": false,
-        "required": [
-          "id",
-          "userId",
-          "policyId",
-          "createdAt"
-        ],
+        "required": ["id", "userId", "policyId", "createdAt"],
         "description": "- 사용자가 동의한 약관 정보"
       },
       "IUser": {
@@ -2494,21 +2114,12 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "ADMIN",
-              "USER",
-              "TEMPORARY_USER"
-            ],
+            "enum": ["ADMIN", "USER", "TEMPORARY_USER"],
             "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
           },
           "snsAuthProvider": {
             "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
+            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"],
             "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
           },
           "snsId": {
@@ -2545,10 +2156,7 @@
           },
           "gender": {
             "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
+            "enum": ["MALE", "FEMALE"],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -2558,14 +2166,7 @@
           },
           "belt": {
             "type": "string",
-            "enum": [
-              "선택없음",
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
+            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
             "description": "- 사용자 주짓수 벨트."
           },
           "profileImageUrlKey": {
@@ -2577,10 +2178,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
+            "enum": ["ACTIVE", "INACTIVE"],
             "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
           },
           "createdAt": {
@@ -2635,43 +2233,30 @@
         ],
         "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
       },
-      "ResponseFormFindOnePolicyResDto": {
+      "ResponseFormFindPolicyResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
             "$ref": "#/components/schemas/IPolicy"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
       "CreatePolicyReqDto": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "TERMS_OF_SERVICE",
-              "PRIVACY",
-              "REFUND",
-              "ADVERTISEMENT"
-            ],
+            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"],
             "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
           "isMandatory": {
@@ -2691,50 +2276,32 @@
           }
         },
         "nullable": false,
-        "required": [
-          "type",
-          "isMandatory",
-          "title",
-          "content"
-        ]
+        "required": ["type", "isMandatory", "title", "content"]
       },
       "ResponseFormIPolicy": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [
-              true
-            ]
+            "enum": [true]
           },
           "code": {
             "type": "number",
-            "enum": [
-              200
-            ]
+            "enum": [200]
           },
           "result": {
             "$ref": "#/components/schemas/IPolicy"
           }
         },
         "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
+        "required": ["isSuccess", "code", "result"]
       },
-      "FindAllPoliciesReqDto": {
+      "FindPoliciesReqDto": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "TERMS_OF_SERVICE",
-              "PRIVACY",
-              "REFUND",
-              "ADVERTISEMENT"
-            ]
+            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"]
           }
         },
         "nullable": false

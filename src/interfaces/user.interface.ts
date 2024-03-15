@@ -72,10 +72,10 @@ export interface IUser {
   belt: '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
   /**
-   * - 사용자 프로필 이미지 키. (썸네일 이미지 역할).
-   * - 참고 s3 image key 최대길이 (https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
+   * - 사용자 프로필 이미지 키 (이미지 파일 이름). (썸네일 이미지 역할).
+   * - 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
    * @minLength 1
-   * @maxLength 1024
+   * @maxLength 128
    */
   profileImageUrlKey: null | string;
 
