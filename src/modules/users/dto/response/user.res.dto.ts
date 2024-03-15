@@ -1,3 +1,3 @@
-import { IUser } from 'src/interfaces/user.interface';
+import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 
-export interface UserResDto extends Omit<IUser, 'policyConsents'> {}
+export interface UserResDto extends Omit<UserEntity, 'policyConsents'> {}

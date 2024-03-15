@@ -1,3 +1,3 @@
-import { PhoneNumberAuthCode } from 'src/interfaces/phone-number-auth-code.type';
+import { PhoneNumberAuthCode } from 'src/modules/register/phone-number-auth-code.type';
 
 export type SendPhoneNumberAuthCodeResDto = PhoneNumberAuthCode;

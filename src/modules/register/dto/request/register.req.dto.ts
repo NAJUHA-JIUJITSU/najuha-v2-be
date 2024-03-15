@@ -1,7 +1,7 @@
-import { IPolicy } from 'src/interfaces/policy.interface';
-import { IUser } from 'src/interfaces/user.interface';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
 
 export type RegisterReqDto = {
-  user: Pick<IUser, 'nickname' | 'gender' | 'belt' | 'birth'>;
-  consentPolicyTypes: IPolicy['type'][];
+  user: Pick<UserEntity, 'nickname' | 'gender' | 'belt' | 'birth'>;
+  consentPolicyTypes: PolicyEntity['type'][];
 };

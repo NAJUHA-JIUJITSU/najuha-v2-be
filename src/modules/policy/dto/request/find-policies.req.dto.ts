@@ -1,3 +1,3 @@
-import { IPolicy } from 'src/interfaces/policy.interface';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
 
-export type FindPoliciesReqDto = { type?: IPolicy['type'] };
+export type FindPoliciesReqDto = { type?: PolicyEntity['type'] };

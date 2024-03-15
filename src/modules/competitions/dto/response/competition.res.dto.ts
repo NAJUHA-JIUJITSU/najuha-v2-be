@@ -1,3 +1,3 @@
-import { ICompetition } from 'src/interfaces/competition.interface';
+import { CompetitionEntity } from 'src/infrastructure/database/entities/competition.entity';
 
-export type CompetitionResDto = ICompetition;
+export type CompetitionResDto = CompetitionEntity;

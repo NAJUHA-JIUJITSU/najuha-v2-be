@@ -1,19 +1,19 @@
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { RegisterReqDto } from '../dto/request/register.req.dto';
-import { IUser } from 'src/interfaces/user.interface';
-import { IPolicyConsent } from 'src/interfaces/policy-consent.interface';
-import { IPolicy } from 'src/interfaces/policy.interface';
+import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy-consent.entity';
 
 export class RegisterUser {
-  user: IUser & { policyConsents: IPolicyConsent[] };
-  registerUserConsentPolicyTypes: IPolicy['type'][];
-  latestPolicies: IPolicy[];
+  user: UserEntity & { policyConsents: PolicyConsentEntity[] };
+  registerUserConsentPolicyTypes: PolicyEntity['type'][];
+  latestPolicies: PolicyEntity[];
 
   constructor(
-    user: IUser,
+    user: UserEntity,
     registerUserInfo: RegisterReqDto['user'],
-    registerUserConsentPolicyTypes: IPolicy['type'][],
-    latestPolicies: IPolicy[],
+    registerUserConsentPolicyTypes: PolicyEntity['type'][],
+    latestPolicies: PolicyEntity[],
   ) {
     this.user = { ...user, ...registerUserInfo, role: 'USER', policyConsents: user.policyConsents || [] };
     this.registerUserConsentPolicyTypes = registerUserConsentPolicyTypes || [];
@@ -22,7 +22,7 @@ export class RegisterUser {
   }
 
   private setUserPolicyConsents() {
-    let policyies: IPolicy[] = [];
+    let policyies: PolicyEntity[] = [];
     // 이미 동의했던 약관은 추가하지 않기
     policyies = this.latestPolicies.filter(
       (policy) => !this.user.policyConsents?.some((consent) => consent.policyId === policy.id),
@@ -38,7 +38,7 @@ export class RegisterUser {
         userId: this.user.id,
         policyId: policy.id,
       };
-    }) as IPolicyConsent[];
+    }) as PolicyConsentEntity[];
 
     this.user.policyConsents = [...this.user.policyConsents, ...policyConsents];
   }

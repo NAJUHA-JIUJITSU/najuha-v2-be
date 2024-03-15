@@ -1,3 +1,3 @@
-import { ICompetition } from 'src/interfaces/competition.interface';
+import { CompetitionEntity } from 'src/infrastructure/database/entities/competition.entity';
 
-export interface CreateCompetitionReqDto extends Partial<ICompetition> {}
+export interface CreateCompetitionReqDto extends Partial<CompetitionEntity> {}
