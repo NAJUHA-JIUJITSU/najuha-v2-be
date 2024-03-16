@@ -13,7 +13,7 @@ export class UserPolicyController {
 
   /**
    * u-4-1 find all types of recent policies.
-   * - RoleLevel: TEMPORARY_USER
+   * - RoleLevel: TEMPORARY_USER.
    * - 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.
    *
    * @tag u-4 policy
@@ -28,7 +28,7 @@ export class UserPolicyController {
 
   /**
    * u-4-2 find policy by id.
-   * - RoleLevel: TEMPORARY_USER
+   * - RoleLevel: TEMPORARY_USER.
    *
    * @tag u-4 policy
    * @param id policy id

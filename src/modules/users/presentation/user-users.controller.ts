@@ -8,14 +8,13 @@ import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { UserResDto } from '../dto/response/user.res.dto';
 
-// TODO: GaurdLevel 설설
 @Controller('user/users')
 export class UserUsersController {
   constructor(private readonly UsersAppService: UsersAppService) {}
 
   /**
-   * u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))
-   * - RoleLevel: USER
+   * u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용)).
+   * - RoleLevel: USER.
    *
    * @tag u-3 users
    * @returns created user info
@@ -29,7 +28,7 @@ export class UserUsersController {
 
   /**
    * u-3-2 update user.
-   * - RoleLevel: USER
+   * - RoleLevel: USER.
    *
    * @tag u-3 users
    * @param dto UpdateUserReqDto
@@ -45,7 +44,7 @@ export class UserUsersController {
 
   /**
    * u-3-3 get me.
-   * - RoleLevel: USER
+   * - RoleLevel: USER.
    *
    * @tag u-3 users
    * @returns user

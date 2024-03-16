@@ -13,8 +13,8 @@ export class AdminPolicyController {
   constructor(private readonly PolicyAppService: PolicyAppService) {}
 
   /**
-   * a-4-1 create policy
-   * - RoleLevel: ADMIN
+   * a-4-1 create policy.
+   * - RoleLevel: ADMIN.
    *
    * @tag a-4 policy
    * @returns created policy
@@ -28,7 +28,7 @@ export class AdminPolicyController {
 
   /**
    * a-4-1 find policies.
-   * - RoleLevel: ADMIN
+   * - RoleLevel: ADMIN.
    *
    * @tag a-4 policy
    * @param type policy type

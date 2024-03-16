@@ -24,7 +24,7 @@ export class UserRegisterController {
 
   /**
    * u-2-1 get temporary user.
-   * - RoleLevel: TEMPORARY_USER
+   * - RoleLevel: TEMPORARY_USER.
    *
    * @tag u-2 register
    * @returns user
@@ -39,10 +39,10 @@ export class UserRegisterController {
 
   /**
    * u-2-2 check duplicated nickname.
-   * - RoleLevel: TEMPORARY_USER
-   * - 닉네임이 중복되면 true, 중복되지 않으면 false를 반환
-   * - 본인이 사용중인 닉네임이면 false를 반환
-   * - 이미 사용중인 닉네임이면 true를 반환
+   * - RoleLevel: TEMPORARY_USER.
+   * - 닉네임이 중복되면 true, 중복되지 않으면 false를 반환.
+   * - 본인이 사용중인 닉네임이면 false를 반환.
+   * - 이미 사용중인 닉네임이면 true를 반환.
    *
    * @tag u-2 register
    * @param nickname 닉네임
@@ -60,7 +60,7 @@ export class UserRegisterController {
 
   /**
    * u-2-3 send auth code to phone number.
-   * - RoleLevel: TEMPORARY_USER
+   * - RoleLevel: TEMPORARY_USER.
    * - 전화번호로 인증코드를 전송한다.
    *
    * @tag u-2 register
@@ -79,7 +79,7 @@ export class UserRegisterController {
 
   /**
    * u-2-4 confirm auth code.
-   * - RoleLevel: TEMPORARY_USER
+   * - RoleLevel: TEMPORARY_USER.
    * - 전화번호로 전송된 인증코드를 확인한다.
    * - 인증성공시 UserEntity의 phoneNumber를 업데이트한다.
    * - 인증성공시 true, 실패시 false를 반환한다.
@@ -101,7 +101,7 @@ export class UserRegisterController {
 
   /**
    * u-2-5 register user.
-   * - RoleLevel: TEMPORARY_USER
+   * - RoleLevel: TEMPORARY_USER.
    * - 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.
    * - USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.
    *

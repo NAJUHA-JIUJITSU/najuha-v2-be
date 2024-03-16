@@ -12,8 +12,8 @@ export class UserCompetitionsController {
   constructor(private readonly CompetitionsAppService: CompetitionsAppService) {}
 
   /**
-   * u-5-1 find competitions
-   * - RoleLevel: USER
+   * u-5-1 find competitions.
+   * - RoleLevel: USER.
    *
    * @tag u-5 competitions
    * @returns competitions
@@ -26,8 +26,8 @@ export class UserCompetitionsController {
   }
 
   /**
-   * u-5-2 get competition
-   * - RoleLevel: USER
+   * u-5-2 get competition.
+   * - RoleLevel: USER.
    *
    * @tag u-5 competitions
    * @returns competition

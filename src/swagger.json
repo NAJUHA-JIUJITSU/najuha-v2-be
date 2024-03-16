@@ -419,7 +419,7 @@
           }
         },
         "summary": "u-3-1 create user",
-        "description": "u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용))\n- RoleLevel: USER",
+        "description": "u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용)).\n- RoleLevel: USER.",
         "x-nestia-namespace": "user.users.postUser",
         "x-nestia-jsDocTags": [
           {
@@ -484,7 +484,7 @@
           }
         },
         "summary": "u-3-2 update user",
-        "description": "u-3-2 update user.\n- RoleLevel: USER",
+        "description": "u-3-2 update user.\n- RoleLevel: USER.",
         "x-nestia-namespace": "user.users.patchUser",
         "x-nestia-jsDocTags": [
           {
@@ -556,7 +556,7 @@
           }
         },
         "summary": "u-3-3 get me",
-        "description": "u-3-3 get me.\n- RoleLevel: USER",
+        "description": "u-3-3 get me.\n- RoleLevel: USER.",
         "x-nestia-namespace": "user.users.me.getMe",
         "x-nestia-jsDocTags": [
           {
@@ -611,7 +611,7 @@
           }
         },
         "summary": "u-2-1 get temporary user",
-        "description": "u-2-1 get temporary user.\n- RoleLevel: TEMPORARY_USER",
+        "description": "u-2-1 get temporary user.\n- RoleLevel: TEMPORARY_USER.",
         "x-nestia-namespace": "user.register.users.me.getTemporaryUser",
         "x-nestia-jsDocTags": [
           {
@@ -666,7 +666,7 @@
           }
         },
         "summary": "u-2-2 check duplicated nickname",
-        "description": "u-2-2 check duplicated nickname.\n- RoleLevel: TEMPORARY_USER\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환\n- 본인이 사용중인 닉네임이면 false를 반환\n- 이미 사용중인 닉네임이면 true를 반환",
+        "description": "u-2-2 check duplicated nickname.\n- RoleLevel: TEMPORARY_USER.\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환.\n- 본인이 사용중인 닉네임이면 false를 반환.\n- 이미 사용중인 닉네임이면 true를 반환.",
         "x-nestia-namespace": "user.register.users.is-duplicated.isDuplicateNickname",
         "x-nestia-jsDocTags": [
           {
@@ -739,7 +739,7 @@
           }
         },
         "summary": "u-2-3 send auth code to phone number",
-        "description": "u-2-3 send auth code to phone number.\n- RoleLevel: TEMPORARY_USER\n- 전화번호로 인증코드를 전송한다.",
+        "description": "u-2-3 send auth code to phone number.\n- RoleLevel: TEMPORARY_USER.\n- 전화번호로 인증코드를 전송한다.",
         "x-nestia-namespace": "user.register.phone-number.auth-code.sendPhoneNumberAuthCode",
         "x-nestia-jsDocTags": [
           {
@@ -806,7 +806,7 @@
           }
         },
         "summary": "u-2-4 confirm auth code",
-        "description": "u-2-4 confirm auth code.\n- RoleLevel: TEMPORARY_USER\n- 전화번호로 전송된 인증코드를 확인한다.\n- 인증성공시 UserEntity의 phoneNumber를 업데이트한다.\n- 인증성공시 true, 실패시 false를 반환한다.",
+        "description": "u-2-4 confirm auth code.\n- RoleLevel: TEMPORARY_USER.\n- 전화번호로 전송된 인증코드를 확인한다.\n- 인증성공시 UserEntity의 phoneNumber를 업데이트한다.\n- 인증성공시 true, 실패시 false를 반환한다.",
         "x-nestia-namespace": "user.register.phone-number.auth-code.confirm.confirmAuthCode",
         "x-nestia-jsDocTags": [
           {
@@ -920,7 +920,7 @@
           }
         },
         "summary": "u-2-5 register user",
-        "description": "u-2-5 register user.\n- RoleLevel: TEMPORARY_USER\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
+        "description": "u-2-5 register user.\n- RoleLevel: TEMPORARY_USER.\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
         "x-nestia-namespace": "user.register.registerUser",
         "x-nestia-jsDocTags": [
           {
@@ -982,7 +982,7 @@
           }
         },
         "summary": "u-4-1 find all types of recent policies",
-        "description": "u-4-1 find all types of recent policies.\n- RoleLevel: TEMPORARY_USER\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
+        "description": "u-4-1 find all types of recent policies.\n- RoleLevel: TEMPORARY_USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
         "x-nestia-namespace": "user.policy.recent.findAllRecentPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -1037,7 +1037,7 @@
           }
         },
         "summary": "u-4-2 find policy by id",
-        "description": "u-4-2 find policy by id.\n- RoleLevel: TEMPORARY_USER",
+        "description": "u-4-2 find policy by id.\n- RoleLevel: TEMPORARY_USER.",
         "x-nestia-namespace": "user.policy.findPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1109,7 +1109,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "a-4-1 create policy\n- RoleLevel: ADMIN",
+        "summary": "a-4-1 create policy",
+        "description": "a-4-1 create policy.\n- RoleLevel: ADMIN.",
         "x-nestia-namespace": "admin.policy.postPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1162,7 +1163,7 @@
           }
         },
         "summary": "a-4-1 find policies",
-        "description": "a-4-1 find policies.\n- RoleLevel: ADMIN",
+        "description": "a-4-1 find policies.\n- RoleLevel: ADMIN.",
         "x-nestia-namespace": "admin.policy.findPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -1223,7 +1224,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "u-5-1 find competitions\n- RoleLevel: USER",
+        "summary": "u-5-1 find competitions",
+        "description": "u-5-1 find competitions.\n- RoleLevel: USER.",
         "x-nestia-namespace": "user.competitions.findCompetitions",
         "x-nestia-jsDocTags": [
           {
@@ -1277,7 +1279,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "u-5-2 get competition\n- RoleLevel: USER",
+        "summary": "u-5-2 get competition",
+        "description": "u-5-2 get competition.\n- RoleLevel: USER.",
         "x-nestia-namespace": "user.competitions.getCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -1332,7 +1335,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "a-5-1 create competition\n- RoleLevel: ADMIN",
+        "summary": "a-5-1 create competition",
+        "description": "a-5-1 create competition.\n- RoleLevel: ADMIN.",
         "x-nestia-namespace": "admin.competitions.createCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -1358,7 +1362,7 @@
       },
       "get": {
         "tags": [
-          "u-5 competitions"
+          "a-5 competitions"
         ],
         "parameters": [],
         "responses": {
@@ -1374,14 +1378,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "a-5-2 find competitions\n- RoleLevel: ADMIN",
+        "summary": "a-5-2 find competitions",
+        "description": "a-5-2 find competitions.\n- RoleLevel: ADMIN.",
         "x-nestia-namespace": "admin.competitions.findCompetitions",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "u-5 competitions",
+                "text": "a-5 competitions",
                 "kind": "text"
               }
             ]
@@ -1402,7 +1407,7 @@
     "/admin/competitions/{id}": {
       "get": {
         "tags": [
-          "u-5 competitions"
+          "a-5 competitions"
         ],
         "parameters": [
           {
@@ -1428,14 +1433,15 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "a-5-3 get competition\n- RoleLevel: ADMIN",
+        "summary": "a-5-3 get competition",
+        "description": "a-5-3 get competition.\n- RoleLevel: ADMIN.",
         "x-nestia-namespace": "admin.competitions.findCompetition",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
             "text": [
               {
-                "text": "u-5 competitions",
+                "text": "a-5 competitions",
                 "kind": "text"
               }
             ]
@@ -1491,7 +1497,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "a-5-4 update competition\n- RoleLevel: ADMIN",
+        "summary": "a-5-4 update competition",
+        "description": "a-5-4 update competition.\n- RoleLevel: ADMIN.",
         "x-nestia-namespace": "admin.competitions.updateCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -1556,7 +1563,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "description": "a-5-5 update competition status\n- RoleLevel: ADMIN",
+        "summary": "a-5-5 update competition status",
+        "description": "a-5-5 update competition status.\n- RoleLevel: ADMIN.",
         "x-nestia-namespace": "admin.competitions.status.updateCompetitionStatus",
         "x-nestia-jsDocTags": [
           {
@@ -3680,14 +3688,6 @@
             "maxLength": 256,
             "minLength": 1,
             "description": "- 대회의 이름."
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
-            "description": "- 대회의 상태\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능"
           },
           "address": {
             "type": "string",

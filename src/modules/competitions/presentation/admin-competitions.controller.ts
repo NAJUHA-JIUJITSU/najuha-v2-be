@@ -15,8 +15,8 @@ export class AdminCompetitionsController {
   constructor(private readonly CompetitionsAppService: CompetitionsAppService) {}
 
   /**
-   * a-5-1 create competition
-   * - RoleLevel: ADMIN
+   * a-5-1 create competition.
+   * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
    * @returns created competition
@@ -29,10 +29,10 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-2 find competitions
-   * - RoleLevel: ADMIN
+   * a-5-2 find competitions.
+   * - RoleLevel: ADMIN.
    *
-   * @tag u-5 competitions
+   * @tag a-5 competitions
    * @returns competitions
    */
   @RoleLevels(RoleLevel.ADMIN)
@@ -43,10 +43,10 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-3 get competition
-   * - RoleLevel: ADMIN
+   * a-5-3 get competition.
+   * - RoleLevel: ADMIN.
    *
-   * @tag u-5 competitions
+   * @tag a-5 competitions
    * @returns competition
    */
   @RoleLevels(RoleLevel.ADMIN)
@@ -57,8 +57,8 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-4 update competition
-   * - RoleLevel: ADMIN
+   * a-5-4 update competition.
+   * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
    * @returns updated competition
@@ -74,8 +74,8 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-5 update competition status
-   * - RoleLevel: ADMIN
+   * a-5-5 update competition status.
+   * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
    * @returns updated competition
