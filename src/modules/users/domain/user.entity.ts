@@ -1,5 +1,5 @@
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
-import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy-consent.entity';
+import { PolicyConsentEntity } from 'src/modules/policy/domain/policy-consent.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 /**

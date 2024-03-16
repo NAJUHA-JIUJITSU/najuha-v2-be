@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
-import { CompetitionEntity } from '../entities/competition.entity';
+import { CompetitionEntity } from '../domain/competition.entity';
 
 @Injectable()
 export class CompetitionsRepository extends Repository<CompetitionEntity> {

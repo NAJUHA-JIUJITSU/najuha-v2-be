@@ -1,4 +1,4 @@
-import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy-consent.entity';
+import { PolicyConsentEntity } from 'src/modules/policy/domain/policy-consent.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 /**

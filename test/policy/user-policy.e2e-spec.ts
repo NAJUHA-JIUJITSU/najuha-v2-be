@@ -9,8 +9,8 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 // import * as Apis from '../../src/api/functional';
 

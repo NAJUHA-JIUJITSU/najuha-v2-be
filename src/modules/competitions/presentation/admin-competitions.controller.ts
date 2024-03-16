@@ -5,7 +5,7 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
 import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
 import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { CompetitionEntity } from 'src/infrastructure/database/entities/competition.entity';
+import { CompetitionEntity } from 'src/modules/competitions/domain/competition.entity';
 import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
 import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
 import { UpdateCompetitionStatusReqDto } from '../dto/request/update-competition-status.req.dto';

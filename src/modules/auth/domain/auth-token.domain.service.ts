@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import Redis from 'ioredis';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
+import { UserEntity } from 'src/modules/users/domain/user.entity';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 

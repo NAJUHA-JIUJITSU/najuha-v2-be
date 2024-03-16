@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException } from 'src/common/response/errorResponse';
 import { UsersErrorMap } from 'src/common/response/errorResponse';
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
+import { UserEntity } from 'src/modules/users/domain/user.entity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()

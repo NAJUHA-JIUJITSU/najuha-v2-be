@@ -1,4 +1,4 @@
-import { CompetitionEntity } from 'src/infrastructure/database/entities/competition.entity';
+import { CompetitionEntity } from 'src/modules/competitions/domain/competition.entity';
 
 export interface CreateCompetitionReqDto
   extends Partial<

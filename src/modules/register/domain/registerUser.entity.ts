@@ -1,8 +1,8 @@
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { RegisterReqDto } from '../dto/request/register.req.dto';
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
-import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy-consent.entity';
+import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
+import { PolicyConsentEntity } from 'src/modules/policy/domain/policy-consent.entity';
 
 export class RegisterUser {
   user: UserEntity & { policyConsents: PolicyConsentEntity[] };

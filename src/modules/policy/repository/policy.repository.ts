@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
-import { PolicyEntity } from '../entities/policy.entity';
+import { PolicyEntity } from '../domain/policy.entity';
 import { BusinessException, PolicyErrorMap } from 'src/common/response/errorResponse';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
-import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
 
 /**
  * - 사용자가 동의한 약관 정보

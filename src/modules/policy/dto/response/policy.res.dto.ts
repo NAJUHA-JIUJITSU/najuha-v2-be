@@ -1,3 +1,3 @@
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy.entity';
+import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
 
 export type PolicyResDto = PolicyEntity;
