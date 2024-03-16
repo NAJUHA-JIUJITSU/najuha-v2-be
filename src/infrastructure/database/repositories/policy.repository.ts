@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { PolicyEntity } from '../entities/policy.entity';
 
 // TODO 에러 표준화
@@ -20,8 +20,8 @@ export class PolicyRepository extends Repository<PolicyEntity> {
     if (!result.affected) throw new Error('Policy not found');
   }
 
-  async getOneOrFail(where: FindOptionsWhere<PolicyEntity>): Promise<PolicyEntity> {
-    const policy = await this.findOne({ where });
+  async getOneOrFail({ where, relations }: FindOneOptions<PolicyEntity>): Promise<PolicyEntity> {
+    const policy = await this.findOne({ where, relations });
     if (!policy) throw new Error('Policy not found');
     return policy;
   }

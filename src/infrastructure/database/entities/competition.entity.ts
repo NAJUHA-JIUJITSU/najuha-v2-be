@@ -35,39 +35,39 @@ export class CompetitionEntity {
   address: string;
 
   /** - 대회 날짜. */
-  @Column('date', { nullable: true })
-  competitionDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  competitionDate: null | string | Date;
 
   /** - 참가 신청 시작일 */
-  @Column('date', { nullable: true })
-  registrationStartDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  registrationStartDate: null | string | Date;
 
   /** - 참가 신청 마감일. */
-  @Column('date', { nullable: true })
-  registrationEndDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  registrationEndDate: null | string | Date;
 
   /** - 환불 가능 기간 마감일. */
-  @Column('date', { nullable: true })
-  refundDeadlineDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  refundDeadlineDate: null | string | Date;
 
   /**
    * - 단독 참가자의 부문 조정 시작일.
    * - 부문에 참가자가 한 명만 있는 경우, 해당 참가자를 다른 체급이나 부문으로 조정할 수 있는 기간의 시작을 나타냅니다.
    */
-  @Column('date', { nullable: true })
-  soloRegistrationAdjustmentStartDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  soloRegistrationAdjustmentStartDate: null | string | Date;
 
   /** - 단독 참가자의 부문 조정 마감일. */
-  @Column('date', { nullable: true })
-  soloRegistrationAdjustmentEndDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  soloRegistrationAdjustmentEndDate: null | string | Date;
 
   /** - 참가자 명단 공개일. */
-  @Column('date', { nullable: true })
-  registrationListOpenDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  registrationListOpenDate: null | string | Date;
 
   /** - 대진표 공개일. */
-  @Column('date', { nullable: true })
-  bracketOpenDate: null | Date | string;
+  @Column('timestamp', { nullable: true })
+  bracketOpenDate: null | string | Date;
 
   /**
    * - 대회 상세 정보.
@@ -107,11 +107,11 @@ export class CompetitionEntity {
 
   /** - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. */
   @CreateDateColumn()
-  createdAt: Date | string;
+  createdAt: string | Date;
 
   /** - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간. */
   @UpdateDateColumn()
-  updatedAt: Date | string;
+  updatedAt: string | Date;
 
   /**
    * - 대회의 얼리버드 할인 전략.

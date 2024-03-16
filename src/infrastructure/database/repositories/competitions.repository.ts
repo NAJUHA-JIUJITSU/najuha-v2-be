@@ -16,4 +16,15 @@ export class CompetitionsRepository extends Repository<CompetitionEntity> {
     if (!competition) throw new Error('Competition not found'); //TODO: 에러 표준화
     return await this.save({ ...competition, ...dto });
   }
+
+  async updateOrFail(dto: Pick<CompetitionEntity, 'id'> & Partial<CompetitionEntity>): Promise<void> {
+    const result = await this.update({ id: dto.id }, dto);
+    if (!result.affected) throw new Error('Competition not found'); //TODO: 에러 표준화
+  }
+
+  async getOneOrFail({ where, relations }: FindOneOptions<CompetitionEntity>): Promise<CompetitionEntity> {
+    const competition = await this.findOne({ where, relations });
+    if (!competition) throw new Error('Competition not found'); //TODO: 에러 표준화
+    return competition;
+  }
 }

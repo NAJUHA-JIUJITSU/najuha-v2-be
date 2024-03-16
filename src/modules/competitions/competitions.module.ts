@@ -5,10 +5,11 @@ import { UserCompetitionsController } from 'src/modules/competitions/presentatio
 import { CompetitionsAppService } from 'src/modules/competitions/application/competitions.app.service';
 import { CompetitionsRepository } from '../../infrastructure/database/repositories/competitions.repository';
 import { EarlyBirdDiscountStrategyEntity } from 'src/infrastructure/database/entities/early-bird-discount-strategy.entity';
+import { AdminCompetitionsController } from './presentation/admin-competitions.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CompetitionEntity, EarlyBirdDiscountStrategyEntity])],
-  controllers: [UserCompetitionsController],
+  controllers: [UserCompetitionsController, AdminCompetitionsController],
   providers: [CompetitionsAppService, CompetitionsRepository],
   exports: [CompetitionsRepository],
 })

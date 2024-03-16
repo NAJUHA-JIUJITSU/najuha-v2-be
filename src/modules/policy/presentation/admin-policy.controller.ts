@@ -21,9 +21,9 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
-  async postPolicy(@TypedBody() CreatePolicyReqDto: CreatePolicyReqDto): Promise<ResponseForm<PolicyResDto>> {
-    const policy = await this.PolicyAppService.createPolicy(CreatePolicyReqDto);
-    return createResponseForm(policy);
+  async postPolicy(@TypedBody() dto: CreatePolicyReqDto): Promise<ResponseForm<PolicyResDto>> {
+    const ret = await this.PolicyAppService.createPolicy(dto);
+    return createResponseForm(ret);
   }
 
   /**
@@ -37,7 +37,7 @@ export class AdminPolicyController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
   async findPolicies(@TypedQuery() query: FindPoliciesReqDto): Promise<ResponseForm<FindPoliciesResDto>> {
-    const policies = await this.PolicyAppService.findPolicies(query.type);
-    return createResponseForm(policies);
+    const ret = await this.PolicyAppService.findPolicies(query.type);
+    return createResponseForm(ret);
   }
 }
