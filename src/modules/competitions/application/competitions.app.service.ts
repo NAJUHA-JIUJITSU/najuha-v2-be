@@ -33,6 +33,7 @@ export class CompetitionsAppService {
     id: CompetitionEntity['id'],
     status: CompetitionEntity['status'],
   ): Promise<CompetitionResDto> {
+    // TODO: active 조건 확인하기
     return await this.competitionsRepository.saveOrFail({ id, status });
   }
 }

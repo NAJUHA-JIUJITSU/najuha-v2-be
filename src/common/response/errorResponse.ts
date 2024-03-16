@@ -113,7 +113,6 @@ export const SnsAuthErrorMap = {
 /** ----------------------------------------------------------------------------
  * Register 3000 ~ 3999
  */
-
 export type REGISTER_NICKNAME_DUPLICATED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.CONFLICT;
@@ -161,4 +160,32 @@ export type USERS_USER_NOT_FOUND = ErrorResponse & {
 
 export const UsersErrorMap = {
   USERS_USER_NOT_FOUND: typia.random<USERS_USER_NOT_FOUND>(),
+};
+
+/** ----------------------------------------------------------------------------
+ * Policy 5000 ~ 5999
+ */
+export type POLICY_POLICY_NOT_FOUND = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.NOT_FOUND;
+  code: 5000;
+  result: '존재하지 않는 약관입니다.';
+};
+
+export const PolicyErrorMap = {
+  POLICY_POLICY_NOT_FOUND: typia.random<POLICY_POLICY_NOT_FOUND>(),
+};
+
+/** ----------------------------------------------------------------------------
+ * Competitions 6000 ~ 6999
+ */
+export type COMPETITIONS_COMPETITION_NOT_FOUND = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.NOT_FOUND;
+  code: 6000;
+  result: '존재하지 않는 대회입니다.';
+};
+
+export const CompetitionsErrorMap = {
+  COMPETITIONS_COMPETITION_NOT_FOUND: typia.random<COMPETITIONS_COMPETITION_NOT_FOUND>(),
 };
