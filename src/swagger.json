@@ -2818,19 +2818,19 @@
           },
           "userId": {
             "type": "number",
-            "description": "- 사용자 ID."
+            "description": "- userId."
           },
           "user": {
             "$ref": "#/components/schemas/UserEntity",
-            "description": "- 사용자 정보\n- ManyToOne: User(1) -> PolicyConsent(*)\n- JoinColumn: userId"
+            "description": "- user"
           },
           "policyId": {
             "type": "number",
-            "description": "- 약관 ID."
+            "description": "- policyId."
           },
           "policy": {
             "$ref": "#/components/schemas/PolicyEntity",
-            "description": "- 약관 정보\n- ManyToOne: Policy(1) -> PolicyConsent(*)\n- JoinColumn: policyId"
+            "description": "- policy"
           }
         },
         "nullable": false,
@@ -3375,6 +3375,7 @@
           },
           "discountPrice": {
             "type": "number",
+            "minimum": 0,
             "description": "- 얼리버드 할인 가격 ex) 10000\n- 단위 : 원\n- 음수 값은 허용하지 않습니다."
           }
         },
@@ -3405,7 +3406,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/CompetitionResDto"
+            "$ref": "#/components/schemas/CompetitionResDto.o1"
           }
         },
         "nullable": false,
@@ -3414,6 +3415,326 @@
           "code",
           "result"
         ]
+      },
+      "CompetitionResDto.o1": {
+        "type": "object",
+        "properties": {
+          "earlyBirdDiscountStrategy": {
+            "$ref": "#/components/schemas/OmitEarlyBirdDiscountStrategyEntitycompetition"
+          },
+          "divisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OmitDivisionEntitycompetition"
+            }
+          },
+          "id": {
+            "type": "integer",
+            "description": "- 대회의 고유 식별자. 데이터베이스에서 자동으로 생성됩니다."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "description": "- 대회의 이름."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 대회의 상태\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능"
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "description": "- 대회가 열리는 장소."
+          },
+          "competitionDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 대회 날짜."
+          },
+          "registrationStartDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 참가 신청 시작일"
+          },
+          "registrationEndDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 참가 신청 마감일."
+          },
+          "refundDeadlineDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 환불 가능 기간 마감일."
+          },
+          "soloRegistrationAdjustmentStartDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 단독 참가자의 부문 조정 시작일.\n- 부문에 참가자가 한 명만 있는 경우, 해당 참가자를 다른 체급이나 부문으로 조정할 수 있는 기간의 시작을 나타냅니다."
+          },
+          "soloRegistrationAdjustmentEndDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 단독 참가자의 부문 조정 마감일."
+          },
+          "registrationListOpenDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 참가자 명단 공개일."
+          },
+          "bracketOpenDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 대진표 공개일."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "minLength": 1,
+            "description": "- 대회 상세 정보.\n- 마크다운 형식으로 작성됩니다."
+          },
+          "isPartnership": {
+            "type": "boolean",
+            "description": "- 협약 대회 여부."
+          },
+          "viewCount": {
+            "type": "integer",
+            "description": "- 조회수."
+          },
+          "posterImgUrlKey": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "nullable": true,
+            "description": "- 대회 포스터 이미지 URL Key."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "title",
+          "status",
+          "createdAt",
+          "updatedAt",
+          "address",
+          "competitionDate",
+          "registrationStartDate",
+          "registrationEndDate",
+          "refundDeadlineDate",
+          "soloRegistrationAdjustmentStartDate",
+          "soloRegistrationAdjustmentEndDate",
+          "registrationListOpenDate",
+          "bracketOpenDate",
+          "description",
+          "isPartnership",
+          "viewCount",
+          "posterImgUrlKey"
+        ]
+      },
+      "OmitDivisionEntitycompetition": {
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE",
+              "MIXED"
+            ],
+            "description": "- 성별."
+          },
+          "belt": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 주짓수벨트."
+          },
+          "id": {
+            "type": "integer",
+            "description": "- division id."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 부문 카테고리."
+          },
+          "uniform": {
+            "type": "string",
+            "enum": [
+              "GI",
+              "NOGI"
+            ],
+            "description": "- 유니폼 GI, NOGI"
+          },
+          "weight": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 체급."
+          },
+          "birthYearRangeStart": {
+            "type": "string",
+            "minLength": 4,
+            "description": "- 출생년도 범위 시작. YYYY."
+          },
+          "birthYearRangeEnd": {
+            "type": "string",
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "description": "- 출생년도 범위 끝. YYYY."
+          },
+          "price": {
+            "type": "integer",
+            "description": "- 부문 가격"
+          },
+          "competitionId": {
+            "type": "number",
+            "description": "- competitionId."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "gender",
+          "belt",
+          "id",
+          "status",
+          "createdAt",
+          "updatedAt",
+          "category",
+          "uniform",
+          "weight",
+          "birthYearRangeStart",
+          "birthYearRangeEnd",
+          "price",
+          "competitionId"
+        ],
+        "description": "Construct a type with the properties of T except for those in type K."
       },
       "CreateCompetitionReqDto": {
         "type": "object",

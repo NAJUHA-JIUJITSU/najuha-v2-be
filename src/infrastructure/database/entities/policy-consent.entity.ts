@@ -18,28 +18,20 @@ export class PolicyConsentEntity {
   @CreateDateColumn()
   createdAt: Date | string;
 
-  /** - 사용자 ID. */
+  /** - userId. */
   @Column({ name: 'userId' })
   userId: number;
 
-  /**
-   * - 사용자 정보
-   * - ManyToOne: User(1) -> PolicyConsent(*)
-   * - JoinColumn: userId
-   */
+  /** - user */
   @ManyToOne(() => UserEntity, (user) => user.policyConsents)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
-  /** - 약관 ID. */
+  /** - policyId. */
   @Column({ name: 'policyId' })
   policyId: number;
 
-  /**
-   * - 약관 정보
-   * - ManyToOne: Policy(1) -> PolicyConsent(*)
-   * - JoinColumn: policyId
-   */
+  /** - policy */
   @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)
   @JoinColumn({ name: 'policyId' })
   policy: PolicyEntity;

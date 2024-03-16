@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { EarlyBirdDiscountStrategyEntity } from './early-bird-discount-strategy.entity';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
+import { DivisionEntity } from './division.entity';
 
 @Entity('competition')
 export class CompetitionEntity {
@@ -114,14 +116,14 @@ export class CompetitionEntity {
   @UpdateDateColumn()
   updatedAt: string | Date;
 
-  /**
-   * - 대회의 얼리버드 할인 전략.
-   * - OneToOne: Competition(1) -> EarlyBirdDiscountStrategy(1)
-   * - JoinColumn: competitionId
-   */
+  /** - 대회의 얼리버드 할인 전략. */
   @OneToOne(() => EarlyBirdDiscountStrategyEntity, (earlyBirdDiscountStrategy) => earlyBirdDiscountStrategy.competition)
   @JoinColumn()
   earlyBirdDiscountStrategy?: EarlyBirdDiscountStrategyEntity;
+
+  /** - divisions. */
+  @OneToMany(() => DivisionEntity, (division) => division.competition)
+  divisions?: DivisionEntity[];
 
   updateStatus(status: CompetitionEntity['status']): void {
     if (status === 'ACTIVE') {

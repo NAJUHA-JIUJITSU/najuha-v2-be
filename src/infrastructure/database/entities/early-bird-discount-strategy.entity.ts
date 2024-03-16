@@ -13,19 +13,20 @@ export class EarlyBirdDiscountStrategyEntity {
   /**
    * - 얼리버드 시작일
    */
-  @Column('date')
+  @Column('timestamp')
   earlyBirdStartDate: Date | string;
 
   /**
    * - 얼리버드 마감일
    */
-  @Column('date')
+  @Column('timestamp')
   earlyBirdEndDate: Date | string;
 
   /**
    * - 얼리버드 할인 가격 ex) 10000
    * - 단위 : 원
    * - 음수 값은 허용하지 않습니다.
+   * @minimum 0
    */
   @Column('int')
   discountPrice: number;

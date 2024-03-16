@@ -2,5 +2,8 @@ import { CompetitionEntity } from 'src/infrastructure/database/entities/competit
 
 export interface CreateCompetitionReqDto
   extends Partial<
-    Omit<CompetitionEntity, 'id' | 'earlyBirdDiscountStrategy' | 'status' | 'viewCount' | 'createdAt' | 'updatedAt'>
+    Omit<
+      CompetitionEntity,
+      'id' | 'earlyBirdDiscountStrategy' | 'divisions' | 'status' | 'viewCount' | 'createdAt' | 'updatedAt'
+    >
   > {}
