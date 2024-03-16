@@ -33,7 +33,9 @@ export class CompetitionsAppService {
     id: CompetitionEntity['id'],
     status: CompetitionEntity['status'],
   ): Promise<CompetitionResDto> {
-    // TODO: active 조건 확인하기
-    return await this.competitionsRepository.saveOrFail({ id, status });
+    const competition = await this.competitionsRepository.getOneOrFail({ where: { id } });
+    competition.updateStatus(status);
+    await this.competitionsRepository.updateOrFail(competition);
+    return competition;
   }
 }

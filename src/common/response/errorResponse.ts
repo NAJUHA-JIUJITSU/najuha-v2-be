@@ -186,6 +186,14 @@ export type COMPETITIONS_COMPETITION_NOT_FOUND = ErrorResponse & {
   result: '존재하지 않는 대회입니다.';
 };
 
+export type COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 6001;
+  result: '대회의 상태를 ACTIVE로 변경할 수 없습니다.';
+};
+
 export const CompetitionsErrorMap = {
   COMPETITIONS_COMPETITION_NOT_FOUND: typia.random<COMPETITIONS_COMPETITION_NOT_FOUND>(),
+  COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(),
 };
