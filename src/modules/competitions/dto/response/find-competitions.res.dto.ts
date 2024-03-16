@@ -1,3 +1,3 @@
-import { CompetitionEntity } from 'src/infrastructure/database/entities/competition.entity';
+import { CompetitionResDto } from './competition.res.dto';
 
-export type FindCompetitionsResDto = Omit<CompetitionEntity, 'earlyBirdDiscountStrategy'>[];
+export type FindCompetitionsResDto = CompetitionResDto[];

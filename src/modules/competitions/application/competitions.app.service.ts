@@ -5,6 +5,7 @@ import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.
 import { CompetitionsRepository } from 'src/infrastructure/database/repositories/competitions.repository';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition.entity';
 import { UserEntity } from 'src/infrastructure/database/entities/user.entity';
+import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -19,7 +20,7 @@ export class CompetitionsAppService {
     return await this.competitionsRepository.saveOrFail({ id, ...dto });
   }
 
-  async findCompetitionsByRole(userRole: UserEntity['role']): Promise<CompetitionResDto[]> {
+  async findCompetitionsByRole(userRole: UserEntity['role']): Promise<FindCompetitionsResDto> {
     if (userRole === 'ADMIN') return await this.competitionsRepository.find();
     return await this.competitionsRepository.find({ where: { status: 'ACTIVE' } });
   }
