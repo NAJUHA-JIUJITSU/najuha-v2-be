@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from 'typeorm';
-import { Competition } from './competition.entity';
 
 @Entity('early_bird_discount_strategy')
 export class EarlyBirdDiscountStrategy {
@@ -39,6 +38,6 @@ export class EarlyBirdDiscountStrategy {
   @UpdateDateColumn()
   updatedAt: Date | string;
 
-  @OneToOne(() => Competition, (competition) => competition.earlyBirdDiscountStrategy)
-  competition: Competition;
+  // @OneToOne(() => Competition, (competition) => competition.earlyBirdDiscountStrategy)
+  // competition: Competition;
 }

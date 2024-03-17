@@ -117,7 +117,7 @@ export class Competition {
   updatedAt: string | Date;
 
   /** - 대회의 얼리버드 할인 전략. */
-  @OneToOne(() => EarlyBirdDiscountStrategy, (earlyBirdDiscountStrategy) => earlyBirdDiscountStrategy.competition)
+  @OneToOne(() => EarlyBirdDiscountStrategy, { nullable: true })
   @JoinColumn()
   earlyBirdDiscountStrategy?: EarlyBirdDiscountStrategy;
 

@@ -193,7 +193,15 @@ export type COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE = ErrorResponse & {
   result: '대회의 상태를 ACTIVE로 변경할 수 없습니다.';
 };
 
+export type COMPETITIONS_DIVISION_SAVE_FAILED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 6002;
+  result: '부문을 저장하는데 실패했습니다.';
+};
+
 export const CompetitionsErrorMap = {
   COMPETITIONS_COMPETITION_NOT_FOUND: typia.random<COMPETITIONS_COMPETITION_NOT_FOUND>(),
   COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(),
+  COMPETITIONS_DIVISION_SAVE_FAILED: typia.random<COMPETITIONS_DIVISION_SAVE_FAILED>(),
 };

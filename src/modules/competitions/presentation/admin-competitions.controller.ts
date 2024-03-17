@@ -5,10 +5,11 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
 import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
 import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { Competition } from 'src/modules/competitions/domain/competition.entity';
+import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
 import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
 import { UpdateCompetitionStatusReqDto } from '../dto/request/update-competition-status.req.dto';
+import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -87,6 +88,23 @@ export class AdminCompetitionsController {
     @TypedBody() dto: UpdateCompetitionStatusReqDto,
   ): Promise<ResponseForm<CompetitionResDto>> {
     const ret = await this.CompetitionsAppService.updateCompetitionStatus(id, dto.status);
+    return createResponseForm(ret);
+  }
+
+  /**
+   * a-5-6 create divisions.
+   * - RoleLevel: ADMIN.
+   *
+   * @tag a-5 competitions
+   * @returns created divisions
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Post('/:id/divisions')
+  async createDivisions(
+    @TypedParam('id') id: Competition['id'],
+    @TypedBody() dto: CreateDivisitonsReqDto,
+  ): Promise<ResponseForm<any>> {
+    const ret = await this.CompetitionsAppService.createDivisions(id, dto);
     return createResponseForm(ret);
   }
 }

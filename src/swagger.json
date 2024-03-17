@@ -1588,6 +1588,72 @@
         ],
         "x-nestia-method": "PATCH"
       }
+    },
+    "/admin/competitions/{id}/divisions": {
+      "post": {
+        "tags": [
+          "a-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDivisitonsReqDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created divisions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormany"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-5-6 create divisions",
+        "description": "a-5-6 create divisions.\n- RoleLevel: ADMIN.",
+        "x-nestia-namespace": "admin.competitions.divisions.createDivisions",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created divisions",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
     }
   },
   "components": {
@@ -3419,9 +3485,6 @@
       "CompetitionResDto.o1": {
         "type": "object",
         "properties": {
-          "earlyBirdDiscountStrategy": {
-            "$ref": "#/components/schemas/OmitEarlyBirdDiscountStrategycompetition"
-          },
           "divisions": {
             "type": "array",
             "items": {
@@ -3469,6 +3532,10 @@
               }
             ],
             "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+          },
+          "earlyBirdDiscountStrategy": {
+            "$ref": "#/components/schemas/EarlyBirdDiscountStrategy",
+            "description": "- 대회의 얼리버드 할인 전략."
           },
           "address": {
             "type": "string",
@@ -3735,6 +3802,77 @@
           "competitionId"
         ],
         "description": "Construct a type with the properties of T except for those in type K."
+      },
+      "EarlyBirdDiscountStrategy": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "earlyBirdStartDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 얼리버드 시작일"
+          },
+          "earlyBirdEndDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 얼리버드 마감일"
+          },
+          "discountPrice": {
+            "type": "number",
+            "minimum": 0,
+            "description": "- 얼리버드 할인 가격 ex) 10000\n- 단위 : 원\n- 음수 값은 허용하지 않습니다."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "earlyBirdStartDate",
+          "earlyBirdEndDate",
+          "discountPrice",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "CreateCompetitionReqDto": {
         "type": "object",
@@ -4028,6 +4166,109 @@
         "nullable": false,
         "required": [
           "status"
+        ]
+      },
+      "CreateDivisitonsReqDto": {
+        "type": "object",
+        "properties": {
+          "packedDivisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackedDivision"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "packedDivisions"
+        ]
+      },
+      "PackedDivision": {
+        "type": "object",
+        "properties": {
+          "categorys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "uniforms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "GI",
+                "NOGI"
+              ]
+            }
+          },
+          "genders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "MALE",
+                "FEMALE",
+                "MIXED"
+              ]
+            }
+          },
+          "belts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "weights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "birthYearRangeStarts": {
+            "type": "string"
+          },
+          "birthYearRangeEnds": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "categorys",
+          "uniforms",
+          "genders",
+          "belts",
+          "weights",
+          "birthYearRangeStarts",
+          "birthYearRangeEnds",
+          "price"
+        ]
+      },
+      "ResponseFormany": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {}
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
         ]
       }
     },

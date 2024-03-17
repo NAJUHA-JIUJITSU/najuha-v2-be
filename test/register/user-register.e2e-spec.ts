@@ -12,7 +12,7 @@ import { Redis } from 'ioredis';
 import { User } from 'src/modules/users/domain/user.entity';
 import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
-import { PhoneNumberAuthCode } from 'src/modules/register/phone-number-auth-code.type';
+import { PhoneNumberAuthCode } from 'src/modules/register/types/phone-number-auth-code.type';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { Policy } from 'src/modules/policy/domain/policy.entity';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';

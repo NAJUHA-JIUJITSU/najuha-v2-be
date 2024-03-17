@@ -1,8 +1,6 @@
-import { Competition } from 'src/modules/competitions/domain/competition.entity';
-import { Division } from 'src/modules/competitions/domain/division.entity';
-import { EarlyBirdDiscountStrategy } from 'src/modules/competitions/domain/early-bird-discount-strategy.entity';
+import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
+import { Division } from 'src/modules/competitions/domain/entities/division.entity';
 
-export interface CompetitionResDto extends Omit<Competition, 'earlyBirdDiscountStrategy' | 'divisions'> {
-  earlyBirdDiscountStrategy?: Omit<EarlyBirdDiscountStrategy, 'competition'>;
+export interface CompetitionResDto extends Omit<Competition, 'divisions'> {
   divisions?: Omit<Division, 'competition'>[];
 }
