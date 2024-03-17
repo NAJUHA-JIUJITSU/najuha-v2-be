@@ -6,10 +6,7 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { UserRepository } from '../../infrastructure/database/repository/user.repository';
 
 @Module({
-  // imports: [TypeOrmModule.forFeature([User])],
-  imports: [],
   controllers: [UserUsersController],
   providers: [UsersAppService, UserRepository],
-  exports: [],
 })
 export class UsersModule {}

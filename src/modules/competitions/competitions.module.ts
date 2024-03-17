@@ -10,9 +10,7 @@ import { Division } from 'src/modules/competitions/domain/entities/division.enti
 import { DivisionRepository } from 'src/infrastructure/database/repository/division.repository';
 
 @Module({
-  imports: [],
   controllers: [UserCompetitionsController, AdminCompetitionsController],
   providers: [CompetitionsAppService, CompetitionRepository, DivisionRepository],
-  exports: [],
 })
 export class CompetitionsModule {}
