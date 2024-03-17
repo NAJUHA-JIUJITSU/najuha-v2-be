@@ -4171,19 +4171,19 @@
       "CreateDivisitonsReqDto": {
         "type": "object",
         "properties": {
-          "packedDivisions": {
+          "divisionPacks": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PackedDivision"
+              "$ref": "#/components/schemas/DivisionPack"
             }
           }
         },
         "nullable": false,
         "required": [
-          "packedDivisions"
+          "divisionPacks"
         ]
       },
-      "PackedDivision": {
+      "DivisionPack": {
         "type": "object",
         "properties": {
           "categorys": {
@@ -4225,10 +4225,10 @@
               "type": "string"
             }
           },
-          "birthYearRangeStarts": {
+          "birthYearRangeStart": {
             "type": "string"
           },
-          "birthYearRangeEnds": {
+          "birthYearRangeEnd": {
             "type": "string"
           },
           "price": {
@@ -4242,8 +4242,8 @@
           "genders",
           "belts",
           "weights",
-          "birthYearRangeStarts",
-          "birthYearRangeEnds",
+          "birthYearRangeStart",
+          "birthYearRangeEnd",
           "price"
         ]
       },

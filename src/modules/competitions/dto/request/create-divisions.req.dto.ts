@@ -1,5 +1,5 @@
-import { PackedDivision } from '../../types/packed-division.type';
+import { DivisionPack } from '../../domain/entities/division-pack.entity';
 
 export interface CreateDivisitonsReqDto {
-  packedDivisions: PackedDivision[];
+  divisionPacks: DivisionPack[];
 }

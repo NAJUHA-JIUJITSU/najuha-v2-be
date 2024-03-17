@@ -7,15 +7,12 @@ import { Competition } from 'src/modules/competitions/domain/entities/competitio
 import { User } from 'src/modules/users/domain/user.entity';
 import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
 import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
-import { DivisonDomainService } from '../domain/services/divison.domain.service';
 import { Division } from '../domain/entities/division.entity';
+import { DivisionPack } from '../domain/entities/division-pack.entity';
 
 @Injectable()
 export class CompetitionsAppService {
-  constructor(
-    private readonly competitionsRepository: CompetitionsRepository,
-    private readonly divisonDomainService: DivisonDomainService,
-  ) {}
+  constructor(private readonly competitionsRepository: CompetitionsRepository) {}
 
   async createCompetition(dto: CreateCompetitionReqDto): Promise<CompetitionResDto> {
     return this.competitionsRepository.createCompetition(dto);
@@ -43,7 +40,10 @@ export class CompetitionsAppService {
   }
 
   async createDivisions(id: Competition['id'], dto: CreateDivisitonsReqDto): Promise<Division[]> {
-    const unpakedDivisions = this.divisonDomainService.unpackDivisions(id, dto.packedDivisions);
-    return await this.competitionsRepository.createDivisions(unpakedDivisions);
+    const divisionPacks = dto.divisionPacks.map((pack) => new DivisionPack(pack));
+    const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
+      return [...acc, ...divisionPack.unpack(id)];
+    }, []);
+    return await this.competitionsRepository.createDivisions(unpackedDivisions);
   }
 }
