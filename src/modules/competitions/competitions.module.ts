@@ -3,15 +3,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 import { UserCompetitionsController } from 'src/modules/competitions/presentation/user-competitions.controller';
 import { CompetitionsAppService } from 'src/modules/competitions/application/competitions.app.service';
-import { CompetitionsRepository } from './repository/competitions.repository';
+import { CompetitionRepository } from '../../infrastructure/database/repository/competition.repository';
 import { EarlyBirdDiscountStrategy } from 'src/modules/competitions/domain/entities/early-bird-discount-strategy.entity';
 import { AdminCompetitionsController } from './presentation/admin-competitions.controller';
 import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { DivisionRepository } from 'src/infrastructure/database/repository/division.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Competition, EarlyBirdDiscountStrategy, Division])],
+  imports: [],
   controllers: [UserCompetitionsController, AdminCompetitionsController],
-  providers: [CompetitionsAppService, CompetitionsRepository],
-  exports: [CompetitionsRepository],
+  providers: [CompetitionsAppService, CompetitionRepository, DivisionRepository],
+  exports: [],
 })
 export class CompetitionsModule {}

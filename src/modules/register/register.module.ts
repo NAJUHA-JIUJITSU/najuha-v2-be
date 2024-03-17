@@ -5,7 +5,7 @@ import { RegisterAppService } from './application/register.app.service';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { PolicyModule } from 'src/modules/policy/policy.module';
 import { PhoneNumberAuthCodeDomainService } from './domain/phone-number-auth-code.domain.service';
-import { PolicyConsentRepository } from 'src/modules/policy/repository/policy-consent.repository';
+import { PolicyConsentRepository } from 'src/infrastructure/database/repository/policy-consent.repository';
 
 @Module({
   imports: [UsersModule, AuthModule, PolicyModule],

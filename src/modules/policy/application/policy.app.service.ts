@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePolicyReqDto } from '../dto/request/create-policy.req.dto';
-import { PolicyRepository } from '../repository/policy.repository';
+import { PolicyRepository } from '../../../infrastructure/database/repository/policy.repository';
 import { Policy } from 'src/modules/policy/domain/policy.entity';
 import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
 import { FindPolicyResDto } from '../dto/response/find-policy.res.dto';

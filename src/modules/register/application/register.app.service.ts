@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { RegisterReqDto } from '../dto/request/register.req.dto';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
-import { UsersRepository } from 'src/modules/users/repository/users.repository';
-import { PolicyRepository } from 'src/modules/policy/repository/policy.repository';
+import { UserRepository } from 'src/infrastructure/database/repository/user.repository';
+import { PolicyRepository } from 'src/infrastructure/database/repository/policy.repository';
 import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
 import { PhoneNumberAuthCodeDomainService } from '../domain/phone-number-auth-code.domain.service';
-import { PolicyConsentRepository } from 'src/modules/policy/repository/policy-consent.repository';
+import { PolicyConsentRepository } from 'src/infrastructure/database/repository/policy-consent.repository';
 import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.req..dto';
 import { RegisterUser } from '../domain/registerUser.entity';
 import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
@@ -21,13 +21,13 @@ export class RegisterAppService {
   constructor(
     private readonly AuthTokenDomainService: AuthTokenDomainService,
     private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeDomainService,
-    private readonly usersRepository: UsersRepository,
+    private readonly userRepository: UserRepository,
     private readonly policyRepository: PolicyRepository,
     private readonly policyConsetRepository: PolicyConsentRepository,
   ) {}
 
   async getTemporaryUser(userId: User['id']): Promise<TemporaryUserResDto> {
-    return await this.usersRepository.getOneOrFail({ where: { id: userId } });
+    return await this.userRepository.getOneOrFail({ where: { id: userId } });
   }
 
   /**
@@ -38,7 +38,7 @@ export class RegisterAppService {
    */
   async isDuplicateNickname(userId: User['id'], nickname: string): Promise<IsDuplicatedNicknameResDto> {
     // domain service로 분리 ?
-    const user = await this.usersRepository.findOneBy({ nickname });
+    const user = await this.userRepository.findOneBy({ nickname });
     if (user === null) return false;
     if (user.id === userId) return false;
     return true;
@@ -50,12 +50,12 @@ export class RegisterAppService {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
 
-    const user = await this.usersRepository.getOneOrFail({ where: { id: userId }, relations: ['policyConsents'] });
+    const user = await this.userRepository.getOneOrFail({ where: { id: userId }, relations: ['policyConsents'] });
     const latestPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
     const registerUser = new RegisterUser(user, dto.user, dto.consentPolicyTypes, latestPolicies);
     registerUser.validate();
 
-    await this.usersRepository.save(registerUser.user);
+    await this.userRepository.save(registerUser.user);
     await this.policyConsetRepository.save(registerUser.user.policyConsents);
     return await this.AuthTokenDomainService.createAuthTokens(registerUser.user.id, registerUser.user.role);
   }

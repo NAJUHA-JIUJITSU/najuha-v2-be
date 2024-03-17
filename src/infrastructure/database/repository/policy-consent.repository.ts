@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 // import { BusinessException } from 'src/common/response/errorResponse';
 import { DataSource, FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
-import { PolicyConsent } from '../domain/policy-consent.entity';
+import { PolicyConsent } from '../../../modules/policy/domain/policy-consent.entity';
 
 @Injectable()
 export class PolicyConsentRepository extends Repository<PolicyConsent> {

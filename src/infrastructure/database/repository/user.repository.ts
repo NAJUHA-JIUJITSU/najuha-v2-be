@@ -5,7 +5,7 @@ import { User } from 'src/modules/users/domain/user.entity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
-export class UsersRepository extends Repository<User> {
+export class UserRepository extends Repository<User> {
   constructor(private dataSource: DataSource) {
     super(User, dataSource.createEntityManager());
   }
