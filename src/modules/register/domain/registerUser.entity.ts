@@ -1,19 +1,19 @@
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { RegisterReqDto } from '../dto/request/register.req.dto';
-import { UserEntity } from 'src/modules/users/domain/user.entity';
-import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
-import { PolicyConsentEntity } from 'src/modules/policy/domain/policy-consent.entity';
+import { User } from 'src/modules/users/domain/user.entity';
+import { Policy } from 'src/modules/policy/domain/policy.entity';
+import { PolicyConsent } from 'src/modules/policy/domain/policy-consent.entity';
 
 export class RegisterUser {
-  user: UserEntity & { policyConsents: PolicyConsentEntity[] };
-  registerUserConsentPolicyTypes: PolicyEntity['type'][];
-  latestPolicies: PolicyEntity[];
+  user: User & { policyConsents: PolicyConsent[] };
+  registerUserConsentPolicyTypes: Policy['type'][];
+  latestPolicies: Policy[];
 
   constructor(
-    user: UserEntity,
+    user: User,
     registerUserInfo: RegisterReqDto['user'],
-    registerUserConsentPolicyTypes: PolicyEntity['type'][],
-    latestPolicies: PolicyEntity[],
+    registerUserConsentPolicyTypes: Policy['type'][],
+    latestPolicies: Policy[],
   ) {
     this.user = { ...user, ...registerUserInfo, role: 'USER', policyConsents: user.policyConsents || [] };
     this.registerUserConsentPolicyTypes = registerUserConsentPolicyTypes || [];
@@ -22,7 +22,7 @@ export class RegisterUser {
   }
 
   private setUserPolicyConsents() {
-    let policyies: PolicyEntity[] = [];
+    let policyies: Policy[] = [];
     // 이미 동의했던 약관은 추가하지 않기
     policyies = this.latestPolicies.filter(
       (policy) => !this.user.policyConsents?.some((consent) => consent.policyId === policy.id),
@@ -38,7 +38,7 @@ export class RegisterUser {
         userId: this.user.id,
         policyId: policy.id,
       };
-    }) as PolicyConsentEntity[];
+    }) as PolicyConsent[];
 
     this.user.policyConsents = [...this.user.policyConsents, ...policyConsents];
   }

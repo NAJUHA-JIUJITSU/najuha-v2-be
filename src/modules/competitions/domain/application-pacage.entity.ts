@@ -1,6 +1,6 @@
 // import { IApplication } from './application.interface';
-// import { CompetitionEntity } from './competition.interface';
-// import { UserEntity } from './user.interface';
+// import { Competition } from './competition.interface';
+// import { User } from './user.interface';
 
 // export interface IApplicationPackage {
 //   /**
@@ -54,7 +54,7 @@
 //    * - ManyToOne: Competition(1) -> ApplicationPackage(*)
 //    * - JoinColumn: competitionId
 //    */
-//   competition?: CompetitionEntity;
+//   competition?: Competition;
 
 //   /**
 //    * - payment
@@ -70,5 +70,5 @@
 //    * - ManyToOne: User(1) -> Application(*)
 //    * - JoinColumn: userId
 //    */
-//   user?: UserEntity;
+//   user?: User;
 // }

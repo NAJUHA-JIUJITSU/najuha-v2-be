@@ -3,7 +3,7 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
-import { CompetitionEntity } from 'src/modules/competitions/domain/competition.entity';
+import { Competition } from 'src/modules/competitions/domain/competition.entity';
 import { CompetitionResDto } from '../dto/response/competition.res.dto';
 import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
 
@@ -34,7 +34,7 @@ export class UserCompetitionsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:id')
-  async getCompetition(@TypedParam('id') id: CompetitionEntity['id']): Promise<ResponseForm<CompetitionResDto>> {
+  async getCompetition(@TypedParam('id') id: Competition['id']): Promise<ResponseForm<CompetitionResDto>> {
     const competition = await this.CompetitionsAppService.getCompetitionByRole('USER', id);
     return createResponseForm(competition);
   }

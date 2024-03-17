@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from 'typeorm';
-import { CompetitionEntity } from './competition.entity';
+import { Competition } from './competition.entity';
 
 @Entity('early_bird_discount_strategy')
-export class EarlyBirdDiscountStrategyEntity {
+export class EarlyBirdDiscountStrategy {
   /**
    * - ID. 데이터베이스에서 자동 생성됩니다.
    * @type uint32
@@ -39,6 +39,6 @@ export class EarlyBirdDiscountStrategyEntity {
   @UpdateDateColumn()
   updatedAt: Date | string;
 
-  @OneToOne(() => CompetitionEntity, (competition) => competition.earlyBirdDiscountStrategy)
-  competition: CompetitionEntity;
+  @OneToOne(() => Competition, (competition) => competition.earlyBirdDiscountStrategy)
+  competition: Competition;
 }

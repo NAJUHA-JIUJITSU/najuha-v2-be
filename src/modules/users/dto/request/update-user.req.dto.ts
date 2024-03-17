@@ -1,3 +1,3 @@
-import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { User } from 'src/modules/users/domain/user.entity';
 
-export type UpdateUserReqDto = Partial<Pick<UserEntity, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>>;
+export type UpdateUserReqDto = Partial<Pick<User, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>>;

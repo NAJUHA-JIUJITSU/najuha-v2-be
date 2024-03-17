@@ -3,7 +3,7 @@ import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.
 import { UsersRepository } from 'src/modules/users/repository/users.repository';
 import { UpdateUserReqDto } from '../dto/request/update-user.req.dto';
 import { UserResDto } from '../dto/response/user.res.dto';
-import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { User } from 'src/modules/users/domain/user.entity';
 
 @Injectable()
 export class UsersAppService {
@@ -14,11 +14,11 @@ export class UsersAppService {
     return await this.usersRepository.save(user);
   }
 
-  async updateUser(userId: UserEntity['id'], dto: UpdateUserReqDto): Promise<UserResDto> {
+  async updateUser(userId: User['id'], dto: UpdateUserReqDto): Promise<UserResDto> {
     return await this.usersRepository.saveOrFail({ id: userId, ...dto });
   }
 
-  async getMe(userId: UserEntity['id']): Promise<UserResDto> {
+  async getMe(userId: User['id']): Promise<UserResDto> {
     return await this.usersRepository.getOneOrFail({ where: { id: userId } });
   }
 }

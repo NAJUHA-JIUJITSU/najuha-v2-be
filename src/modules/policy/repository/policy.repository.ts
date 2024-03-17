@@ -1,32 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, FindOptionsWhere, Repository } from 'typeorm';
-import { PolicyEntity } from '../domain/policy.entity';
+import { Policy } from '../domain/policy.entity';
 import { BusinessException, PolicyErrorMap } from 'src/common/response/errorResponse';
 
 @Injectable()
-export class PolicyRepository extends Repository<PolicyEntity> {
+export class PolicyRepository extends Repository<Policy> {
   constructor(private dataSource: DataSource) {
-    super(PolicyEntity, dataSource.createEntityManager());
+    super(Policy, dataSource.createEntityManager());
   }
 
-  async saveOrFail(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<PolicyEntity> {
+  async saveOrFail(dto: Pick<Policy, 'id'> & Partial<Policy>): Promise<Policy> {
     const policy = await this.findOne({ where: { id: dto.id } });
     if (!policy) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
     return await this.save({ ...policy, ...dto });
   }
 
-  async updateOrFail(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<void> {
+  async updateOrFail(dto: Pick<Policy, 'id'> & Partial<Policy>): Promise<void> {
     const result = await this.update({ id: dto.id }, dto);
     if (!result.affected) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
   }
 
-  async getOneOrFail(where: FindOptionsWhere<PolicyEntity>): Promise<PolicyEntity> {
+  async getOneOrFail(where: FindOptionsWhere<Policy>): Promise<Policy> {
     const policy = await this.findOne({ where });
     if (!policy) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
     return policy;
   }
 
-  async getOneLatestPolicyByTypeOrFail(type: PolicyEntity['type']): Promise<PolicyEntity> {
+  async getOneLatestPolicyByTypeOrFail(type: Policy['type']): Promise<Policy> {
     const policy = await this.createQueryBuilder('policy')
       .where('policy.type = :type', { type })
       .orderBy('policy.createdAt', 'DESC')
@@ -35,7 +35,7 @@ export class PolicyRepository extends Repository<PolicyEntity> {
     return policy;
   }
 
-  async findAllTypesOfLatestPolicies(): Promise<PolicyEntity[]> {
+  async findAllTypesOfLatestPolicies(): Promise<Policy[]> {
     return this.createQueryBuilder('policy')
       .distinctOn(['policy.type'])
       .orderBy('policy.type')

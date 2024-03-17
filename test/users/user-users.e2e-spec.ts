@@ -10,7 +10,7 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
-import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { User } from 'src/modules/users/domain/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-3 user-users test', () => {
@@ -49,12 +49,12 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-2 PATCH /user/users --------------------------------------------------', () => {
     it('유저 정보 수정 성공 시', async () => {
-      const user = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
+      const user = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
       user.role = 'USER';
       user.birth = '19980101';
-      const userEntity = await userService.createUser(user);
+      const User = await userService.createUser(user);
       const accessToken = jwtService.sign(
-        { userId: userEntity.id, userRole: userEntity.role },
+        { userId: User.id, userRole: User.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
@@ -73,26 +73,26 @@ describe('E2E u-3 user-users test', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send(UpdateUserReqDto);
 
-      expect(typia.is<ResponseForm<UserEntity>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<User>>(res.body)).toBe(true);
     });
   });
 
   describe('u-3-3 GET /user/users/me --------------------------------------------------', () => {
     it('내 정보 조회 성공 시', async () => {
-      const user = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
+      const user = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
       user.role = 'USER';
       user.birth = '19980101';
-      const userEntity = await userService.createUser(user);
+      const User = await userService.createUser(user);
       const accessToken = jwtService.sign(
-        { userId: userEntity.id, userRole: userEntity.role },
+        { userId: User.id, userRole: User.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
 
       const res = await request(app.getHttpServer())
         .get('/user/users/me')
         .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<UserEntity>>(res.body)).toBe(true);
-      expect(res.body.result.id).toEqual(userEntity.id);
+      expect(typia.is<ResponseForm<User>>(res.body)).toBe(true);
+      expect(res.body.result.id).toEqual(User.id);
     });
   });
 });

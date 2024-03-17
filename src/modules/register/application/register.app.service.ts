@@ -10,7 +10,7 @@ import { PolicyConsentRepository } from 'src/modules/policy/repository/policy-co
 import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.req..dto';
 import { RegisterUser } from '../domain/registerUser.entity';
 import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
-import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { User } from 'src/modules/users/domain/user.entity';
 import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
 import { IsDuplicatedNicknameResDto } from '../dto/response/is-duplicated-nickname.res.dto';
 import { ConfirmedAuthCodeResDto } from '../dto/response/confirm-auth-code.res.dto';
@@ -26,7 +26,7 @@ export class RegisterAppService {
     private readonly policyConsetRepository: PolicyConsentRepository,
   ) {}
 
-  async getTemporaryUser(userId: UserEntity['id']): Promise<TemporaryUserResDto> {
+  async getTemporaryUser(userId: User['id']): Promise<TemporaryUserResDto> {
     return await this.usersRepository.getOneOrFail({ where: { id: userId } });
   }
 
@@ -36,7 +36,7 @@ export class RegisterAppService {
    * - 존재하는 닉네임 이지만 본인이 사용중이면 false를 반환
    * - 존재하는 닉네임이면 true를 반환
    */
-  async isDuplicateNickname(userId: UserEntity['id'], nickname: string): Promise<IsDuplicatedNicknameResDto> {
+  async isDuplicateNickname(userId: User['id'], nickname: string): Promise<IsDuplicatedNicknameResDto> {
     // domain service로 분리 ?
     const user = await this.usersRepository.findOneBy({ nickname });
     if (user === null) return false;
@@ -45,7 +45,7 @@ export class RegisterAppService {
   }
 
   // TODO: transaction 필요
-  async registerUser(userId: UserEntity['id'], dto: RegisterReqDto): Promise<AuthTokensResDto> {
+  async registerUser(userId: User['id'], dto: RegisterReqDto): Promise<AuthTokensResDto> {
     if (await this.isDuplicateNickname(userId, dto.user.nickname)) {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
@@ -62,7 +62,7 @@ export class RegisterAppService {
 
   // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
   async sendPhoneNumberAuthCode(
-    userId: UserEntity['id'],
+    userId: User['id'],
     dto: RegisterPhoneNumberReqDto,
   ): Promise<SendPhoneNumberAuthCodeResDto> {
     const authCode = await this.phoneAuthCodeProvider.issueAuthCode(userId, dto.phoneNumber);
@@ -70,7 +70,7 @@ export class RegisterAppService {
     return authCode;
   }
 
-  async confirmAuthCode(userId: UserEntity['id'], dto: confirmAuthCodeReqDto): Promise<ConfirmedAuthCodeResDto> {
+  async confirmAuthCode(userId: User['id'], dto: confirmAuthCodeReqDto): Promise<ConfirmedAuthCodeResDto> {
     const isConfirmed = await this.phoneAuthCodeProvider.isAuthCodeValid(userId, dto.authCode);
     return isConfirmed;
   }

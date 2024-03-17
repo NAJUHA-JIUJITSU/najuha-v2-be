@@ -8,12 +8,12 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { EarlyBirdDiscountStrategyEntity } from './early-bird-discount-strategy.entity';
+import { EarlyBirdDiscountStrategy } from './early-bird-discount-strategy.entity';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
-import { DivisionEntity } from './division.entity';
+import { Division } from './division.entity';
 
 @Entity('competition')
-export class CompetitionEntity {
+export class Competition {
   /**
    * - 대회의 고유 식별자. 데이터베이스에서 자동으로 생성됩니다.
    * @type uint32
@@ -117,15 +117,15 @@ export class CompetitionEntity {
   updatedAt: string | Date;
 
   /** - 대회의 얼리버드 할인 전략. */
-  @OneToOne(() => EarlyBirdDiscountStrategyEntity, (earlyBirdDiscountStrategy) => earlyBirdDiscountStrategy.competition)
+  @OneToOne(() => EarlyBirdDiscountStrategy, (earlyBirdDiscountStrategy) => earlyBirdDiscountStrategy.competition)
   @JoinColumn()
-  earlyBirdDiscountStrategy?: EarlyBirdDiscountStrategyEntity;
+  earlyBirdDiscountStrategy?: EarlyBirdDiscountStrategy;
 
   /** - divisions. */
-  @OneToMany(() => DivisionEntity, (division) => division.competition)
-  divisions?: DivisionEntity[];
+  @OneToMany(() => Division, (division) => division.competition)
+  divisions?: Division[];
 
-  updateStatus(status: CompetitionEntity['status']): void {
+  updateStatus(status: Competition['status']): void {
     if (status === 'ACTIVE') {
       const missingProperties: string[] = [];
       if (this.title === 'DEFAULT TITLE') missingProperties.push('title');
@@ -134,6 +134,7 @@ export class CompetitionEntity {
       if (this.registrationStartDate === null) missingProperties.push('registrationStartDate');
       if (this.registrationEndDate === null) missingProperties.push('registrationEndDate');
       if (this.description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
+
       if (missingProperties.length > 0) {
         throw new BusinessException(
           CompetitionsErrorMap.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,

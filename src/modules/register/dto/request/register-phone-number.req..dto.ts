@@ -1,3 +1,3 @@
-import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { User } from 'src/modules/users/domain/user.entity';
 
-export type RegisterPhoneNumberReqDto = Pick<UserEntity, 'phoneNumber'>;
+export type RegisterPhoneNumberReqDto = Pick<User, 'phoneNumber'>;

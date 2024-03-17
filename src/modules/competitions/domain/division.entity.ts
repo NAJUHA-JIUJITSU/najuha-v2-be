@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { CompetitionEntity } from './competition.entity';
+import { Competition } from './competition.entity';
 
 @Entity('division')
-export class DivisionEntity {
+export class Division {
   /**
    * - division id.
    * @type uint32
@@ -92,8 +92,8 @@ export class DivisionEntity {
   competitionId: number;
 
   /** - competition. */
-  @ManyToOne(() => CompetitionEntity, (competition) => competition.divisions)
-  competition?: CompetitionEntity;
+  @ManyToOne(() => Competition, (competition) => competition.divisions)
+  competition?: Competition;
 
   //   /**
   //    * - 부문에 대한 신청 목록.

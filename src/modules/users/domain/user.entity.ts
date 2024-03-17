@@ -1,5 +1,5 @@
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
-import { PolicyConsentEntity } from 'src/modules/policy/domain/policy-consent.entity';
+import { PolicyConsent } from 'src/modules/policy/domain/policy-consent.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 /**
@@ -10,7 +10,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
  * - apple  : snsId, email, name.
  */
 @Entity('user')
-export class UserEntity {
+export class User {
   /**
    * - 사용자 ID. 데이터베이스에서 자동 생성됩니다.
    * @type uint32
@@ -109,6 +109,6 @@ export class UserEntity {
    * - 사용자가 동의한 약관 정보
    * - OneToMany: User(1) -> PolicyConsent(*)
    */
-  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user)
-  policyConsents?: PolicyConsentEntity[];
+  @OneToMany(() => PolicyConsent, (policyConsent) => policyConsent.user)
+  policyConsents?: PolicyConsent[];
 }

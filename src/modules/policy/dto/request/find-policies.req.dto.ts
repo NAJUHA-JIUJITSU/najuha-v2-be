@@ -1,3 +1,3 @@
-import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
+import { Policy } from 'src/modules/policy/domain/policy.entity';
 
-export type FindPoliciesReqDto = { type?: PolicyEntity['type'] };
+export type FindPoliciesReqDto = { type?: Policy['type'] };

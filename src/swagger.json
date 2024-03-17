@@ -453,7 +453,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PartialPickUserEntitynamegenderbirthnicknamebelt"
+                "$ref": "#/components/schemas/PartialPickUsernamegenderbirthnicknamebelt"
               }
             }
           },
@@ -1102,7 +1102,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
+                  "$ref": "#/components/schemas/ResponseFormPolicy"
                 }
               }
             },
@@ -2257,7 +2257,7 @@
           "updatedAt"
         ]
       },
-      "PartialPickUserEntitynamegenderbirthnicknamebelt": {
+      "PartialPickUsernamegenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "name": {
@@ -2519,7 +2519,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/PickUserEntitygenderbirthnicknamebelt"
+            "$ref": "#/components/schemas/PickUsergenderbirthnicknamebelt"
           },
           "consentPolicyTypes": {
             "type": "array",
@@ -2540,7 +2540,7 @@
           "consentPolicyTypes"
         ]
       },
-      "PickUserEntitygenderbirthnicknamebelt": {
+      "PickUsergenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
@@ -2726,10 +2726,10 @@
       "FindPoliciesResDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/PolicyEntity"
+          "$ref": "#/components/schemas/Policy"
         }
       },
-      "PolicyEntity": {
+      "Policy": {
         "type": "object",
         "properties": {
           "id": {
@@ -2780,7 +2780,7 @@
           "policyConsents": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PolicyConsentEntity"
+              "$ref": "#/components/schemas/PolicyConsent"
             },
             "description": "- 사용자가 동의한 약관 정보\nOneToMany: Policy(1) -> PolicyConsent(*)"
           }
@@ -2797,7 +2797,7 @@
         ],
         "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
-      "PolicyConsentEntity": {
+      "PolicyConsent": {
         "type": "object",
         "properties": {
           "id": {
@@ -2821,7 +2821,7 @@
             "description": "- userId."
           },
           "user": {
-            "$ref": "#/components/schemas/UserEntity",
+            "$ref": "#/components/schemas/User",
             "description": "- user"
           },
           "policyId": {
@@ -2829,7 +2829,7 @@
             "description": "- policyId."
           },
           "policy": {
-            "$ref": "#/components/schemas/PolicyEntity",
+            "$ref": "#/components/schemas/Policy",
             "description": "- policy"
           }
         },
@@ -2844,7 +2844,7 @@
         ],
         "description": "- 사용자가 동의한 약관 정보"
       },
-      "UserEntity": {
+      "User": {
         "type": "object",
         "properties": {
           "id": {
@@ -2955,7 +2955,7 @@
           "policyConsents": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PolicyConsentEntity"
+              "$ref": "#/components/schemas/PolicyConsent"
             },
             "description": "- 사용자가 동의한 약관 정보\n- OneToMany: User(1) -> PolicyConsent(*)"
           }
@@ -2996,7 +2996,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/PolicyEntity"
+            "$ref": "#/components/schemas/Policy"
           }
         },
         "nullable": false,
@@ -3043,7 +3043,7 @@
           "content"
         ]
       },
-      "ResponseFormPolicyEntity": {
+      "ResponseFormPolicy": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -3059,7 +3059,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/PolicyEntity"
+            "$ref": "#/components/schemas/Policy"
           }
         },
         "nullable": false,
@@ -3120,7 +3120,7 @@
         "type": "object",
         "properties": {
           "earlyBirdDiscountStrategy": {
-            "$ref": "#/components/schemas/OmitEarlyBirdDiscountStrategyEntitycompetition"
+            "$ref": "#/components/schemas/OmitEarlyBirdDiscountStrategycompetition"
           },
           "id": {
             "type": "integer",
@@ -3318,7 +3318,7 @@
           "posterImgUrlKey"
         ]
       },
-      "OmitEarlyBirdDiscountStrategyEntitycompetition": {
+      "OmitEarlyBirdDiscountStrategycompetition": {
         "type": "object",
         "properties": {
           "id": {
@@ -3420,12 +3420,12 @@
         "type": "object",
         "properties": {
           "earlyBirdDiscountStrategy": {
-            "$ref": "#/components/schemas/OmitEarlyBirdDiscountStrategyEntitycompetition"
+            "$ref": "#/components/schemas/OmitEarlyBirdDiscountStrategycompetition"
           },
           "divisions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OmitDivisionEntitycompetition"
+              "$ref": "#/components/schemas/OmitDivisioncompetition"
             }
           },
           "id": {
@@ -3624,7 +3624,7 @@
           "posterImgUrlKey"
         ]
       },
-      "OmitDivisionEntitycompetition": {
+      "OmitDivisioncompetition": {
         "type": "object",
         "properties": {
           "gender": {

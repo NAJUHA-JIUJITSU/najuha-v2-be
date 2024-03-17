@@ -9,7 +9,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
+import { Policy } from 'src/modules/policy/domain/policy.entity';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { CreatePolicyReqDto } from 'src/modules/policy/dto/request/create-policy.req.dto';
 import exp from 'constants';
@@ -68,7 +68,7 @@ describe('E2E a-4 admin-policy test', () => {
 
   describe('a-4-2 GET /admin/policy ------------------------------------------------------', () => {
     it('모든 약관 가져오기 성공 시', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {
@@ -90,13 +90,13 @@ describe('E2E a-4 admin-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(policyTypes.length * maxVersion);
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      const query = { type: typia.random<PolicyEntity['type']>() };
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const query = { type: typia.random<Policy['type']>() };
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {
@@ -122,7 +122,7 @@ describe('E2E a-4 admin-policy test', () => {
         .query(query)
         .set('Authorization', `Bearer ${accessToken}`);
 
-      expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(maxVersion);
       expect(res.body.result[0].type).toEqual(query.type);
     });

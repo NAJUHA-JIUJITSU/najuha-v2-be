@@ -9,8 +9,8 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src/modules/users/domain/user.entity';
-import { PolicyEntity } from 'src/modules/policy/domain/policy.entity';
+import { User } from 'src/modules/users/domain/user.entity';
+import { Policy } from 'src/modules/policy/domain/policy.entity';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 // import * as Apis from '../../src/api/functional';
 
@@ -52,7 +52,7 @@ describe('E2E u-4 user-policy test', () => {
 
   describe('u-4-1 GET /user/policy/recent --------------------------------------------------', () => {
     it('가장 최근에 등록된 모든 타입의 약관을 가져오기 성공 시', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return PolicyAppService.createPolicy({
@@ -65,7 +65,7 @@ describe('E2E u-4 user-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/user/policy/recent');
-      expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(policyTypes.length);
     });
   });
@@ -80,7 +80,7 @@ describe('E2E u-4 user-policy test', () => {
       });
 
       const res = await request(app.getHttpServer()).get(`/user/policy/${policy.id}`);
-      expect(typia.is<ResponseForm<PolicyEntity>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<Policy>>(res.body)).toBe(true);
       expect(res.body.result.id).toEqual(policy.id);
     });
   });

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import { RefreshTokenReqDto } from 'src/modules/auth/dto/request/refresh-token.dto';
 import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
-import { UserEntity } from 'src/modules/users/domain/user.entity';
+import { User } from 'src/modules/users/domain/user.entity';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import { UsersRepository } from 'src/modules/users/repository/users.repository';
 import { SnsAuthClient } from 'src/infrastructure/sns-auth-client/sns-auth.client';
@@ -39,7 +39,7 @@ export class AuthAppService {
     return authTokens;
   }
 
-  async acquireAdminRole(userId: UserEntity['id']): Promise<AuthTokensResDto> {
+  async acquireAdminRole(userId: User['id']): Promise<AuthTokensResDto> {
     const user = await this.usersRepository.getOneOrFail({ where: { id: userId } });
 
     const isCurrentAdmin = appEnv.adminCredentials.some(
