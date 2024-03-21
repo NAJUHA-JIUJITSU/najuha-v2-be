@@ -1,12 +1,12 @@
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import appEnv from '../../common/app-env';
-import { Policy } from 'src/modules/policy/domain/policy.entity';
-import { PolicyConsent } from 'src/modules/policy/domain/policy-consent.entity';
-import { EarlyBirdDiscountStrategy } from 'src/modules/competitions/domain/early-bird-discount-strategy.entity';
-import { User } from 'src/modules/users/domain/user.entity';
-import { Competition } from 'src/modules/competitions/domain/competition.entity';
-import { Division } from 'src/modules/competitions/domain/division.entity';
-import { PriceSnapshot } from 'src/modules/competitions/domain/price-snapshot.entity';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
+import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
+import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
+import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
+import { EarlyBirdDiscountSnapshotEntity } from 'src/infrastructure/database/entities/competition/early-bird-discount-snapshot.entity';
 
 export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
   useFactory: async (): Promise<TypeOrmModuleOptions> => ({
@@ -17,7 +17,15 @@ export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
     password: appEnv.dbpassword,
     database: appEnv.dbDatabase,
     synchronize: appEnv.dbSynchronize,
-    entities: [User, Competition, Division, EarlyBirdDiscountStrategy, Policy, PolicyConsent, PriceSnapshot],
+    entities: [
+      UserEntity,
+      CompetitionEntity,
+      DivisionEntity,
+      EarlyBirdDiscountSnapshotEntity,
+      PolicyEntity,
+      PolicyConsentEntity,
+      PriceSnapshotEntity,
+    ],
     autoLoadEntities: true,
   }),
 };

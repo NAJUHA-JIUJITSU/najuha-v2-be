@@ -9,8 +9,8 @@ import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
-import { User } from 'src/modules/users/domain/user.entity';
+import { UpdateUserReqDto } from 'src/modules/users/structure/dto/request/update-user.req.dto';
+import { User } from 'src/infrastructure/database/entities/user/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-3 user-users test', () => {

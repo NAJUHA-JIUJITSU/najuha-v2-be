@@ -3,13 +3,13 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
-import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
-import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { Competition } from 'src/modules/competitions/domain/competition.entity';
-import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
-import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
-import { UpdateCompetitionStatusReqDto } from '../dto/request/update-competition-status.req.dto';
-import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
+import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
+import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
+import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
+import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
+import { UpdateCompetitionStatusReqDto } from '../structure/dto/request/update-competition-status.req.dto';
+import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
+import { ICompetition } from '../structure/competition.interface';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -52,7 +52,7 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:id')
-  async findCompetition(@TypedParam('id') id: Competition['id']): Promise<ResponseForm<CompetitionResDto>> {
+  async findCompetition(@TypedParam('id') id: ICompetition['id']): Promise<ResponseForm<CompetitionResDto>> {
     const competition = await this.CompetitionsAppService.getCompetitionByRole('ADMIN', id);
     return createResponseForm(competition);
   }
@@ -67,7 +67,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:id')
   async updateCompetition(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: UpdateCompetitionReqDto,
   ): Promise<ResponseForm<CompetitionResDto>> {
     const ret = await this.CompetitionsAppService.updateCompetition(id, dto);
@@ -84,7 +84,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:id/status')
   async updateCompetitionStatus(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: UpdateCompetitionStatusReqDto,
   ): Promise<ResponseForm<CompetitionResDto>> {
     const ret = await this.CompetitionsAppService.updateCompetitionStatus(id, dto.status);
@@ -101,7 +101,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:id/divisions')
   async createDivisions(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: CreateDivisitonsReqDto,
   ): Promise<ResponseForm<any>> {
     const ret = await this.CompetitionsAppService.createDivisions(id, dto);

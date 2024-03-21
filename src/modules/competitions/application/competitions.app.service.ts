@@ -1,54 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
-import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
-import { Competition } from 'src/modules/competitions/domain/competition.entity';
-import { User } from 'src/modules/users/domain/user.entity';
-import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
-import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
-import { Division } from '../domain/division.entity';
-import { DivisionPack } from '../domain/division-pack.entity';
-import { CompetitionRepository } from 'src/infrastructure/database/repository/competition.repository';
-import { DivisionRepository } from 'src/infrastructure/database/repository/division.repository';
+import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
+import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
+import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
+import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
+import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
+import { CompetitionRepository } from 'src/infrastructure/database/repository/competition/competition.repository';
+import { IUser } from 'src/modules/users/structure/user.interface';
+import { IDivision } from '../structure/division.interface';
+import { ICompetition } from '../structure/competition.interface';
+import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
+import { DivisionRepository } from '../../../infrastructure/database/repository/competition/division.repository';
 
 @Injectable()
 export class CompetitionsAppService {
   constructor(
     private readonly competitionRepository: CompetitionRepository,
     private readonly divisionRepository: DivisionRepository,
+    private readonly divisionPackDomainService: DivisionPackDomainService,
   ) {}
 
   async createCompetition(dto: CreateCompetitionReqDto): Promise<CompetitionResDto> {
-    const competition = this.competitionRepository.create(dto);
-    return await this.competitionRepository.save(competition);
+    return await this.competitionRepository.createCompetition(dto);
   }
 
-  async updateCompetition(id: Competition['id'], dto: UpdateCompetitionReqDto): Promise<CompetitionResDto> {
-    return await this.competitionRepository.saveOrFail({ id, ...dto });
+  async updateCompetition(id: ICompetition['id'], dto: UpdateCompetitionReqDto): Promise<CompetitionResDto> {
+    return await this.competitionRepository.saveCompetition({ id, ...dto });
   }
 
-  async findCompetitionsByRole(userRole: User['role']): Promise<FindCompetitionsResDto> {
-    if (userRole === 'ADMIN') return await this.competitionRepository.find();
-    return await this.competitionRepository.find({ where: { status: 'ACTIVE' } });
+  async findCompetitionsByRole(userRole: IUser['role']): Promise<FindCompetitionsResDto> {
+    if (userRole === 'ADMIN') return await this.competitionRepository.findCompetitons();
+    return await this.competitionRepository.findCompetitons({ where: { status: 'ACTIVE' } });
   }
 
-  async getCompetitionByRole(userRole: User['role'], id: number): Promise<CompetitionResDto> {
-    if (userRole === 'ADMIN') return await this.competitionRepository.getOneOrFail({ where: { id } });
-    return await this.competitionRepository.getOneOrFail({ where: { id, status: 'ACTIVE' } });
+  async getCompetitionByRole(userRole: IUser['role'], id: number): Promise<CompetitionResDto> {
+    if (userRole === 'ADMIN') return await this.competitionRepository.getCompetition({ where: { id } });
+    return await this.competitionRepository.getCompetition({ where: { id, status: 'ACTIVE' } });
   }
 
-  async updateCompetitionStatus(id: Competition['id'], status: Competition['status']): Promise<CompetitionResDto> {
-    const competition = await this.competitionRepository.getOneOrFail({ where: { id } });
-    competition.updateStatus(status);
-    await this.competitionRepository.updateOrFail(competition);
-    return competition;
+  async updateCompetitionStatus(id: ICompetition['id'], status: ICompetition['status']): Promise<CompetitionResDto> {
+    return await this.competitionRepository.saveCompetition({ id, status });
   }
 
-  async createDivisions(id: Competition['id'], dto: CreateDivisitonsReqDto): Promise<Division[]> {
-    const competiton = await this.competitionRepository.getOneOrFail({ where: { id } });
-    const divisionPacks = dto.divisionPacks.map((pack) => new DivisionPack(pack));
-    const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
-      return [...acc, ...divisionPack.unpack(id)];
+  async createDivisions(id: ICompetition['id'], dto: CreateDivisitonsReqDto): Promise<IDivision[]> {
+    const competiton = await this.competitionRepository.getCompetition({ where: { id } });
+    const unpackedDivisions = dto.divisionPacks.reduce((acc, divisionPack) => {
+      return [...acc, ...this.divisionPackDomainService.unpack(id, divisionPack)];
     }, []);
 
     return await this.divisionRepository.createDivisions(unpackedDivisions);

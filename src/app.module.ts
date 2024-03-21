@@ -12,13 +12,15 @@ import { PolicyModule } from './modules/policy/policy.module';
 import { RegisterModule } from './modules/register/register.module';
 import { CompetitionsModule } from './modules/competitions/competitions.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfigAsync } from './infrastructure/database/typeorm.config';
 
 @Module({
   imports: [
     /**
      * Infra Modules: These modules ard used to provide the basic functionality to the application
      */
-    ApiConventionsModule,
+    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     DatabaseModule,
     FilterModule,
     GuardModule,
@@ -30,6 +32,7 @@ import { RedisModule } from './infrastructure/redis/redis.module';
     /**
      * Domain Modules: These modules arr used to provide the business logic to the application
      */
+    ApiConventionsModule,
     AuthModule,
     RegisterModule,
     UsersModule,

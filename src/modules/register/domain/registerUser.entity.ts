@@ -1,19 +1,19 @@
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
-import { RegisterReqDto } from '../dto/request/register.req.dto';
-import { User } from 'src/modules/users/domain/user.entity';
-import { Policy } from 'src/modules/policy/domain/policy.entity';
-import { PolicyConsent } from 'src/modules/policy/domain/policy-consent.entity';
+import { RegisterReqDto } from '../structure/dto/request/register.req.dto';
+import { IUser } from 'src/modules/users/structure/user.interface';
+import { IPolicyConsent } from 'src/modules/policy/structure/policy-consent.interface';
+import { IPolicy } from 'src/modules/policy/structure/policy.interface';
 
 export class RegisterUser {
-  user: User & { policyConsents: PolicyConsent[] };
-  registerUserConsentPolicyTypes: Policy['type'][];
-  latestPolicies: Policy[];
+  user: IUser & { policyConsents: IPolicyConsent[] };
+  registerUserConsentPolicyTypes: IPolicy['type'][];
+  latestPolicies: IPolicy[];
 
   constructor(
-    user: User,
+    user: IUser,
     registerUserInfo: RegisterReqDto['user'],
-    registerUserConsentPolicyTypes: Policy['type'][],
-    latestPolicies: Policy[],
+    registerUserConsentPolicyTypes: IPolicy['type'][],
+    latestPolicies: IPolicy[],
   ) {
     this.user = { ...user, ...registerUserInfo, role: 'USER', policyConsents: user.policyConsents || [] };
     this.registerUserConsentPolicyTypes = registerUserConsentPolicyTypes || [];
@@ -22,7 +22,7 @@ export class RegisterUser {
   }
 
   private setUserPolicyConsents() {
-    let policyies: Policy[] = [];
+    let policyies: IPolicy[] = [];
     // 이미 동의했던 약관은 추가하지 않기
     policyies = this.latestPolicies.filter(
       (policy) => !this.user.policyConsents?.some((consent) => consent.policyId === policy.id),
@@ -38,7 +38,7 @@ export class RegisterUser {
         userId: this.user.id,
         policyId: policy.id,
       };
-    }) as PolicyConsent[];
+    }) as IPolicyConsent[];
 
     this.user.policyConsents = [...this.user.policyConsents, ...policyConsents];
   }

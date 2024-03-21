@@ -1,24 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
-import { UserRepository } from 'src/infrastructure/database/repository/user.repository';
-import { UpdateUserReqDto } from '../dto/request/update-user.req.dto';
-import { UserResDto } from '../dto/response/user.res.dto';
-import { User } from 'src/modules/users/domain/user.entity';
+import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
+import { UpdateUserReqDto } from '../structure/dto/request/update-user.req.dto';
+import { UserResDto } from '../structure/dto/response/user.res.dto';
+import { IUser } from '../structure/user.interface';
+import { UserRepository } from 'src/infrastructure/database/repository/user/user.repository';
 
 @Injectable()
 export class UsersAppService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async createUser(dto: CreateUserReqDto): Promise<UserResDto> {
-    const user = this.userRepository.create(dto);
-    return await this.userRepository.save(user);
+    return await this.userRepository.createUser(dto);
   }
 
-  async updateUser(userId: User['id'], dto: UpdateUserReqDto): Promise<UserResDto> {
-    return await this.userRepository.saveOrFail({ id: userId, ...dto });
+  async updateUser(userId: IUser['id'], dto: UpdateUserReqDto): Promise<UserResDto> {
+    return await this.userRepository.saveUser({ id: userId, ...dto });
   }
 
-  async getMe(userId: User['id']): Promise<UserResDto> {
-    return await this.userRepository.getOneOrFail({ where: { id: userId } });
+  async getMe(userId: IUser['id']): Promise<UserResDto> {
+    return await this.userRepository.getUser({ where: { id: userId } });
   }
 }

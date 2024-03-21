@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { User } from 'src/modules/users/domain/user.entity';
 import { Redis } from 'ioredis';
-import { PhoneNumberAuthCode } from '../types/phone-number-auth-code.type';
+import { PhoneNumberAuthCode } from '../structure/types/phone-number-auth-code.type';
 import typia from 'typia';
+import { IUser } from 'src/modules/users/structure/user.interface';
 
 @Injectable()
 export class PhoneNumberAuthCodeDomainService {
   constructor(@Inject('REDIS_CLIENT') private readonly redisClient: Redis) {}
 
   // 발급하다
-  async issueAuthCode(userId: User['id'], phoneNumber: User['phoneNumber']): Promise<PhoneNumberAuthCode> {
+  async issueAuthCode(userId: IUser['id'], phoneNumber: IUser['phoneNumber']): Promise<PhoneNumberAuthCode> {
     const authCode = typia.random<PhoneNumberAuthCode>();
     // 레디스에 인증코드 저장 (5분)
     // TODO: 시간 정보 환경변수로 관리하기
@@ -17,7 +17,7 @@ export class PhoneNumberAuthCodeDomainService {
     return authCode;
   }
 
-  async isAuthCodeValid(userId: User['id'], authCode: PhoneNumberAuthCode): Promise<boolean> {
+  async isAuthCodeValid(userId: IUser['id'], authCode: PhoneNumberAuthCode): Promise<boolean> {
     const phoneNumber = await this.redisClient.get(`userId:${userId}-authCode:${authCode}`);
     if (!phoneNumber) return false;
     return true;
