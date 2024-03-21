@@ -45,10 +45,12 @@ export class CompetitionsAppService {
   }
 
   async createDivisions(id: Competition['id'], dto: CreateDivisitonsReqDto): Promise<Division[]> {
+    const competiton = await this.competitionRepository.getOneOrFail({ where: { id } });
     const divisionPacks = dto.divisionPacks.map((pack) => new DivisionPack(pack));
     const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
       return [...acc, ...divisionPack.unpack(id)];
     }, []);
+
     return await this.divisionRepository.createDivisions(unpackedDivisions);
   }
 }

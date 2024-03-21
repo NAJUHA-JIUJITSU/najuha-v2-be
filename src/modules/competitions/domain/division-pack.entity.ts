@@ -1,7 +1,6 @@
 import { Competition } from './competition.entity';
 import { Division } from './division.entity';
 import { PriceSnapshot } from './price-snapshot.entity';
-import { UnpackedDivision } from './unpacked-divison.entity';
 
 export class DivisionPack {
   categorys: Division['category'][];
@@ -24,24 +23,25 @@ export class DivisionPack {
     this.price = divisionPack.price;
   }
 
-  unpack(id: Competition['id']): UnpackedDivision[] {
-    const divisions: UnpackedDivision[] = [];
+  unpack(id: Competition['id']): Division[] {
+    const divisions: Division[] = [];
     this.categorys.map((category) => {
       this.uniforms.map((uniform) => {
         this.genders.map((gender) => {
           this.belts.map((belt) => {
             this.weights.map((weight) => {
-              const division = new UnpackedDivision({
-                competitionId: id,
-                category,
-                uniform,
-                gender,
-                belt,
-                weight,
-                birthYearRangeStart: this.birthYearRangeStart,
-                birthYearRangeEnd: this.birthYearRangeEnd,
-                price: this.price,
-              });
+              const division = new Division();
+              division.competitionId = id;
+              division.category = category;
+              division.uniform = uniform;
+              division.gender = gender;
+              division.belt = belt;
+              division.weight = weight;
+              division.birthYearRangeStart = this.birthYearRangeStart;
+              division.birthYearRangeEnd = this.birthYearRangeEnd;
+              const priceSnapshot = new PriceSnapshot();
+              priceSnapshot.price = this.price;
+              division.priceSnapshots = [priceSnapshot];
               divisions.push(division);
             });
           });

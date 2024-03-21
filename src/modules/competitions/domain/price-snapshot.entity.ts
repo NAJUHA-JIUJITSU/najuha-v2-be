@@ -24,8 +24,9 @@ export class PriceSnapshot {
   @CreateDateColumn()
   createdAt: Date | string;
 
+  @Column({ name: 'divisionId' })
   divisionId: number;
 
-  @ManyToOne(() => Division, (division) => division.priceSnapshots, { cascade: true })
-  division?: Competition;
+  @ManyToOne(() => Division, (division) => division.priceSnapshots)
+  division?: Division;
 }
