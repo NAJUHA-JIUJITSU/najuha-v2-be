@@ -8,8 +8,8 @@ import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dt
 import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
 import { Division } from '../domain/division.entity';
 import { DivisionPack } from '../domain/division-pack.entity';
-import { DivisionRepository } from 'src/infrastructure/database/repository/division.repository';
 import { CompetitionRepository } from 'src/infrastructure/database/repository/competition.repository';
+import { DivisionRepository } from 'src/infrastructure/database/repository/division.repository';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -49,6 +49,6 @@ export class CompetitionsAppService {
     const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
       return [...acc, ...divisionPack.unpack(id)];
     }, []);
-    return await this.divisionRepository.save(unpackedDivisions);
+    return await this.divisionRepository.createDivisions(unpackedDivisions);
   }
 }

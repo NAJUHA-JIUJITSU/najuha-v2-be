@@ -1,5 +1,15 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Competition } from './competition.entity';
+import { PriceSnapshot } from './price-snapshot.entity';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
@@ -62,13 +72,6 @@ export class Division {
   birthYearRangeEnd: string;
 
   /**
-   * - 부문 가격
-   * @type uint32
-   */
-  @Column('int')
-  price: number;
-
-  /**
    * - 활성 상태.
    * - ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)
    * - INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)
@@ -95,6 +98,10 @@ export class Division {
   /** - competition. */
   @ManyToOne(() => Competition, (competition) => competition.divisions)
   competition?: Competition;
+
+  /** - price-snapshot. */
+  @OneToMany(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.division)
+  priceSnapshots?: PriceSnapshot[];
 
   //   /**
   //    * - 부문에 대한 신청 목록.

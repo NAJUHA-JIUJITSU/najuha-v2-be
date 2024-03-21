@@ -1,5 +1,7 @@
 import { Competition } from './competition.entity';
 import { Division } from './division.entity';
+import { PriceSnapshot } from './price-snapshot.entity';
+import { UnpackedDivision } from './unpacked-divison.entity';
 
 export class DivisionPack {
   categorys: Division['category'][];
@@ -9,7 +11,7 @@ export class DivisionPack {
   weights: Division['weight'][];
   birthYearRangeStart: Division['birthYearRangeStart'];
   birthYearRangeEnd: Division['birthYearRangeEnd'];
-  price: Division['price'];
+  price: PriceSnapshot['price'];
 
   constructor(divisionPack: DivisionPack) {
     this.categorys = divisionPack.categorys;
@@ -22,24 +24,24 @@ export class DivisionPack {
     this.price = divisionPack.price;
   }
 
-  unpack(id: Competition['id']): Division[] {
-    const divisions: Division[] = [];
+  unpack(id: Competition['id']): UnpackedDivision[] {
+    const divisions: UnpackedDivision[] = [];
     this.categorys.map((category) => {
       this.uniforms.map((uniform) => {
         this.genders.map((gender) => {
           this.belts.map((belt) => {
             this.weights.map((weight) => {
-              const division = new Division();
-              division.category = category;
-              division.uniform = uniform;
-              division.gender = gender;
-              division.belt = belt;
-              division.weight = weight;
-              division.birthYearRangeStart = this.birthYearRangeStart;
-              division.birthYearRangeEnd = this.birthYearRangeEnd;
-              division.price = this.price;
-              division.competitionId = id;
-              console.log(division);
+              const division = new UnpackedDivision({
+                competitionId: id,
+                category,
+                uniform,
+                gender,
+                belt,
+                weight,
+                birthYearRangeStart: this.birthYearRangeStart,
+                birthYearRangeEnd: this.birthYearRangeEnd,
+                price: this.price,
+              });
               divisions.push(division);
             });
           });

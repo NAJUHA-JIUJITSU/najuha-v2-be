@@ -6,6 +6,7 @@ import { EarlyBirdDiscountStrategy } from 'src/modules/competitions/domain/early
 import { User } from 'src/modules/users/domain/user.entity';
 import { Competition } from 'src/modules/competitions/domain/competition.entity';
 import { Division } from 'src/modules/competitions/domain/division.entity';
+import { PriceSnapshot } from 'src/modules/competitions/domain/price-snapshot.entity';
 
 export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
   useFactory: async (): Promise<TypeOrmModuleOptions> => ({
@@ -16,7 +17,7 @@ export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {
     password: appEnv.dbpassword,
     database: appEnv.dbDatabase,
     synchronize: appEnv.dbSynchronize,
-    entities: [User, Competition, Division, EarlyBirdDiscountStrategy, Policy, PolicyConsent],
+    entities: [User, Competition, Division, EarlyBirdDiscountStrategy, Policy, PolicyConsent, PriceSnapshot],
     autoLoadEntities: true,
   }),
 };
