@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
 import { CompetitionResDto } from '../dto/response/competition.res.dto';
 import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
-import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
+import { Competition } from 'src/modules/competitions/domain/competition.entity';
 import { User } from 'src/modules/users/domain/user.entity';
 import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
 import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
-import { Division } from '../domain/entities/division.entity';
-import { DivisionPack } from '../domain/entities/division-pack.entity';
+import { Division } from '../domain/division.entity';
+import { DivisionPack } from '../domain/division-pack.entity';
 import { DivisionRepository } from 'src/infrastructure/database/repository/division.repository';
 import { CompetitionRepository } from 'src/infrastructure/database/repository/competition.repository';
 

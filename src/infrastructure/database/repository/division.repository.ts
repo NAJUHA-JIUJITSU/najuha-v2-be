@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { Division } from 'src/modules/competitions/domain/division.entity';
 import { DataSource, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()

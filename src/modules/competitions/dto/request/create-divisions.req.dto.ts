@@ -1,4 +1,4 @@
-import { DivisionPack } from '../../domain/entities/division-pack.entity';
+import { DivisionPack } from '../../domain/division-pack.entity';
 
 export interface CreateDivisitonsReqDto {
   divisionPacks: DivisionPack[];
