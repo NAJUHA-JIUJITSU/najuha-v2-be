@@ -55,7 +55,7 @@ export class PolicyRepository {
 
   async createPolicy(dto: Partial<IPolicy>): Promise<IPolicy> {
     const policy = this.policyRepository.create(dto);
-    return this.policyRepository.create(policy);
+    return await this.policyRepository.save(policy);
   }
 
   async findPolicy(options?: {

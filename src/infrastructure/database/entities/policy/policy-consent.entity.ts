@@ -24,7 +24,6 @@ export class PolicyConsentEntity {
 
   /** - user */
   @ManyToOne(() => UserEntity, (user) => user.policyConsents)
-  @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
   /** - policyId. */
@@ -33,6 +32,5 @@ export class PolicyConsentEntity {
 
   /** - policy */
   @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)
-  @JoinColumn({ name: 'policyId' })
   policy: PolicyEntity;
 }

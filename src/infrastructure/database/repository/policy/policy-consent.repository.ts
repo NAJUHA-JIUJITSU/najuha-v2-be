@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
 import { IPolicyConsent } from 'src/modules/policy/structure/policy-consent.interface';
 // import { BusinessException } from 'src/common/response/errorResponse';
-import { DataSource, FindOneOptions, FindOptionsWhere, In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 // TODO: 에러 표준화
 // @Injectable()
