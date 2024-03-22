@@ -5,7 +5,6 @@ import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoet
 import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
 import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
 import { CompetitionRepository } from 'src/infrastructure/database/repository/competition/competition.repository';
-import { IUser } from 'src/modules/users/structure/user.interface';
 import { IDivision } from '../structure/division.interface';
 import { ICompetition } from '../structure/competition.interface';
 import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
@@ -27,14 +26,12 @@ export class CompetitionsAppService {
     return await this.competitionRepository.saveCompetition({ id, ...dto });
   }
 
-  async findCompetitionsByRole(userRole: IUser['role']): Promise<FindCompetitionsResDto> {
-    if (userRole === 'ADMIN') return await this.competitionRepository.findCompetitons();
-    return await this.competitionRepository.findCompetitons({ where: { status: 'ACTIVE' } });
+  async findCompetitions(options?: { where?: Partial<Pick<ICompetition, 'status'>> }): Promise<FindCompetitionsResDto> {
+    return await this.competitionRepository.findCompetitons(options);
   }
 
-  async getCompetitionByRole(userRole: IUser['role'], id: number): Promise<CompetitionResDto> {
-    if (userRole === 'ADMIN') return await this.competitionRepository.getCompetition({ where: { id } });
-    return await this.competitionRepository.getCompetition({ where: { id, status: 'ACTIVE' } });
+  async getCompetition(options?: { where?: Partial<Pick<ICompetition, 'id' | 'status'>> }): Promise<ICompetition> {
+    return await this.competitionRepository.getCompetition(options);
   }
 
   async updateCompetitionStatus(id: ICompetition['id'], status: ICompetition['status']): Promise<CompetitionResDto> {

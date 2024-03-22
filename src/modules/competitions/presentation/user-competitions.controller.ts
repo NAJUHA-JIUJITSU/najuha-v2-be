@@ -21,7 +21,7 @@ export class UserCompetitionsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/')
   async findCompetitions(): Promise<ResponseForm<FindCompetitionsResDto>> {
-    const competitions = await this.CompetitionsAppService.findCompetitionsByRole('USER');
+    const competitions = await this.CompetitionsAppService.findCompetitions({ where: { status: 'ACTIVE' } });
     return createResponseForm(competitions);
   }
 
@@ -35,7 +35,7 @@ export class UserCompetitionsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:id')
   async getCompetition(@TypedParam('id') id: ICompetition['id']): Promise<ResponseForm<CompetitionResDto>> {
-    const competition = await this.CompetitionsAppService.getCompetitionByRole('USER', id);
+    const competition = await this.CompetitionsAppService.getCompetition({ where: { id, status: 'ACTIVE' } });
     return createResponseForm(competition);
   }
 }

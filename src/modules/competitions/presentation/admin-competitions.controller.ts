@@ -39,7 +39,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
   async findCompetitions(): Promise<ResponseForm<FindCompetitionsResDto>> {
-    const competitions = await this.CompetitionsAppService.findCompetitionsByRole('ADMIN');
+    const competitions = await this.CompetitionsAppService.findCompetitions();
     return createResponseForm(competitions);
   }
 
@@ -53,7 +53,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:id')
   async findCompetition(@TypedParam('id') id: ICompetition['id']): Promise<ResponseForm<CompetitionResDto>> {
-    const competition = await this.CompetitionsAppService.getCompetitionByRole('ADMIN', id);
+    const competition = await this.CompetitionsAppService.getCompetition({ where: { id } });
     return createResponseForm(competition);
   }
 
