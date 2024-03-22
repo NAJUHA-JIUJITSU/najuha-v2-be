@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
-import { IEarlyBirdDiscountSnapshot } from 'src/modules/competitions/structure/earlbird-discount-snapshot.interface';
+import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/structure/earlbird-discount-snapshot.interface';
 
 @Entity('early_bird_discount_snapshot')
 export class EarlyBirdDiscountSnapshotEntity {
@@ -9,19 +9,19 @@ export class EarlyBirdDiscountSnapshotEntity {
    * @type uint32
    */
   @PrimaryGeneratedColumn()
-  id: IEarlyBirdDiscountSnapshot['id'];
+  id: IEarlybirdDiscountSnapshot['id'];
 
   /**
    * - 얼리버드 시작일
    */
   @Column('timestamp')
-  earlyBirdStartDate: IEarlyBirdDiscountSnapshot['earlyBirdStartDate'];
+  earlyBirdStartDate: IEarlybirdDiscountSnapshot['earlyBirdStartDate'];
 
   /**
    * - 얼리버드 마감일
    */
   @Column('timestamp')
-  earlyBirdEndDate: IEarlyBirdDiscountSnapshot['earlyBirdEndDate'];
+  earlyBirdEndDate: IEarlybirdDiscountSnapshot['earlyBirdEndDate'];
 
   /**
    * - 얼리버드 할인 가격 ex) 10000
@@ -30,16 +30,16 @@ export class EarlyBirdDiscountSnapshotEntity {
    * @minimum 0
    */
   @Column('int')
-  discountPrice: IEarlyBirdDiscountSnapshot['discountPrice'];
+  discountPrice: IEarlybirdDiscountSnapshot['discountPrice'];
 
   /** - 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다. */
   @CreateDateColumn()
-  createdAt: IEarlyBirdDiscountSnapshot['createdAt'];
+  createdAt: IEarlybirdDiscountSnapshot['createdAt'];
 
   /** - 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다. */
   @UpdateDateColumn()
-  updatedAt: IEarlyBirdDiscountSnapshot['updatedAt'];
+  updatedAt: IEarlybirdDiscountSnapshot['updatedAt'];
 
-  @ManyToOne(() => CompetitionEntity, (competition) => competition.earlyBirdDiscountSnapshots)
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.earlybirdDiscountSnapshots)
   competition: CompetitionEntity;
 }

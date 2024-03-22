@@ -113,7 +113,7 @@ export class CompetitionEntity {
     () => EarlyBirdDiscountSnapshotEntity,
     (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
   )
-  earlyBirdDiscountSnapshots?: EarlyBirdDiscountSnapshotEntity[];
+  earlybirdDiscountSnapshots?: EarlyBirdDiscountSnapshotEntity[];
 
   /** - divisions. */
   @OneToMany(() => DivisionEntity, (division) => division.competition)

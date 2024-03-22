@@ -1,6 +1,6 @@
 import { ICompetition } from './competition.interface';
 
-export class IEarlyBirdDiscountSnapshot {
+export class IEarlybirdDiscountSnapshot {
   /**
    * - ID. 데이터베이스에서 자동 생성됩니다.
    * @type uint32

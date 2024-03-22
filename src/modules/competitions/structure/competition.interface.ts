@@ -1,5 +1,5 @@
 import { IDivision } from './division.interface';
-import { IEarlyBirdDiscountSnapshot } from './earlbird-discount-snapshot.interface';
+import { IEarlybirdDiscountSnapshot } from './earlbird-discount-snapshot.interface';
 
 export interface ICompetition {
   /**
@@ -87,7 +87,7 @@ export interface ICompetition {
   updatedAt: string | Date;
 
   /** - 대회의 얼리버드 할인 전략. */
-  earlyBirdDiscountSnapshots?: IEarlyBirdDiscountSnapshot[];
+  earlybirdDiscountSnapshots?: IEarlybirdDiscountSnapshot[];
 
   /** - divisions. */
   divisions?: IDivision[];
