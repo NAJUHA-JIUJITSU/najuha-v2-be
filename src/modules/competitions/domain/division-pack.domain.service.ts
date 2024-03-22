@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
-import { IDivisionyPack } from './division-pack.interface';
+import { IDivisionyPack } from '../structure/division-pack.interface';
 
 @Injectable()
 export class DivisionPackDomainService {

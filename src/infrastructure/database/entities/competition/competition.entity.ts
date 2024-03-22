@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './early-bird-discount-snapshot.entity';
 import { ApplicationPackageEntity } from './application-package.entity';
+import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 
 @Entity('competition')
 export class CompetitionEntity {
@@ -127,4 +128,24 @@ export class CompetitionEntity {
    */
   @OneToMany(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.competition)
   applicationPackages?: ApplicationPackageEntity[];
+
+  updateStatus(status: CompetitionEntity['status']): void {
+    if (status === 'ACTIVE') {
+      const missingProperties: string[] = [];
+      if (this.title === 'DEFAULT TITLE') missingProperties.push('title');
+      if (this.address === 'DEFAULT ADDRESS') missingProperties.push('address');
+      if (this.competitionDate === null) missingProperties.push('competitionDate');
+      if (this.registrationStartDate === null) missingProperties.push('registrationStartDate');
+      if (this.registrationEndDate === null) missingProperties.push('registrationEndDate');
+      if (this.description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
+
+      if (missingProperties.length > 0) {
+        throw new BusinessException(
+          CompetitionsErrorMap.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
+          `다음 항목을 작성해주세요: ${missingProperties.join(', ')}`,
+        );
+      }
+    }
+    this.status = status;
+  }
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
-import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
-import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
-import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
+import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
+import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
+import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
+import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
+import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
 import { CompetitionRepository } from 'src/infrastructure/database/repository/competition/competition.repository';
 import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
 import { DivisionRepository } from '../../../infrastructure/database/repository/competition/division.repository';
@@ -44,7 +44,7 @@ export class CompetitionsAppService {
   ): Promise<CompetitionResDto> {
     const competition = await this.competitionRepository.getCompetition({ where: { id } });
     console.log(competition.earlybirdDiscountSnapshots);
-    // competition.updateStatus(status);
+    competition.updateStatus(status);
     return await this.competitionRepository.saveCompetition(competition);
   }
 

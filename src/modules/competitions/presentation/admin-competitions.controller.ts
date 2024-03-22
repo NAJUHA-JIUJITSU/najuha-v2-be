@@ -3,12 +3,12 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
-import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
-import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
-import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
-import { UpdateCompetitionStatusReqDto } from '../dto/request/update-competition-status.req.dto';
-import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
+import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
+import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
+import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
+import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
+import { UpdateCompetitionStatusReqDto } from '../structure/dto/request/update-competition-status.req.dto';
+import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
 
 @Controller('admin/competitions')
