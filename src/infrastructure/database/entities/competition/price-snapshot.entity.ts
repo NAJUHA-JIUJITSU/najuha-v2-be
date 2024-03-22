@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DivisionEntity } from './division.entity';
+import { ApplicationEntity } from './application.entity';
 
 @Entity('price-snapshot')
 export class PriceSnapshotEntity {
@@ -13,6 +14,7 @@ export class PriceSnapshotEntity {
   /**
    * - price, 단위: 원.
    * @type uint32
+   * @minimum 0
    */
   @Column('int')
   price: number;
@@ -23,9 +25,22 @@ export class PriceSnapshotEntity {
   @CreateDateColumn()
   createdAt: Date | string;
 
-  @Column({ name: 'divisionId' })
-  divisionId: number;
+  /** - division id. */
+  @Column()
+  divisionId: DivisionEntity['id'];
 
+  /**
+   * - division 정보.
+   * - ManyToOne: Division(1) -> PriceSnapshot(*).
+   */
   @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)
+  @JoinColumn({ name: 'divisionId' })
   division?: DivisionEntity;
+
+  /**
+   * - application 정보.
+   * - OneToMany: Application(1) -> PriceSnapshot(*).
+   */
+  @OneToMany(() => ApplicationEntity, (application) => application.payedPriceSnapshot)
+  applications?: ApplicationEntity[];
 }

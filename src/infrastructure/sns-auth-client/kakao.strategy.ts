@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { KakaoUserData } from 'src/infrastructure/sns-auth-client/types/kakao-user-data.type';
 import { SnsAuthStrategy } from 'src/infrastructure/sns-auth-client/types/sns-auth.strategy.type';
-import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 

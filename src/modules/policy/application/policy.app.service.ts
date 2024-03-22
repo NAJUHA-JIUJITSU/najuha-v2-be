@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePolicyReqDto } from '../structure/dto/request/create-policy.req.dto';
+import { CreatePolicyReqDto } from '../dto/request/create-policy.req.dto';
 import { PolicyRepository } from '../../../infrastructure/database/repository/policy/policy.repository';
-import { FindPoliciesResDto } from '../structure/dto/response/find-policies.res.dto';
-import { FindPolicyResDto } from '../structure/dto/response/find-policy.res.dto';
-import { PolicyResDto } from '../structure/dto/response/policy.res.dto';
-import { IPolicy } from '../structure/policy.interface';
+import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
+import { FindPolicyResDto } from '../dto/response/find-policy.res.dto';
+import { PolicyResDto } from '../dto/response/policy.res.dto';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
 
 @Injectable()
 export class PolicyAppService {
@@ -26,7 +26,7 @@ export class PolicyAppService {
   }
 
   // TODO content 는 제외
-  async findPolicies(type?: IPolicy['type']): Promise<FindPoliciesResDto> {
+  async findPolicies(type?: PolicyEntity['type']): Promise<FindPoliciesResDto> {
     return this.policyRepository.findPolicies({ where: { type } });
   }
 

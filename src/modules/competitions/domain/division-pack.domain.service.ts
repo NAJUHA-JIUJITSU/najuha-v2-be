@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ICompetition } from '../structure/competition.interface';
-import { IDivision } from '../structure/division.interface';
-import { IDivisionPack } from '../structure/division-pack.interface';
+import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
+import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { IDivisionyPack } from './division-pack.interface';
 
 @Injectable()
 export class DivisionPackDomainService {
@@ -11,7 +11,7 @@ export class DivisionPackDomainService {
     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
   }
 
-  unpack(id: ICompetition['id'], divisionPack: IDivisionPack): IDivision[] {
+  unpack(id: CompetitionEntity['id'], divisionPack: IDivisionyPack): DivisionEntity[] {
     const combinations = this.cartesian(
       divisionPack.categorys,
       divisionPack.uniforms,
@@ -20,8 +20,8 @@ export class DivisionPackDomainService {
       divisionPack.weights,
     );
 
-    const divisions: IDivision[] = combinations.map(([category, uniform, gender, belt, weight]) => {
-      const division: IDivision = {
+    const divisions: DivisionEntity[] = combinations.map(([category, uniform, gender, belt, weight]) => {
+      const division: DivisionEntity = {
         competitionId: id,
         id: 0, // You need to determine how to handle IDs
         category,

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
-import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
-import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
-import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
-import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
+import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
+import { CompetitionResDto } from '../dto/response/competition.res.dto';
+import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
+import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
+import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
 import { CompetitionRepository } from 'src/infrastructure/database/repository/competition/competition.repository';
-import { IDivision } from '../structure/division.interface';
-import { ICompetition } from '../structure/competition.interface';
 import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
 import { DivisionRepository } from '../../../infrastructure/database/repository/competition/division.repository';
+import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -22,23 +22,33 @@ export class CompetitionsAppService {
     return await this.competitionRepository.createCompetition(dto);
   }
 
-  async updateCompetition(id: ICompetition['id'], dto: UpdateCompetitionReqDto): Promise<CompetitionResDto> {
+  async updateCompetition(id: CompetitionEntity['id'], dto: UpdateCompetitionReqDto): Promise<CompetitionResDto> {
     return await this.competitionRepository.saveCompetition({ id, ...dto });
   }
 
-  async findCompetitions(options?: { where?: Partial<Pick<ICompetition, 'status'>> }): Promise<FindCompetitionsResDto> {
+  async findCompetitions(options?: {
+    where?: Partial<Pick<CompetitionEntity, 'status'>>;
+  }): Promise<FindCompetitionsResDto> {
     return await this.competitionRepository.findCompetitons(options);
   }
 
-  async getCompetition(options?: { where?: Partial<Pick<ICompetition, 'id' | 'status'>> }): Promise<ICompetition> {
+  async getCompetition(options?: {
+    where?: Partial<Pick<CompetitionEntity, 'id' | 'status'>>;
+  }): Promise<CompetitionEntity> {
     return await this.competitionRepository.getCompetition(options);
   }
 
-  async updateCompetitionStatus(id: ICompetition['id'], status: ICompetition['status']): Promise<CompetitionResDto> {
-    return await this.competitionRepository.saveCompetition({ id, status });
+  async updateCompetitionStatus(
+    id: CompetitionEntity['id'],
+    status: CompetitionEntity['status'],
+  ): Promise<CompetitionResDto> {
+    const competition = await this.competitionRepository.getCompetition({ where: { id } });
+    console.log(competition.earlybirdDiscountSnapshots);
+    // competition.updateStatus(status);
+    return await this.competitionRepository.saveCompetition(competition);
   }
 
-  async createDivisions(id: ICompetition['id'], dto: CreateDivisitonsReqDto): Promise<IDivision[]> {
+  async createDivisions(id: CompetitionEntity['id'], dto: CreateDivisitonsReqDto): Promise<DivisionEntity[]> {
     const competiton = await this.competitionRepository.getCompetition({ where: { id } });
     const unpackedDivisions = dto.divisionPacks.reduce((acc, divisionPack) => {
       return [...acc, ...this.divisionPackDomainService.unpack(id, divisionPack)];

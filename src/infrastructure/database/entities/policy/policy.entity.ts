@@ -1,5 +1,5 @@
-import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import { PolicyConsentEntity } from './policy-consent.entity';
 
 /**
  * - 약관 테이블.

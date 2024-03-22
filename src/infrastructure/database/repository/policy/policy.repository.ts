@@ -1,34 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { FindOptionsWhere, Repository } from 'typeorm';
-import { PolicyEntity } from '../../entities/policy/policy.entity';
+import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { BusinessException, PolicyErrorMap } from 'src/common/response/errorResponse';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IPolicy } from 'src/modules/policy/structure/policy.interface';
+import { PolicyEntity } from '../../entities/policy/policy.entity';
 
 // @Injectable()
-// export class PolicyRepository extends Repository<IPolicy> {
+// export class PolicyRepository extends Repository<PolicyEntity> {
 //   constructor(private dataSource: DataSource) {
-//     super(IPolicy, dataSource.createEntityManager());
+//     super(PolicyEntity, dataSource.createEntityManager());
 //   }
 
-//   async saveOrFail(dto: Pick<IPolicy, 'id'> & Partial<IPolicy>): Promise<IPolicy> {
+//   async saveOrFail(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<PolicyEntity> {
 //     const policy = await this.findOne({ where: { id: dto.id } });
 //     if (!policy) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
 //     return await this.save({ ...policy, ...dto });
 //   }
 
-//   async updateOrFail(dto: Pick<IPolicy, 'id'> & Partial<IPolicy>): Promise<void> {
+//   async updateOrFail(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<void> {
 //     const result = await this.update({ id: dto.id }, dto);
 //     if (!result.affected) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
 //   }
 
-//   async getOneOrFail(where: FindOptionsWhere<IPolicy>): Promise<IPolicy> {
+//   async getOneOrFail(where: FindOptionsWhere<PolicyEntity>): Promise<PolicyEntity> {
 //     const policy = await this.findOne({ where });
 //     if (!policy) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
 //     return policy;
 //   }
 
-//   async getOneLatestPolicyByTypeOrFail(type: IPolicy['type']): Promise<IPolicy> {
+//   async getOneLatestPolicyByTypeOrFail(type: PolicyEntity['type']): Promise<PolicyEntity> {
 //     const policy = await this.createQueryBuilder('policy')
 //       .where('policy.type = :type', { type })
 //       .orderBy('policy.createdAt', 'DESC')
@@ -37,7 +36,7 @@ import { IPolicy } from 'src/modules/policy/structure/policy.interface';
 //     return policy;
 //   }
 
-//   async findAllTypesOfLatestPolicies(): Promise<IPolicy[]> {
+//   async findAllTypesOfLatestPolicies(): Promise<PolicyEntity[]> {
 //     return this.createQueryBuilder('policy')
 //       .distinctOn(['policy.type'])
 //       .orderBy('policy.type')
@@ -53,44 +52,32 @@ export class PolicyRepository {
     private readonly policyRepository: Repository<PolicyEntity>,
   ) {}
 
-  async createPolicy(dto: Partial<IPolicy>): Promise<IPolicy> {
+  async createPolicy(dto: Partial<PolicyEntity>): Promise<PolicyEntity> {
     const policy = this.policyRepository.create(dto);
     return await this.policyRepository.save(policy);
   }
 
-  async findPolicy(options?: {
-    where?: Partial<IPolicy>;
-    relations?: string[];
-    order?: { [P in keyof IPolicy]?: 'ASC' | 'DESC' };
-  }): Promise<IPolicy | null> {
-    const policy = await this.policyRepository.findOne({
-      where: options?.where,
-      relations: options?.relations,
-      order: options?.order,
-    });
+  async findPolicy({ where, relations, order }: FindOneOptions<PolicyEntity>): Promise<PolicyEntity | null> {
+    const policy = await this.policyRepository.findOne({ where, relations, order });
     return policy;
   }
 
-  async findPolicies(options?: {
-    where?: Partial<IPolicy>;
-    relations?: string[];
-    order?: { [P in keyof IPolicy]?: 'ASC' | 'DESC' };
-  }): Promise<IPolicy[]> {
+  async findPolicies({ where, relations, order }: FindOneOptions<PolicyEntity>): Promise<PolicyEntity[]> {
     const policies = await this.policyRepository.find({
-      where: options?.where,
-      relations: options?.relations,
-      order: options?.order,
+      where,
+      relations,
+      order,
     });
     return policies;
   }
 
-  async getPolicy(where: FindOptionsWhere<IPolicy>): Promise<IPolicy> {
+  async getPolicy(where: FindOptionsWhere<PolicyEntity>): Promise<PolicyEntity> {
     const policy = await this.policyRepository.findOne({ where });
     if (!policy) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
     return policy;
   }
 
-  async getLatestPolicyByType(type: IPolicy['type']): Promise<IPolicy> {
+  async getLatestPolicyByType(type: PolicyEntity['type']): Promise<PolicyEntity> {
     const policy = await this.policyRepository
       .createQueryBuilder('policy')
       .where('policy.type = :type', { type })
@@ -100,7 +87,7 @@ export class PolicyRepository {
     return policy;
   }
 
-  async findAllTypesOfLatestPolicies(): Promise<IPolicy[]> {
+  async findAllTypesOfLatestPolicies(): Promise<PolicyEntity[]> {
     return this.policyRepository
       .createQueryBuilder('policy')
       .distinctOn(['policy.type'])
@@ -109,13 +96,13 @@ export class PolicyRepository {
       .getMany();
   }
 
-  async savePolicy(dto: Pick<IPolicy, 'id'> & Partial<IPolicy>): Promise<IPolicy> {
+  async savePolicy(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<PolicyEntity> {
     const policy = await this.policyRepository.findOne({ where: { id: dto.id } });
     if (!policy) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
     return await this.policyRepository.save({ ...policy, ...dto });
   }
 
-  async updatePolicy(dto: Pick<IPolicy, 'id'> & Partial<IPolicy>): Promise<void> {
+  async updatePolicy(dto: Pick<PolicyEntity, 'id'> & Partial<PolicyEntity>): Promise<void> {
     const result = await this.policyRepository.update({ id: dto.id }, dto);
     if (!result.affected) throw new BusinessException(PolicyErrorMap.POLICY_POLICY_NOT_FOUND);
   }

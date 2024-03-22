@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -10,7 +11,7 @@ import {
 } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { PriceSnapshotEntity } from './price-snapshot.entity';
-import { IDivision } from 'src/modules/competitions/structure/division.interface';
+import { ApplicationSnapshotEntity } from './applicatioin-snapshot.entity';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
@@ -20,7 +21,7 @@ export class DivisionEntity {
    * @type uint32
    */
   @PrimaryGeneratedColumn()
-  id: IDivision['id'];
+  id: number;
 
   /**
    * - 부문 카테고리.
@@ -28,17 +29,17 @@ export class DivisionEntity {
    * @maxLength 64
    */
   @Column('varchar', { length: 64 })
-  category: IDivision['category'];
+  category: string;
 
   /**
    * - 유니폼 GI, NOGI
    */
   @Column('varchar', { length: 16 })
-  uniform: IDivision['uniform'];
+  uniform: 'GI' | 'NOGI';
 
   /** - 성별. */
   @Column('varchar', { length: 16 })
-  gender: IDivision['gender'];
+  gender: 'MALE' | 'FEMALE' | 'MIXED';
 
   /**
    * - 주짓수벨트.
@@ -46,7 +47,7 @@ export class DivisionEntity {
    * @maxLength 64
    */
   @Column('varchar', { length: 64 })
-  belt: IDivision['belt'];
+  belt: string;
 
   /**
    * - 체급.
@@ -54,7 +55,7 @@ export class DivisionEntity {
    * @maxLength 64
    */
   @Column('varchar', { length: 64 })
-  weight: IDivision['weight'];
+  weight: string;
 
   /**
    * - 출생년도 범위 시작. YYYY.
@@ -62,7 +63,7 @@ export class DivisionEntity {
    * @tern ^[0-9]{4}$
    */
   @Column('varchar', { length: 4 })
-  birthYearRangeStart: IDivision['birthYearRangeStart'];
+  birthYearRangeStart: string;
 
   /**
    * - 출생년도 범위 끝. YYYY.
@@ -70,7 +71,7 @@ export class DivisionEntity {
    * @pattern ^[0-9]{4}$
    */
   @Column('varchar', { length: 4 })
-  birthYearRangeEnd: IDivision['birthYearRangeEnd'];
+  birthYearRangeEnd: string;
 
   /**
    * - 활성 상태.
@@ -78,35 +79,33 @@ export class DivisionEntity {
    * - INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)
    */
   @Column('varchar', { length: 16, default: 'ACTIVE' })
-  status: IDivision['status'];
+  status: 'ACTIVE' | 'INACTIVE';
 
   /**
    * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
    */
   @CreateDateColumn()
-  createdAt: IDivision['createdAt'];
+  createdAt: Date | string;
 
   /**
    * - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간.
    */
   @UpdateDateColumn()
-  updatedAt: IDivision['updatedAt'];
+  updatedAt: Date | string;
 
   /** - competitionId. */
-  @Column({ name: 'competitionId' })
-  competitionId: IDivision['competitionId'];
+  @Column()
+  competitionId: number;
 
   /** - competition. */
   @ManyToOne(() => CompetitionEntity, (competition) => competition.divisions)
+  @JoinColumn({ name: 'competitionId' })
   competition?: CompetitionEntity;
 
   /** - price-snapshot. */
   @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.division, { cascade: true })
   priceSnapshots?: PriceSnapshotEntity[];
 
-  //   /**
-  //    * - 부문에 대한 신청 목록.
-  //    * - OneToMany: Division(1) -> Application(*)
-  //    */
-  //   applications: ApplicationEntity[];
+  @OneToMany(() => ApplicationSnapshotEntity, (applicationSnapshot) => applicationSnapshot.division)
+  applicationSnapshots?: ApplicationSnapshotEntity[];
 }

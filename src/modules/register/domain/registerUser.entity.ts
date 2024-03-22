@@ -1,22 +1,22 @@
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
-import { RegisterReqDto } from '../structure/dto/request/register.req.dto';
-import { IUser } from 'src/modules/users/structure/user.interface';
-import { IPolicyConsent } from 'src/modules/policy/structure/policy-consent.interface';
-import { IPolicy } from 'src/modules/policy/structure/policy.interface';
+import { RegisterReqDto } from '../dto/request/register.req.dto';
+import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
+import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
 
 export class RegisterUser {
-  user: Omit<IUser, 'policyConsents'>;
-  existingPolicyConsents: IPolicyConsent[];
-  newPolicyConsents: IPolicyConsent[];
-  registerUserConsentPolicyTypes: IPolicy['type'][];
-  latestPolicies: IPolicy[];
+  user: Omit<UserEntity, 'policyConsents'>;
+  existingPolicyConsents: PolicyConsentEntity[];
+  newPolicyConsents: PolicyConsentEntity[];
+  registerUserConsentPolicyTypes: PolicyEntity['type'][];
+  latestPolicies: PolicyEntity[];
 
   constructor(
-    user: Omit<IUser, 'policyConsents'>,
-    existingPolicyConsents: IPolicyConsent[] = [],
+    user: Omit<UserEntity, 'policyConsents'>,
+    existingPolicyConsents: PolicyConsentEntity[] = [],
     registerUserInfo: RegisterReqDto['user'],
-    registerUserConsentPolicyTypes: IPolicy['type'][],
-    latestPolicies: IPolicy[],
+    registerUserConsentPolicyTypes: PolicyEntity['type'][],
+    latestPolicies: PolicyEntity[],
   ) {
     this.user = { ...user, ...registerUserInfo };
     this.existingPolicyConsents = existingPolicyConsents;
@@ -33,12 +33,11 @@ export class RegisterUser {
     );
 
     this.newPolicyConsents = unconsentedPolicies.map((policy) => {
-      return {
-        id: 0,
-        createdAt: new Date(),
-        userId: this.user.id,
-        policyId: policy.id,
-      };
+      const policyConsent = new PolicyConsentEntity();
+      policyConsent.createdAt = new Date();
+      policyConsent.userId = this.user.id;
+      policyConsent.policyId = policy.id;
+      return policyConsent;
     });
   }
 

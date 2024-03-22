@@ -1,8 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 import { DivisionEntity } from './division.entity';
-import { EarlyBirdDiscountSnapshotEntity } from './early-bird-discount-snapshot.entity';
-import { ICompetition } from 'src/modules/competitions/structure/competition.interface';
+import { EarlybirdDiscountSnapshotEntity } from './early-bird-discount-snapshot.entity';
+import { ApplicationPackageEntity } from './application-package.entity';
 
 @Entity('competition')
 export class CompetitionEntity {
@@ -11,7 +10,7 @@ export class CompetitionEntity {
    * @type uint32
    */
   @PrimaryGeneratedColumn()
-  id: ICompetition['id'];
+  id: number;
 
   /**
    * - 대회의 이름.
@@ -19,7 +18,7 @@ export class CompetitionEntity {
    * @maxLength 256
    */
   @Column('varchar', { length: 256, default: 'DEFAULT TITLE' })
-  title: ICompetition['title'];
+  title: string;
 
   /**
    * - 대회가 열리는 장소.
@@ -27,42 +26,42 @@ export class CompetitionEntity {
    * @maxLength 256
    */
   @Column('varchar', { length: 256, default: 'DEFAULT ADDRESS' })
-  address: ICompetition['address'];
+  address: string;
 
   /** - 대회 날짜. */
   @Column('timestamp', { nullable: true })
-  competitionDate: ICompetition['competitionDate'];
+  competitionDate: null | string | Date;
 
   /** - 참가 신청 시작일 */
   @Column('timestamp', { nullable: true })
-  registrationStartDate: ICompetition['registrationStartDate'];
+  registrationStartDate: null | string | Date;
 
   /** - 참가 신청 마감일. */
   @Column('timestamp', { nullable: true })
-  registrationEndDate: ICompetition['registrationEndDate'];
+  registrationEndDate: null | string | Date;
 
   /** - 환불 가능 기간 마감일. */
   @Column('timestamp', { nullable: true })
-  refundDeadlineDate: ICompetition['refundDeadlineDate'];
+  refundDeadlineDate: null | string | Date;
 
   /**
    * - 단독 참가자의 부문 조정 시작일.
    * - 부문에 참가자가 한 명만 있는 경우, 해당 참가자를 다른 체급이나 부문으로 조정할 수 있는 기간의 시작을 나타냅니다.
    */
   @Column('timestamp', { nullable: true })
-  soloRegistrationAdjustmentStartDate: ICompetition['soloRegistrationAdjustmentStartDate'];
+  soloRegistrationAdjustmentStartDate: null | string | Date;
 
   /** - 단독 참가자의 부문 조정 마감일. */
   @Column('timestamp', { nullable: true })
-  soloRegistrationAdjustmentEndDate: ICompetition['soloRegistrationAdjustmentEndDate'];
+  soloRegistrationAdjustmentEndDate: null | string | Date;
 
   /** - 참가자 명단 공개일. */
   @Column('timestamp', { nullable: true })
-  registrationListOpenDate: ICompetition['registrationListOpenDate'];
+  registrationListOpenDate: null | string | Date;
 
   /** - 대진표 공개일. */
   @Column('timestamp', { nullable: true })
-  bracketOpenDate: ICompetition['bracketOpenDate'];
+  bracketOpenDate: null | string | Date;
 
   /**
    * - 대회 상세 정보.
@@ -71,18 +70,18 @@ export class CompetitionEntity {
    * @maxLength 10000
    */
   @Column('text', { default: 'DEFAULT DESCRIPTION' })
-  description: ICompetition['description'];
+  description: string;
 
   /** - 협약 대회 여부. */
   @Column('boolean', { default: false })
-  isPartnership: ICompetition['isPartnership'];
+  isPartnership: boolean;
 
   /**
    * - 조회수.
    * @type uint32
    */
   @Column('int', { default: 0 })
-  viewCount: ICompetition['viewCount'];
+  viewCount: number;
 
   /**
    * - 대회 포스터 이미지 URL Key.
@@ -90,7 +89,7 @@ export class CompetitionEntity {
    * @maxLength 128
    */
   @Column('varchar', { length: 256, nullable: true })
-  posterImgUrlKey: ICompetition['posterImgUrlKey'];
+  posterImgUrlKey: null | string;
 
   /**
    * - 대회의 상태
@@ -98,44 +97,34 @@ export class CompetitionEntity {
    * - INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능
    */
   @Column('varchar', { length: 16, default: 'INACTIVE' })
-  status: ICompetition['status'];
+  status: 'ACTIVE' | 'INACTIVE';
 
   /** - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. */
   @CreateDateColumn()
-  createdAt: ICompetition['createdAt'];
+  createdAt: string | Date;
 
   /** - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간. */
   @UpdateDateColumn()
-  updatedAt: ICompetition['updatedAt'];
+  updatedAt: string | Date;
 
   /** - 대회의 얼리버드 할인 전략. */
   @OneToMany(
-    () => EarlyBirdDiscountSnapshotEntity,
+    () => EarlybirdDiscountSnapshotEntity,
     (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
   )
-  earlybirdDiscountSnapshots?: EarlyBirdDiscountSnapshotEntity[];
+  earlybirdDiscountSnapshots?: EarlybirdDiscountSnapshotEntity[];
 
-  /** - divisions. */
+  /**
+   * - divisions.
+   * - OneToMany: Competition(1) -> Division(*)
+   */
   @OneToMany(() => DivisionEntity, (division) => division.competition)
   divisions?: DivisionEntity[];
 
-  updateStatus(status: ICompetition['status']): void {
-    if (status === 'ACTIVE') {
-      const missingProperties: string[] = [];
-      if (this.title === 'DEFAULT TITLE') missingProperties.push('title');
-      if (this.address === 'DEFAULT ADDRESS') missingProperties.push('address');
-      if (this.competitionDate === null) missingProperties.push('competitionDate');
-      if (this.registrationStartDate === null) missingProperties.push('registrationStartDate');
-      if (this.registrationEndDate === null) missingProperties.push('registrationEndDate');
-      if (this.description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
-
-      if (missingProperties.length > 0) {
-        throw new BusinessException(
-          CompetitionsErrorMap.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
-          `다음 항목을 작성해주세요: ${missingProperties.join(', ')}`,
-        );
-      }
-    }
-    this.status = status;
-  }
+  /**
+   * - application packages.
+   * - OneToMany: Competition(1) -> ApplicationPackage(*)
+   */
+  @OneToMany(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.competition)
+  applicationPackages?: ApplicationPackageEntity[];
 }

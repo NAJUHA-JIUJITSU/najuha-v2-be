@@ -1,10 +1,10 @@
-import { IUser } from 'src/modules/users/structure/user.interface';
+import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
 
 export type SnsLoginReqDto = {
   /**
    * snsProvider.
    */
-  snsAuthProvider: IUser['snsAuthProvider'];
+  snsAuthProvider: UserEntity['snsAuthProvider'];
 
   /**
    * authCode.

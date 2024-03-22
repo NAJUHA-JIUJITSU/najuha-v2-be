@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
-import { IPolicyConsent } from 'src/modules/policy/structure/policy-consent.interface';
 // import { BusinessException } from 'src/common/response/errorResponse';
 import { Repository } from 'typeorm';
 
@@ -37,7 +36,7 @@ export class PolicyConsentRepository {
     private readonly policyConsentRepository: Repository<PolicyConsentEntity>,
   ) {}
 
-  async createPolicyConsents(dto: IPolicyConsent[]): Promise<IPolicyConsent[]> {
+  async createPolicyConsents(dto: PolicyConsentEntity[]): Promise<PolicyConsentEntity[]> {
     const policyConsent = this.policyConsentRepository.create(dto);
     return this.policyConsentRepository.save(policyConsent);
   }

@@ -1,45 +1,74 @@
-// import { IDivision } from './division.interface';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { PriceSnapshotEntity } from './price-snapshot.entity';
+import { ApplicationPackageEntity } from './application-package.entity';
 
-// export interface IApplication {
-//   /**
-//    * - 신청 id.
-//    */
-//   id: number;
+@Entity('application')
+export class ApplicationEntity {
+  /**
+   * - application id.
+   * @type uint32
+   */
+  @PrimaryGeneratedColumn()
+  id: number;
 
-//   playerName: string;
+  /**
+   * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
+   */
+  @CreateDateColumn()
+  createdAt: Date | string;
 
-//   playerGender: string;
+  /**
+   * - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간.
+   */
+  @UpdateDateColumn()
+  updatedAt: Date | string;
 
-//   playerBirth: string;
+  /**
+   * - status.
+   * - READY: 결제 대기중
+   * - DONE: 결제 완료
+   * - CANCELED: 결제 취소
+   */
+  @Column('varchar', { length: 16, default: 'READY' })
+  status: 'READY' | 'DONE' | 'CANCELED';
 
-//   playerPhoneNumber: string;
+  /** - payed price snapshot id. */
+  @Column()
+  payedPriceSnapshotId: number | null;
 
-//   playerBelt: string;
+  /**
+   * - payed price snapshot.
+   * - 결제 당시에 적용된 가격 스냅샷.
+   * - 결제 이전에는 null로 설정됩니다.
+   * - 환불, 부분환불시에 사용됩니다.
+   * - ManyToOne: PriceSnapshot(1) -> Application(*)
+   */
+  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.applications)
+  @JoinColumn({ name: 'payedPriceSnapshotId' })
+  payedPriceSnapshot?: PriceSnapshotEntity;
 
-//   /**
-//    * - 신청 상태.
-//    */
-//   status: string;
+  @Column()
+  applicationPackageId: number;
 
-//   /**
-//    * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
-//    */
-//   createdAt: Date | string;
+  @ManyToOne(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.applications)
+  @JoinColumn({ name: 'applicationPackageId' })
+  applicationPackage?: ApplicationPackageEntity;
 
-//   /**
-//    * - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간.
-//    */
-//   updatedAt: Date | string;
+  //   /**
+  //    * - cancel id.
+  //    */
+  //   cancelId: number | null;
 
-//   /**
-//    * - division id.
-//    */
-//   divisionId: number;
-
-//   /**
-//    * - division 정보
-//    * - ManyToOne: Division(1) -> Application(*)
-//    * - JoinColumn: divisionId
-//    */
-//   division?: IDivision;
-// }
+  //   /**
+  //    * - cancel.
+  //    */
+  //   cancle?: Cancel | null;
+}

@@ -388,199 +388,6 @@
         "x-nestia-method": "PATCH"
       }
     },
-    "/user/users": {
-      "post": {
-        "tags": [
-          "u-3 users"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserReqDto"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "created user info",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserResDto"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-3-1 create user",
-        "description": "u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용)).\n- RoleLevel: USER.",
-        "x-nestia-namespace": "user.users.postUser",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-3 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "created user info",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      },
-      "patch": {
-        "tags": [
-          "u-3 users"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "description": "UpdateUserReqDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PartialPickUsernamegenderbirthnicknamebelt"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "updated user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserResDto"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
-                }
-              }
-            }
-          }
-        },
-        "summary": "u-3-2 update user",
-        "description": "u-3-2 update user.\n- RoleLevel: USER.",
-        "x-nestia-namespace": "user.users.patchUser",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-3 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "dto",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "UpdateUserReqDto",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "updated user",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "PATCH"
-      }
-    },
-    "/user/users/me": {
-      "get": {
-        "tags": [
-          "u-3 users"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormUserResDto"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
-                }
-              }
-            }
-          }
-        },
-        "summary": "u-3-3 get me",
-        "description": "u-3-3 get me.\n- RoleLevel: USER.",
-        "x-nestia-namespace": "user.users.me.getMe",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-3 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "user",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
     "/user/register/users/me": {
       "get": {
         "tags": [
@@ -962,6 +769,199 @@
         "x-nestia-method": "PATCH"
       }
     },
+    "/user/users": {
+      "post": {
+        "tags": [
+          "u-3 users"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserReqDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created user info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUserResDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-3-1 create user",
+        "description": "u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용)).\n- RoleLevel: USER.",
+        "x-nestia-namespace": "user.users.postUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-3 users",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created user info",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "patch": {
+        "tags": [
+          "u-3 users"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "UpdateUserReqDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartialPickUserEntitynamegenderbirthnicknamebelt"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "updated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUserResDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          },
+          "4001": {
+            "description": "USERS_USER_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                }
+              }
+            }
+          }
+        },
+        "summary": "u-3-2 update user",
+        "description": "u-3-2 update user.\n- RoleLevel: USER.",
+        "x-nestia-namespace": "user.users.patchUser",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-3 users",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "dto",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateUserReqDto",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "updated user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      }
+    },
+    "/user/users/me": {
+      "get": {
+        "tags": [
+          "u-3 users"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUserResDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          },
+          "4001": {
+            "description": "USERS_USER_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                }
+              }
+            }
+          }
+        },
+        "summary": "u-3-3 get me",
+        "description": "u-3-3 get me.\n- RoleLevel: USER.",
+        "x-nestia-namespace": "user.users.me.getMe",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-3 users",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "user",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
     "/user/policy/recent": {
       "get": {
         "tags": [
@@ -1102,7 +1102,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormPolicy"
+                  "$ref": "#/components/schemas/ResponseFormPolicyEntity"
                 }
               }
             },
@@ -2109,266 +2109,6 @@
         ],
         "description": "----------------------------------------------------------------------------\nUsers 4000 ~ 4999"
       },
-      "CreateUserReqDto": {
-        "type": "object",
-        "properties": {
-          "snsId": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
-          },
-          "snsAuthProvider": {
-            "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
-            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 320,
-            "minLength": 1,
-            "description": "- 사용자 이메일 주소."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "pattern": "^01[0-9]{9}$",
-            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
-            "description": "- 사용자 성별."
-          },
-          "birth": {
-            "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "snsId",
-          "snsAuthProvider",
-          "name",
-          "email"
-        ]
-      },
-      "ResponseFormUserResDto": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              200
-            ]
-          },
-          "result": {
-            "$ref": "#/components/schemas/UserResDto"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
-      },
-      "UserResDto": {
-        "type": "object",
-        "properties": {
-          "snsId": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
-          },
-          "snsAuthProvider": {
-            "type": "string",
-            "enum": [
-              "KAKAO",
-              "NAVER",
-              "GOOGLE",
-              "APPLE"
-            ],
-            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "maxLength": 320,
-            "minLength": 1,
-            "description": "- 사용자 이메일 주소."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "pattern": "^01[0-9]{9}$",
-            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
-            "description": "- 사용자 성별."
-          },
-          "birth": {
-            "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
-          },
-          "nickname": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
-          },
-          "belt": {
-            "type": "string",
-            "enum": [
-              "선택없음",
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
-            "description": "- 사용자 주짓수 벨트."
-          },
-          "id": {
-            "type": "integer",
-            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "ADMIN",
-              "USER",
-              "TEMPORARY_USER"
-            ],
-            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
-          },
-          "profileImageUrlKey": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "nullable": true,
-            "description": "- 사용자 프로필 이미지 키 (이미지 파일 이름). (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
-            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "snsId",
-          "snsAuthProvider",
-          "name",
-          "email",
-          "phoneNumber",
-          "gender",
-          "birth",
-          "nickname",
-          "belt",
-          "id",
-          "role",
-          "profileImageUrlKey",
-          "status",
-          "createdAt",
-          "updatedAt"
-        ]
-      },
-      "PartialPickUsernamegenderbirthnicknamebelt": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ],
-            "description": "- 사용자 성별."
-          },
-          "birth": {
-            "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
-          },
-          "nickname": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
-          },
-          "belt": {
-            "type": "string",
-            "enum": [
-              "선택없음",
-              "화이트",
-              "블루",
-              "퍼플",
-              "브라운",
-              "블랙"
-            ],
-            "description": "- 사용자 주짓수 벨트."
-          }
-        },
-        "nullable": false,
-        "description": "Make all properties in T optional"
-      },
       "ResponseFormTemporaryUserResDto": {
         "type": "object",
         "properties": {
@@ -2471,12 +2211,26 @@
             ]
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time"
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ]
           },
           "updatedAt": {
-            "type": "string",
-            "format": "date-time"
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "nullable": false,
@@ -2585,7 +2339,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/PickUsergenderbirthnicknamebelt"
+            "$ref": "#/components/schemas/PickUserEntitygenderbirthnicknamebelt"
           },
           "consentPolicyTypes": {
             "type": "array",
@@ -2606,7 +2360,7 @@
           "consentPolicyTypes"
         ]
       },
-      "PickUsergenderbirthnicknamebelt": {
+      "PickUserEntitygenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
@@ -2763,7 +2517,67 @@
           "result"
         ]
       },
-      "ResponseFormFindPoliciesResDto": {
+      "CreateUserReqDto": {
+        "type": "object",
+        "properties": {
+          "snsId": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
+          },
+          "snsAuthProvider": {
+            "type": "string",
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
+            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "minLength": 1,
+            "description": "- 사용자 이메일 주소."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^01[0-9]{9}$",
+            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "description": "- 사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "snsId",
+          "snsAuthProvider",
+          "name",
+          "email"
+        ]
+      },
+      "ResponseFormUserResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -2779,7 +2593,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/FindPoliciesResDto"
+            "$ref": "#/components/schemas/UserResDto"
           }
         },
         "nullable": false,
@@ -2789,47 +2603,102 @@
           "result"
         ]
       },
-      "FindPoliciesResDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Policy"
-        }
-      },
-      "Policy": {
+      "UserResDto": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^01[0-9]{9}$",
+            "description": "- 사용자 전화번호. 01012345678.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다."
           },
-          "version": {
-            "type": "number",
-            "description": "- 약관의 버전.\n- 버전이 변경될 때마다 새로운 약관으로 간주합니다."
+          "snsId": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "description": "- SNS ID. 소셜 로그인을 위한 고유 식별자입니다."
           },
-          "type": {
+          "snsAuthProvider": {
             "type": "string",
             "enum": [
-              "TERMS_OF_SERVICE",
-              "PRIVACY",
-              "REFUND",
-              "ADVERTISEMENT"
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
             ],
-            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
+            "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
           },
-          "isMandatory": {
-            "type": "boolean",
-            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
           },
-          "title": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 320,
+            "minLength": 1,
+            "description": "- 사용자 이메일 주소."
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "description": "- 사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "description": "- 사용자 주짓수 벨트."
+          },
+          "id": {
+            "type": "integer",
+            "description": "- 사용자 ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ],
+            "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
+          },
+          "profileImageUrlKey": {
             "type": "string",
             "maxLength": 128,
             "minLength": 1,
-            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+            "description": "- 사용자 프로필 이미지 키 (이미지 파일 이름). (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
           },
-          "content": {
+          "status": {
             "type": "string",
-            "minLength": 1,
-            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
           },
           "createdAt": {
             "oneOf": [
@@ -2841,34 +2710,131 @@
                 "type": "string"
               }
             ],
-            "description": "- 약관 생성 날짜"
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
           },
-          "policyConsents": {
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          },
+          "applicationPackages": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PolicyConsent"
+              "$ref": "#/components/schemas/ApplicationPackageEntity"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "phoneNumber",
+          "snsId",
+          "snsAuthProvider",
+          "name",
+          "email",
+          "gender",
+          "birth",
+          "nickname",
+          "belt",
+          "id",
+          "role",
+          "profileImageUrlKey",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ApplicationPackageEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- application package id."
+          },
+          "network": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 주짓수 네트워크."
+          },
+          "team": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 소속 팀."
+          },
+          "masterName": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 관장님 성함."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 신청시간."
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationEntity"
             },
-            "description": "- 사용자가 동의한 약관 정보\nOneToMany: Policy(1) -> PolicyConsent(*)"
+            "description": "- application 정보\n- OneToMany: Application(1) -> ApplicationPackage(*)"
+          },
+          "applicationPackageSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPackageSnapshotEntity"
+            },
+            "description": "- application package snapshot 정보\n- OneToMany: ApplicationPackage(1) -> ApplicationPackageSnapshot(*)"
+          },
+          "competitionId": {
+            "type": "number",
+            "description": "- competition id."
+          },
+          "competition": {
+            "$ref": "#/components/schemas/CompetitionEntity",
+            "description": "- competition 정보\n- ManyToOne: Competition(1) -> ApplicationPackage(*)\n- JoinColumn: competitionId"
+          },
+          "userId": {
+            "type": "number",
+            "description": "- 신청자 계정 id."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserEntity",
+            "description": "- 신청자 계정 정보\n- ManyToOne: User(1) -> Application(*)\n- JoinColumn: userId"
           }
         },
         "nullable": false,
         "required": [
           "id",
-          "version",
-          "type",
-          "isMandatory",
-          "title",
-          "content",
-          "createdAt"
-        ],
-        "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
+          "network",
+          "team",
+          "masterName",
+          "createdAt",
+          "competitionId",
+          "userId"
+        ]
       },
-      "PolicyConsent": {
+      "ApplicationEntity": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
-            "description": "- 약관 동의 ID."
+            "description": "- application id."
           },
           "createdAt": {
             "oneOf": [
@@ -2880,37 +2846,660 @@
                 "type": "string"
               }
             ],
-            "description": "- 동의 날짜."
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다."
           },
-          "userId": {
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "READY",
+              "DONE",
+              "CANCELED"
+            ],
+            "description": "- status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소"
+          },
+          "payedPriceSnapshotId": {
             "type": "number",
-            "description": "- userId."
+            "nullable": true,
+            "description": "- payed price snapshot id."
           },
-          "user": {
-            "$ref": "#/components/schemas/User",
-            "description": "- user"
+          "payedPriceSnapshot": {
+            "$ref": "#/components/schemas/PriceSnapshotEntity",
+            "description": "- payed price snapshot.\n- 결제 당시에 적용된 가격 스냅샷.\n- 결제 이전에는 null로 설정됩니다.\n- 환불, 부분환불시에 사용됩니다.\n- ManyToOne: PriceSnapshot(1) -> Application(*)"
           },
-          "policyId": {
-            "type": "number",
-            "description": "- policyId."
+          "applicationPackageId": {
+            "type": "number"
           },
-          "policy": {
-            "$ref": "#/components/schemas/Policy",
-            "description": "- policy"
+          "applicationPackage": {
+            "$ref": "#/components/schemas/ApplicationPackageEntity"
           }
         },
         "nullable": false,
         "required": [
           "id",
           "createdAt",
-          "userId",
-          "user",
-          "policyId",
-          "policy"
-        ],
-        "description": "- 사용자가 동의한 약관 정보"
+          "updatedAt",
+          "status",
+          "payedPriceSnapshotId",
+          "applicationPackageId"
+        ]
       },
-      "User": {
+      "PriceSnapshotEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- price-snapshot id."
+          },
+          "price": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "- price, 단위: 원."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다."
+          },
+          "divisionId": {
+            "type": "number",
+            "description": "- division id."
+          },
+          "division": {
+            "$ref": "#/components/schemas/DivisionEntity",
+            "description": "- division 정보.\n- ManyToOne: Division(1) -> PriceSnapshot(*)."
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationEntity"
+            },
+            "description": "- application 정보.\n- OneToMany: Application(1) -> PriceSnapshot(*)."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "price",
+          "createdAt",
+          "divisionId"
+        ]
+      },
+      "DivisionEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- division id."
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 부문 카테고리."
+          },
+          "uniform": {
+            "type": "string",
+            "enum": [
+              "GI",
+              "NOGI"
+            ],
+            "description": "- 유니폼 GI, NOGI"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE",
+              "MIXED"
+            ],
+            "description": "- 성별."
+          },
+          "belt": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 주짓수벨트."
+          },
+          "weight": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 체급."
+          },
+          "birthYearRangeStart": {
+            "type": "string",
+            "minLength": 4,
+            "description": "- 출생년도 범위 시작. YYYY."
+          },
+          "birthYearRangeEnd": {
+            "type": "string",
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "description": "- 출생년도 범위 끝. YYYY."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+          },
+          "competitionId": {
+            "type": "number",
+            "description": "- competitionId."
+          },
+          "competition": {
+            "$ref": "#/components/schemas/CompetitionEntity",
+            "description": "- competition."
+          },
+          "priceSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PriceSnapshotEntity"
+            },
+            "description": "- price-snapshot."
+          },
+          "applicationSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationSnapshotEntity"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "category",
+          "uniform",
+          "gender",
+          "belt",
+          "weight",
+          "birthYearRangeStart",
+          "birthYearRangeEnd",
+          "status",
+          "createdAt",
+          "updatedAt",
+          "competitionId"
+        ]
+      },
+      "CompetitionEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- 대회의 고유 식별자. 데이터베이스에서 자동으로 생성됩니다."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "description": "- 대회의 이름."
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "description": "- 대회가 열리는 장소."
+          },
+          "competitionDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 대회 날짜."
+          },
+          "registrationStartDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 참가 신청 시작일"
+          },
+          "registrationEndDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 참가 신청 마감일."
+          },
+          "refundDeadlineDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 환불 가능 기간 마감일."
+          },
+          "soloRegistrationAdjustmentStartDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 단독 참가자의 부문 조정 시작일.\n- 부문에 참가자가 한 명만 있는 경우, 해당 참가자를 다른 체급이나 부문으로 조정할 수 있는 기간의 시작을 나타냅니다."
+          },
+          "soloRegistrationAdjustmentEndDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 단독 참가자의 부문 조정 마감일."
+          },
+          "registrationListOpenDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 참가자 명단 공개일."
+          },
+          "bracketOpenDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ],
+            "description": "- 대진표 공개일."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "minLength": 1,
+            "description": "- 대회 상세 정보.\n- 마크다운 형식으로 작성됩니다."
+          },
+          "isPartnership": {
+            "type": "boolean",
+            "description": "- 협약 대회 여부."
+          },
+          "viewCount": {
+            "type": "integer",
+            "description": "- 조회수."
+          },
+          "posterImgUrlKey": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "nullable": true,
+            "description": "- 대회 포스터 이미지 URL Key."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 대회의 상태\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능"
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+          },
+          "earlybirdDiscountSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EarlybirdDiscountSnapshotEntity"
+            },
+            "description": "- 대회의 얼리버드 할인 전략."
+          },
+          "divisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DivisionEntity"
+            },
+            "description": "- divisions.\n- OneToMany: Competition(1) -> Division(*)"
+          },
+          "applicationPackages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPackageEntity"
+            },
+            "description": "- application packages.\n- OneToMany: Competition(1) -> ApplicationPackage(*)"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "title",
+          "address",
+          "competitionDate",
+          "registrationStartDate",
+          "registrationEndDate",
+          "refundDeadlineDate",
+          "soloRegistrationAdjustmentStartDate",
+          "soloRegistrationAdjustmentEndDate",
+          "registrationListOpenDate",
+          "bracketOpenDate",
+          "description",
+          "isPartnership",
+          "viewCount",
+          "posterImgUrlKey",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "EarlybirdDiscountSnapshotEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "earlyBirdStartDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 얼리버드 시작일"
+          },
+          "earlyBirdEndDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 얼리버드 마감일"
+          },
+          "discountPrice": {
+            "type": "number",
+            "minimum": 0,
+            "description": "- 얼리버드 할인 가격 ex) 10000\n- 단위 : 원\n- 음수 값은 허용하지 않습니다."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          },
+          "competitionId": {
+            "type": "number"
+          },
+          "competition": {
+            "$ref": "#/components/schemas/CompetitionEntity"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "earlyBirdStartDate",
+          "earlyBirdEndDate",
+          "discountPrice",
+          "createdAt",
+          "updatedAt",
+          "competitionId",
+          "competition"
+        ]
+      },
+      "ApplicationSnapshotEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- application snapshot id."
+          },
+          "playerName": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- player name."
+          },
+          "playerGender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEAMLE"
+            ],
+            "description": "-player gender"
+          },
+          "playerBirth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "description": "- player birth (BirtDate YYYYMMDD)."
+          },
+          "playerPhoneNumber": {
+            "type": "string",
+            "pattern": "^01[0-9]{9}$",
+            "description": "- player phone number.\n- ex) 01012345678."
+          },
+          "playerBelt": {
+            "type": "string",
+            "enum": [
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "description": "- player belt"
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다."
+          },
+          "divisionId": {
+            "type": "number",
+            "description": "- division id."
+          },
+          "division": {
+            "$ref": "#/components/schemas/DivisionEntity",
+            "description": "- division 정보\n- ManyToOne: Division(1) -> Application(*)\n- JoinColumn: divisionId"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "playerName",
+          "playerGender",
+          "playerBirth",
+          "playerPhoneNumber",
+          "playerBelt",
+          "createdAt",
+          "divisionId"
+        ]
+      },
+      "ApplicationPackageSnapshotEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- application package snapshot id."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- entity 생성 시간."
+          },
+          "pacageTotalAmount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "- pacage total amount."
+          },
+          "earlbirdDiscountAmount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "- earlybird discount amount."
+          },
+          "combinationDiscountAmount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "- combination discount amount."
+          },
+          "amount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "- final amount.\n- pacageTotalAmount - earlbirdDiscountAmount - combinationDiscountAmount"
+          },
+          "applicationPackageId": {
+            "type": "number",
+            "description": "- application package id."
+          },
+          "applicationPackage": {
+            "$ref": "#/components/schemas/ApplicationPackageEntity",
+            "description": "- application package 정보\n- ManyToOne: ApplicationPackage(1) -> ApplicationPackageSnapshot(*)"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "createdAt",
+          "pacageTotalAmount",
+          "earlbirdDiscountAmount",
+          "combinationDiscountAmount",
+          "amount",
+          "applicationPackageId"
+        ]
+      },
+      "UserEntity": {
         "type": "object",
         "properties": {
           "id": {
@@ -2997,7 +3586,6 @@
             "type": "string",
             "maxLength": 128,
             "minLength": 1,
-            "nullable": true,
             "description": "- 사용자 프로필 이미지 키 (이미지 파일 이름). (썸네일 이미지 역할).\n- 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html)."
           },
           "status": {
@@ -3009,21 +3597,41 @@
             "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
           },
           "createdAt": {
-            "type": "string",
-            "format": "date-time",
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
             "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
           },
           "updatedAt": {
-            "type": "string",
-            "format": "date-time",
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
             "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
           },
           "policyConsents": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PolicyConsent"
+              "$ref": "#/components/schemas/PolicyConsentEntity"
             },
             "description": "- 사용자가 동의한 약관 정보\n- OneToMany: User(1) -> PolicyConsent(*)"
+          },
+          "applicationPackages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPackageEntity"
+            }
           }
         },
         "nullable": false,
@@ -3046,6 +3654,199 @@
         ],
         "description": "- 각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
       },
+      "PolicyConsentEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- 약관 동의 ID."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 동의 날짜."
+          },
+          "userId": {
+            "type": "number",
+            "description": "- userId."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserEntity",
+            "description": "- user"
+          },
+          "policyId": {
+            "type": "number",
+            "description": "- policyId."
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyEntity",
+            "description": "- policy"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "createdAt",
+          "userId",
+          "user",
+          "policyId",
+          "policy"
+        ],
+        "description": "- 사용자가 동의한 약관 정보."
+      },
+      "PolicyEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- 약관 id. 데이터베이스에서 자동 생성됩니다."
+          },
+          "version": {
+            "type": "number",
+            "description": "- 약관의 버전.\n- 버전이 변경될 때마다 새로운 약관으로 간주합니다."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ],
+            "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
+          },
+          "isMandatory": {
+            "type": "boolean",
+            "description": "- 약관동의 필수여수\n- true: 필수\n- false: 선택"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "description": "- 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "description": "// TODO: html 혹은 markdown 형식으로 저장할지 고민중\n- 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 약관 생성 날짜"
+          },
+          "policyConsents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PolicyConsentEntity"
+            },
+            "description": "- 사용자가 동의한 약관 정보\nOneToMany: Policy(1) -> PolicyConsentEntity(*)"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "version",
+          "type",
+          "isMandatory",
+          "title",
+          "content",
+          "createdAt"
+        ],
+        "description": "- 약관 테이블.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
+      },
+      "PartialPickUserEntitynamegenderbirthnicknamebelt": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "description": "- 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
+            "description": "- 사용자 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "description": "- 사용자 생년월일 (BirtDate YYYYMMDD)."
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "description": "- 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)"
+          },
+          "belt": {
+            "type": "string",
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
+            "description": "- 사용자 주짓수 벨트."
+          }
+        },
+        "nullable": false,
+        "description": "Make all properties in T optional"
+      },
+      "ResponseFormFindPoliciesResDto": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/FindPoliciesResDto"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "FindPoliciesResDto": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PolicyEntity"
+        }
+      },
       "ResponseFormFindPolicyResDto": {
         "type": "object",
         "properties": {
@@ -3062,7 +3863,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/Policy"
+            "$ref": "#/components/schemas/PolicyEntity"
           }
         },
         "nullable": false,
@@ -3109,7 +3910,7 @@
           "content"
         ]
       },
-      "ResponseFormPolicy": {
+      "ResponseFormPolicyEntity": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -3125,7 +3926,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/Policy"
+            "$ref": "#/components/schemas/PolicyEntity"
           }
         },
         "nullable": false,
@@ -3186,7 +3987,7 @@
         "type": "object",
         "properties": {
           "earlyBirdDiscountStrategy": {
-            "$ref": "#/components/schemas/OmitEarlyBirdDiscountStrategycompetition"
+            "$ref": "#/components/schemas/OmitEarlybirdDiscountSnapshotEntitycompetition"
           },
           "id": {
             "type": "integer",
@@ -3229,6 +4030,13 @@
               }
             ],
             "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+          },
+          "applicationPackages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPackageEntity"
+            },
+            "description": "- application packages.\n- OneToMany: Competition(1) -> ApplicationPackage(*)"
           },
           "address": {
             "type": "string",
@@ -3360,6 +4168,13 @@
             "minLength": 1,
             "nullable": true,
             "description": "- 대회 포스터 이미지 URL Key."
+          },
+          "earlybirdDiscountSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EarlybirdDiscountSnapshotEntity"
+            },
+            "description": "- 대회의 얼리버드 할인 전략."
           }
         },
         "nullable": false,
@@ -3384,7 +4199,7 @@
           "posterImgUrlKey"
         ]
       },
-      "OmitEarlyBirdDiscountStrategycompetition": {
+      "OmitEarlybirdDiscountSnapshotEntitycompetition": {
         "type": "object",
         "properties": {
           "id": {
@@ -3443,6 +4258,9 @@
             "type": "number",
             "minimum": 0,
             "description": "- 얼리버드 할인 가격 ex) 10000\n- 단위 : 원\n- 음수 값은 허용하지 않습니다."
+          },
+          "competitionId": {
+            "type": "number"
           }
         },
         "nullable": false,
@@ -3452,7 +4270,8 @@
           "updatedAt",
           "earlyBirdStartDate",
           "earlyBirdEndDate",
-          "discountPrice"
+          "discountPrice",
+          "competitionId"
         ],
         "description": "Construct a type with the properties of T except for those in type K."
       },
@@ -3488,7 +4307,13 @@
           "divisions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OmitDivisioncompetition"
+              "$ref": "#/components/schemas/SimplifiedDivision"
+            }
+          },
+          "earlybirdDiscountSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SimplifiedEarlybirdDiscountSnapshot"
             }
           },
           "id": {
@@ -3533,9 +4358,12 @@
             ],
             "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
           },
-          "earlyBirdDiscountStrategy": {
-            "$ref": "#/components/schemas/EarlyBirdDiscountStrategy",
-            "description": "- 대회의 얼리버드 할인 전략."
+          "applicationPackages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPackageEntity"
+            },
+            "description": "- application packages.\n- OneToMany: Competition(1) -> ApplicationPackage(*)"
           },
           "address": {
             "type": "string",
@@ -3691,9 +4519,15 @@
           "posterImgUrlKey"
         ]
       },
-      "OmitDivisioncompetition": {
+      "SimplifiedDivision": {
         "type": "object",
         "properties": {
+          "priceSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SimplifiedPriceSnapshot"
+            }
+          },
           "gender": {
             "type": "string",
             "enum": [
@@ -3745,6 +4579,10 @@
             ],
             "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
           },
+          "competitionId": {
+            "type": "number",
+            "description": "- competitionId."
+          },
           "category": {
             "type": "string",
             "maxLength": 64,
@@ -3776,13 +4614,11 @@
             "pattern": "^[0-9]{4}$",
             "description": "- 출생년도 범위 끝. YYYY."
           },
-          "price": {
-            "type": "integer",
-            "description": "- 부문 가격"
-          },
-          "competitionId": {
-            "type": "number",
-            "description": "- competitionId."
+          "applicationSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationSnapshotEntity"
+            }
           }
         },
         "nullable": false,
@@ -3793,22 +4629,88 @@
           "status",
           "createdAt",
           "updatedAt",
+          "competitionId",
           "category",
           "uniform",
           "weight",
           "birthYearRangeStart",
-          "birthYearRangeEnd",
-          "price",
-          "competitionId"
-        ],
-        "description": "Construct a type with the properties of T except for those in type K."
+          "birthYearRangeEnd"
+        ]
       },
-      "EarlyBirdDiscountStrategy": {
+      "SimplifiedPriceSnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "- price-snapshot id."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다."
+          },
+          "price": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "- price, 단위: 원."
+          },
+          "divisionId": {
+            "type": "number",
+            "description": "- division id."
+          },
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationEntity"
+            },
+            "description": "- application 정보.\n- OneToMany: Application(1) -> PriceSnapshot(*)."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "createdAt",
+          "price",
+          "divisionId"
+        ]
+      },
+      "SimplifiedEarlybirdDiscountSnapshot": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "description": "- ID. 데이터베이스에서 자동 생성됩니다."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
           },
           "earlyBirdStartDate": {
             "oneOf": [
@@ -3839,39 +4741,19 @@
             "minimum": 0,
             "description": "- 얼리버드 할인 가격 ex) 10000\n- 단위 : 원\n- 음수 값은 허용하지 않습니다."
           },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string"
-              }
-            ],
-            "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string"
-              }
-            ],
-            "description": "- 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다."
+          "competitionId": {
+            "type": "number"
           }
         },
         "nullable": false,
         "required": [
           "id",
+          "createdAt",
+          "updatedAt",
           "earlyBirdStartDate",
           "earlyBirdEndDate",
           "discountPrice",
-          "createdAt",
-          "updatedAt"
+          "competitionId"
         ]
       },
       "CreateCompetitionReqDto": {
@@ -3882,6 +4764,13 @@
             "maxLength": 256,
             "minLength": 1,
             "description": "- 대회의 이름."
+          },
+          "applicationPackages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPackageEntity"
+            },
+            "description": "- application packages.\n- OneToMany: Competition(1) -> ApplicationPackage(*)"
           },
           "address": {
             "type": "string",
@@ -4009,6 +4898,13 @@
             "minLength": 1,
             "nullable": true,
             "description": "- 대회 포스터 이미지 URL Key."
+          },
+          "earlybirdDiscountSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EarlybirdDiscountSnapshotEntity"
+            },
+            "description": "- 대회의 얼리버드 할인 전략."
           }
         },
         "nullable": false
@@ -4022,6 +4918,13 @@
             "minLength": 1,
             "description": "- 대회의 이름."
           },
+          "applicationPackages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationPackageEntity"
+            },
+            "description": "- application packages.\n- OneToMany: Competition(1) -> ApplicationPackage(*)"
+          },
           "address": {
             "type": "string",
             "maxLength": 256,
@@ -4148,6 +5051,13 @@
             "minLength": 1,
             "nullable": true,
             "description": "- 대회 포스터 이미지 URL Key."
+          },
+          "earlybirdDiscountSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EarlybirdDiscountSnapshotEntity"
+            },
+            "description": "- 대회의 얼리버드 할인 전략."
           }
         },
         "nullable": false
@@ -4174,7 +5084,7 @@
           "divisionPacks": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/DivisionPack"
+              "$ref": "#/components/schemas/IDivisionyPack"
             }
           }
         },
@@ -4183,7 +5093,7 @@
           "divisionPacks"
         ]
       },
-      "DivisionPack": {
+      "IDivisionyPack": {
         "type": "object",
         "properties": {
           "categorys": {

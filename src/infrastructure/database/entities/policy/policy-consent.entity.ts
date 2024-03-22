@@ -2,9 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDa
 import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
 import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
 
-/**
- * - 사용자가 동의한 약관 정보
- */
+/** - 사용자가 동의한 약관 정보. */
 @Entity('policy_consent')
 export class PolicyConsentEntity {
   /**
@@ -19,18 +17,20 @@ export class PolicyConsentEntity {
   createdAt: Date | string;
 
   /** - userId. */
-  @Column({ name: 'userId' })
+  @Column()
   userId: number;
 
   /** - user */
   @ManyToOne(() => UserEntity, (user) => user.policyConsents)
+  @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
   /** - policyId. */
-  @Column({ name: 'policyId' })
+  @Column()
   policyId: number;
 
   /** - policy */
   @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)
+  @JoinColumn({ name: 'policyId' })
   policy: PolicyEntity;
 }
