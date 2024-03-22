@@ -9,10 +9,10 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { CreatePolicyReqDto } from 'src/modules/policy/structure/dto/request/create-policy.req.dto';
 import exp from 'constants';
+import { IPolicy } from 'src/modules/policy/structure/policy.interface';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
@@ -24,7 +24,7 @@ describe('E2E a-4 admin-policy test', () => {
   let redisClient: Redis;
   let jwtService: JwtService;
   let userService: UsersAppService;
-  let PolicyAppService: PolicyAppService;
+  let policyAppService: PolicyAppService;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -38,7 +38,7 @@ describe('E2E a-4 admin-policy test', () => {
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersAppService>(UsersAppService);
-    PolicyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
+    policyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -68,13 +68,13 @@ describe('E2E a-4 admin-policy test', () => {
 
   describe('a-4-2 GET /admin/policy ------------------------------------------------------', () => {
     it('모든 약관 가져오기 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {
         await Promise.all(
           policyTypes.map((type) => {
-            return PolicyAppService.createPolicy({
+            return policyAppService.createPolicy({
               type: type,
               isMandatory: true,
               title: `${type} 제목`,
@@ -90,19 +90,19 @@ describe('E2E a-4 admin-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<IPolicy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(policyTypes.length * maxVersion);
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      const query = { type: typia.random<Policy['type']>() };
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const query = { type: typia.random<IPolicy['type']>() };
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {
         await Promise.all(
           policyTypes.map((type) => {
-            return PolicyAppService.createPolicy({
+            return policyAppService.createPolicy({
               type: type,
               isMandatory: true,
               title: `${type} 제목 ${version}`,
@@ -122,7 +122,7 @@ describe('E2E a-4 admin-policy test', () => {
         .query(query)
         .set('Authorization', `Bearer ${accessToken}`);
 
-      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<IPolicy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(maxVersion);
       expect(res.body.result[0].type).toEqual(query.type);
     });

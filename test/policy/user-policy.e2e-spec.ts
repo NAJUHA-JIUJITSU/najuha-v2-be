@@ -9,9 +9,8 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { User } from 'src/infrastructure/database/entities/user/user.entity';
-import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
+import { IPolicy } from 'src/modules/policy/structure/policy.interface';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {
@@ -23,7 +22,7 @@ describe('E2E u-4 user-policy test', () => {
   let redisClient: Redis;
   let jwtService: JwtService;
   let userService: UsersAppService;
-  let PolicyAppService: PolicyAppService;
+  let policyAppService: PolicyAppService;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -37,7 +36,7 @@ describe('E2E u-4 user-policy test', () => {
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersAppService>(UsersAppService);
-    PolicyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
+    policyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -52,10 +51,10 @@ describe('E2E u-4 user-policy test', () => {
 
   describe('u-4-1 GET /user/policy/recent --------------------------------------------------', () => {
     it('가장 최근에 등록된 모든 타입의 약관을 가져오기 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return PolicyAppService.createPolicy({
+          return policyAppService.createPolicy({
             type: type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -65,14 +64,14 @@ describe('E2E u-4 user-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/user/policy/recent');
-      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<IPolicy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(policyTypes.length);
     });
   });
 
   describe('u-4-2 GET /user/policy/:id --------------------------------------------------', () => {
     it('약관 ID로 약관을 가져오기 성공 시', async () => {
-      const policy = await PolicyAppService.createPolicy({
+      const policy = await policyAppService.createPolicy({
         type: 'TERMS_OF_SERVICE',
         isMandatory: true,
         title: `TERMS_OF_SERVICE 제목`,
@@ -80,7 +79,7 @@ describe('E2E u-4 user-policy test', () => {
       });
 
       const res = await request(app.getHttpServer()).get(`/user/policy/${policy.id}`);
-      expect(typia.is<ResponseForm<Policy>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<IPolicy>>(res.body)).toBe(true);
       expect(res.body.result.id).toEqual(policy.id);
     });
   });

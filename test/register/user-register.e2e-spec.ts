@@ -6,21 +6,21 @@ import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
 import { EntityManager } from 'typeorm';
-import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { User } from 'src/infrastructure/database/entities/user/user.entity';
 import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
-import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
 import { PhoneNumberAuthCode } from 'src/modules/register/structure/types/phone-number-auth-code.type';
-import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
 } from 'src/common/response/errorResponse';
+import { UsersAppService } from 'src/modules/users/application/users.app.service';
+import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
+import { IUser } from 'src/modules/users/structure/user.interface';
+import { IPolicy } from 'src/modules/policy/structure/policy.interface';
+import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;
@@ -29,8 +29,8 @@ describe('E2E u-2 register test', () => {
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
-  let UsersAppService: UsersAppService;
-  let PolicyAppService: PolicyAppService;
+  let usersAppService: UsersAppService;
+  let policyAppService: PolicyAppService;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -42,8 +42,8 @@ describe('E2E u-2 register test', () => {
     tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
-    UsersAppService = testingModule.get<UsersAppService>(UsersAppService);
-    PolicyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
+    usersAppService = testingModule.get<UsersAppService>(UsersAppService);
+    policyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -58,9 +58,9 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-1 GET /user/users/me --------------------------------------------------', () => {
     it('TEMPORARY_USER 권한으로 내 정보 조회 성공 시', async () => {
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      TemporaryUserResDto.birth = '19980101';
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      temporaryUserResDto.birth = '19980101';
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const accessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -77,14 +77,14 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-2 GET /user/users/:nickname/is-duplicated ----------------------------', () => {
     it('닉네임 중복검사 - 중복된 닉네임인 경우', async () => {
-      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
+      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
-      const existUser = await UsersAppService.createUser(existUserDto);
+      const existUser = await usersAppService.createUser(existUserDto);
 
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      TemporaryUserResDto.birth = '19980101';
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      temporaryUserResDto.birth = '19980101';
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
 
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
@@ -100,9 +100,9 @@ describe('E2E u-2 register test', () => {
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
-      const TemporaryUserResDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
-      TemporaryUserResDto.birth = '19980101';
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
+      temporaryUserResDto.birth = '19980101';
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
 
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
@@ -134,9 +134,9 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-3 POST /user/register/phone-number/auth-code', () => {
     it('전화번호로 인증코드 전송', async () => {
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      TemporaryUserResDto.phoneNumber = '01012345678';
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      temporaryUserResDto.phoneNumber = '01012345678';
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -152,8 +152,8 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-4 POST /user/register/phone-number/authcode/confirm --------', () => {
     it('전화번호로 인증코드 확인 성공 시', async () => {
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -173,9 +173,9 @@ describe('E2E u-2 register test', () => {
     });
 
     it('전화번호로 인증코드 확인 실패 시', async () => {
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      delete TemporaryUserResDto.phoneNumber;
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      delete temporaryUserResDto.phoneNumber;
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -198,10 +198,10 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-5 PATCH /user/register ------------------------------------------------', () => {
     it('유저 등록 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      await Promise.all(
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const ret = await Promise.all(
         policyTypes.map((type) => {
-          return PolicyAppService.createPolicy({
+          return policyAppService.createPolicy({
             type: type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -210,10 +210,10 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      TemporaryUserResDto.birth = '19980101';
-      TemporaryUserResDto.phoneNumber = '01012345678';
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      temporaryUserResDto.birth = '19980101';
+      temporaryUserResDto.phoneNumber = '01012345678';
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -235,10 +235,10 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 닉네임 중복', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return PolicyAppService.createPolicy({
+          return policyAppService.createPolicy({
             type: type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -247,14 +247,14 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
+      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       existUserDto.nickname = 'existingNickname';
-      const existUser = await UsersAppService.createUser(existUserDto);
+      const existUser = await usersAppService.createUser(existUserDto);
 
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -276,10 +276,10 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 필수 약관 미동의', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return PolicyAppService.createPolicy({
+          return policyAppService.createPolicy({
             type: type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -288,9 +288,9 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      TemporaryUserResDto.phoneNumber = '01012345678';
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      temporaryUserResDto.phoneNumber = '01012345678';
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -312,10 +312,10 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 전화번호 미등록', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return PolicyAppService.createPolicy({
+          return policyAppService.createPolicy({
             type: type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -324,9 +324,9 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const TemporaryUserResDto = typia.random<CreateUserReqDto>();
-      delete TemporaryUserResDto.phoneNumber;
-      const temporaryUser = await UsersAppService.createUser(TemporaryUserResDto);
+      const temporaryUserResDto = typia.random<CreateUserReqDto>();
+      delete temporaryUserResDto.phoneNumber;
+      const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
