@@ -1,7 +1,7 @@
 import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
-import { ApplicationPackageEntity } from '../competition/application-package.entity';
+import { ApplicationPackageEntity } from '../application/application-package.entity';
 
 /**
  * - 각 snsAuthProvider 마다 제공되는 정보.

@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DivisionEntity } from './division.entity';
-import { ApplicationEntity } from './application.entity';
+import { ApplicationEntity } from '../application/application.entity';
 
 @Entity('price-snapshot')
 export class PriceSnapshotEntity {

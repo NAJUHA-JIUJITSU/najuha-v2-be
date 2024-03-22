@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { DivisionEntity } from './division.entity';
+import { DivisionEntity } from '../competition/division.entity';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 
 @Entity('application_snapshot')

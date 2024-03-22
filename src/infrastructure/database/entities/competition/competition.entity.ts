@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './early-bird-discount-snapshot.entity';
-import { ApplicationPackageEntity } from './application-package.entity';
+import { ApplicationPackageEntity } from '../application/application-package.entity';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
+import { combinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
 
 @Entity('competition')
 export class CompetitionEntity {
@@ -114,6 +115,13 @@ export class CompetitionEntity {
     (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
   )
   earlybirdDiscountSnapshots?: EarlybirdDiscountSnapshotEntity[];
+
+  /** - 부문 조합 할인 전략. */
+  @OneToMany(
+    () => combinationDiscountSnapshotEntity,
+    (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
+  )
+  combinationDiscountSnapshots?: combinationDiscountSnapshotEntity[];
 
   /**
    * - divisions.

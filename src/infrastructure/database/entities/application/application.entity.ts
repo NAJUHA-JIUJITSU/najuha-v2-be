@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PriceSnapshotEntity } from './price-snapshot.entity';
+import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
 import { ApplicationPackageEntity } from './application-package.entity';
 
 @Entity('application')

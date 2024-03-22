@@ -37,15 +37,11 @@ export class EarlybirdDiscountSnapshotEntity {
    * @minimum 0
    */
   @Column('int')
-  discountPrice: number;
+  discountAmount: number;
 
   /** - 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다. */
   @CreateDateColumn()
   createdAt: Date | string;
-
-  /** - 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다. */
-  @UpdateDateColumn()
-  updatedAt: Date | string;
 
   @Column()
   competitionId: CompetitionEntity['id'];

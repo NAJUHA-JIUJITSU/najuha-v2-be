@@ -2,7 +2,7 @@ import { UserEntity } from 'src/infrastructure/database/entities/user/user.entit
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { ApplicationPackageSnapshotEntity } from './application-package-snapshot.entity';
-import { CompetitionEntity } from './competition.entity';
+import { CompetitionEntity } from '../competition/competition.entity';
 
 @Entity('application_package')
 export class ApplicationPackageEntity {

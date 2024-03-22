@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { PriceSnapshotEntity } from './price-snapshot.entity';
-import { ApplicationSnapshotEntity } from './applicatioin-snapshot.entity';
+import { ApplicationSnapshotEntity } from '../application/applicatioin-snapshot.entity';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
