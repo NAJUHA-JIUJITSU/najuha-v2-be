@@ -12,7 +12,7 @@ export type TemporaryUserResDto = {
   gender: IUser['gender'] | null;
   birth: IUser['birth'] | null;
   belt: IUser['belt'] | null;
-  profileImageUrlKey: IUser['profileImageUrlKey'];
+  profileImageUrlKey: IUser['profileImageUrlKey'] | null;
   status: IUser['status'];
   createdAt: IUser['createdAt'];
   updatedAt: IUser['updatedAt'];
