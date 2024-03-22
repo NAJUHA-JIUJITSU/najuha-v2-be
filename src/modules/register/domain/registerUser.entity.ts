@@ -5,54 +5,54 @@ import { IPolicyConsent } from 'src/modules/policy/structure/policy-consent.inte
 import { IPolicy } from 'src/modules/policy/structure/policy.interface';
 
 export class RegisterUser {
-  user: IUser & { policyConsents: IPolicyConsent[] };
+  user: Omit<IUser, 'policyConsents'>;
+  existingPolicyConsents: IPolicyConsent[];
+  newPolicyConsents: IPolicyConsent[];
   registerUserConsentPolicyTypes: IPolicy['type'][];
   latestPolicies: IPolicy[];
 
   constructor(
-    user: IUser,
+    user: Omit<IUser, 'policyConsents'>,
+    existingPolicyConsents: IPolicyConsent[] = [],
     registerUserInfo: RegisterReqDto['user'],
     registerUserConsentPolicyTypes: IPolicy['type'][],
     latestPolicies: IPolicy[],
   ) {
-    this.user = { ...user, ...registerUserInfo, role: 'USER', policyConsents: user.policyConsents || [] };
+    this.user = { ...user, ...registerUserInfo };
+    this.existingPolicyConsents = existingPolicyConsents;
     this.registerUserConsentPolicyTypes = registerUserConsentPolicyTypes || [];
     this.latestPolicies = latestPolicies || [];
-    this.setUserPolicyConsents();
+    this.setNewPolicyConsents();
   }
 
-  private setUserPolicyConsents() {
-    let policyies: IPolicy[] = [];
-    // 이미 동의했던 약관은 추가하지 않기
-    policyies = this.latestPolicies.filter(
-      (policy) => !this.user.policyConsents?.some((consent) => consent.policyId === policy.id),
+  private setNewPolicyConsents() {
+    const unconsentedPolicies = this.latestPolicies.filter(
+      (policy) =>
+        !this.existingPolicyConsents.some((consent) => consent.policyId === policy.id) &&
+        this.registerUserConsentPolicyTypes.includes(policy.type),
     );
 
-    // 유저가 동의한 타입의 약관만 추가
-    policyies = policyies.filter((policy) => this.registerUserConsentPolicyTypes.includes(policy.type));
-
-    const policyConsents = policyies.map((policy) => {
+    this.newPolicyConsents = unconsentedPolicies.map((policy) => {
       return {
         id: 0,
         createdAt: new Date(),
         userId: this.user.id,
         policyId: policy.id,
       };
-    }) as IPolicyConsent[];
-
-    this.user.policyConsents = [...this.user.policyConsents, ...policyConsents];
+    });
   }
 
-  private validatePhoneNumberRegistered() {
+  private ensurePhoneNumberRegistered() {
     if (!this.user.phoneNumber) {
       throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
     }
   }
 
-  private validateMandatoryPoliciesConseted() {
+  private ensureMandatoryPoliciesConsented() {
+    const userConsentedPolices = [...this.existingPolicyConsents, ...this.newPolicyConsents];
     const mandatoryPolicies = this.latestPolicies.filter((policy) => policy.isMandatory);
     const missingConsents = mandatoryPolicies.filter(
-      (policy) => !this.user.policyConsents?.some((consent) => consent.policyId === policy.id),
+      (policy) => !userConsentedPolices?.some((consent) => consent.policyId === policy.id),
     );
     if (missingConsents.length > 0) {
       const missingPolicyTypes = missingConsents.map((policy) => policy.type).join(', ');
@@ -64,7 +64,7 @@ export class RegisterUser {
   }
 
   validate() {
-    this.validatePhoneNumberRegistered();
-    this.validateMandatoryPoliciesConseted();
+    this.ensurePhoneNumberRegistered();
+    this.ensureMandatoryPoliciesConsented();
   }
 }

@@ -50,13 +50,16 @@ export class RegisterAppService {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
 
-    const user = await this.userRepository.getUser({ where: { id: userId }, relations: ['policyConsents'] });
+    const { policyConsents, ...user } = await this.userRepository.getUser({
+      where: { id: userId },
+      relations: ['policyConsents'],
+    });
     const latestPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
-    const registerUser = new RegisterUser(user, dto.user, dto.consentPolicyTypes, latestPolicies);
+    const registerUser = new RegisterUser(user, policyConsents, dto.user, dto.consentPolicyTypes, latestPolicies);
     registerUser.validate();
 
     await this.userRepository.updateUser(registerUser.user);
-    await this.policyConsetRepository.createPolicyConsents(registerUser.user.policyConsents);
+    await this.policyConsetRepository.createPolicyConsents(registerUser.newPolicyConsents);
     return await this.AuthTokenDomainService.createAuthTokens(registerUser.user.id, registerUser.user.role);
   }
 
