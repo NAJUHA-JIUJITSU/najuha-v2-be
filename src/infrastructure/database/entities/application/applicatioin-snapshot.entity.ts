@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { DivisionEntity } from '../competition/division.entity';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
+import { ApplicationEntity } from './application.entity';
 
 @Entity('application_snapshot')
 export class ApplicationSnapshotEntity {
@@ -46,6 +47,14 @@ export class ApplicationSnapshotEntity {
   /** - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다. */
   @CreateDateColumn()
   createdAt: Date | string;
+
+  /** - application id. */
+  @Column()
+  applicationId: ApplicationEntity['id'];
+
+  /** - application 정보 */
+  @ManyToOne(() => ApplicationEntity, (application) => application.applicationSnapshots)
+  application?: ApplicationEntity;
 
   /**
    * - division id.

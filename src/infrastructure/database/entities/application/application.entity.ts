@@ -4,11 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
 import { ApplicationPackageEntity } from './application-package.entity';
+import { ApplicationSnapshotEntity } from './applicatioin-snapshot.entity';
 
 @Entity('application')
 export class ApplicationEntity {
@@ -43,6 +45,10 @@ export class ApplicationEntity {
   /** - payed price snapshot id. */
   @Column()
   payedPriceSnapshotId: number | null;
+
+  /** - application snapshot. */
+  @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.applications)
+  applicationSnapshots: ApplicationSnapshotEntity[];
 
   /**
    * - payed price snapshot.

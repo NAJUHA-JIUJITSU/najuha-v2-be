@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { DivisionEntity } from './division.entity';
 import { ApplicationEntity } from '../application/application.entity';
 
-@Entity('price-snapshot')
+@Entity('price_snapshot')
 export class PriceSnapshotEntity {
   /**
    * - price-snapshot id.
