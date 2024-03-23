@@ -1,8 +1,9 @@
+import { OmitOptional } from 'src/common/omit-optional.type';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
 import { EarlybirdDiscountSnapshotEntity } from 'src/infrastructure/database/entities/competition/early-bird-discount-snapshot.entity';
 
-interface CompetitionResDto extends Omit<CompetitionEntity, 'earlyBirdDiscountStrategy' | 'divisions'> {
-  earlyBirdDiscountStrategy?: Omit<EarlybirdDiscountSnapshotEntity, 'competition'>;
+export interface SCompetition extends Omit<OmitOptional<CompetitionEntity>, 'description'> {
+  earlybirdDiscountSnapshots?: OmitOptional<EarlybirdDiscountSnapshotEntity>[];
 }
 
-export type FindCompetitionsResDto = CompetitionResDto[];
+export type FindCompetitionsResDto = SCompetition[];

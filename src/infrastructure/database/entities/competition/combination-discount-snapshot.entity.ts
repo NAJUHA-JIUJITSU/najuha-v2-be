@@ -32,5 +32,5 @@ export class combinationDiscountSnapshotEntity {
 
   @ManyToOne(() => CompetitionEntity, (competition) => competition.combinationDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionEntity;
+  competition?: CompetitionEntity;
 }

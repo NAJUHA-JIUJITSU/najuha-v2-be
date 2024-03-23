@@ -1,3 +1,4 @@
+import { OmitOptional } from 'src/common/omit-optional.type';
 import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
 
-export type FindPolicyResDto = PolicyEntity | null;
+export type FindPolicyResDto = OmitOptional<PolicyEntity> | null;

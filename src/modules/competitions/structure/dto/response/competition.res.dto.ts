@@ -1,17 +1,16 @@
+import { OmitOptional } from 'src/common/omit-optional.type';
+import { combinationDiscountSnapshotEntity } from 'src/infrastructure/database/entities/competition/combination-discount-snapshot.entity';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
 import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
 import { EarlybirdDiscountSnapshotEntity } from 'src/infrastructure/database/entities/competition/early-bird-discount-snapshot.entity';
 import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 
-interface SimplifiedDivision extends Omit<DivisionEntity, 'competition' | 'priceSnapshots'> {
-  priceSnapshots?: SimplifiedPriceSnapshot[];
+interface SDivision extends OmitOptional<DivisionEntity> {
+  priceSnapshots?: OmitOptional<PriceSnapshotEntity>[];
 }
 
-interface SimplifiedPriceSnapshot extends Omit<PriceSnapshotEntity, 'division'> {}
-
-interface SimplifiedEarlybirdDiscountSnapshot extends Omit<EarlybirdDiscountSnapshotEntity, 'competition'> {}
-
-export interface CompetitionResDto extends Omit<CompetitionEntity, 'divisions' | 'earlybirdDiscountSnapshots'> {
-  divisions?: SimplifiedDivision[];
-  earlybirdDiscountSnapshots?: SimplifiedEarlybirdDiscountSnapshot[];
+export interface CompetitionResDto extends OmitOptional<CompetitionEntity> {
+  divisions?: SDivision[];
+  earlybirdDiscountSnapshots?: OmitOptional<EarlybirdDiscountSnapshotEntity>[];
+  combinationDiscountSnapshots?: OmitOptional<combinationDiscountSnapshotEntity>[];
 }

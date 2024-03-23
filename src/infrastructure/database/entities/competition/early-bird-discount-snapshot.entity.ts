@@ -48,5 +48,5 @@ export class EarlybirdDiscountSnapshotEntity {
 
   @ManyToOne(() => CompetitionEntity, (competition) => competition.earlybirdDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionEntity;
+  competition?: CompetitionEntity;
 }
