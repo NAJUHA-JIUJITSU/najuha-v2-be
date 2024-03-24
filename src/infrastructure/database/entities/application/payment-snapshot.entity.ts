@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Application } from './application.entity';
 
 @Entity('payment_snapshot')
 export class PaymentSnapshot {
@@ -45,17 +46,11 @@ export class PaymentSnapshot {
   @Column('int', { unsigned: true })
   totalAmount: number;
 
-  // /**
-  //  * - application package id.
-  //  */
-  // @Column()
-  // applicationPackageId: ApplicationPackage['id'];
+  /** - application id. */
+  @Column()
+  applicationId: Application['id'];
 
-  // /**
-  //  * - application package 정보
-  //  * - ManyToOne: ApplicationPackage(1) -> ApplicationPackageSnapshot(*)
-  //  */
-  // @ManyToOne(() => ApplicationPackage, (applicationPackage) => applicationPackage.applicationPackageSnapshots)
-  // @JoinColumn({ name: 'applicationPackageId' })
-  // applicationPackage?: ApplicationPackage;
+  /** - application. */
+  @ManyToOne(() => Application, (application) => application.paymentSnapshots)
+  application: Application;
 }

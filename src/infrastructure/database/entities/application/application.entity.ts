@@ -52,19 +52,19 @@ export class Application {
   playerSnapshots?: PlayerSnapshot[];
 
   /** - payment snapshot. */
-  @OneToMany(() => PlayerSnapshot, (playerSnapshot) => playerSnapshot.application)
-  paymentSnapshot?: PaymentSnapshot;
+  @OneToMany(() => PaymentSnapshot, (paymentSnapshot) => paymentSnapshot.application)
+  paymentSnapshots?: PaymentSnapshot[];
 
   /** - participation division. */
-  @OneToMany(() => PlayerSnapshot, (playerSnapshot) => playerSnapshot.application)
-  participationDivisions?: ParticipationDivision;
+  @OneToMany(() => ParticipationDivision, (participationDivision) => participationDivision.application)
+  participationDivisions?: ParticipationDivision[];
 
   /** - earlybird discount snapshot id. */
   @Column()
   earlybirdDiscountSnapshotId?: EarlybirdDiscountSnapshot['id'];
 
   /** - earlybird discount snapshot. */
-  @OneToOne(() => PaymentSnapshot)
+  @OneToOne(() => EarlybirdDiscountSnapshot)
   @JoinColumn({ name: 'earlybirdDiscountSnapshotId' })
   earlybirdDiscountSnapshot?: EarlybirdDiscountSnapshot;
 
@@ -73,7 +73,7 @@ export class Application {
   combinationDiscountSnapshotId?: PaymentSnapshot['id'];
 
   /** - combination discount snapshot. */
-  @OneToOne(() => PaymentSnapshot)
+  @OneToOne(() => CombinationDiscountSnapshot)
   @JoinColumn({ name: 'combinationDiscountSnapshotId' })
   combinationDiscountSnapshot?: CombinationDiscountSnapshot;
 
