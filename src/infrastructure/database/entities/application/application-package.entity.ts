@@ -1,8 +1,19 @@
 import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { ApplicationPackageSnapshotEntity } from './application-package-snapshot.entity';
 import { CompetitionEntity } from '../competition/competition.entity';
+import { EarlybirdDiscountSnapshotEntity } from '../competition/early-bird-discount-snapshot.entity';
+import { CombinationDiscountSnapshotEntity } from '../competition/combination-discount-snapshot.entity';
 
 @Entity('application_package')
 export class ApplicationPackageEntity {
@@ -90,6 +101,12 @@ export class ApplicationPackageEntity {
   @ManyToOne(() => UserEntity, (user) => user.applicationPackages)
   @JoinColumn({ name: 'userId' })
   user?: UserEntity;
+
+  @OneToOne(() => EarlybirdDiscountSnapshotEntity)
+  earlybirdDiscountSnapshot?: EarlybirdDiscountSnapshotEntity;
+
+  @OneToOne(() => CombinationDiscountSnapshotEntity)
+  combinationDiscountSnapshot?: CombinationDiscountSnapshotEntity;
 
   //   /*
   //    * - cancel 정보

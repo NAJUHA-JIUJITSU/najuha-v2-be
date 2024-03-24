@@ -20,7 +20,7 @@ export class ApplicationPackageSnapshotEntity {
    * @minimum 0
    */
   @Column('int', { unsigned: true })
-  totalAmount: number;
+  normalAmount: number;
 
   /**
    * - earlybird discount amount.
@@ -39,13 +39,12 @@ export class ApplicationPackageSnapshotEntity {
   combinationDiscountAmount: number;
 
   /**
-   * - final amount.
-   * - pacageTotalAmount - earlbirdDiscountAmount - combinationDiscountAmount
+   * - total amount = normalAmount - earlbirdDiscountAmount - combinationDiscountAmount.
    * @type uint32
    * @minimum 0
    */
   @Column('int', { unsigned: true })
-  amount: number;
+  totalAmount: number;
 
   /**
    * - application package id.

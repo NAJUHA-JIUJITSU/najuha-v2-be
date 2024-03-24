@@ -108,4 +108,8 @@ export class DivisionEntity {
 
   @OneToMany(() => ApplicationSnapshotEntity, (applicationSnapshot) => applicationSnapshot.division)
   applicationSnapshots?: ApplicationSnapshotEntity[];
+
+  constructor(partial: Partial<DivisionEntity>) {
+    Object.assign(this, partial);
+  }
 }

@@ -43,4 +43,8 @@ export class PriceSnapshotEntity {
    */
   @OneToMany(() => ApplicationEntity, (application) => application.payedPriceSnapshot)
   applications?: ApplicationEntity[];
+
+  constructor(partial: Partial<PriceSnapshotEntity>) {
+    Object.assign(this, partial);
+  }
 }

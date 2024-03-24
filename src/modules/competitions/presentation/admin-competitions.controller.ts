@@ -3,6 +3,7 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
+
 import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
 import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
 import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
@@ -10,6 +11,7 @@ import { FindCompetitionsResDto } from '../structure/dto/response/find-competiti
 import { UpdateCompetitionStatusReqDto } from '../structure/dto/request/update-competition-status.req.dto';
 import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { CreateCompetitionResDto } from '../structure/dto/response/create-competition.res.dto';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -24,7 +26,7 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
-  async createCompetition(@TypedBody() dto: CreateCompetitionReqDto): Promise<ResponseForm<CreateCompetitionReqDto>> {
+  async createCompetition(@TypedBody() dto: CreateCompetitionReqDto): Promise<ResponseForm<CreateCompetitionResDto>> {
     const ret = await this.CompetitionsAppService.createCompetition(dto);
     return createResponseForm(ret);
   }

@@ -12,7 +12,7 @@ type discountRule = {
 };
 
 @Entity('combination_discount_snapshot')
-export class combinationDiscountSnapshotEntity {
+export class CombinationDiscountSnapshotEntity {
   /**
    * - combination discount snapshot id.
    * @type uint32

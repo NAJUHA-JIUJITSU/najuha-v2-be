@@ -3,7 +3,7 @@ import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './early-bird-discount-snapshot.entity';
 import { ApplicationPackageEntity } from '../application/application-package.entity';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
-import { combinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
+import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
 
 @Entity('competition')
 export class CompetitionEntity {
@@ -118,10 +118,10 @@ export class CompetitionEntity {
 
   /** - 부문 조합 할인 전략. */
   @OneToMany(
-    () => combinationDiscountSnapshotEntity,
+    () => CombinationDiscountSnapshotEntity,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
   )
-  combinationDiscountSnapshots?: combinationDiscountSnapshotEntity[];
+  combinationDiscountSnapshots?: CombinationDiscountSnapshotEntity[];
 
   /**
    * - divisions.

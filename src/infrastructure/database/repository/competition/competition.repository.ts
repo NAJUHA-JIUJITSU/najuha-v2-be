@@ -13,7 +13,7 @@ export class CompetitionRepository {
 
   async createCompetition(dto: Partial<CompetitionEntity>): Promise<CompetitionEntity> {
     const competition = this.competitionRepository.create(dto);
-    return this.competitionRepository.save(competition);
+    return await this.competitionRepository.save(competition);
   }
 
   async findCompetitons(options?: {
