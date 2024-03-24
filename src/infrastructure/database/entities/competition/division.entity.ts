@@ -9,13 +9,13 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { CompetitionEntity } from './competition.entity';
-import { PriceSnapshotEntity } from './price-snapshot.entity';
-import { ParticipationDivisionSnapshotEntity } from '../application/participation-division-snapshot.entity';
+import { Competition } from './competition.entity';
+import { PriceSnapshot } from './price-snapshot.entity';
+import { ParticipationDivisionSnapshot } from '../application/participation-division-snapshot.entity';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
-export class DivisionEntity {
+export class Division {
   /**
    * - division id.
    * @type uint32
@@ -94,23 +94,23 @@ export class DivisionEntity {
   competitionId: number;
 
   /** - competition. */
-  @ManyToOne(() => CompetitionEntity, (competition) => competition.divisions)
+  @ManyToOne(() => Competition, (competition) => competition.divisions)
   @JoinColumn({ name: 'competitionId' })
-  competition?: CompetitionEntity;
+  competition?: Competition;
 
   /** - price snapshots. */
-  @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.division, { cascade: true })
-  priceSnapshots?: PriceSnapshotEntity[];
+  @OneToMany(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.division, { cascade: true })
+  priceSnapshots?: PriceSnapshot[];
 
   /** - participation division snapshots. */
   @OneToMany(
-    () => ParticipationDivisionSnapshotEntity,
+    () => ParticipationDivisionSnapshot,
     (participationDivisionSnapshot) => participationDivisionSnapshot.division,
   )
-  participationDivisionSnapshots?: ParticipationDivisionSnapshotEntity[];
+  participationDivisionSnapshots?: ParticipationDivisionSnapshot[];
 
   // methods ------------------------------------------------------------------
-  constructor(partial: Partial<DivisionEntity>) {
+  constructor(partial: Partial<Division>) {
     Object.assign(this, partial);
   }
 }

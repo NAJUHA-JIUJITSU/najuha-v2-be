@@ -11,14 +11,14 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { CreatePolicyReqDto } from 'src/modules/policy/dto/request/create-policy.req.dto';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let dataSource: DataSource;
-  let entityManager: EntityManager;
+  let entityEntityManager: EntityManager;
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
@@ -32,8 +32,8 @@ describe('E2E a-4 admin-policy test', () => {
 
     app = testingModule.createNestApplication();
     dataSource = testingModule.get<DataSource>(DataSource);
-    entityManager = testingModule.get<EntityManager>(EntityManager);
-    tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
+    entityEntityManager = testingModule.get<EntityManager>(EntityManager);
+    tableNames = entityEntityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersAppService>(UsersAppService);
@@ -42,7 +42,7 @@ describe('E2E a-4 admin-policy test', () => {
   });
 
   afterEach(async () => {
-    await entityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+    await entityEntityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
     await redisClient.flushall();
   });
 
@@ -67,7 +67,7 @@ describe('E2E a-4 admin-policy test', () => {
 
   describe('a-4-2 GET /admin/policy ------------------------------------------------------', () => {
     it('모든 약관 가져오기 성공 시', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {
@@ -89,13 +89,13 @@ describe('E2E a-4 admin-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(policyTypes.length * maxVersion);
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      const query = { type: typia.random<PolicyEntity['type']>() };
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const query = { type: typia.random<Policy['type']>() };
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {
@@ -121,7 +121,7 @@ describe('E2E a-4 admin-policy test', () => {
         .query(query)
         .set('Authorization', `Bearer ${accessToken}`);
 
-      expect(typia.is<ResponseForm<PolicyEntity[]>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
       expect(res.body.result.length).toEqual(maxVersion);
       expect(res.body.result[0].type).toEqual(query.type);
     });

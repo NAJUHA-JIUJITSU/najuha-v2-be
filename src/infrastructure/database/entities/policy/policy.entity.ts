@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
-import { PolicyConsentEntity } from './policy-consent.entity';
+import { PolicyConsent } from './policy-consent.entity';
 
 /**
  * - 약관 테이블.
@@ -7,7 +7,7 @@ import { PolicyConsentEntity } from './policy-consent.entity';
  * - 새로운 약관이 생성될 때마다 버전을 올립니다.
  */
 @Entity('policy')
-export class PolicyEntity {
+export class Policy {
   /**
    * - 약관 id. 데이터베이스에서 자동 생성됩니다.
    * @type uint32
@@ -62,8 +62,8 @@ export class PolicyEntity {
 
   /**
    * - 사용자가 동의한 약관 정보
-   * OneToMany: Policy(1) -> PolicyConsentEntity(*)
+   * OneToMany: Policy(1) -> PolicyConsent(*)
    */
-  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.policy)
-  policyConsents?: PolicyConsentEntity[];
+  @OneToMany(() => PolicyConsent, (policyConsent) => policyConsent.policy)
+  policyConsents?: PolicyConsent[];
 }

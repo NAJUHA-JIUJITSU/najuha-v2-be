@@ -1,7 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('payment_snapshot')
-export class PaymentSnapshotEntity {
+export class PaymentSnapshot {
   /**
    * - application package snapshot id.
    * @type uint32
@@ -49,13 +49,13 @@ export class PaymentSnapshotEntity {
   //  * - application package id.
   //  */
   // @Column()
-  // applicationPackageId: ApplicationPackageEntity['id'];
+  // applicationPackageId: ApplicationPackage['id'];
 
   // /**
   //  * - application package 정보
   //  * - ManyToOne: ApplicationPackage(1) -> ApplicationPackageSnapshot(*)
   //  */
-  // @ManyToOne(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.applicationPackageSnapshots)
+  // @ManyToOne(() => ApplicationPackage, (applicationPackage) => applicationPackage.applicationPackageSnapshots)
   // @JoinColumn({ name: 'applicationPackageId' })
-  // applicationPackage?: ApplicationPackageEntity;
+  // applicationPackage?: ApplicationPackage;
 }

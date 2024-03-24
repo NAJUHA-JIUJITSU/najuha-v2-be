@@ -5,19 +5,19 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
-import { DataSource, EntityManager, QueryRunner } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
-import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
+import { User } from 'src/infrastructure/database/entities/user/user.entity';
 import { UserResDto } from 'src/modules/users/dto/response/user.res.dto';
 
 describe('E2E u-3 user-users test', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let dataSource: DataSource;
-  let entityManager: EntityManager;
+  let entityEntityManager: EntityManager;
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
@@ -30,8 +30,8 @@ describe('E2E u-3 user-users test', () => {
 
     app = testingModule.createNestApplication();
     dataSource = testingModule.get<DataSource>(DataSource);
-    entityManager = testingModule.get<EntityManager>(EntityManager);
-    tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
+    entityEntityManager = testingModule.get<EntityManager>(EntityManager);
+    tableNames = entityEntityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersAppService>(UsersAppService);
@@ -39,7 +39,7 @@ describe('E2E u-3 user-users test', () => {
   });
 
   afterEach(async () => {
-    await entityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+    await entityEntityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
     await redisClient.flushall();
   });
 
@@ -49,7 +49,7 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-2 PATCH /user/users --------------------------------------------------', () => {
     it('유저 정보 수정 성공 시', async () => {
-      const dummyUser = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
+      const dummyUser = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';
       const user = await userService.createUser(dummyUser);
@@ -79,7 +79,7 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-3 GET /user/users/me --------------------------------------------------', () => {
     it('내 정보 조회 성공 시', async () => {
-      const dummyUser = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt' | 'id'>>();
+      const dummyUser = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';
       const user = await userService.createUser(dummyUser);

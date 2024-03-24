@@ -7,10 +7,10 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { CompetitionEntity } from './competition.entity';
+import { Competition } from './competition.entity';
 
 @Entity('early_bird_discount_snapshot')
-export class EarlybirdDiscountSnapshotEntity {
+export class EarlybirdDiscountSnapshot {
   /**
    * - ID. 데이터베이스에서 자동 생성됩니다.
    * @type uint32
@@ -44,9 +44,9 @@ export class EarlybirdDiscountSnapshotEntity {
   createdAt: Date | string;
 
   @Column()
-  competitionId: CompetitionEntity['id'];
+  competitionId: Competition['id'];
 
-  @ManyToOne(() => CompetitionEntity, (competition) => competition.earlybirdDiscountSnapshots)
+  @ManyToOne(() => Competition, (competition) => competition.earlybirdDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition?: CompetitionEntity;
+  competition?: Competition;
 }

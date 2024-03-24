@@ -1,5 +1,5 @@
-import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
 
 export interface UpdateCompetitionStatusReqDto {
-  status: CompetitionEntity['status'];
+  status: Competition['status'];
 }

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { CompetitionEntity } from './competition.entity';
+import { Competition } from './competition.entity';
 
 type unit = {
   uniform: 'GI' | 'NOGI';
@@ -12,7 +12,7 @@ type discountRule = {
 };
 
 @Entity('combination_discount_snapshot')
-export class CombinationDiscountSnapshotEntity {
+export class CombinationDiscountSnapshot {
   /**
    * - combination discount snapshot id.
    * @type uint32
@@ -28,9 +28,9 @@ export class CombinationDiscountSnapshotEntity {
   createdAt: Date | string;
 
   @Column()
-  competitionId: CompetitionEntity['id'];
+  competitionId: Competition['id'];
 
-  @ManyToOne(() => CompetitionEntity, (competition) => competition.combinationDiscountSnapshots)
+  @ManyToOne(() => Competition, (competition) => competition.combinationDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition?: CompetitionEntity;
+  competition?: Competition;
 }

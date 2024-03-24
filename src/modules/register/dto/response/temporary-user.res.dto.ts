@@ -1,19 +1,19 @@
-import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
+import { User } from 'src/infrastructure/database/entities/user/user.entity';
 
 export type TemporaryUserResDto = {
-  id: UserEntity['id'];
-  role: UserEntity['role'];
-  snsAuthProvider: UserEntity['snsAuthProvider'];
-  snsId: UserEntity['snsId'];
-  email: UserEntity['email'];
-  name: UserEntity['name'];
-  phoneNumber: UserEntity['phoneNumber'] | null;
-  nickname: UserEntity['nickname'] | null;
-  gender: UserEntity['gender'] | null;
-  birth: UserEntity['birth'] | null;
-  belt: UserEntity['belt'] | null;
-  profileImageUrlKey: UserEntity['profileImageUrlKey'] | null;
-  status: UserEntity['status'];
-  createdAt: UserEntity['createdAt'];
-  updatedAt: UserEntity['updatedAt'];
+  id: User['id'];
+  role: User['role'];
+  snsAuthProvider: User['snsAuthProvider'];
+  snsId: User['snsId'];
+  email: User['email'];
+  name: User['name'];
+  phoneNumber: User['phoneNumber'] | null;
+  nickname: User['nickname'] | null;
+  gender: User['gender'] | null;
+  birth: User['birth'] | null;
+  belt: User['belt'] | null;
+  profileImageUrlKey: User['profileImageUrlKey'] | null;
+  status: User['status'];
+  createdAt: User['createdAt'];
+  updatedAt: User['updatedAt'];
 };

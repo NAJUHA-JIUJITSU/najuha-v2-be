@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
-import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
+import { User } from 'src/infrastructure/database/entities/user/user.entity';
 
 @Injectable()
 export class AuthTokenDomainService {
@@ -13,7 +13,7 @@ export class AuthTokenDomainService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createAuthTokens(userId: UserEntity['id'], userRole: UserEntity['role']): Promise<AuthTokensResDto> {
+  async createAuthTokens(userId: User['id'], userRole: User['role']): Promise<AuthTokensResDto> {
     const accessToken = this.createAccessToken(userId, userRole);
     const refreshToken = this.createRefreshToken(userId, userRole);
 
@@ -27,7 +27,7 @@ export class AuthTokenDomainService {
     };
   }
 
-  private createAccessToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
+  private createAccessToken(userId: User['id'], userRole: User['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appEnv.jwtAccessTokenSecret,
@@ -35,7 +35,7 @@ export class AuthTokenDomainService {
     });
   }
 
-  private createRefreshToken(userId: UserEntity['id'], userRole: UserEntity['role']): string {
+  private createRefreshToken(userId: User['id'], userRole: User['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appEnv.jwtRefreshTokenSecret,

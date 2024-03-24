@@ -1,13 +1,13 @@
-import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
-import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
+import { Division } from 'src/infrastructure/database/entities/competition/division.entity';
+import { PriceSnapshot } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 
 export interface IDivisionPack {
-  categorys: DivisionEntity['category'][];
-  uniforms: DivisionEntity['uniform'][];
-  genders: DivisionEntity['gender'][];
-  belts: DivisionEntity['belt'][];
-  weights: DivisionEntity['weight'][];
-  birthYearRangeStart: DivisionEntity['birthYearRangeStart'];
-  birthYearRangeEnd: DivisionEntity['birthYearRangeEnd'];
-  price: PriceSnapshotEntity['price'];
+  categorys: Division['category'][];
+  uniforms: Division['uniform'][];
+  genders: Division['gender'][];
+  belts: Division['belt'][];
+  weights: Division['weight'][];
+  birthYearRangeStart: Division['birthYearRangeStart'];
+  birthYearRangeEnd: Division['birthYearRangeEnd'];
+  price: PriceSnapshot['price'];
 }

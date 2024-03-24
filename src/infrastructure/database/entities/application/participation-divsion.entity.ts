@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ApplicationEntity } from '../application/application.entity';
-import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
-import { ParticipationDivisionSnapshotEntity } from './participation-division-snapshot.entity';
+import { Application } from '../application/application.entity';
+import { PriceSnapshot } from '../competition/price-snapshot.entity';
+import { ParticipationDivisionSnapshot } from './participation-division-snapshot.entity';
 
 @Entity('participation_divsion')
-export class ParticipationDivisionEntity {
+export class ParticipationDivision {
   /**
    * - participation division id.
    * @type uint32
@@ -18,25 +18,25 @@ export class ParticipationDivisionEntity {
 
   /** - application id. */
   @Column()
-  applicationId: ApplicationEntity['id'];
+  applicationId: Application['id'];
 
   /** - applications. */
-  @ManyToOne(() => ApplicationEntity, (application) => application.participationDivisions)
+  @ManyToOne(() => Application, (application) => application.participationDivisions)
   @JoinColumn({ name: 'applicationId' })
-  application?: ApplicationEntity[];
+  application?: Application[];
 
   /** - payed price snapshot id. */
   @Column()
-  priceSnapshotId: PriceSnapshotEntity['id'];
+  priceSnapshotId: PriceSnapshot['id'];
 
   /** - payed price snapshot. */
-  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.participationDivisions)
+  @ManyToOne(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.participationDivisions)
   @JoinColumn({ name: 'priceSnapshotId' })
-  priceSnapshot?: PriceSnapshotEntity;
+  priceSnapshot?: PriceSnapshot;
 
   /** - participation division snapshots. */
-  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.participationDivisions)
-  participationDivisionSnapshots?: ParticipationDivisionSnapshotEntity[];
+  @ManyToOne(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.participationDivisions)
+  participationDivisionSnapshots?: ParticipationDivisionSnapshot[];
 
   // cancleId
   // cancle

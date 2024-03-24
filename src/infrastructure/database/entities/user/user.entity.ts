@@ -1,7 +1,7 @@
-import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
+import { PolicyConsent } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
-import { ApplicationEntity } from '../application/application.entity';
+import { Application } from '../application/application.entity';
 
 /**
  * - 각 snsAuthProvider 마다 제공되는 정보.
@@ -11,7 +11,7 @@ import { ApplicationEntity } from '../application/application.entity';
  * - apple  : snsId, email, name.
  */
 @Entity('user')
-export class UserEntity {
+export class User {
   /**
    * - 사용자 ID. 데이터베이스에서 자동 생성됩니다.
    * @type uint32
@@ -110,9 +110,9 @@ export class UserEntity {
    * - 사용자가 동의한 약관 정보
    * - OneToMany: User(1) -> PolicyConsent(*)
    */
-  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user)
-  policyConsents?: PolicyConsentEntity[];
+  @OneToMany(() => PolicyConsent, (policyConsent) => policyConsent.user)
+  policyConsents?: PolicyConsent[];
 
-  @OneToMany(() => ApplicationEntity, (application) => application.user)
-  applications?: ApplicationEntity[];
+  @OneToMany(() => Application, (application) => application.user)
+  applications?: Application[];
 }

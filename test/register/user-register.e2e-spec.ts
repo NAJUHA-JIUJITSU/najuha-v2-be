@@ -18,14 +18,14 @@ import {
 } from 'src/common/response/errorResponse';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
+import { User } from 'src/infrastructure/database/entities/user/user.entity';
 import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
-  let entityManager: EntityManager;
+  let entityEntityManager: EntityManager;
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
@@ -38,8 +38,8 @@ describe('E2E u-2 register test', () => {
     }).compile();
 
     app = testingModule.createNestApplication();
-    entityManager = testingModule.get<EntityManager>(EntityManager);
-    tableNames = entityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
+    entityEntityManager = testingModule.get<EntityManager>(EntityManager);
+    tableNames = entityEntityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     usersAppService = testingModule.get<UsersAppService>(UsersAppService);
@@ -48,7 +48,7 @@ describe('E2E u-2 register test', () => {
   });
 
   afterEach(async () => {
-    await entityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+    await entityEntityManager.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
     await redisClient.flushall();
   });
 
@@ -77,7 +77,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-2 GET /user/users/:nickname/is-duplicated ----------------------------', () => {
     it('닉네임 중복검사 - 중복된 닉네임인 경우', async () => {
-      const existUserDto = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt'>>();
+      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       const existUser = await usersAppService.createUser(existUserDto);
@@ -100,7 +100,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
-      const temporaryUserResDto = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt'>>();
+      const temporaryUserResDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
       temporaryUserResDto.birth = '19980101';
       const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
 
@@ -198,7 +198,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-5 PATCH /user/register ------------------------------------------------', () => {
     it('유저 등록 성공 시', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const ret = await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -235,7 +235,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 닉네임 중복', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -247,7 +247,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const existUserDto = typia.random<Omit<UserEntity, 'createdAt' | 'updatedAt'>>();
+      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       existUserDto.nickname = 'existingNickname';
@@ -276,7 +276,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 필수 약관 미동의', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -312,7 +312,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 전화번호 미등록', async () => {
-      const policyTypes: PolicyEntity['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({

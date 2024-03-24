@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { DivisionEntity } from './division.entity';
-import { EarlybirdDiscountSnapshotEntity } from './early-bird-discount-snapshot.entity';
+import { Division } from './division.entity';
+import { EarlybirdDiscountSnapshot } from './early-bird-discount-snapshot.entity';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
-import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
-import { ApplicationEntity } from '../application/application.entity';
+import { CombinationDiscountSnapshot } from './combination-discount-snapshot.entity';
+import { Application } from '../application/application.entity';
 
 @Entity('competition')
-export class CompetitionEntity {
+export class Competition {
   /**
    * - 대회의 고유 식별자. 데이터베이스에서 자동으로 생성됩니다.
    * @type uint32
@@ -110,35 +110,32 @@ export class CompetitionEntity {
   updatedAt: string | Date;
 
   /** - 대회의 얼리버드 할인 전략. */
-  @OneToMany(
-    () => EarlybirdDiscountSnapshotEntity,
-    (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
-  )
-  earlybirdDiscountSnapshots?: EarlybirdDiscountSnapshotEntity[];
+  @OneToMany(() => EarlybirdDiscountSnapshot, (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition)
+  earlybirdDiscountSnapshots?: EarlybirdDiscountSnapshot[];
 
   /** - 부문 조합 할인 전략. */
   @OneToMany(
-    () => CombinationDiscountSnapshotEntity,
+    () => CombinationDiscountSnapshot,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
   )
-  combinationDiscountSnapshots?: CombinationDiscountSnapshotEntity[];
+  combinationDiscountSnapshots?: CombinationDiscountSnapshot[];
 
   /**
    * - divisions.
    * - OneToMany: Competition(1) -> Division(*)
    */
-  @OneToMany(() => DivisionEntity, (division) => division.competition)
-  divisions?: DivisionEntity[];
+  @OneToMany(() => Division, (division) => division.competition)
+  divisions?: Division[];
 
   /**
    * - application.
    * - OneToMany: Competition(1) -> Application(*)
    */
-  @OneToMany(() => ApplicationEntity, (application) => application.competition)
-  applications?: ApplicationEntity[];
+  @OneToMany(() => Application, (application) => application.competition)
+  applications?: Application[];
 
   // mathod --------------------------------------------------------------------
-  updateStatus(status: CompetitionEntity['status']): void {
+  updateStatus(status: Competition['status']): void {
     if (status === 'ACTIVE') {
       const missingProperties: string[] = [];
       if (this.title === 'DEFAULT TITLE') missingProperties.push('title');

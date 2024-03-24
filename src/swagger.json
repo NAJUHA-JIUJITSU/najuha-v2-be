@@ -591,7 +591,7 @@
           }
         },
         "summary": "u-2-4 confirm auth code",
-        "description": "u-2-4 confirm auth code.\n- RoleLevel: TEMPORARY_USER.\n- 전화번호로 전송된 인증코드를 확인한다.\n- 인증성공시 UserEntity의 phoneNumber를 업데이트한다.\n- 인증성공시 true, 실패시 false를 반환한다.",
+        "description": "u-2-4 confirm auth code.\n- RoleLevel: TEMPORARY_USER.\n- 전화번호로 전송된 인증코드를 확인한다.\n- 인증성공시 User의 phoneNumber를 업데이트한다.\n- 인증성공시 true, 실패시 false를 반환한다.",
         "x-nestia-namespace": "user.register.phone-number.auth-code.confirm.confirmAuthCode",
         "x-nestia-jsDocTags": [
           {
@@ -806,7 +806,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PartialPickUserEntitynamegenderbirthnicknamebelt"
+                "$ref": "#/components/schemas/PartialPickUsernamegenderbirthnicknamebelt"
               }
             }
           },
@@ -2084,7 +2084,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/PickUserEntitygenderbirthnicknamebelt"
+            "$ref": "#/components/schemas/PickUsergenderbirthnicknamebelt"
           },
           "consentPolicyTypes": {
             "type": "array",
@@ -2097,7 +2097,7 @@
         "nullable": false,
         "required": ["user", "consentPolicyTypes"]
       },
-      "PickUserEntitygenderbirthnicknamebelt": {
+      "PickUsergenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
@@ -2384,7 +2384,7 @@
           "updatedAt"
         ]
       },
-      "PartialPickUserEntitynamegenderbirthnicknamebelt": {
+      "PartialPickUsernamegenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "name": {
@@ -2441,10 +2441,10 @@
       "FindPoliciesResDto": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/OmitOptionalPolicyEntity"
+          "$ref": "#/components/schemas/OmitOptionalPolicy"
         }
       },
-      "OmitOptionalPolicyEntity": {
+      "OmitOptionalPolicy": {
         "type": "object",
         "properties": {
           "id": {
@@ -2510,9 +2510,9 @@
         "required": ["isSuccess", "code", "result"]
       },
       "FindPolicyResDto": {
-        "$ref": "#/components/schemas/OmitOptionalPolicyEntity.Nullable"
+        "$ref": "#/components/schemas/OmitOptionalPolicy.Nullable"
       },
-      "OmitOptionalPolicyEntity.Nullable": {
+      "OmitOptionalPolicy.Nullable": {
         "type": "object",
         "properties": {
           "id": {
@@ -2691,7 +2691,7 @@
           "earlybirdDiscountSnapshots": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OmitOptionalEarlybirdDiscountSnapshotEntity"
+              "$ref": "#/components/schemas/OmitOptionalEarlybirdDiscountSnapshot"
             }
           },
           "id": {
@@ -2880,7 +2880,7 @@
           "posterImgUrlKey"
         ]
       },
-      "OmitOptionalEarlybirdDiscountSnapshotEntity": {
+      "OmitOptionalEarlybirdDiscountSnapshot": {
         "type": "object",
         "properties": {
           "id": {
@@ -2965,13 +2965,13 @@
           "earlybirdDiscountSnapshots": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OmitOptionalEarlybirdDiscountSnapshotEntity"
+              "$ref": "#/components/schemas/OmitOptionalEarlybirdDiscountSnapshot"
             }
           },
           "combinationDiscountSnapshots": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OmitOptionalCombinationDiscountSnapshotEntity"
+              "$ref": "#/components/schemas/OmitOptionalCombinationDiscountSnapshot"
             }
           },
           "id": {
@@ -3173,7 +3173,7 @@
           "priceSnapshots": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OmitOptionalPriceSnapshotEntity"
+              "$ref": "#/components/schemas/OmitOptionalPriceSnapshot"
             }
           },
           "gender": {
@@ -3269,7 +3269,7 @@
           "birthYearRangeEnd"
         ]
       },
-      "OmitOptionalPriceSnapshotEntity": {
+      "OmitOptionalPriceSnapshot": {
         "type": "object",
         "properties": {
           "id": {
@@ -3301,7 +3301,7 @@
         "nullable": false,
         "required": ["id", "createdAt", "price", "divisionId"]
       },
-      "OmitOptionalCombinationDiscountSnapshotEntity": {
+      "OmitOptionalCombinationDiscountSnapshot": {
         "type": "object",
         "properties": {
           "id": {

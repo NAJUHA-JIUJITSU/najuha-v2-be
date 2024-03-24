@@ -81,7 +81,7 @@ export class UserRegisterController {
    * u-2-4 confirm auth code.
    * - RoleLevel: TEMPORARY_USER.
    * - 전화번호로 전송된 인증코드를 확인한다.
-   * - 인증성공시 UserEntity의 phoneNumber를 업데이트한다.
+   * - 인증성공시 User의 phoneNumber를 업데이트한다.
    * - 인증성공시 true, 실패시 false를 반환한다.
    *
    * @tag u-2 register

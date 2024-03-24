@@ -1,22 +1,22 @@
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { RegisterReqDto } from '../dto/request/register.req.dto';
-import { UserEntity } from 'src/infrastructure/database/entities/user/user.entity';
-import { PolicyConsentEntity } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { User } from 'src/infrastructure/database/entities/user/user.entity';
+import { PolicyConsent } from 'src/infrastructure/database/entities/policy/policy-consent.entity';
+import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 
 export class RegisterUser {
-  user: Omit<UserEntity, 'policyConsents'>;
-  existingPolicyConsents: PolicyConsentEntity[];
-  newPolicyConsents: PolicyConsentEntity[];
-  registerUserConsentPolicyTypes: PolicyEntity['type'][];
-  latestPolicies: PolicyEntity[];
+  user: Omit<User, 'policyConsents'>;
+  existingPolicyConsents: PolicyConsent[];
+  newPolicyConsents: PolicyConsent[];
+  registerUserConsentPolicyTypes: Policy['type'][];
+  latestPolicies: Policy[];
 
   constructor(
-    user: Omit<UserEntity, 'policyConsents'>,
-    existingPolicyConsents: PolicyConsentEntity[] = [],
+    user: Omit<User, 'policyConsents'>,
+    existingPolicyConsents: PolicyConsent[] = [],
     registerUserInfo: RegisterReqDto['user'],
-    registerUserConsentPolicyTypes: PolicyEntity['type'][],
-    latestPolicies: PolicyEntity[],
+    registerUserConsentPolicyTypes: Policy['type'][],
+    latestPolicies: Policy[],
   ) {
     this.user = { ...user, ...registerUserInfo };
     this.existingPolicyConsents = existingPolicyConsents;
@@ -33,7 +33,7 @@ export class RegisterUser {
     );
 
     this.newPolicyConsents = unconsentedPolicies.map((policy) => {
-      const policyConsent = new PolicyConsentEntity();
+      const policyConsent = new PolicyConsent();
       policyConsent.createdAt = new Date();
       policyConsent.userId = this.user.id;
       policyConsent.policyId = policy.id;

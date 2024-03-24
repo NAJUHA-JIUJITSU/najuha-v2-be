@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
-import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { Division } from 'src/infrastructure/database/entities/competition/division.entity';
+import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
 import { IDivisionPack } from '../structure/division-pack.interface';
-import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
+import { PriceSnapshot } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 
 // @Injectable()
 // export class DivisionPackDomainService {
@@ -12,7 +12,7 @@ import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/compet
 //     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
 //   }
 
-//   unpack(id: CompetitionEntity['id'], divisionPack: IDivisionPack): DivisionEntity[] {
+//   unpack(id: Competition['id'], divisionPack: IDivisionPack): Division[] {
 //     const combinations = this.cartesian(
 //       divisionPack.categorys,
 //       divisionPack.uniforms,
@@ -21,8 +21,8 @@ import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/compet
 //       divisionPack.weights,
 //     );
 
-//     const divisions: DivisionEntity[] = combinations.map(([category, uniform, gender, belt, weight]) => {
-//       const division: DivisionEntity = {
+//     const divisions: Division[] = combinations.map(([category, uniform, gender, belt, weight]) => {
+//       const division: Division = {
 //         competitionId: id,
 //         id: 0, // You need to determine how to handle IDs
 //         category,
@@ -59,7 +59,7 @@ import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/compet
 //     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
 //   }
 
-//   unpack(id: CompetitionEntity['id'], divisionPack: IDivisionPack): DivisionEntity[] {
+//   unpack(id: Competition['id'], divisionPack: IDivisionPack): Division[] {
 //     const combinations = this.cartesian(
 //       divisionPack.categorys,
 //       divisionPack.uniforms,
@@ -68,11 +68,11 @@ import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/compet
 //       divisionPack.weights,
 //     );
 
-//     const divisions: DivisionEntity[] = combinations.map(([category, uniform, gender, belt, weight]) => {
-//       const priceSnapshot = new PriceSnapshotEntity();
+//     const divisions: Division[] = combinations.map(([category, uniform, gender, belt, weight]) => {
+//       const priceSnapshot = new PriceSnapshot();
 //       priceSnapshot.price = divisionPack.price;
 //       priceSnapshot.createdAt = new Date();
-//       const division = new DivisionEntity();
+//       const division = new Division();
 //       division.competitionId = id;
 //       division.category = category;
 //       division.uniform = uniform;
@@ -100,7 +100,7 @@ export class DivisionPackDomainService {
     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
   }
 
-  unpack(id: CompetitionEntity['id'], divisionPack: IDivisionPack): DivisionEntity[] {
+  unpack(id: Competition['id'], divisionPack: IDivisionPack): Division[] {
     const combinations = this.cartesian(
       divisionPack.categorys,
       divisionPack.uniforms,
@@ -109,8 +109,8 @@ export class DivisionPackDomainService {
       divisionPack.weights,
     );
 
-    const divisions: DivisionEntity[] = combinations.map(([category, uniform, gender, belt, weight]) => {
-      const division = new DivisionEntity({
+    const divisions: Division[] = combinations.map(([category, uniform, gender, belt, weight]) => {
+      const division = new Division({
         competitionId: id,
         category,
         uniform,
@@ -120,7 +120,7 @@ export class DivisionPackDomainService {
         birthYearRangeStart: divisionPack.birthYearRangeStart,
         birthYearRangeEnd: divisionPack.birthYearRangeEnd,
         status: 'ACTIVE',
-        priceSnapshots: [new PriceSnapshotEntity({ price: divisionPack.price })],
+        priceSnapshots: [new PriceSnapshot({ price: divisionPack.price })],
       });
 
       return division;

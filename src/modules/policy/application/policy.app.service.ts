@@ -4,7 +4,7 @@ import { PolicyRepository } from '../../../infrastructure/database/repository/po
 import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
 import { FindPolicyResDto } from '../dto/response/find-policy.res.dto';
 import { PolicyResDto } from '../dto/response/policy.res.dto';
-import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 
 @Injectable()
 export class PolicyAppService {
@@ -26,7 +26,7 @@ export class PolicyAppService {
   }
 
   // TODO content 는 제외
-  async findPolicies(type?: PolicyEntity['type']): Promise<FindPoliciesResDto> {
+  async findPolicies(type?: Policy['type']): Promise<FindPoliciesResDto> {
     return this.policyRepository.findPolicies({ where: { type } });
   }
 
