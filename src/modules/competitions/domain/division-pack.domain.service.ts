@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
-import { IDivisionyPack } from '../structure/division-pack.interface';
+import { IDivisionPack } from '../structure/division-pack.interface';
 import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 
 // @Injectable()
@@ -12,7 +12,7 @@ import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/compet
 //     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
 //   }
 
-//   unpack(id: CompetitionEntity['id'], divisionPack: IDivisionyPack): DivisionEntity[] {
+//   unpack(id: CompetitionEntity['id'], divisionPack: IDivisionPack): DivisionEntity[] {
 //     const combinations = this.cartesian(
 //       divisionPack.categorys,
 //       divisionPack.uniforms,
@@ -59,7 +59,7 @@ import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/compet
 //     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
 //   }
 
-//   unpack(id: CompetitionEntity['id'], divisionPack: IDivisionyPack): DivisionEntity[] {
+//   unpack(id: CompetitionEntity['id'], divisionPack: IDivisionPack): DivisionEntity[] {
 //     const combinations = this.cartesian(
 //       divisionPack.categorys,
 //       divisionPack.uniforms,
@@ -100,7 +100,7 @@ export class DivisionPackDomainService {
     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
   }
 
-  unpack(id: CompetitionEntity['id'], divisionPack: IDivisionyPack): DivisionEntity[] {
+  unpack(id: CompetitionEntity['id'], divisionPack: IDivisionPack): DivisionEntity[] {
     const combinations = this.cartesian(
       divisionPack.categorys,
       divisionPack.uniforms,

@@ -1,7 +1,7 @@
 import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
 import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 
-export interface IDivisionyPack {
+export interface IDivisionPack {
   categorys: DivisionEntity['category'][];
   uniforms: DivisionEntity['uniform'][];
   genders: DivisionEntity['gender'][];

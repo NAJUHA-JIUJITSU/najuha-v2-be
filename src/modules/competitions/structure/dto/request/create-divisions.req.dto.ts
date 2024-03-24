@@ -1,5 +1,5 @@
-import { IDivisionyPack } from '../../division-pack.interface';
+import { IDivisionPack } from '../../division-pack.interface';
 
 export interface CreateDivisitonsReqDto {
-  divisionPacks: IDivisionyPack[];
+  divisionPacks: IDivisionPack[];
 }
