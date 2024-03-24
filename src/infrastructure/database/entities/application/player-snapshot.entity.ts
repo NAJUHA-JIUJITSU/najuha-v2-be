@@ -1,12 +1,11 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { DivisionEntity } from '../competition/division.entity';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { ApplicationEntity } from './application.entity';
 
-@Entity('application_snapshot')
-export class ApplicationSnapshotEntity {
+@Entity('player_snapshot')
+export class PlayerSnapshotEntity {
   /**
-   * - application snapshot id.
+   * - player snapshot id.
    * @type uint32
    */
   @PrimaryGeneratedColumn()
@@ -44,6 +43,33 @@ export class ApplicationSnapshotEntity {
   @Column('varchar', { length: 16 })
   playerBelt: '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
+  /**
+   * - 주짓수 네트워크.
+   * @minLength 1
+   * @maxLength 64
+   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
+   */
+  @Column('varchar', { length: 64 })
+  network: string;
+
+  /**
+   * - 소속 팀.
+   * @minLength 1
+   * @maxLength 64
+   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
+   */
+  @Column('varchar', { length: 64 })
+  team: string;
+
+  /**
+   * - 관장님 성함.
+   * @minLength 1
+   * @maxLength 64
+   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
+   */
+  @Column('varchar', { length: 64 })
+  masterName: string;
+
   /** - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다. */
   @CreateDateColumn()
   createdAt: Date | string;
@@ -53,21 +79,21 @@ export class ApplicationSnapshotEntity {
   applicationId: ApplicationEntity['id'];
 
   /** - application 정보 */
-  @ManyToOne(() => ApplicationEntity, (application) => application.applicationSnapshots)
+  @ManyToOne(() => ApplicationEntity, (application) => application.playerSnapshots)
   application?: ApplicationEntity;
 
-  /**
-   * - division id.
-   */
-  @Column()
-  divisionId: DivisionEntity['id'];
+  // /**
+  //  * - division id.
+  //  */
+  // @Column()
+  // divisionId: DivisionEntity['id'];
 
-  /**
-   * - division 정보
-   * - ManyToOne: Division(1) -> Application(*)
-   * - JoinColumn: divisionId
-   */
-  @ManyToOne(() => DivisionEntity, (division) => division.applicationSnapshots)
-  @JoinColumn({ name: 'divisionId' })
-  division?: DivisionEntity;
+  // /**
+  //  * - division 정보
+  //  * - ManyToOne: Division(1) -> Application(*)
+  //  * - JoinColumn: divisionId
+  //  */
+  // @ManyToOne(() => DivisionEntity, (division) => division.applicationSnapshots)
+  // @JoinColumn({ name: 'divisionId' })
+  // division?: DivisionEntity;
 }

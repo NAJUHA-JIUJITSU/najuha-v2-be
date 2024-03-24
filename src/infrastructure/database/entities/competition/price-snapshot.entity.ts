@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DivisionEntity } from './division.entity';
 import { ApplicationEntity } from '../application/application.entity';
+import { ParticipationDivisionEntity } from '../application/participation-divsion.entity';
 
 @Entity('price_snapshot')
 export class PriceSnapshotEntity {
@@ -29,20 +30,14 @@ export class PriceSnapshotEntity {
   @Column()
   divisionId: DivisionEntity['id'];
 
-  /**
-   * - division 정보.
-   * - ManyToOne: Division(1) -> PriceSnapshot(*).
-   */
+  /** - division. */
   @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)
   @JoinColumn({ name: 'divisionId' })
   division?: DivisionEntity;
 
-  /**
-   * - application 정보.
-   * - OneToMany: Application(1) -> PriceSnapshot(*).
-   */
-  @OneToMany(() => ApplicationEntity, (application) => application.payedPriceSnapshot)
-  applications?: ApplicationEntity[];
+  /** - participation division. */
+  @OneToMany(() => ParticipationDivisionEntity, (participationDivision) => participationDivision.priceSnapshot)
+  participationDivisions?: ParticipationDivisionEntity[];
 
   constructor(partial: Partial<PriceSnapshotEntity>) {
     Object.assign(this, partial);

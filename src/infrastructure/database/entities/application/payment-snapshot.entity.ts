@@ -1,8 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ApplicationPackageEntity } from './application-package.entity';
 
-@Entity('application_package_snapshot')
-export class ApplicationPackageSnapshotEntity {
+@Entity('payment_snapshot')
+export class PaymentSnapshotEntity {
   /**
    * - application package snapshot id.
    * @type uint32
@@ -46,17 +45,17 @@ export class ApplicationPackageSnapshotEntity {
   @Column('int', { unsigned: true })
   totalAmount: number;
 
-  /**
-   * - application package id.
-   */
-  @Column()
-  applicationPackageId: ApplicationPackageEntity['id'];
+  // /**
+  //  * - application package id.
+  //  */
+  // @Column()
+  // applicationPackageId: ApplicationPackageEntity['id'];
 
-  /**
-   * - application package 정보
-   * - ManyToOne: ApplicationPackage(1) -> ApplicationPackageSnapshot(*)
-   */
-  @ManyToOne(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.applicationPackageSnapshots)
-  @JoinColumn({ name: 'applicationPackageId' })
-  applicationPackage?: ApplicationPackageEntity;
+  // /**
+  //  * - application package 정보
+  //  * - ManyToOne: ApplicationPackage(1) -> ApplicationPackageSnapshot(*)
+  //  */
+  // @ManyToOne(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.applicationPackageSnapshots)
+  // @JoinColumn({ name: 'applicationPackageId' })
+  // applicationPackage?: ApplicationPackageEntity;
 }

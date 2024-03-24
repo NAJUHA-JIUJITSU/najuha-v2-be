@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { PriceSnapshotEntity } from './price-snapshot.entity';
-import { ApplicationSnapshotEntity } from '../application/applicatioin-snapshot.entity';
+import { ParticipationDivisionSnapshotEntity } from '../application/participation-division-snapshot.entity';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
@@ -81,15 +81,11 @@ export class DivisionEntity {
   @Column('varchar', { length: 16, default: 'ACTIVE' })
   status: 'ACTIVE' | 'INACTIVE';
 
-  /**
-   * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
-   */
+  /** - created at. */
   @CreateDateColumn()
   createdAt: Date | string;
 
-  /**
-   * - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간.
-   */
+  /** - updated at. */
   @UpdateDateColumn()
   updatedAt: Date | string;
 
@@ -102,13 +98,18 @@ export class DivisionEntity {
   @JoinColumn({ name: 'competitionId' })
   competition?: CompetitionEntity;
 
-  /** - price-snapshot. */
+  /** - price snapshots. */
   @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.division, { cascade: true })
   priceSnapshots?: PriceSnapshotEntity[];
 
-  @OneToMany(() => ApplicationSnapshotEntity, (applicationSnapshot) => applicationSnapshot.division)
-  applicationSnapshots?: ApplicationSnapshotEntity[];
+  /** - participation division snapshots. */
+  @OneToMany(
+    () => ParticipationDivisionSnapshotEntity,
+    (participationDivisionSnapshot) => participationDivisionSnapshot.division,
+  )
+  participationDivisionSnapshots?: ParticipationDivisionSnapshotEntity[];
 
+  // methods ------------------------------------------------------------------
   constructor(partial: Partial<DivisionEntity>) {
     Object.assign(this, partial);
   }

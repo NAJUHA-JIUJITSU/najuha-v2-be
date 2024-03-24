@@ -5,12 +5,17 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
-import { ApplicationPackageEntity } from './application-package.entity';
-import { ApplicationSnapshotEntity } from './applicatioin-snapshot.entity';
+import { PlayerSnapshotEntity } from './player-snapshot.entity';
+import { PaymentSnapshotEntity } from './payment-snapshot.entity';
+import { CompetitionEntity } from '../competition/competition.entity';
+import { UserEntity } from '../user/user.entity';
+import { ParticipationDivisionEntity } from './participation-divsion.entity';
+import { EarlybirdDiscountSnapshotEntity } from '../competition/early-bird-discount-snapshot.entity';
+import { CombinationDiscountSnapshotEntity } from '../competition/combination-discount-snapshot.entity';
 
 @Entity('application')
 export class ApplicationEntity {
@@ -42,39 +47,56 @@ export class ApplicationEntity {
   @Column('varchar', { length: 16, default: 'READY' })
   status: 'READY' | 'DONE' | 'CANCELED';
 
-  /** - payed price snapshot id. */
+  /** - player snapshots. */
+  @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application)
+  playerSnapshots?: PlayerSnapshotEntity[];
+
+  /** - payment snapshot. */
+  @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application)
+  paymentSnapshot?: PaymentSnapshotEntity;
+
+  /** - participation division. */
+  @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application)
+  participationDivisions?: ParticipationDivisionEntity;
+
+  /** - earlybird discount snapshot id. */
   @Column()
-  payedPriceSnapshotId: number | null;
+  earlybirdDiscountSnapshotId?: EarlybirdDiscountSnapshotEntity['id'];
 
-  /** - application snapshot. */
-  @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.applications)
-  applicationSnapshots: ApplicationSnapshotEntity[];
+  /** - earlybird discount snapshot. */
+  @OneToOne(() => PaymentSnapshotEntity)
+  @JoinColumn({ name: 'earlybirdDiscountSnapshotId' })
+  earlybirdDiscountSnapshot?: EarlybirdDiscountSnapshotEntity;
 
-  /**
-   * - payed price snapshot.
-   * - 결제 당시에 적용된 가격 스냅샷.
-   * - 결제 이전에는 null로 설정됩니다.
-   * - 환불, 부분환불시에 사용됩니다.
-   * - ManyToOne: PriceSnapshot(1) -> Application(*)
-   */
-  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.applications)
-  @JoinColumn({ name: 'payedPriceSnapshotId' })
-  payedPriceSnapshot?: PriceSnapshotEntity;
-
+  /** - combination discount snapshot id. */
   @Column()
-  applicationPackageId: number;
+  combinationDiscountSnapshotId?: PaymentSnapshotEntity['id'];
 
-  @ManyToOne(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.applications)
-  @JoinColumn({ name: 'applicationPackageId' })
-  applicationPackage?: ApplicationPackageEntity;
+  /** - combination discount snapshot. */
+  @OneToOne(() => PaymentSnapshotEntity)
+  @JoinColumn({ name: 'combinationDiscountSnapshotId' })
+  combinationDiscountSnapshot?: CombinationDiscountSnapshotEntity;
 
-  //   /**
-  //    * - cancel id.
-  //    */
-  //   cancelId: number | null;
+  /** - competition id. */
+  @Column()
+  competitionId: CompetitionEntity['id'];
+
+  /** - competition. */
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.applications)
+  @JoinColumn({ name: 'competitionId' })
+  competition?: CompetitionEntity;
+
+  /** - user id. */
+  @Column()
+  userId: UserEntity['id'];
+
+  /** - user, 신청자 계정정보. */
+  @ManyToOne(() => UserEntity, (user) => user.applications)
+  @JoinColumn({ name: 'userId' })
+  user: UserEntity;
 
   //   /**
   //    * - cancel.
   //    */
-  //   cancle?: Cancel | null;
+  //   cancles?: Cancel;
 }

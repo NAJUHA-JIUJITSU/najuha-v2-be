@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './early-bird-discount-snapshot.entity';
-import { ApplicationPackageEntity } from '../application/application-package.entity';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
+import { ApplicationEntity } from '../application/application.entity';
 
 @Entity('competition')
 export class CompetitionEntity {
@@ -131,12 +131,13 @@ export class CompetitionEntity {
   divisions?: DivisionEntity[];
 
   /**
-   * - application packages.
-   * - OneToMany: Competition(1) -> ApplicationPackage(*)
+   * - application.
+   * - OneToMany: Competition(1) -> Application(*)
    */
-  @OneToMany(() => ApplicationPackageEntity, (applicationPackage) => applicationPackage.competition)
-  applicationPackages?: ApplicationPackageEntity[];
+  @OneToMany(() => ApplicationEntity, (application) => application.competition)
+  applications?: ApplicationEntity[];
 
+  // mathod --------------------------------------------------------------------
   updateStatus(status: CompetitionEntity['status']): void {
     if (status === 'ACTIVE') {
       const missingProperties: string[] = [];
