@@ -14,7 +14,7 @@ import { PriceSnapshot } from 'src/infrastructure/database/entities/competition/
 
 //   unpack(id: Competition['id'], divisionPack: IDivisionPack): Division[] {
 //     const combinations = this.cartesian(
-//       divisionPack.categorys,
+//       divisionPack.categories,
 //       divisionPack.uniforms,
 //       divisionPack.genders,
 //       divisionPack.belts,
@@ -61,7 +61,7 @@ import { PriceSnapshot } from 'src/infrastructure/database/entities/competition/
 
 //   unpack(id: Competition['id'], divisionPack: IDivisionPack): Division[] {
 //     const combinations = this.cartesian(
-//       divisionPack.categorys,
+//       divisionPack.categories,
 //       divisionPack.uniforms,
 //       divisionPack.genders,
 //       divisionPack.belts,
@@ -102,7 +102,7 @@ export class DivisionPackDomainService {
 
   unpack(id: Competition['id'], divisionPack: IDivisionPack): Division[] {
     const combinations = this.cartesian(
-      divisionPack.categorys,
+      divisionPack.categories,
       divisionPack.uniforms,
       divisionPack.genders,
       divisionPack.belts,

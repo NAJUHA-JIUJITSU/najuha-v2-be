@@ -2,7 +2,7 @@ import { Division } from 'src/infrastructure/database/entities/competition/divis
 import { PriceSnapshot } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 
 export interface IDivisionPack {
-  categorys: Division['category'][];
+  categories: Division['category'][];
   uniforms: Division['uniform'][];
   genders: Division['gender'][];
   belts: Division['belt'][];

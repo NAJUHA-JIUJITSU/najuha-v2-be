@@ -3883,7 +3883,7 @@
       "IDivisionPack": {
         "type": "object",
         "properties": {
-          "categorys": {
+          "categories": {
             "type": "array",
             "items": {
               "type": "string"
@@ -3927,7 +3927,7 @@
         },
         "nullable": false,
         "required": [
-          "categorys",
+          "categories",
           "uniforms",
           "genders",
           "belts",
