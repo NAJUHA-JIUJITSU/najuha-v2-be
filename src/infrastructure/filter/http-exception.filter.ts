@@ -1,7 +1,7 @@
 import { ExceptionFilter, Catch, ArgumentsHost, Inject, HttpStatus, HttpException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { BusinessException, INTERNAL_SERVER_ERROR } from 'src/common/response/errorResponse';
+import { BusinessException, CommonErrorMap, INTERNAL_SERVER_ERROR } from 'src/common/response/errorResponse';
 import typia from 'typia';
 import { Logger } from 'winston';
 
@@ -35,7 +35,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else {
       this.logger.error('Internal Server Error', errorInfo);
       status = HttpStatus.INTERNAL_SERVER_ERROR;
-      responseBody = typia.random<INTERNAL_SERVER_ERROR>();
+      responseBody = CommonErrorMap.INTERNAL_SERVER_ERROR;
     }
 
     res.status(status).json({

@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import exp from 'constants';
 import typia from 'typia';
 
 export type ErrorResponse = {
@@ -24,6 +25,21 @@ export type INTERNAL_SERVER_ERROR = ErrorResponse & {
   status: HttpStatus.INTERNAL_SERVER_ERROR;
   code: 500;
   result: 'Internal Server Error';
+};
+
+/** ----------------------------------------------------------------------------
+ * - Entity Not Found Error 404
+ */
+export type ENTITY_NOT_FOUND = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.NOT_FOUND;
+  code: 404;
+  result: 'Entity Not Found';
+};
+
+export const CommonErrorMap = {
+  INTERNAL_SERVER_ERROR: typia.random<INTERNAL_SERVER_ERROR>(),
+  ENTITY_NOT_FOUND: typia.random<ENTITY_NOT_FOUND>(),
 };
 
 /** ----------------------------------------------------------------------------
@@ -151,40 +167,36 @@ export const RegisterErrorMap = {
 /** ----------------------------------------------------------------------------
  * Users 4000 ~ 4999
  */
-export type USERS_USER_NOT_FOUND = ErrorResponse & {
-  isSuccess: false;
-  status: HttpStatus.NOT_FOUND;
-  code: 4001;
-  result: '존재하지 않는 유저입니다.';
-};
+// export type USERS_USER_NOT_FOUND = ErrorResponse & {
+//   isSuccess: false;
+//   status: HttpStatus.NOT_FOUND;
+//   code: 4001;
+//   result: '존재하지 않는 유저입니다.';
+// };
 
-export const UsersErrorMap = {
-  USERS_USER_NOT_FOUND: typia.random<USERS_USER_NOT_FOUND>(),
-};
+export const UsersErrorMap = {};
 
 /** ----------------------------------------------------------------------------
  * Policy 5000 ~ 5999
  */
-export type POLICY_POLICY_NOT_FOUND = ErrorResponse & {
-  isSuccess: false;
-  status: HttpStatus.NOT_FOUND;
-  code: 5000;
-  result: '존재하지 않는 약관입니다.';
-};
+// export type POLICY_POLICY_NOT_FOUND = ErrorResponse & {
+//   isSuccess: false;
+//   status: HttpStatus.NOT_FOUND;
+//   code: 5000;
+//   result: '존재하지 않는 약관입니다.';
+// };
 
-export const PolicyErrorMap = {
-  POLICY_POLICY_NOT_FOUND: typia.random<POLICY_POLICY_NOT_FOUND>(),
-};
+export const PolicyErrorMap = {};
 
 /** ----------------------------------------------------------------------------
  * Competitions 6000 ~ 6999
  */
-export type COMPETITIONS_COMPETITION_NOT_FOUND = ErrorResponse & {
-  isSuccess: false;
-  status: HttpStatus.NOT_FOUND;
-  code: 6000;
-  result: '존재하지 않는 대회입니다.';
-};
+// export type COMPETITIONS_COMPETITION_NOT_FOUND = ErrorResponse & {
+//   isSuccess: false;
+//   status: HttpStatus.NOT_FOUND;
+//   code: 6000;
+//   result: '존재하지 않는 대회입니다.';
+// };
 
 export type COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE = ErrorResponse & {
   isSuccess: false;
@@ -201,7 +213,6 @@ export type COMPETITIONS_DIVISION_SAVE_FAILED = ErrorResponse & {
 };
 
 export const CompetitionsErrorMap = {
-  COMPETITIONS_COMPETITION_NOT_FOUND: typia.random<COMPETITIONS_COMPETITION_NOT_FOUND>(),
   COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(),
   COMPETITIONS_DIVISION_SAVE_FAILED: typia.random<COMPETITIONS_DIVISION_SAVE_FAILED>(),
 };

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
-import { In, Repository } from 'typeorm';
+import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
+import { Repository } from 'typeorm';
 import { Competition } from './domain/entities/competition.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Division } from './domain/entities/division.entity';
@@ -27,19 +27,19 @@ export class CompetitionRepository {
 
   async getCompetition(options?: { where?: Partial<Pick<Competition, 'id' | 'status'>> }): Promise<Competition> {
     const competition = await this.competitionRepository.findOne({ where: options?.where });
-    if (!competition) throw new BusinessException(CompetitionsErrorMap.COMPETITIONS_COMPETITION_NOT_FOUND);
+    if (!competition) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
     return competition;
   }
 
   async saveCompetition(dto: Pick<Competition, 'id'> & Partial<Competition>): Promise<Competition> {
     const competition = await this.competitionRepository.findOne({ where: { id: dto.id } });
-    if (!competition) throw new BusinessException(CompetitionsErrorMap.COMPETITIONS_COMPETITION_NOT_FOUND);
+    if (!competition) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
     return await this.competitionRepository.save({ ...competition, ...dto });
   }
 
   async updateCompetition(dto: Pick<Competition, 'id'> & Partial<Competition>): Promise<void> {
     const result = await this.competitionRepository.update({ id: dto.id }, dto);
-    if (!result.affected) throw new BusinessException(CompetitionsErrorMap.COMPETITIONS_COMPETITION_NOT_FOUND);
+    if (!result.affected) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
   }
 
   // ----------------- Division -----------------

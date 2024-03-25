@@ -5,10 +5,10 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RegisterAppService } from '../application/register.app.service';
 import { RegisterReqDto } from '../structure/dto/request/register.req.dto';
 import {
+  ENTITY_NOT_FOUND,
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
-  USERS_USER_NOT_FOUND,
 } from 'src/common/response/errorResponse';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import { RegisterPhoneNumberReqDto } from '../structure/dto/request/register-phone-number.req..dto';
@@ -29,7 +29,7 @@ export class UserRegisterController {
    * @tag u-2 register
    * @returns user
    */
-  @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
+  @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserResDto>> {
@@ -88,7 +88,7 @@ export class UserRegisterController {
    * @param dto confirmAuthCodeReqDto
    * @returns true or false
    */
-  @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
+  @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code/confirm')
   async confirmAuthCode(
@@ -109,10 +109,10 @@ export class UserRegisterController {
    * @param dto RegisterReqDto
    * @returns accessToken & refreshToken
    */
+  @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(3000, 'REGISTER_NICKNAME_DUPLICATED')
   @TypedException<REGISTER_POLICY_CONSENT_REQUIRED>(3002, 'REGISTER_POLICY_CONSENT_REQUIRED')
   @TypedException<REGISTER_PHONE_NUMBER_REQUIRED>(3003, 'REGISTER_PHONE_NUMBER_REQUIRED')
-  @TypedException<USERS_USER_NOT_FOUND>(4001, 'USERS_USER_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Patch()
   async registerUser(@Req() req: Request, @TypedBody() dto: RegisterReqDto): Promise<ResponseForm<AuthTokensResDto>> {
