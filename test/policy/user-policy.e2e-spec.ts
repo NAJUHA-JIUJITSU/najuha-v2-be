@@ -10,7 +10,7 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {

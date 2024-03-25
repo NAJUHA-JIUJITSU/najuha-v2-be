@@ -1,33 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterReqDto } from '../dto/request/register.req.dto';
+import { RegisterReqDto } from '../structure/dto/request/register.req.dto';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
-import { UserRepository } from 'src/infrastructure/database/repository/user/user.repository';
-import { PolicyRepository } from 'src/infrastructure/database/repository/policy/policy.repository';
 import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
 import { PhoneNumberAuthCodeDomainService } from '../domain/phone-number-auth-code.domain.service';
-import { PolicyConsentRepository } from 'src/infrastructure/database/repository/policy/policy-consent.repository';
-import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.req..dto';
+import { RegisterPhoneNumberReqDto } from '../structure/dto/request/register-phone-number.req..dto';
 import { RegisterUser } from '../domain/registerUser.entity';
-import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
-import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
-import { IsDuplicatedNicknameResDto } from '../dto/response/is-duplicated-nickname.res.dto';
-import { ConfirmedAuthCodeResDto } from '../dto/response/confirm-auth-code.res.dto';
-import { SendPhoneNumberAuthCodeResDto } from '../dto/response/send-phone-number-auth-code.res';
-import { User } from 'src/infrastructure/database/entities/user/user.entity';
+import { confirmAuthCodeReqDto } from '../structure/dto/request/confirm-auth-code.req.dto';
+import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
+import { IsDuplicatedNicknameResDto } from '../structure/dto/response/is-duplicated-nickname.res.dto';
+import { ConfirmedAuthCodeResDto } from '../structure/dto/response/confirm-auth-code.res.dto';
+import { SendPhoneNumberAuthCodeResDto } from '../structure/dto/response/send-phone-number-auth-code.res';
+import { User } from 'src/modules/users/domain/entities/user.entity';
+import { RegisterRepository } from '../register.repository';
 
 @Injectable()
 export class RegisterAppService {
   constructor(
     private readonly AuthTokenDomainService: AuthTokenDomainService,
     private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeDomainService,
-    private readonly userRepository: UserRepository,
-    private readonly policyRepository: PolicyRepository,
-    private readonly policyConsetRepository: PolicyConsentRepository,
+    private readonly registerRepository: RegisterRepository,
   ) {}
 
   async getTemporaryUser(userId: User['id']): Promise<TemporaryUserResDto> {
-    return await this.userRepository.getUser({ where: { id: userId } });
+    return await this.registerRepository.getUser({ where: { id: userId } });
   }
 
   /**
@@ -38,7 +34,7 @@ export class RegisterAppService {
    */
   async isDuplicateNickname(userId: User['id'], nickname: string): Promise<IsDuplicatedNicknameResDto> {
     // domain service로 분리 ?
-    const user = await this.userRepository.findUser({ where: { nickname } });
+    const user = await this.registerRepository.findUser({ where: { nickname } });
     if (user === null) return false;
     if (user.id === userId) return false;
     return true;
@@ -50,16 +46,16 @@ export class RegisterAppService {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
     }
 
-    const { policyConsents, ...user } = await this.userRepository.getUser({
+    const { policyConsents, ...user } = await this.registerRepository.getUser({
       where: { id: userId },
       relations: ['policyConsents'],
     });
-    const latestPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
+    const latestPolicies = await this.registerRepository.findAllTypesOfLatestPolicies();
     const registerUser = new RegisterUser(user, policyConsents, dto.user, dto.consentPolicyTypes, latestPolicies);
     registerUser.validate();
 
-    await this.userRepository.updateUser(registerUser.user);
-    await this.policyConsetRepository.createPolicyConsents(registerUser.newPolicyConsents);
+    await this.registerRepository.updateUser(registerUser.user);
+    await this.registerRepository.createPolicyConsents(registerUser.newPolicyConsents);
     return await this.AuthTokenDomainService.createAuthTokens(registerUser.user.id, registerUser.user.role);
   }
 

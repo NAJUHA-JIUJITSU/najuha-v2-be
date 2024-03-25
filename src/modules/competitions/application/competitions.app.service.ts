@@ -4,17 +4,17 @@ import { CompetitionResDto } from '../structure/dto/response/competition.res.dto
 import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
 import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
 import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
-import { CompetitionRepository } from 'src/infrastructure/database/repository/competition/competition.repository';
+import { CompetitionRepository } from 'src/modules/competitions/competition.repository';
 import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
-import { DivisionRepository } from '../../../infrastructure/database/repository/competition/division.repository';
-import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
-import { Division } from 'src/infrastructure/database/entities/competition/division.entity';
+import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
+import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
+import { CreateEarlybirdDiscountReqDto } from '../structure/dto/request/create-earlybird-discount.req.dto';
 
 @Injectable()
 export class CompetitionsAppService {
   constructor(
     private readonly competitionRepository: CompetitionRepository,
-    private readonly divisionRepository: DivisionRepository,
     private readonly divisionPackDomainService: DivisionPackDomainService,
   ) {}
 
@@ -47,6 +47,11 @@ export class CompetitionsAppService {
       return [...acc, ...this.divisionPackDomainService.unpack(id, divisionPack)];
     }, []);
 
-    return await this.divisionRepository.createDivisions(unpackedDivisions);
+    return await this.competitionRepository.createDivisions(unpackedDivisions);
   }
+
+  // async createEarlybirdDiscounts(
+  //   id: Competition['id'],
+  //   dto: CreateEarlybirdDiscountReqDto,
+  // ): Promise<EarlybirdDiscountSnapshot> {}
 }

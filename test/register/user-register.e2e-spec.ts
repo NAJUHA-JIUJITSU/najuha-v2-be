@@ -8,7 +8,7 @@ import { ResponseForm } from 'src/common/response/response';
 import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
+import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
 import { PhoneNumberAuthCode } from 'src/modules/register/types/phone-number-auth-code.type';
 import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
@@ -18,9 +18,9 @@ import {
 } from 'src/common/response/errorResponse';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { User } from 'src/infrastructure/database/entities/user/user.entity';
-import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
-import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { User } from 'src/modules/users/domain/entities/user.entity';
+import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
+import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;

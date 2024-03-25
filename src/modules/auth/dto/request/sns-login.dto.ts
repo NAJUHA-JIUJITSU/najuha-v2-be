@@ -1,4 +1,4 @@
-import { User } from 'src/infrastructure/database/entities/user/user.entity';
+import { User } from 'src/modules/users/domain/entities/user.entity';
 
 export type SnsLoginReqDto = {
   /**

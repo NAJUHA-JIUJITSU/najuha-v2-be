@@ -1,5 +1,5 @@
-import { Division } from 'src/infrastructure/database/entities/competition/division.entity';
-import { PriceSnapshot } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
+import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { PriceSnapshot } from 'src/modules/competitions/domain/entities/price-snapshot.entity';
 
 export interface IDivisionPack {
   categories: Division['category'][];

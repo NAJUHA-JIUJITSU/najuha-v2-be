@@ -5,7 +5,7 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
 import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
 import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
-import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 
 @Controller('user/competitions')
 export class UserCompetitionsController {

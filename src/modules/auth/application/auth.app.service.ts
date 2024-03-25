@@ -3,10 +3,10 @@ import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.
 import { RefreshTokenReqDto } from 'src/modules/auth/dto/request/refresh-token.dto';
 import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
-import { UserRepository } from 'src/infrastructure/database/repository/user/user.repository';
+import { UserRepository } from 'src/modules/users/user.repository';
 import { SnsAuthClient } from 'src/infrastructure/sns-auth-client/sns-auth.client';
 import { AuthTokenDomainService } from '../domain/auth-token.domain.service';
-import { User } from 'src/infrastructure/database/entities/user/user.entity';
+import { User } from 'src/modules/users/domain/entities/user.entity';
 import appEnv from 'src/common/app-env';
 
 @Injectable()

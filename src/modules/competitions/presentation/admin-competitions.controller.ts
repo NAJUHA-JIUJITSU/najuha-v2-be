@@ -10,12 +10,16 @@ import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoet
 import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
 import { UpdateCompetitionStatusReqDto } from '../structure/dto/request/update-competition-status.req.dto';
 import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
-import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 import { CreateCompetitionResDto } from '../structure/dto/response/create-competition.res.dto';
+import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
+import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
+import { CreateEarlybirdDiscountReqDto } from '../structure/dto/request/create-earlybird-discount.req.dto';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
-  constructor(private readonly CompetitionsAppService: CompetitionsAppService) {}
+  constructor(private readonly competitionsAppService: CompetitionsAppService) {}
 
   /**
    * a-5-1 create competition.
@@ -27,7 +31,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
   async createCompetition(@TypedBody() dto: CreateCompetitionReqDto): Promise<ResponseForm<CreateCompetitionResDto>> {
-    const ret = await this.CompetitionsAppService.createCompetition(dto);
+    const ret = await this.competitionsAppService.createCompetition(dto);
     return createResponseForm(ret);
   }
 
@@ -41,7 +45,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
   async findCompetitions(): Promise<ResponseForm<FindCompetitionsResDto>> {
-    const competitions = await this.CompetitionsAppService.findCompetitions();
+    const competitions = await this.competitionsAppService.findCompetitions();
     return createResponseForm(competitions);
   }
 
@@ -55,7 +59,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:id')
   async findCompetition(@TypedParam('id') id: Competition['id']): Promise<ResponseForm<CompetitionResDto>> {
-    const competition = await this.CompetitionsAppService.getCompetition({ where: { id } });
+    const competition = await this.competitionsAppService.getCompetition({ where: { id } });
     return createResponseForm(competition);
   }
 
@@ -72,7 +76,7 @@ export class AdminCompetitionsController {
     @TypedParam('id') id: Competition['id'],
     @TypedBody() dto: UpdateCompetitionReqDto,
   ): Promise<ResponseForm<CompetitionResDto>> {
-    const ret = await this.CompetitionsAppService.updateCompetition(id, dto);
+    const ret = await this.competitionsAppService.updateCompetition(id, dto);
     return createResponseForm(ret);
   }
 
@@ -89,7 +93,7 @@ export class AdminCompetitionsController {
     @TypedParam('id') id: Competition['id'],
     @TypedBody() dto: UpdateCompetitionStatusReqDto,
   ): Promise<ResponseForm<CompetitionResDto>> {
-    const ret = await this.CompetitionsAppService.updateCompetitionStatus(id, dto.status);
+    const ret = await this.competitionsAppService.updateCompetitionStatus(id, dto.status);
     return createResponseForm(ret);
   }
 
@@ -105,8 +109,25 @@ export class AdminCompetitionsController {
   async createDivisions(
     @TypedParam('id') id: Competition['id'],
     @TypedBody() dto: CreateDivisitonsReqDto,
-  ): Promise<ResponseForm<any>> {
-    const ret = await this.CompetitionsAppService.createDivisions(id, dto);
+  ): Promise<ResponseForm<Division[]>> {
+    const ret = await this.competitionsAppService.createDivisions(id, dto);
     return createResponseForm(ret);
   }
+
+  // /**
+  //  * - a-5-7 create earlybird discount.
+  //  * - RoleLevel: ADMIN.
+  //  *
+  //  * @tag a-5 competitions
+  //  * @returns created earlybird discount snapshot
+  //  */
+  // @RoleLevels(RoleLevel.ADMIN)
+  // @TypedRoute.Post('/:id/earlybird-discount-snapshots')
+  // async createEarlybirdDiscount(
+  //   @TypedParam('id') id: Competition['id'],
+  //   @TypedBody() dto: CreateEarlybirdDiscountReqDto,
+  // ): Promise<ResponseForm<EarlybirdDiscountSnapshot>> {
+  //   const ret = await this.competitionsAppService.createEarlybirdDiscount(id, dto);
+  //   return createResponseForm(ret);
+  // }
 }

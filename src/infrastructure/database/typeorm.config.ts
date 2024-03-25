@@ -9,7 +9,6 @@ const typeOrmConfig = {
   password: appEnv.dbpassword,
   database: appEnv.dbDatabase,
   synchronize: appEnv.dbSynchronize,
-  entities: [__dirname + '/entities/**/*.entity{.ts,.js}'],
   autoLoadEntities: true,
 };
 
