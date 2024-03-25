@@ -1,9 +1,9 @@
-export type CombinationUnit = {
+export interface ICombinationUnit {
   uniform: 'GI' | 'NOGI';
   weight: 'WEIGHT' | 'ABSOLUTE';
-};
+}
 
-export type CombinationDiscountRule = {
-  combination: CombinationUnit[];
+export interface ICombinationDiscountRule {
+  combination: ICombinationUnit[];
   discountAmount: number;
-};
+}
