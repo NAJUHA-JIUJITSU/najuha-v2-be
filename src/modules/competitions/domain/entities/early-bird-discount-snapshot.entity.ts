@@ -49,4 +49,9 @@ export class EarlybirdDiscountSnapshot {
   @ManyToOne(() => Competition, (competition) => competition.earlybirdDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
   competition?: Competition;
+
+  // ----------------- Constructor -----------------
+  constructor(dto: Pick<EarlybirdDiscountSnapshot, 'earlyBirdStartDate' | 'earlyBirdEndDate' | 'discountAmount'>) {
+    Object.assign(this, dto);
+  }
 }

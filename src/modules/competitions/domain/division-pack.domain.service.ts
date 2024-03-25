@@ -100,7 +100,7 @@ export class DivisionPackDomainService {
     return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
   }
 
-  unpack(id: Competition['id'], divisionPack: IDivisionPack): Division[] {
+  unpack(divisionPack: IDivisionPack): Division[] {
     const combinations = this.cartesian(
       divisionPack.categories,
       divisionPack.uniforms,
@@ -111,7 +111,6 @@ export class DivisionPackDomainService {
 
     const divisions: Division[] = combinations.map(([category, uniform, gender, belt, weight]) => {
       const division = new Division({
-        competitionId: id,
         category,
         uniform,
         gender,

@@ -191,28 +191,21 @@ export const PolicyErrorMap = {};
 /** ----------------------------------------------------------------------------
  * Competitions 6000 ~ 6999
  */
-// export type COMPETITIONS_COMPETITION_NOT_FOUND = ErrorResponse & {
-//   isSuccess: false;
-//   status: HttpStatus.NOT_FOUND;
-//   code: 6000;
-//   result: '존재하지 않는 대회입니다.';
-// };
-
 export type COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
-  code: 6001;
+  code: 6000;
   result: '대회의 상태를 ACTIVE로 변경할 수 없습니다.';
 };
 
-export type COMPETITIONS_DIVISION_SAVE_FAILED = ErrorResponse & {
+export type COMPETITIONS_DIVISION_DUPLICATED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
-  code: 6002;
-  result: '부문을 저장하는데 실패했습니다.';
+  code: 6001;
+  result: '대회 부문이 중복되었습니다.';
 };
 
 export const CompetitionsErrorMap = {
   COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(),
-  COMPETITIONS_DIVISION_SAVE_FAILED: typia.random<COMPETITIONS_DIVISION_SAVE_FAILED>(),
+  COMPETITIONS_DIVISION_DUPLICATED: typia.random<COMPETITIONS_DIVISION_DUPLICATED>(),
 };

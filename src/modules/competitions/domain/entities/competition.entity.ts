@@ -124,7 +124,7 @@ export class Competition {
    * - divisions.
    * - OneToMany: Competition(1) -> Division(*)
    */
-  @OneToMany(() => Division, (division) => division.competition)
+  @OneToMany(() => Division, (division) => division.competition, { cascade: true })
   divisions?: Division[];
 
   /**
@@ -153,5 +153,30 @@ export class Competition {
       }
     }
     this.status = status;
+  }
+
+  addDivisions(divisions: Division[]): void {
+    const duplicatedDivisions = divisions.filter((division) => {
+      return this.divisions?.some(
+        (existingDivision) =>
+          existingDivision.category === division.category &&
+          existingDivision.uniform === division.uniform &&
+          existingDivision.gender === division.gender &&
+          existingDivision.belt === division.belt &&
+          existingDivision.weight === division.weight,
+      );
+    });
+    if (duplicatedDivisions.length > 0) {
+      throw new BusinessException(
+        CompetitionsErrorMap.COMPETITIONS_DIVISION_DUPLICATED,
+        `${duplicatedDivisions
+          .map(
+            (division) =>
+              `${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight}`,
+          )
+          .join(', ')}`,
+      );
+    }
+    this.divisions = [...(this.divisions || []), ...divisions];
   }
 }

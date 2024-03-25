@@ -99,7 +99,7 @@ export class Division {
   competition?: Competition;
 
   /** - price snapshots. */
-  @OneToMany(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.division, { cascade: true })
+  @OneToMany(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
   priceSnapshots?: PriceSnapshot[];
 
   /** - participation division snapshots. */

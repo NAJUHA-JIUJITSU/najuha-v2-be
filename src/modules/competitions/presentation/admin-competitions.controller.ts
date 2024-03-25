@@ -3,7 +3,6 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
-
 import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
 import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
 import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
@@ -12,10 +11,12 @@ import { UpdateCompetitionStatusReqDto } from '../structure/dto/request/update-c
 import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
 import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 import { CreateCompetitionResDto } from '../structure/dto/response/create-competition.res.dto';
-import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
 import { Division } from 'src/modules/competitions/domain/entities/division.entity';
 import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
 import { CreateEarlybirdDiscountReqDto } from '../structure/dto/request/create-earlybird-discount.req.dto';
+import { OmitOptional } from 'src/common/omit-optional.type';
+import { CreateCombinationDiscountReqDto } from '../structure/dto/request/create-combination-discount.req.dto';
+import { CombinationDiscountSnapshot } from '../domain/entities/combination-discount-snapshot.entity';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -114,20 +115,37 @@ export class AdminCompetitionsController {
     return createResponseForm(ret);
   }
 
-  // /**
-  //  * - a-5-7 create earlybird discount.
-  //  * - RoleLevel: ADMIN.
-  //  *
-  //  * @tag a-5 competitions
-  //  * @returns created earlybird discount snapshot
-  //  */
-  // @RoleLevels(RoleLevel.ADMIN)
-  // @TypedRoute.Post('/:id/earlybird-discount-snapshots')
-  // async createEarlybirdDiscount(
-  //   @TypedParam('id') id: Competition['id'],
-  //   @TypedBody() dto: CreateEarlybirdDiscountReqDto,
-  // ): Promise<ResponseForm<EarlybirdDiscountSnapshot>> {
-  //   const ret = await this.competitionsAppService.createEarlybirdDiscount(id, dto);
-  //   return createResponseForm(ret);
-  // }
+  /**
+   * - a-5-7 create earlybird discount.
+   * - RoleLevel: ADMIN.
+   *
+   * @tag a-5 competitions
+   * @returns created earlybird discount snapshot
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Post('/:id/earlybird-discount-snapshots')
+  async createEarlybirdDiscount(
+    @TypedParam('id') id: Competition['id'],
+    @TypedBody() dto: CreateEarlybirdDiscountReqDto,
+  ): Promise<ResponseForm<OmitOptional<EarlybirdDiscountSnapshot>>> {
+    const ret = await this.competitionsAppService.createEarlybirdDiscountSnapshot(id, dto);
+    return createResponseForm(ret);
+  }
+
+  /**
+   * - a-5-8 create combination discount.
+   * - RoleLevel: ADMIN.
+   *
+   * @tag a-5 competitions
+   * @returns created combination discount snapshot
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Post('/:id/combination-discount-snapshots')
+  async createCombinationDiscount(
+    @TypedParam('id') id: Competition['id'],
+    @TypedBody() dto: CreateCombinationDiscountReqDto,
+  ): Promise<ResponseForm<CombinationDiscountSnapshot>> {
+    const ret = await this.competitionsAppService.createCombinationDiscountSnapshot(id, dto);
+    return createResponseForm(ret);
+  }
 }
