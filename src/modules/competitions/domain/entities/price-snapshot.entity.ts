@@ -37,8 +37,4 @@ export class PriceSnapshot {
   /** - participation division. */
   @OneToMany(() => ParticipationDivision, (participationDivision) => participationDivision.priceSnapshot)
   participationDivisions?: ParticipationDivision[];
-
-  constructor(partial: Partial<PriceSnapshot>) {
-    Object.assign(this, partial);
-  }
 }

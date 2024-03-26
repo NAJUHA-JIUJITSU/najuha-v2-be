@@ -108,9 +108,4 @@ export class Division {
     (participationDivisionSnapshot) => participationDivisionSnapshot.division,
   )
   participationDivisionSnapshots?: ParticipationDivisionSnapshot[];
-
-  // methods ------------------------------------------------------------------
-  constructor(partial: Partial<Division>) {
-    Object.assign(this, partial);
-  }
 }

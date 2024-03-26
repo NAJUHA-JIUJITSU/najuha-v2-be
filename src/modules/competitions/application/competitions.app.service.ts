@@ -3,19 +3,19 @@ import { CreateCompetitionReqDto } from '../structure/dto/request/create-competi
 import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
 import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
 import { CompetitionRepository } from 'src/modules/competitions/competition.repository';
-import { DivisionPackDomainService } from '../domain/division-pack.domain.service';
 import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 import { Division } from 'src/modules/competitions/domain/entities/division.entity';
 import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
 import { CombinationDiscountSnapshot } from '../domain/entities/combination-discount-snapshot.entity';
 import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
 import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';
+import { DivisionFactory } from '../domain/division-factory.service';
 
 @Injectable()
 export class CompetitionsAppService {
   constructor(
     private readonly competitionRepository: CompetitionRepository,
-    private readonly divisionPackDomainService: DivisionPackDomainService,
+    private readonly divisionFactory: DivisionFactory,
   ) {}
 
   async createCompetition(dto: CreateCompetitionReqDto): Promise<Competition> {
@@ -52,10 +52,8 @@ export class CompetitionsAppService {
       where: { id: competitionId },
       relations: ['divisions'],
     });
-    const unpackedDivisions = dto.divisionPacks.reduce((acc, divisionPack) => {
-      return [...acc, ...this.divisionPackDomainService.unpack(divisionPack)];
-    }, []);
-    competition.addDivisions(unpackedDivisions);
+    const divisions = this.divisionFactory.createDivision(dto.divisionPacks);
+    competition.addDivisions(divisions);
     return (await this.competitionRepository.saveCompetition(competition)).divisions || [];
   }
 

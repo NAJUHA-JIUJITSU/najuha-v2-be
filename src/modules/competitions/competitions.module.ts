@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { UserCompetitionsController } from 'src/modules/competitions/presentation/user-competitions.controller';
 import { CompetitionsAppService } from 'src/modules/competitions/application/competitions.app.service';
 import { AdminCompetitionsController } from './presentation/admin-competitions.controller';
-import { DivisionPackDomainService } from './domain/division-pack.domain.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Competition } from './domain/entities/competition.entity';
 import { Division } from './domain/entities/division.entity';
@@ -15,6 +14,7 @@ import { ParticipationDivisionSnapshot } from './domain/entities/participation-d
 import { PaymentSnapshot } from './domain/entities/payment-snapshot.entity';
 import { PlayerSnapshot } from './domain/entities/player-snapshot.entity';
 import { PriceSnapshot } from './domain/entities/price-snapshot.entity';
+import { DivisionFactory } from './domain/division-factory.service';
 
 @Module({
   imports: [
@@ -32,6 +32,6 @@ import { PriceSnapshot } from './domain/entities/price-snapshot.entity';
     ]),
   ],
   controllers: [UserCompetitionsController, AdminCompetitionsController],
-  providers: [CompetitionsAppService, DivisionPackDomainService, CompetitionRepository],
+  providers: [CompetitionsAppService, CompetitionRepository, DivisionFactory],
 })
 export class CompetitionsModule {}
