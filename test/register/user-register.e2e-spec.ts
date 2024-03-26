@@ -21,6 +21,9 @@ import { PolicyAppService } from 'src/modules/policy/application/policy.app.serv
 import { User } from 'src/modules/users/domain/entities/user.entity';
 import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
 import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
+import { IsDuplicatedNicknameResDto } from 'src/modules/register/structure/dto/response/is-duplicated-nickname.res.dto';
+import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/structure/dto/response/send-phone-number-auth-code.res';
+import { ConfirmedAuthCodeResDto } from 'src/modules/register/structure/dto/response/confirm-auth-code.res.dto';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;
@@ -71,7 +74,7 @@ describe('E2E u-2 register test', () => {
         .set('Authorization', `Bearer ${accessToken}`);
 
       expect(typia.is<ResponseForm<TemporaryUserResDto>>(res.body)).toBe(true);
-      expect(res.body.result.id).toEqual(temporaryUser.id);
+      expect(res.body.result.user.id).toEqual(temporaryUser.id);
     });
   });
 
@@ -95,8 +98,8 @@ describe('E2E u-2 register test', () => {
         .get(`/user/register/users/${existUser.nickname}/is-duplicated`)
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`);
 
-      expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.result).toEqual(true);
+      expect(typia.is<ResponseForm<IsDuplicatedNicknameResDto>>(res.body)).toBe(true);
+      expect(res.body.result.isDuplicated).toEqual(true);
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
@@ -113,8 +116,8 @@ describe('E2E u-2 register test', () => {
         .get(`/user/register/users/${temporaryUser.nickname}/is-duplicated`)
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`);
 
-      expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.result).toEqual(false);
+      expect(typia.is<ResponseForm<IsDuplicatedNicknameResDto>>(res.body)).toBe(true);
+      expect(res.body.result.isDuplicated).toEqual(false);
     });
 
     it('닉네임 중복검사 - 중복되지 않은 닉네임(사용가능)', async () => {
@@ -127,8 +130,9 @@ describe('E2E u-2 register test', () => {
       const res = await request(app.getHttpServer())
         .get(`/user/register/users/${unusedNickname}/is-duplicated`)
         .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.result).toEqual(false);
+
+      expect(typia.is<ResponseForm<IsDuplicatedNicknameResDto>>(res.body)).toBe(true);
+      expect(res.body.result.isDuplicated).toEqual(false);
     });
   });
 
@@ -146,7 +150,7 @@ describe('E2E u-2 register test', () => {
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
         .send({ phoneNumber: '01012345678' });
 
-      expect(typia.is<ResponseForm<PhoneNumberAuthCode>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<SendPhoneNumberAuthCodeResDto>>(res.body)).toBe(true);
     });
   });
 
@@ -168,8 +172,8 @@ describe('E2E u-2 register test', () => {
         .post(`/user/register/phone-number/auth-code/confirm`)
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
         .send({ authCode });
-      expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.result).toEqual(true);
+      expect(typia.is<ResponseForm<ConfirmedAuthCodeResDto>>(res.body)).toBe(true);
+      expect(res.body.result.isConfirmed).toEqual(true);
     });
 
     it('전화번호로 인증코드 확인 실패 시', async () => {
@@ -191,8 +195,8 @@ describe('E2E u-2 register test', () => {
         .post(`/user/register/phone-number/auth-code/confirm`)
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
         .send({ authCode: wrongCode });
-      expect(typia.is<ResponseForm<boolean>>(res.body)).toBe(true);
-      expect(res.body.result).toEqual(false);
+      expect(typia.is<ResponseForm<ConfirmedAuthCodeResDto>>(res.body)).toBe(true);
+      expect(res.body.result.isConfirmed).toEqual(false);
     });
   });
 

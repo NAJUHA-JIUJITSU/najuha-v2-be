@@ -12,6 +12,9 @@ import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { CreatePolicyReqDto } from 'src/modules/policy/structure/dto/request/create-policy.req.dto';
 import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
+import { PolicyResDto } from 'src/modules/policy/structure/dto/response/policy.res.dto';
+import { FindPoliciesReqDto } from 'src/modules/policy/structure/dto/request/find-policies.req.dto';
+import { FindPoliciesResDto } from 'src/modules/policy/structure/dto/response/find-policies.res.dto';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
@@ -62,6 +65,7 @@ describe('E2E a-4 admin-policy test', () => {
         .post('/admin/policy')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(CreatePolicyReqDto);
+      expect(typia.is<ResponseForm<PolicyResDto>>(res.body)).toBe(true);
     });
   });
 
@@ -89,8 +93,8 @@ describe('E2E a-4 admin-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
-      expect(res.body.result.length).toEqual(policyTypes.length * maxVersion);
+      expect(typia.is<ResponseForm<FindPoliciesResDto>>(res.body)).toBe(true);
+      expect(res.body.result.policies.length).toEqual(policyTypes.length * maxVersion);
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
@@ -121,9 +125,9 @@ describe('E2E a-4 admin-policy test', () => {
         .query(query)
         .set('Authorization', `Bearer ${accessToken}`);
 
-      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
-      expect(res.body.result.length).toEqual(maxVersion);
-      expect(res.body.result[0].type).toEqual(query.type);
+      expect(typia.is<ResponseForm<FindPoliciesResDto>>(res.body)).toBe(true);
+      expect(res.body.result.policies.length).toEqual(policyTypes.length);
+      expect(res.body.result.policies[0].type).toEqual(query.type);
     });
   });
 });

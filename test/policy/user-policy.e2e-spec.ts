@@ -11,6 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
+import { FindPoliciesResDto } from 'src/modules/policy/structure/dto/response/find-policies.res.dto';
+import { PolicyResDto } from 'src/modules/policy/structure/dto/response/policy.res.dto';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {
@@ -64,8 +66,8 @@ describe('E2E u-4 user-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/user/policy/recent');
-      expect(typia.is<ResponseForm<Policy[]>>(res.body)).toBe(true);
-      expect(res.body.result.length).toEqual(policyTypes.length);
+      expect(typia.is<ResponseForm<FindPoliciesResDto>>(res.body)).toBe(true);
+      expect(res.body.result.policies.every((policy) => policyTypes.includes(policy.type))).toBe(true);
     });
   });
 
@@ -79,8 +81,8 @@ describe('E2E u-4 user-policy test', () => {
       });
 
       const res = await request(app.getHttpServer()).get(`/user/policy/${policy.id}`);
-      expect(typia.is<ResponseForm<Policy>>(res.body)).toBe(true);
-      expect(res.body.result.id).toEqual(policy.id);
+      expect(typia.is<ResponseForm<PolicyResDto>>(res.body)).toBe(true);
+      expect(res.body.result.policy.id).toEqual(policy.id);
     });
   });
 });
