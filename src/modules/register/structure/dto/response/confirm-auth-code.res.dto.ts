@@ -1,1 +1,3 @@
-export type ConfirmedAuthCodeResDto = boolean;
+export interface ConfirmedAuthCodeResDto {
+  isConfirmed: boolean;
+}

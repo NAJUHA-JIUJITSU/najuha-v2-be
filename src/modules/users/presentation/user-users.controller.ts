@@ -22,8 +22,8 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
   async postUser(@TypedBody() dto: CreateUserReqDto): Promise<ResponseForm<UserResDto>> {
-    const ret = await this.UsersAppService.createUser(dto);
-    return createResponseForm(ret);
+    const user = await this.UsersAppService.createUser(dto);
+    return createResponseForm({ user });
   }
 
   /**
@@ -38,8 +38,8 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
   async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserReqDto): Promise<ResponseForm<UserResDto>> {
-    const ret = await this.UsersAppService.updateUser(req['userId'], dto);
-    return createResponseForm(ret);
+    const user = await this.UsersAppService.updateUser(req['userId'], dto);
+    return createResponseForm({ user });
   }
 
   /**
@@ -53,7 +53,7 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<UserResDto>> {
-    const ret = await this.UsersAppService.getMe(req['userId']);
-    return createResponseForm(ret);
+    const user = await this.UsersAppService.getMe(req['userId']);
+    return createResponseForm({ user });
   }
 }

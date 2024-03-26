@@ -10,7 +10,7 @@ import {
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
 } from 'src/common/response/errorResponse';
-import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
+import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
 import { RegisterPhoneNumberReqDto } from '../structure/dto/request/register-phone-number.req..dto';
 import { confirmAuthCodeReqDto } from '../structure/dto/request/confirm-auth-code.req.dto';
 import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
@@ -33,8 +33,8 @@ export class UserRegisterController {
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/me')
   async getTemporaryUser(@Req() req: Request): Promise<ResponseForm<TemporaryUserResDto>> {
-    const ret = await this.RegisterAppService.getTemporaryUser(req['userId']);
-    return createResponseForm(ret);
+    const user = await this.RegisterAppService.getTemporaryUser(req['userId']);
+    return createResponseForm({ user });
   }
 
   /**
@@ -54,8 +54,8 @@ export class UserRegisterController {
     @Req() req: Request,
     @TypedParam('nickname') nickname: string,
   ): Promise<ResponseForm<IsDuplicatedNicknameResDto>> {
-    const ret = await this.RegisterAppService.isDuplicateNickname(req['userId'], nickname);
-    return createResponseForm(ret);
+    const isDuplicated = await this.RegisterAppService.isDuplicateNickname(req['userId'], nickname);
+    return createResponseForm({ isDuplicated });
   }
 
   /**
@@ -73,8 +73,8 @@ export class UserRegisterController {
     @TypedBody() dto: RegisterPhoneNumberReqDto,
   ): Promise<ResponseForm<SendPhoneNumberAuthCodeResDto>> {
     // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
-    const ret = await this.RegisterAppService.sendPhoneNumberAuthCode(req['userId'], dto);
-    return createResponseForm(ret);
+    const phoneNumberAuthCode = await this.RegisterAppService.sendPhoneNumberAuthCode(req['userId'], dto);
+    return createResponseForm({ phoneNumberAuthCode });
   }
 
   /**
@@ -95,8 +95,8 @@ export class UserRegisterController {
     @Req() req: Request,
     @TypedBody() dto: confirmAuthCodeReqDto,
   ): Promise<ResponseForm<ConfirmedAuthCodeResDto>> {
-    const ret = await this.RegisterAppService.confirmAuthCode(req['userId'], dto);
-    return createResponseForm(ret);
+    const isConfirmed = await this.RegisterAppService.confirmAuthCode(req['userId'], dto);
+    return createResponseForm({ isConfirmed });
   }
 
   /**
@@ -117,6 +117,6 @@ export class UserRegisterController {
   @TypedRoute.Patch()
   async registerUser(@Req() req: Request, @TypedBody() dto: RegisterReqDto): Promise<ResponseForm<AuthTokensResDto>> {
     const authTokens = await this.RegisterAppService.registerUser(req['userId'], dto);
-    return createResponseForm(authTokens);
+    return createResponseForm({ authTokens });
   }
 }

@@ -39,6 +39,7 @@ export class AdminCompetitionsController {
   /**
    * a-5-2 find competitions.
    * - RoleLevel: ADMIN.
+   * - ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.
    *
    * @tag a-5 competitions
    * @returns competitions
@@ -55,6 +56,7 @@ export class AdminCompetitionsController {
   /**
    * a-5-3 get competition.
    * - RoleLevel: ADMIN.
+   * - ACTIVE, INACTIVE 상태인 competition 을 조회합니다.
    *
    * @tag a-5 competitions
    * @returns competition

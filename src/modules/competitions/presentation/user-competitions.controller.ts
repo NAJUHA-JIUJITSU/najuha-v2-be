@@ -14,6 +14,7 @@ export class UserCompetitionsController {
   /**
    * u-5-1 find competitions.
    * - RoleLevel: USER.
+   * - ACTIVE 상태인 competition 들을 조회합니다.
    *
    * @tag u-5 competitions
    * @returns competitions
@@ -28,6 +29,7 @@ export class UserCompetitionsController {
   /**
    * u-5-2 get competition.
    * - RoleLevel: USER.
+   * - ACTIVE 상태인 competition 을 조회합니다.
    *
    * @tag u-5 competitions
    * @returns competition

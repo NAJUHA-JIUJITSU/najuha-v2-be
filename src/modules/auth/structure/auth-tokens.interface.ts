@@ -1,4 +1,4 @@
-export type AuthTokensResDto = {
+export interface IAuthTokens {
   accessToken: string;
   refreshToken: string;
-};
+}

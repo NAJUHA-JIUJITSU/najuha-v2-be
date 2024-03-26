@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
 import { PhoneNumberAuthCode } from 'src/modules/register/structure/types/phone-number-auth-code.type';
-import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
+import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,

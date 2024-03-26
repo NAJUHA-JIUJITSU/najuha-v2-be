@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import Redis from 'ioredis';
-import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
-import appEnv from 'src/common/app-env';
 import { User } from 'src/modules/users/domain/entities/user.entity';
+import appEnv from 'src/common/app-env';
+import { IAuthTokens } from '../structure/auth-tokens.interface';
 
 @Injectable()
 export class AuthTokenDomainService {
@@ -13,7 +13,7 @@ export class AuthTokenDomainService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createAuthTokens(userId: User['id'], userRole: User['role']): Promise<AuthTokensResDto> {
+  async createAuthTokens(userId: User['id'], userRole: User['role']): Promise<IAuthTokens> {
     const accessToken = this.createAccessToken(userId, userRole);
     const refreshToken = this.createRefreshToken(userId, userRole);
 

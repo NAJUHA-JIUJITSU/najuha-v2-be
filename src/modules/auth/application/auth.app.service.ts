@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
-import { RefreshTokenReqDto } from 'src/modules/auth/dto/request/refresh-token.dto';
-import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
+import { RefreshTokenReqDto } from 'src/modules/auth/structure/dto/request/refresh-token.dto';
+import { SnsLoginReqDto } from 'src/modules/auth/structure/dto/request/sns-login.dto';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import { UserRepository } from 'src/modules/users/user.repository';
 import { SnsAuthClient } from 'src/infrastructure/sns-auth-client/sns-auth.client';
 import { AuthTokenDomainService } from '../domain/auth-token.domain.service';
 import { User } from 'src/modules/users/domain/entities/user.entity';
+import { IAuthTokens } from '../structure/auth-tokens.interface';
 import appEnv from 'src/common/app-env';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AuthAppService {
     private readonly AuthTokenDomainService: AuthTokenDomainService,
   ) {}
 
-  async snsLogin(SnsLoginReqDto: SnsLoginReqDto): Promise<AuthTokensResDto> {
+  async snsLogin(SnsLoginReqDto: SnsLoginReqDto): Promise<IAuthTokens> {
     const userData = await this.snsAuthClient.validate(SnsLoginReqDto);
     let user = await this.userRepository.findUser({
       where: { snsId: userData.snsId, snsAuthProvider: userData.snsAuthProvider },
@@ -30,7 +30,7 @@ export class AuthAppService {
     return authTokens;
   }
 
-  async refreshToken(RefreshTokenReqDto: RefreshTokenReqDto): Promise<AuthTokensResDto> {
+  async refreshToken(RefreshTokenReqDto: RefreshTokenReqDto): Promise<IAuthTokens> {
     const { refreshToken } = RefreshTokenReqDto;
     const payload = await this.AuthTokenDomainService.verifyRefreshToken(refreshToken);
     const authTokens = await this.AuthTokenDomainService.createAuthTokens(payload.userId, payload.userRole);
@@ -38,7 +38,7 @@ export class AuthAppService {
     return authTokens;
   }
 
-  async acquireAdminRole(userId: User['id']): Promise<AuthTokensResDto> {
+  async acquireAdminRole(userId: User['id']): Promise<IAuthTokens> {
     const user = await this.userRepository.getUser({ where: { id: userId } });
 
     const isCurrentAdmin = appEnv.adminCredentials.some(

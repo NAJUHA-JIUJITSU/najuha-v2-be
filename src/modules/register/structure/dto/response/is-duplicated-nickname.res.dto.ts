@@ -1,1 +1,3 @@
-export type IsDuplicatedNicknameResDto = boolean;
+export interface IsDuplicatedNicknameResDto {
+  isDuplicated: boolean;
+}

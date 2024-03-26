@@ -1,8 +1,8 @@
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
+import { SnsLoginReqDto } from 'src/modules/auth/structure/dto/request/sns-login.dto';
 import { AuthAppService } from 'src/modules/auth/application/auth.app.service';
-import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
+import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -12,7 +12,7 @@ import {
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
 } from 'src/common/response/errorResponse';
-import { RefreshTokenReqDto } from '../dto/request/refresh-token.dto';
+import { RefreshTokenReqDto } from '../structure/dto/request/refresh-token.dto';
 import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 
@@ -35,7 +35,7 @@ export class UserAuthController {
   @TypedRoute.Post('sns-login')
   async snsLogin(@TypedBody() dto: SnsLoginReqDto): Promise<ResponseForm<AuthTokensResDto>> {
     const authTokens = await this.AuthAppService.snsLogin(dto);
-    return createResponseForm(authTokens);
+    return createResponseForm({ authTokens });
   }
 
   /**
@@ -50,7 +50,7 @@ export class UserAuthController {
   @TypedRoute.Post('token')
   async refreshToken(@TypedBody() dto: RefreshTokenReqDto): Promise<ResponseForm<AuthTokensResDto>> {
     const authTokens = await this.AuthAppService.refreshToken(dto);
-    return createResponseForm(authTokens);
+    return createResponseForm({ authTokens });
   }
 
   /**
@@ -68,6 +68,6 @@ export class UserAuthController {
   @TypedRoute.Patch('acquire-admin-role')
   async aqureAdminRole(@Req() req: Request): Promise<ResponseForm<AuthTokensResDto>> {
     const authTokens = await this.AuthAppService.acquireAdminRole(req['userId']);
-    return createResponseForm(authTokens);
+    return createResponseForm({ authTokens });
   }
 }

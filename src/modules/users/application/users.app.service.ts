@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
 import { UpdateUserReqDto } from '../structure/dto/request/update-user.req.dto';
-import { UserResDto } from '../structure/dto/response/user.res.dto';
 import { UserRepository } from 'src/modules/users/user.repository';
 import { User } from 'src/modules/users/domain/entities/user.entity';
 
@@ -9,15 +8,15 @@ import { User } from 'src/modules/users/domain/entities/user.entity';
 export class UsersAppService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async createUser(dto: CreateUserReqDto): Promise<UserResDto> {
+  async createUser(dto: CreateUserReqDto): Promise<User> {
     return await this.userRepository.createUser(dto);
   }
 
-  async updateUser(userId: User['id'], dto: UpdateUserReqDto): Promise<UserResDto> {
+  async updateUser(userId: User['id'], dto: UpdateUserReqDto): Promise<User> {
     return await this.userRepository.saveUser({ id: userId, ...dto });
   }
 
-  async getMe(userId: User['id']): Promise<UserResDto> {
+  async getMe(userId: User['id']): Promise<User> {
     return await this.userRepository.getUser({ where: { id: userId } });
   }
 }
