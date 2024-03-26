@@ -9,8 +9,12 @@ interface SDivision extends OmitOptional<Division> {
   priceSnapshots?: OmitOptional<PriceSnapshot>[];
 }
 
-export interface CompetitionResDto extends OmitOptional<Competition> {
+export interface SCompetition extends OmitOptional<Competition> {
   divisions?: SDivision[];
   earlybirdDiscountSnapshots?: OmitOptional<EarlybirdDiscountSnapshot>[];
   combinationDiscountSnapshots?: OmitOptional<CombinationDiscountSnapshot>[];
+}
+
+export interface CompetitionResDto {
+  competition: SCompetition;
 }

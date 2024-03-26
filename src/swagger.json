@@ -17,7 +17,9 @@
   "paths": {
     "/api-conventions/auth-guard": {
       "get": {
-        "tags": ["api-conventions"],
+        "tags": [
+          "api-conventions"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -74,7 +76,9 @@
     },
     "/api-conventions/user-api-vs-admin-api": {
       "get": {
-        "tags": ["api-conventions"],
+        "tags": [
+          "api-conventions"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -101,7 +105,9 @@
     },
     "/api-conventions/find-vs-get": {
       "get": {
-        "tags": ["api-conventions"],
+        "tags": [
+          "api-conventions"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -128,7 +134,9 @@
     },
     "/api-conventions/update": {
       "get": {
-        "tags": ["api-conventions"],
+        "tags": [
+          "api-conventions"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -155,7 +163,9 @@
     },
     "/user/auth/sns-login": {
       "post": {
-        "tags": ["u-1 auth"],
+        "tags": [
+          "u-1 auth"
+        ],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -249,7 +259,9 @@
     },
     "/user/auth/token": {
       "post": {
-        "tags": ["u-1 auth"],
+        "tags": [
+          "u-1 auth"
+        ],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -313,7 +325,9 @@
     },
     "/user/auth/acquire-admin-role": {
       "patch": {
-        "tags": ["u-1 auth"],
+        "tags": [
+          "u-1 auth"
+        ],
         "parameters": [],
         "responses": {
           "201": {
@@ -327,22 +341,22 @@
             },
             "x-nestia-encrypted": false
           },
+          "404": {
+            "description": "ENTITY_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ENTITY_NOT_FOUND"
+                }
+              }
+            }
+          },
           "1004": {
             "description": "AUTH_UNREGISTERED_ADMIN_CREDENTIALS",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AUTH_UNREGISTERED_ADMIN_CREDENTIALS"
-                }
-              }
-            }
-          },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
                 }
               }
             }
@@ -376,7 +390,9 @@
     },
     "/user/register/users/me": {
       "get": {
-        "tags": ["u-2 register"],
+        "tags": [
+          "u-2 register"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -390,12 +406,12 @@
             },
             "x-nestia-encrypted": false
           },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
+          "404": {
+            "description": "ENTITY_NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                  "$ref": "#/components/schemas/ENTITY_NOT_FOUND"
                 }
               }
             }
@@ -429,7 +445,9 @@
     },
     "/user/register/users/{nickname}/is-duplicated": {
       "get": {
-        "tags": ["u-2 register"],
+        "tags": [
+          "u-2 register"
+        ],
         "parameters": [
           {
             "name": "nickname",
@@ -499,7 +517,9 @@
     },
     "/user/register/phone-number/auth-code": {
       "post": {
-        "tags": ["u-2 register"],
+        "tags": [
+          "u-2 register"
+        ],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -553,7 +573,9 @@
     },
     "/user/register/phone-number/auth-code/confirm": {
       "post": {
-        "tags": ["u-2 register"],
+        "tags": [
+          "u-2 register"
+        ],
         "parameters": [],
         "requestBody": {
           "description": "confirmAuthCodeReqDto",
@@ -579,12 +601,12 @@
             },
             "x-nestia-encrypted": false
           },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
+          "404": {
+            "description": "ENTITY_NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                  "$ref": "#/components/schemas/ENTITY_NOT_FOUND"
                 }
               }
             }
@@ -635,7 +657,9 @@
     },
     "/user/register": {
       "patch": {
-        "tags": ["u-2 register"],
+        "tags": [
+          "u-2 register"
+        ],
         "parameters": [],
         "requestBody": {
           "description": "RegisterReqDto",
@@ -660,6 +684,16 @@
               }
             },
             "x-nestia-encrypted": false
+          },
+          "404": {
+            "description": "ENTITY_NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ENTITY_NOT_FOUND"
+                }
+              }
+            }
           },
           "3000": {
             "description": "REGISTER_NICKNAME_DUPLICATED",
@@ -687,16 +721,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/REGISTER_PHONE_NUMBER_REQUIRED"
-                }
-              }
-            }
-          },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
                 }
               }
             }
@@ -747,7 +771,9 @@
     },
     "/user/users": {
       "post": {
-        "tags": ["u-3 users"],
+        "tags": [
+          "u-3 users"
+        ],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -799,7 +825,9 @@
         "x-nestia-method": "POST"
       },
       "patch": {
-        "tags": ["u-3 users"],
+        "tags": [
+          "u-3 users"
+        ],
         "parameters": [],
         "requestBody": {
           "description": "UpdateUserReqDto",
@@ -825,12 +853,12 @@
             },
             "x-nestia-encrypted": false
           },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
+          "404": {
+            "description": "ENTITY_NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                  "$ref": "#/components/schemas/ENTITY_NOT_FOUND"
                 }
               }
             }
@@ -881,7 +909,9 @@
     },
     "/user/users/me": {
       "get": {
-        "tags": ["u-3 users"],
+        "tags": [
+          "u-3 users"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -895,12 +925,12 @@
             },
             "x-nestia-encrypted": false
           },
-          "4001": {
-            "description": "USERS_USER_NOT_FOUND",
+          "404": {
+            "description": "ENTITY_NOT_FOUND",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/USERS_USER_NOT_FOUND"
+                  "$ref": "#/components/schemas/ENTITY_NOT_FOUND"
                 }
               }
             }
@@ -934,7 +964,9 @@
     },
     "/user/policy/recent": {
       "get": {
-        "tags": ["u-4 policy"],
+        "tags": [
+          "u-4 policy"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -977,7 +1009,9 @@
     },
     "/user/policy/{id}": {
       "get": {
-        "tags": ["u-4 policy"],
+        "tags": [
+          "u-4 policy"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1047,7 +1081,9 @@
     },
     "/admin/policy": {
       "post": {
-        "tags": ["a-4 policy"],
+        "tags": [
+          "a-4 policy"
+        ],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1099,7 +1135,9 @@
         "x-nestia-method": "POST"
       },
       "get": {
-        "tags": ["a-4 policy"],
+        "tags": [
+          "a-4 policy"
+        ],
         "parameters": [
           {
             "name": "query",
@@ -1169,7 +1207,9 @@
     },
     "/user/competitions": {
       "get": {
-        "tags": ["u-5 competitions"],
+        "tags": [
+          "u-5 competitions"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -1212,7 +1252,9 @@
     },
     "/user/competitions/{id}": {
       "get": {
-        "tags": ["u-5 competitions"],
+        "tags": [
+          "u-5 competitions"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1265,7 +1307,9 @@
     },
     "/admin/competitions": {
       "post": {
-        "tags": ["a-5 competitions"],
+        "tags": [
+          "a-5 competitions"
+        ],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1317,7 +1361,9 @@
         "x-nestia-method": "POST"
       },
       "get": {
-        "tags": ["a-5 competitions"],
+        "tags": [
+          "a-5 competitions"
+        ],
         "parameters": [],
         "responses": {
           "200": {
@@ -1360,7 +1406,9 @@
     },
     "/admin/competitions/{id}": {
       "get": {
-        "tags": ["a-5 competitions"],
+        "tags": [
+          "a-5 competitions"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1411,7 +1459,9 @@
         "x-nestia-method": "GET"
       },
       "patch": {
-        "tags": ["a-5 competitions"],
+        "tags": [
+          "a-5 competitions"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1475,7 +1525,9 @@
     },
     "/admin/competitions/{id}/status": {
       "patch": {
-        "tags": ["a-5 competitions"],
+        "tags": [
+          "a-5 competitions"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1539,7 +1591,9 @@
     },
     "/admin/competitions/{id}/divisions": {
       "post": {
-        "tags": ["a-5 competitions"],
+        "tags": [
+          "a-5 competitions"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1568,7 +1622,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormany"
+                  "$ref": "#/components/schemas/ResponseFormCreateDivisionsResDto"
                 }
               }
             },
@@ -1600,6 +1654,138 @@
         ],
         "x-nestia-method": "POST"
       }
+    },
+    "/admin/competitions/{id}/earlybird-discount-snapshots": {
+      "post": {
+        "tags": [
+          "a-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEarlybirdDiscountSnapshotReqDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created earlybird discount snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateEarlybirdDiscountSnapshotResDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-5-7 create earlybird discount snapshot",
+        "description": "a-5-7 create earlybird discount snapshot.\n- RoleLevel: ADMIN.",
+        "x-nestia-namespace": "admin.competitions.earlybird-discount-snapshots.createEarlybirdDiscountSnapshot",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created earlybird discount snapshot",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/admin/competitions/{id}/combination-discount-snapshots": {
+      "post": {
+        "tags": [
+          "a-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createCombinationDiscountSnapshotReqDto"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created combination discount snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateCombinationDiscountSnapshotResDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-5-8 create combination discount snapshot",
+        "description": "a-5-8 create combination discount snapshot.\n- RoleLevel: ADMIN.",
+        "x-nestia-namespace": "admin.competitions.combination-discount-snapshots.createCombinationDiscountSnapshot",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created combination discount snapshot",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
     }
   },
   "components": {
@@ -1609,24 +1795,37 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [400]
+            "enum": [
+              400
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [1000]
+            "enum": [
+              1000
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["accssToken이 없습니다."]
+            "enum": [
+              "accssToken이 없습니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"],
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ],
         "description": "----------------------------------------------------------------------------\nAuth 1000 ~ 1999"
       },
       "AUTH_ACCESS_TOKEN_UNAUTHORIZED": {
@@ -1634,55 +1833,86 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [401]
+            "enum": [
+              401
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [1001]
+            "enum": [
+              1001
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["유효하지 않은 accessToken 입니다."]
+            "enum": [
+              "유효하지 않은 accessToken 입니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "AUTH_LEVEL_FORBIDDEN": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [403]
+            "enum": [
+              403
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [1003]
+            "enum": [
+              1003
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["API 호출 권한이 없습니다."]
+            "enum": [
+              "API 호출 권한이 없습니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "SnsLoginReqDto": {
         "type": "object",
         "properties": {
           "snsAuthProvider": {
             "type": "string",
-            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"],
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
             "description": "snsProvider."
           },
           "snsAuthCode": {
@@ -1691,31 +1921,47 @@
           }
         },
         "nullable": false,
-        "required": ["snsAuthProvider", "snsAuthCode"]
+        "required": [
+          "snsAuthProvider",
+          "snsAuthCode"
+        ]
       },
       "SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [400]
+            "enum": [
+              400
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [2000]
+            "enum": [
+              2000
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["지원하지 않는 SNS AUTH PROVIDER 입니다."]
+            "enum": [
+              "지원하지 않는 SNS AUTH PROVIDER 입니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"],
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ],
         "description": "----------------------------------------------------------------------------\nSnsAuth 2000 ~ 2999"
       },
       "SNS_AUTH_KAKAO_LOGIN_FAIL": {
@@ -1723,90 +1969,137 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [400]
+            "enum": [
+              400
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [2001]
+            "enum": [
+              2001
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["카카오 로그인에 실패했습니다."]
+            "enum": [
+              "카카오 로그인에 실패했습니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "SNS_AUTH_NAVER_LOGIN_FAIL": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [400]
+            "enum": [
+              400
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [2002]
+            "enum": [
+              2002
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["네이버 로그인에 실패했습니다."]
+            "enum": [
+              "네이버 로그인에 실패했습니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "SNS_AUTH_GOOGLE_LOGIN_FAIL": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [400]
+            "enum": [
+              400
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [2003]
+            "enum": [
+              2003
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["구글 로그인에 실패했습니다."]
+            "enum": [
+              "구글 로그인에 실패했습니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "ResponseFormAuthTokensResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/AuthTokensResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "AuthTokensResDto": {
         "type": "object",
@@ -1819,7 +2112,10 @@
           }
         },
         "nullable": false,
-        "required": ["accessToken", "refreshToken"]
+        "required": [
+          "accessToken",
+          "refreshToken"
+        ]
       },
       "RefreshTokenReqDto": {
         "type": "object",
@@ -1829,98 +2125,147 @@
           }
         },
         "nullable": false,
-        "required": ["refreshToken"]
+        "required": [
+          "refreshToken"
+        ]
       },
       "AUTH_REFRESH_TOKEN_UNAUTHORIZED": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [401]
+            "enum": [
+              401
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [1002]
+            "enum": [
+              1002
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["유효하지 않은 refreshToken 입니다."]
+            "enum": [
+              "유효하지 않은 refreshToken 입니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
+      },
+      "ENTITY_NOT_FOUND": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "status": {
+            "type": "number",
+            "enum": [
+              404
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              404
+            ]
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "Entity Not Found"
+            ]
+          },
+          "detail": {}
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ],
+        "description": "----------------------------------------------------------------------------\n- Entity Not Found Error 404"
       },
       "AUTH_UNREGISTERED_ADMIN_CREDENTIALS": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [403]
+            "enum": [
+              403
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [1004]
+            "enum": [
+              1004
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["등록되지 않은 관리자 계정입니다."]
+            "enum": [
+              "등록되지 않은 관리자 계정입니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
-      },
-      "USERS_USER_NOT_FOUND": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [false]
-          },
-          "status": {
-            "type": "number",
-            "enum": [404]
-          },
-          "code": {
-            "type": "number",
-            "enum": [4001]
-          },
-          "result": {
-            "type": "string",
-            "enum": ["존재하지 않는 유저입니다."]
-          },
-          "detail": {}
-        },
-        "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"],
-        "description": "----------------------------------------------------------------------------\nUsers 4000 ~ 4999"
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "ResponseFormTemporaryUserResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/TemporaryUserResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "TemporaryUserResDto": {
         "type": "object",
@@ -1930,11 +2275,20 @@
           },
           "role": {
             "type": "string",
-            "enum": ["ADMIN", "USER", "TEMPORARY_USER"]
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ]
           },
           "snsAuthProvider": {
             "type": "string",
-            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"]
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ]
           },
           "snsId": {
             "type": "string"
@@ -1955,7 +2309,10 @@
           },
           "gender": {
             "type": "string",
-            "enum": ["MALE", "FEMALE"],
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
             "nullable": true
           },
           "birth": {
@@ -1964,7 +2321,14 @@
           },
           "belt": {
             "type": "string",
-            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
             "nullable": true
           },
           "profileImageUrlKey": {
@@ -1973,7 +2337,10 @@
           },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "INACTIVE"]
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
           },
           "createdAt": {
             "oneOf": [
@@ -2022,18 +2389,26 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "type": "boolean"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "RegisterPhoneNumberReqDto": {
         "type": "object",
@@ -2045,25 +2420,35 @@
           }
         },
         "nullable": false,
-        "required": ["phoneNumber"]
+        "required": [
+          "phoneNumber"
+        ]
       },
       "ResponseFormPhoneNumberAuthCode": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/PhoneNumberAuthCode"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "PhoneNumberAuthCode": {
         "type": "string",
@@ -2078,7 +2463,9 @@
           }
         },
         "nullable": false,
-        "required": ["authCode"]
+        "required": [
+          "authCode"
+        ]
       },
       "RegisterReqDto": {
         "type": "object",
@@ -2090,19 +2477,30 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"]
+              "enum": [
+                "TERMS_OF_SERVICE",
+                "PRIVACY",
+                "REFUND",
+                "ADVERTISEMENT"
+              ]
             }
           }
         },
         "nullable": false,
-        "required": ["user", "consentPolicyTypes"]
+        "required": [
+          "user",
+          "consentPolicyTypes"
+        ]
       },
       "PickUsergenderbirthnicknamebelt": {
         "type": "object",
         "properties": {
           "gender": {
             "type": "string",
-            "enum": ["MALE", "FEMALE"],
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -2119,12 +2517,24 @@
           },
           "belt": {
             "type": "string",
-            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
             "description": "- 사용자 주짓수 벨트."
           }
         },
         "nullable": false,
-        "required": ["gender", "birth", "nickname", "belt"],
+        "required": [
+          "gender",
+          "birth",
+          "nickname",
+          "belt"
+        ],
         "description": "From T, pick a set of properties whose keys are in the union K"
       },
       "REGISTER_NICKNAME_DUPLICATED": {
@@ -2132,24 +2542,37 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [409]
+            "enum": [
+              409
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [3000]
+            "enum": [
+              3000
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["이미 사용중인 닉네임입니다."]
+            "enum": [
+              "이미 사용중인 닉네임입니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"],
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ],
         "description": "----------------------------------------------------------------------------\nRegister 3000 ~ 3999"
       },
       "REGISTER_POLICY_CONSENT_REQUIRED": {
@@ -2157,48 +2580,74 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [400]
+            "enum": [
+              400
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [3002]
+            "enum": [
+              3002
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["필수 동의 항목을 모두 동의해야 합니다."]
+            "enum": [
+              "필수 동의 항목을 모두 동의해야 합니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "REGISTER_PHONE_NUMBER_REQUIRED": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [false]
+            "enum": [
+              false
+            ]
           },
           "status": {
             "type": "number",
-            "enum": [400]
+            "enum": [
+              400
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [3003]
+            "enum": [
+              3003
+            ]
           },
           "result": {
             "type": "string",
-            "enum": ["회원가입을 위해서는 휴대폰 번호인증이 필요합니다."]
+            "enum": [
+              "회원가입을 위해서는 휴대폰 번호인증이 필요합니다."
+            ]
           },
           "detail": {}
         },
         "nullable": false,
-        "required": ["isSuccess", "status", "code", "result"]
+        "required": [
+          "isSuccess",
+          "status",
+          "code",
+          "result"
+        ]
       },
       "CreateUserReqDto": {
         "type": "object",
@@ -2211,7 +2660,12 @@
           },
           "snsAuthProvider": {
             "type": "string",
-            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"],
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
             "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
           },
           "name": {
@@ -2235,7 +2689,10 @@
           },
           "gender": {
             "type": "string",
-            "enum": ["MALE", "FEMALE"],
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -2245,25 +2702,38 @@
           }
         },
         "nullable": false,
-        "required": ["snsId", "snsAuthProvider", "name", "email"]
+        "required": [
+          "snsId",
+          "snsAuthProvider",
+          "name",
+          "email"
+        ]
       },
       "ResponseFormUserResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/UserResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "UserResDto": {
         "type": "object",
@@ -2281,7 +2751,12 @@
           },
           "snsAuthProvider": {
             "type": "string",
-            "enum": ["KAKAO", "NAVER", "GOOGLE", "APPLE"],
+            "enum": [
+              "KAKAO",
+              "NAVER",
+              "GOOGLE",
+              "APPLE"
+            ],
             "description": "- SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다."
           },
           "name": {
@@ -2300,7 +2775,10 @@
           },
           "gender": {
             "type": "string",
-            "enum": ["MALE", "FEMALE"],
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -2317,7 +2795,14 @@
           },
           "belt": {
             "type": "string",
-            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
             "description": "- 사용자 주짓수 벨트."
           },
           "id": {
@@ -2338,7 +2823,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["ADMIN", "USER", "TEMPORARY_USER"],
+            "enum": [
+              "ADMIN",
+              "USER",
+              "TEMPORARY_USER"
+            ],
             "description": "- 사용자 역할. 사용자의 접근 권한을 나타냅니다."
           },
           "profileImageUrlKey": {
@@ -2349,7 +2838,10 @@
           },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "INACTIVE"],
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
             "description": "- 사용자 상태. 활성, 비활성 등을 나타냅니다."
           },
           "updatedAt": {
@@ -2396,7 +2888,10 @@
           },
           "gender": {
             "type": "string",
-            "enum": ["MALE", "FEMALE"],
+            "enum": [
+              "MALE",
+              "FEMALE"
+            ],
             "description": "- 사용자 성별."
           },
           "birth": {
@@ -2413,7 +2908,14 @@
           },
           "belt": {
             "type": "string",
-            "enum": ["선택없음", "화이트", "블루", "퍼플", "브라운", "블랙"],
+            "enum": [
+              "선택없음",
+              "화이트",
+              "블루",
+              "퍼플",
+              "브라운",
+              "블랙"
+            ],
             "description": "- 사용자 주짓수 벨트."
           }
         },
@@ -2425,18 +2927,26 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/FindPoliciesResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "FindPoliciesResDto": {
         "type": "array",
@@ -2457,7 +2967,12 @@
           },
           "type": {
             "type": "string",
-            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"],
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ],
             "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
           "isMandatory": {
@@ -2489,25 +3004,41 @@
           }
         },
         "nullable": false,
-        "required": ["id", "version", "type", "isMandatory", "title", "content", "createdAt"]
+        "required": [
+          "id",
+          "version",
+          "type",
+          "isMandatory",
+          "title",
+          "content",
+          "createdAt"
+        ]
       },
       "ResponseFormFindPolicyResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/FindPolicyResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "FindPolicyResDto": {
         "$ref": "#/components/schemas/OmitOptionalPolicy.Nullable"
@@ -2525,7 +3056,12 @@
           },
           "type": {
             "type": "string",
-            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"],
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ],
             "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
           "isMandatory": {
@@ -2557,14 +3093,27 @@
           }
         },
         "nullable": true,
-        "required": ["id", "version", "type", "isMandatory", "title", "content", "createdAt"]
+        "required": [
+          "id",
+          "version",
+          "type",
+          "isMandatory",
+          "title",
+          "content",
+          "createdAt"
+        ]
       },
       "CreatePolicyReqDto": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"],
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ],
             "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
           "isMandatory": {
@@ -2584,25 +3133,38 @@
           }
         },
         "nullable": false,
-        "required": ["type", "isMandatory", "title", "content"]
+        "required": [
+          "type",
+          "isMandatory",
+          "title",
+          "content"
+        ]
       },
       "ResponseFormPolicyResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/PolicyResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "PolicyResDto": {
         "type": "object",
@@ -2617,7 +3179,12 @@
           },
           "type": {
             "type": "string",
-            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"],
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ],
             "description": "- 약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
           "isMandatory": {
@@ -2649,14 +3216,27 @@
           }
         },
         "nullable": false,
-        "required": ["id", "version", "type", "isMandatory", "title", "content", "createdAt"]
+        "required": [
+          "id",
+          "version",
+          "type",
+          "isMandatory",
+          "title",
+          "content",
+          "createdAt"
+        ]
       },
       "FindPoliciesReqDto": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["TERMS_OF_SERVICE", "PRIVACY", "REFUND", "ADVERTISEMENT"]
+            "enum": [
+              "TERMS_OF_SERVICE",
+              "PRIVACY",
+              "REFUND",
+              "ADVERTISEMENT"
+            ]
           }
         },
         "nullable": false
@@ -2666,24 +3246,41 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/FindCompetitionsResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "FindCompetitionsResDto": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/SCompetition"
-        }
+        "type": "object",
+        "properties": {
+          "competitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SCompetition"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "competitions"
+        ]
       },
       "SCompetition": {
         "type": "object",
@@ -2718,7 +3315,10 @@
           },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "INACTIVE"],
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
             "description": "- 대회의 상태\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능"
           },
           "updatedAt": {
@@ -2933,27 +3533,54 @@
           }
         },
         "nullable": false,
-        "required": ["id", "createdAt", "earlyBirdStartDate", "earlyBirdEndDate", "discountAmount", "competitionId"]
+        "required": [
+          "id",
+          "createdAt",
+          "earlyBirdStartDate",
+          "earlyBirdEndDate",
+          "discountAmount",
+          "competitionId"
+        ]
       },
       "ResponseFormCompetitionResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/CompetitionResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "CompetitionResDto": {
+        "type": "object",
+        "properties": {
+          "competition": {
+            "$ref": "#/components/schemas/SCompetition.o1"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "competition"
+        ]
+      },
+      "SCompetition.o1": {
         "type": "object",
         "properties": {
           "divisions": {
@@ -2998,7 +3625,10 @@
           },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "INACTIVE"],
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
             "description": "- 대회의 상태\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능"
           },
           "updatedAt": {
@@ -3178,7 +3808,11 @@
           },
           "gender": {
             "type": "string",
-            "enum": ["MALE", "FEMALE", "MIXED"],
+            "enum": [
+              "MALE",
+              "FEMALE",
+              "MIXED"
+            ],
             "description": "- 성별."
           },
           "belt": {
@@ -3201,11 +3835,14 @@
                 "type": "string"
               }
             ],
-            "description": "- 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다."
+            "description": "- created at."
           },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "INACTIVE"],
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
             "description": "- 활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
           },
           "updatedAt": {
@@ -3218,7 +3855,7 @@
                 "type": "string"
               }
             ],
-            "description": "- 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간."
+            "description": "- updated at."
           },
           "competitionId": {
             "type": "number",
@@ -3232,7 +3869,10 @@
           },
           "uniform": {
             "type": "string",
-            "enum": ["GI", "NOGI"],
+            "enum": [
+              "GI",
+              "NOGI"
+            ],
             "description": "- 유니폼 GI, NOGI"
           },
           "weight": {
@@ -3244,6 +3884,7 @@
           "birthYearRangeStart": {
             "type": "string",
             "minLength": 4,
+            "pattern": "^[0-9]{4}$",
             "description": "- 출생년도 범위 시작. YYYY."
           },
           "birthYearRangeEnd": {
@@ -3299,7 +3940,12 @@
           }
         },
         "nullable": false,
-        "required": ["id", "createdAt", "price", "divisionId"]
+        "required": [
+          "id",
+          "createdAt",
+          "price",
+          "divisionId"
+        ]
       },
       "OmitOptionalCombinationDiscountSnapshot": {
         "type": "object",
@@ -3323,23 +3969,28 @@
           "competitionId": {
             "type": "number"
           },
-          "discountRules": {
+          "combinationDiscountRules": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/discountRule"
+              "$ref": "#/components/schemas/ICombinationDiscountRule"
             }
           }
         },
         "nullable": false,
-        "required": ["id", "createdAt", "competitionId", "discountRules"]
+        "required": [
+          "id",
+          "createdAt",
+          "competitionId",
+          "combinationDiscountRules"
+        ]
       },
-      "discountRule": {
+      "ICombinationDiscountRule": {
         "type": "object",
         "properties": {
           "combination": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/unit"
+              "$ref": "#/components/schemas/ICombinationUnit"
             }
           },
           "discountAmount": {
@@ -3347,22 +3998,34 @@
           }
         },
         "nullable": false,
-        "required": ["combination", "discountAmount"]
+        "required": [
+          "combination",
+          "discountAmount"
+        ]
       },
-      "unit": {
+      "ICombinationUnit": {
         "type": "object",
         "properties": {
           "uniform": {
             "type": "string",
-            "enum": ["GI", "NOGI"]
+            "enum": [
+              "GI",
+              "NOGI"
+            ]
           },
           "weight": {
             "type": "string",
-            "enum": ["WEIGHT", "ABSOLUTE"]
+            "enum": [
+              "WEIGHT",
+              "ABSOLUTE"
+            ]
           }
         },
         "nullable": false,
-        "required": ["uniform", "weight"]
+        "required": [
+          "uniform",
+          "weight"
+        ]
       },
       "CreateCompetitionReqDto": {
         "type": "object",
@@ -3508,20 +4171,40 @@
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/CreateCompetitionResDto"
           }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
       },
       "CreateCompetitionResDto": {
+        "type": "object",
+        "properties": {
+          "competition": {
+            "$ref": "#/components/schemas/OmitOptionalCompetition"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "competition"
+        ]
+      },
+      "OmitOptionalCompetition": {
         "type": "object",
         "properties": {
           "id": {
@@ -3548,7 +4231,10 @@
           },
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "INACTIVE"],
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
             "description": "- 대회의 상태\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능"
           },
           "updatedAt": {
@@ -3861,11 +4547,16 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["ACTIVE", "INACTIVE"]
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
           }
         },
         "nullable": false,
-        "required": ["status"]
+        "required": [
+          "status"
+        ]
       },
       "CreateDivisitonsReqDto": {
         "type": "object",
@@ -3878,7 +4569,9 @@
           }
         },
         "nullable": false,
-        "required": ["divisionPacks"]
+        "required": [
+          "divisionPacks"
+        ]
       },
       "IDivisionPack": {
         "type": "object",
@@ -3893,14 +4586,21 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["GI", "NOGI"]
+              "enum": [
+                "GI",
+                "NOGI"
+              ]
             }
           },
           "genders": {
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["MALE", "FEMALE", "MIXED"]
+              "enum": [
+                "MALE",
+                "FEMALE",
+                "MIXED"
+              ]
             }
           },
           "belts": {
@@ -3937,21 +4637,284 @@
           "price"
         ]
       },
-      "ResponseFormany": {
+      "ResponseFormCreateDivisionsResDto": {
         "type": "object",
         "properties": {
           "isSuccess": {
             "type": "boolean",
-            "enum": [true]
+            "enum": [
+              true
+            ]
           },
           "code": {
             "type": "number",
-            "enum": [200]
+            "enum": [
+              200
+            ]
           },
-          "result": {}
+          "result": {
+            "$ref": "#/components/schemas/CreateDivisionsResDto"
+          }
         },
         "nullable": false,
-        "required": ["isSuccess", "code", "result"]
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CreateDivisionsResDto": {
+        "type": "object",
+        "properties": {
+          "divisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OmitOptionalDivision"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "divisions"
+        ]
+      },
+      "OmitOptionalDivision": {
+        "type": "object",
+        "properties": {
+          "gender": {
+            "type": "string",
+            "enum": [
+              "MALE",
+              "FEMALE",
+              "MIXED"
+            ],
+            "description": "- 성별."
+          },
+          "belt": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 주짓수벨트."
+          },
+          "id": {
+            "type": "integer",
+            "description": "- division id."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- created at."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "description": "- 활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- updated at."
+          },
+          "competitionId": {
+            "type": "number",
+            "description": "- competitionId."
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 부문 카테고리."
+          },
+          "uniform": {
+            "type": "string",
+            "enum": [
+              "GI",
+              "NOGI"
+            ],
+            "description": "- 유니폼 GI, NOGI"
+          },
+          "weight": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "description": "- 체급."
+          },
+          "birthYearRangeStart": {
+            "type": "string",
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "description": "- 출생년도 범위 시작. YYYY."
+          },
+          "birthYearRangeEnd": {
+            "type": "string",
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "description": "- 출생년도 범위 끝. YYYY."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "gender",
+          "belt",
+          "id",
+          "createdAt",
+          "status",
+          "updatedAt",
+          "competitionId",
+          "category",
+          "uniform",
+          "weight",
+          "birthYearRangeStart",
+          "birthYearRangeEnd"
+        ]
+      },
+      "CreateEarlybirdDiscountSnapshotReqDto": {
+        "type": "object",
+        "properties": {
+          "earlyBirdStartDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 얼리버드 시작일"
+          },
+          "earlyBirdEndDate": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "- 얼리버드 마감일"
+          },
+          "discountAmount": {
+            "type": "number",
+            "minimum": 0,
+            "description": "- 얼리버드 할인 가격 ex) 10000\n- 단위 : 원\n- 음수 값은 허용하지 않습니다."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "earlyBirdStartDate",
+          "earlyBirdEndDate",
+          "discountAmount"
+        ]
+      },
+      "ResponseFormCreateEarlybirdDiscountSnapshotResDto": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateEarlybirdDiscountSnapshotResDto"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CreateEarlybirdDiscountSnapshotResDto": {
+        "type": "object",
+        "properties": {
+          "earlybirdDiscountSnapshot": {
+            "$ref": "#/components/schemas/OmitOptionalEarlybirdDiscountSnapshot"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "earlybirdDiscountSnapshot"
+        ]
+      },
+      "createCombinationDiscountSnapshotReqDto": {
+        "type": "object",
+        "properties": {
+          "combinationDiscountRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICombinationDiscountRule"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "combinationDiscountRules"
+        ]
+      },
+      "ResponseFormCreateCombinationDiscountSnapshotResDto": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateCombinationDiscountSnapshotResDto"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CreateCombinationDiscountSnapshotResDto": {
+        "type": "object",
+        "properties": {
+          "combinationDiscountSnapshot": {
+            "$ref": "#/components/schemas/OmitOptionalCombinationDiscountSnapshot"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "combinationDiscountSnapshot"
+        ]
       }
     },
     "securitySchemes": {

@@ -22,7 +22,7 @@ export class UserCompetitionsController {
   @TypedRoute.Get('/')
   async findCompetitions(): Promise<ResponseForm<FindCompetitionsResDto>> {
     const competitions = await this.CompetitionsAppService.findCompetitions({ where: { status: 'ACTIVE' } });
-    return createResponseForm(competitions);
+    return createResponseForm({ competitions });
   }
 
   /**
@@ -36,6 +36,6 @@ export class UserCompetitionsController {
   @TypedRoute.Get('/:id')
   async getCompetition(@TypedParam('id') id: Competition['id']): Promise<ResponseForm<CompetitionResDto>> {
     const competition = await this.CompetitionsAppService.getCompetition({ where: { id, status: 'ACTIVE' } });
-    return createResponseForm(competition);
+    return createResponseForm({ competition });
   }
 }

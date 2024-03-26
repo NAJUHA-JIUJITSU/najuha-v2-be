@@ -6,4 +6,6 @@ export interface SCompetition extends Omit<OmitOptional<Competition>, 'descripti
   earlybirdDiscountSnapshots?: OmitOptional<EarlybirdDiscountSnapshot>[];
 }
 
-export type FindCompetitionsResDto = SCompetition[];
+export interface FindCompetitionsResDto {
+  competitions: SCompetition[];
+}

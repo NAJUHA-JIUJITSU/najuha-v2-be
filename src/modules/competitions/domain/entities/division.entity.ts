@@ -60,7 +60,7 @@ export class Division {
   /**
    * - 출생년도 범위 시작. YYYY.
    * @minLength 4
-   * @tern ^[0-9]{4}$
+   * @pattern ^[0-9]{4}$
    */
   @Column('varchar', { length: 4 })
   birthYearRangeStart: string;
