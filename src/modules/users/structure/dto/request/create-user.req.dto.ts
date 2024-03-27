@@ -1,4 +1,4 @@
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { IUser } from '../../interface/user.interface';
 
-export type CreateUserReqDto = Pick<User, 'snsId' | 'snsAuthProvider' | 'name' | 'email'> &
-  Partial<Pick<User, 'phoneNumber' | 'gender' | 'birth'>>;
+export type CreateUserReqDto = Pick<IUser, 'snsId' | 'snsAuthProvider' | 'name' | 'email'> &
+  Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>>;

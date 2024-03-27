@@ -5,30 +5,22 @@ import { AdminCompetitionsController } from './presentation/admin-competitions.c
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Competition } from './domain/entities/competition.entity';
 import { Division } from './domain/entities/division.entity';
-import { EarlybirdDiscountSnapshot } from './domain/entities/early-bird-discount-snapshot.entity';
+import { EarlybirdDiscountSnapshot } from './domain/entities/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshot } from './domain/entities/combination-discount-snapshot.entity';
 import { CompetitionRepository } from './competition.repository';
-import { Application } from './domain/entities/application.entity';
-import { ParticipationDivision } from './domain/entities/participation-divsion.entity';
-import { ParticipationDivisionSnapshot } from './domain/entities/participation-division-snapshot.entity';
 import { PaymentSnapshot } from './domain/entities/payment-snapshot.entity';
-import { PlayerSnapshot } from './domain/entities/player-snapshot.entity';
 import { PriceSnapshot } from './domain/entities/price-snapshot.entity';
 import { DivisionFactory } from './domain/division-factory.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Application,
-      CombinationDiscountSnapshot,
       Competition,
       Division,
+      CombinationDiscountSnapshot,
       EarlybirdDiscountSnapshot,
-      ParticipationDivisionSnapshot,
-      ParticipationDivision,
-      PaymentSnapshot,
-      PlayerSnapshot,
       PriceSnapshot,
+      PaymentSnapshot,
     ]),
   ],
   controllers: [UserCompetitionsController, AdminCompetitionsController],

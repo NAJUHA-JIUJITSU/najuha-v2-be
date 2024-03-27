@@ -12,6 +12,7 @@ import { PolicyModule } from './modules/policy/policy.module';
 import { RegisterModule } from './modules/register/register.module';
 import { CompetitionsModule } from './modules/competitions/competitions.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
+import { ApplicationModule } from './modules/applications/application.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { RedisModule } from './infrastructure/redis/redis.module';
     UsersModule,
     PolicyModule,
     CompetitionsModule,
+    ApplicationModule,
   ],
   providers: [],
 })

@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Division } from './division.entity';
-import { EarlybirdDiscountSnapshot } from './early-bird-discount-snapshot.entity';
+import { EarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.entity';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 import { CombinationDiscountSnapshot } from './combination-discount-snapshot.entity';
-import { Application } from './application.entity';
+import { Application } from '../../../applications/domain/entities/application.entity';
 
 @Entity('competition')
 export class Competition {
@@ -111,28 +111,28 @@ export class Competition {
 
   /** - 대회의 얼리버드 할인 전략. */
   @OneToMany(() => EarlybirdDiscountSnapshot, (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition)
-  earlybirdDiscountSnapshots?: EarlybirdDiscountSnapshot[];
+  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshot[];
 
   /** - 부문 조합 할인 전략. */
   @OneToMany(
     () => CombinationDiscountSnapshot,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
   )
-  combinationDiscountSnapshots?: CombinationDiscountSnapshot[];
+  combinationDiscountSnapshots: CombinationDiscountSnapshot[];
 
   /**
    * - divisions.
    * - OneToMany: Competition(1) -> Division(*)
    */
   @OneToMany(() => Division, (division) => division.competition, { cascade: true })
-  divisions?: Division[];
+  divisions: Division[];
 
   /**
    * - application.
    * - OneToMany: Competition(1) -> Application(*)
    */
   @OneToMany(() => Application, (application) => application.competition)
-  applications?: Application[];
+  applications: Application[];
 
   // mathod --------------------------------------------------------------------
   updateStatus(status: Competition['status']): void {
@@ -157,7 +157,7 @@ export class Competition {
 
   addDivisions(divisions: Division[]): void {
     const duplicatedDivisions = divisions.filter((division) => {
-      return this.divisions?.some(
+      return this.divisions.some(
         (existingDivision) =>
           existingDivision.category === division.category &&
           existingDivision.uniform === division.uniform &&

@@ -14,8 +14,11 @@ export class DivisionFactory {
     private readonly priceSnapshotRepository: Repository<PriceSnapshot>,
   ) {}
 
-  private cartesian(...arrays: any[][]): any[][] {
-    return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
+  createDivision(divisionPacks: IDivisionPack[]): Division[] {
+    const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
+      return [...acc, ...this.unpack(divisionPack)];
+    }, []);
+    return unpackedDivisions;
   }
 
   private unpack(divisionPack: IDivisionPack): Division[] {
@@ -39,16 +42,13 @@ export class DivisionFactory {
         status: 'ACTIVE',
         priceSnapshots: [this.priceSnapshotRepository.create({ price: divisionPack.price })],
       });
-
       return division;
     });
+
     return divisions;
   }
 
-  createDivision(divisionPacks: IDivisionPack[]): Division[] {
-    const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
-      return [...acc, ...this.unpack(divisionPack)];
-    }, []);
-    return unpackedDivisions;
+  private cartesian(...arrays: any[][]): any[][] {
+    return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
   }
 }

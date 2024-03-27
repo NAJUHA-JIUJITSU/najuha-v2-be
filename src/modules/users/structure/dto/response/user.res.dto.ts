@@ -1,6 +1,5 @@
-import { OmitOptional } from 'src/common/omit-optional.type';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { IUser } from '../../interface/user.interface';
 
 export interface UserResDto {
-  user: OmitOptional<User>;
+  user: IUser;
 }

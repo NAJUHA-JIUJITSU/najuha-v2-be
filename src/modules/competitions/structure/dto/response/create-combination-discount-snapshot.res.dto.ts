@@ -1,6 +1,5 @@
-import { OmitOptional } from 'src/common/omit-optional.type';
-import { CombinationDiscountSnapshot } from 'src/modules/competitions/domain/entities/combination-discount-snapshot.entity';
+import { ICombinationDiscountSnapshot } from '../../interface/combination-discount-snapshot.interface';
 
 export interface CreateCombinationDiscountSnapshotResDto {
-  combinationDiscountSnapshot: OmitOptional<CombinationDiscountSnapshot>;
+  combinationDiscountSnapshot: ICombinationDiscountSnapshot;
 }

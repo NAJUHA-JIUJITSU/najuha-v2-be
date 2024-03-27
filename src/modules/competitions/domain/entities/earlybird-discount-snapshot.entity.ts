@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Competition } from './competition.entity';
+import { Application } from 'src/modules/applications/domain/entities/application.entity';
 
 @Entity('early_bird_discount_snapshot')
 export class EarlybirdDiscountSnapshot {
@@ -43,15 +45,16 @@ export class EarlybirdDiscountSnapshot {
   @CreateDateColumn()
   createdAt: Date | string;
 
+  /** - competition id. */
   @Column()
   competitionId: Competition['id'];
 
+  /** - competition. */
   @ManyToOne(() => Competition, (competition) => competition.earlybirdDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition?: Competition;
+  competition: Competition;
 
-  // ----------------- Constructor -----------------
-  constructor(dto: Pick<EarlybirdDiscountSnapshot, 'earlyBirdStartDate' | 'earlyBirdEndDate' | 'discountAmount'>) {
-    Object.assign(this, dto);
-  }
+  /** - applications. */
+  @OneToMany(() => Application, (application) => application.earlybirdDiscountSnapshot)
+  applications: Application[];
 }

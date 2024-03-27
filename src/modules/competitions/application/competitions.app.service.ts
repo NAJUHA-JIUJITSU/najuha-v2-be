@@ -5,7 +5,7 @@ import { CreateDivisitonsReqDto } from '../structure/dto/request/create-division
 import { CompetitionRepository } from 'src/modules/competitions/competition.repository';
 import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 import { Division } from 'src/modules/competitions/domain/entities/division.entity';
-import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
+import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshot } from '../domain/entities/combination-discount-snapshot.entity';
 import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
 import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';

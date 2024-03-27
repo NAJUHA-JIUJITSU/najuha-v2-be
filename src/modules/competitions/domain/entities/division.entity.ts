@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Competition } from './competition.entity';
 import { PriceSnapshot } from './price-snapshot.entity';
-import { ParticipationDivisionSnapshot } from './participation-division-snapshot.entity';
+import { ParticipationDivisionSnapshot } from '../../../applications/domain/entities/participation-division-snapshot.entity';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
@@ -96,16 +96,16 @@ export class Division {
   /** - competition. */
   @ManyToOne(() => Competition, (competition) => competition.divisions)
   @JoinColumn({ name: 'competitionId' })
-  competition?: Competition;
+  competition: Competition;
 
   /** - price snapshots. */
   @OneToMany(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
-  priceSnapshots?: PriceSnapshot[];
+  priceSnapshots: PriceSnapshot[];
 
   /** - participation division snapshots. */
   @OneToMany(
     () => ParticipationDivisionSnapshot,
     (participationDivisionSnapshot) => participationDivisionSnapshot.division,
   )
-  participationDivisionSnapshots?: ParticipationDivisionSnapshot[];
+  participationDivisionSnapshots: ParticipationDivisionSnapshot[];
 }

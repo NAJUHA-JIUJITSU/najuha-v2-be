@@ -1,5 +1,5 @@
-import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
+import { ICompetition } from '../../interface/competition.interface';
 
 export interface UpdateCompetitionStatusReqDto {
-  status: Competition['status'];
+  status: ICompetition['status'];
 }

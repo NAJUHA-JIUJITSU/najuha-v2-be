@@ -1,6 +1,5 @@
-import { OmitOptional } from 'src/common/omit-optional.type';
-import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { IDivision } from '../../interface/division.interface';
 
 export interface CreateDivisionsResDto {
-  divisions: OmitOptional<Division>[];
+  divisions: IDivision[];
 }

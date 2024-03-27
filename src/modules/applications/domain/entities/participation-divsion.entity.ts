@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { PriceSnapshot } from './price-snapshot.entity';
+import { PriceSnapshot } from '../../../competitions/domain/entities/price-snapshot.entity';
 import { ParticipationDivisionSnapshot } from './participation-division-snapshot.entity';
 import { Application } from './application.entity';
 
@@ -23,7 +23,7 @@ export class ParticipationDivision {
   /** - applications. */
   @ManyToOne(() => Application, (application) => application.participationDivisions)
   @JoinColumn({ name: 'applicationId' })
-  application?: Application[];
+  application: Application[];
 
   /** - payed price snapshot id. */
   @Column()
@@ -32,11 +32,11 @@ export class ParticipationDivision {
   /** - payed price snapshot. */
   @ManyToOne(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.participationDivisions)
   @JoinColumn({ name: 'priceSnapshotId' })
-  priceSnapshot?: PriceSnapshot;
+  priceSnapshot: PriceSnapshot;
 
   /** - participation division snapshots. */
-  @ManyToOne(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.participationDivisions)
-  participationDivisionSnapshots?: ParticipationDivisionSnapshot[];
+  @ManyToOne(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.participationDivisions, { cascade: true })
+  participationDivisionSnapshots: ParticipationDivisionSnapshot[];
 
   // cancleId
   // cancle

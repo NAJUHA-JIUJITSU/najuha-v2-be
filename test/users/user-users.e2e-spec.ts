@@ -10,8 +10,8 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UpdateUserReqDto } from 'src/modules/users/structure/dto/request/update-user.req.dto';
-import { User } from 'src/modules/users/domain/entities/user.entity';
 import { UserResDto } from 'src/modules/users/structure/dto/response/user.res.dto';
+import { IUser } from 'src/modules/users/structure/interface/user.interface';
 
 describe('E2E u-3 user-users test', () => {
   let app: INestApplication;
@@ -49,7 +49,7 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-2 PATCH /user/users --------------------------------------------------', () => {
     it('유저 정보 수정 성공 시', async () => {
-      const dummyUser = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
+      const dummyUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';
       const user = await userService.createUser(dummyUser);
@@ -79,7 +79,7 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-3 GET /user/users/me --------------------------------------------------', () => {
     it('내 정보 조회 성공 시', async () => {
-      const dummyUser = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
+      const dummyUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';
       const user = await userService.createUser(dummyUser);

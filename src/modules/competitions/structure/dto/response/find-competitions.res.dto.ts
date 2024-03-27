@@ -1,9 +1,8 @@
-import { OmitOptional } from 'src/common/omit-optional.type';
-import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
-import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
+import { ICompetition } from '../../interface/competition.interface';
+import { IEarlybirdDiscountSnapshot } from '../../interface/earlybird-discount-snapshot.interface';
 
-export interface SCompetition extends Omit<OmitOptional<Competition>, 'description'> {
-  earlybirdDiscountSnapshots?: OmitOptional<EarlybirdDiscountSnapshot>[];
+interface SCompetition extends ICompetition {
+  earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
 }
 
 export interface FindCompetitionsResDto {

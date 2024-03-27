@@ -1,10 +1,10 @@
-export type ResponseForm<T> = {
+export type ResponseForm<Result> = {
   isSuccess: true;
   code: 200;
-  result: T;
+  result: Result | void;
 };
 
-export const createResponseForm = <T>(result: T): ResponseForm<T> => {
+export const createResponseForm = <Result>(result: Result | void): ResponseForm<Result> => {
   return {
     isSuccess: true,
     code: 200,

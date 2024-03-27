@@ -1,7 +1,7 @@
 import { PolicyConsent } from 'src/modules/users/domain/entities/policy-consent.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
-import { Application } from '../../../competitions/domain/entities/application.entity';
+import { Application } from '../../../applications/domain/entities/application.entity';
 
 /**
  * - 각 snsAuthProvider 마다 제공되는 정보.
@@ -25,7 +25,7 @@ export class User {
 
   /** - SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다. */
   @Column('varchar', { length: 16 })
-  snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE'; //TODO: enum으로 변경?
+  snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE'; //TODO: enum으로 변경
 
   /**
    * - SNS ID. 소셜 로그인을 위한 고유 식별자입니다.
@@ -111,8 +111,8 @@ export class User {
    * - OneToMany: User(1) -> PolicyConsent(*)
    */
   @OneToMany(() => PolicyConsent, (policyConsent) => policyConsent.user)
-  policyConsents?: PolicyConsent[];
+  policyConsents: PolicyConsent[];
 
   @OneToMany(() => Application, (application) => application.user)
-  applications?: Application[];
+  applications: Application[];
 }

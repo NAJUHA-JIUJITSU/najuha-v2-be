@@ -9,7 +9,6 @@ import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
-import { PhoneNumberAuthCode } from 'src/modules/register/structure/types/phone-number-auth-code.type';
 import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
@@ -18,12 +17,13 @@ import {
 } from 'src/common/response/errorResponse';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+// import { User } from 'src/modules/users/domain/entities/user.entity';
 import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
 import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
 import { IsDuplicatedNicknameResDto } from 'src/modules/register/structure/dto/response/is-duplicated-nickname.res.dto';
 import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/structure/dto/response/send-phone-number-auth-code.res';
 import { ConfirmedAuthCodeResDto } from 'src/modules/register/structure/dto/response/confirm-auth-code.res.dto';
+import { IUser } from 'src/modules/users/structure/interface/user.interface';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;
@@ -80,7 +80,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-2 GET /user/users/:nickname/is-duplicated ----------------------------', () => {
     it('닉네임 중복검사 - 중복된 닉네임인 경우', async () => {
-      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
+      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       const existUser = await usersAppService.createUser(existUserDto);
@@ -103,7 +103,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
-      const temporaryUserResDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
+      const temporaryUserResDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       temporaryUserResDto.birth = '19980101';
       const temporaryUser = await usersAppService.createUser(temporaryUserResDto);
 
@@ -251,7 +251,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt'>>();
+      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       existUserDto.nickname = 'existingNickname';

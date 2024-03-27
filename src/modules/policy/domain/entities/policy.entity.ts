@@ -65,5 +65,5 @@ export class Policy {
    * OneToMany: Policy(1) -> PolicyConsent(*)
    */
   @OneToMany(() => PolicyConsent, (policyConsent) => policyConsent.policy)
-  policyConsents?: PolicyConsent[];
+  policyConsents: PolicyConsent[];
 }

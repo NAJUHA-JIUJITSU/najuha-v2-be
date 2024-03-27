@@ -1,4 +1,4 @@
-import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
+import { IEarlybirdDiscountSnapshot } from '../../interface/earlybird-discount-snapshot.interface';
 
 export interface CreateEarlybirdDiscountSnapshotReqDto
-  extends Pick<EarlybirdDiscountSnapshot, 'earlyBirdStartDate' | 'earlyBirdEndDate' | 'discountAmount'> {}
+  extends Pick<IEarlybirdDiscountSnapshot, 'earlyBirdStartDate' | 'earlyBirdEndDate' | 'discountAmount'> {}

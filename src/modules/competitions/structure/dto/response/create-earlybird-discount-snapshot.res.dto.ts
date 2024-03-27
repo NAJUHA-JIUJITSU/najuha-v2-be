@@ -1,6 +1,5 @@
-import { OmitOptional } from 'src/common/omit-optional.type';
-import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/early-bird-discount-snapshot.entity';
+import { IEarlybirdDiscountSnapshot } from '../../interface/earlybird-discount-snapshot.interface';
 
 export interface CreateEarlybirdDiscountSnapshotResDto {
-  earlybirdDiscountSnapshot: OmitOptional<EarlybirdDiscountSnapshot>;
+  earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot;
 }

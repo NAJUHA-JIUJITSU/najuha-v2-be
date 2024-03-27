@@ -1,21 +1,21 @@
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { IUser } from 'src/modules/users/structure/interface/user.interface';
 
 export interface TemporaryUserResDto {
   user: {
-    id: User['id'];
-    role: User['role'];
-    snsAuthProvider: User['snsAuthProvider'];
-    snsId: User['snsId'];
-    email: User['email'];
-    name: User['name'];
-    phoneNumber: User['phoneNumber'] | null;
-    nickname: User['nickname'] | null;
-    gender: User['gender'] | null;
-    birth: User['birth'] | null;
-    belt: User['belt'] | null;
-    profileImageUrlKey: User['profileImageUrlKey'] | null;
-    status: User['status'];
-    createdAt: User['createdAt'];
-    updatedAt: User['updatedAt'];
+    id: IUser['id'];
+    role: IUser['role'];
+    snsAuthProvider: IUser['snsAuthProvider'];
+    snsId: IUser['snsId'];
+    email: IUser['email'];
+    name: IUser['name'];
+    phoneNumber: IUser['phoneNumber'] | null;
+    nickname: IUser['nickname'] | null;
+    gender: IUser['gender'] | null;
+    birth: IUser['birth'] | null;
+    belt: IUser['belt'] | null;
+    profileImageUrlKey: IUser['profileImageUrlKey'] | null;
+    status: IUser['status'];
+    createdAt: IUser['createdAt'];
+    updatedAt: IUser['updatedAt'];
   };
 }

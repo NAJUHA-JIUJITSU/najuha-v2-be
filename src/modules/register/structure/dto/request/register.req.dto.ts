@@ -1,7 +1,7 @@
 import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { IUser } from 'src/modules/users/structure/interface/user.interface';
 
 export type RegisterReqDto = {
-  user: Pick<User, 'nickname' | 'gender' | 'belt' | 'birth'>;
+  user: Pick<IUser, 'nickname' | 'gender' | 'belt' | 'birth'>;
   consentPolicyTypes: Policy['type'][];
 };

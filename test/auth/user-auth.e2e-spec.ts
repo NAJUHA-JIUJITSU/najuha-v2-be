@@ -24,7 +24,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { IUser } from 'src/modules/users/structure/interface/user.interface';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {
@@ -70,7 +70,7 @@ describe('E2E u-1 user-auth test', () => {
   describe('u-1-1 POST /user/auth/sns-login ------------------------------------------', () => {
     it('기존 유저 KAKAO 로그인 성공 시', async () => {
       const snsAuthProvider = 'KAKAO';
-      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
+      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       existUserDto.snsAuthProvider = snsAuthProvider;
@@ -133,7 +133,7 @@ describe('E2E u-1 user-auth test', () => {
 
     it('기존 유저 NAVER 로그인 성공 시', async () => {
       const snsAuthProvider = 'NAVER';
-      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
+      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       existUserDto.snsAuthProvider = snsAuthProvider;
@@ -196,7 +196,7 @@ describe('E2E u-1 user-auth test', () => {
 
     it('기존 유저 GOOGLE 로그인 성공 시', async () => {
       const snsAuthProvider = 'GOOGLE';
-      const existUserDto = typia.random<Omit<User, 'createdAt' | 'updatedAt' | 'id'>>();
+      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
       existUserDto.role = 'USER';
       existUserDto.birth = '19980101';
       existUserDto.snsAuthProvider = snsAuthProvider;

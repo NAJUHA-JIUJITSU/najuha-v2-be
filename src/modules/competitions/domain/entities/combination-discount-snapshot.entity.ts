@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Competition } from './competition.entity';
 import { ICombinationDiscountRule } from '../../structure/combination-discount-rule.interface';
+import { Application } from 'src/modules/applications/domain/entities/application.entity';
 
 @Entity('combination_discount_snapshot')
 export class CombinationDiscountSnapshot {
@@ -18,10 +19,16 @@ export class CombinationDiscountSnapshot {
   @CreateDateColumn()
   createdAt: Date | string;
 
+  /** - competition id. */
   @Column()
   competitionId: Competition['id'];
 
+  /** - competition. */
   @ManyToOne(() => Competition, (competition) => competition.combinationDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition?: Competition;
+  competition: Competition;
+
+  /** - applications. */
+  @OneToMany(() => Application, (application) => application.combinationDiscountSnapshot)
+  applications: Application[];
 }

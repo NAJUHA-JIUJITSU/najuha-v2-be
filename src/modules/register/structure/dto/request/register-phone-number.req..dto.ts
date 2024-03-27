@@ -1,3 +1,3 @@
-import { User } from 'src/modules/users/domain/entities/user.entity';
+import { IUser } from 'src/modules/users/structure/interface/user.interface';
 
-export type RegisterPhoneNumberReqDto = Pick<User, 'phoneNumber'>;
+export type RegisterPhoneNumberReqDto = Pick<IUser, 'phoneNumber'>;

@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ParticipationDivision } from './participation-divsion.entity';
-import { Division } from './division.entity';
+import { Division } from '../../../competitions/domain/entities/division.entity';
 
 @Entity('participation_divsion_snapshot')
 export class ParticipationDivisionSnapshot {
@@ -27,7 +27,7 @@ export class ParticipationDivisionSnapshot {
     (participationDivision) => participationDivision.participationDivisionSnapshots,
   )
   @JoinColumn({ name: 'participationDivisionId' })
-  participationDivision?: ParticipationDivision;
+  participationDivision: ParticipationDivision;
 
   /** - division id. */
   @Column()

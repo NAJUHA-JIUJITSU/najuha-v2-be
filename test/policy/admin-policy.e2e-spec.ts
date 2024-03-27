@@ -11,10 +11,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { CreatePolicyReqDto } from 'src/modules/policy/structure/dto/request/create-policy.req.dto';
-import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
 import { PolicyResDto } from 'src/modules/policy/structure/dto/response/policy.res.dto';
-import { FindPoliciesReqDto } from 'src/modules/policy/structure/dto/request/find-policies.req.dto';
 import { FindPoliciesResDto } from 'src/modules/policy/structure/dto/response/find-policies.res.dto';
+import { IPolicy } from 'src/modules/policy/structure/interface/policy.interface';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
@@ -71,7 +70,7 @@ describe('E2E a-4 admin-policy test', () => {
 
   describe('a-4-2 GET /admin/policy ------------------------------------------------------', () => {
     it('모든 약관 가져오기 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {
@@ -98,8 +97,8 @@ describe('E2E a-4 admin-policy test', () => {
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      const query = { type: typia.random<Policy['type']>() };
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const query = { type: typia.random<IPolicy['type']>() };
       const maxVersion = 4;
 
       for (let version = 1; version <= maxVersion; version++) {

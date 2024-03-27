@@ -12,7 +12,6 @@ import { CreateDivisitonsReqDto } from '../structure/dto/request/create-division
 import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
 import { CreateCompetitionResDto } from '../structure/dto/response/create-competition.res.dto';
 import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
-import { CombinationDiscountSnapshot } from '../domain/entities/combination-discount-snapshot.entity';
 import { CreateDivisionsResDto } from '../structure/dto/response/create-divisions.res.dto';
 import { CreateEarlybirdDiscountSnapshotResDto } from '../structure/dto/response/create-earlybird-discount-snapshot.res.dto';
 import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';

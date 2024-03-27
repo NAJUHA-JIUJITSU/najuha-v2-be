@@ -1,5 +1,4 @@
-import { OmitOptional } from 'src/common/omit-optional.type';
-import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
+import { ICompetition } from '../../interface/competition.interface';
 
 export interface UpdateCompetitionReqDto
-  extends Partial<Omit<OmitOptional<Competition>, 'id' | 'viewCount' | 'status' | 'createdAt' | 'updatedAt'>> {}
+  extends Partial<Omit<ICompetition, 'id' | 'viewCount' | 'status' | 'createdAt' | 'updatedAt'>> {}

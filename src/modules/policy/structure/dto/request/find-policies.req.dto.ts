@@ -1,3 +1,3 @@
-import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
+import { IPolicy } from '../../interface/policy.interface';
 
-export type FindPoliciesReqDto = { type?: Policy['type'] };
+export type FindPoliciesReqDto = { type?: IPolicy['type'] };

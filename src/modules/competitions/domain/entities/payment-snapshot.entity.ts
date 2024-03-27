@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Application } from './application.entity';
+import { Application } from '../../../applications/domain/entities/application.entity';
 
 @Entity('payment_snapshot')
 export class PaymentSnapshot {

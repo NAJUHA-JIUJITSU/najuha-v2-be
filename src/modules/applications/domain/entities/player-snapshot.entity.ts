@@ -18,18 +18,18 @@ export class PlayerSnapshot {
    * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
    */
   @Column('varchar', { length: 64 })
-  playerName: string;
+  name: string;
 
   /** -player gender */
-  @Column('varchar', { length: 64 })
-  playerGender: 'MALE' | 'FEAMLE';
+  @Column('varchar', { length: 16 })
+  gender: 'MALE' | 'FEMALE';
 
   /**
    * - player birth (BirtDate YYYYMMDD).
    * @pattern ^[0-9]{8}$
    */
   @Column('varchar', { length: 64 })
-  playerBirth: string & BirthDate;
+  birth: string & BirthDate;
 
   /**
    * - player phone number.
@@ -37,11 +37,11 @@ export class PlayerSnapshot {
    * @pattern ^01[0-9]{9}$
    */
   @Column('varchar', { length: 16 })
-  playerPhoneNumber: string;
+  phoneNumber: string;
 
   /** - player belt */
   @Column('varchar', { length: 16 })
-  playerBelt: '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
+  belt: '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
   /**
    * - 주짓수 네트워크.
@@ -80,7 +80,7 @@ export class PlayerSnapshot {
 
   /** - application 정보 */
   @ManyToOne(() => Application, (application) => application.playerSnapshots)
-  application?: Application;
+  application: Application;
 
   // /**
   //  * - division id.
@@ -95,5 +95,5 @@ export class PlayerSnapshot {
   //  */
   // @ManyToOne(() => Division, (division) => division.applicationSnapshots)
   // @JoinColumn({ name: 'divisionId' })
-  // division?: Division;
+  // division: Division;
 }

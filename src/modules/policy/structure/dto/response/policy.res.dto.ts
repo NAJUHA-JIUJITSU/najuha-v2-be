@@ -1,6 +1,5 @@
-import { OmitOptional } from 'src/common/omit-optional.type';
-import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
+import { IPolicy } from '../../interface/policy.interface';
 
 export interface PolicyResDto {
-  policy: OmitOptional<Policy>;
+  policy: IPolicy;
 }
