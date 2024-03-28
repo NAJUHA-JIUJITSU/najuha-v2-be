@@ -26,7 +26,7 @@ export class ParticipationDivision {
   application: Application[];
 
   /** - payed price snapshot id. */
-  @Column()
+  @Column({ nullable: true })
   priceSnapshotId: PriceSnapshot['id'];
 
   /** - payed price snapshot. */

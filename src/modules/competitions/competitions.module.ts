@@ -10,7 +10,7 @@ import { CombinationDiscountSnapshot } from './domain/entities/combination-disco
 import { CompetitionRepository } from './competition.repository';
 import { PaymentSnapshot } from './domain/entities/payment-snapshot.entity';
 import { PriceSnapshot } from './domain/entities/price-snapshot.entity';
-import { DivisionFactory } from './domain/division-factory.service';
+import { DivisionFactory } from './domain/division.factory';
 
 @Module({
   imports: [

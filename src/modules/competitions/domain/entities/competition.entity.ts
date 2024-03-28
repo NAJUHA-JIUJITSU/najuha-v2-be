@@ -179,4 +179,16 @@ export class Competition {
     }
     this.divisions = [...(this.divisions || []), ...divisions];
   }
+
+  validateExistDivisions(divisonIds: Division['id'][]): void {
+    const notExistDivisions = divisonIds.filter((divisionId) => {
+      return !this.divisions.some((division) => division.id === divisionId);
+    });
+    if (notExistDivisions.length > 0) {
+      throw new BusinessException(
+        CompetitionsErrorMap.COMPETITIONS_DIVISION_NOT_FOUND,
+        `not found divisionIds: ${notExistDivisions.join(', ')}`,
+      );
+    }
+  }
 }

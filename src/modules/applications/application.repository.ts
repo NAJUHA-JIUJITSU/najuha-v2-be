@@ -8,6 +8,7 @@ import { PlayerSnapshot } from './domain/entities/player-snapshot.entity';
 import { User } from '../users/domain/entities/user.entity';
 import { ParticipationDivision } from './domain/entities/participation-divsion.entity';
 import { ParticipationDivisionSnapshot } from './domain/entities/participation-division-snapshot.entity';
+import { PaymentSnapshot } from '../competitions/domain/entities/payment-snapshot.entity';
 
 @Injectable()
 export class ApplicationRepository {
@@ -24,16 +25,20 @@ export class ApplicationRepository {
     private readonly participationDivisionRepository: Repository<ParticipationDivision>,
     @InjectRepository(ParticipationDivisionSnapshot)
     private readonly participationDivisionSnapshotRepository: Repository<ParticipationDivisionSnapshot>,
+    @InjectRepository(PaymentSnapshot)
+    private readonly paymentSnapshotRepository: Repository<PaymentSnapshot>,
   ) {}
 
   // ----------------- Competition -----------------
-  async getCompetition(options?: {
-    where?: Partial<Pick<Competition, 'id' | 'status'>>;
-    relations?: string[];
-  }): Promise<Competition> {
+  async getCompetition(id: Competition['id']): Promise<Competition> {
     const competition = await this.competitionRepository.findOne({
-      where: options?.where,
-      relations: options?.relations,
+      where: { id, status: 'ACTIVE' },
+      relations: [
+        'earlybirdDiscountSnapshots',
+        'combinationDiscountSnapshots',
+        'divisions',
+        'divisions.priceSnapshots',
+      ],
     });
     if (!competition) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
     return competition;
@@ -49,43 +54,44 @@ export class ApplicationRepository {
   }
 
   // ----------------- Application -----------------
-  createApplication(
-    dto: Pick<
-      Application,
-      | 'userId'
-      | 'competitionId'
-      | 'earlybirdDiscountSnapshotId'
-      | 'combinationDiscountSnapshotId'
-      | 'participationDivisions'
-    > & {
-      playerSnapshot: PlayerSnapshot;
-    },
-  ): Application {
-    return this.applicationRepository.create(dto);
-  }
-
-  saveApplication(application: Partial<Application>): Promise<Application> {
+  async createApplication(dto: Pick<Application, 'userId' | 'competitionId'>): Promise<Application> {
+    const application = this.applicationRepository.create(dto);
     return this.applicationRepository.save(application);
   }
 
   // ----------------- PlayerSnapshot -----------------
-  createPlayerSnapshot(
-    dto: Pick<PlayerSnapshot, 'name' | 'gender' | 'birth' | 'phoneNumber' | 'belt' | 'network' | 'team' | 'masterName'>,
-  ): PlayerSnapshot {
-    return this.playerSnapshotRepository.create(dto);
+  async createPlayerSnapshot(
+    dto: Pick<
+      PlayerSnapshot,
+      'applicationId' | 'name' | 'gender' | 'birth' | 'phoneNumber' | 'belt' | 'network' | 'team' | 'masterName'
+    >,
+  ): Promise<PlayerSnapshot> {
+    const player = this.playerSnapshotRepository.create(dto);
+    return this.playerSnapshotRepository.save(player);
   }
 
   // ----------------- ParticipationDivision -----------------
-  createParticipationDivision(
-    dto: Pick<ParticipationDivision, 'participationDivisionSnapshots' | 'priceSnapshot'>,
-  ): ParticipationDivision {
-    return this.participationDivisionRepository.create(dto);
+  async createParticipationDivision(dto: Pick<ParticipationDivision, 'applicationId'>): Promise<ParticipationDivision> {
+    const participationDivision = this.participationDivisionRepository.create(dto);
+    return await this.participationDivisionRepository.save(participationDivision);
   }
 
   // ----------------- ParticipationDivisionSnapshot -----------------
-  createParticipationDivisionSnapshot(
-    dto: Pick<ParticipationDivisionSnapshot, 'division'>,
-  ): ParticipationDivisionSnapshot {
-    return this.participationDivisionSnapshotRepository.create(dto);
+  async createParticipationDivisionSnapshot(
+    dto: Pick<ParticipationDivisionSnapshot, 'participationDivisionId' | 'divisionId'>,
+  ): Promise<ParticipationDivisionSnapshot> {
+    const participationDivisionSnapshot = this.participationDivisionSnapshotRepository.create(dto);
+    return await this.participationDivisionSnapshotRepository.save(participationDivisionSnapshot);
+  }
+
+  // ----------------- PaymentSnapshot -----------------
+  async createPaymentSnapshot(
+    dto: Pick<
+      PaymentSnapshot,
+      'normalAmount' | 'earlybirdDiscountAmount' | 'combinationDiscountAmount' | 'totalAmount'
+    >,
+  ): Promise<PaymentSnapshot> {
+    const paymentSnapshot = this.paymentSnapshotRepository.create(dto);
+    return await this.paymentSnapshotRepository.save(paymentSnapshot);
   }
 }

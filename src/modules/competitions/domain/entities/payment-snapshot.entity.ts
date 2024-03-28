@@ -28,7 +28,7 @@ export class PaymentSnapshot {
    * @minimum 0
    */
   @Column('int', { unsigned: true })
-  earlbirdDiscountAmount: number;
+  earlybirdDiscountAmount: number;
 
   /**
    * - combination discount amount.
@@ -39,7 +39,7 @@ export class PaymentSnapshot {
   combinationDiscountAmount: number;
 
   /**
-   * - total amount = normalAmount - earlbirdDiscountAmount - combinationDiscountAmount.
+   * - total amount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount.
    * @type uint32
    * @minimum 0
    */

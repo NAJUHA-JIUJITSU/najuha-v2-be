@@ -9,7 +9,7 @@ import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entit
 import { CombinationDiscountSnapshot } from '../domain/entities/combination-discount-snapshot.entity';
 import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
 import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';
-import { DivisionFactory } from '../domain/division-factory.service';
+import { DivisionFactory } from '../domain/division.factory';
 
 @Injectable()
 export class CompetitionsAppService {

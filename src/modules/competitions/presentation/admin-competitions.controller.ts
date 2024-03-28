@@ -16,6 +16,7 @@ import { CreateDivisionsResDto } from '../structure/dto/response/create-division
 import { CreateEarlybirdDiscountSnapshotResDto } from '../structure/dto/response/create-earlybird-discount-snapshot.res.dto';
 import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';
 import { CreateCombinationDiscountSnapshotResDto } from '../structure/dto/response/create-combination-discount-snapshot.res.dto';
+import { UpdateCompetitionResDto } from '../structure/dto/response/update-competition.res.dto';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -79,7 +80,7 @@ export class AdminCompetitionsController {
   async updateCompetition(
     @TypedParam('id') id: Competition['id'],
     @TypedBody() dto: UpdateCompetitionReqDto,
-  ): Promise<ResponseForm<CompetitionResDto>> {
+  ): Promise<ResponseForm<UpdateCompetitionResDto>> {
     const competition = await this.competitionsAppService.updateCompetition(id, dto);
     return createResponseForm({ competition });
   }
@@ -96,7 +97,7 @@ export class AdminCompetitionsController {
   async updateCompetitionStatus(
     @TypedParam('id') id: Competition['id'],
     @TypedBody() dto: UpdateCompetitionStatusReqDto,
-  ): Promise<ResponseForm<CompetitionResDto>> {
+  ): Promise<ResponseForm<UpdateCompetitionResDto>> {
     const competition = await this.competitionsAppService.updateCompetitionStatus(id, dto.status);
     return createResponseForm({ competition });
   }

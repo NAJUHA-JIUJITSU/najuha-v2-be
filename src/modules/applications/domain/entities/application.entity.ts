@@ -5,7 +5,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -56,11 +55,13 @@ export class Application {
   paymentSnapshots: PaymentSnapshot[];
 
   /** - participation division. */
-  @OneToMany(() => ParticipationDivision, (participationDivision) => participationDivision.application)
+  @OneToMany(() => ParticipationDivision, (participationDivision) => participationDivision.application, {
+    cascade: true,
+  })
   participationDivisions: ParticipationDivision[];
 
   /** - earlybird discount snapshot id. */
-  @Column()
+  @Column({ nullable: true })
   earlybirdDiscountSnapshotId: EarlybirdDiscountSnapshot['id'];
 
   /** - earlybird discount snapshot. */
@@ -69,7 +70,7 @@ export class Application {
   earlybirdDiscountSnapshot: EarlybirdDiscountSnapshot;
 
   /** - combination discount snapshot id. */
-  @Column()
+  @Column({ nullable: true })
   combinationDiscountSnapshotId: PaymentSnapshot['id'];
 
   /** - combination discount snapshot. */
@@ -102,4 +103,17 @@ export class Application {
   //    * - cancel.
   //    */
   //   cancles: Cancel;
+
+  // ----------------- Mathods -----------------
+  calculatePaymentSnapshot() {
+    const normalAmount = this.participationDivisions.reduce((acc, cur) => {
+      return acc + cur.priceSnapshot.price;
+    }, 0);
+    console.log('normalAmount', normalAmount);
+    const earlybirdDiscountAmount = this.earlybirdDiscountSnapshot.discountAmount;
+    console.log('earlybirdDiscountAmount', earlybirdDiscountAmount);
+    const combinationDiscountAmount = 0;
+    const totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
+    return { normalAmount, earlybirdDiscountAmount, combinationDiscountAmount, totalAmount };
+  }
 }

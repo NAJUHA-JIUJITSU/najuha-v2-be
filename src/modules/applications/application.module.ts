@@ -9,6 +9,8 @@ import { ApplicationsAppService } from './application/applications.app.service';
 import { ApplicationRepository } from './application.repository';
 import { Competition } from '../competitions/domain/entities/competition.entity';
 import { User } from '../users/domain/entities/user.entity';
+import { ApplicationFactory } from './domain/application.factory';
+import { PaymentSnapshot } from '../competitions/domain/entities/payment-snapshot.entity';
 
 @Module({
   imports: [
@@ -19,9 +21,10 @@ import { User } from '../users/domain/entities/user.entity';
       ParticipationDivision,
       ParticipationDivisionSnapshot,
       Competition,
+      PaymentSnapshot,
     ]),
   ],
   controllers: [UserApplicationsController],
-  providers: [ApplicationsAppService, ApplicationRepository],
+  providers: [ApplicationsAppService, ApplicationRepository, ApplicationFactory],
 })
 export class ApplicationModule {}

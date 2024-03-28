@@ -6,7 +6,7 @@ import { CreateApplicationReqDto } from '../../applications/structure/dto/reques
 import { UpdateApplicationReqDto } from '../../applications/structure/dto/request/update-application.req.dto';
 import { Application } from '../domain/entities/application.entity';
 import { ApplicationsAppService } from '../application/applications.app.service';
-import { CreateApplicationResDto } from '../structure/dto/response/create-application.res.dto';
+import { CreateApplicationInReadyStatusResDto } from '../structure/dto/response/create-application.res.dto';
 
 @Controller('user/applications')
 export class UserApplicationsController {
@@ -24,7 +24,7 @@ export class UserApplicationsController {
   async createCompetitionApplication(
     @Req() req: Request,
     @TypedBody() dto: CreateApplicationReqDto,
-  ): Promise<ResponseForm<CreateApplicationResDto>> {
+  ): Promise<ResponseForm<CreateApplicationInReadyStatusResDto>> {
     const application = await this.ApplicationAppService.createApplication(req['userId'], dto);
     return createResponseForm({ application });
   }
