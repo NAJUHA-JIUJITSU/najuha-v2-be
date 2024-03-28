@@ -7,6 +7,7 @@ import { PlayerSnapshot } from './entities/player-snapshot.entity';
 import { ParticipationDivision } from './entities/participation-divsion.entity';
 import { Division } from 'src/modules/competitions/domain/entities/division.entity';
 
+// TODO: Transaction
 @Injectable()
 export class ApplicationFactory {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
@@ -17,7 +18,6 @@ export class ApplicationFactory {
 
     competition.validateExistDivisions(dto.divisionIds);
 
-    // const application = await this.createApplication(userId, competition, dto);
     const application = await this.applicationRepository.createApplication({
       userId,
       competitionId: competition.id,
@@ -29,7 +29,7 @@ export class ApplicationFactory {
       competition.divisions
         .filter((division) => dto.divisionIds.includes(division.id))
         .map(async (division) => {
-          const participationDivision = await this.createParticipationDivision(application, division.id);
+          const participationDivision = await this.createParticipationDivision(application.id, division.id);
           return participationDivision;
         }),
     );
@@ -58,11 +58,11 @@ export class ApplicationFactory {
   }
 
   private async createParticipationDivision(
-    application: Application,
+    applicationId: Application['id'],
     divisionId: Division['id'],
   ): Promise<ParticipationDivision> {
     const participationDivision = await this.applicationRepository.createParticipationDivision({
-      applicationId: application.id,
+      applicationId,
     });
     const participationDivisionSnapshot = await this.applicationRepository.createParticipationDivisionSnapshot({
       participationDivisionId: participationDivision.id,

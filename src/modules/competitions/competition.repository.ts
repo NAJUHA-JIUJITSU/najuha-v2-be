@@ -58,7 +58,7 @@ export class CompetitionRepository {
   // ----------------- EarlybirdDiscountSnapshot -----------------
   async createEarlybirdDiscount(
     id: Competition['id'],
-    dto: Pick<EarlybirdDiscountSnapshot, 'earlyBirdStartDate' | 'earlyBirdEndDate' | 'discountAmount'>,
+    dto: Pick<EarlybirdDiscountSnapshot, 'earlybirdStartDate' | 'earlybirdEndDate' | 'discountAmount'>,
   ): Promise<EarlybirdDiscountSnapshot> {
     const earlybirdDiscountSnapshot = this.earlybirdDiscountSnapshotRepository.create(dto);
     earlybirdDiscountSnapshot.competitionId = id;

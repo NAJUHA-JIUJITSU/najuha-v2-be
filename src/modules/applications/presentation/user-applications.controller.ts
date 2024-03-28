@@ -7,6 +7,7 @@ import { UpdateApplicationReqDto } from '../../applications/structure/dto/reques
 import { Application } from '../domain/entities/application.entity';
 import { ApplicationsAppService } from '../application/applications.app.service';
 import { CreateApplicationInReadyStatusResDto } from '../structure/dto/response/create-application.res.dto';
+import { getExpectedPaymentResDto } from '../structure/dto/response/get-expected-payment.res.dto';
 
 @Controller('user/applications')
 export class UserApplicationsController {
@@ -73,5 +74,20 @@ export class UserApplicationsController {
     @TypedParam('applicationId') applicationId: Application['id'],
   ): Promise<ResponseForm<void>> {
     return createResponseForm();
+  }
+  /**
+   * u-6-5 get expected payment.
+   * - RoleLevel: USER.
+   *
+   * @tag u-6 applications
+   * @returns expected payment
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Get('/:applicationId/expected-payment')
+  async getExpectedPayment(
+    @TypedParam('applicationId') applicationId: Application['id'],
+  ): Promise<ResponseForm<getExpectedPaymentResDto>> {
+    const expectedPayment = await this.ApplicationAppService.getExpectedPayment(applicationId);
+    return createResponseForm({ expectedPayment });
   }
 }

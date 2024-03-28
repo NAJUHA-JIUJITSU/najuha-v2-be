@@ -24,13 +24,13 @@ export class EarlybirdDiscountSnapshot {
    * - 얼리버드 시작일
    */
   @Column('timestamp')
-  earlyBirdStartDate: Date | string;
+  earlybirdStartDate: Date | string;
 
   /**
    * - 얼리버드 마감일
    */
   @Column('timestamp')
-  earlyBirdEndDate: Date | string;
+  earlybirdEndDate: Date | string;
 
   /**
    * - 얼리버드 할인 가격 ex) 10000

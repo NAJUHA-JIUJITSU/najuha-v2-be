@@ -4,6 +4,7 @@ import { CreateApplicationReqDto } from '../structure/dto/request/create-applica
 import { ApplicationRepository } from '../application.repository';
 import { Application } from '../domain/entities/application.entity';
 import { ApplicationFactory } from '../domain/application.factory';
+import { IExpectedPayment } from '../structure/interface/expectedPayment.interface';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -14,10 +15,12 @@ export class ApplicationsAppService {
 
   // TODO: Transaction
   async createApplication(userId: User['id'], dto: CreateApplicationReqDto): Promise<Application> {
-    const application = await this.applicationFactory.create(userId, dto);
-    // const expectedPayment = application.calculatePaymentSnapshot();
-    // TODO: expectedPayment 어떻게 반환할지 고민
-    console.log('application', application);
-    return application;
+    return await this.applicationFactory.create(userId, dto);
+  }
+
+  async getExpectedPayment(applicationId: Application['id']): Promise<IExpectedPayment> {
+    const application = await this.applicationRepository.getApplication(applicationId);
+    const competition = await this.applicationRepository.getCompetition(application.competitionId);
+    return competition.calculateExpectedPayment(application);
   }
 }

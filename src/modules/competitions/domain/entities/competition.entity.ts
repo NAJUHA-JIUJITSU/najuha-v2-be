@@ -4,6 +4,8 @@ import { EarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.entity'
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 import { CombinationDiscountSnapshot } from './combination-discount-snapshot.entity';
 import { Application } from '../../../applications/domain/entities/application.entity';
+import { IExpectedPayment } from 'src/modules/applications/structure/interface/expectedPayment.interface';
+import e from 'express';
 
 @Entity('competition')
 export class Competition {
@@ -177,7 +179,7 @@ export class Competition {
           .join(', ')}`,
       );
     }
-    this.divisions = [...(this.divisions || []), ...divisions];
+    this.divisions = [...this.divisions, ...divisions];
   }
 
   validateExistDivisions(divisonIds: Division['id'][]): void {
@@ -190,5 +192,48 @@ export class Competition {
         `not found divisionIds: ${notExistDivisions.join(', ')}`,
       );
     }
+  }
+
+  calculateExpectedPayment(application: Application): IExpectedPayment {
+    const divisions = this.divisions.filter((division) => {
+      return application.participationDivisions.some(
+        (participationDivision) =>
+          division.id === participationDivision.participationDivisionSnapshots.at(-1)?.divisionId,
+      );
+    });
+
+    const normalAmount = this.calculateNormalAmount(divisions);
+
+    const earlybirdDiscountAmount = this.calculateEarlybirdDiscountAmount(this.earlybirdDiscountSnapshots);
+
+    const combinationDiscountAmount = this.calculateCombinationDiscountAmount(divisions);
+    const totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
+    return { normalAmount, earlybirdDiscountAmount, combinationDiscountAmount, totalAmount };
+  }
+
+  private calculateNormalAmount(divisions: Division[]): number {
+    return divisions.reduce((acc, division) => {
+      acc += division.priceSnapshots.at(-1)?.price || 0;
+      return acc;
+    }, 0);
+  }
+
+  private calculateEarlybirdDiscountAmount(
+    earlybirdDiscountSnapshots: EarlybirdDiscountSnapshot[] | null,
+    currentTime: Date = new Date(),
+  ): number {
+    if (earlybirdDiscountSnapshots === null) return 0;
+    if (earlybirdDiscountSnapshots.length === 0) return 0;
+    const earlybirdDiscountSnapshot = earlybirdDiscountSnapshots[earlybirdDiscountSnapshots.length - 1];
+
+    if (currentTime < earlybirdDiscountSnapshot.earlybirdStartDate) return 0;
+    if (currentTime > earlybirdDiscountSnapshot.earlybirdEndDate) return 0;
+
+    return earlybirdDiscountSnapshot.discountAmount;
+  }
+
+  private calculateCombinationDiscountAmount(divisions: Division[]): number {
+    //TODO: implement combination discount amount calculation
+    return 0;
   }
 }

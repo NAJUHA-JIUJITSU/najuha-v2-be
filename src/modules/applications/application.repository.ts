@@ -34,10 +34,10 @@ export class ApplicationRepository {
     const competition = await this.competitionRepository.findOne({
       where: { id, status: 'ACTIVE' },
       relations: [
-        'earlybirdDiscountSnapshots',
-        'combinationDiscountSnapshots',
         'divisions',
         'divisions.priceSnapshots',
+        'earlybirdDiscountSnapshots',
+        'combinationDiscountSnapshots',
       ],
     });
     if (!competition) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
@@ -57,6 +57,15 @@ export class ApplicationRepository {
   async createApplication(dto: Pick<Application, 'userId' | 'competitionId'>): Promise<Application> {
     const application = this.applicationRepository.create(dto);
     return this.applicationRepository.save(application);
+  }
+
+  async getApplication(id: Application['id']): Promise<Application> {
+    const application = await this.applicationRepository.findOne({
+      where: { id },
+      relations: ['participationDivisions', 'participationDivisions.participationDivisionSnapshots'],
+    });
+    if (!application) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Application not found');
+    return application;
   }
 
   // ----------------- PlayerSnapshot -----------------

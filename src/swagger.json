@@ -2014,6 +2014,61 @@
         ],
         "x-nestia-method": "DELETE"
       }
+    },
+    "/user/applications/{applicationId}/expected-payment": {
+      "get": {
+        "tags": [
+          "u-6 applications"
+        ],
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "expected payment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormgetExpectedPaymentResDto"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-6-5 get expected payment",
+        "description": "u-6-5 get expected payment.\n- RoleLevel: USER.",
+        "x-nestia-namespace": "user.applications.expected-payment.getExpectedPayment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-6 applications",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "expected payment",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
     }
   },
   "components": {
@@ -3790,7 +3845,7 @@
             ],
             "description": "- 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다."
           },
-          "earlyBirdStartDate": {
+          "earlybirdStartDate": {
             "oneOf": [
               {
                 "type": "string",
@@ -3802,7 +3857,7 @@
             ],
             "description": "- 얼리버드 시작일"
           },
-          "earlyBirdEndDate": {
+          "earlybirdEndDate": {
             "oneOf": [
               {
                 "type": "string",
@@ -3828,8 +3883,8 @@
         "required": [
           "id",
           "createdAt",
-          "earlyBirdStartDate",
-          "earlyBirdEndDate",
+          "earlybirdStartDate",
+          "earlybirdEndDate",
           "discountAmount",
           "competitionId"
         ]
@@ -4928,7 +4983,7 @@
       "CreateEarlybirdDiscountSnapshotReqDto": {
         "type": "object",
         "properties": {
-          "earlyBirdStartDate": {
+          "earlybirdStartDate": {
             "oneOf": [
               {
                 "type": "string",
@@ -4940,7 +4995,7 @@
             ],
             "description": "- 얼리버드 시작일"
           },
-          "earlyBirdEndDate": {
+          "earlybirdEndDate": {
             "oneOf": [
               {
                 "type": "string",
@@ -4960,8 +5015,8 @@
         },
         "nullable": false,
         "required": [
-          "earlyBirdStartDate",
-          "earlyBirdEndDate",
+          "earlybirdStartDate",
+          "earlybirdEndDate",
           "discountAmount"
         ]
       },
@@ -5511,6 +5566,67 @@
         "required": [
           "isSuccess",
           "code"
+        ]
+      },
+      "ResponseFormgetExpectedPaymentResDto": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/getExpectedPaymentResDto"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "getExpectedPaymentResDto": {
+        "type": "object",
+        "properties": {
+          "expectedPayment": {
+            "$ref": "#/components/schemas/IExpectedPayment"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "expectedPayment"
+        ]
+      },
+      "IExpectedPayment": {
+        "type": "object",
+        "properties": {
+          "normalAmount": {
+            "type": "number"
+          },
+          "earlybirdDiscountAmount": {
+            "type": "number"
+          },
+          "combinationDiscountAmount": {
+            "type": "number"
+          },
+          "totalAmount": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "normalAmount",
+          "earlybirdDiscountAmount",
+          "combinationDiscountAmount",
+          "totalAmount"
         ]
       }
     },
