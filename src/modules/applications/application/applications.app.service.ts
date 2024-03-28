@@ -15,12 +15,18 @@ export class ApplicationsAppService {
 
   // TODO: Transaction
   async createApplication(userId: User['id'], dto: CreateApplicationReqDto): Promise<Application> {
+    // TODO: 성별, 나이 확인
     return await this.applicationFactory.create(userId, dto);
   }
 
   async getExpectedPayment(applicationId: Application['id']): Promise<IExpectedPayment> {
     const application = await this.applicationRepository.getApplication(applicationId);
+    const participationDivisionIds = application.participationDivisions.map((participationDivision) => {
+      return participationDivision.participationDivisionSnapshots[
+        participationDivision.participationDivisionSnapshots.length - 1
+      ].divisionId;
+    });
     const competition = await this.applicationRepository.getCompetition(application.competitionId);
-    return competition.calculateExpectedPayment(application);
+    return competition.calculateExpectedPayment(participationDivisionIds);
   }
 }

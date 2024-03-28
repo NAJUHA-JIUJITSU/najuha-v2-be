@@ -1,5 +1,7 @@
+import { Division } from '../domain/entities/division.entity';
+
 export interface ICombinationUnit {
-  uniform: 'GI' | 'NOGI';
+  uniform: Division['uniform'];
   weight: 'WEIGHT' | 'ABSOLUTE';
 }
 
