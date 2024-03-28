@@ -3,7 +3,6 @@ import { BusinessException, CommonErrorMap } from 'src/common/response/errorResp
 import { Repository } from 'typeorm';
 import { Competition } from './domain/entities/competition.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Division } from './domain/entities/division.entity';
 import { EarlybirdDiscountSnapshot } from './domain/entities/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshot } from './domain/entities/combination-discount-snapshot.entity';
 
@@ -12,8 +11,6 @@ export class CompetitionRepository {
   constructor(
     @InjectRepository(Competition)
     private readonly competitionRepository: Repository<Competition>,
-    @InjectRepository(Division)
-    private readonly divisionRepository: Repository<Division>,
     @InjectRepository(EarlybirdDiscountSnapshot)
     private readonly earlybirdDiscountSnapshotRepository: Repository<EarlybirdDiscountSnapshot>,
     @InjectRepository(CombinationDiscountSnapshot)

@@ -38,6 +38,7 @@ export class ParticipationDivision {
   @OneToMany(
     () => ParticipationDivisionSnapshot,
     (participationDivisionSnapshot) => participationDivisionSnapshot.participationDivision,
+    { cascade: true },
   )
   participationDivisionSnapshots: ParticipationDivisionSnapshot[];
 

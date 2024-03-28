@@ -13,10 +13,20 @@ export class ApplicationsAppService {
     private readonly applicationFactory: ApplicationFactory,
   ) {}
 
-  // TODO: Transaction
   async createApplication(userId: User['id'], dto: CreateApplicationReqDto): Promise<Application> {
-    // TODO: 성별, 나이 확인
-    return await this.applicationFactory.create(userId, dto);
+    const user = await this.applicationRepository.getUser(userId);
+    const competition = await this.applicationRepository.getCompetition(dto.competitionId);
+
+    competition.validateExistDivisions(dto.divisionIds);
+
+    // TODO: check gender
+    // competition.validateGender(user)
+    // TODO: check age
+    // competition.validateAge(user);
+
+    let application = await this.applicationFactory.create(dto, user, competition);
+    application = await this.applicationRepository.saveApplication(application);
+    return application;
   }
 
   async getExpectedPayment(applicationId: Application['id']): Promise<IExpectedPayment> {
