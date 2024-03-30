@@ -1,4 +1,4 @@
-import { Division } from '../domain/entities/division.entity';
+import { Division } from '../../../infrastructure/database/entities/competition/division.entity';
 
 export interface ICombinationUnit {
   uniform: Division['uniform'];

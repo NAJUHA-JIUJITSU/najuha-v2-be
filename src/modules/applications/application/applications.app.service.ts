@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/modules/users/domain/entities/user.entity';
 import { CreateApplicationReqDto } from '../structure/dto/request/create-application.req.dto';
 import { ApplicationRepository } from '../application.repository';
-import { Application } from '../domain/entities/application.entity';
+import { Application } from '../../../infrastructure/database/entities/application/application.entity';
 import { ApplicationFactory } from '../domain/application.factory';
-import { IExpectedPayment } from '../structure/interface/expectedPayment.interface';
+import { IExpectedPayment } from '../domain/expected-payment.interface';
+import { IUser } from 'src/modules/users/domain/user.interface';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -13,7 +13,7 @@ export class ApplicationsAppService {
     private readonly applicationFactory: ApplicationFactory,
   ) {}
 
-  async createApplication(userId: User['id'], dto: CreateApplicationReqDto): Promise<Application> {
+  async createApplication(userId: IUser['id'], dto: CreateApplicationReqDto): Promise<Application> {
     const user = await this.applicationRepository.getUser(userId);
     const competition = await this.applicationRepository.getCompetition(dto.competitionId);
 

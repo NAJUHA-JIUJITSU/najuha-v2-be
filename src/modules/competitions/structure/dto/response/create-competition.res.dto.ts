@@ -1,4 +1,4 @@
-import { ICompetition } from '../../interface/competition.interface';
+import { ICompetition } from '../../../domain/competition.interface';
 
 export interface CreateCompetitionResDto {
   competition: ICompetition;

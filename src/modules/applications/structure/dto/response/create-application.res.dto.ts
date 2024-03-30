@@ -1,7 +1,7 @@
-import { IApplication } from '../../interface/application.interface';
-import { IPlayerSnapshot } from '../../interface/player-snapshot.interface';
-import { IParticipationDivision } from '../../interface/participation-division.interface';
-import { IParticipationDivisionSnapshot } from '../../interface/participation-division-snapshot.interface';
+import { IApplication } from '../../../domain/application.interface';
+import { IPlayerSnapshot } from '../../../domain/player-snapshot.interface';
+import { IParticipationDivision } from '../../../domain/participation-division.interface';
+import { IParticipationDivisionSnapshot } from '../../../domain/participation-division-snapshot.interface';
 
 interface ParticipationDivisionSnapshotInReadyStatus {
   id: IParticipationDivisionSnapshot['id'];

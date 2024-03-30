@@ -1,6 +1,6 @@
-import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
-import { Division } from 'src/modules/competitions/domain/entities/division.entity';
-import { PlayerSnapshot } from 'src/modules/applications/domain/entities/player-snapshot.entity';
+import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
+import { Division } from 'src/infrastructure/database/entities/competition/division.entity';
+import { PlayerSnapshot } from 'src/infrastructure/database/entities/application/player-snapshot.entity';
 
 export interface CreateApplicationReqDto {
   competitionId: Competition['id'];

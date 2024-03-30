@@ -1,4 +1,4 @@
-import { IUser } from 'src/modules/users/structure/interface/user.interface';
+import { IUser } from 'src/modules/users/domain/user.interface';
 
 export interface TemporaryUserResDto {
   user: {

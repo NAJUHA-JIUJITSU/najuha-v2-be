@@ -9,7 +9,7 @@ import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoet
 import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
 import { UpdateCompetitionStatusReqDto } from '../structure/dto/request/update-competition-status.req.dto';
 import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
-import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
+import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
 import { CreateCompetitionResDto } from '../structure/dto/response/create-competition.res.dto';
 import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
 import { CreateDivisionsResDto } from '../structure/dto/response/create-divisions.res.dto';

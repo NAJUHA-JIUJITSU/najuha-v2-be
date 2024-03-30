@@ -1,4 +1,4 @@
-import { IDivision } from '../../interface/division.interface';
+import { IDivision } from '../../../domain/division.interface';
 
 export interface CreateDivisionsResDto {
   divisions: IDivision[];

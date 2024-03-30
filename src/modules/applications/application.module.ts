@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Application } from './domain/entities/application.entity';
-import { ParticipationDivision } from './domain/entities/participation-divsion.entity';
-import { PlayerSnapshot } from './domain/entities/player-snapshot.entity';
-import { ParticipationDivisionSnapshot } from './domain/entities/participation-division-snapshot.entity';
+import { Application } from '../../infrastructure/database/entities/application/application.entity';
+import { ParticipationDivision } from '../../infrastructure/database/entities/application/participation-divsion.entity';
+import { PlayerSnapshot } from '../../infrastructure/database/entities/application/player-snapshot.entity';
+import { ParticipationDivisionSnapshot } from '../../infrastructure/database/entities/application/participation-division-snapshot.entity';
 import { UserApplicationsController } from './presentation/user-applications.controller';
 import { ApplicationsAppService } from './application/applications.app.service';
 import { ApplicationRepository } from './application.repository';
-import { Competition } from '../competitions/domain/entities/competition.entity';
-import { User } from '../users/domain/entities/user.entity';
+import { Competition } from '../../infrastructure/database/entities/competition/competition.entity';
+import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
 import { ApplicationFactory } from './domain/application.factory';
-import { PaymentSnapshot } from '../competitions/domain/entities/payment-snapshot.entity';
+import { PaymentSnapshot } from '../../infrastructure/database/entities/competition/payment-snapshot.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      User,
+      UserEntity,
       Application,
       PlayerSnapshot,
       ParticipationDivision,

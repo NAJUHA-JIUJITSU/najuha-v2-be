@@ -1,9 +1,6 @@
-import { ICompetition } from '../../interface/competition.interface';
-import { IEarlybirdDiscountSnapshot } from '../../interface/earlybird-discount-snapshot.interface';
+import { ICompetition } from '../../../domain/competition.interface';
 
-interface SCompetition extends ICompetition {
-  earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
-}
+interface SCompetition extends Omit<ICompetition, 'divisions' | 'combinationDiscountSnapshots'> {}
 
 export interface FindCompetitionsResDto {
   competitions: SCompetition[];

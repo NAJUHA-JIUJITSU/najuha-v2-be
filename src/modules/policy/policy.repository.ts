@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Policy } from './domain/entities/policy.entity';
+import { Policy } from '../../infrastructure/database/entities/policy/policy.entity';
 
 @Injectable()
 export class PolicyRepository {

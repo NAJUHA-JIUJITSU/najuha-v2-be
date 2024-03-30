@@ -1,16 +1,19 @@
 import { FindOneOptions, Repository } from 'typeorm';
-import { User } from '../users/domain/entities/user.entity';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Policy } from '../policy/domain/entities/policy.entity';
-import { PolicyConsent } from '../users/domain/entities/policy-consent.entity';
+import { Policy } from '../../infrastructure/database/entities/policy/policy.entity';
+import { PolicyConsent } from '../../infrastructure/database/entities/user/policy-consent.entity';
+import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
+import { IRegisterUser } from './domain/register-user.interface';
+import { IPolicy } from '../policy/domain/policy.interface';
+import { IPolicyConsent } from './domain/policy-consent.interface';
 
 @Injectable()
 export class RegisterRepository {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(Policy)
     private readonly policyRepository: Repository<Policy>,
     @InjectRepository(PolicyConsent)
@@ -18,23 +21,23 @@ export class RegisterRepository {
   ) {}
 
   // ------------------ User ------------------
-  async findUser({ where, relations }: FindOneOptions<User>): Promise<User | null> {
-    return await this.userRepository.findOne({ where, relations });
+  async findUser({ where, relations }: FindOneOptions<IRegisterUser>): Promise<IRegisterUser | null> {
+    return this.userRepository.findOne({ where, relations });
   }
 
-  async getUser({ where, relations }: FindOneOptions<User>): Promise<User> {
-    const user = await this.userRepository.findOne({ where, relations });
+  async getUser(options?: { where: Partial<Pick<IRegisterUser, 'id'>>; relations?: string[] }): Promise<IRegisterUser> {
+    const user = await this.userRepository.findOne({ where: options?.where, relations: options?.relations });
     if (!user) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
     return user;
   }
 
-  async updateUser(dto: Pick<User, 'id'> & Partial<User>): Promise<void> {
+  async updateUser(dto: Pick<IRegisterUser, 'id'> & Partial<IRegisterUser>): Promise<void> {
     const result = await this.userRepository.update({ id: dto.id }, dto);
     if (!result.affected) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
   }
 
   // ------------------ Policy ------------------
-  async findAllTypesOfLatestPolicies(): Promise<Policy[]> {
+  async findAllTypesOfLatestPolicies(): Promise<IPolicy[]> {
     return this.policyRepository
       .createQueryBuilder('policy')
       .distinctOn(['policy.type'])
@@ -43,8 +46,12 @@ export class RegisterRepository {
       .getMany();
   }
 
+  async findAllMandatoryPolicies(): Promise<IPolicy[]> {
+    return this.findAllTypesOfLatestPolicies().then((policies) => policies.filter((policy) => policy.isMandatory));
+  }
+
   // ------------------ PolicyConsent ------------------
-  async createPolicyConsents(dto: PolicyConsent[]): Promise<PolicyConsent[]> {
+  async createPolicyConsents(dto: IPolicyConsent[]): Promise<IPolicyConsent[]> {
     const policyConsent = this.policyConsentRepository.create(dto);
     return this.policyConsentRepository.save(policyConsent);
   }

@@ -1,18 +1,17 @@
-import { ICombinationDiscountSnapshot } from '../../interface/combination-discount-snapshot.interface';
-import { IDivision } from '../../interface/division.interface';
-import { IEarlybirdDiscountSnapshot } from '../../interface/earlybird-discount-snapshot.interface';
-import { IPriceSnapshot } from '../../interface/price-snapshot.interface';
+import { ICompetition } from 'src/modules/competitions/domain/competition.interface';
+import { IDivision } from '../../../domain/division.interface';
+import { IPriceSnapshot } from '../../../domain/price-snapshot.interface';
 
 interface SDivision extends IDivision {
   priceSnapshots: IPriceSnapshot[];
 }
 
-interface SCompetition {
-  divisions: SDivision[];
-  earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
-  combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
-}
+// interface SCompetition {
+//   divisions: SDivision[];
+//   earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
+//   combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
+// }
 
 export interface CompetitionResDto {
-  competition: SCompetition;
+  competition: ICompetition;
 }

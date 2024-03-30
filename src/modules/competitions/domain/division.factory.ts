@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { Division } from 'src/infrastructure/database/entities/competition/division.entity';
 import { IDivisionPack } from '../structure/division-pack.interface';
-import { PriceSnapshot } from 'src/modules/competitions/domain/entities/price-snapshot.entity';
+import { PriceSnapshot } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 

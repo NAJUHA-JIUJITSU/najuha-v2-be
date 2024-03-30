@@ -1,5 +1,5 @@
-import { IDivision } from 'src/modules/competitions/structure/interface/division.interface';
-import { IPlayerSnapshot } from '../../interface/player-snapshot.interface';
+import { IDivision } from 'src/modules/competitions/domain/division.interface';
+import { IPlayerSnapshot } from '../../../domain/player-snapshot.interface';
 
 export interface UpdateApplicationReqDto {
   dvisionIds: IDivision['id'][];

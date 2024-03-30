@@ -5,9 +5,9 @@ import { AuthErrorMap, BusinessException } from 'src/common/response/errorRespon
 import { UserRepository } from 'src/modules/users/user.repository';
 import { SnsAuthClient } from 'src/infrastructure/sns-auth-client/sns-auth.client';
 import { AuthTokenDomainService } from '../domain/auth-token.domain.service';
-import { User } from 'src/modules/users/domain/entities/user.entity';
 import { IAuthTokens } from '../structure/auth-tokens.interface';
 import appEnv from 'src/common/app-env';
+import { IUser } from 'src/modules/users/domain/user.interface';
 
 @Injectable()
 export class AuthAppService {
@@ -38,7 +38,7 @@ export class AuthAppService {
     return authTokens;
   }
 
-  async acquireAdminRole(userId: User['id']): Promise<IAuthTokens> {
+  async acquireAdminRole(userId: IUser['id']): Promise<IAuthTokens> {
     const user = await this.userRepository.getUser({ where: { id: userId } });
 
     const isCurrentAdmin = appEnv.adminCredentials.some(

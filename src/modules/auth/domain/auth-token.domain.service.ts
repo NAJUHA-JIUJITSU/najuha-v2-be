@@ -2,9 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import Redis from 'ioredis';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
-import { User } from 'src/modules/users/domain/entities/user.entity';
 import appEnv from 'src/common/app-env';
 import { IAuthTokens } from '../structure/auth-tokens.interface';
+import { IUser } from 'src/modules/users/domain/user.interface';
 
 @Injectable()
 export class AuthTokenDomainService {
@@ -13,7 +13,7 @@ export class AuthTokenDomainService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createAuthTokens(userId: User['id'], userRole: User['role']): Promise<IAuthTokens> {
+  async createAuthTokens(userId: IUser['id'], userRole: IUser['role']): Promise<IAuthTokens> {
     const accessToken = this.createAccessToken(userId, userRole);
     const refreshToken = this.createRefreshToken(userId, userRole);
 
@@ -27,7 +27,7 @@ export class AuthTokenDomainService {
     };
   }
 
-  private createAccessToken(userId: User['id'], userRole: User['role']): string {
+  private createAccessToken(userId: IUser['id'], userRole: IUser['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appEnv.jwtAccessTokenSecret,
@@ -35,7 +35,7 @@ export class AuthTokenDomainService {
     });
   }
 
-  private createRefreshToken(userId: User['id'], userRole: User['role']): string {
+  private createRefreshToken(userId: IUser['id'], userRole: IUser['role']): string {
     const payload = { userId, userRole };
     return this.jwtService.sign(payload, {
       secret: appEnv.jwtRefreshTokenSecret,
@@ -51,7 +51,7 @@ export class AuthTokenDomainService {
    * 오류 발생시 redis에 저장된 refreshToken 삭제(로그아웃 처리)
    */
   async verifyRefreshToken(refreshToken: string): Promise<any> {
-    let payload;
+    let payload; // TODO: any 타입 수정 필요
 
     try {
       payload = this.jwtService.verify(refreshToken, {

@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Repository } from 'typeorm';
-import { Competition } from '../competitions/domain/entities/competition.entity';
-import { Application } from './domain/entities/application.entity';
+import { Competition } from '../../infrastructure/database/entities/competition/competition.entity';
+import { Application } from '../../infrastructure/database/entities/application/application.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../users/domain/entities/user.entity';
+import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
+import { IUser } from '../users/domain/user.interface';
 
 @Injectable()
 export class ApplicationRepository {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(Application)
     private readonly applicationRepository: Repository<Application>,
     @InjectRepository(Competition)
@@ -18,7 +19,7 @@ export class ApplicationRepository {
   ) {}
 
   // ----------------- User -----------------
-  async getUser(userId: User['id']): Promise<User> {
+  async getUser(userId: IUser['id']): Promise<IUser> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
     return user;
