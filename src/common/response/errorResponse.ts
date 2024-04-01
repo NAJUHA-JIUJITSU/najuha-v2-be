@@ -205,15 +205,22 @@ export type COMPETITIONS_DIVISION_DUPLICATED = ErrorResponse & {
   result: '대회 부문이 중복되었습니다.';
 };
 
-export type COMPETITIONS_DIVISION_NOT_FOUND = ErrorResponse & {
-  isSuccess: false;
-  status: HttpStatus.BAD_REQUEST;
-  code: 6002;
-  result: '대회 부문을 찾을 수 없습니다.';
-};
-
 export const CompetitionsErrorMap = {
   COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(),
   COMPETITIONS_DIVISION_DUPLICATED: typia.random<COMPETITIONS_DIVISION_DUPLICATED>(),
-  COMPETITIONS_DIVISION_NOT_FOUND: typia.random<COMPETITIONS_DIVISION_NOT_FOUND>(),
+};
+
+/** ----------------------------------------------------------------------------
+ * Applications 7000 ~ 7999
+ */
+
+export type APPLICATIONS_DIVISION_NOT_FOUND = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7000;
+  result: '신청 부문을 찾을 수 없습니다.';
+};
+
+export const ApplicationsErrorMap = {
+  APPLICATIONS_DIVISION_NOT_FOUND: typia.random<APPLICATIONS_DIVISION_NOT_FOUND>(),
 };

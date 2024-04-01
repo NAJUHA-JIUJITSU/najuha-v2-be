@@ -2,12 +2,12 @@ import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { CreateApplicationReqDto } from '../../applications/structure/dto/request/create-application.req.dto';
-import { UpdateApplicationReqDto } from '../../applications/structure/dto/request/update-application.req.dto';
-import { Application } from '../domain/entities/application.entity';
+import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
+import { UpdateApplicationReqDto } from '../dto/request/update-application.req.dto';
 import { ApplicationsAppService } from '../application/applications.app.service';
-import { CreateApplicationInReadyStatusResDto } from '../structure/dto/response/create-application.res.dto';
-import { getExpectedPaymentResDto } from '../structure/dto/response/get-expected-payment.res.dto';
+import { CreateApplicationInReadyStatusResDto } from '../dto/response/create-application.res.dto';
+import { getExpectedPaymentResDto } from '../dto/response/get-expected-payment.res.dto';
+import { IApplication } from '../domain/structure/application.interface';
 
 @Controller('user/applications')
 export class UserApplicationsController {
@@ -40,7 +40,7 @@ export class UserApplicationsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:applicationId')
   async getCompetitionApplication(
-    @TypedParam('applicationId') applicationId: Application['id'],
+    @TypedParam('applicationId') applicationId: IApplication['id'],
   ): Promise<ResponseForm<any>> {
     return createResponseForm({});
   }
@@ -55,7 +55,7 @@ export class UserApplicationsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/:applicationId')
   async updateCompetitionApplication(
-    @TypedParam('applicationId') applicationId: Application['id'],
+    @TypedParam('applicationId') applicationId: IApplication['id'],
     @TypedBody() dto: UpdateApplicationReqDto,
   ): Promise<ResponseForm<any>> {
     return createResponseForm({});
@@ -71,7 +71,7 @@ export class UserApplicationsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:applicationId')
   async deleteCompetitionApplication(
-    @TypedParam('applicationId') applicationId: Application['id'],
+    @TypedParam('applicationId') applicationId: IApplication['id'],
   ): Promise<ResponseForm<void>> {
     return createResponseForm();
   }
@@ -85,7 +85,7 @@ export class UserApplicationsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:applicationId/expected-payment')
   async getExpectedPayment(
-    @TypedParam('applicationId') applicationId: Application['id'],
+    @TypedParam('applicationId') applicationId: IApplication['id'],
   ): Promise<ResponseForm<getExpectedPaymentResDto>> {
     const expectedPayment = await this.ApplicationAppService.getExpectedPayment(applicationId);
     return createResponseForm({ expectedPayment });

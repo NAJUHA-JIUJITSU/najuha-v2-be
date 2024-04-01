@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePolicyReqDto } from '../structure/dto/request/create-policy.req.dto';
+import { CreatePolicyReqDto } from '../dto/request/create-policy.req.dto';
 import { PolicyRepository } from '../policy.repository';
-import { FindPoliciesResDto } from '../structure/dto/response/find-policies.res.dto';
-import { FindPolicyResDto } from '../structure/dto/response/find-policy.res.dto';
-import { PolicyResDto } from '../structure/dto/response/policy.res.dto';
-import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
+import { IPolicy } from '../domain/structure/policy.interface';
 
 @Injectable()
 export class PolicyAppService {
   constructor(private readonly policyRepository: PolicyRepository) {}
 
-  async createPolicy(CreatePolicyReqDto: CreatePolicyReqDto): Promise<Policy> {
+  async createPolicy(CreatePolicyReqDto: CreatePolicyReqDto): Promise<IPolicy> {
     // 같은 타입의 약관이 이미 존재하는지 확인, 가장 최근에 등록된 약관을 가져을
     // TODO: domain service 로 분리
     const existingPolicy = await this.policyRepository.findPolicy({
@@ -26,16 +23,16 @@ export class PolicyAppService {
   }
 
   // TODO content 는 제외
-  async findPolicies(type?: Policy['type']): Promise<Policy[]> {
+  async findPolicies(type?: IPolicy['type']): Promise<IPolicy[]> {
     return this.policyRepository.findPolicies({ where: { type } });
   }
 
-  async findPolicy(id: number): Promise<Policy | null> {
+  async findPolicy(id: number): Promise<IPolicy | null> {
     return this.policyRepository.findPolicy({ where: { id } });
   }
 
   // TODO content 는 제외
-  async findAllTypesOfLatestPolicies(): Promise<Policy[]> {
+  async findAllTypesOfLatestPolicies(): Promise<IPolicy[]> {
     return this.policyRepository.findAllTypesOfLatestPolicies();
   }
 }

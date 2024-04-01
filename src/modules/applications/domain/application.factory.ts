@@ -1,74 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { ApplicationRepository } from '../application.repository';
-import { Application } from './entities/application.entity';
-import { User } from 'src/modules/users/domain/entities/user.entity';
-import { CreateApplicationReqDto } from '../structure/dto/request/create-application.req.dto';
-import { PlayerSnapshot } from './entities/player-snapshot.entity';
-import { ParticipationDivision } from './entities/participation-divsion.entity';
-import { Division } from 'src/modules/competitions/domain/entities/division.entity';
+import { ApplicationEntity } from '../../../infrastructure/database/entities/application/application.entity';
+import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
+import { PlayerSnapshotEntity } from '../../../infrastructure/database/entities/application/player-snapshot.entity';
+import { ParticipationDivisionEntity } from '../../../infrastructure/database/entities/application/participation-divsion.entity';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { ICompetition } from 'src/modules/competitions/domain/structure/competition.interface';
+import { IApplication } from './structure/application.interface';
+import { ParticipationDivisionSnapshotEntity } from 'src/infrastructure/database/entities/application/participation-division-snapshot.entity';
 
-// TODO: Transaction
 @Injectable()
 export class ApplicationFactory {
-  constructor(private readonly applicationRepository: ApplicationRepository) {}
+  async create(dto: CreateApplicationReqDto, user: IUser, competition: ICompetition): Promise<IApplication> {
+    const application = new ApplicationEntity();
+    application.userId = user.id;
+    // application.petitionId = competition.id;
 
-  async create(userId: User['id'], dto: CreateApplicationReqDto): Promise<Application> {
-    const user = await this.applicationRepository.getUser({ where: { id: userId } });
-    const competition = await this.applicationRepository.getCompetition(dto.competitionId);
-
-    competition.validateExistDivisions(dto.divisionIds);
-
-    const application = await this.applicationRepository.createApplication({
-      userId,
-      competitionId: competition.id,
-    });
-
-    const playerSnapshot = await this.createPlayerSnapshot(user, dto, application.id);
-
-    const participationDivisions = await Promise.all(
-      competition.divisions
-        .filter((division) => dto.divisionIds.includes(division.id))
-        .map(async (division) => {
-          const participationDivision = await this.createParticipationDivision(application.id, division.id);
-          return participationDivision;
-        }),
-    );
+    const playerSnapshot = new PlayerSnapshotEntity();
+    playerSnapshot.name = user.name;
+    playerSnapshot.gender = user.gender;
+    playerSnapshot.birth = user.birth;
+    playerSnapshot.phoneNumber = user.phoneNumber;
+    playerSnapshot.belt = dto.player.belt;
+    playerSnapshot.network = dto.player.network;
+    playerSnapshot.team = dto.player.team;
+    playerSnapshot.masterName = dto.player.masterName;
+    playerSnapshot.applicationId = application.id;
 
     application.playerSnapshots = [playerSnapshot];
+
+    const participationDivisions = competition.divisions
+      .filter((division) => dto.divisionIds.includes(division.id))
+      .map((division) => {
+        const participationDivision = new ParticipationDivisionEntity();
+        participationDivision.applicationId = application.id;
+        const participationDivisionSnapshot = new ParticipationDivisionSnapshotEntity();
+        participationDivisionSnapshot.divisionId = division.id;
+        participationDivision.participationDivisionSnapshots = [participationDivisionSnapshot];
+        return participationDivision;
+      });
     application.participationDivisions = participationDivisions;
+
     return application;
-  }
-
-  private async createPlayerSnapshot(
-    user: User,
-    dto: CreateApplicationReqDto,
-    applicationId: Application['id'],
-  ): Promise<PlayerSnapshot> {
-    return this.applicationRepository.createPlayerSnapshot({
-      name: user.name,
-      gender: user.gender,
-      birth: user.birth,
-      phoneNumber: user.phoneNumber,
-      belt: dto.player.belt,
-      network: dto.player.network,
-      team: dto.player.team,
-      masterName: dto.player.masterName,
-      applicationId,
-    });
-  }
-
-  private async createParticipationDivision(
-    applicationId: Application['id'],
-    divisionId: Division['id'],
-  ): Promise<ParticipationDivision> {
-    const participationDivision = await this.applicationRepository.createParticipationDivision({
-      applicationId,
-    });
-    const participationDivisionSnapshot = await this.applicationRepository.createParticipationDivisionSnapshot({
-      participationDivisionId: participationDivision.id,
-      divisionId,
-    });
-    participationDivision.participationDivisionSnapshots = [participationDivisionSnapshot];
-    return participationDivision;
   }
 }

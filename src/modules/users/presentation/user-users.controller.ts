@@ -2,10 +2,10 @@ import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
-import { UpdateUserReqDto } from 'src/modules/users/structure/dto/request/update-user.req.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
+import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
-import { UserResDto } from '../structure/dto/response/user.res.dto';
+import { UserResDto } from '../dto/response/user.res.dto';
 import { ENTITY_NOT_FOUND } from 'src/common/response/errorResponse';
 
 @Controller('user/users')

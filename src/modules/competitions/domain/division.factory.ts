@@ -1,27 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { Division } from 'src/modules/competitions/domain/entities/division.entity';
-import { IDivisionPack } from '../structure/division-pack.interface';
-import { PriceSnapshot } from 'src/modules/competitions/domain/entities/price-snapshot.entity';
+import { IDivisionPack } from './structure/division-pack.interface';
+import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
+import { IDivision } from './structure/division.interface';
 
 @Injectable()
 export class DivisionFactory {
   constructor(
-    @InjectRepository(Division)
-    private readonly divisionRepository: Repository<Division>,
-    @InjectRepository(PriceSnapshot)
-    private readonly priceSnapshotRepository: Repository<PriceSnapshot>,
+    @InjectRepository(DivisionEntity)
+    private readonly divisionRepository: Repository<DivisionEntity>,
+    @InjectRepository(PriceSnapshotEntity)
+    private readonly priceSnapshotRepository: Repository<PriceSnapshotEntity>,
   ) {}
 
-  createDivision(divisionPacks: IDivisionPack[]): Division[] {
+  createDivision(divisionPacks: IDivisionPack[]): IDivision[] {
     const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
       return [...acc, ...this.unpack(divisionPack)];
     }, []);
     return unpackedDivisions;
   }
 
-  private unpack(divisionPack: IDivisionPack): Division[] {
+  private unpack(divisionPack: IDivisionPack): IDivision[] {
     const combinations = this.cartesian(
       divisionPack.categories,
       divisionPack.uniforms,
@@ -30,7 +31,7 @@ export class DivisionFactory {
       divisionPack.weights,
     );
 
-    const divisions: Division[] = combinations.map(([category, uniform, gender, belt, weight]) => {
+    const divisions: IDivision[] = combinations.map(([category, uniform, gender, belt, weight]) => {
       const division = this.divisionRepository.create({
         category,
         uniform,

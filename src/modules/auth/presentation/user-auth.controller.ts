@@ -1,8 +1,8 @@
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { SnsLoginReqDto } from 'src/modules/auth/structure/dto/request/sns-login.dto';
+import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
 import { AuthAppService } from 'src/modules/auth/application/auth.app.service';
-import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -12,7 +12,7 @@ import {
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
 } from 'src/common/response/errorResponse';
-import { RefreshTokenReqDto } from '../structure/dto/request/refresh-token.dto';
+import { RefreshTokenReqDto } from '../dto/request/refresh-token.dto';
 import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 

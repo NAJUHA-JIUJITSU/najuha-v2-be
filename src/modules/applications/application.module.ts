@@ -1,30 +1,38 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Application } from './domain/entities/application.entity';
-import { ParticipationDivision } from './domain/entities/participation-divsion.entity';
-import { PlayerSnapshot } from './domain/entities/player-snapshot.entity';
-import { ParticipationDivisionSnapshot } from './domain/entities/participation-division-snapshot.entity';
+import { ApplicationEntity } from '../../infrastructure/database/entities/application/application.entity';
+import { ParticipationDivisionEntity } from '../../infrastructure/database/entities/application/participation-divsion.entity';
+import { PlayerSnapshotEntity } from '../../infrastructure/database/entities/application/player-snapshot.entity';
+import { ParticipationDivisionSnapshotEntity } from '../../infrastructure/database/entities/application/participation-division-snapshot.entity';
 import { UserApplicationsController } from './presentation/user-applications.controller';
 import { ApplicationsAppService } from './application/applications.app.service';
 import { ApplicationRepository } from './application.repository';
-import { Competition } from '../competitions/domain/entities/competition.entity';
-import { User } from '../users/domain/entities/user.entity';
+import { CompetitionEntity } from '../../infrastructure/database/entities/competition/competition.entity';
+import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
 import { ApplicationFactory } from './domain/application.factory';
-import { PaymentSnapshot } from '../competitions/domain/entities/payment-snapshot.entity';
+import { PaymentSnapshotEntity } from '../../infrastructure/database/entities/competition/payment-snapshot.entity';
+import { ApplicationDomainService } from './domain/application.domain.service';
+import { ApplicationValidator } from './domain/application.validator';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      User,
-      Application,
-      PlayerSnapshot,
-      ParticipationDivision,
-      ParticipationDivisionSnapshot,
-      Competition,
-      PaymentSnapshot,
+      UserEntity,
+      ApplicationEntity,
+      PlayerSnapshotEntity,
+      ParticipationDivisionEntity,
+      ParticipationDivisionSnapshotEntity,
+      CompetitionEntity,
+      PaymentSnapshotEntity,
     ]),
   ],
   controllers: [UserApplicationsController],
-  providers: [ApplicationsAppService, ApplicationRepository, ApplicationFactory],
+  providers: [
+    ApplicationsAppService,
+    ApplicationRepository,
+    ApplicationFactory,
+    ApplicationDomainService,
+    ApplicationValidator,
+  ],
 })
 export class ApplicationModule {}

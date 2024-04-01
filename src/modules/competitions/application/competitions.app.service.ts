@@ -1,74 +1,81 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
-import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
-import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
+import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
+import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
+import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
 import { CompetitionRepository } from 'src/modules/competitions/competition.repository';
-import { Competition } from 'src/modules/competitions/domain/entities/competition.entity';
-import { Division } from 'src/modules/competitions/domain/entities/division.entity';
-import { EarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/entities/earlybird-discount-snapshot.entity';
-import { CombinationDiscountSnapshot } from '../domain/entities/combination-discount-snapshot.entity';
-import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
-import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';
+import { CreateEarlybirdDiscountSnapshotReqDto } from '../dto/request/create-earlybird-discount-snapshot.req.dto';
+import { createCombinationDiscountSnapshotReqDto } from '../dto/request/create-combination-discount-snapshot.req.dto';
 import { DivisionFactory } from '../domain/division.factory';
+import { ICompetition } from '../domain/structure/competition.interface';
+import { CompetitionValidator } from '../domain/competition.validator';
+import { IDivision } from '../domain/structure/division.interface';
+import { ICombinationDiscountSnapshot } from '../domain/structure/combination-discount-snapshot.interface';
+import { IEarlybirdDiscountSnapshot } from '../domain/structure/earlybird-discount-snapshot.interface';
 
 @Injectable()
 export class CompetitionsAppService {
   constructor(
     private readonly competitionRepository: CompetitionRepository,
     private readonly divisionFactory: DivisionFactory,
+    private readonly competitionValidator: CompetitionValidator,
   ) {}
 
-  async createCompetition(dto: CreateCompetitionReqDto): Promise<Competition> {
+  async createCompetition(dto: CreateCompetitionReqDto): Promise<ICompetition> {
     return await this.competitionRepository.createCompetition(dto);
   }
 
-  async updateCompetition(combinationId: Competition['id'], dto: UpdateCompetitionReqDto): Promise<Competition> {
+  async updateCompetition(combinationId: ICompetition['id'], dto: UpdateCompetitionReqDto): Promise<ICompetition> {
     const competition = await this.competitionRepository.getCompetition({ where: { id: combinationId } });
     return await this.competitionRepository.saveCompetition({ ...competition, ...dto });
   }
 
-  async findCompetitions(options?: { where?: Partial<Pick<Competition, 'status'>> }): Promise<Competition[]> {
+  async findCompetitions(options?: { where?: Partial<Pick<ICompetition, 'status'>> }): Promise<ICompetition[]> {
     return await this.competitionRepository.findCompetitons({
       where: options?.where,
       relations: ['earlybirdDiscountSnapshots'],
     });
   }
 
-  async getCompetition(options?: { where?: Partial<Pick<Competition, 'id' | 'status'>> }): Promise<Competition> {
+  async getCompetition(options?: { where?: Partial<Pick<ICompetition, 'id' | 'status'>> }): Promise<ICompetition> {
     return await this.competitionRepository.getCompetition({
       where: options?.where,
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
   }
 
-  async updateCompetitionStatus(combinationId: Competition['id'], status: Competition['status']): Promise<Competition> {
+  async updateCompetitionStatus(
+    combinationId: ICompetition['id'],
+    status: ICompetition['status'],
+  ): Promise<ICompetition> {
     const competition = await this.competitionRepository.getCompetition({ where: { id: combinationId } });
-    competition.updateStatus(status);
+    if (status === 'ACTIVE') this.competitionValidator.validateCanBeActive(competition);
+    competition.status = status;
     return await this.competitionRepository.saveCompetition(competition);
   }
 
-  async createDivisions(competitionId: Competition['id'], dto: CreateDivisitonsReqDto): Promise<Division[]> {
+  async createDivisions(competitionId: ICompetition['id'], dto: CreateDivisitonsReqDto): Promise<IDivision[]> {
     const competition = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
       relations: ['divisions'],
     });
-    const divisions = this.divisionFactory.createDivision(dto.divisionPacks);
-    competition.addDivisions(divisions);
-    return (await this.competitionRepository.saveCompetition(competition)).divisions || [];
+    const newDivisions = this.divisionFactory.createDivision(dto.divisionPacks);
+    this.competitionValidator.validateDuplicateDivisions(competition, newDivisions);
+    competition.divisions = [...competition.divisions, ...newDivisions];
+    return (await this.competitionRepository.saveCompetition(competition)).divisions;
   }
 
   async createEarlybirdDiscountSnapshot(
-    competitionId: Competition['id'],
+    competitionId: ICompetition['id'],
     dto: CreateEarlybirdDiscountSnapshotReqDto,
-  ): Promise<EarlybirdDiscountSnapshot> {
+  ): Promise<IEarlybirdDiscountSnapshot> {
     const competition = await this.competitionRepository.getCompetition({ where: { id: competitionId } });
     return await this.competitionRepository.createEarlybirdDiscount(competition.id, dto);
   }
 
   async createCombinationDiscountSnapshot(
-    competitionId: Competition['id'],
+    competitionId: ICompetition['id'],
     dto: createCombinationDiscountSnapshotReqDto,
-  ): Promise<CombinationDiscountSnapshot> {
+  ): Promise<ICombinationDiscountSnapshot> {
     const competition = await this.competitionRepository.getCompetition({ where: { id: competitionId } });
     return await this.competitionRepository.createCombinationDiscount(competition.id, dto);
   }

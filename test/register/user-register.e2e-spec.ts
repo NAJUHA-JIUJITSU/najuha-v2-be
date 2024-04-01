@@ -8,8 +8,8 @@ import { ResponseForm } from 'src/common/response/response';
 import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
-import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
@@ -17,13 +17,12 @@ import {
 } from 'src/common/response/errorResponse';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-// import { User } from 'src/modules/users/domain/entities/user.entity';
-import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
-import { Policy } from 'src/modules/policy/domain/entities/policy.entity';
-import { IsDuplicatedNicknameResDto } from 'src/modules/register/structure/dto/response/is-duplicated-nickname.res.dto';
-import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/structure/dto/response/send-phone-number-auth-code.res';
-import { ConfirmedAuthCodeResDto } from 'src/modules/register/structure/dto/response/confirm-auth-code.res.dto';
-import { IUser } from 'src/modules/users/structure/interface/user.interface';
+import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
+import { IPolicy } from 'src/modules/policy/domain/structure/policy.interface';
+import { IsDuplicatedNicknameResDto } from 'src/modules/register/dto/response/is-duplicated-nickname.res.dto';
+import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/dto/response/send-phone-number-auth-code.res';
+import { ConfirmedAuthCodeResDto } from 'src/modules/register/dto/response/confirm-auth-code.res.dto';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;
@@ -202,7 +201,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-5 PATCH /user/register ------------------------------------------------', () => {
     it('유저 등록 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const ret = await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -239,7 +238,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 닉네임 중복', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -280,7 +279,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 필수 약관 미동의', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -316,7 +315,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 전화번호 미등록', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
