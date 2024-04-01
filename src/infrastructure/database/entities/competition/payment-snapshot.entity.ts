@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Application } from '../application/application.entity';
+import { ApplicationEntity } from '../application/application.entity';
 
 @Entity('payment_snapshot')
-export class PaymentSnapshot {
+export class PaymentSnapshotEntity {
   /**
    * - application package snapshot id.
    * @type uint32
@@ -48,9 +48,9 @@ export class PaymentSnapshot {
 
   /** - application id. */
   @Column()
-  applicationId: Application['id'];
+  applicationId: ApplicationEntity['id'];
 
   /** - application. */
-  @ManyToOne(() => Application, (application) => application.paymentSnapshots)
-  application: Application;
+  @ManyToOne(() => ApplicationEntity, (application) => application.paymentSnapshots)
+  application: ApplicationEntity;
 }

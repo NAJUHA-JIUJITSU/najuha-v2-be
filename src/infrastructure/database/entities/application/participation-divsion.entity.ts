@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PriceSnapshot } from '../competition/price-snapshot.entity';
-import { ParticipationDivisionSnapshot } from './participation-division-snapshot.entity';
-import { Application } from './application.entity';
+import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
+import { ParticipationDivisionSnapshotEntity } from './participation-division-snapshot.entity';
+import { ApplicationEntity } from './application.entity';
 
 @Entity('participation_divsion')
-export class ParticipationDivision {
+export class ParticipationDivisionEntity {
   /**
    * - participation division id.
    * @type uint32
@@ -18,29 +18,29 @@ export class ParticipationDivision {
 
   /** - application id. */
   @Column()
-  applicationId: Application['id'];
+  applicationId: ApplicationEntity['id'];
 
   /** - applications. */
-  @ManyToOne(() => Application, (application) => application.participationDivisions)
+  @ManyToOne(() => ApplicationEntity, (application) => application.participationDivisions)
   @JoinColumn({ name: 'applicationId' })
-  application: Application[];
+  application: ApplicationEntity[];
 
   /** - payed price snapshot id. */
   @Column({ nullable: true })
-  priceSnapshotId: PriceSnapshot['id'];
+  priceSnapshotId: PriceSnapshotEntity['id'];
 
   /** - payed price snapshot. */
-  @ManyToOne(() => PriceSnapshot, (priceSnapshot) => priceSnapshot.participationDivisions)
+  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.participationDivisions)
   @JoinColumn({ name: 'priceSnapshotId' })
-  priceSnapshot: PriceSnapshot;
+  priceSnapshot: PriceSnapshotEntity;
 
   /** - participation division snapshots. */
   @OneToMany(
-    () => ParticipationDivisionSnapshot,
+    () => ParticipationDivisionSnapshotEntity,
     (participationDivisionSnapshot) => participationDivisionSnapshot.participationDivision,
     { cascade: true },
   )
-  participationDivisionSnapshots: ParticipationDivisionSnapshot[];
+  participationDivisionSnapshots: ParticipationDivisionSnapshotEntity[];
 
   // cancleId
   // cancle

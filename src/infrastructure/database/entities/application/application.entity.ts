@@ -8,87 +8,71 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PlayerSnapshot } from './player-snapshot.entity';
-import { PaymentSnapshot } from '../competition/payment-snapshot.entity';
-import { Competition } from '../competition/competition.entity';
+import { PlayerSnapshotEntity } from './player-snapshot.entity';
+import { PaymentSnapshotEntity } from '../competition/payment-snapshot.entity';
+import { CompetitionEntity } from '../competition/competition.entity';
 import { UserEntity } from '../user/user.entity';
-import { ParticipationDivision } from './participation-divsion.entity';
-import { EarlybirdDiscountSnapshot } from '../competition/earlybird-discount-snapshot.entity';
-import { CombinationDiscountSnapshot } from '../competition/combination-discount-snapshot.entity';
+import { ParticipationDivisionEntity } from './participation-divsion.entity';
+import { EarlybirdDiscountSnapshotEntity } from '../competition/earlybird-discount-snapshot.entity';
+import { CombinationDiscountSnapshotEntity } from '../competition/combination-discount-snapshot.entity';
+import { IApplication } from 'src/modules/applications/domain/structure/application.interface';
 
 @Entity('application')
-export class Application {
-  /**
-   * - application id.
-   * @type uint32
-   */
+export class ApplicationEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: IApplication['id'];
 
-  /**
-   * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
-   */
   @CreateDateColumn()
-  createdAt: Date | string;
+  createdAt: IApplication['createdAt'];
 
-  /**
-   * - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간.
-   */
   @UpdateDateColumn()
-  updatedAt: Date | string;
+  updatedAt: IApplication['updatedAt'];
 
-  /**
-   * - status.
-   * - READY: 결제 대기중
-   * - DONE: 결제 완료
-   * - CANCELED: 결제 취소
-   */
   @Column('varchar', { length: 16, default: 'READY' })
-  status: 'READY' | 'DONE' | 'CANCELED';
+  status: IApplication['status'];
 
-  /** - player snapshots. */
-  @OneToMany(() => PlayerSnapshot, (playerSnapshot) => playerSnapshot.application, { cascade: true })
-  playerSnapshots: PlayerSnapshot[];
+  @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application, { cascade: true })
+  playerSnapshots: PlayerSnapshotEntity[];
 
-  /** - payment snapshot. */
-  @OneToMany(() => PaymentSnapshot, (paymentSnapshot) => paymentSnapshot.application)
-  paymentSnapshots: PaymentSnapshot[];
+  @OneToMany(() => PaymentSnapshotEntity, (paymentSnapshot) => paymentSnapshot.application)
+  paymentSnapshots: PaymentSnapshotEntity[];
 
-  /** - participation division. */
-  @OneToMany(() => ParticipationDivision, (participationDivision) => participationDivision.application, {
+  @OneToMany(() => ParticipationDivisionEntity, (participationDivision) => participationDivision.application, {
     cascade: true,
   })
-  participationDivisions: ParticipationDivision[];
+  participationDivisions: ParticipationDivisionEntity[];
 
-  /** - earlybird discount snapshot id. */
   @Column({ nullable: true })
-  earlybirdDiscountSnapshotId: EarlybirdDiscountSnapshot['id'];
+  earlybirdDiscountSnapshotId: EarlybirdDiscountSnapshotEntity['id'];
 
   /** - earlybird discount snapshot. */
-  @ManyToOne(() => EarlybirdDiscountSnapshot, (earlybirdDiscountSnapshot) => earlybirdDiscountSnapshot.applications)
+  @ManyToOne(
+    () => EarlybirdDiscountSnapshotEntity,
+    (earlybirdDiscountSnapshot) => earlybirdDiscountSnapshot.applications,
+  )
   @JoinColumn({ name: 'earlybirdDiscountSnapshotId' })
-  earlybirdDiscountSnapshot: EarlybirdDiscountSnapshot;
+  earlybirdDiscountSnapshot: EarlybirdDiscountSnapshotEntity;
 
   /** - combination discount snapshot id. */
   @Column({ nullable: true })
-  combinationDiscountSnapshotId: PaymentSnapshot['id'];
+  combinationDiscountSnapshotId: PaymentSnapshotEntity['id'];
 
   /** - combination discount snapshot. */
   @ManyToOne(
-    () => CombinationDiscountSnapshot,
+    () => CombinationDiscountSnapshotEntity,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.applications,
   )
   @JoinColumn({ name: 'combinationDiscountSnapshotId' })
-  combinationDiscountSnapshot: CombinationDiscountSnapshot;
+  combinationDiscountSnapshot: CombinationDiscountSnapshotEntity;
 
   /** - competition id. */
   @Column()
-  competitionId: Competition['id'];
+  competitionId: CompetitionEntity['id'];
 
   /** - competition. */
-  @ManyToOne(() => Competition, (competition) => competition.applications)
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.applications)
   @JoinColumn({ name: 'competitionId' })
-  competition: Competition;
+  competition: CompetitionEntity;
 
   /** - user id. */
   @Column()
@@ -103,17 +87,4 @@ export class Application {
   //    * - cancel.
   //    */
   //   cancles: Cancel;
-
-  // ----------------- Mathods -----------------
-  calculatePaymentSnapshot() {
-    const normalAmount = this.participationDivisions.reduce((acc, cur) => {
-      return acc + cur.priceSnapshot.price;
-    }, 0);
-    console.log('normalAmount', normalAmount);
-    const earlybirdDiscountAmount = this.earlybirdDiscountSnapshot.discountAmount;
-    console.log('earlybirdDiscountAmount', earlybirdDiscountAmount);
-    const combinationDiscountAmount = 0;
-    const totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
-    return { normalAmount, earlybirdDiscountAmount, combinationDiscountAmount, totalAmount };
-  }
 }

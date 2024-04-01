@@ -9,7 +9,6 @@ import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.
 import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
 import { UpdateCompetitionStatusReqDto } from '../dto/request/update-competition-status.req.dto';
 import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
-import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
 import { CreateCompetitionResDto } from '../dto/response/create-competition.res.dto';
 import { CreateEarlybirdDiscountSnapshotReqDto } from '../dto/request/create-earlybird-discount-snapshot.req.dto';
 import { CreateDivisionsResDto } from '../dto/response/create-divisions.res.dto';
@@ -17,6 +16,7 @@ import { CreateEarlybirdDiscountSnapshotResDto } from '../dto/response/create-ea
 import { createCombinationDiscountSnapshotReqDto } from '../dto/request/create-combination-discount-snapshot.req.dto';
 import { CreateCombinationDiscountSnapshotResDto } from '../dto/response/create-combination-discount-snapshot.res.dto';
 import { UpdateCompetitionResDto } from '../dto/response/update-competition.res.dto';
+import { ICompetition } from '../domain/structure/competition.interface';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -63,7 +63,7 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:id')
-  async findCompetition(@TypedParam('id') id: Competition['id']): Promise<ResponseForm<CompetitionResDto>> {
+  async findCompetition(@TypedParam('id') id: ICompetition['id']): Promise<ResponseForm<CompetitionResDto>> {
     const competition = await this.competitionsAppService.getCompetition({ where: { id } });
     return createResponseForm({ competition });
   }
@@ -78,7 +78,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:id')
   async updateCompetition(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: UpdateCompetitionReqDto,
   ): Promise<ResponseForm<UpdateCompetitionResDto>> {
     const competition = await this.competitionsAppService.updateCompetition(id, dto);
@@ -95,7 +95,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:id/status')
   async updateCompetitionStatus(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: UpdateCompetitionStatusReqDto,
   ): Promise<ResponseForm<UpdateCompetitionResDto>> {
     const competition = await this.competitionsAppService.updateCompetitionStatus(id, dto.status);
@@ -112,7 +112,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:id/divisions')
   async createDivisions(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: CreateDivisitonsReqDto,
   ): Promise<ResponseForm<CreateDivisionsResDto>> {
     const divisions = await this.competitionsAppService.createDivisions(id, dto);
@@ -131,7 +131,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:id/earlybird-discount-snapshots')
   async createEarlybirdDiscountSnapshot(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: CreateEarlybirdDiscountSnapshotReqDto,
   ): Promise<ResponseForm<CreateEarlybirdDiscountSnapshotResDto>> {
     const earlybirdDiscountSnapshot = await this.competitionsAppService.createEarlybirdDiscountSnapshot(id, dto);
@@ -150,7 +150,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:id/combination-discount-snapshots')
   async createCombinationDiscountSnapshot(
-    @TypedParam('id') id: Competition['id'],
+    @TypedParam('id') id: ICompetition['id'],
     @TypedBody() dto: createCombinationDiscountSnapshotReqDto,
   ): Promise<ResponseForm<CreateCombinationDiscountSnapshotResDto>> {
     const combinationDiscountSnapshot = await this.competitionsAppService.createCombinationDiscountSnapshot(id, dto);

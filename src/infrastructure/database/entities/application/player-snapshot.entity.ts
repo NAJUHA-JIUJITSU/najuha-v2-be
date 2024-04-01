@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
-import { Application } from './application.entity';
+import { ApplicationEntity } from './application.entity';
 
 @Entity('player_snapshot')
-export class PlayerSnapshot {
+export class PlayerSnapshotEntity {
   /**
    * - player snapshot id.
    * @type uint32
@@ -76,11 +76,11 @@ export class PlayerSnapshot {
 
   /** - application id. */
   @Column()
-  applicationId: Application['id'];
+  applicationId: ApplicationEntity['id'];
 
   /** - application 정보 */
-  @ManyToOne(() => Application, (application) => application.playerSnapshots)
-  application: Application;
+  @ManyToOne(() => ApplicationEntity, (application) => application.playerSnapshots)
+  application: ApplicationEntity;
 
   // /**
   //  * - division id.
@@ -90,7 +90,7 @@ export class PlayerSnapshot {
 
   // /**
   //  * - division 정보
-  //  * - ManyToOne: Division(1) -> Application(*)
+  //  * - ManyToOne: Division(1) -> ApplicationEntity(*)
   //  * - JoinColumn: divisionId
   //  */
   // @ManyToOne(() => Division, (division) => division.applicationSnapshots)

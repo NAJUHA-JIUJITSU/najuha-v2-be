@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Repository } from 'typeorm';
-import { Competition } from '../../infrastructure/database/entities/competition/competition.entity';
-import { Application } from '../../infrastructure/database/entities/application/application.entity';
+import { ApplicationEntity } from '../../infrastructure/database/entities/application/application.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
 import { IUser } from '../users/domain/structure/user.interface';
 import { ICompetition } from '../competitions/domain/structure/competition.interface';
 import { IApplication } from './domain/structure/application.interface';
+import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
 
 @Injectable()
 export class ApplicationRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(Application)
-    private readonly applicationRepository: Repository<Application>,
-    @InjectRepository(Competition)
-    private readonly competitionRepository: Repository<Competition>,
+    @InjectRepository(ApplicationEntity)
+    private readonly applicationRepository: Repository<ApplicationEntity>,
+    @InjectRepository(CompetitionEntity)
+    private readonly competitionRepository: Repository<CompetitionEntity>,
   ) {}
 
   // ----------------- User -----------------

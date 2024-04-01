@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Competition } from './competition.entity';
+import { CompetitionEntity } from './competition.entity';
 import { ICombinationDiscountRule } from '../../../../modules/competitions/domain/structure/combination-discount-rule.interface';
-import { Application } from 'src/infrastructure/database/entities/application/application.entity';
+import { ApplicationEntity } from 'src/infrastructure/database/entities/application/application.entity';
 
 @Entity('combination_discount_snapshot')
-export class CombinationDiscountSnapshot {
+export class CombinationDiscountSnapshotEntity {
   /**
    * - combination discount snapshot id.
    * @type uint32
@@ -21,14 +21,14 @@ export class CombinationDiscountSnapshot {
 
   /** - competition id. */
   @Column()
-  competitionId: Competition['id'];
+  competitionId: CompetitionEntity['id'];
 
   /** - competition. */
-  @ManyToOne(() => Competition, (competition) => competition.combinationDiscountSnapshots)
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.combinationDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition: Competition;
+  competition: CompetitionEntity;
 
   /** - applications. */
-  @OneToMany(() => Application, (application) => application.combinationDiscountSnapshot)
-  applications: Application[];
+  @OneToMany(() => ApplicationEntity, (application) => application.combinationDiscountSnapshot)
+  applications: ApplicationEntity[];
 }

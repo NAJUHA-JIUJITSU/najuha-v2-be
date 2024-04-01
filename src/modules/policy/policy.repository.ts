@@ -1,26 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Policy } from '../../infrastructure/database/entities/policy/policy.entity';
+import { PolicyEntity } from '../../infrastructure/database/entities/policy/policy.entity';
+import { IPolicy } from './domain/structure/policy.interface';
 
 @Injectable()
 export class PolicyRepository {
   constructor(
-    @InjectRepository(Policy)
-    private readonly policyRepository: Repository<Policy>,
+    @InjectRepository(PolicyEntity)
+    private readonly policyRepository: Repository<PolicyEntity>,
   ) {}
 
-  async createPolicy(dto: Partial<Policy>): Promise<Policy> {
+  async createPolicy(dto: Partial<IPolicy>): Promise<IPolicy> {
     const policy = this.policyRepository.create(dto);
     return await this.policyRepository.save(policy);
   }
 
-  async findPolicy({ where, relations, order }: FindOneOptions<Policy>): Promise<Policy | null> {
+  async findPolicy({ where, relations, order }: FindOneOptions<IPolicy>): Promise<IPolicy | null> {
     const policy = await this.policyRepository.findOne({ where, relations, order });
     return policy;
   }
 
-  async findPolicies({ where, relations, order }: FindOneOptions<Policy>): Promise<Policy[]> {
+  async findPolicies({ where, relations, order }: FindOneOptions<IPolicy>): Promise<IPolicy[]> {
     const policies = await this.policyRepository.find({
       where,
       relations,
@@ -29,7 +30,7 @@ export class PolicyRepository {
     return policies;
   }
 
-  async findAllTypesOfLatestPolicies(): Promise<Policy[]> {
+  async findAllTypesOfLatestPolicies(): Promise<IPolicy[]> {
     return this.policyRepository
       .createQueryBuilder('policy')
       .distinctOn(['policy.type'])

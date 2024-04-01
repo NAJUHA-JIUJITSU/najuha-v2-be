@@ -40,7 +40,6 @@ export class RegisterAppService {
     return true;
   }
 
-  // TODO: transaction 필요
   async registerUser(userId: IUser['id'], dto: RegisterReqDto): Promise<IAuthTokens> {
     if (await this.isDuplicateNickname(userId, dto.user.nickname)) {
       throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
@@ -52,6 +51,7 @@ export class RegisterAppService {
 
     const { policyConsents, ...user } = registerUser;
 
+    // TODO: transaction 필요
     await this.registerRepository.updateUser(user);
     await this.registerRepository.createPolicyConsents(policyConsents);
     return await this.AuthTokenDomainService.createAuthTokens(user.id, user.role);

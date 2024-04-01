@@ -1,13 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { Division } from './division.entity';
-import { EarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.entity';
-import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
-import { CombinationDiscountSnapshot } from './combination-discount-snapshot.entity';
-import { Application } from '../application/application.entity';
-import { IExpectedPayment } from 'src/modules/applications/domain/structure/expected-payment.interface';
+import { DivisionEntity } from './division.entity';
+import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
+import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
+import { ApplicationEntity } from '../application/application.entity';
 
 @Entity('competition')
-export class Competition {
+export class CompetitionEntity {
   /**
    * - 대회의 고유 식별자. 데이터베이스에서 자동으로 생성됩니다.
    * @type uint32
@@ -111,137 +109,30 @@ export class Competition {
   updatedAt: string | Date;
 
   /** - 대회의 얼리버드 할인 전략. */
-  @OneToMany(() => EarlybirdDiscountSnapshot, (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition)
-  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshot[];
+  @OneToMany(
+    () => EarlybirdDiscountSnapshotEntity,
+    (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
+  )
+  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotEntity[];
 
   /** - 부문 조합 할인 전략. */
   @OneToMany(
-    () => CombinationDiscountSnapshot,
+    () => CombinationDiscountSnapshotEntity,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
   )
-  combinationDiscountSnapshots: CombinationDiscountSnapshot[];
+  combinationDiscountSnapshots: CombinationDiscountSnapshotEntity[];
 
   /**
    * - divisions.
    * - OneToMany: Competition(1) -> Division(*)
    */
-  @OneToMany(() => Division, (division) => division.competition, { cascade: true })
-  divisions: Division[];
+  @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
+  divisions: DivisionEntity[];
 
   /**
    * - application.
-   * - OneToMany: Competition(1) -> Application(*)
+   * - OneToMany: Competition(1) -> ApplicationEntity(*)
    */
-  @OneToMany(() => Application, (application) => application.competition)
-  applications: Application[];
-
-  // mathod --------------------------------------------------------------------
-  // updateStatus(status: Competition['status']): void {
-  //   if (status === 'ACTIVE') {
-  //     const missingProperties: string[] = [];
-  //     if (this.title === 'DEFAULT TITLE') missingProperties.push('title');
-  //     if (this.address === 'DEFAULT ADDRESS') missingProperties.push('address');
-  //     if (this.competitionDate === null) missingProperties.push('competitionDate');
-  //     if (this.registrationStartDate === null) missingProperties.push('registrationStartDate');
-  //     if (this.registrationEndDate === null) missingProperties.push('registrationEndDate');
-  //     if (this.description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
-
-  //     if (missingProperties.length > 0) {
-  //       throw new BusinessException(
-  //         CompetitionsErrorMap.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
-  //         `다음 항목을 작성해주세요: ${missingProperties.join(', ')}`,
-  //       );
-  //     }
-  //   }
-  //   this.status = status;
-  // }
-
-  // addDivisions(divisions: Division[]): void {
-  //   const duplicatedDivisions = divisions.filter((division) => {
-  //     return this.divisions.some(
-  //       (existingDivision) =>
-  //         existingDivision.category === division.category &&
-  //         existingDivision.uniform === division.uniform &&
-  //         existingDivision.gender === division.gender &&
-  //         existingDivision.belt === division.belt &&
-  //         existingDivision.weight === division.weight,
-  //     );
-  //   });
-  //   if (duplicatedDivisions.length > 0) {
-  //     throw new BusinessException(
-  //       CompetitionsErrorMap.COMPETITIONS_DIVISION_DUPLICATED,
-  //       `${duplicatedDivisions
-  //         .map(
-  //           (division) =>
-  //             `${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight}`,
-  //         )
-  //         .join(', ')}`,
-  //     );
-  //   }
-  //   this.divisions = [...this.divisions, ...divisions];
-  // }
-
-  validateExistDivisions(divisonIds: Division['id'][]): void {
-    const notExistDivisions = divisonIds.filter((divisionId) => {
-      return !this.divisions.some((division) => division.id === divisionId);
-    });
-    if (notExistDivisions.length > 0) {
-      throw new BusinessException(
-        CompetitionsErrorMap.COMPETITIONS_DIVISION_NOT_FOUND,
-        `not found divisionIds: ${notExistDivisions.join(', ')}`,
-      );
-    }
-  }
-
-  // calculateExpectedPayment(divisionIds: Division['id'][]): IExpectedPayment {
-  //   const divisions = this.divisions.filter((division) => divisionIds.includes(division.id));
-  //   const normalAmount = this.calculateNormalAmount(divisions);
-  //   const earlybirdDiscountAmount = this.calculateEarlybirdDiscountAmount(
-  //     this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1] || null,
-  //   );
-  //   const combinationDiscountAmount = this.calculateCombinationDiscountAmount(
-  //     this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1] || null,
-  //     divisions,
-  //   );
-  //   const totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
-  //   return { normalAmount, earlybirdDiscountAmount, combinationDiscountAmount, totalAmount };
-  // }
-
-  // private calculateNormalAmount(divisions: Division[]): number {
-  //   return divisions.reduce((acc, division) => {
-  //     acc += division.priceSnapshots.at(-1)?.price || 0;
-  //     return acc;
-  //   }, 0);
-  // }
-
-  // private calculateEarlybirdDiscountAmount(
-  //   earlybirdDiscountSnapshot: EarlybirdDiscountSnapshot,
-  //   currentTime: Date = new Date(),
-  // ): number {
-  //   if (earlybirdDiscountSnapshot === null) return 0;
-  //   if (currentTime < earlybirdDiscountSnapshot.earlybirdStartDate) return 0;
-  //   if (currentTime > earlybirdDiscountSnapshot.earlybirdEndDate) return 0;
-  //   return earlybirdDiscountSnapshot.discountAmount;
-  // }
-
-  // private calculateCombinationDiscountAmount(
-  //   combinationDiscountSnapshot: CombinationDiscountSnapshot,
-  //   divisions: Division[],
-  // ): number {
-  //   if (combinationDiscountSnapshot === null) return 0;
-  //   const divisionUnits = divisions.map((division) => ({
-  //     weight: division.weight === 'ABSOLUTE' ? 'ABSOLUTE' : 'WEIGHT',
-  //     uniform: division.uniform,
-  //   }));
-  //   let maxDiscountAmount = 0;
-  //   for (const rule of combinationDiscountSnapshot.combinationDiscountRules) {
-  //     const matched = rule.combination.every((unit) =>
-  //       divisionUnits.some(
-  //         (divisionUnit) => divisionUnit.uniform === unit.uniform && divisionUnit.weight === unit.weight,
-  //       ),
-  //     );
-  //     if (matched) maxDiscountAmount = Math.max(maxDiscountAmount, rule.discountAmount);
-  //   }
-  //   return maxDiscountAmount;
-  // }
+  @OneToMany(() => ApplicationEntity, (application) => application.competition)
+  applications: ApplicationEntity[];
 }

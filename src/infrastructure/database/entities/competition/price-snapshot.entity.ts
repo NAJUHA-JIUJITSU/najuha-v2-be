@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Division } from './division.entity';
-import { ParticipationDivision } from '../application/participation-divsion.entity';
+import { DivisionEntity } from './division.entity';
+import { ParticipationDivisionEntity } from '../application/participation-divsion.entity';
 
 @Entity('price_snapshot')
-export class PriceSnapshot {
+export class PriceSnapshotEntity {
   /**
    * - price-snapshot id.
    * @type uint32
@@ -27,14 +27,14 @@ export class PriceSnapshot {
 
   /** - division id. */
   @Column()
-  divisionId: Division['id'];
+  divisionId: DivisionEntity['id'];
 
   /** - division. */
-  @ManyToOne(() => Division, (division) => division.priceSnapshots)
+  @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)
   @JoinColumn({ name: 'divisionId' })
-  division: Division;
+  division: DivisionEntity;
 
   /** - participation division. */
-  @OneToMany(() => ParticipationDivision, (participationDivision) => participationDivision.priceSnapshot)
-  participationDivisions: ParticipationDivision[];
+  @OneToMany(() => ParticipationDivisionEntity, (participationDivision) => participationDivision.priceSnapshot)
+  participationDivisions: ParticipationDivisionEntity[];
 }

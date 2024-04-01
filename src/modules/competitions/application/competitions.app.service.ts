@@ -3,14 +3,14 @@ import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.d
 import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
 import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
 import { CompetitionRepository } from 'src/modules/competitions/competition.repository';
-import { EarlybirdDiscountSnapshot } from 'src/infrastructure/database/entities/competition/earlybird-discount-snapshot.entity';
-import { CombinationDiscountSnapshot } from '../../../infrastructure/database/entities/competition/combination-discount-snapshot.entity';
 import { CreateEarlybirdDiscountSnapshotReqDto } from '../dto/request/create-earlybird-discount-snapshot.req.dto';
 import { createCombinationDiscountSnapshotReqDto } from '../dto/request/create-combination-discount-snapshot.req.dto';
 import { DivisionFactory } from '../domain/division.factory';
 import { ICompetition } from '../domain/structure/competition.interface';
 import { CompetitionValidator } from '../domain/competition.validator';
 import { IDivision } from '../domain/structure/division.interface';
+import { ICombinationDiscountSnapshot } from '../domain/structure/combination-discount-snapshot.interface';
+import { IEarlybirdDiscountSnapshot } from '../domain/structure/earlybird-discount-snapshot.interface';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -67,7 +67,7 @@ export class CompetitionsAppService {
   async createEarlybirdDiscountSnapshot(
     competitionId: ICompetition['id'],
     dto: CreateEarlybirdDiscountSnapshotReqDto,
-  ): Promise<EarlybirdDiscountSnapshot> {
+  ): Promise<IEarlybirdDiscountSnapshot> {
     const competition = await this.competitionRepository.getCompetition({ where: { id: competitionId } });
     return await this.competitionRepository.createEarlybirdDiscount(competition.id, dto);
   }
@@ -75,7 +75,7 @@ export class CompetitionsAppService {
   async createCombinationDiscountSnapshot(
     competitionId: ICompetition['id'],
     dto: createCombinationDiscountSnapshotReqDto,
-  ): Promise<CombinationDiscountSnapshot> {
+  ): Promise<ICombinationDiscountSnapshot> {
     const competition = await this.competitionRepository.getCompetition({ where: { id: competitionId } });
     return await this.competitionRepository.createCombinationDiscount(competition.id, dto);
   }

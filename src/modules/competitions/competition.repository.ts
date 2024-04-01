@@ -1,21 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Repository } from 'typeorm';
-import { Competition } from '../../infrastructure/database/entities/competition/competition.entity';
+import { CompetitionEntity } from '../../infrastructure/database/entities/competition/competition.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EarlybirdDiscountSnapshot } from '../../infrastructure/database/entities/competition/earlybird-discount-snapshot.entity';
-import { CombinationDiscountSnapshot } from '../../infrastructure/database/entities/competition/combination-discount-snapshot.entity';
+import { EarlybirdDiscountSnapshotEntity } from '../../infrastructure/database/entities/competition/earlybird-discount-snapshot.entity';
+import { CombinationDiscountSnapshotEntity } from '../../infrastructure/database/entities/competition/combination-discount-snapshot.entity';
 import { ICompetition } from './domain/structure/competition.interface';
+import { IEarlybirdDiscountSnapshot } from './domain/structure/earlybird-discount-snapshot.interface';
 
 @Injectable()
 export class CompetitionRepository {
   constructor(
-    @InjectRepository(Competition)
-    private readonly competitionRepository: Repository<Competition>,
-    @InjectRepository(EarlybirdDiscountSnapshot)
-    private readonly earlybirdDiscountSnapshotRepository: Repository<EarlybirdDiscountSnapshot>,
-    @InjectRepository(CombinationDiscountSnapshot)
-    private readonly combinationDiscountSnapshotRepository: Repository<CombinationDiscountSnapshot>,
+    @InjectRepository(CompetitionEntity)
+    private readonly competitionRepository: Repository<CompetitionEntity>,
+    @InjectRepository(EarlybirdDiscountSnapshotEntity)
+    private readonly earlybirdDiscountSnapshotRepository: Repository<EarlybirdDiscountSnapshotEntity>,
+    @InjectRepository(CombinationDiscountSnapshotEntity)
+    private readonly combinationDiscountSnapshotRepository: Repository<CombinationDiscountSnapshotEntity>,
   ) {}
 
   // ----------------- Competition -----------------
@@ -56,18 +57,18 @@ export class CompetitionRepository {
   // ----------------- EarlybirdDiscountSnapshot -----------------
   async createEarlybirdDiscount(
     id: ICompetition['id'],
-    dto: Pick<EarlybirdDiscountSnapshot, 'earlybirdStartDate' | 'earlybirdEndDate' | 'discountAmount'>,
-  ): Promise<EarlybirdDiscountSnapshot> {
+    dto: Pick<IEarlybirdDiscountSnapshot, 'earlybirdStartDate' | 'earlybirdEndDate' | 'discountAmount'>,
+  ): Promise<IEarlybirdDiscountSnapshot> {
     const earlybirdDiscountSnapshot = this.earlybirdDiscountSnapshotRepository.create(dto);
     earlybirdDiscountSnapshot.competitionId = id;
     return await this.earlybirdDiscountSnapshotRepository.save(earlybirdDiscountSnapshot);
   }
 
-  // ----------------- CombinationDiscountSnapshot -----------------
+  // ----------------- CombinationDiscountSnapshotEntity -----------------
   async createCombinationDiscount(
     id: ICompetition['id'],
-    dto: Pick<CombinationDiscountSnapshot, 'combinationDiscountRules'>,
-  ): Promise<CombinationDiscountSnapshot> {
+    dto: Pick<CombinationDiscountSnapshotEntity, 'combinationDiscountRules'>,
+  ): Promise<CombinationDiscountSnapshotEntity> {
     const combinationDiscountSnapshot = this.combinationDiscountSnapshotRepository.create(dto);
     combinationDiscountSnapshot.competitionId = id;
     return await this.combinationDiscountSnapshotRepository.save(combinationDiscountSnapshot);

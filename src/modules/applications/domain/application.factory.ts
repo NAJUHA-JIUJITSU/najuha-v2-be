@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { Application } from '../../../infrastructure/database/entities/application/application.entity';
+import { ApplicationEntity } from '../../../infrastructure/database/entities/application/application.entity';
 import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
-import { PlayerSnapshot } from '../../../infrastructure/database/entities/application/player-snapshot.entity';
-import { ParticipationDivision } from '../../../infrastructure/database/entities/application/participation-divsion.entity';
-import { ParticipationDivisionSnapshot } from '../../../infrastructure/database/entities/application/participation-division-snapshot.entity';
+import { PlayerSnapshotEntity } from '../../../infrastructure/database/entities/application/player-snapshot.entity';
+import { ParticipationDivisionEntity } from '../../../infrastructure/database/entities/application/participation-divsion.entity';
 import { IUser } from 'src/modules/users/domain/structure/user.interface';
 import { ICompetition } from 'src/modules/competitions/domain/structure/competition.interface';
 import { IApplication } from './structure/application.interface';
+import { ParticipationDivisionSnapshotEntity } from 'src/infrastructure/database/entities/application/participation-division-snapshot.entity';
 
 @Injectable()
 export class ApplicationFactory {
   async create(dto: CreateApplicationReqDto, user: IUser, competition: ICompetition): Promise<IApplication> {
-    const application = new Application();
+    const application = new ApplicationEntity();
     application.userId = user.id;
-    application.competitionId = competition.id;
+    // application.petitionId = competition.id;
 
-    const playerSnapshot = new PlayerSnapshot();
+    const playerSnapshot = new PlayerSnapshotEntity();
     playerSnapshot.name = user.name;
     playerSnapshot.gender = user.gender;
     playerSnapshot.birth = user.birth;
@@ -31,9 +31,9 @@ export class ApplicationFactory {
     const participationDivisions = competition.divisions
       .filter((division) => dto.divisionIds.includes(division.id))
       .map((division) => {
-        const participationDivision = new ParticipationDivision();
+        const participationDivision = new ParticipationDivisionEntity();
         participationDivision.applicationId = application.id;
-        const participationDivisionSnapshot = new ParticipationDivisionSnapshot();
+        const participationDivisionSnapshot = new ParticipationDivisionSnapshotEntity();
         participationDivisionSnapshot.divisionId = division.id;
         participationDivision.participationDivisionSnapshots = [participationDivisionSnapshot];
         return participationDivision;

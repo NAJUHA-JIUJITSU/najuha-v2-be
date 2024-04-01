@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ParticipationDivision } from './participation-divsion.entity';
-import { Division } from '../competition/division.entity';
+import { ParticipationDivisionEntity } from './participation-divsion.entity';
+import { DivisionEntity } from '../competition/division.entity';
 
 @Entity('participation_divsion_snapshot')
-export class ParticipationDivisionSnapshot {
+export class ParticipationDivisionSnapshotEntity {
   /**
    * - participation division id.
    * @type uint32
@@ -19,24 +19,24 @@ export class ParticipationDivisionSnapshot {
 
   /** - participation division id. */
   @Column()
-  participationDivisionId: ParticipationDivision['id'];
+  participationDivisionId: ParticipationDivisionEntity['id'];
 
   /** - participation division */
   @ManyToOne(
-    () => ParticipationDivision,
+    () => ParticipationDivisionEntity,
     (participationDivision) => participationDivision.participationDivisionSnapshots,
   )
   @JoinColumn({ name: 'participationDivisionId' })
-  participationDivision: ParticipationDivision;
+  participationDivision: ParticipationDivisionEntity;
 
   /** - division id. */
   @Column()
-  divisionId: Division['id'];
+  divisionId: DivisionEntity['id'];
 
   /** - division */
-  @ManyToOne(() => Division, (division) => division.participationDivisionSnapshots)
+  @ManyToOne(() => DivisionEntity, (division) => division.participationDivisionSnapshots)
   @JoinColumn({ name: 'divisionId' })
-  division: Division;
+  division: DivisionEntity;
 
   // cancleId
   // cancle

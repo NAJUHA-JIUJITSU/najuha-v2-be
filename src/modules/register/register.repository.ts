@@ -2,8 +2,8 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Policy } from '../../infrastructure/database/entities/policy/policy.entity';
-import { PolicyConsent } from '../../infrastructure/database/entities/user/policy-consent.entity';
+import { PolicyEntity } from '../../infrastructure/database/entities/policy/policy.entity';
+import { PolicyConsentEntity } from '../../infrastructure/database/entities/user/policy-consent.entity';
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
 import { IRegisterUser } from './domain/structure/register-user.interface';
 import { IPolicy } from '../policy/domain/structure/policy.interface';
@@ -14,10 +14,10 @@ export class RegisterRepository {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(Policy)
-    private readonly policyRepository: Repository<Policy>,
-    @InjectRepository(PolicyConsent)
-    private readonly policyConsentRepository: Repository<PolicyConsent>,
+    @InjectRepository(PolicyEntity)
+    private readonly policyRepository: Repository<PolicyEntity>,
+    @InjectRepository(PolicyConsentEntity)
+    private readonly policyConsentRepository: Repository<PolicyConsentEntity>,
   ) {}
 
   // ------------------ User ------------------

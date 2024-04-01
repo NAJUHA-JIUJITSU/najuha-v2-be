@@ -1,8 +1,8 @@
-import { PaymentSnapshot } from 'src/infrastructure/database/entities/competition/payment-snapshot.entity';
+import { IPaymentSnapshot } from 'src/modules/competitions/domain/structure/payment-snapshot.interface';
 
 export interface IExpectedPayment {
-  normalAmount: PaymentSnapshot['normalAmount'];
-  earlybirdDiscountAmount: PaymentSnapshot['earlybirdDiscountAmount'];
-  combinationDiscountAmount: PaymentSnapshot['combinationDiscountAmount'];
-  totalAmount: PaymentSnapshot['totalAmount'];
+  normalAmount: IPaymentSnapshot['normalAmount'];
+  earlybirdDiscountAmount: IPaymentSnapshot['earlybirdDiscountAmount'];
+  combinationDiscountAmount: IPaymentSnapshot['combinationDiscountAmount'];
+  totalAmount: IPaymentSnapshot['totalAmount'];
 }

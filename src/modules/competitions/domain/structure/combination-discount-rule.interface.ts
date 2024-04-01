@@ -1,7 +1,7 @@
-import { Division } from '../../../../infrastructure/database/entities/competition/division.entity';
+import { IDivision } from './division.interface';
 
 export interface ICombinationUnit {
-  uniform: Division['uniform'];
+  uniform: IDivision['uniform'];
   weight: 'WEIGHT' | 'ABSOLUTE';
 }
 

@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Competition } from './competition.entity';
-import { Application } from 'src/infrastructure/database/entities/application/application.entity';
+import { CompetitionEntity } from './competition.entity';
+import { ApplicationEntity } from 'src/infrastructure/database/entities/application/application.entity';
 
 @Entity('early_bird_discount_snapshot')
-export class EarlybirdDiscountSnapshot {
+export class EarlybirdDiscountSnapshotEntity {
   /**
    * - ID. 데이터베이스에서 자동 생성됩니다.
    * @type uint32
@@ -38,14 +38,14 @@ export class EarlybirdDiscountSnapshot {
 
   /** - competition id. */
   @Column()
-  competitionId: Competition['id'];
+  competitionId: CompetitionEntity['id'];
 
   /** - competition. */
-  @ManyToOne(() => Competition, (competition) => competition.earlybirdDiscountSnapshots)
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.earlybirdDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition: Competition;
+  competition: CompetitionEntity;
 
   /** - applications. */
-  @OneToMany(() => Application, (application) => application.earlybirdDiscountSnapshot)
-  applications: Application[];
+  @OneToMany(() => ApplicationEntity, (application) => application.earlybirdDiscountSnapshot)
+  applications: ApplicationEntity[];
 }

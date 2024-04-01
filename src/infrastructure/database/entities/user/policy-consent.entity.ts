@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
-import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
 import { UserEntity } from './user.entity';
 
 /** - 사용자가 동의한 약관 정보. */
 @Entity('policy_consent')
-export class PolicyConsent {
+export class PolicyConsentEntity {
   /**
    * - 약관 동의 ID.
    * @type uint32
@@ -30,7 +30,7 @@ export class PolicyConsent {
   policyId: number;
 
   /** - policy */
-  @ManyToOne(() => Policy, (policy) => policy.policyConsents)
+  @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)
   @JoinColumn({ name: 'policyId' })
-  policy: Policy;
+  policy: PolicyEntity;
 }
