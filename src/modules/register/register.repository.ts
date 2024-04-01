@@ -5,9 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Policy } from '../../infrastructure/database/entities/policy/policy.entity';
 import { PolicyConsent } from '../../infrastructure/database/entities/user/policy-consent.entity';
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
-import { IRegisterUser } from './domain/register-user.interface';
-import { IPolicy } from '../policy/domain/policy.interface';
-import { IPolicyConsent } from './domain/policy-consent.interface';
+import { IRegisterUser } from './domain/structure/register-user.interface';
+import { IPolicy } from '../policy/domain/structure/policy.interface';
+import { IPolicyConsent } from './domain/structure/policy-consent.interface';
 
 @Injectable()
 export class RegisterRepository {

@@ -9,7 +9,7 @@ import { PolicyConsent } from '../../infrastructure/database/entities/user/polic
 import { RegisterRepository } from './register.repository';
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
 import { RegisterUserFactory } from './domain/register-user.factory';
-import { RegisterValidatorService } from './domain/register-validator.service';
+import { RegisterValidator } from './domain/register.validator';
 
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([UserEntity, Policy, PolicyConsent])],
@@ -18,7 +18,7 @@ import { RegisterValidatorService } from './domain/register-validator.service';
     RegisterAppService,
     PhoneNumberAuthCodeDomainService,
     RegisterRepository,
-    RegisterValidatorService,
+    RegisterValidator,
     RegisterUserFactory,
   ],
   exports: [RegisterAppService],

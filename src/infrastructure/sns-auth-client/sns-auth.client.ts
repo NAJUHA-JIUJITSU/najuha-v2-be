@@ -3,8 +3,8 @@ import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorRes
 import { GoogleStrategy } from 'src/infrastructure/sns-auth-client/google.strategy';
 import { KakaoStrategy } from 'src/infrastructure/sns-auth-client/kakao.strategy';
 import { NaverStrategy } from 'src/infrastructure/sns-auth-client/naver.strategy';
-import { SnsLoginReqDto } from 'src/modules/auth/structure/dto/request/sns-login.dto';
-import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
+import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 
 @Injectable()
 export class SnsAuthClient {

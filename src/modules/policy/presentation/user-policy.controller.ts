@@ -3,8 +3,8 @@ import { TypedParam, TypedRoute } from '@nestia/core';
 import { PolicyAppService } from '../application/policy.app.service';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { FindPoliciesResDto } from '../structure/dto/response/find-policies.res.dto';
-import { FindPolicyResDto } from '../structure/dto/response/find-policy.res.dto';
+import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
+import { FindPolicyResDto } from '../dto/response/find-policy.res.dto';
 import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
 
 @Controller('user/policy')

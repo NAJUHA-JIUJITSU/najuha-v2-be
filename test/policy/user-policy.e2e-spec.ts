@@ -10,9 +10,9 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { FindPoliciesResDto } from 'src/modules/policy/structure/dto/response/find-policies.res.dto';
-import { PolicyResDto } from 'src/modules/policy/structure/dto/response/policy.res.dto';
-import { IPolicy } from 'src/modules/policy/domain/policy.interface';
+import { FindPoliciesResDto } from 'src/modules/policy/dto/response/find-policies.res.dto';
+import { PolicyResDto } from 'src/modules/policy/dto/response/policy.res.dto';
+import { IPolicy } from 'src/modules/policy/domain/structure/policy.interface';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {

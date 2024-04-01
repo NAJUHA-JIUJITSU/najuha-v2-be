@@ -3,20 +3,20 @@ import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RegisterAppService } from '../application/register.app.service';
-import { RegisterReqDto } from '../structure/dto/request/register.req.dto';
+import { RegisterReqDto } from '../dto/request/register.req.dto';
 import {
   ENTITY_NOT_FOUND,
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
 } from 'src/common/response/errorResponse';
-import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
-import { RegisterPhoneNumberReqDto } from '../structure/dto/request/register-phone-number.req..dto';
-import { confirmAuthCodeReqDto } from '../structure/dto/request/confirm-auth-code.req.dto';
-import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
-import { IsDuplicatedNicknameResDto } from '../structure/dto/response/is-duplicated-nickname.res.dto';
-import { ConfirmedAuthCodeResDto } from '../structure/dto/response/confirm-auth-code.res.dto';
-import { SendPhoneNumberAuthCodeResDto } from '../structure/dto/response/send-phone-number-auth-code.res';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
+import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.req..dto';
+import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
+import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
+import { IsDuplicatedNicknameResDto } from '../dto/response/is-duplicated-nickname.res.dto';
+import { ConfirmedAuthCodeResDto } from '../dto/response/confirm-auth-code.res.dto';
+import { SendPhoneNumberAuthCodeResDto } from '../dto/response/send-phone-number-auth-code.res';
 
 @Controller('user/register')
 export class UserRegisterController {

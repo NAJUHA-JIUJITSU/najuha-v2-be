@@ -11,7 +11,7 @@ import { CompetitionRepository } from './competition.repository';
 import { PaymentSnapshot } from '../../infrastructure/database/entities/competition/payment-snapshot.entity';
 import { PriceSnapshot } from '../../infrastructure/database/entities/competition/price-snapshot.entity';
 import { DivisionFactory } from './domain/division.factory';
-import { CompetitionValidator } from './domain/competition-validator';
+import { CompetitionValidator } from './domain/competition.validator';
 
 @Module({
   imports: [

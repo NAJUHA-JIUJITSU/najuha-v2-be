@@ -11,6 +11,7 @@ import { Competition } from '../../infrastructure/database/entities/competition/
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
 import { ApplicationFactory } from './domain/application.factory';
 import { PaymentSnapshot } from '../../infrastructure/database/entities/competition/payment-snapshot.entity';
+import { ApplicationDomainService } from './domain/application.domain.service';
 
 @Module({
   imports: [
@@ -25,6 +26,6 @@ import { PaymentSnapshot } from '../../infrastructure/database/entities/competit
     ]),
   ],
   controllers: [UserApplicationsController],
-  providers: [ApplicationsAppService, ApplicationRepository, ApplicationFactory],
+  providers: [ApplicationsAppService, ApplicationRepository, ApplicationFactory, ApplicationDomainService],
 })
 export class ApplicationModule {}

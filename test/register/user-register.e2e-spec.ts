@@ -8,8 +8,8 @@ import { ResponseForm } from 'src/common/response/response';
 import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
-import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
@@ -18,12 +18,12 @@ import {
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 // import { User } from 'src/modules/users/domain/entities/user.entity';
-import { TemporaryUserResDto } from 'src/modules/register/structure/dto/response/temporary-user.res.dto';
+import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
 import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
-import { IsDuplicatedNicknameResDto } from 'src/modules/register/structure/dto/response/is-duplicated-nickname.res.dto';
-import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/structure/dto/response/send-phone-number-auth-code.res';
-import { ConfirmedAuthCodeResDto } from 'src/modules/register/structure/dto/response/confirm-auth-code.res.dto';
-import { IUser } from 'src/modules/users/domain/user.interface';
+import { IsDuplicatedNicknameResDto } from 'src/modules/register/dto/response/is-duplicated-nickname.res.dto';
+import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/dto/response/send-phone-number-auth-code.res';
+import { ConfirmedAuthCodeResDto } from 'src/modules/register/dto/response/confirm-auth-code.res.dto';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;

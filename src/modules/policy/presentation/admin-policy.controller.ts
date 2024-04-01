@@ -1,12 +1,12 @@
 import { Controller } from '@nestjs/common';
 import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { PolicyAppService } from '../application/policy.app.service';
-import { CreatePolicyReqDto } from '../structure/dto/request/create-policy.req.dto';
+import { CreatePolicyReqDto } from '../dto/request/create-policy.req.dto';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { FindPoliciesReqDto } from '../structure/dto/request/find-policies.req.dto';
-import { PolicyResDto } from '../structure/dto/response/policy.res.dto';
-import { FindPoliciesResDto } from '../structure/dto/response/find-policies.res.dto';
+import { FindPoliciesReqDto } from '../dto/request/find-policies.req.dto';
+import { PolicyResDto } from '../dto/response/policy.res.dto';
+import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
 
 @Controller('admin/policy')
 export class AdminPolicyController {

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Competition } from './competition.entity';
-import { ICombinationDiscountRule } from '../../../../modules/competitions/structure/combination-discount-rule.interface';
+import { ICombinationDiscountRule } from '../../../../modules/competitions/domain/structure/combination-discount-rule.interface';
 import { Application } from 'src/infrastructure/database/entities/application/application.entity';
 
 @Entity('combination_discount_snapshot')

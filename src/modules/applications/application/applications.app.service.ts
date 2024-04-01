@@ -1,23 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateApplicationReqDto } from '../structure/dto/request/create-application.req.dto';
+import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
 import { ApplicationRepository } from '../application.repository';
-import { Application } from '../../../infrastructure/database/entities/application/application.entity';
 import { ApplicationFactory } from '../domain/application.factory';
-import { IExpectedPayment } from '../domain/expected-payment.interface';
-import { IUser } from 'src/modules/users/domain/user.interface';
+import { IExpectedPayment } from '../domain/structure/expected-payment.interface';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { IApplication } from '../domain/structure/application.interface';
+import { ApplicationDomainService } from '../domain/application.domain.service';
 
 @Injectable()
 export class ApplicationsAppService {
   constructor(
     private readonly applicationRepository: ApplicationRepository,
     private readonly applicationFactory: ApplicationFactory,
+    private readonly applicationDomainService: ApplicationDomainService,
   ) {}
 
-  async createApplication(userId: IUser['id'], dto: CreateApplicationReqDto): Promise<Application> {
+  async createApplication(userId: IUser['id'], dto: CreateApplicationReqDto): Promise<IApplication> {
     const user = await this.applicationRepository.getUser(userId);
     const competition = await this.applicationRepository.getCompetition(dto.competitionId);
 
-    competition.validateExistDivisions(dto.divisionIds);
+    // competition.validateExistDivisions(dto.divisionIds);
 
     // TODO: check gender
     // competition.validateGender(user)
@@ -29,14 +31,8 @@ export class ApplicationsAppService {
     return application;
   }
 
-  async getExpectedPayment(applicationId: Application['id']): Promise<IExpectedPayment> {
+  async getExpectedPayment(applicationId: IApplication['id']): Promise<IExpectedPayment> {
     const application = await this.applicationRepository.getApplication(applicationId);
-    const participationDivisionIds = application.participationDivisions.map((participationDivision) => {
-      return participationDivision.participationDivisionSnapshots[
-        participationDivision.participationDivisionSnapshots.length - 1
-      ].divisionId;
-    });
-    const competition = await this.applicationRepository.getCompetition(application.competitionId);
-    return competition.calculateExpectedPayment(participationDivisionIds);
+    return this.applicationDomainService.calculateExpectedPrice(application);
   }
 }

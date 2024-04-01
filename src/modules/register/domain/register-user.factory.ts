@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { IRegisterUser } from './register-user.interface';
+import { IRegisterUser } from './structure/register-user.interface';
 import { RegisterRepository } from '../register.repository';
-import { IUser } from 'src/modules/users/domain/user.interface';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
 
 @Injectable()
 export class RegisterUserFactory {

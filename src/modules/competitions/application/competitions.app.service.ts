@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
-import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
-import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
+import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
+import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
+import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
 import { CompetitionRepository } from 'src/modules/competitions/competition.repository';
 import { EarlybirdDiscountSnapshot } from 'src/infrastructure/database/entities/competition/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshot } from '../../../infrastructure/database/entities/competition/combination-discount-snapshot.entity';
-import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
-import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';
+import { CreateEarlybirdDiscountSnapshotReqDto } from '../dto/request/create-earlybird-discount-snapshot.req.dto';
+import { createCombinationDiscountSnapshotReqDto } from '../dto/request/create-combination-discount-snapshot.req.dto';
 import { DivisionFactory } from '../domain/division.factory';
-import { ICompetition } from '../domain/competition.interface';
-import { CompetitionValidator } from '../domain/competition-validator';
-import { IDivision } from '../domain/division.interface';
+import { ICompetition } from '../domain/structure/competition.interface';
+import { CompetitionValidator } from '../domain/competition.validator';
+import { IDivision } from '../domain/structure/division.interface';
 
 @Injectable()
 export class CompetitionsAppService {

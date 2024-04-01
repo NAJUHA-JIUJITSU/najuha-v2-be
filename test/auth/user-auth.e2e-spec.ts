@@ -3,11 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { SnsLoginReqDto } from '../../src/modules/auth/structure/dto/request/sns-login.dto';
+import { SnsLoginReqDto } from '../../src/modules/auth/dto/request/sns-login.dto';
 import appEnv from '../../src/common/app-env';
-import { CreateUserReqDto } from 'src/modules/users/structure/dto/request/create-user.req.dto';
+import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { ResponseForm } from 'src/common/response/response';
-import { AuthTokensResDto } from 'src/modules/auth/structure/dto/response/auth-tokens.res.dto';
+import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -24,7 +24,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { IUser } from 'src/modules/users/domain/user.interface';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {

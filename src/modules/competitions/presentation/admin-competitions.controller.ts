@@ -3,20 +3,20 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
-import { CreateCompetitionReqDto } from '../structure/dto/request/create-competition.req.dto';
-import { CompetitionResDto } from '../structure/dto/response/competition.res.dto';
-import { UpdateCompetitionReqDto } from '../structure/dto/request/update-compoetition.req.dto';
-import { FindCompetitionsResDto } from '../structure/dto/response/find-competitions.res.dto';
-import { UpdateCompetitionStatusReqDto } from '../structure/dto/request/update-competition-status.req.dto';
-import { CreateDivisitonsReqDto } from '../structure/dto/request/create-divisions.req.dto';
+import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
+import { CompetitionResDto } from '../dto/response/competition.res.dto';
+import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
+import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
+import { UpdateCompetitionStatusReqDto } from '../dto/request/update-competition-status.req.dto';
+import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
 import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
-import { CreateCompetitionResDto } from '../structure/dto/response/create-competition.res.dto';
-import { CreateEarlybirdDiscountSnapshotReqDto } from '../structure/dto/request/create-earlybird-discount-snapshot.req.dto';
-import { CreateDivisionsResDto } from '../structure/dto/response/create-divisions.res.dto';
-import { CreateEarlybirdDiscountSnapshotResDto } from '../structure/dto/response/create-earlybird-discount-snapshot.res.dto';
-import { createCombinationDiscountSnapshotReqDto } from '../structure/dto/request/create-combination-discount-snapshot.req.dto';
-import { CreateCombinationDiscountSnapshotResDto } from '../structure/dto/response/create-combination-discount-snapshot.res.dto';
-import { UpdateCompetitionResDto } from '../structure/dto/response/update-competition.res.dto';
+import { CreateCompetitionResDto } from '../dto/response/create-competition.res.dto';
+import { CreateEarlybirdDiscountSnapshotReqDto } from '../dto/request/create-earlybird-discount-snapshot.req.dto';
+import { CreateDivisionsResDto } from '../dto/response/create-divisions.res.dto';
+import { CreateEarlybirdDiscountSnapshotResDto } from '../dto/response/create-earlybird-discount-snapshot.res.dto';
+import { createCombinationDiscountSnapshotReqDto } from '../dto/request/create-combination-discount-snapshot.req.dto';
+import { CreateCombinationDiscountSnapshotResDto } from '../dto/response/create-combination-discount-snapshot.res.dto';
+import { UpdateCompetitionResDto } from '../dto/response/update-competition.res.dto';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {

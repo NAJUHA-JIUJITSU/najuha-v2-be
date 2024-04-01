@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { RefreshTokenReqDto } from 'src/modules/auth/structure/dto/request/refresh-token.dto';
-import { SnsLoginReqDto } from 'src/modules/auth/structure/dto/request/sns-login.dto';
+import { RefreshTokenReqDto } from 'src/modules/auth/dto/request/refresh-token.dto';
+import { SnsLoginReqDto } from 'src/modules/auth/dto/request/sns-login.dto';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import { UserRepository } from 'src/modules/users/user.repository';
 import { SnsAuthClient } from 'src/infrastructure/sns-auth-client/sns-auth.client';
 import { AuthTokenDomainService } from '../domain/auth-token.domain.service';
-import { IAuthTokens } from '../structure/auth-tokens.interface';
+import { IAuthTokens } from '../domain/structure/auth-tokens.interface';
 import appEnv from 'src/common/app-env';
-import { IUser } from 'src/modules/users/domain/user.interface';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
 
 @Injectable()
 export class AuthAppService {

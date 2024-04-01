@@ -5,7 +5,9 @@ import { Competition } from '../../infrastructure/database/entities/competition/
 import { Application } from '../../infrastructure/database/entities/application/application.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
-import { IUser } from '../users/domain/user.interface';
+import { IUser } from '../users/domain/structure/user.interface';
+import { ICompetition } from '../competitions/domain/structure/competition.interface';
+import { IApplication } from './domain/structure/application.interface';
 
 @Injectable()
 export class ApplicationRepository {
@@ -26,7 +28,7 @@ export class ApplicationRepository {
   }
 
   // ----------------- Competition -----------------
-  async getCompetition(id: Competition['id']): Promise<Competition> {
+  async getCompetition(id: ICompetition['id']): Promise<ICompetition> {
     const competition = await this.competitionRepository.findOne({
       where: { id, status: 'ACTIVE' },
       relations: [
@@ -41,11 +43,11 @@ export class ApplicationRepository {
   }
 
   // ----------------- Application -----------------
-  async saveApplication(application: Application): Promise<Application> {
+  async saveApplication(application: IApplication): Promise<IApplication> {
     return this.applicationRepository.save(application);
   }
 
-  async getApplication(id: Application['id']): Promise<Application> {
+  async getApplication(id: IApplication['id']): Promise<IApplication> {
     const application = await this.applicationRepository.findOne({
       where: { id },
       relations: ['participationDivisions', 'participationDivisions.participationDivisionSnapshots'],

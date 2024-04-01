@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Application } from '../../../infrastructure/database/entities/application/application.entity';
-import { CreateApplicationReqDto } from '../structure/dto/request/create-application.req.dto';
+import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
 import { PlayerSnapshot } from '../../../infrastructure/database/entities/application/player-snapshot.entity';
 import { ParticipationDivision } from '../../../infrastructure/database/entities/application/participation-divsion.entity';
 import { ParticipationDivisionSnapshot } from '../../../infrastructure/database/entities/application/participation-division-snapshot.entity';
-import { Competition } from 'src/infrastructure/database/entities/competition/competition.entity';
-import { IUser } from 'src/modules/users/domain/user.interface';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { ICompetition } from 'src/modules/competitions/domain/structure/competition.interface';
+import { IApplication } from './structure/application.interface';
 
 @Injectable()
 export class ApplicationFactory {
-  async create(dto: CreateApplicationReqDto, user: IUser, competition: Competition): Promise<Application> {
+  async create(dto: CreateApplicationReqDto, user: IUser, competition: ICompetition): Promise<IApplication> {
     const application = new Application();
     application.userId = user.id;
     application.competitionId = competition.id;

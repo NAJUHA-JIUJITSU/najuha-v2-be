@@ -5,7 +5,7 @@ import { Competition } from '../../infrastructure/database/entities/competition/
 import { InjectRepository } from '@nestjs/typeorm';
 import { EarlybirdDiscountSnapshot } from '../../infrastructure/database/entities/competition/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshot } from '../../infrastructure/database/entities/competition/combination-discount-snapshot.entity';
-import { ICompetition } from './domain/competition.interface';
+import { ICompetition } from './domain/structure/competition.interface';
 
 @Injectable()
 export class CompetitionRepository {

@@ -2,12 +2,12 @@ import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { CreateApplicationReqDto } from '../../applications/structure/dto/request/create-application.req.dto';
-import { UpdateApplicationReqDto } from '../../applications/structure/dto/request/update-application.req.dto';
+import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
+import { UpdateApplicationReqDto } from '../dto/request/update-application.req.dto';
 import { Application } from '../../../infrastructure/database/entities/application/application.entity';
 import { ApplicationsAppService } from '../application/applications.app.service';
-import { CreateApplicationInReadyStatusResDto } from '../structure/dto/response/create-application.res.dto';
-import { getExpectedPaymentResDto } from '../structure/dto/response/get-expected-payment.res.dto';
+import { CreateApplicationInReadyStatusResDto } from '../dto/response/create-application.res.dto';
+import { getExpectedPaymentResDto } from '../dto/response/get-expected-payment.res.dto';
 
 @Controller('user/applications')
 export class UserApplicationsController {

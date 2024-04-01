@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterReqDto } from '../structure/dto/request/register.req.dto';
+import { RegisterReqDto } from '../dto/request/register.req.dto';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
 import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
 import { PhoneNumberAuthCodeDomainService } from '../domain/phone-number-auth-code.domain.service';
-import { RegisterPhoneNumberReqDto } from '../structure/dto/request/register-phone-number.req..dto';
-import { confirmAuthCodeReqDto } from '../structure/dto/request/confirm-auth-code.req.dto';
+import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.req..dto';
+import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
 import { RegisterRepository } from '../register.repository';
-import { PhoneNumberAuthCode } from '../structure/types/phone-number-auth-code.type';
-import { IAuthTokens } from 'src/modules/auth/structure/auth-tokens.interface';
-import { IUser } from 'src/modules/users/domain/user.interface';
+import { PhoneNumberAuthCode } from '../domain/structure/phone-number-auth-code.type';
+import { IAuthTokens } from 'src/modules/auth/domain/structure/auth-tokens.interface';
+import { IUser } from 'src/modules/users/domain/structure/user.interface';
 import { RegisterUserFactory } from '../domain/register-user.factory';
-import { RegisterValidatorService } from '../domain/register-validator.service';
+import { RegisterValidator } from '../domain/register.validator';
 
 @Injectable()
 export class RegisterAppService {
@@ -18,7 +18,7 @@ export class RegisterAppService {
     private readonly AuthTokenDomainService: AuthTokenDomainService,
     private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeDomainService,
     private readonly registerRepository: RegisterRepository,
-    private readonly registerValidatorService: RegisterValidatorService,
+    private readonly registerValidatorService: RegisterValidator,
     private readonly regiterUserFactory: RegisterUserFactory,
   ) {}
 
