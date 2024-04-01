@@ -1,80 +1,39 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { ApplicationEntity } from './application.entity';
+import { IPlayerSnapshot } from 'src/modules/applications/domain/structure/player-snapshot.interface';
 
 @Entity('player_snapshot')
 export class PlayerSnapshotEntity {
-  /**
-   * - player snapshot id.
-   * @type uint32
-   */
   @PrimaryGeneratedColumn()
-  id: number;
+  id: IPlayerSnapshot['id'];
 
-  /**
-   * - player name.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
-   */
   @Column('varchar', { length: 64 })
-  name: string;
+  name: IPlayerSnapshot['name'];
 
-  /** -player gender */
   @Column('varchar', { length: 16 })
-  gender: 'MALE' | 'FEMALE';
+  gender: IPlayerSnapshot['gender'];
 
-  /**
-   * - player birth (BirtDate YYYYMMDD).
-   * @pattern ^[0-9]{8}$
-   */
   @Column('varchar', { length: 64 })
-  birth: string & BirthDate;
+  birth: IPlayerSnapshot['birth'];
 
-  /**
-   * - player phone number.
-   * - ex) 01012345678.
-   * @pattern ^01[0-9]{9}$
-   */
   @Column('varchar', { length: 16 })
-  phoneNumber: string;
+  phoneNumber: IPlayerSnapshot['phoneNumber'];
 
-  /** - player belt */
   @Column('varchar', { length: 16 })
-  belt: '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
+  belt: IPlayerSnapshot['belt'];
 
-  /**
-   * - 주짓수 네트워크.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
-   */
   @Column('varchar', { length: 64 })
-  network: string;
+  network: IPlayerSnapshot['network'];
 
-  /**
-   * - 소속 팀.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
-   */
   @Column('varchar', { length: 64 })
-  team: string;
+  team: IPlayerSnapshot['team'];
 
-  /**
-   * - 관장님 성함.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
-   */
   @Column('varchar', { length: 64 })
-  masterName: string;
+  masterName: IPlayerSnapshot['masterName'];
 
-  /** - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다. */
   @CreateDateColumn()
-  createdAt: Date | string;
+  createdAt: IPlayerSnapshot['createdAt'];
 
-  /** - application id. */
   @Column()
   applicationId: ApplicationEntity['id'];
 

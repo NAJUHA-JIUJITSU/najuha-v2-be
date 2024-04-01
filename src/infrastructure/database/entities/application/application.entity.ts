@@ -45,7 +45,6 @@ export class ApplicationEntity {
   @Column({ nullable: true })
   earlybirdDiscountSnapshotId: EarlybirdDiscountSnapshotEntity['id'];
 
-  /** - earlybird discount snapshot. */
   @ManyToOne(
     () => EarlybirdDiscountSnapshotEntity,
     (earlybirdDiscountSnapshot) => earlybirdDiscountSnapshot.applications,
@@ -53,11 +52,9 @@ export class ApplicationEntity {
   @JoinColumn({ name: 'earlybirdDiscountSnapshotId' })
   earlybirdDiscountSnapshot: EarlybirdDiscountSnapshotEntity;
 
-  /** - combination discount snapshot id. */
   @Column({ nullable: true })
   combinationDiscountSnapshotId: PaymentSnapshotEntity['id'];
 
-  /** - combination discount snapshot. */
   @ManyToOne(
     () => CombinationDiscountSnapshotEntity,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.applications,
@@ -65,20 +62,16 @@ export class ApplicationEntity {
   @JoinColumn({ name: 'combinationDiscountSnapshotId' })
   combinationDiscountSnapshot: CombinationDiscountSnapshotEntity;
 
-  /** - competition id. */
   @Column()
   competitionId: CompetitionEntity['id'];
 
-  /** - competition. */
   @ManyToOne(() => CompetitionEntity, (competition) => competition.applications)
   @JoinColumn({ name: 'competitionId' })
   competition: CompetitionEntity;
 
-  /** - user id. */
   @Column()
   userId: UserEntity['id'];
 
-  /** - user, 신청자 계정정보. */
   @ManyToOne(() => UserEntity, (user) => user.applications)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;

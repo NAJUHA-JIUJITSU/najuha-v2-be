@@ -1,24 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { PolicyEntity } from 'src/infrastructure/database/entities/policy/policy.entity';
 import { UserEntity } from './user.entity';
+import { IPolicyConsent } from 'src/modules/register/domain/structure/policy-consent.interface';
 
-/** - 사용자가 동의한 약관 정보. */
 @Entity('policy_consent')
 export class PolicyConsentEntity {
-  /**
-   * - 약관 동의 ID.
-   * @type uint32
-   */
   @PrimaryGeneratedColumn()
-  id: number;
+  id: IPolicyConsent['id'];
 
-  /** - 동의 날짜. */
   @CreateDateColumn()
-  createdAt: Date | string;
+  createdAt: IPolicyConsent['createdAt'];
 
-  /** - userId. */
   @Column()
-  userId: number;
+  userId: UserEntity['id'];
 
   /** - user */
   @ManyToOne(() => UserEntity, (user) => user.policyConsents)
@@ -27,7 +21,7 @@ export class PolicyConsentEntity {
 
   /** - policyId. */
   @Column()
-  policyId: number;
+  policyId: PolicyEntity['id'];
 
   /** - policy */
   @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)

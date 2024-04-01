@@ -1,21 +1,15 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ParticipationDivisionEntity } from './participation-divsion.entity';
 import { DivisionEntity } from '../competition/division.entity';
+import { IParticipationDivisionSnapshot } from 'src/modules/applications/domain/structure/participation-division-snapshot.interface';
 
 @Entity('participation_divsion_snapshot')
 export class ParticipationDivisionSnapshotEntity {
-  /**
-   * - participation division id.
-   * @type uint32
-   */
   @PrimaryGeneratedColumn()
-  id: number;
+  id: IParticipationDivisionSnapshot['id'];
 
-  /**
-   * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
-   */
   @CreateDateColumn()
-  createdAt: Date | string;
+  createdAt: IParticipationDivisionSnapshot['createdAt'];
 
   /** - participation division id. */
   @Column()
