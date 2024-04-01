@@ -1,56 +1,30 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
+import { IPaymentSnapshot } from 'src/modules/competitions/domain/structure/payment-snapshot.interface';
 
 @Entity('payment_snapshot')
 export class PaymentSnapshotEntity {
-  /**
-   * - application package snapshot id.
-   * @type uint32
-   */
   @PrimaryGeneratedColumn()
-  id: number;
+  id: IPaymentSnapshot['id'];
 
-  /** - entity 생성 시간. */
   @CreateDateColumn()
-  createdAt: Date | string;
+  createdAt: IPaymentSnapshot['createdAt'];
 
-  /**
-   * - pacage total amount.
-   * @type uint32
-   * @minimum 0
-   */
   @Column('int', { unsigned: true })
-  normalAmount: number;
+  normalAmount: IPaymentSnapshot['normalAmount'];
 
-  /**
-   * - earlybird discount amount.
-   * @type uint32
-   * @minimum 0
-   */
   @Column('int', { unsigned: true })
-  earlybirdDiscountAmount: number;
+  earlybirdDiscountAmount: IPaymentSnapshot['earlybirdDiscountAmount'];
 
-  /**
-   * - combination discount amount.
-   * @type uint32
-   * @minimum 0
-   */
   @Column('int', { unsigned: true })
-  combinationDiscountAmount: number;
+  combinationDiscountAmount: IPaymentSnapshot['combinationDiscountAmount'];
 
-  /**
-   * - total amount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount.
-   * @type uint32
-   * @minimum 0
-   */
   @Column('int', { unsigned: true })
-  totalAmount: number;
+  totalAmount: IPaymentSnapshot['totalAmount'];
 
-  /** - application id. */
   @Column()
   applicationId: ApplicationEntity['id'];
 
-  /** - application. */
   @ManyToOne(() => ApplicationEntity, (application) => application.paymentSnapshots)
   application: ApplicationEntity;
 }
