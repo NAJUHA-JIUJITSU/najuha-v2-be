@@ -17,9 +17,8 @@ import {
 } from 'src/common/response/errorResponse';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-// import { User } from 'src/modules/users/domain/entities/user.entity';
 import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
-import { Policy } from 'src/infrastructure/database/entities/policy/policy.entity';
+import { IPolicy } from 'src/modules/policy/domain/structure/policy.interface';
 import { IsDuplicatedNicknameResDto } from 'src/modules/register/dto/response/is-duplicated-nickname.res.dto';
 import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/dto/response/send-phone-number-auth-code.res';
 import { ConfirmedAuthCodeResDto } from 'src/modules/register/dto/response/confirm-auth-code.res.dto';
@@ -202,7 +201,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-5 PATCH /user/register ------------------------------------------------', () => {
     it('유저 등록 성공 시', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const ret = await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -239,7 +238,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 닉네임 중복', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -280,7 +279,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 필수 약관 미동의', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
@@ -316,7 +315,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 전화번호 미등록', async () => {
-      const policyTypes: Policy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
+      const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
