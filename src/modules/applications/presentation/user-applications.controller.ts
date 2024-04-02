@@ -8,6 +8,7 @@ import { ApplicationsAppService } from '../application/applications.app.service'
 import { getExpectedPaymentResDto } from '../dto/response/get-expected-payment.res.dto';
 import { IApplication } from '../domain/structure/application.interface';
 import { CreateApplicationResDto } from '../dto/response/create-application.res.dto';
+import { GetApplicationResDto } from '../dto/response/get-application.res.dto';
 
 @Controller('user/applications')
 export class UserApplicationsController {
@@ -41,8 +42,10 @@ export class UserApplicationsController {
   @TypedRoute.Get('/:applicationId')
   async getCompetitionApplication(
     @TypedParam('applicationId') applicationId: IApplication['id'],
-  ): Promise<ResponseForm<any>> {
-    return createResponseForm({});
+    @Req() req: Request,
+  ): Promise<ResponseForm<GetApplicationResDto>> {
+    const application = await this.ApplicationAppService.getApplication(req['userId'], applicationId);
+    return createResponseForm({ application });
   }
 
   /**
@@ -86,8 +89,9 @@ export class UserApplicationsController {
   @TypedRoute.Get('/:applicationId/expected-payment')
   async getExpectedPayment(
     @TypedParam('applicationId') applicationId: IApplication['id'],
+    @Req() req: Request,
   ): Promise<ResponseForm<getExpectedPaymentResDto>> {
-    const expectedPayment = await this.ApplicationAppService.getExpectedPayment(applicationId);
+    const expectedPayment = await this.ApplicationAppService.getExpectedPayment(req['userId'], applicationId);
     return createResponseForm({ expectedPayment });
   }
 }

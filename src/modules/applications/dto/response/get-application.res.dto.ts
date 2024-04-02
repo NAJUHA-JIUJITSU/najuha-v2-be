@@ -7,6 +7,7 @@ interface SParticipationDivisionSnapshot {
   createdAt: IParticipationDivisionSnapshot['createdAt'];
   participationDivisionId: IParticipationDivisionSnapshot['participationDivisionId'];
   divisionId: IParticipationDivisionSnapshot['divisionId'];
+  division: IParticipationDivisionSnapshot['division'];
 }
 
 interface SParticipationDivision {
@@ -27,6 +28,6 @@ interface SApplication {
   participationDivisions: SParticipationDivision[];
 }
 
-export interface CreateApplicationResDto {
+export interface GetApplicationResDto {
   application: SApplication;
 }

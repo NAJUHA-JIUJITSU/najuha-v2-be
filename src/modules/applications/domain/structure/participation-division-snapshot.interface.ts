@@ -18,5 +18,7 @@ export interface IParticipationDivisionSnapshot {
 
   divisionId: IDivision['id'];
 
+  division: IDivision;
+
   // cancleId
 }

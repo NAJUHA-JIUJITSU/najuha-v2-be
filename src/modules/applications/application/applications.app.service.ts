@@ -27,8 +27,24 @@ export class ApplicationsAppService {
     return await this.applicationRepository.saveApplication(application);
   }
 
-  async getExpectedPayment(applicationId: IApplication['id']): Promise<IExpectedPayment> {
-    const application = await this.applicationRepository.getApplication(applicationId);
+  async getExpectedPayment(userId: IUser['id'], applicationId: IApplication['id']): Promise<IExpectedPayment> {
+    const application = await this.applicationRepository.getApplication({
+      where: { userId, id: applicationId },
+      relations: ['participationDivisions', 'participationDivisions.participationDivisionSnapshots'],
+    });
     return this.applicationDomainService.calculateExpectedPrice(application);
+  }
+
+  async getApplication(userId: IUser['id'], applicationId: IApplication['id']): Promise<IApplication> {
+    const application = await this.applicationRepository.getApplication({
+      where: { userId, id: applicationId },
+      relations: [
+        'playerSnapshots',
+        'participationDivisions',
+        'participationDivisions.participationDivisionSnapshots',
+        'participationDivisions.participationDivisionSnapshots.division',
+      ],
+    });
+    return application;
   }
 }

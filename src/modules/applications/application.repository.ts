@@ -47,10 +47,13 @@ export class ApplicationRepository {
     return this.applicationRepository.save(application);
   }
 
-  async getApplication(id: IApplication['id']): Promise<IApplication> {
+  async getApplication(options?: {
+    where?: Partial<Pick<ApplicationEntity, 'id' | 'userId'>>;
+    relations?: string[];
+  }): Promise<IApplication> {
     const application = await this.applicationRepository.findOne({
-      where: { id },
-      relations: ['participationDivisions', 'participationDivisions.participationDivisionSnapshots'],
+      where: { ...options?.where },
+      relations: options?.relations,
     });
     if (!application) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Application not found');
     return application;
