@@ -216,11 +216,27 @@ export const CompetitionsErrorMap = {
 
 export type APPLICATIONS_DIVISION_NOT_FOUND = ErrorResponse & {
   isSuccess: false;
-  status: HttpStatus.BAD_REQUEST;
+  status: HttpStatus.NOT_FOUND;
   code: 7000;
   result: '신청 부문을 찾을 수 없습니다.';
 };
 
+export type APPLICATIONS_DIVISION_AGE_NOT_MATCH = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7001;
+  result: '신청 부문의 나이가 맞지 않습니다.';
+};
+
+export type APPLICATIONS_DIVISION_GENDER_NOT_MATCH = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7002;
+  result: '신청 부문의 성별이 맞지 않습니다.';
+};
+
 export const ApplicationsErrorMap = {
   APPLICATIONS_DIVISION_NOT_FOUND: typia.random<APPLICATIONS_DIVISION_NOT_FOUND>(),
+  APPLICATIONS_DIVISION_AGE_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_AGE_NOT_MATCH>(),
+  APPLICATIONS_DIVISION_GENDER_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_GENDER_NOT_MATCH>(),
 };

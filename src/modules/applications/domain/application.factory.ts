@@ -10,10 +10,10 @@ import { ParticipationDivisionSnapshotEntity } from 'src/infrastructure/database
 
 @Injectable()
 export class ApplicationFactory {
-  async create(dto: CreateApplicationReqDto, user: IUser, competition: ICompetition): Promise<IApplication> {
+  create(dto: CreateApplicationReqDto, user: IUser, competition: ICompetition): IApplication {
     const application = new ApplicationEntity();
     application.userId = user.id;
-    // application.petitionId = competition.id;
+    application.competitionId = competition.id;
 
     const playerSnapshot = new PlayerSnapshotEntity();
     playerSnapshot.name = user.name;

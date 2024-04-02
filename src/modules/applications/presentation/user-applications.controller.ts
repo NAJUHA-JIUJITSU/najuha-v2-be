@@ -5,9 +5,9 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
 import { UpdateApplicationReqDto } from '../dto/request/update-application.req.dto';
 import { ApplicationsAppService } from '../application/applications.app.service';
-import { CreateApplicationInReadyStatusResDto } from '../dto/response/create-application.res.dto';
 import { getExpectedPaymentResDto } from '../dto/response/get-expected-payment.res.dto';
 import { IApplication } from '../domain/structure/application.interface';
+import { CreateApplicationResDto } from '../dto/response/create-application.res.dto';
 
 @Controller('user/applications')
 export class UserApplicationsController {
@@ -25,7 +25,7 @@ export class UserApplicationsController {
   async createCompetitionApplication(
     @Req() req: Request,
     @TypedBody() dto: CreateApplicationReqDto,
-  ): Promise<ResponseForm<CreateApplicationInReadyStatusResDto>> {
+  ): Promise<ResponseForm<CreateApplicationResDto>> {
     const application = await this.ApplicationAppService.createApplication(req['userId'], dto);
     return createResponseForm({ application });
   }

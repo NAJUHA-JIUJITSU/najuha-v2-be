@@ -28,9 +28,9 @@ export class ApplicationRepository {
   }
 
   // ----------------- Competition -----------------
-  async getCompetition(id: ICompetition['id']): Promise<ICompetition> {
+  async getCompetition(id: ICompetition['id'], status?: ICompetition['status']): Promise<ICompetition> {
     const competition = await this.competitionRepository.findOne({
-      where: { id, status: 'ACTIVE' },
+      where: { id, status },
       relations: [
         'divisions',
         'divisions.priceSnapshots',

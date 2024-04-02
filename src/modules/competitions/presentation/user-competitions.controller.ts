@@ -19,7 +19,7 @@ export class UserCompetitionsController {
    * @tag u-5 competitions
    * @returns competitions
    */
-  @RoleLevels(RoleLevel.USER)
+  @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/')
   async findCompetitions(): Promise<ResponseForm<FindCompetitionsResDto>> {
     const competitions = await this.CompetitionsAppService.findCompetitions({ where: { status: 'ACTIVE' } });
@@ -34,7 +34,7 @@ export class UserCompetitionsController {
    * @tag u-5 competitions
    * @returns competition
    */
-  @RoleLevels(RoleLevel.USER)
+  @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:competitionId')
   async getCompetition(
     @TypedParam('competitionId') competitionId: ICompetition['id'],

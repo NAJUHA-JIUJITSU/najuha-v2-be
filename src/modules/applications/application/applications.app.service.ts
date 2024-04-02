@@ -19,13 +19,12 @@ export class ApplicationsAppService {
 
   async createApplication(userId: IUser['id'], dto: CreateApplicationReqDto): Promise<IApplication> {
     const user = await this.applicationRepository.getUser(userId);
-    const competition = await this.applicationRepository.getCompetition(dto.competitionId);
+    const competition = await this.applicationRepository.getCompetition(dto.competitionId, 'ACTIVE');
 
     await this.applicationValidator.validateApplication(dto, competition);
 
-    let application = await this.applicationFactory.create(dto, user, competition);
-    application = await this.applicationRepository.saveApplication(application);
-    return application;
+    const application = this.applicationFactory.create(dto, user, competition);
+    return await this.applicationRepository.saveApplication(application);
   }
 
   async getExpectedPayment(applicationId: IApplication['id']): Promise<IExpectedPayment> {

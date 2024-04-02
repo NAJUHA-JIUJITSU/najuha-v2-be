@@ -50,6 +50,7 @@ export interface IDivision {
    */
   birthYearRangeEnd: string;
 
+  // TODO: inactive 조회 구현
   /**
    * - 활성 상태.
    * - ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)
