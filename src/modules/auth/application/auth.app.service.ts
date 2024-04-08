@@ -5,9 +5,9 @@ import { AuthErrorMap, BusinessException } from 'src/common/response/errorRespon
 import { UserRepository } from 'src/modules/users/user.repository';
 import { SnsAuthClient } from 'src/infrastructure/sns-auth-client/sns-auth.client';
 import { AuthTokenDomainService } from '../domain/auth-token.domain.service';
-import { IAuthTokens } from '../domain/structure/auth-tokens.interface';
+import { IAuthTokens } from '../domain/interface/auth-tokens.interface';
 import appEnv from 'src/common/app-env';
-import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 @Injectable()
 export class AuthAppService {

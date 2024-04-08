@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
 import { ParticipationDivisionSnapshotEntity } from './participation-division-snapshot.entity';
 import { ApplicationEntity } from './application.entity';
-import { IParticipationDivision } from 'src/modules/applications/domain/structure/participation-division.interface';
+import { IParticipationDivision } from 'src/modules/applications/domain/interface/participation-division.interface';
 
 @Entity('participation_divsion')
 export class ParticipationDivisionEntity {

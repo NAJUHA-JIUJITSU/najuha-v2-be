@@ -1,4 +1,4 @@
-import { IPolicy } from '../../domain/structure/policy.interface';
+import { IPolicy } from '../../domain/interface/policy.interface';
 
 export interface FindPolicyResDto {
   policy: IPolicy | null;

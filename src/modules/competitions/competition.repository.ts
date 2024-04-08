@@ -1,18 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CompetitionEntity } from '../../infrastructure/database/entities/competition/competition.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EarlybirdDiscountSnapshotEntity } from '../../infrastructure/database/entities/competition/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshotEntity } from '../../infrastructure/database/entities/competition/combination-discount-snapshot.entity';
-import { ICompetition } from './domain/structure/competition.interface';
-import { IEarlybirdDiscountSnapshot } from './domain/structure/earlybird-discount-snapshot.interface';
+import { ICompetition } from './domain/interface/competition.interface';
+import { IEarlybirdDiscountSnapshot } from './domain/interface/earlybird-discount-snapshot.interface';
+import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
+import { IDivision } from './domain/interface/division.interface';
+import { ICombinationDiscountSnapshot } from './domain/interface/combination-discount-snapshot.interface';
 
 @Injectable()
 export class CompetitionRepository {
   constructor(
     @InjectRepository(CompetitionEntity)
     private readonly competitionRepository: Repository<CompetitionEntity>,
+    @InjectRepository(DivisionEntity)
+    private readonly divisionRepository: Repository<DivisionEntity>,
     @InjectRepository(EarlybirdDiscountSnapshotEntity)
     private readonly earlybirdDiscountSnapshotRepository: Repository<EarlybirdDiscountSnapshotEntity>,
     @InjectRepository(CombinationDiscountSnapshotEntity)
@@ -29,7 +34,7 @@ export class CompetitionRepository {
   async findCompetitons(options?: {
     where?: Partial<Pick<ICompetition, 'status'>>;
     relations?: string[];
-  }): Promise<ICompetition[]> {
+  }): Promise<ICompetition.Find.Competition[]> {
     return await this.competitionRepository.find(options);
   }
 
@@ -54,6 +59,11 @@ export class CompetitionRepository {
     if (!result.affected) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
   }
 
+  // ----------------- Division -----------------
+  async saveDivisions(dto: Partial<IDivision>[]): Promise<DivisionEntity[]> {
+    return await this.divisionRepository.save(dto);
+  }
+
   // ----------------- EarlybirdDiscountSnapshot -----------------
   async createEarlybirdDiscount(
     id: ICompetition['id'],
@@ -67,7 +77,7 @@ export class CompetitionRepository {
   // ----------------- CombinationDiscountSnapshotEntity -----------------
   async createCombinationDiscount(
     id: ICompetition['id'],
-    dto: Pick<CombinationDiscountSnapshotEntity, 'combinationDiscountRules'>,
+    dto: Pick<ICombinationDiscountSnapshot, 'combinationDiscountRules'>,
   ): Promise<CombinationDiscountSnapshotEntity> {
     const combinationDiscountSnapshot = this.combinationDiscountSnapshotRepository.create(dto);
     combinationDiscountSnapshot.competitionId = id;

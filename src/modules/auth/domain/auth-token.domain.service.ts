@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import Redis from 'ioredis';
 import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
-import { IAuthTokens } from './structure/auth-tokens.interface';
-import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { IAuthTokens } from './interface/auth-tokens.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 @Injectable()
 export class AuthTokenDomainService {

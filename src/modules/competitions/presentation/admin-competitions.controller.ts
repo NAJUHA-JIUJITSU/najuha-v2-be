@@ -3,20 +3,22 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
-import { CreateCompetitionReqDto } from '../dto/request/create-competition.req.dto';
-import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { UpdateCompetitionReqDto } from '../dto/request/update-compoetition.req.dto';
-import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
-import { UpdateCompetitionStatusReqDto } from '../dto/request/update-competition-status.req.dto';
-import { CreateDivisitonsReqDto } from '../dto/request/create-divisions.req.dto';
-import { CreateCompetitionResDto } from '../dto/response/create-competition.res.dto';
-import { CreateEarlybirdDiscountSnapshotReqDto } from '../dto/request/create-earlybird-discount-snapshot.req.dto';
-import { CreateDivisionsResDto } from '../dto/response/create-divisions.res.dto';
-import { CreateEarlybirdDiscountSnapshotResDto } from '../dto/response/create-earlybird-discount-snapshot.res.dto';
-import { createCombinationDiscountSnapshotReqDto } from '../dto/request/create-combination-discount-snapshot.req.dto';
-import { CreateCombinationDiscountSnapshotResDto } from '../dto/response/create-combination-discount-snapshot.res.dto';
-import { UpdateCompetitionResDto } from '../dto/response/update-competition.res.dto';
-import { ICompetition } from '../domain/structure/competition.interface';
+import {
+  CreateCombinationDiscountSnapshotReqBody,
+  CreateCombinationDiscountSnapshotRes,
+  CreateCompetitionReqBody,
+  CreateCompetitionRes,
+  CreateDivisionsReqBody,
+  CreateDivisionsRes,
+  CreateEarlybirdDiscountSnapshotReqBody,
+  CreateEarlybirdDiscountSnapshotRes,
+  FindCompetitionsRes,
+  UpdateCompetitionReqBody,
+  UpdateCompetitionRes,
+  UpdateCompetitionStatusReqBody,
+} from './dtos';
+import { ICompetition } from '../domain/interface/competition.interface';
+import { GetCompetitionRet } from '../application/dtos';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -31,9 +33,8 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
-  async createCompetition(@TypedBody() dto: CreateCompetitionReqDto): Promise<ResponseForm<CreateCompetitionResDto>> {
-    const competition = await this.competitionsAppService.createCompetition(dto);
-    return createResponseForm({ competition });
+  async createCompetition(@TypedBody() body: CreateCompetitionReqBody): Promise<ResponseForm<CreateCompetitionRes>> {
+    return createResponseForm(await this.competitionsAppService.createCompetition({ creatCompetition: body }));
   }
 
   /**
@@ -46,11 +47,8 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
-  async findCompetitions(): Promise<ResponseForm<FindCompetitionsResDto>> {
-    const competitions = await this.competitionsAppService.findCompetitions();
-    return createResponseForm({
-      competitions,
-    });
+  async findCompetitions(): Promise<ResponseForm<FindCompetitionsRes>> {
+    return createResponseForm(await this.competitionsAppService.findCompetitions());
   }
 
   /**
@@ -63,9 +61,8 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:id')
-  async findCompetition(@TypedParam('id') id: ICompetition['id']): Promise<ResponseForm<CompetitionResDto>> {
-    const competition = await this.competitionsAppService.getCompetition({ where: { id } });
-    return createResponseForm({ competition });
+  async findCompetition(@TypedParam('id') id: ICompetition['id']): Promise<ResponseForm<GetCompetitionRet>> {
+    return createResponseForm(await this.competitionsAppService.getCompetition({ competitionId: id }));
   }
 
   /**
@@ -79,10 +76,11 @@ export class AdminCompetitionsController {
   @TypedRoute.Patch('/:id')
   async updateCompetition(
     @TypedParam('id') id: ICompetition['id'],
-    @TypedBody() dto: UpdateCompetitionReqDto,
-  ): Promise<ResponseForm<UpdateCompetitionResDto>> {
-    const competition = await this.competitionsAppService.updateCompetition(id, dto);
-    return createResponseForm({ competition });
+    @TypedBody() body: UpdateCompetitionReqBody,
+  ): Promise<ResponseForm<UpdateCompetitionRes>> {
+    return createResponseForm(
+      await this.competitionsAppService.updateCompetition({ updateCompetition: { id, ...body } }),
+    );
   }
 
   /**
@@ -96,10 +94,14 @@ export class AdminCompetitionsController {
   @TypedRoute.Patch('/:id/status')
   async updateCompetitionStatus(
     @TypedParam('id') id: ICompetition['id'],
-    @TypedBody() dto: UpdateCompetitionStatusReqDto,
-  ): Promise<ResponseForm<UpdateCompetitionResDto>> {
-    const competition = await this.competitionsAppService.updateCompetitionStatus(id, dto.status);
-    return createResponseForm({ competition });
+    @TypedBody() body: UpdateCompetitionStatusReqBody,
+  ): Promise<ResponseForm<UpdateCompetitionRes>> {
+    return createResponseForm(
+      await this.competitionsAppService.updateCompetitionStatus({
+        competitionId: id,
+        status: body.status,
+      }),
+    );
   }
 
   /**
@@ -113,12 +115,11 @@ export class AdminCompetitionsController {
   @TypedRoute.Post('/:id/divisions')
   async createDivisions(
     @TypedParam('id') id: ICompetition['id'],
-    @TypedBody() dto: CreateDivisitonsReqDto,
-  ): Promise<ResponseForm<CreateDivisionsResDto>> {
-    const divisions = await this.competitionsAppService.createDivisions(id, dto);
-    return createResponseForm({
-      divisions,
-    });
+    @TypedBody() body: CreateDivisionsReqBody,
+  ): Promise<ResponseForm<CreateDivisionsRes>> {
+    return createResponseForm(
+      await this.competitionsAppService.createDivisions({ competitionId: id, divisionPacks: body.divisionPacks }),
+    );
   }
 
   /**
@@ -132,12 +133,14 @@ export class AdminCompetitionsController {
   @TypedRoute.Post('/:id/earlybird-discount-snapshots')
   async createEarlybirdDiscountSnapshot(
     @TypedParam('id') id: ICompetition['id'],
-    @TypedBody() dto: CreateEarlybirdDiscountSnapshotReqDto,
-  ): Promise<ResponseForm<CreateEarlybirdDiscountSnapshotResDto>> {
-    const earlybirdDiscountSnapshot = await this.competitionsAppService.createEarlybirdDiscountSnapshot(id, dto);
-    return createResponseForm({
-      earlybirdDiscountSnapshot,
-    });
+    @TypedBody() body: CreateEarlybirdDiscountSnapshotReqBody,
+  ): Promise<ResponseForm<CreateEarlybirdDiscountSnapshotRes>> {
+    return createResponseForm(
+      await this.competitionsAppService.createEarlybirdDiscountSnapshot({
+        competitionId: id,
+        earlybirdDiscount: body,
+      }),
+    );
   }
 
   /**
@@ -151,11 +154,13 @@ export class AdminCompetitionsController {
   @TypedRoute.Post('/:id/combination-discount-snapshots')
   async createCombinationDiscountSnapshot(
     @TypedParam('id') id: ICompetition['id'],
-    @TypedBody() dto: createCombinationDiscountSnapshotReqDto,
-  ): Promise<ResponseForm<CreateCombinationDiscountSnapshotResDto>> {
-    const combinationDiscountSnapshot = await this.competitionsAppService.createCombinationDiscountSnapshot(id, dto);
-    return createResponseForm({
-      combinationDiscountSnapshot,
-    });
+    @TypedBody() dto: CreateCombinationDiscountSnapshotReqBody,
+  ): Promise<ResponseForm<CreateCombinationDiscountSnapshotRes>> {
+    return createResponseForm(
+      await this.competitionsAppService.createCombinationDiscountSnapshot({
+        competitionId: id,
+        combinationDiscount: dto,
+      }),
+    );
   }
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
-import { IUser } from './domain/structure/user.interface';
+import { IUser } from './domain/interface/user.interface';
 
 @Injectable()
 export class UserRepository {

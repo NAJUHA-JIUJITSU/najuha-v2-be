@@ -1,17 +1,21 @@
-import { IDivision } from 'src/modules/competitions/domain/structure/division.interface';
+import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { ApplicationRepository } from '../application.repository';
-import { IApplication } from './structure/application.interface';
-import { IExpectedPayment } from './structure/expected-payment.interface';
-import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/structure/earlybird-discount-snapshot.interface';
-import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/structure/combination-discount-snapshot.interface';
+import { IApplication } from './interface/application.interface';
+import { IExpectedPayment } from './interface/expected-payment.interface';
+import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
+import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import { Injectable } from '@nestjs/common';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 
 @Injectable()
 export class ApplicationDomainService {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
 
-  async calculateExpectedPrice(application: IApplication): Promise<IExpectedPayment> {
-    const competition = await this.applicationRepository.getCompetition(application.competitionId);
+  async calculatePayment(
+    application: IApplication.CalculatePayment.Application,
+    competition: IApplication.CalculatePayment.Competition,
+  ): Promise<IExpectedPayment> {
+    // const competition = await this.applicationRepository.getCompetition(application.competitionId);
 
     const participationDivisionIds = application.participationDivisions.map((participationDivision) => {
       return participationDivision.participationDivisionSnapshots[
@@ -19,15 +23,17 @@ export class ApplicationDomainService {
       ].divisionId;
     });
 
-    const divisions = competition.divisions.filter((division) => participationDivisionIds.includes(division.id));
+    const participationDivisions = competition.divisions.filter((division) =>
+      participationDivisionIds.includes(division.id),
+    );
 
-    const normalAmount = this.calculateNormalAmount(divisions);
+    const normalAmount = this.calculateNormalAmount(participationDivisions);
     const earlybirdDiscountAmount = this.calculateEarlybirdDiscountAmount(
       competition.earlybirdDiscountSnapshots[competition.earlybirdDiscountSnapshots.length - 1] || null,
     );
     const combinationDiscountAmount = this.calculateCombinationDiscountAmount(
       competition.combinationDiscountSnapshots[competition.combinationDiscountSnapshots.length - 1] || null,
-      divisions,
+      participationDivisions,
     );
     const totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
 
@@ -57,14 +63,15 @@ export class ApplicationDomainService {
   ): number {
     if (combinationDiscountSnapshot === null) return 0;
     const divisionUnits = divisions.map((division) => ({
-      weight: division.weight === 'ABSOLUTE' ? 'ABSOLUTE' : 'WEIGHT',
-      uniform: division.uniform,
+      weightType: division.weight === 'ABSOLUTE' ? 'ABSOLUTE' : 'WEIGHT',
+      uniformType: division.uniform,
     }));
     let maxDiscountAmount = 0;
     for (const rule of combinationDiscountSnapshot.combinationDiscountRules) {
       const matched = rule.combination.every((unit) =>
         divisionUnits.some(
-          (divisionUnit) => divisionUnit.uniform === unit.uniform && divisionUnit.weight === unit.weight,
+          (divisionUnit) =>
+            divisionUnit.uniformType === unit.uniformType && divisionUnit.weightType === unit.weightType,
         ),
       );
       if (matched) maxDiscountAmount = Math.max(maxDiscountAmount, rule.discountAmount);

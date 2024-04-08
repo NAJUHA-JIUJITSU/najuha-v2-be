@@ -3,9 +3,8 @@ import { Controller } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
-import { CompetitionResDto } from '../dto/response/competition.res.dto';
-import { FindCompetitionsResDto } from '../dto/response/find-competitions.res.dto';
-import { ICompetition } from '../domain/structure/competition.interface';
+import { ICompetition } from '../domain/interface/competition.interface';
+import { FindCompetitionsRes, GetCompetitionRes } from './dtos';
 
 @Controller('user/competitions')
 export class UserCompetitionsController {
@@ -21,9 +20,8 @@ export class UserCompetitionsController {
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/')
-  async findCompetitions(): Promise<ResponseForm<FindCompetitionsResDto>> {
-    const competitions = await this.CompetitionsAppService.findCompetitions({ where: { status: 'ACTIVE' } });
-    return createResponseForm({ competitions });
+  async findCompetitions(): Promise<ResponseForm<FindCompetitionsRes>> {
+    return createResponseForm(await this.CompetitionsAppService.findCompetitions({ status: 'ACTIVE' }));
   }
 
   /**
@@ -38,10 +36,7 @@ export class UserCompetitionsController {
   @TypedRoute.Get('/:competitionId')
   async getCompetition(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-  ): Promise<ResponseForm<CompetitionResDto>> {
-    const competition = await this.CompetitionsAppService.getCompetition({
-      where: { id: competitionId, status: 'ACTIVE' },
-    });
-    return createResponseForm({ competition });
+  ): Promise<ResponseForm<GetCompetitionRes>> {
+    return createResponseForm(await this.CompetitionsAppService.getCompetition({ competitionId, status: 'ACTIVE' }));
   }
 }

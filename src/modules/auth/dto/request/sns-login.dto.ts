@@ -1,4 +1,4 @@
-import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 export type SnsLoginReqDto = {
   /**

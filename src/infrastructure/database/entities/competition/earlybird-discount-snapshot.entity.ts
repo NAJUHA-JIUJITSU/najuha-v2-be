@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { ApplicationEntity } from 'src/infrastructure/database/entities/application/application.entity';
-import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/structure/earlybird-discount-snapshot.interface';
+import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 
 @Entity('early_bird_discount_snapshot')
 export class EarlybirdDiscountSnapshotEntity {

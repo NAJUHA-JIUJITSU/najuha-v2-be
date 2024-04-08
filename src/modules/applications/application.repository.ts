@@ -4,9 +4,9 @@ import { Repository } from 'typeorm';
 import { ApplicationEntity } from '../../infrastructure/database/entities/application/application.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
-import { IUser } from '../users/domain/structure/user.interface';
-import { ICompetition } from '../competitions/domain/structure/competition.interface';
-import { IApplication } from './domain/structure/application.interface';
+import { IUser } from '../users/domain/interface/user.interface';
+import { ICompetition } from '../competitions/domain/interface/competition.interface';
+import { IApplication } from './domain/interface/application.interface';
 import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
 
 @Injectable()
@@ -28,29 +28,41 @@ export class ApplicationRepository {
   }
 
   // ----------------- Competition -----------------
-  async getCompetition(id: ICompetition['id'], status?: ICompetition['status']): Promise<ICompetition> {
+  // async getCompetition(id: ICompetition['id'], status?: ICompetition['status']): Promise<ICompetition> {
+  //   const competition = await this.competitionRepository.findOne({
+  //     where: { id, status },
+  //     relations: [
+  //       'divisions',
+  //       'divisions.priceSnapshots',
+  //       'earlybirdDiscountSnapshots',
+  //       'combinationDiscountSnapshots',
+  //     ],
+  //   });
+  //   if (!competition) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
+  //   return competition;
+  // }
+
+  async getCompetition(options?: {
+    where?: Partial<Pick<ICompetition, 'id' | 'status'>>;
+    relations?: string[];
+  }): Promise<ICompetition> {
     const competition = await this.competitionRepository.findOne({
-      where: { id, status },
-      relations: [
-        'divisions',
-        'divisions.priceSnapshots',
-        'earlybirdDiscountSnapshots',
-        'combinationDiscountSnapshots',
-      ],
+      where: { ...options?.where },
+      relations: options?.relations,
     });
     if (!competition) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Competition not found');
     return competition;
   }
 
   // ----------------- Application -----------------
-  async saveApplication(application: IApplication): Promise<IApplication> {
+  async saveApplication(application: IApplication): Promise<IApplication.Create.Application> {
     return this.applicationRepository.save(application);
   }
 
   async getApplication(options?: {
     where?: Partial<Pick<ApplicationEntity, 'id' | 'userId'>>;
     relations?: string[];
-  }): Promise<IApplication> {
+  }): Promise<IApplication.Get.Application> {
     const application = await this.applicationRepository.findOne({
       where: { ...options?.where },
       relations: options?.relations,

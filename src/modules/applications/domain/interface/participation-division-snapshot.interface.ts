@@ -1,4 +1,4 @@
-import { IDivision } from 'src/modules/competitions/domain/structure/division.interface';
+import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IParticipationDivision } from './participation-division.interface';
 
 export interface IParticipationDivisionSnapshot {
@@ -17,8 +17,6 @@ export interface IParticipationDivisionSnapshot {
   participationDivisionId: IParticipationDivision['id'];
 
   divisionId: IDivision['id'];
-
-  division: IDivision;
 
   // cancleId
 }

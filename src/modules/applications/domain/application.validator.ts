@@ -1,18 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { CreateApplicationReqDto } from '../dto/request/create-application.req.dto';
-import { ICompetition } from 'src/modules/competitions/domain/structure/competition.interface';
-import { IDivision } from 'src/modules/competitions/domain/structure/division.interface';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { ApplicationsErrorMap, BusinessException } from 'src/common/response/errorResponse';
-import { IPlayerSnapshot } from './structure/player-snapshot.interface';
+import { IPlayerSnapshot } from './interface/player-snapshot.interface';
+import { IApplication } from './interface/application.interface';
 
 @Injectable()
 export class ApplicationValidator {
-  async validateApplication(dto: CreateApplicationReqDto, competition: ICompetition): Promise<void> {
-    const existDivisions = this.validateExistDivisions(dto.divisionIds, competition.divisions);
+  // validateRegisterEndDate(competition: ICompetition): void {
+  //   if (new Date(competition.registrationEndDate) < new Date()) {
+  //     throw new BusinessException(ApplicationsErrorMap.APPLICATIONS_REGISTER_END_DATE_EXPIRED);
+  //   }
+  // }
 
+  checkDivisionSuitability(
+    divisionIds: IDivision['id'][],
+    player: IApplication.Create.Player,
+    competition: IApplication.Create.Competition,
+  ): void {
+    const existDivisions = this.validateExistDivisions(divisionIds, competition.divisions);
     existDivisions.forEach((division) => {
-      this.validateDivisionAge(dto.player.birth, division);
-      this.validateDivisionGender(dto.player.gender, division);
+      this.validateDivisionAge(player.birth, division);
+      this.validateDivisionGender(player.gender, division);
     });
   }
 

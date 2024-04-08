@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { IDivisionPack } from './structure/division-pack.interface';
+import { IDivisionPack } from './interface/division-pack.interface';
 import { PriceSnapshotEntity } from 'src/infrastructure/database/entities/competition/price-snapshot.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
-import { IDivision } from './structure/division.interface';
+import { IDivision } from './interface/division.interface';
 
 @Injectable()
 export class DivisionFactory {
@@ -32,6 +32,7 @@ export class DivisionFactory {
     );
 
     const divisions: IDivision[] = combinations.map(([category, uniform, gender, belt, weight]) => {
+      // TODO: repository 사용하지 않기
       const division = this.divisionRepository.create({
         category,
         uniform,

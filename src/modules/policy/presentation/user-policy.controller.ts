@@ -5,7 +5,7 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
 import { FindPolicyResDto } from '../dto/response/find-policy.res.dto';
-import { IPolicy } from '../domain/structure/policy.interface';
+import { IPolicy } from '../domain/interface/policy.interface';
 
 @Controller('user/policy')
 export class UserPolicyController {

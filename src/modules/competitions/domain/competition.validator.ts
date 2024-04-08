@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ICompetition } from './structure/competition.interface';
+import { ICompetition } from './interface/competition.interface';
 import { BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
-import { IDivision } from './structure/division.interface';
+import { IDivision } from './interface/division.interface';
 
 @Injectable()
 export class CompetitionValidator {
@@ -24,7 +24,7 @@ export class CompetitionValidator {
     }
   }
 
-  validateDuplicateDivisions(competition: ICompetition, newDivisions: IDivision[]): void {
+  validateDuplicateDivisions(competition: ICompetition.CreateDivisions.Competition, newDivisions: IDivision[]): void {
     const duplicatedDivisions = competition.divisions.filter((division) => {
       return newDivisions.some(
         (newDivision) =>

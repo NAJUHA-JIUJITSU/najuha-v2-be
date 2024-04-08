@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
 import { UserResDto } from 'src/modules/users/dto/response/user.res.dto';
-import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 describe('E2E u-3 user-users test', () => {
   let app: INestApplication;

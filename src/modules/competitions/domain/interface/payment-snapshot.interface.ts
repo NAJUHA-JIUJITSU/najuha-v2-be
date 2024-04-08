@@ -1,4 +1,4 @@
-import { IApplication } from 'src/modules/applications/domain/structure/application.interface';
+import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
 
 export interface IPaymentSnapshot {
   /**

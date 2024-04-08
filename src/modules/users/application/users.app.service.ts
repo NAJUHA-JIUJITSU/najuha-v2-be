@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { UpdateUserReqDto } from '../dto/request/update-user.req.dto';
 import { UserRepository } from 'src/modules/users/user.repository';
-import { IUser } from '../domain/structure/user.interface';
+import { IUser } from '../domain/interface/user.interface';
 
 @Injectable()
 export class UsersAppService {

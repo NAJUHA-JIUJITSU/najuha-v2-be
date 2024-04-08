@@ -18,11 +18,11 @@ import {
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { TemporaryUserResDto } from 'src/modules/register/dto/response/temporary-user.res.dto';
-import { IPolicy } from 'src/modules/policy/domain/structure/policy.interface';
+import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { IsDuplicatedNicknameResDto } from 'src/modules/register/dto/response/is-duplicated-nickname.res.dto';
 import { SendPhoneNumberAuthCodeResDto } from 'src/modules/register/dto/response/send-phone-number-auth-code.res';
 import { ConfirmedAuthCodeResDto } from 'src/modules/register/dto/response/confirm-auth-code.res.dto';
-import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;

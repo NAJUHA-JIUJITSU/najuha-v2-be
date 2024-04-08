@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PolicyEntity } from '../../infrastructure/database/entities/policy/policy.entity';
-import { IPolicy } from './domain/structure/policy.interface';
+import { IPolicy } from './domain/interface/policy.interface';
 
 @Injectable()
 export class PolicyRepository {

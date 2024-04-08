@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
-import { IPlayerSnapshot } from 'src/modules/applications/domain/structure/player-snapshot.interface';
+import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
 
 @Entity('player_snapshot')
 export class PlayerSnapshotEntity {

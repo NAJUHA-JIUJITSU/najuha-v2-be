@@ -15,7 +15,7 @@ import { UserEntity } from '../user/user.entity';
 import { ParticipationDivisionEntity } from './participation-divsion.entity';
 import { EarlybirdDiscountSnapshotEntity } from '../competition/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshotEntity } from '../competition/combination-discount-snapshot.entity';
-import { IApplication } from 'src/modules/applications/domain/structure/application.interface';
+import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
 
 @Entity('application')
 export class ApplicationEntity {

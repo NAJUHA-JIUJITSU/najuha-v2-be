@@ -13,7 +13,7 @@ import { PolicyAppService } from 'src/modules/policy/application/policy.app.serv
 import { CreatePolicyReqDto } from 'src/modules/policy/dto/request/create-policy.req.dto';
 import { PolicyResDto } from 'src/modules/policy/dto/response/policy.res.dto';
 import { FindPoliciesResDto } from 'src/modules/policy/dto/response/find-policies.res.dto';
-import { IPolicy } from 'src/modules/policy/domain/structure/policy.interface';
+import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {

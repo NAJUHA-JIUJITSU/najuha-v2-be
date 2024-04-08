@@ -6,9 +6,9 @@ import { PhoneNumberAuthCodeDomainService } from '../domain/phone-number-auth-co
 import { RegisterPhoneNumberReqDto } from '../dto/request/register-phone-number.req..dto';
 import { confirmAuthCodeReqDto } from '../dto/request/confirm-auth-code.req.dto';
 import { RegisterRepository } from '../register.repository';
-import { PhoneNumberAuthCode } from '../domain/structure/phone-number-auth-code.type';
-import { IAuthTokens } from 'src/modules/auth/domain/structure/auth-tokens.interface';
-import { IUser } from 'src/modules/users/domain/structure/user.interface';
+import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.type';
+import { IAuthTokens } from 'src/modules/auth/domain/interface/auth-tokens.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { RegisterUserFactory } from '../domain/register-user.factory';
 import { RegisterValidator } from '../domain/register.validator';
 

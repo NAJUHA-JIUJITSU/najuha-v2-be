@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
-import { IRegisterUser } from './structure/register-user.interface';
+import { IRegisterUser } from './interface/register-user.interface';
 import { RegisterRepository } from '../register.repository';
 
 @Injectable()

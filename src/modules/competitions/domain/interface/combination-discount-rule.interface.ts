@@ -1,8 +1,8 @@
 import { IDivision } from './division.interface';
 
 export interface ICombinationUnit {
-  uniform: IDivision['uniform'];
-  weight: 'WEIGHT' | 'ABSOLUTE';
+  uniformType: IDivision['uniform'];
+  weightType: 'WEIGHT' | 'ABSOLUTE';
 }
 
 export interface ICombinationDiscountRule {

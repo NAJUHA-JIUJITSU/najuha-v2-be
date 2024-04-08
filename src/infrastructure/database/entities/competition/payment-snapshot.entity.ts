@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
-import { IPaymentSnapshot } from 'src/modules/competitions/domain/structure/payment-snapshot.interface';
+import { IPaymentSnapshot } from 'src/modules/competitions/domain/interface/payment-snapshot.interface';
 
 @Entity('payment_snapshot')
 export class PaymentSnapshotEntity {

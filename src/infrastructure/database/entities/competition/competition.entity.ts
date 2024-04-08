@@ -3,7 +3,7 @@ import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
 import { ApplicationEntity } from '../application/application.entity';
-import { ICompetition } from 'src/modules/competitions/domain/structure/competition.interface';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 
 @Entity('competition')
 export class CompetitionEntity {

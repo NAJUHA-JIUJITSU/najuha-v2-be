@@ -1,4 +1,4 @@
-import { IPriceSnapshot } from 'src/modules/competitions/domain/structure/price-snapshot.interface';
+import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 import { IApplication } from './application.interface';
 import { IParticipationDivisionSnapshot } from './participation-division-snapshot.interface';
 

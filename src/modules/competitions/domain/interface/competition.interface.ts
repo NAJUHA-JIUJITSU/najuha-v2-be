@@ -87,9 +87,39 @@ export interface ICompetition {
   /** - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간. */
   updatedAt: string | Date;
 
-  divisions: IDivision[];
+  // divisions: IDivision[];
 
-  earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
+  // earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
 
-  combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
+  // combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
+}
+
+export namespace ICompetition {
+  export namespace Create {
+    export interface Competition extends ICompetition {}
+  }
+
+  export namespace Update {
+    export interface Competition extends ICompetition {}
+  }
+
+  export namespace Find {
+    export interface Competition extends ICompetition {
+      earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
+    }
+  }
+
+  export namespace Get {
+    export interface Competition extends ICompetition {
+      divisions: IDivision[];
+      earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
+      combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
+    }
+  }
+
+  export namespace CreateDivisions {
+    export interface Competition extends ICompetition {
+      divisions: IDivision[];
+    }
+  }
 }

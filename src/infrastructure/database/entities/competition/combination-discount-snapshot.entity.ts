@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { ApplicationEntity } from 'src/infrastructure/database/entities/application/application.entity';
-import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/structure/combination-discount-snapshot.interface';
+import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 
 @Entity('combination_discount_snapshot')
 export class CombinationDiscountSnapshotEntity {

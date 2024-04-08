@@ -12,7 +12,7 @@ import {
 import { CompetitionEntity } from './competition.entity';
 import { PriceSnapshotEntity } from './price-snapshot.entity';
 import { ParticipationDivisionSnapshotEntity } from '../application/participation-division-snapshot.entity';
-import { IDivision } from 'src/modules/competitions/domain/structure/division.interface';
+import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])

@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ParticipationDivisionEntity } from './participation-divsion.entity';
 import { DivisionEntity } from '../competition/division.entity';
-import { IParticipationDivisionSnapshot } from 'src/modules/applications/domain/structure/participation-division-snapshot.interface';
+import { IParticipationDivisionSnapshot } from 'src/modules/applications/domain/interface/participation-division-snapshot.interface';
 
 @Entity('participation_divsion_snapshot')
 export class ParticipationDivisionSnapshotEntity {

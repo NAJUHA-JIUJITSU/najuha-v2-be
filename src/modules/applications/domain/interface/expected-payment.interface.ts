@@ -1,4 +1,4 @@
-import { IPaymentSnapshot } from 'src/modules/competitions/domain/structure/payment-snapshot.interface';
+import { IPaymentSnapshot } from 'src/modules/competitions/domain/interface/payment-snapshot.interface';
 
 export interface IExpectedPayment {
   normalAmount: IPaymentSnapshot['normalAmount'];
