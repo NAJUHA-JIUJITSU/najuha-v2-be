@@ -73,15 +73,17 @@ export class ApplicationRepository {
     await this.participationDivisionRepository.save(participationDivisions);
   }
 
-  async deleteParticipationDivisions(applicationId: IApplication['id']): Promise<void> {
-    await this.participationDivisionRepository.delete({ applicationId });
-  }
-
-  // ----------------- ParticipationDivisionSnapshot -----------------
-  async deleteParticipationDivisionSnapshot(
-    participationDivisionSnapshotId: IParticipationDivisionSnapshot['id'],
-  ): Promise<void> {
-    await this.participationDivisionSnapshotRepository.delete({ id: participationDivisionSnapshotId });
+  async deleteParticipationDivisions(participationDivisions: IParticipationDivision[]): Promise<void> {
+    await Promise.all(
+      participationDivisions.map(async (participationDivision) => {
+        await Promise.all(
+          participationDivision.participationDivisionSnapshots.map(async (participationDivisionSnapshot) => {
+            await this.participationDivisionSnapshotRepository.delete(participationDivisionSnapshot.id);
+          }),
+        );
+        await this.participationDivisionRepository.delete(participationDivision.id);
+      }),
+    );
   }
 
   // ----------------- PlayerSnapshot -----------------

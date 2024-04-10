@@ -62,6 +62,7 @@ export class ApplicationsAppService {
    * - READY status 를 가진 application 을 업데이트 합니다.
    * - CANCELED, DONE 상태의 application 은 업데이트 할 수 없습니다.
    * - 기존 participationDivisions 를 삭제하고 새로운 participationDivisions 를 생성합니다.
+   * TODO: Transaction 처리
    */
   async updateReadyApplication({
     userId,
@@ -86,6 +87,8 @@ export class ApplicationsAppService {
 
     this.applicationValidator.validateApplicationAbility(player, divisionIds, competition);
 
+    await this.applicationRepository.deleteParticipationDivisions(application.participationDivisions);
+
     const playerSnapshot = { ...application.playerSnapshots[application.playerSnapshots.length - 1], ...player };
     const participationDivisions = this.applicationFactory.createParticipationDivisions(
       divisionIds,
@@ -95,7 +98,6 @@ export class ApplicationsAppService {
     application.playerSnapshots = [playerSnapshot];
     application.participationDivisions = participationDivisions;
 
-    // TODO: delete old participationDivisions
     await this.applicationRepository.saveParticipationDivisions(participationDivisions);
     await this.applicationRepository.savePlayerSnapshot(playerSnapshot);
 
