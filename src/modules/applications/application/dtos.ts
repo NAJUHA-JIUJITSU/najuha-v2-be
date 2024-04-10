@@ -17,11 +17,11 @@ export interface GetApplicationParam {
   applicationId: IApplication['id'];
 }
 
-export interface UpdateApplicationParam {
+export interface UpdateReadyApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
   divisionIds: IDivision['id'][];
-  player: IApplication.Create.Player;
+  player: IApplication.UpdateReadyApplication.Player;
 }
 
 export interface GetExpectedPaymentParam {
@@ -41,7 +41,7 @@ export interface GetApplicationRet {
 
 // TODO
 export interface UpdateApplicationRet {
-  application: IApplication.Update.Application;
+  application: IApplication.UpdateReadyApplication.Application;
 }
 
 export interface GetExpectedPaymentRet {

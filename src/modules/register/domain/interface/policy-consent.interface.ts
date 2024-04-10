@@ -1,7 +1,7 @@
 /** - 사용자가 동의한 약관 정보. */
 export interface IPolicyConsent {
   /**
-   * - 약관 동의 ID.
+   * - id.
    * @type uint32
    */
   id: number;

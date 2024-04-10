@@ -2,7 +2,7 @@ import { IPriceSnapshot } from './price-snapshot.interface';
 
 export interface IDivision {
   /**
-   * - division id.
+   * - id.
    * @type uint32
    */
   id: number;

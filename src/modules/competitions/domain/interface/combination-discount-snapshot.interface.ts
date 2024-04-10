@@ -3,7 +3,7 @@ import { ICompetition } from './competition.interface';
 
 export interface ICombinationDiscountSnapshot {
   /**
-   * - combination discount snapshot id.
+   * - id.
    * @type uint32
    */
   id: number;

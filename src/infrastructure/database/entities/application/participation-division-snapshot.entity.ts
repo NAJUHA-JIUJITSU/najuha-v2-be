@@ -5,7 +5,7 @@ import { IParticipationDivisionSnapshot } from 'src/modules/applications/domain/
 
 @Entity('participation_divsion_snapshot')
 export class ParticipationDivisionSnapshotEntity {
-  @PrimaryGeneratedColumn()
+  @Column('varchar', { length: 26, primary: true })
   id: IParticipationDivisionSnapshot['id'];
 
   @CreateDateColumn()
@@ -31,7 +31,4 @@ export class ParticipationDivisionSnapshotEntity {
   @ManyToOne(() => DivisionEntity, (division) => division.participationDivisionSnapshots)
   @JoinColumn({ name: 'divisionId' })
   division: DivisionEntity;
-
-  // cancleId
-  // cancle
 }

@@ -27,6 +27,6 @@ export class EarlybirdDiscountSnapshotEntity {
   @JoinColumn({ name: 'competitionId' })
   competition: CompetitionEntity;
 
-  @OneToMany(() => ApplicationEntity, (application) => application.earlybirdDiscountSnapshot)
-  applications: ApplicationEntity[];
+  // @OneToMany(() => ApplicationEntity, (application) => application.earlybirdDiscountSnapshot)
+  // applications: ApplicationEntity[];
 }

@@ -4,7 +4,7 @@ import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/playe
 
 @Entity('player_snapshot')
 export class PlayerSnapshotEntity {
-  @PrimaryGeneratedColumn()
+  @Column('varchar', { length: 26, primary: true })
   id: IPlayerSnapshot['id'];
 
   @Column('varchar', { length: 64 })

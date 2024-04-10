@@ -2,8 +2,10 @@ import { IApplication } from 'src/modules/applications/domain/interface/applicat
 
 export interface IPaymentSnapshot {
   /**
-   * - application package snapshot id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
   id: number;
 

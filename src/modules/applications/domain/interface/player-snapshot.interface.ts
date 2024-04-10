@@ -3,10 +3,12 @@ import { IApplication } from './application.interface';
 
 export interface IPlayerSnapshot {
   /**
-   * - player snapshot id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /**
    * - player name.

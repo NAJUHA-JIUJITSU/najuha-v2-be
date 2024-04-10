@@ -21,6 +21,6 @@ export class CombinationDiscountSnapshotEntity {
   @JoinColumn({ name: 'competitionId' })
   competition: CompetitionEntity;
 
-  @OneToMany(() => ApplicationEntity, (application) => application.combinationDiscountSnapshot)
-  applications: ApplicationEntity[];
+  // @OneToMany(() => ApplicationEntity, (application) => application.combinationDiscountSnapshot)
+  // applications: ApplicationEntity[];
 }

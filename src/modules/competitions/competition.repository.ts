@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CompetitionEntity } from '../../infrastructure/database/entities/competition/competition.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EarlybirdDiscountSnapshotEntity } from '../../infrastructure/database/entities/competition/earlybird-discount-snapshot.entity';
@@ -26,7 +26,7 @@ export class CompetitionRepository {
 
   // ----------------- Competition -----------------
 
-  async createCompetition(dto: Partial<ICompetition>): Promise<ICompetition> {
+  async createCompetition(dto: Partial<ICompetition>): Promise<CompetitionEntity> {
     const competition = this.competitionRepository.create(dto);
     return await this.competitionRepository.save(competition);
   }
@@ -34,14 +34,14 @@ export class CompetitionRepository {
   async findCompetitons(options?: {
     where?: Partial<Pick<ICompetition, 'status'>>;
     relations?: string[];
-  }): Promise<ICompetition.Find.Competition[]> {
+  }): Promise<CompetitionEntity[]> {
     return await this.competitionRepository.find(options);
   }
 
   async getCompetition(options?: {
     where?: Partial<Pick<ICompetition, 'id' | 'status'>>;
     relations?: string[];
-  }): Promise<ICompetition> {
+  }): Promise<CompetitionEntity> {
     const competition = await this.competitionRepository.findOne({
       where: options?.where,
       relations: options?.relations,
@@ -50,7 +50,7 @@ export class CompetitionRepository {
     return competition;
   }
 
-  async saveCompetition(competition: Pick<ICompetition, 'id'> & Partial<ICompetition>): Promise<ICompetition> {
+  async saveCompetition(competition: Pick<ICompetition, 'id'> & Partial<ICompetition>): Promise<CompetitionEntity> {
     return await this.competitionRepository.save(competition);
   }
 
@@ -68,7 +68,7 @@ export class CompetitionRepository {
   async createEarlybirdDiscount(
     id: ICompetition['id'],
     dto: Pick<IEarlybirdDiscountSnapshot, 'earlybirdStartDate' | 'earlybirdEndDate' | 'discountAmount'>,
-  ): Promise<IEarlybirdDiscountSnapshot> {
+  ): Promise<EarlybirdDiscountSnapshotEntity> {
     const earlybirdDiscountSnapshot = this.earlybirdDiscountSnapshotRepository.create(dto);
     earlybirdDiscountSnapshot.competitionId = id;
     return await this.earlybirdDiscountSnapshotRepository.save(earlybirdDiscountSnapshot);

@@ -5,7 +5,9 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DivisionEntity } from 'src/infrastructure/database/entities/competition/division.entity';
 import { IDivision } from './interface/division.interface';
+import { ICompetition } from './interface/competition.interface';
 
+// TODO: repository 사용하지 않기
 @Injectable()
 export class DivisionFactory {
   constructor(
@@ -15,14 +17,14 @@ export class DivisionFactory {
     private readonly priceSnapshotRepository: Repository<PriceSnapshotEntity>,
   ) {}
 
-  createDivision(divisionPacks: IDivisionPack[]): IDivision[] {
+  createDivision(competitionId: ICompetition['id'], divisionPacks: IDivisionPack[]): IDivision[] {
     const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
-      return [...acc, ...this.unpack(divisionPack)];
+      return [...acc, ...this.unpack(competitionId, divisionPack)];
     }, []);
     return unpackedDivisions;
   }
 
-  private unpack(divisionPack: IDivisionPack): IDivision[] {
+  private unpack(competitionId: ICompetition['id'], divisionPack: IDivisionPack): IDivision[] {
     const combinations = this.cartesian(
       divisionPack.categories,
       divisionPack.uniforms,
@@ -34,6 +36,7 @@ export class DivisionFactory {
     const divisions: IDivision[] = combinations.map(([category, uniform, gender, belt, weight]) => {
       // TODO: repository 사용하지 않기
       const division = this.divisionRepository.create({
+        competitionId,
         category,
         uniform,
         gender,

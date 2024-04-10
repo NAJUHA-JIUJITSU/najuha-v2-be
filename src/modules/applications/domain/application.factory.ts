@@ -1,49 +1,80 @@
 import { Injectable } from '@nestjs/common';
-import { ApplicationEntity } from '../../../infrastructure/database/entities/application/application.entity';
-import { PlayerSnapshotEntity } from '../../../infrastructure/database/entities/application/player-snapshot.entity';
-import { ParticipationDivisionEntity } from '../../../infrastructure/database/entities/application/participation-divsion.entity';
 import { IApplication } from './interface/application.interface';
-import { ParticipationDivisionSnapshotEntity } from 'src/infrastructure/database/entities/application/participation-division-snapshot.entity';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { ulid } from 'ulid';
+import { IParticipationDivision } from './interface/participation-division.interface';
+import { IParticipationDivisionSnapshot } from './interface/participation-division-snapshot.interface';
 
+// TODO: new 방식말고 다른방법 생각
 @Injectable()
 export class ApplicationFactory {
-  create(
-    player: IApplication.Create.Player,
+  createApplication(
     user: IApplication.Create.User,
+    player: IApplication.Create.Player,
     divisionIds: IDivision['id'][],
     competition: IApplication.Create.Competition,
   ): IApplication.Create.Application {
-    const application = new ApplicationEntity();
-    application.userId = user.id;
-    application.competitionId = competition.id;
+    const applicationId = ulid();
+    const playerSnapshot = this.createPlayerSnapshot(user, player, applicationId);
+    const particiationDivisions = this.createParticipationDivisions(divisionIds, competition, applicationId);
 
-    // TODO: new 방식말고 다른방법 생각
-    const playerSnapshot = new PlayerSnapshotEntity();
-    playerSnapshot.name = user.name;
-    playerSnapshot.gender = user.gender;
-    playerSnapshot.birth = user.birth;
-    playerSnapshot.phoneNumber = user.phoneNumber;
-    playerSnapshot.belt = player.belt;
-    playerSnapshot.network = player.network;
-    playerSnapshot.team = player.team;
-    playerSnapshot.masterName = player.masterName;
-    playerSnapshot.applicationId = application.id;
-
-    application.playerSnapshots = [playerSnapshot];
-
-    const participationDivisions = competition.divisions
-      .filter((division) => divisionIds.includes(division.id))
-      .map((division) => {
-        const participationDivision = new ParticipationDivisionEntity();
-        participationDivision.applicationId = application.id;
-        const participationDivisionSnapshot = new ParticipationDivisionSnapshotEntity();
-        participationDivisionSnapshot.divisionId = division.id;
-        participationDivision.participationDivisionSnapshots = [participationDivisionSnapshot];
-        return participationDivision;
-      });
-    application.participationDivisions = participationDivisions;
+    const application: IApplication.Create.Application = {
+      id: applicationId,
+      userId: user.id,
+      competitionId: competition.id,
+      playerSnapshots: [playerSnapshot],
+      participationDivisions: particiationDivisions,
+      status: 'READY',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
     return application;
+  }
+
+  createPlayerSnapshot(
+    user: IApplication.Create.User,
+    player: IApplication.Create.Player,
+    applicationId: IApplication['id'],
+  ): IApplication.Create.PlayerSnapshot {
+    return {
+      id: ulid(),
+      name: user.name,
+      gender: user.gender,
+      birth: user.birth,
+      phoneNumber: user.phoneNumber,
+      belt: player.belt,
+      network: player.network,
+      team: player.team,
+      masterName: player.masterName,
+      applicationId: applicationId,
+      createdAt: new Date(),
+    };
+  }
+
+  createParticipationDivisions(
+    divisionIds: IDivision['id'][],
+    competition: IApplication.Create.Competition,
+    applicationId: IApplication['id'],
+  ): IParticipationDivision[] {
+    return competition.divisions
+      .filter((division) => divisionIds.includes(division.id))
+      .map((division) => {
+        const participationDivisionId = ulid();
+        const participationDivisionSnapshot: IParticipationDivisionSnapshot = {
+          id: ulid(),
+          divisionId: division.id,
+          participationDivisionId: participationDivisionId,
+          createdAt: new Date(),
+        };
+
+        const participationDivision: IParticipationDivision = {
+          id: participationDivisionId,
+          applicationId,
+          participationDivisionSnapshots: [participationDivisionSnapshot],
+          createdAt: new Date(),
+        };
+        return participationDivision;
+      });
   }
 }

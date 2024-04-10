@@ -11,7 +11,7 @@ import {
   GetApplicationRet,
   GetExpectedPaymentParam,
   GetExpectedPaymentRet,
-  UpdateApplicationParam,
+  UpdateReadyApplicationParam,
   UpdateApplicationRet,
 } from './dtos';
 
@@ -26,9 +26,9 @@ export class ApplicationsAppService {
 
   async createApplication({
     userId,
-    competitionId,
-    divisionIds,
     player,
+    divisionIds,
+    competitionId,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = (await this.applicationRepository.getUser(userId)) as IApplication.Create.User;
 
@@ -37,10 +37,10 @@ export class ApplicationsAppService {
       relations: ['divisions', 'divisions.priceSnapshots'],
     })) as IApplication.Create.Competition;
 
-    this.applicationValidator.checkDivisionSuitability(divisionIds, player, competition);
+    this.applicationValidator.validateApplicationAbility(player, divisionIds, competition);
 
-    let application = this.applicationFactory.create(player, user, divisionIds, competition);
-    application = await this.applicationRepository.saveApplication(application);
+    const application = this.applicationFactory.createApplication(user, player, divisionIds, competition);
+    await this.applicationRepository.saveApplication(application);
     return { application };
   }
 
@@ -50,10 +50,55 @@ export class ApplicationsAppService {
       relations: [
         'playerSnapshots',
         'participationDivisions',
-        'participationDivisions.particiationDivisionSnapshots',
+        'participationDivisions.participationDivisionSnapshots',
         'participationDivisions.participationDivisionSnapshots.division',
       ],
     })) as IApplication.Get.Application;
+    return { application };
+  }
+
+  /**
+   * - Update ready application.
+   * - READY status 를 가진 application 을 업데이트 합니다.
+   * - CANCELED, DONE 상태의 application 은 업데이트 할 수 없습니다.
+   * - 기존 participationDivisions 를 삭제하고 새로운 participationDivisions 를 생성합니다.
+   */
+  async updateReadyApplication({
+    userId,
+    player,
+    applicationId,
+    divisionIds,
+  }: UpdateReadyApplicationParam): Promise<UpdateApplicationRet> {
+    const application = (await this.applicationRepository.getApplication({
+      where: { userId, id: applicationId, status: 'READY' },
+      relations: ['playerSnapshots', 'participationDivisions', 'participationDivisions.participationDivisionSnapshots'],
+    })) as IApplication.UpdateReadyApplication.Application;
+
+    const competition = (await this.applicationRepository.getCompetition({
+      where: { id: application.competitionId },
+      relations: [
+        'divisions',
+        'divisions.priceSnapshots',
+        'earlybirdDiscountSnapshots',
+        'combinationDiscountSnapshots',
+      ],
+    })) as IApplication.UpdateReadyApplication.Competition;
+
+    this.applicationValidator.validateApplicationAbility(player, divisionIds, competition);
+
+    const playerSnapshot = { ...application.playerSnapshots[application.playerSnapshots.length - 1], ...player };
+    const participationDivisions = this.applicationFactory.createParticipationDivisions(
+      divisionIds,
+      competition,
+      application.id,
+    );
+    application.playerSnapshots = [playerSnapshot];
+    application.participationDivisions = participationDivisions;
+
+    // TODO: delete old participationDivisions
+    await this.applicationRepository.saveParticipationDivisions(participationDivisions);
+    await this.applicationRepository.savePlayerSnapshot(playerSnapshot);
+
     return { application };
   }
 
@@ -79,35 +124,5 @@ export class ApplicationsAppService {
 
     const expectedPayment = await this.applicationDomainService.calculatePayment(application, competition);
     return { expectedPayment };
-  }
-
-  // TODO: transaction
-  async updateApplication({
-    userId,
-    applicationId,
-    player,
-    divisionIds,
-  }: UpdateApplicationParam): Promise<UpdateApplicationRet> {
-    const user = await this.applicationRepository.getUser(userId);
-    const application = await this.applicationRepository.getApplication({
-      where: { userId, id: applicationId },
-      relations: ['participationDivisions', 'participationDivisions.participationDivisionSnapshots'],
-    });
-
-    const competition = (await this.applicationRepository.getCompetition({
-      where: { id: application.competitionId },
-      relations: [
-        'divisions',
-        'divisions.priceSnapshots',
-        'earlybirdDiscountSnapshots',
-        'combinationDiscountSnapshots',
-      ],
-    })) as IApplication.Update.Competition;
-
-    // delete all participationDivisionSnapshots
-    // create new participationDivisionSnapshots
-    // save application.playerSnapshots
-    // save application.participationDivisions
-    return { application };
   }
 }

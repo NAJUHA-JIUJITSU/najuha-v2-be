@@ -9,7 +9,7 @@ import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
  */
 export interface IUser {
   /**
-   * - 사용자 ID. 데이터베이스에서 자동 생성됩니다.
+   * - id.
    * @type uint32
    */
   id: number;

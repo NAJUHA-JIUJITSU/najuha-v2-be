@@ -1,30 +1,24 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { ParticipationDivisionSnapshotEntity } from './participation-division-snapshot.entity';
 import { ApplicationEntity } from './application.entity';
 import { IParticipationDivision } from 'src/modules/applications/domain/interface/participation-division.interface';
+import { ParticipationDivisionPaymentEntity } from './participation-division-payment.entity';
+import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
 
-@Entity('participation_divsion')
+@Entity('participation_division')
 export class ParticipationDivisionEntity {
-  @PrimaryGeneratedColumn()
+  @Column('varchar', { length: 26, primary: true })
   id: IParticipationDivision['id'];
 
   @CreateDateColumn()
   createdAt: IParticipationDivision['createdAt'];
 
   @Column()
-  applicationId: ApplicationEntity['id'];
+  applicationId: IApplication['id'];
 
   @ManyToOne(() => ApplicationEntity, (application) => application.participationDivisions)
   @JoinColumn({ name: 'applicationId' })
-  application: ApplicationEntity[];
-
-  @Column({ nullable: true })
-  priceSnapshotId: PriceSnapshotEntity['id'];
-
-  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.participationDivisions)
-  @JoinColumn({ name: 'priceSnapshotId' })
-  priceSnapshot: PriceSnapshotEntity;
+  application: ApplicationEntity;
 
   @OneToMany(
     () => ParticipationDivisionSnapshotEntity,
@@ -33,6 +27,9 @@ export class ParticipationDivisionEntity {
   )
   participationDivisionSnapshots: ParticipationDivisionSnapshotEntity[];
 
-  // cancleId
-  // cancle
+  @OneToOne(
+    () => ParticipationDivisionPaymentEntity,
+    (participationDivisionPayment) => participationDivisionPayment.participationDivision,
+  )
+  participationDivisionPayment: ParticipationDivisionPaymentEntity;
 }

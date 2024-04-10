@@ -9,7 +9,7 @@ import {
   CreateApplicationRes,
   GetApplicationRes,
   GetExpectedPaymentRes,
-  UpdateApplicationReqBody,
+  UpdateReadyApplicationReqBody,
 } from './dtos';
 
 @Controller('user/applications')
@@ -51,20 +51,20 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-3 update application.
+   * u-6-3 update ready status application.
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
    * @returns application
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Patch('/:applicationId')
+  @TypedRoute.Patch('/:applicationId/ready')
   async updateCompetitionApplication(
     @Req() req: Request,
     @TypedParam('applicationId') applicationId: IApplication['id'],
-    @TypedBody() body: UpdateApplicationReqBody,
+    @TypedBody() body: UpdateReadyApplicationReqBody,
   ): Promise<ResponseForm<any>> {
-    const application = await this.ApplicationAppService.updateApplication({
+    const application = await this.ApplicationAppService.updateReadyApplication({
       userId: req['userId'],
       applicationId,
       ...body,
@@ -73,7 +73,27 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-4 delete application.
+   * u-6-4 update done status application.
+   * - RoleLevel: USER.
+   *
+   * @tag u-6 applications
+   * @returns application
+   */
+  // @RoleLevels(RoleLevel.USER)
+  // @TypedRoute.Patch('/:applicationId/done')
+  // async updateDoneCompetitionApplication(
+  //   @Req() req: Request,
+  //   @TypedParam('applicationId') applicationId: IApplication['id'],
+  // ): Promise<ResponseForm<any>> {
+  //   const application = await this.ApplicationAppService.updateDoneApplication({
+  //     userId: req['userId'],
+  //     applicationId,
+  //   });
+  //   return createResponseForm({ application });
+  // }
+
+  /**
+   * u-6-5 delete application.
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
@@ -87,7 +107,7 @@ export class UserApplicationsController {
     return createResponseForm();
   }
   /**
-   * u-6-5 get expected payment.
+   * u-6-6 get expected payment.
    * - RoleLevel: USER.
    *
    * @tag u-6 applications

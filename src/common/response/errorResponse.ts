@@ -235,8 +235,24 @@ export type APPLICATIONS_DIVISION_GENDER_NOT_MATCH = ErrorResponse & {
   result: '신청 부문의 성별이 맞지 않습니다.';
 };
 
+export type APPLICATIONS_REGISTRATION_NOT_STARTED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7003;
+  result: '대회 신청 기간 이전입니다.';
+};
+
+export type APPLICATIONS_REGISTRATION_ENDED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7004;
+  result: '대회 신청 기간이 종료되었습니다.';
+};
+
 export const ApplicationsErrorMap = {
   APPLICATIONS_DIVISION_NOT_FOUND: typia.random<APPLICATIONS_DIVISION_NOT_FOUND>(),
   APPLICATIONS_DIVISION_AGE_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_AGE_NOT_MATCH>(),
   APPLICATIONS_DIVISION_GENDER_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_GENDER_NOT_MATCH>(),
+  APPLICATIONS_REGISTRATION_NOT_STARTED: typia.random<APPLICATIONS_REGISTRATION_NOT_STARTED>(),
+  APPLICATIONS_REGISTRATION_ENDED: typia.random<APPLICATIONS_REGISTRATION_ENDED>(),
 };

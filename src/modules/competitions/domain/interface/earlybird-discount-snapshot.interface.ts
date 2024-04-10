@@ -2,7 +2,7 @@ import { ICompetition } from './competition.interface';
 
 export interface IEarlybirdDiscountSnapshot {
   /**
-   * - ID. 데이터베이스에서 자동 생성됩니다.
+   * - id.
    * @type uint32
    */
   id: number;

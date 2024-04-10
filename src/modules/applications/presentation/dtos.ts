@@ -3,15 +3,15 @@ import {
   CreateApplicationRet,
   GetApplicationRet,
   GetExpectedPaymentRet,
-  UpdateApplicationParam,
   UpdateApplicationRet,
+  UpdateReadyApplicationParam,
 } from 'src/modules/applications/application/dtos';
 
 // Presentation Layer Request Dto ---------------------------------------------------
 export interface CreateApplicationReqBody
   extends Pick<CreateApplicationParam, 'competitionId' | 'divisionIds' | 'player'> {}
 
-export interface UpdateApplicationReqBody extends Pick<UpdateApplicationParam, 'divisionIds' | 'player'> {}
+export interface UpdateReadyApplicationReqBody extends Pick<UpdateReadyApplicationParam, 'divisionIds' | 'player'> {}
 
 // Presentation Layer Response Dto ---------------------------------------------------
 export interface CreateApplicationRes extends CreateApplicationRet {}

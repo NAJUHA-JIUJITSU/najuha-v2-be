@@ -3,10 +3,12 @@ import { IParticipationDivision } from './participation-division.interface';
 
 export interface IParticipationDivisionSnapshot {
   /**
-   * - participation division id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /**
    * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
@@ -17,6 +19,4 @@ export interface IParticipationDivisionSnapshot {
   participationDivisionId: IParticipationDivision['id'];
 
   divisionId: IDivision['id'];
-
-  // cancleId
 }

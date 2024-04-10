@@ -4,7 +4,7 @@ import { IEarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.interf
 
 export interface ICompetition {
   /**
-   * - 대회의 고유 식별자. 데이터베이스에서 자동으로 생성됩니다.
+   * - id.
    * @type uint32
    */
   id: number;
@@ -86,12 +86,6 @@ export interface ICompetition {
 
   /** - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간. */
   updatedAt: string | Date;
-
-  // divisions: IDivision[];
-
-  // earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
-
-  // combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
 }
 
 export namespace ICompetition {

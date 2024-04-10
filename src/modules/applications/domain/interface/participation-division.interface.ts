@@ -1,13 +1,14 @@
-import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 import { IApplication } from './application.interface';
 import { IParticipationDivisionSnapshot } from './participation-division-snapshot.interface';
 
 export interface IParticipationDivision {
   /**
-   * - participation division id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /** - created at. */
   createdAt: Date | string;
@@ -15,10 +16,6 @@ export interface IParticipationDivision {
   /** - application id. */
   applicationId: IApplication['id'];
 
-  /** - payed price snapshot id. */
-  priceSnapshotId: IPriceSnapshot['id'];
-
+  /** - participation division snapshots. */
   participationDivisionSnapshots: IParticipationDivisionSnapshot[];
-
-  // cancleId
 }
