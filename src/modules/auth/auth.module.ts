@@ -5,10 +5,10 @@ import { SnsAuthModule } from 'src/infrastructure/sns-auth-client/sns-auth.modul
 import { AuthTokenDomainService } from './domain/auth-token.domain.service';
 import { UserRepository } from '../users/user.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
+import { UserTable } from '../../infrastructure/database/tables/user/user.entity';
 
 @Module({
-  imports: [SnsAuthModule, TypeOrmModule.forFeature([UserEntity])],
+  imports: [SnsAuthModule, TypeOrmModule.forFeature([UserTable])],
   controllers: [UserAuthController],
   providers: [AuthAppService, AuthTokenDomainService, UserRepository],
   exports: [AuthTokenDomainService],

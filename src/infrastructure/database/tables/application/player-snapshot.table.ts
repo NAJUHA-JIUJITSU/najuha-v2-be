@@ -1,9 +1,9 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ApplicationEntity } from './application.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ApplicationTable } from './application.table';
 import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
 
 @Entity('player_snapshot')
-export class PlayerSnapshotEntity {
+export class PlayerSnapshotTable {
   @Column('varchar', { length: 26, primary: true })
   id: IPlayerSnapshot['id'];
 
@@ -35,24 +35,10 @@ export class PlayerSnapshotEntity {
   createdAt: IPlayerSnapshot['createdAt'];
 
   @Column()
-  applicationId: ApplicationEntity['id'];
+  applicationId: ApplicationTable['id'];
 
   /** - application 정보 */
-  @ManyToOne(() => ApplicationEntity, (application) => application.playerSnapshots)
-  application: ApplicationEntity;
-
-  // /**
-  //  * - division id.
-  //  */
-  // @Column()
-  // divisionId: Division['id'];
-
-  // /**
-  //  * - division 정보
-  //  * - ManyToOne: Division(1) -> ApplicationEntity(*)
-  //  * - JoinColumn: divisionId
-  //  */
-  // @ManyToOne(() => Division, (division) => division.applicationSnapshots)
-  // @JoinColumn({ name: 'divisionId' })
-  // division: Division;
+  @ManyToOne(() => ApplicationTable, (application) => application.playerSnapshots)
+  @JoinColumn({ name: 'applicationId' })
+  application: ApplicationTable;
 }

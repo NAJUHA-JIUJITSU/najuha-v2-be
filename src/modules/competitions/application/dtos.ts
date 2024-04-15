@@ -1,3 +1,5 @@
+import { CompetitionEntity } from '../domain/entity/competition.entity';
+import { DivisionEntity } from '../domain/entity/division.entity';
 import { ICombinationDiscountSnapshot } from '../domain/interface/combination-discount-snapshot.interface';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { IDivisionPack } from '../domain/interface/division-pack.interface';
@@ -6,12 +8,36 @@ import { IEarlybirdDiscountSnapshot } from '../domain/interface/earlybird-discou
 
 // Application Layer Param DTOs ----------------------------------------------
 export interface CreateCompetitionParam {
-  creatCompetition: Partial<Omit<ICompetition, 'id' | 'status' | 'viewCount' | 'createdAt' | 'updatedAt'>>;
+  creatCompetitionDto: Partial<
+    Omit<
+      ICompetition,
+      | 'id'
+      | 'status'
+      | 'viewCount'
+      | 'createdAt'
+      | 'updatedAt'
+      | 'divisions'
+      | 'earlybirdDiscountSnapshots'
+      | 'combinationDiscountSnapshots'
+    >
+  >;
 }
 
 export interface UpdateCompetitionParam {
   updateCompetition: Pick<ICompetition, 'id'> &
-    Partial<Omit<ICompetition, 'id' | 'status' | 'viewCount' | 'createdAt' | 'updatedAt'>>;
+    Partial<
+      Omit<
+        ICompetition,
+        | 'id'
+        | 'status'
+        | 'viewCount'
+        | 'createdAt'
+        | 'updatedAt'
+        | 'divisions'
+        | 'earlybirdDiscountSnapshots'
+        | 'combinationDiscountSnapshots'
+      >
+    >;
 }
 
 export interface FindCompetitionsParam {
@@ -45,19 +71,19 @@ export interface CreateCombinationDiscountSnapshotParam {
 
 // Application Layer Result DTOs ----------------------------------------------
 export interface CreateCompetitionRet {
-  competition: ICompetition.Create.Competition;
+  competition: Omit<ICompetition, 'divisions' | 'earlybirdDiscountSnapshots' | 'combinationDiscountSnapshots'>;
 }
 
 export interface UpdateCompetitionRet {
-  competition: ICompetition.Update.Competition;
+  competition: Omit<ICompetition, 'divisions' | 'earlybirdDiscountSnapshots' | 'combinationDiscountSnapshots'>;
 }
 
 export interface FindCompetitionsRet {
-  competitions: ICompetition.Find.Competition[];
+  competitions: Omit<ICompetition, 'divisions' | 'combinationDiscountSnapshots'>[];
 }
 
 export interface GetCompetitionRet {
-  competition: ICompetition.Get.Competition;
+  competition: ICompetition;
 }
 
 export interface CreateDivisionsRet {

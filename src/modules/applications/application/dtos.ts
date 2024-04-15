@@ -3,13 +3,15 @@ import { ICompetition } from 'src/modules/competitions/domain/interface/competit
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
+import { IParticipationDivisionInfoUpdateData } from '../domain/interface/participation-division-info-update-data.interface';
+import { IPlayerSnapshot } from '../domain/interface/player-snapshot.interface';
 
 // Application Layer Param DTOs ---------------------------------------------------
 export interface CreateApplicationParam {
   userId: IUser['id'];
   competitionId: ICompetition['id'];
-  divisionIds: IDivision['id'][];
-  player: IApplication.Create.Player;
+  participationDivisionIds: IDivision['id'][];
+  createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
 }
 
 export interface GetApplicationParam {
@@ -20,8 +22,15 @@ export interface GetApplicationParam {
 export interface UpdateReadyApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
-  divisionIds: IDivision['id'][];
-  player: IApplication.UpdateReadyApplication.Player;
+  participationDivisionIds: IDivision['id'][];
+  createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
+}
+
+export interface UpdateDoneApplicationParam {
+  userId: IUser['id'];
+  applicationId: IApplication['id'];
+  createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
+  participationDivisionInfoUpdateDataList: IParticipationDivisionInfoUpdateData[];
 }
 
 export interface GetExpectedPaymentParam {
@@ -31,17 +40,15 @@ export interface GetExpectedPaymentParam {
 
 // Application Layer Result DTOs -----------------------------------------------------
 export interface CreateApplicationRet {
-  application: IApplication.Create.Application;
+  application: IApplication;
 }
 
-// TODO
 export interface GetApplicationRet {
-  application: IApplication.Get.Application;
+  application: IApplication;
 }
 
-// TODO
-export interface UpdateApplicationRet {
-  application: IApplication.UpdateReadyApplication.Application;
+export interface UpdateReadyApplicationRet {
+  application: IApplication;
 }
 
 export interface GetExpectedPaymentRet {

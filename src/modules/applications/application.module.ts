@@ -1,31 +1,31 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ApplicationEntity } from '../../infrastructure/database/entities/application/application.entity';
-import { ParticipationDivisionEntity } from '../../infrastructure/database/entities/application/participation-divsion.entity';
-import { PlayerSnapshotEntity } from '../../infrastructure/database/entities/application/player-snapshot.entity';
-import { ParticipationDivisionSnapshotEntity } from '../../infrastructure/database/entities/application/participation-division-snapshot.entity';
+import { ApplicationTable } from '../../infrastructure/database/tables/application/application.table';
+import { ParticipationDivisionInfoTable } from '../../infrastructure/database/tables/application/participation-division-info.table';
+import { PlayerSnapshotTable } from '../../infrastructure/database/tables/application/player-snapshot.table';
+import { ParticipationDivisionInfoSnapshotTable } from '../../infrastructure/database/tables/application/participation-division-info-snapshot.table';
 import { UserApplicationsController } from './presentation/user-applications.controller';
 import { ApplicationsAppService } from './application/applications.app.service';
 import { ApplicationRepository } from './application.repository';
-import { CompetitionEntity } from '../../infrastructure/database/entities/competition/competition.entity';
-import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
+import { CompetitionTable } from '../../infrastructure/database/tables/competition/competition.table';
+import { UserTable } from '../../infrastructure/database/tables/user/user.entity';
 import { ApplicationFactory } from './domain/application.factory';
-import { PaymentSnapshotEntity } from '../../infrastructure/database/entities/competition/payment-snapshot.entity';
+import { PaymentSnapshotTable } from '../../infrastructure/database/tables/competition/payment-snapshot.table';
 import { ApplicationDomainService } from './domain/application.domain.service';
 import { ApplicationValidator } from './domain/application.validator';
-import { ParticipationDivisionPaymentEntity } from 'src/infrastructure/database/entities/application/participation-division-payment.entity';
+import { ParticipationDivisionInfoPaymentTable } from 'src/infrastructure/database/tables/application/participation-division-info-payment.table';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      UserEntity,
-      ApplicationEntity,
-      PlayerSnapshotEntity,
-      ParticipationDivisionEntity,
-      ParticipationDivisionSnapshotEntity,
-      CompetitionEntity,
-      PaymentSnapshotEntity,
-      ParticipationDivisionPaymentEntity,
+      UserTable,
+      ApplicationTable,
+      PlayerSnapshotTable,
+      ParticipationDivisionInfoTable,
+      ParticipationDivisionInfoSnapshotTable,
+      CompetitionTable,
+      PaymentSnapshotTable,
+      ParticipationDivisionInfoPaymentTable,
     ]),
   ],
   controllers: [UserApplicationsController],

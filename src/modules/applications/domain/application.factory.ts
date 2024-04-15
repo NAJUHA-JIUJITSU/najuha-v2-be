@@ -2,79 +2,118 @@ import { Injectable } from '@nestjs/common';
 import { IApplication } from './interface/application.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { ulid } from 'ulid';
-import { IParticipationDivision } from './interface/participation-division.interface';
-import { IParticipationDivisionSnapshot } from './interface/participation-division-snapshot.interface';
+import { IParticipationDivisionInfo } from './interface/participation-division-info.interface';
+import { IPlayerSnapshot } from './interface/player-snapshot.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { ApplicationEntity } from './entity/application.entity';
+import { ParticipationDivisionInfoEntity } from './entity/participation-division-info.entity';
+import { ParticipationDivisionInfoSnapshotEntity } from './entity/participation-division-info-snapshot.entity';
+import { PlayerSnapshotEntity } from './entity/player-snapshot.entity';
+import { IParticipationDivisionInfoUpdateData } from './interface/participation-division-info-update-data.interface';
 
-// TODO: new 방식말고 다른방법 생각
 @Injectable()
 export class ApplicationFactory {
   createApplication(
-    user: IApplication.Create.User,
-    player: IApplication.Create.Player,
-    divisionIds: IDivision['id'][],
-    competition: IApplication.Create.Competition,
-  ): IApplication.Create.Application {
+    user: IUser,
+    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+    participationDivisionIds: IDivision['id'][],
+    competition: ICompetition,
+  ): ApplicationEntity {
     const applicationId = ulid();
-    const playerSnapshot = this.createPlayerSnapshot(user, player, applicationId);
-    const particiationDivisions = this.createParticipationDivisions(divisionIds, competition, applicationId);
+    const playerSnapshot = this.createPlayerSnapshot(user, createPlayerSnapshotDto, applicationId);
 
-    const application: IApplication.Create.Application = {
+    const particiationDivisions = this.createParticipationDivisionInfos(
+      participationDivisionIds,
+      competition.divisions,
+      applicationId,
+    );
+
+    return new ApplicationEntity({
       id: applicationId,
       userId: user.id,
       competitionId: competition.id,
       playerSnapshots: [playerSnapshot],
-      participationDivisions: particiationDivisions,
+      participationDivisionInfos: particiationDivisions,
       status: 'READY',
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
-
-    return application;
+    });
   }
 
   createPlayerSnapshot(
-    user: IApplication.Create.User,
-    player: IApplication.Create.Player,
+    user: IUser,
+    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
     applicationId: IApplication['id'],
-  ): IApplication.Create.PlayerSnapshot {
-    return {
+  ): PlayerSnapshotEntity {
+    return new PlayerSnapshotEntity({
       id: ulid(),
       name: user.name,
       gender: user.gender,
       birth: user.birth,
       phoneNumber: user.phoneNumber,
-      belt: player.belt,
-      network: player.network,
-      team: player.team,
-      masterName: player.masterName,
-      applicationId: applicationId,
+      belt: createPlayerSnapshotDto.belt,
+      network: createPlayerSnapshotDto.network,
+      team: createPlayerSnapshotDto.team,
+      masterName: createPlayerSnapshotDto.masterName,
+      applicationId,
       createdAt: new Date(),
-    };
+    });
   }
 
-  createParticipationDivisions(
-    divisionIds: IDivision['id'][],
-    competition: IApplication.Create.Competition,
+  createParticipationDivisionInfos(
+    participationDivisionIds: IDivision['id'][],
+    competitionDivisions: IDivision[],
     applicationId: IApplication['id'],
-  ): IParticipationDivision[] {
-    return competition.divisions
-      .filter((division) => divisionIds.includes(division.id))
+  ): ParticipationDivisionInfoEntity[] {
+    return competitionDivisions
+      .filter((division) => participationDivisionIds.includes(division.id))
       .map((division) => {
-        const participationDivisionId = ulid();
-        const participationDivisionSnapshot: IParticipationDivisionSnapshot = {
-          id: ulid(),
-          divisionId: division.id,
-          participationDivisionId: participationDivisionId,
-          createdAt: new Date(),
-        };
-
-        const participationDivision: IParticipationDivision = {
-          id: participationDivisionId,
+        const participationDivisionInfoId = ulid();
+        const participationDivisionInfosSnapshot = this.createParticipationDivisionInfoSnapshot(
+          participationDivisionInfoId,
+          division,
+          division.id,
+        );
+        const participationDivisionInfo: IParticipationDivisionInfo = {
+          id: participationDivisionInfoId,
           applicationId,
-          participationDivisionSnapshots: [participationDivisionSnapshot],
+          participationDivisionInfoSnapshots: [participationDivisionInfosSnapshot],
           createdAt: new Date(),
         };
-        return participationDivision;
+        return new ParticipationDivisionInfoEntity(participationDivisionInfo);
       });
+  }
+
+  createParticipationDivisionInfoSnapshot(
+    participationDivisionInfoId: IParticipationDivisionInfo['id'],
+    division: IDivision,
+    participationDivisionId: IDivision['id'],
+  ): ParticipationDivisionInfoSnapshotEntity {
+    return new ParticipationDivisionInfoSnapshotEntity({
+      id: ulid(),
+      participationDivisionId,
+      division,
+      participationDivisionInfoId,
+      createdAt: new Date(),
+    });
+  }
+
+  createParticipationDivisionInfoSnapshots(
+    competitionDivisions: IDivision[],
+    participationDivisionInfoUpdateDataList: IParticipationDivisionInfoUpdateData[],
+  ): ParticipationDivisionInfoSnapshotEntity[] {
+    return participationDivisionInfoUpdateDataList.map((participationDivisionInfoUpdateData) => {
+      const division = competitionDivisions.find(
+        (division) => division.id === participationDivisionInfoUpdateData.newParticipationDivisionId,
+      );
+      // TODO: 에러 표준화
+      if (!division) throw new Error('Division not found');
+      return this.createParticipationDivisionInfoSnapshot(
+        participationDivisionInfoUpdateData.participationDivisionInfoId,
+        division,
+        division.id,
+      );
+    });
   }
 }

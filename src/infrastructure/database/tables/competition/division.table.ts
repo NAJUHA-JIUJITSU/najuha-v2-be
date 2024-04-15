@@ -1,23 +1,13 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-  UpdateDateColumn,
-} from 'typeorm';
-import { CompetitionEntity } from './competition.entity';
-import { PriceSnapshotEntity } from './price-snapshot.entity';
-import { ParticipationDivisionSnapshotEntity } from '../application/participation-division-snapshot.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Unique, UpdateDateColumn } from 'typeorm';
+import { CompetitionTable } from './competition.table';
+import { PriceSnapshotTable } from './price-snapshot.entity';
+import { ParticipationDivisionInfoSnapshotTable } from '../application/participation-division-info-snapshot.table';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
-export class DivisionEntity {
-  @PrimaryGeneratedColumn()
+export class DivisionTable {
+  @Column('varchar', { length: 26, primary: true })
   id: IDivision['id'];
 
   @Column('varchar', { length: 64 })
@@ -51,18 +41,18 @@ export class DivisionEntity {
   updatedAt: IDivision['updatedAt'];
 
   @Column()
-  competitionId: CompetitionEntity['id'];
+  competitionId: CompetitionTable['id'];
 
-  @ManyToOne(() => CompetitionEntity, (competition) => competition.divisions)
+  @ManyToOne(() => CompetitionTable, (competition) => competition.divisions)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionEntity;
+  competition: CompetitionTable;
 
-  @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
-  priceSnapshots: PriceSnapshotEntity[];
+  @OneToMany(() => PriceSnapshotTable, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
+  priceSnapshots: PriceSnapshotTable[];
 
   @OneToMany(
-    () => ParticipationDivisionSnapshotEntity,
-    (participationDivisionSnapshot) => participationDivisionSnapshot.division,
+    () => ParticipationDivisionInfoSnapshotTable,
+    (participationDivisionInfoSnapshot) => participationDivisionInfoSnapshot.division,
   )
-  participationDivisionSnapshots: ParticipationDivisionSnapshotEntity[];
+  participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotTable[];
 }

@@ -2,10 +2,12 @@ import { ICompetition } from './competition.interface';
 
 export interface IEarlybirdDiscountSnapshot {
   /**
-   * - id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /**
    * - 얼리버드 시작일

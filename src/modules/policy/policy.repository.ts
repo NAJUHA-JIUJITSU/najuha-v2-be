@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PolicyEntity } from '../../infrastructure/database/entities/policy/policy.entity';
+import { PolicyTable } from '../../infrastructure/database/tables/policy/policy.entity';
 import { IPolicy } from './domain/interface/policy.interface';
 
 @Injectable()
 export class PolicyRepository {
   constructor(
-    @InjectRepository(PolicyEntity)
-    private readonly policyRepository: Repository<PolicyEntity>,
+    @InjectRepository(PolicyTable)
+    private readonly policyRepository: Repository<PolicyTable>,
   ) {}
 
   async createPolicy(dto: Partial<IPolicy>): Promise<IPolicy> {

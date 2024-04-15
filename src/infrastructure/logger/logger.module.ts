@@ -1,8 +1,5 @@
 import { Module } from '@nestjs/common';
-import {
-  utilities as nestWinstonModuleUtilities,
-  WinstonModule,
-} from 'nest-winston';
+import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 

@@ -9,8 +9,11 @@ import {
   CreateApplicationRes,
   GetApplicationRes,
   GetExpectedPaymentRes,
+  UpdateDoneApplicationReqBody,
   UpdateReadyApplicationReqBody,
+  UpdateReadyApplicationRes,
 } from './dtos';
+import { Type } from 'class-transformer';
 
 @Controller('user/applications')
 export class UserApplicationsController {
@@ -63,13 +66,14 @@ export class UserApplicationsController {
     @Req() req: Request,
     @TypedParam('applicationId') applicationId: IApplication['id'],
     @TypedBody() body: UpdateReadyApplicationReqBody,
-  ): Promise<ResponseForm<any>> {
-    const application = await this.ApplicationAppService.updateReadyApplication({
-      userId: req['userId'],
-      applicationId,
-      ...body,
-    });
-    return createResponseForm({ application });
+  ): Promise<ResponseForm<UpdateReadyApplicationRes>> {
+    return createResponseForm(
+      await this.ApplicationAppService.updateReadyApplication({
+        userId: req['userId'],
+        applicationId,
+        ...body,
+      }),
+    );
   }
 
   /**
@@ -79,18 +83,20 @@ export class UserApplicationsController {
    * @tag u-6 applications
    * @returns application
    */
-  // @RoleLevels(RoleLevel.USER)
-  // @TypedRoute.Patch('/:applicationId/done')
-  // async updateDoneCompetitionApplication(
-  //   @Req() req: Request,
-  //   @TypedParam('applicationId') applicationId: IApplication['id'],
-  // ): Promise<ResponseForm<any>> {
-  //   const application = await this.ApplicationAppService.updateDoneApplication({
-  //     userId: req['userId'],
-  //     applicationId,
-  //   });
-  //   return createResponseForm({ application });
-  // }
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Patch('/:applicationId/done')
+  async updateDoneCompetitionApplication(
+    @Req() req: Request,
+    @TypedParam('applicationId') applicationId: IApplication['id'],
+    @TypedBody() body: UpdateDoneApplicationReqBody,
+  ): Promise<ResponseForm<any>> {
+    const application = await this.ApplicationAppService.updateDoneApplication({
+      userId: req['userId'],
+      applicationId,
+      ...body,
+    });
+    return createResponseForm({ application });
+  }
 
   /**
    * u-6-5 delete application.

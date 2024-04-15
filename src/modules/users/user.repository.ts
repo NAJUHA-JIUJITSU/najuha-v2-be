@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Repository } from 'typeorm';
-import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
+import { UserTable } from '../../infrastructure/database/tables/user/user.entity';
 import { IUser } from './domain/interface/user.interface';
 
 @Injectable()
 export class UserRepository {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserTable)
+    private readonly userRepository: Repository<UserTable>,
   ) {}
 
   async createUser(dto: Partial<IUser>): Promise<IUser> {

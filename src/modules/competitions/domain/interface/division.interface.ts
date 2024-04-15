@@ -1,11 +1,14 @@
+import { ICompetition } from './competition.interface';
 import { IPriceSnapshot } from './price-snapshot.interface';
 
 export interface IDivision {
   /**
-   * - id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /**
    * - 부문 카테고리.
@@ -50,7 +53,6 @@ export interface IDivision {
    */
   birthYearRangeEnd: string;
 
-  // TODO: inactive 조회 구현
   /**
    * - 활성 상태.
    * - ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)
@@ -65,7 +67,7 @@ export interface IDivision {
   updatedAt: Date | string;
 
   /** - competitionId. */
-  competitionId: number;
+  competitionId: ICompetition['id'];
 
   priceSnapshots: IPriceSnapshot[];
 }

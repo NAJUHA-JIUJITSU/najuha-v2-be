@@ -7,7 +7,7 @@ export interface IPaymentSnapshot {
    * @minLength 26
    * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /** - entity 생성 시간. */
   createdAt: Date | string;

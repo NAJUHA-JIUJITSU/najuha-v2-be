@@ -1,38 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
-import { In, Repository } from 'typeorm';
-import { ApplicationEntity } from '../../infrastructure/database/entities/application/application.entity';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../../infrastructure/database/entities/user/user.entity';
+import { UserTable } from '../../infrastructure/database/tables/user/user.entity';
 import { IUser } from '../users/domain/interface/user.interface';
 import { ICompetition } from '../competitions/domain/interface/competition.interface';
 import { IApplication } from './domain/interface/application.interface';
-import { CompetitionEntity } from 'src/infrastructure/database/entities/competition/competition.entity';
-import { ParticipationDivisionEntity } from 'src/infrastructure/database/entities/application/participation-divsion.entity';
-import { IParticipationDivision } from './domain/interface/participation-division.interface';
-import { PlayerSnapshotEntity } from 'src/infrastructure/database/entities/application/player-snapshot.entity';
-import { ParticipationDivisionSnapshotEntity } from 'src/infrastructure/database/entities/application/participation-division-snapshot.entity';
-import { IParticipationDivisionSnapshot } from './domain/interface/participation-division-snapshot.interface';
+import { CompetitionTable } from 'src/infrastructure/database/tables/competition/competition.table';
+import { ParticipationDivisionInfoTable } from 'src/infrastructure/database/tables/application/participation-division-info.table';
+import { IParticipationDivisionInfo } from './domain/interface/participation-division-info.interface';
+import { PlayerSnapshotTable } from 'src/infrastructure/database/tables/application/player-snapshot.table';
+import { ParticipationDivisionInfoSnapshotTable } from 'src/infrastructure/database/tables/application/participation-division-info-snapshot.table';
+import { ApplicationEntity } from './domain/entity/application.entity';
+import { ParticipationDivisionInfoEntity } from './domain/entity/participation-division-info.entity';
+import { PlayerSnapshotEntity } from './domain/entity/player-snapshot.entity';
+import { ApplicationTable } from 'src/infrastructure/database/tables/application/application.table';
 
 @Injectable()
 export class ApplicationRepository {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(ApplicationEntity)
-    private readonly applicationRepository: Repository<ApplicationEntity>,
-    @InjectRepository(CompetitionEntity)
-    private readonly competitionRepository: Repository<CompetitionEntity>,
-    @InjectRepository(ParticipationDivisionEntity)
-    private readonly participationDivisionRepository: Repository<ParticipationDivisionEntity>,
-    @InjectRepository(PlayerSnapshotEntity)
-    private readonly playerSnapshotRepository: Repository<PlayerSnapshotEntity>,
-    @InjectRepository(ParticipationDivisionSnapshotEntity)
-    private readonly participationDivisionSnapshotRepository: Repository<ParticipationDivisionSnapshotEntity>,
+    @InjectRepository(UserTable)
+    private readonly userRepository: Repository<UserTable>,
+    @InjectRepository(ApplicationTable)
+    private readonly applicationRepository: Repository<ApplicationTable>,
+    @InjectRepository(CompetitionTable)
+    private readonly competitionRepository: Repository<CompetitionTable>,
+    @InjectRepository(ParticipationDivisionInfoTable)
+    private readonly participationDivisionInfoRepository: Repository<ParticipationDivisionInfoTable>,
+    @InjectRepository(PlayerSnapshotTable)
+    private readonly playerSnapshotRepository: Repository<PlayerSnapshotTable>,
+    @InjectRepository(ParticipationDivisionInfoSnapshotTable)
+    private readonly participationDivisionInfoSnapshotRepository: Repository<ParticipationDivisionInfoSnapshotTable>,
   ) {}
 
   // ----------------- User -----------------
-  async getUser(userId: IUser['id']): Promise<UserEntity> {
+  async getUser(userId: IUser['id']): Promise<IUser> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
     return user;
@@ -42,7 +44,7 @@ export class ApplicationRepository {
   async getCompetition(options?: {
     where?: Partial<Pick<ICompetition, 'id' | 'status'>>;
     relations?: string[];
-  }): Promise<CompetitionEntity> {
+  }): Promise<ICompetition> {
     const competition = await this.competitionRepository.findOne({
       where: { ...options?.where },
       relations: options?.relations,
@@ -52,14 +54,14 @@ export class ApplicationRepository {
   }
 
   // ----------------- Application -----------------
-  async saveApplication(application: IApplication.Create.Application): Promise<ApplicationEntity> {
+  async saveApplication(application: IApplication): Promise<IApplication> {
     return await this.applicationRepository.save(application);
   }
 
   async getApplication(options?: {
-    where?: Partial<Pick<ApplicationEntity, 'id' | 'userId' | 'status'>>;
+    where?: Partial<Pick<IApplication, 'id' | 'userId' | 'status'>>;
     relations?: string[];
-  }): Promise<ApplicationEntity> {
+  }): Promise<IApplication> {
     const application = await this.applicationRepository.findOne({
       where: { ...options?.where },
       relations: options?.relations,
@@ -68,26 +70,33 @@ export class ApplicationRepository {
     return application;
   }
 
-  // ----------------- ParticipationDivision -----------------
-  async saveParticipationDivisions(participationDivisions: IParticipationDivision[]): Promise<void> {
-    await this.participationDivisionRepository.save(participationDivisions);
+  // ----------------- ParticipationDivisionInfo -----------------
+  async saveParticipationDivisionInfos(participationDivisionInfos: IParticipationDivisionInfo[]): Promise<void> {
+    await this.participationDivisionInfoRepository.save(participationDivisionInfos);
   }
 
-  async deleteParticipationDivisions(participationDivisions: IParticipationDivision[]): Promise<void> {
+  async deleteParticipationDivisionInfos(participationDivisionInfos: ParticipationDivisionInfoEntity[]): Promise<void> {
     await Promise.all(
-      participationDivisions.map(async (participationDivision) => {
+      participationDivisionInfos.map(async (participationDivisionInfo) => {
         await Promise.all(
-          participationDivision.participationDivisionSnapshots.map(async (participationDivisionSnapshot) => {
-            await this.participationDivisionSnapshotRepository.delete(participationDivisionSnapshot.id);
-          }),
+          participationDivisionInfo.participationDivisionInfoSnapshots.map(
+            async (participationDivisionInfoSnapshot) => {
+              await this.participationDivisionInfoSnapshotRepository.delete(participationDivisionInfoSnapshot.id);
+            },
+          ),
         );
-        await this.participationDivisionRepository.delete(participationDivision.id);
+        await this.participationDivisionInfoRepository.delete(participationDivisionInfo.id);
       }),
     );
   }
 
   // ----------------- PlayerSnapshot -----------------
-  async savePlayerSnapshot(playerSnapshot: IApplication.Create.PlayerSnapshot): Promise<void> {
+  async deletePlayerSnapshots(playerSnapshots: PlayerSnapshotEntity[]): Promise<void> {
+    playerSnapshots.forEach(async (playerSnapshot) => {
+      await this.playerSnapshotRepository.delete(playerSnapshot.id);
+    });
+  }
+  async savePlayerSnapshot(playerSnapshot: PlayerSnapshotEntity): Promise<void> {
     await this.playerSnapshotRepository.save(playerSnapshot);
   }
 }

@@ -1,7 +1,7 @@
 import { IApplication } from './application.interface';
-import { IParticipationDivisionSnapshot } from './participation-division-snapshot.interface';
+import { IParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.interface';
 
-export interface IParticipationDivision {
+export interface IParticipationDivisionInfo {
   /**
    * - ULID.
    * @type string
@@ -16,6 +16,5 @@ export interface IParticipationDivision {
   /** - application id. */
   applicationId: IApplication['id'];
 
-  /** - participation division snapshots. */
-  participationDivisionSnapshots: IParticipationDivisionSnapshot[];
+  participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshot[];
 }

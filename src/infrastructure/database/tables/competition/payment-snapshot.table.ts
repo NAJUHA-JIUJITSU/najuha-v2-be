@@ -1,10 +1,10 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ApplicationEntity } from '../application/application.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
+import { ApplicationTable } from '../application/application.table';
 import { IPaymentSnapshot } from 'src/modules/competitions/domain/interface/payment-snapshot.interface';
 
 @Entity('payment_snapshot')
-export class PaymentSnapshotEntity {
-  @PrimaryGeneratedColumn()
+export class PaymentSnapshotTable {
+  @Column('varchar', { length: 26, primary: true })
   id: IPaymentSnapshot['id'];
 
   @CreateDateColumn()
@@ -23,8 +23,8 @@ export class PaymentSnapshotEntity {
   totalAmount: IPaymentSnapshot['totalAmount'];
 
   @Column()
-  applicationId: ApplicationEntity['id'];
+  applicationId: ApplicationTable['id'];
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.paymentSnapshots)
-  application: ApplicationEntity;
+  @ManyToOne(() => ApplicationTable, (application) => application.paymentSnapshots)
+  application: ApplicationTable;
 }

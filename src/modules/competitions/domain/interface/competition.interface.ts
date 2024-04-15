@@ -4,10 +4,12 @@ import { IEarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.interf
 
 export interface ICompetition {
   /**
-   * - id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /**
    * - 대회의 이름.
@@ -86,34 +88,18 @@ export interface ICompetition {
 
   /** - 엔티티가 수정될 때마다 업데이트되는 최종 업데이트 시간. */
   updatedAt: string | Date;
+
+  divisions: IDivision[];
+
+  earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
+
+  combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
 }
 
 export namespace ICompetition {
-  export namespace Create {
-    export interface Competition extends ICompetition {}
-  }
+  export interface CreateDto extends ICompetition {}
 
-  export namespace Update {
-    export interface Competition extends ICompetition {}
-  }
-
-  export namespace Find {
-    export interface Competition extends ICompetition {
-      earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
-    }
-  }
-
-  export namespace Get {
-    export interface Competition extends ICompetition {
-      divisions: IDivision[];
-      earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
-      combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
-    }
-  }
-
-  export namespace CreateDivisions {
-    export interface Competition extends ICompetition {
-      divisions: IDivision[];
-    }
+  export namespace Read {
+    export interface FindCompetitions extends Omit<ICompetition, 'combinationDiscountSnapshots' | 'divisions'> {}
   }
 }

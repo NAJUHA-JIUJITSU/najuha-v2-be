@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
-import { PolicyConsentEntity } from '../user/policy-consent.entity';
+import { PolicyConsentTable } from '../user/policy-consent.entity';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 
 @Entity('policy')
-export class PolicyEntity {
+export class PolicyTable {
   @PrimaryGeneratedColumn()
   id: IPolicy['id'];
 
@@ -25,6 +25,6 @@ export class PolicyEntity {
   @CreateDateColumn()
   createdAt: IPolicy['createdAt'];
 
-  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.policy)
-  policyConsents: PolicyConsentEntity[];
+  @OneToMany(() => PolicyConsentTable, (policyConsent) => policyConsent.policy)
+  policyConsents: PolicyConsentTable[];
 }

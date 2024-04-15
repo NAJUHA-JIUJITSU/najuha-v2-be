@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CompetitionRepository } from 'src/modules/competitions/competition.repository';
 import { DivisionFactory } from '../domain/division.factory';
-import { ICompetition } from '../domain/interface/competition.interface';
-import { CompetitionValidator } from '../domain/competition.validator';
 import {
   CreateCombinationDiscountSnapshotParam,
   CreateCombinationDiscountSnapshotRet,
@@ -20,50 +18,48 @@ import {
   UpdateCompetitionRet,
   UpdateCompetitionStatusParam,
 } from './dtos';
+import { CompetitionEntity } from '../domain/entity/competition.entity';
+import { ulid } from 'ulid';
 
 @Injectable()
 export class CompetitionsAppService {
   constructor(
     private readonly competitionRepository: CompetitionRepository,
     private readonly divisionFactory: DivisionFactory,
-    private readonly competitionValidator: CompetitionValidator,
   ) {}
 
-  async createCompetition({ creatCompetition }: CreateCompetitionParam): Promise<CreateCompetitionRet> {
-    const newCompetition = (await this.competitionRepository.createCompetition(
-      creatCompetition,
-    )) as ICompetition.Create.Competition;
-
-    return { competition: newCompetition };
+  async createCompetition({ creatCompetitionDto }: CreateCompetitionParam): Promise<CreateCompetitionRet> {
+    const competition = await this.competitionRepository.createCompetition({ ...creatCompetitionDto, id: ulid() });
+    return { competition };
   }
 
   async updateCompetition({ updateCompetition }: UpdateCompetitionParam): Promise<UpdateCompetitionRet> {
-    let competition = (await this.competitionRepository.getCompetition({
+    let competition = await this.competitionRepository.getCompetition({
       where: { id: updateCompetition.id },
-    })) as ICompetition.Update.Competition;
+    });
 
-    competition = (await this.competitionRepository.saveCompetition({
+    competition = await this.competitionRepository.saveCompetition({
       ...competition,
       ...updateCompetition,
-    })) as ICompetition.Update.Competition;
+    });
 
     return { competition };
   }
 
   async findCompetitions(param?: FindCompetitionsParam | null): Promise<FindCompetitionsRet> {
-    const competitions = (await this.competitionRepository.findCompetitons({
+    const competitions = await this.competitionRepository.findCompetitons({
       where: { status: param?.status },
       relations: ['earlybirdDiscountSnapshots'],
-    })) as ICompetition.Find.Competition[];
+    });
 
     return { competitions };
   }
 
   async getCompetition({ competitionId, status }: GetCompetitionParam): Promise<GetCompetitionRet> {
-    const competition = (await this.competitionRepository.getCompetition({
+    const competition = await this.competitionRepository.getCompetition({
       where: { id: competitionId, status: status },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
-    })) as ICompetition.Get.Competition;
+    });
     return { competition };
   }
 
@@ -71,37 +67,41 @@ export class CompetitionsAppService {
     competitionId,
     status,
   }: UpdateCompetitionStatusParam): Promise<UpdateCompetitionRet> {
-    let competition = (await this.competitionRepository.getCompetition({
+    const competitionEntityData = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
-    })) as ICompetition.Update.Competition;
-    if (status === 'ACTIVE') this.competitionValidator.validateCanBeActive(competition);
-    competition.status = status;
-    competition = await this.competitionRepository.saveCompetition(competition);
+      relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+    });
+    const competition = new CompetitionEntity(competitionEntityData);
+    competition.updateStatus(status);
+    await this.competitionRepository.saveCompetition(competition);
     return { competition };
   }
 
   async createDivisions({ competitionId, divisionPacks }: CreateDivisionsParam): Promise<CreateDivisionsRet> {
-    const competition = (await this.competitionRepository.getCompetition({
+    const competitionEntityData = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
-      relations: ['divisions'],
-    })) as ICompetition.CreateDivisions.Competition;
-    const divisions = this.divisionFactory.createDivision(competition.id, divisionPacks);
-    this.competitionValidator.validateDuplicateDivisions(competition, divisions);
-    const newDivisions = await this.competitionRepository.saveDivisions(divisions);
-    return { divisions: newDivisions };
+      relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+    });
+    const competition = new CompetitionEntity(competitionEntityData);
+    const divisions = this.divisionFactory.createDivisions(competition.id, divisionPacks);
+    competition.addDivisions(divisions);
+    await this.competitionRepository.saveDivisions(divisions);
+    return { divisions };
   }
 
   async createEarlybirdDiscountSnapshot({
     competitionId,
     earlybirdDiscount,
   }: CreateEarlybirdDiscountSnapshotParam): Promise<CreateEarlybirdDiscountSnapshotRet> {
-    const competition = (await this.competitionRepository.getCompetition({
+    const competition = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
-    })) as ICompetition;
-    const earlybirdDiscountSnapshot = await this.competitionRepository.createEarlybirdDiscount(
-      competition.id,
-      earlybirdDiscount,
-    );
+    });
+    const earlybirdDiscountSnapshot = await this.competitionRepository.createEarlybirdDiscount({
+      id: ulid(),
+      competitionId: competition.id,
+      ...earlybirdDiscount,
+      createdAt: new Date(),
+    });
     return { earlybirdDiscountSnapshot };
   }
 
@@ -109,13 +109,15 @@ export class CompetitionsAppService {
     competitionId,
     combinationDiscount,
   }: CreateCombinationDiscountSnapshotParam): Promise<CreateCombinationDiscountSnapshotRet> {
-    const competition = (await this.competitionRepository.getCompetition({
+    const competition = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
-    })) as ICompetition;
-    const combinationDiscountSnapshot = await this.competitionRepository.createCombinationDiscount(
-      competition.id,
-      combinationDiscount,
-    );
+    });
+    const combinationDiscountSnapshot = await this.competitionRepository.createCombinationDiscount({
+      id: ulid(),
+      competitionId: competition.id,
+      ...combinationDiscount,
+      createdAt: new Date(),
+    });
     return { combinationDiscountSnapshot };
   }
 }

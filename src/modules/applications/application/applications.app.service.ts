@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ApplicationRepository } from '../application.repository';
 import { ApplicationFactory } from '../domain/application.factory';
 import { ApplicationDomainService } from '../domain/application.domain.service';
-import { ApplicationValidator } from '../domain/application.validator';
-import { IApplication } from '../domain/interface/application.interface';
 import {
   CreateApplicationParam,
   CreateApplicationRet,
@@ -11,9 +9,12 @@ import {
   GetApplicationRet,
   GetExpectedPaymentParam,
   GetExpectedPaymentRet,
+  UpdateDoneApplicationParam,
   UpdateReadyApplicationParam,
-  UpdateApplicationRet,
+  UpdateReadyApplicationRet,
 } from './dtos';
+import { CompetitionEntity } from 'src/modules/competitions/domain/entity/competition.entity';
+import { ApplicationEntity } from '../domain/entity/application.entity';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -21,61 +22,91 @@ export class ApplicationsAppService {
     private readonly applicationRepository: ApplicationRepository,
     private readonly applicationFactory: ApplicationFactory,
     private readonly applicationDomainService: ApplicationDomainService,
-    private readonly applicationValidator: ApplicationValidator,
   ) {}
 
+  /**
+   * Create application.
+   *
+   * @param CreateApplicationParam
+   * @returns CreateApplicationRet
+   */
   async createApplication({
     userId,
-    player,
-    divisionIds,
+    createPlayerSnapshotDto,
+    participationDivisionIds,
     competitionId,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
-    const user = (await this.applicationRepository.getUser(userId)) as IApplication.Create.User;
-
-    const competition = (await this.applicationRepository.getCompetition({
+    const user = await this.applicationRepository.getUser(userId);
+    const competitionEntityData = await this.applicationRepository.getCompetition({
       where: { id: competitionId, status: 'ACTIVE' },
-      relations: ['divisions', 'divisions.priceSnapshots'],
-    })) as IApplication.Create.Competition;
+      relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+    });
+    const competition = new CompetitionEntity(competitionEntityData);
 
-    this.applicationValidator.validateApplicationAbility(player, divisionIds, competition);
+    competition.validateApplicationAbility(createPlayerSnapshotDto, participationDivisionIds);
 
-    const application = this.applicationFactory.createApplication(user, player, divisionIds, competition);
-    await this.applicationRepository.saveApplication(application);
-    return { application };
+    const applicationEntityData = this.applicationFactory.createApplication(
+      user,
+      createPlayerSnapshotDto,
+      participationDivisionIds,
+      competitionEntityData,
+    );
+
+    await this.applicationRepository.saveApplication(applicationEntityData);
+    return { application: applicationEntityData };
   }
 
+  /**
+   * Get application.
+   *
+   * @param GetApplicationParam
+   * @returns
+   */
   async getApplication({ userId, applicationId }: GetApplicationParam): Promise<GetApplicationRet> {
-    const application = (await this.applicationRepository.getApplication({
+    const application = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId },
       relations: [
         'playerSnapshots',
-        'participationDivisions',
-        'participationDivisions.participationDivisionSnapshots',
-        'participationDivisions.participationDivisionSnapshots.division',
+        'participationDivisionInfos',
+        'participationDivisionInfos.participationDivisionInfoSnapshots',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
-    })) as IApplication.Get.Application;
+    });
     return { application };
   }
 
   /**
-   * - Update ready application.
+   * Update ready application.
    * - READY status 를 가진 application 을 업데이트 합니다.
    * - CANCELED, DONE 상태의 application 은 업데이트 할 수 없습니다.
-   * - 기존 participationDivisions 를 삭제하고 새로운 participationDivisions 를 생성합니다.
-   * TODO: Transaction 처리
+   * - 기존 ParticipationDivisionInfos 를 삭제하고 새로운 ParticipationDivisionInfos 를 생성합니다.
+   * - TODO: Transaction
+   *
+   * @param UpdateReadyApplicationParam
+   * @returns UpdateApplicationRet
    */
   async updateReadyApplication({
     userId,
-    player,
+    createPlayerSnapshotDto,
     applicationId,
-    divisionIds,
-  }: UpdateReadyApplicationParam): Promise<UpdateApplicationRet> {
-    const application = (await this.applicationRepository.getApplication({
-      where: { userId, id: applicationId, status: 'READY' },
-      relations: ['playerSnapshots', 'participationDivisions', 'participationDivisions.participationDivisionSnapshots'],
-    })) as IApplication.UpdateReadyApplication.Application;
+    participationDivisionIds,
+  }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
+    const user = await this.applicationRepository.getUser(userId);
 
-    const competition = (await this.applicationRepository.getCompetition({
+    const applicationEntityData = await this.applicationRepository.getApplication({
+      where: { userId, id: applicationId, status: 'READY' },
+      relations: [
+        'playerSnapshots',
+        'participationDivisionInfos',
+        'participationDivisionInfos.participationDivisionInfoSnapshots',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+      ],
+    });
+    const application = new ApplicationEntity(applicationEntityData);
+
+    const competitionEntityData = await this.applicationRepository.getCompetition({
       where: { id: application.competitionId },
       relations: [
         'divisions',
@@ -83,38 +114,48 @@ export class ApplicationsAppService {
         'earlybirdDiscountSnapshots',
         'combinationDiscountSnapshots',
       ],
-    })) as IApplication.UpdateReadyApplication.Competition;
-
-    this.applicationValidator.validateApplicationAbility(player, divisionIds, competition);
-
-    await this.applicationRepository.deleteParticipationDivisions(application.participationDivisions);
-
-    const playerSnapshot = { ...application.playerSnapshots[application.playerSnapshots.length - 1], ...player };
-    const participationDivisions = this.applicationFactory.createParticipationDivisions(
-      divisionIds,
-      competition,
-      application.id,
+    });
+    const competition = new CompetitionEntity(competitionEntityData);
+    competition.validateApplicationAbility(createPlayerSnapshotDto, participationDivisionIds);
+    await this.applicationRepository.deletePlayerSnapshots(application.playerSnapshots);
+    await this.applicationRepository.deleteParticipationDivisionInfos(application.participationDivisionInfos);
+    const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(
+      user,
+      createPlayerSnapshotDto,
+      applicationId,
     );
-    application.playerSnapshots = [playerSnapshot];
-    application.participationDivisions = participationDivisions;
-
-    await this.applicationRepository.saveParticipationDivisions(participationDivisions);
-    await this.applicationRepository.savePlayerSnapshot(playerSnapshot);
-
+    const newParticipationDivisionInfos = this.applicationFactory.createParticipationDivisionInfos(
+      participationDivisionIds,
+      competition.divisions,
+      applicationId,
+    );
+    application.updateReadyApplication(newPlayerSnapshot, newParticipationDivisionInfos);
+    await this.applicationRepository.saveApplication(application);
     return { application };
   }
 
-  async getExpectedPayment({ userId, applicationId }: GetExpectedPaymentParam): Promise<GetExpectedPaymentRet> {
-    const application = (await this.applicationRepository.getApplication({
-      where: { userId, id: applicationId },
+  /**
+   * Update done application.
+   */
+  async updateDoneApplication({
+    userId,
+    applicationId,
+    createPlayerSnapshotDto,
+    participationDivisionInfoUpdateDataList,
+  }: UpdateDoneApplicationParam): Promise<any> {
+    const user = await this.applicationRepository.getUser(userId);
+    const applicationEntityData = await this.applicationRepository.getApplication({
+      where: { userId, id: applicationId, status: 'DONE' },
       relations: [
-        'participationDivisions',
-        'participationDivisions.participationDivisionSnapshots',
-        'participationDivisions.participationDivisionSnapshots.division',
+        'playerSnapshots',
+        'participationDivisionInfos',
+        'participationDivisionInfos.participationDivisionInfoSnapshots',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
-    })) as IApplication.CalculatePayment.Application;
-
-    const competition = (await this.applicationRepository.getCompetition({
+    });
+    const application = new ApplicationEntity(applicationEntityData);
+    const competitionEntityData = await this.applicationRepository.getCompetition({
       where: { id: application.competitionId },
       relations: [
         'divisions',
@@ -122,7 +163,55 @@ export class ApplicationsAppService {
         'earlybirdDiscountSnapshots',
         'combinationDiscountSnapshots',
       ],
-    })) as IApplication.CalculatePayment.Competition;
+    });
+    const competition = new CompetitionEntity(competitionEntityData);
+    competition.validateApplicationAbility(
+      createPlayerSnapshotDto,
+      participationDivisionInfoUpdateDataList.map((participationDivisionInfoUpdateData) => {
+        return participationDivisionInfoUpdateData.newParticipationDivisionId;
+      }),
+    );
+    const newPlayerSnapshots = this.applicationFactory.createPlayerSnapshot(
+      user,
+      createPlayerSnapshotDto,
+      applicationId,
+    );
+    const newParticipationDivisionInfoSnapshots = this.applicationFactory.createParticipationDivisionInfoSnapshots(
+      competition.divisions,
+      participationDivisionInfoUpdateDataList,
+    );
+    application.updateDoneApplication(newPlayerSnapshots, newParticipationDivisionInfoSnapshots);
+    await this.applicationRepository.saveApplication(application);
+    return { application };
+  }
+
+  /**
+   * Get expected payment.
+   * - 현재 가격, 할인 정보를 바탕으로 application 의 예상 결제 금액을 계산합니다.
+   *
+   * @param GetExpectedPaymentParam
+   * @returns GetExpectedPaymentRet
+   */
+  async getExpectedPayment({ userId, applicationId }: GetExpectedPaymentParam): Promise<GetExpectedPaymentRet> {
+    const application = await this.applicationRepository.getApplication({
+      where: { userId, id: applicationId },
+      relations: [
+        'participationDivisionInfos',
+        'participationDivisionInfos.participationDivisionInfoSnapshots',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+      ],
+    });
+
+    const competition = await this.applicationRepository.getCompetition({
+      where: { id: application.competitionId },
+      relations: [
+        'divisions',
+        'divisions.priceSnapshots',
+        'earlybirdDiscountSnapshots',
+        'combinationDiscountSnapshots',
+      ],
+    });
 
     const expectedPayment = await this.applicationDomainService.calculatePayment(application, competition);
     return { expectedPayment };

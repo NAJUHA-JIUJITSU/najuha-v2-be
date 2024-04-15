@@ -1,7 +1,7 @@
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
-import { IParticipationDivision } from './participation-division.interface';
+import { IParticipationDivisionInfo } from './participation-division-info.interface';
 
-export interface IParticipationDivisionSnapshot {
+export interface IParticipationDivisionInfoSnapshot {
   /**
    * - ULID.
    * @type string
@@ -15,8 +15,11 @@ export interface IParticipationDivisionSnapshot {
    */
   createdAt: Date | string;
 
-  /** - participation division id. */
-  participationDivisionId: IParticipationDivision['id'];
+  /** - participation division Info id. */
+  participationDivisionInfoId: IParticipationDivisionInfo['id'];
 
-  divisionId: IDivision['id'];
+  /** - division id */
+  participationDivisionId: IDivision['id'];
+
+  division: IDivision;
 }

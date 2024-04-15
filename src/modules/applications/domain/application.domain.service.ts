@@ -1,10 +1,10 @@
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
-import { ApplicationRepository } from '../application.repository';
-import { IApplication } from './interface/application.interface';
 import { IExpectedPayment } from './interface/expected-payment.interface';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
-import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import { Injectable } from '@nestjs/common';
+import { DivisionEntity } from 'src/modules/competitions/domain/entity/division.entity';
+import { CombinationDiscountSnapshotEntity } from 'src/modules/competitions/domain/entity/combination-discount-snapshot.entity';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { IApplication } from './interface/application.interface';
 
 @Injectable()
 export class ApplicationDomainService {
@@ -19,29 +19,30 @@ export class ApplicationDomainService {
    * @param competition
    * @returns IExpectedPayment
    */
-  async calculatePayment(
-    application: IApplication.CalculatePayment.Application,
-    competition: IApplication.CalculatePayment.Competition,
-  ): Promise<IExpectedPayment> {
-    const participationDivisionIds = application.participationDivisions.map((participationDivision) => {
-      return participationDivision.participationDivisionSnapshots[
-        participationDivision.participationDivisionSnapshots.length - 1
-      ].divisionId;
+  async calculatePayment(application: IApplication, competition: ICompetition): Promise<IExpectedPayment> {
+    if (!competition.earlybirdDiscountSnapshots) throw new Error('earlybirdDiscountSnapshots is undefined');
+    if (!competition.combinationDiscountSnapshots) throw new Error('combinationDiscountSnapshots is undefined');
+    if (!competition.divisions) throw new Error('divisions is undefined');
+
+    const participationDivisionInfoIds = application.participationDivisionInfos.map((participationDivisionInfo) => {
+      return participationDivisionInfo.participationDivisionInfoSnapshots[
+        participationDivisionInfo.participationDivisionInfoSnapshots.length - 1
+      ].participationDivisionId;
     });
 
-    const participationDivisions = competition.divisions.filter((division) =>
-      participationDivisionIds.includes(division.id),
+    const participationDivisionInfos = competition.divisions?.filter((division) =>
+      participationDivisionInfoIds.includes(division.id),
     );
 
-    const normalAmount = this.calculateNormalAmount(participationDivisions);
+    const normalAmount = this.calculateNormalAmount(participationDivisionInfos);
 
     const earlybirdDiscountAmount = this.calculateEarlybirdDiscountAmount(
       competition.earlybirdDiscountSnapshots[competition.earlybirdDiscountSnapshots.length - 1] || null,
     );
 
     const combinationDiscountAmount = this.calculateCombinationDiscountAmount(
-      competition.combinationDiscountSnapshots[competition.combinationDiscountSnapshots.length - 1] || null,
-      participationDivisions,
+      competition?.combinationDiscountSnapshots[competition.combinationDiscountSnapshots.length - 1] || null,
+      participationDivisionInfos,
     );
 
     const totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
@@ -55,7 +56,7 @@ export class ApplicationDomainService {
    * @param divisions
    * @returns normal amount
    */
-  private calculateNormalAmount(divisions: IDivision[]): number {
+  private calculateNormalAmount(divisions: DivisionEntity[]): number {
     return divisions.reduce((acc, division) => {
       acc += division.priceSnapshots[division.priceSnapshots.length - 1].price || 0;
       return acc;
@@ -87,8 +88,8 @@ export class ApplicationDomainService {
    * @returns combination discount amount
    */
   private calculateCombinationDiscountAmount(
-    combinationDiscountSnapshot: ICombinationDiscountSnapshot,
-    divisions: IDivision[],
+    combinationDiscountSnapshot: CombinationDiscountSnapshotEntity,
+    divisions: DivisionEntity[],
   ): number {
     if (combinationDiscountSnapshot === null) return 0;
     const divisionUnits = divisions.map((division) => ({

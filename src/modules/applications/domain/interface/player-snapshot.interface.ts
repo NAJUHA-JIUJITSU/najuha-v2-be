@@ -67,3 +67,7 @@ export interface IPlayerSnapshot {
   /** - application id. */
   applicationId: IApplication['id'];
 }
+
+export namespace IPlayerSnapshot {
+  export interface CreateDto extends Omit<IPlayerSnapshot, 'id' | 'createdAt' | 'applicationId'> {}
+}

@@ -34,7 +34,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
   async createCompetition(@TypedBody() body: CreateCompetitionReqBody): Promise<ResponseForm<CreateCompetitionRes>> {
-    return createResponseForm(await this.competitionsAppService.createCompetition({ creatCompetition: body }));
+    return createResponseForm(await this.competitionsAppService.createCompetition({ creatCompetitionDto: body }));
   }
 
   /**

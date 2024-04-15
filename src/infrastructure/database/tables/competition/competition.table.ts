@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { DivisionEntity } from './division.entity';
-import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
-import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
-import { ApplicationEntity } from '../application/application.entity';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { DivisionTable } from './division.table';
+import { EarlybirdDiscountSnapshotTable } from './earlybird-discount-snapshot.table';
+import { CombinationDiscountSnapshotTable } from './combination-discount-snapshot.table';
+import { ApplicationTable } from '../application/application.table';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 
 @Entity('competition')
-export class CompetitionEntity {
-  @PrimaryGeneratedColumn()
+export class CompetitionTable {
+  @Column('varchar', { length: 26, primary: true })
   id: ICompetition['id'];
 
   @Column('varchar', { length: 256, default: 'DEFAULT TITLE' })
@@ -16,28 +16,28 @@ export class CompetitionEntity {
   @Column('varchar', { length: 256, default: 'DEFAULT ADDRESS' })
   address: ICompetition['address'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   competitionDate: ICompetition['competitionDate'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   registrationStartDate: ICompetition['registrationStartDate'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   registrationEndDate: ICompetition['registrationEndDate'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   refundDeadlineDate: ICompetition['refundDeadlineDate'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   soloRegistrationAdjustmentStartDate: ICompetition['soloRegistrationAdjustmentStartDate'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   soloRegistrationAdjustmentEndDate: ICompetition['soloRegistrationAdjustmentEndDate'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   registrationListOpenDate: ICompetition['registrationListOpenDate'];
 
-  @Column('timestamp', { nullable: true })
+  @Column('timestamptz', { nullable: true })
   bracketOpenDate: ICompetition['bracketOpenDate'];
 
   @Column('text', { default: 'DEFAULT DESCRIPTION' })
@@ -61,21 +61,18 @@ export class CompetitionEntity {
   @UpdateDateColumn()
   updatedAt: ICompetition['updatedAt'];
 
-  @OneToMany(
-    () => EarlybirdDiscountSnapshotEntity,
-    (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
-  )
-  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotEntity[];
+  @OneToMany(() => EarlybirdDiscountSnapshotTable, (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition)
+  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotTable[];
 
   @OneToMany(
-    () => CombinationDiscountSnapshotEntity,
+    () => CombinationDiscountSnapshotTable,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
   )
-  combinationDiscountSnapshots: CombinationDiscountSnapshotEntity[];
+  combinationDiscountSnapshots: CombinationDiscountSnapshotTable[];
 
-  @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
-  divisions: DivisionEntity[];
+  @OneToMany(() => DivisionTable, (division) => division.competition, { cascade: true })
+  divisions: DivisionTable[];
 
-  @OneToMany(() => ApplicationEntity, (application) => application.competition)
-  applications: ApplicationEntity[];
+  @OneToMany(() => ApplicationTable, (application) => application.competition)
+  applications: ApplicationTable[];
 }
