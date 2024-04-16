@@ -20,11 +20,9 @@ export class ApplicationEntity {
     this.createdAt = application.createdAt;
     this.updatedAt = application.updatedAt;
     this.status = application.status;
-    this.playerSnapshots = application.playerSnapshots.map(
-      (playerSnapshot) => new PlayerSnapshotEntity(playerSnapshot),
-    );
+    this.playerSnapshots = application.playerSnapshots.map((snapshot) => new PlayerSnapshotEntity(snapshot));
     this.participationDivisionInfos = application.participationDivisionInfos.map(
-      (participationDivisionInfo) => new ParticipationDivisionInfoEntity(participationDivisionInfo),
+      (info) => new ParticipationDivisionInfoEntity(info),
     );
   }
 
@@ -32,7 +30,6 @@ export class ApplicationEntity {
     newPlayerSnapshot: PlayerSnapshotEntity,
     newParticipationDivisionInfos: ParticipationDivisionInfoEntity[],
   ) {
-    // TODO: 에러 표준화
     if (this.status !== 'READY') throw new Error('Only READY application can be updated');
     this.playerSnapshots = [newPlayerSnapshot];
     this.participationDivisionInfos = newParticipationDivisionInfos;
@@ -42,7 +39,6 @@ export class ApplicationEntity {
     newPlayerSnapshot: PlayerSnapshotEntity,
     newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotEntity[],
   ) {
-    // TODO: 에러 표준화
     if (this.status !== 'DONE') throw new Error('Only DONE application can be updated');
     this.playerSnapshots.push(newPlayerSnapshot);
     this.participationDivisionInfos.forEach((participationDivisionInfo) => {

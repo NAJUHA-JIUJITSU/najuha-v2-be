@@ -5077,7 +5077,9 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/IDivisionPack"
-            }
+            },
+            "minItems": 1,
+            "description": "- Division packs."
           }
         },
         "nullable": false,
@@ -5330,7 +5332,9 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1,
+            "description": "- Division IDs to participate."
           },
           "createPlayerSnapshotDto": {
             "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
@@ -5683,7 +5687,7 @@
             "type": "string",
             "description": "- participation division Info id."
           },
-          "divisionId": {
+          "participationDivisionId": {
             "type": "string",
             "description": "- division id"
           },
@@ -5696,7 +5700,7 @@
           "id",
           "createdAt",
           "participationDivisionInfoId",
-          "divisionId",
+          "participationDivisionId",
           "division"
         ]
       },
@@ -5744,7 +5748,9 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1,
+            "description": "- Division IDs to participate."
           },
           "createPlayerSnapshotDto": {
             "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"

@@ -11,7 +11,6 @@ import { ParticipationDivisionInfoTable } from 'src/infrastructure/database/tabl
 import { IParticipationDivisionInfo } from './domain/interface/participation-division-info.interface';
 import { PlayerSnapshotTable } from 'src/infrastructure/database/tables/application/player-snapshot.table';
 import { ParticipationDivisionInfoSnapshotTable } from 'src/infrastructure/database/tables/application/participation-division-info-snapshot.table';
-import { ApplicationEntity } from './domain/entity/application.entity';
 import { ParticipationDivisionInfoEntity } from './domain/entity/participation-division-info.entity';
 import { PlayerSnapshotEntity } from './domain/entity/player-snapshot.entity';
 import { ApplicationTable } from 'src/infrastructure/database/tables/application/application.table';

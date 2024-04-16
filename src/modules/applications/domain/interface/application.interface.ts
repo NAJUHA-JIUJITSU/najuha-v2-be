@@ -36,3 +36,10 @@ export interface IApplication {
 
   participationDivisionInfos: IParticipationDivisionInfo[];
 }
+
+export namespace IApplication {
+  export interface EntityData extends Omit<IApplication, 'playerSnapshots' | 'participationDivisionInfos'> {
+    playerSnapshots?: IPlayerSnapshot[];
+    participationDivisionInfos?: IParticipationDivisionInfo[];
+  }
+}

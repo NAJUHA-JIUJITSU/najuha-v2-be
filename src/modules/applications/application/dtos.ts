@@ -10,6 +10,10 @@ import { IPlayerSnapshot } from '../domain/interface/player-snapshot.interface';
 export interface CreateApplicationParam {
   userId: IUser['id'];
   competitionId: ICompetition['id'];
+  /**
+   * - Division IDs to participate.
+   * @minItems 1
+   */
   participationDivisionIds: IDivision['id'][];
   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
 }
@@ -22,6 +26,10 @@ export interface GetApplicationParam {
 export interface UpdateReadyApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
+  /**
+   * - Division IDs to participate.
+   * @minItems 1
+   */
   participationDivisionIds: IDivision['id'][];
   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
 }
@@ -30,6 +38,10 @@ export interface UpdateDoneApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
+  /**
+   * - Division info update data list.
+   * @minItems 1
+   */
   participationDivisionInfoUpdateDataList: IParticipationDivisionInfoUpdateData[];
 }
 

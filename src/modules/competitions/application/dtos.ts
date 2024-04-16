@@ -1,5 +1,3 @@
-import { CompetitionEntity } from '../domain/entity/competition.entity';
-import { DivisionEntity } from '../domain/entity/division.entity';
 import { ICombinationDiscountSnapshot } from '../domain/interface/combination-discount-snapshot.interface';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { IDivisionPack } from '../domain/interface/division-pack.interface';
@@ -56,6 +54,11 @@ export interface UpdateCompetitionStatusParam {
 
 export interface CreateDivisionsParam {
   competitionId: ICompetition['id'];
+  /**
+   * - Division packs.
+   *
+   * @minItems 1
+   */
   divisionPacks: IDivisionPack[];
 }
 

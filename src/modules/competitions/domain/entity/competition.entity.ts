@@ -3,7 +3,6 @@ import { ICompetition } from '../interface/competition.interface';
 import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
 import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
-import { ApplicationEntity } from 'src/modules/applications/domain/entity/application.entity';
 import { IDivision } from '../interface/division.interface';
 import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
 
@@ -51,10 +50,10 @@ export class CompetitionEntity {
     this.updatedAt = competition.updatedAt;
     this.divisions = competition.divisions.map((division) => new DivisionEntity(division));
     this.earlybirdDiscountSnapshots = competition.earlybirdDiscountSnapshots.map(
-      (earlybirdDiscountSnapshot) => new EarlybirdDiscountSnapshotEntity(earlybirdDiscountSnapshot),
+      (snapshot) => new EarlybirdDiscountSnapshotEntity(snapshot),
     );
     this.combinationDiscountSnapshots = competition.combinationDiscountSnapshots.map(
-      (combinationDiscountSnapshot) => new CombinationDiscountSnapshotEntity(combinationDiscountSnapshot),
+      (snapshot) => new CombinationDiscountSnapshotEntity(snapshot),
     );
   }
 
@@ -139,6 +138,7 @@ export class CompetitionEntity {
           ApplicationsErrorMap.APPLICATIONS_DIVISION_NOT_FOUND,
           `Missing DivisionId: ${divisionId}`,
         );
+      // TODO: Implement validateAge, validateGender
       // division.validateAge(createPlayerSnapshotDto.birth);
       // division.validateGender(createPlayerSnapshotDto.gender);
     });

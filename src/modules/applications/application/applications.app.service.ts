@@ -24,12 +24,7 @@ export class ApplicationsAppService {
     private readonly applicationDomainService: ApplicationDomainService,
   ) {}
 
-  /**
-   * Create application.
-   *
-   * @param CreateApplicationParam
-   * @returns CreateApplicationRet
-   */
+  /** Create application. */
   async createApplication({
     userId,
     createPlayerSnapshotDto,
@@ -56,12 +51,7 @@ export class ApplicationsAppService {
     return { application: applicationEntityData };
   }
 
-  /**
-   * Get application.
-   *
-   * @param GetApplicationParam
-   * @returns
-   */
+  /** Get application. */
   async getApplication({ userId, applicationId }: GetApplicationParam): Promise<GetApplicationRet> {
     const application = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId },
@@ -81,10 +71,7 @@ export class ApplicationsAppService {
    * - READY status 를 가진 application 을 업데이트 합니다.
    * - CANCELED, DONE 상태의 application 은 업데이트 할 수 없습니다.
    * - 기존 ParticipationDivisionInfos 를 삭제하고 새로운 ParticipationDivisionInfos 를 생성합니다.
-   * - TODO: Transaction
-   *
-   * @param UpdateReadyApplicationParam
-   * @returns UpdateApplicationRet
+   * TODO: Transaction
    */
   async updateReadyApplication({
     userId,
@@ -134,9 +121,7 @@ export class ApplicationsAppService {
     return { application };
   }
 
-  /**
-   * Update done application.
-   */
+  /** Update done application. */
   async updateDoneApplication({
     userId,
     applicationId,
@@ -188,9 +173,6 @@ export class ApplicationsAppService {
   /**
    * Get expected payment.
    * - 현재 가격, 할인 정보를 바탕으로 application 의 예상 결제 금액을 계산합니다.
-   *
-   * @param GetExpectedPaymentParam
-   * @returns GetExpectedPaymentRet
    */
   async getExpectedPayment({ userId, applicationId }: GetExpectedPaymentParam): Promise<GetExpectedPaymentRet> {
     const application = await this.applicationRepository.getApplication({
