@@ -1,8 +1,8 @@
 import { IExpectedPayment } from './interface/expected-payment.interface';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { Injectable } from '@nestjs/common';
-import { DivisionEntity } from 'src/modules/competitions/domain/entity/division.entity';
-import { CombinationDiscountSnapshotEntity } from 'src/modules/competitions/domain/entity/combination-discount-snapshot.entity';
+import { DivisionModel } from 'src/modules/competitions/domain/model/division.model';
+import { CombinationDiscountSnapshotModel } from 'src/modules/competitions/domain/model/combination-discount-snapshot.model';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IApplication } from './interface/application.interface';
 
@@ -56,7 +56,7 @@ export class ApplicationDomainService {
    * @param divisions
    * @returns normal amount
    */
-  private calculateNormalAmount(divisions: DivisionEntity[]): number {
+  private calculateNormalAmount(divisions: DivisionModel[]): number {
     return divisions.reduce((acc, division) => {
       acc += division.priceSnapshots[division.priceSnapshots.length - 1].price || 0;
       return acc;
@@ -88,8 +88,8 @@ export class ApplicationDomainService {
    * @returns combination discount amount
    */
   private calculateCombinationDiscountAmount(
-    combinationDiscountSnapshot: CombinationDiscountSnapshotEntity,
-    divisions: DivisionEntity[],
+    combinationDiscountSnapshot: CombinationDiscountSnapshotModel,
+    divisions: DivisionModel[],
   ): number {
     if (combinationDiscountSnapshot === null) return 0;
     const divisionUnits = divisions.map((division) => ({

@@ -2,9 +2,9 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PolicyTable } from '../../infrastructure/database/tables/policy/policy.entity';
-import { PolicyConsentTable } from '../../infrastructure/database/tables/user/policy-consent.entity';
-import { UserTable } from '../../infrastructure/database/tables/user/user.entity';
+import { PolicyEntity } from '../../infrastructure/database/entity/policy/policy.entity';
+import { PolicyConsentEntity } from '../../infrastructure/database/entity/user/policy-consent.entity';
+import { UserEntity } from '../../infrastructure/database/entity/user/user.entity';
 import { IRegisterUser } from './domain/interface/register-user.interface';
 import { IPolicy } from '../policy/domain/interface/policy.interface';
 import { IPolicyConsent } from './domain/interface/policy-consent.interface';
@@ -12,12 +12,12 @@ import { IPolicyConsent } from './domain/interface/policy-consent.interface';
 @Injectable()
 export class RegisterRepository {
   constructor(
-    @InjectRepository(UserTable)
-    private readonly userRepository: Repository<UserTable>,
-    @InjectRepository(PolicyTable)
-    private readonly policyRepository: Repository<PolicyTable>,
-    @InjectRepository(PolicyConsentTable)
-    private readonly policyConsentRepository: Repository<PolicyConsentTable>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(PolicyEntity)
+    private readonly policyRepository: Repository<PolicyEntity>,
+    @InjectRepository(PolicyConsentEntity)
+    private readonly policyConsentRepository: Repository<PolicyConsentEntity>,
   ) {}
 
   // ------------------ User ------------------

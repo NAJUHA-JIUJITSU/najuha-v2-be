@@ -1,12 +1,12 @@
 import { ApplicationsErrorMap, BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 import { ICompetition } from '../interface/competition.interface';
-import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
-import { DivisionEntity } from './division.entity';
-import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
+import { CombinationDiscountSnapshotModel } from './combination-discount-snapshot.model';
+import { DivisionModel } from './division.model';
+import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.entity';
 import { IDivision } from '../interface/division.interface';
 import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
 
-export class CompetitionEntity {
+export class CompetitionModel {
   public id: ICompetition['id'];
   public title: ICompetition['title'];
   public address: ICompetition['address'];
@@ -25,9 +25,9 @@ export class CompetitionEntity {
   public status: ICompetition['status'];
   public createdAt: ICompetition['createdAt'];
   public updatedAt: ICompetition['updatedAt'];
-  public divisions: DivisionEntity[];
-  public earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotEntity[];
-  public combinationDiscountSnapshots: CombinationDiscountSnapshotEntity[];
+  public divisions: DivisionModel[];
+  public earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
+  public combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
 
   constructor(competition: ICompetition) {
     this.id = competition.id;
@@ -48,12 +48,12 @@ export class CompetitionEntity {
     this.status = competition.status;
     this.createdAt = competition.createdAt;
     this.updatedAt = competition.updatedAt;
-    this.divisions = competition.divisions.map((division) => new DivisionEntity(division));
+    this.divisions = competition.divisions.map((division) => new DivisionModel(division));
     this.earlybirdDiscountSnapshots = competition.earlybirdDiscountSnapshots.map(
-      (snapshot) => new EarlybirdDiscountSnapshotEntity(snapshot),
+      (snapshot) => new EarlybirdDiscountSnapshotModel(snapshot),
     );
     this.combinationDiscountSnapshots = competition.combinationDiscountSnapshots.map(
-      (snapshot) => new CombinationDiscountSnapshotEntity(snapshot),
+      (snapshot) => new CombinationDiscountSnapshotModel(snapshot),
     );
   }
 

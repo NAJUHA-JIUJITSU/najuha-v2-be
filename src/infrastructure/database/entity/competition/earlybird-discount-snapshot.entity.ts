@@ -1,9 +1,9 @@
 import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { CompetitionTable } from './competition.table';
+import { CompetitionEntity } from './competition.entity';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 
 @Entity('earlybird_discount_snapshot')
-export class EarlybirdDiscountSnapshotTable {
+export class EarlybirdDiscountSnapshotEntity {
   @Column('varchar', { length: 26, primary: true })
   id: IEarlybirdDiscountSnapshot['id'];
 
@@ -20,9 +20,9 @@ export class EarlybirdDiscountSnapshotTable {
   createdAt: IEarlybirdDiscountSnapshot['createdAt'];
 
   @Column()
-  competitionId: CompetitionTable['id'];
+  competitionId: CompetitionEntity['id'];
 
-  @ManyToOne(() => CompetitionTable, (competition) => competition.earlybirdDiscountSnapshots)
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.earlybirdDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionTable;
+  competition: CompetitionEntity;
 }

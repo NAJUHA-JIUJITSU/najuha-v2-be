@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { DivisionTable } from './division.table';
+import { DivisionEntity } from './division.entity';
 import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
-import { ParticipationDivisionInfoPaymentTable } from '../application/participation-division-info-payment.table';
+import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
 
 @Entity('price_snapshot')
-export class PriceSnapshotTable {
+export class PriceSnapshotEntity {
   @Column('varchar', { length: 26, primary: true })
   id: IPriceSnapshot['id'];
 
@@ -15,15 +15,15 @@ export class PriceSnapshotTable {
   createdAt: IPriceSnapshot['createdAt'];
 
   @Column()
-  divisionId: DivisionTable['id'];
+  divisionId: DivisionEntity['id'];
 
-  @ManyToOne(() => DivisionTable, (division) => division.priceSnapshots)
+  @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)
   @JoinColumn({ name: 'divisionId' })
-  division: DivisionTable;
+  division: DivisionEntity;
 
   @OneToMany(
-    () => ParticipationDivisionInfoPaymentTable,
+    () => ParticipationDivisionInfoPaymentEntity,
     (participationDivisionInfoPayment) => participationDivisionInfoPayment.priceSnapshot,
   )
-  participationDivisionInfoPayments: ParticipationDivisionInfoPaymentTable[];
+  participationDivisionInfoPayments: ParticipationDivisionInfoPaymentEntity[];
 }

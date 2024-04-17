@@ -1,9 +1,9 @@
 import { ICompetition } from '../interface/competition.interface';
 import { IDivision } from '../interface/division.interface';
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
-import { PriceSnapshotEntity } from './price-snapshot.entity';
+import { PriceSnapshotModel } from './price-snapshot.model';
 
-export class DivisionEntity {
+export class DivisionModel {
   public readonly id: IDivision['id'];
   public readonly category: IDivision['category'];
   public readonly uniform: IDivision['uniform'];
@@ -31,6 +31,6 @@ export class DivisionEntity {
     this.createdAt = division.createdAt;
     this.updatedAt = division.updatedAt;
     this.competitionId = division.competitionId;
-    this.priceSnapshots = division.priceSnapshots.map((priceSnapshot) => new PriceSnapshotEntity(priceSnapshot));
+    this.priceSnapshots = division.priceSnapshots.map((priceSnapshot) => new PriceSnapshotModel(priceSnapshot));
   }
 }

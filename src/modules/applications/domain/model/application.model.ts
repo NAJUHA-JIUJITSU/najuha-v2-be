@@ -1,17 +1,18 @@
 import { IApplication } from '../interface/application.interface';
-import { PlayerSnapshotEntity } from './player-snapshot.entity';
-import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
-import { ParticipationDivisionInfoSnapshotEntity } from './participation-division-info-snapshot.entity';
+import { PlayerSnapshotModel } from './player-snapshot.model';
+import { ParticipationDivisionInfoModel } from './participation-division-info.model';
+import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 
-export class ApplicationEntity {
+export class ApplicationModel {
   public id: IApplication['id'];
   public userId: IApplication['userId'];
   public competitionId: IApplication['competitionId'];
   public createdAt: IApplication['createdAt'];
   public updatedAt: IApplication['updatedAt'];
+  public type: IApplication['type'];
   public status: IApplication['status'];
-  public playerSnapshots: PlayerSnapshotEntity[];
-  public participationDivisionInfos: ParticipationDivisionInfoEntity[];
+  public playerSnapshots: PlayerSnapshotModel[];
+  public participationDivisionInfos: ParticipationDivisionInfoModel[];
 
   constructor(application: IApplication) {
     this.id = application.id;
@@ -20,15 +21,15 @@ export class ApplicationEntity {
     this.createdAt = application.createdAt;
     this.updatedAt = application.updatedAt;
     this.status = application.status;
-    this.playerSnapshots = application.playerSnapshots.map((snapshot) => new PlayerSnapshotEntity(snapshot));
-    this.participationDivisionInfos = application.participationDivisionInfos.map(
-      (info) => new ParticipationDivisionInfoEntity(info),
+    this.playerSnapshots = (application.playerSnapshots || []).map((snapshot) => new PlayerSnapshotModel(snapshot));
+    this.participationDivisionInfos = (application.participationDivisionInfos || []).map(
+      (info) => new ParticipationDivisionInfoModel(info),
     );
   }
 
   updateReadyApplication(
-    newPlayerSnapshot: PlayerSnapshotEntity,
-    newParticipationDivisionInfos: ParticipationDivisionInfoEntity[],
+    newPlayerSnapshot: PlayerSnapshotModel,
+    newParticipationDivisionInfos: ParticipationDivisionInfoModel[],
   ) {
     if (this.status !== 'READY') throw new Error('Only READY application can be updated');
     this.playerSnapshots = [newPlayerSnapshot];
@@ -36,8 +37,8 @@ export class ApplicationEntity {
   }
 
   updateDoneApplication(
-    newPlayerSnapshot: PlayerSnapshotEntity,
-    newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotEntity[],
+    newPlayerSnapshot: PlayerSnapshotModel,
+    newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[],
   ) {
     if (this.status !== 'DONE') throw new Error('Only DONE application can be updated');
     this.playerSnapshots.push(newPlayerSnapshot);

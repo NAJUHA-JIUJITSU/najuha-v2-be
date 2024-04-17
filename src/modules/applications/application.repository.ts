@@ -2,34 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { BusinessException, CommonErrorMap } from 'src/common/response/errorResponse';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserTable } from '../../infrastructure/database/tables/user/user.entity';
+import { UserEntity } from '../../infrastructure/database/entity/user/user.entity';
 import { IUser } from '../users/domain/interface/user.interface';
 import { ICompetition } from '../competitions/domain/interface/competition.interface';
 import { IApplication } from './domain/interface/application.interface';
-import { CompetitionTable } from 'src/infrastructure/database/tables/competition/competition.table';
-import { ParticipationDivisionInfoTable } from 'src/infrastructure/database/tables/application/participation-division-info.table';
+import { CompetitionEntity } from 'src/infrastructure/database/entity/competition/competition.entity';
+import { ParticipationDivisionInfoEntity } from 'src/infrastructure/database/entity/application/participation-division-info.entity';
 import { IParticipationDivisionInfo } from './domain/interface/participation-division-info.interface';
-import { PlayerSnapshotTable } from 'src/infrastructure/database/tables/application/player-snapshot.table';
-import { ParticipationDivisionInfoSnapshotTable } from 'src/infrastructure/database/tables/application/participation-division-info-snapshot.table';
-import { ParticipationDivisionInfoEntity } from './domain/entity/participation-division-info.entity';
-import { PlayerSnapshotEntity } from './domain/entity/player-snapshot.entity';
-import { ApplicationTable } from 'src/infrastructure/database/tables/application/application.table';
+import { PlayerSnapshotEntity } from 'src/infrastructure/database/entity/application/player-snapshot.entity';
+import { ParticipationDivisionInfoSnapshotEntity } from 'src/infrastructure/database/entity/application/participation-division-info-snapshot.entity';
+import { ParticipationDivisionInfoModel } from './domain/model/participation-division-info.model';
+import { PlayerSnapshotModel } from './domain/model/player-snapshot.model';
+import { ApplicationEntity } from 'src/infrastructure/database/entity/application/application.entity';
 
 @Injectable()
 export class ApplicationRepository {
   constructor(
-    @InjectRepository(UserTable)
-    private readonly userRepository: Repository<UserTable>,
-    @InjectRepository(ApplicationTable)
-    private readonly applicationRepository: Repository<ApplicationTable>,
-    @InjectRepository(CompetitionTable)
-    private readonly competitionRepository: Repository<CompetitionTable>,
-    @InjectRepository(ParticipationDivisionInfoTable)
-    private readonly participationDivisionInfoRepository: Repository<ParticipationDivisionInfoTable>,
-    @InjectRepository(PlayerSnapshotTable)
-    private readonly playerSnapshotRepository: Repository<PlayerSnapshotTable>,
-    @InjectRepository(ParticipationDivisionInfoSnapshotTable)
-    private readonly participationDivisionInfoSnapshotRepository: Repository<ParticipationDivisionInfoSnapshotTable>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ApplicationEntity)
+    private readonly applicationRepository: Repository<ApplicationEntity>,
+    @InjectRepository(CompetitionEntity)
+    private readonly competitionRepository: Repository<CompetitionEntity>,
+    @InjectRepository(ParticipationDivisionInfoEntity)
+    private readonly participationDivisionInfoRepository: Repository<ParticipationDivisionInfoEntity>,
+    @InjectRepository(PlayerSnapshotEntity)
+    private readonly playerSnapshotRepository: Repository<PlayerSnapshotEntity>,
+    @InjectRepository(ParticipationDivisionInfoSnapshotEntity)
+    private readonly participationDivisionInfoSnapshotRepository: Repository<ParticipationDivisionInfoSnapshotEntity>,
   ) {}
 
   // ----------------- User -----------------
@@ -74,7 +74,7 @@ export class ApplicationRepository {
     await this.participationDivisionInfoRepository.save(participationDivisionInfos);
   }
 
-  async deleteParticipationDivisionInfos(participationDivisionInfos: ParticipationDivisionInfoEntity[]): Promise<void> {
+  async deleteParticipationDivisionInfos(participationDivisionInfos: ParticipationDivisionInfoModel[]): Promise<void> {
     await Promise.all(
       participationDivisionInfos.map(async (participationDivisionInfo) => {
         await Promise.all(
@@ -90,12 +90,12 @@ export class ApplicationRepository {
   }
 
   // ----------------- PlayerSnapshot -----------------
-  async deletePlayerSnapshots(playerSnapshots: PlayerSnapshotEntity[]): Promise<void> {
+  async deletePlayerSnapshots(playerSnapshots: PlayerSnapshotModel[]): Promise<void> {
     playerSnapshots.forEach(async (playerSnapshot) => {
       await this.playerSnapshotRepository.delete(playerSnapshot.id);
     });
   }
-  async savePlayerSnapshot(playerSnapshot: PlayerSnapshotEntity): Promise<void> {
+  async savePlayerSnapshot(playerSnapshot: PlayerSnapshotModel): Promise<void> {
     await this.playerSnapshotRepository.save(playerSnapshot);
   }
 }

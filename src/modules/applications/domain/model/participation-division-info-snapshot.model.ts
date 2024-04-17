@@ -2,7 +2,7 @@ import { IParticipationDivisionInfoSnapshot } from '../interface/participation-d
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 
-export class ParticipationDivisionInfoSnapshotEntity {
+export class ParticipationDivisionInfoSnapshotModel {
   public readonly id: IParticipationDivisionInfoSnapshot['id'];
   public readonly createdAt: IParticipationDivisionInfoSnapshot['createdAt'];
   public readonly participationDivisionInfoId: IParticipationDivisionInfo['id'];

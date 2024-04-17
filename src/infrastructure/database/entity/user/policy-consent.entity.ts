@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
-import { PolicyTable } from 'src/infrastructure/database/tables/policy/policy.entity';
-import { UserTable } from './user.entity';
+import { PolicyEntity } from 'src/infrastructure/database/entity/policy/policy.entity';
+import { UserEntity } from './user.entity';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
 
 @Entity('policy_consent')
-export class PolicyConsentTable {
+export class PolicyConsentEntity {
   @PrimaryGeneratedColumn()
   id: IPolicyConsent['id'];
 
@@ -12,19 +12,19 @@ export class PolicyConsentTable {
   createdAt: IPolicyConsent['createdAt'];
 
   @Column()
-  userId: UserTable['id'];
+  userId: UserEntity['id'];
 
   /** - user */
-  @ManyToOne(() => UserTable, (user) => user.policyConsents)
+  @ManyToOne(() => UserEntity, (user) => user.policyConsents)
   @JoinColumn({ name: 'userId' })
-  user: UserTable;
+  user: UserEntity;
 
   /** - policyId. */
   @Column()
-  policyId: PolicyTable['id'];
+  policyId: PolicyEntity['id'];
 
   /** - policy */
-  @ManyToOne(() => PolicyTable, (policy) => policy.policyConsents)
+  @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)
   @JoinColumn({ name: 'policyId' })
-  policy: PolicyTable;
+  policy: PolicyEntity;
 }

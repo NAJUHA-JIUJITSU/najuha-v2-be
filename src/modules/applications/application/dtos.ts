@@ -15,6 +15,7 @@ export interface CreateApplicationParam {
    * @minItems 1
    */
   participationDivisionIds: IDivision['id'][];
+  applicationType: IApplication['type'];
   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
 }
 

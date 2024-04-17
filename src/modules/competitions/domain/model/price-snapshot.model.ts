@@ -1,7 +1,7 @@
 import { IDivision } from '../interface/division.interface';
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 
-export class PriceSnapshotEntity {
+export class PriceSnapshotModel {
   public readonly id: IPriceSnapshot['id'];
   public readonly price: IPriceSnapshot['price'];
   public readonly createdAt: IPriceSnapshot['createdAt'];

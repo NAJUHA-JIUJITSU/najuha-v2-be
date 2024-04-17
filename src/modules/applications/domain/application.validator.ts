@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ApplicationsErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import { IPlayerSnapshot } from './interface/player-snapshot.interface';
-import { CompetitionEntity } from 'src/modules/competitions/domain/entity/competition.entity';
-import { PlayerSnapshotEntity } from './entity/player-snapshot.entity';
+import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
+import { PlayerSnapshotModel } from './model/player-snapshot.model';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 
@@ -27,8 +27,8 @@ export class ApplicationValidator {
   }
 
   validateApplicationPeriod(
-    registrationStartDate: CompetitionEntity['registrationStartDate'],
-    registrationEndDate: CompetitionEntity['registrationEndDate'],
+    registrationStartDate: CompetitionModel['registrationStartDate'],
+    registrationEndDate: CompetitionModel['registrationEndDate'],
     now: Date = new Date(),
   ): void {
     if (registrationStartDate && now < registrationStartDate) {
@@ -73,7 +73,7 @@ export class ApplicationValidator {
     return existDivisions;
   }
 
-  validateDivisionAge(playerBirth: PlayerSnapshotEntity['birth'], division: IDivision): void {
+  validateDivisionAge(playerBirth: PlayerSnapshotModel['birth'], division: IDivision): void {
     const birthYear = +playerBirth.slice(0, 4);
     if (birthYear < +division.birthYearRangeStart || birthYear > +division.birthYearRangeEnd) {
       throw new BusinessException(
@@ -83,7 +83,7 @@ export class ApplicationValidator {
     }
   }
 
-  validateDivisionGender(playerGender: PlayerSnapshotEntity['gender'], division: IDivision): void {
+  validateDivisionGender(playerGender: PlayerSnapshotModel['gender'], division: IDivision): void {
     if (division.gender === 'MIXED') return;
     if (playerGender !== division.gender) {
       throw new BusinessException(

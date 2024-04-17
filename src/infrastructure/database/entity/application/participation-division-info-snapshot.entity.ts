@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ParticipationDivisionInfoTable } from './participation-division-info.table';
-import { DivisionTable } from '../competition/division.table';
+import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
+import { DivisionEntity } from '../competition/division.entity';
 import { IParticipationDivisionInfoSnapshot } from 'src/modules/applications/domain/interface/participation-division-info-snapshot.interface';
 
 @Entity('participation_divsion_info_snapshot')
-export class ParticipationDivisionInfoSnapshotTable {
+export class ParticipationDivisionInfoSnapshotEntity {
   @Column('varchar', { length: 26, primary: true })
   id: IParticipationDivisionInfoSnapshot['id'];
 
@@ -13,22 +13,22 @@ export class ParticipationDivisionInfoSnapshotTable {
 
   /** - participation division id. */
   @Column()
-  participationDivisionInfoId: ParticipationDivisionInfoTable['id'];
+  participationDivisionInfoId: ParticipationDivisionInfoEntity['id'];
 
   /** - participation division */
   @ManyToOne(
-    () => ParticipationDivisionInfoTable,
+    () => ParticipationDivisionInfoEntity,
     (participationDivisionInfo) => participationDivisionInfo.participationDivisionInfoSnapshots,
   )
   @JoinColumn({ name: 'participationDivisionInfoId' })
-  participationDivisionInfo: ParticipationDivisionInfoTable;
+  participationDivisionInfo: ParticipationDivisionInfoEntity;
 
   /** - division id. */
   @Column()
-  participationDivisionId: DivisionTable['id'];
+  participationDivisionId: DivisionEntity['id'];
 
   /** - division */
-  @ManyToOne(() => DivisionTable, (division) => division.participationDivisionInfoSnapshots)
+  @ManyToOne(() => DivisionEntity, (division) => division.participationDivisionInfoSnapshots)
   @JoinColumn({ name: 'participationDivisionId' })
-  division: DivisionTable;
+  division: DivisionEntity;
 }

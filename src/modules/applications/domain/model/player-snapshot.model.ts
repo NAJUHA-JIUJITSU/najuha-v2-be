@@ -1,7 +1,7 @@
 import { IApplication } from '../interface/application.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
 
-export class PlayerSnapshotEntity {
+export class PlayerSnapshotModel {
   public readonly id: IPlayerSnapshot['id'];
   public readonly name: IPlayerSnapshot['name'];
   public readonly gender: IPlayerSnapshot['gender'];
@@ -14,7 +14,7 @@ export class PlayerSnapshotEntity {
   public readonly createdAt: IPlayerSnapshot['createdAt'];
   public readonly applicationId: IApplication['id'];
 
-  constructor(playerSnapshot: PlayerSnapshotEntity) {
+  constructor(playerSnapshot: PlayerSnapshotModel) {
     this.id = playerSnapshot.id;
     this.name = playerSnapshot.name;
     this.gender = playerSnapshot.gender;

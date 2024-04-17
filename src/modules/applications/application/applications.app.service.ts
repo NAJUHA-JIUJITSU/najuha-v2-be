@@ -13,8 +13,8 @@ import {
   UpdateReadyApplicationParam,
   UpdateReadyApplicationRet,
 } from './dtos';
-import { CompetitionEntity } from 'src/modules/competitions/domain/entity/competition.entity';
-import { ApplicationEntity } from '../domain/entity/application.entity';
+import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
+import { ApplicationModel } from '../domain/model/application.model';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -29,26 +29,28 @@ export class ApplicationsAppService {
     userId,
     createPlayerSnapshotDto,
     participationDivisionIds,
+    applicationType,
     competitionId,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = await this.applicationRepository.getUser(userId);
-    const competitionEntityData = await this.applicationRepository.getCompetition({
+    const competitionModelData = await this.applicationRepository.getCompetition({
       where: { id: competitionId, status: 'ACTIVE' },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionEntity(competitionEntityData);
+    const competition = new CompetitionModel(competitionModelData);
 
     competition.validateApplicationAbility(createPlayerSnapshotDto, participationDivisionIds);
 
-    const applicationEntityData = this.applicationFactory.createApplication(
+    const application = this.applicationFactory.createApplication(
       user,
       createPlayerSnapshotDto,
       participationDivisionIds,
-      competitionEntityData,
+      applicationType,
+      competitionModelData,
     );
 
-    await this.applicationRepository.saveApplication(applicationEntityData);
-    return { application: applicationEntityData };
+    await this.applicationRepository.saveApplication(application);
+    return { application };
   }
 
   /** Get application. */
@@ -81,7 +83,7 @@ export class ApplicationsAppService {
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
     const user = await this.applicationRepository.getUser(userId);
 
-    const applicationEntityData = await this.applicationRepository.getApplication({
+    const applicationModelData = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'READY' },
       relations: [
         'playerSnapshots',
@@ -91,9 +93,9 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const application = new ApplicationEntity(applicationEntityData);
+    const application = new ApplicationModel(applicationModelData);
 
-    const competitionEntityData = await this.applicationRepository.getCompetition({
+    const competitionModelData = await this.applicationRepository.getCompetition({
       where: { id: application.competitionId },
       relations: [
         'divisions',
@@ -102,7 +104,7 @@ export class ApplicationsAppService {
         'combinationDiscountSnapshots',
       ],
     });
-    const competition = new CompetitionEntity(competitionEntityData);
+    const competition = new CompetitionModel(competitionModelData);
     competition.validateApplicationAbility(createPlayerSnapshotDto, participationDivisionIds);
     await this.applicationRepository.deletePlayerSnapshots(application.playerSnapshots);
     await this.applicationRepository.deleteParticipationDivisionInfos(application.participationDivisionInfos);
@@ -129,7 +131,7 @@ export class ApplicationsAppService {
     participationDivisionInfoUpdateDataList,
   }: UpdateDoneApplicationParam): Promise<any> {
     const user = await this.applicationRepository.getUser(userId);
-    const applicationEntityData = await this.applicationRepository.getApplication({
+    const applicationModelData = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'DONE' },
       relations: [
         'playerSnapshots',
@@ -139,8 +141,8 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const application = new ApplicationEntity(applicationEntityData);
-    const competitionEntityData = await this.applicationRepository.getCompetition({
+    const application = new ApplicationModel(applicationModelData);
+    const competitionModelData = await this.applicationRepository.getCompetition({
       where: { id: application.competitionId },
       relations: [
         'divisions',
@@ -149,7 +151,7 @@ export class ApplicationsAppService {
         'combinationDiscountSnapshots',
       ],
     });
-    const competition = new CompetitionEntity(competitionEntityData);
+    const competition = new CompetitionModel(competitionModelData);
     competition.validateApplicationAbility(
       createPlayerSnapshotDto,
       participationDivisionInfoUpdateDataList.map((participationDivisionInfoUpdateData) => {

@@ -1,12 +1,12 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { DivisionTable } from '../competition/division.table';
+import { DivisionEntity } from '../competition/division.entity';
 import { IParticipationDivisionInfoPayment } from 'src/modules/applications/domain/interface/participation-division-info-payment.interface';
-import { PriceSnapshotTable } from '../competition/price-snapshot.entity';
+import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
 import { IParticipationDivisionInfo } from 'src/modules/applications/domain/interface/participation-division-info.interface';
-import { ParticipationDivisionInfoTable } from './participation-division-info.table';
+import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 
 @Entity('participation_division_info_payment')
-export class ParticipationDivisionInfoPaymentTable {
+export class ParticipationDivisionInfoPaymentEntity {
   @Column('varchar', { length: 26, primary: true })
   id: IParticipationDivisionInfoPayment['id'];
 
@@ -14,26 +14,26 @@ export class ParticipationDivisionInfoPaymentTable {
   createdAt: IParticipationDivisionInfoPayment['createdAt'];
 
   @Column()
-  divisionId: DivisionTable['id'];
+  divisionId: DivisionEntity['id'];
 
-  @ManyToOne(() => DivisionTable, (division) => division.priceSnapshots)
+  @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)
   @JoinColumn({ name: 'divisionId' })
-  division: DivisionTable;
+  division: DivisionEntity;
 
   @Column()
   priceSnapshotId: IParticipationDivisionInfoPayment['priceSnapshotId'];
 
-  @ManyToOne(() => PriceSnapshotTable, (priceSnapshot) => priceSnapshot.participationDivisionInfoPayments)
+  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.participationDivisionInfoPayments)
   @JoinColumn({ name: 'priceSnapshotId' })
-  priceSnapshot: PriceSnapshotTable;
+  priceSnapshot: PriceSnapshotEntity;
 
   @Column()
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
 
   @OneToOne(
-    () => ParticipationDivisionInfoTable,
+    () => ParticipationDivisionInfoEntity,
     (participationDivisionInfo) => participationDivisionInfo.participationDivisionInfoPayment,
   )
   @JoinColumn({ name: 'participationDivisionInfoId' })
-  participationDivisionInfo: ParticipationDivisionInfoTable;
+  participationDivisionInfo: ParticipationDivisionInfoEntity;
 }

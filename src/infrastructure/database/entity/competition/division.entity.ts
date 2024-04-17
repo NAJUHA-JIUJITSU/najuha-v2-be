@@ -1,12 +1,12 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Unique, UpdateDateColumn } from 'typeorm';
-import { CompetitionTable } from './competition.table';
-import { PriceSnapshotTable } from './price-snapshot.entity';
-import { ParticipationDivisionInfoSnapshotTable } from '../application/participation-division-info-snapshot.table';
+import { CompetitionEntity } from './competition.entity';
+import { PriceSnapshotEntity } from './price-snapshot.entity';
+import { ParticipationDivisionInfoSnapshotEntity } from '../application/participation-division-info-snapshot.entity';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
-export class DivisionTable {
+export class DivisionEntity {
   @Column('varchar', { length: 26, primary: true })
   id: IDivision['id'];
 
@@ -41,18 +41,18 @@ export class DivisionTable {
   updatedAt: IDivision['updatedAt'];
 
   @Column()
-  competitionId: CompetitionTable['id'];
+  competitionId: CompetitionEntity['id'];
 
-  @ManyToOne(() => CompetitionTable, (competition) => competition.divisions)
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.divisions)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionTable;
+  competition: CompetitionEntity;
 
-  @OneToMany(() => PriceSnapshotTable, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
-  priceSnapshots: PriceSnapshotTable[];
+  @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
+  priceSnapshots: PriceSnapshotEntity[];
 
   @OneToMany(
-    () => ParticipationDivisionInfoSnapshotTable,
+    () => ParticipationDivisionInfoSnapshotEntity,
     (participationDivisionInfoSnapshot) => participationDivisionInfoSnapshot.division,
   )
-  participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotTable[];
+  participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotEntity[];
 }

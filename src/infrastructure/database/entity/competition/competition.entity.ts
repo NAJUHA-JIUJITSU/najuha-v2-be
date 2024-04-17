@@ -1,12 +1,12 @@
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { DivisionTable } from './division.table';
-import { EarlybirdDiscountSnapshotTable } from './earlybird-discount-snapshot.table';
-import { CombinationDiscountSnapshotTable } from './combination-discount-snapshot.table';
-import { ApplicationTable } from '../application/application.table';
+import { DivisionEntity } from './division.entity';
+import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
+import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
+import { ApplicationEntity } from '../application/application.entity';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 
 @Entity('competition')
-export class CompetitionTable {
+export class CompetitionEntity {
   @Column('varchar', { length: 26, primary: true })
   id: ICompetition['id'];
 
@@ -61,18 +61,21 @@ export class CompetitionTable {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: ICompetition['updatedAt'];
 
-  @OneToMany(() => EarlybirdDiscountSnapshotTable, (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition)
-  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotTable[];
+  @OneToMany(
+    () => EarlybirdDiscountSnapshotEntity,
+    (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
+  )
+  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotEntity[];
 
   @OneToMany(
-    () => CombinationDiscountSnapshotTable,
+    () => CombinationDiscountSnapshotEntity,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
   )
-  combinationDiscountSnapshots: CombinationDiscountSnapshotTable[];
+  combinationDiscountSnapshots: CombinationDiscountSnapshotEntity[];
 
-  @OneToMany(() => DivisionTable, (division) => division.competition, { cascade: true })
-  divisions: DivisionTable[];
+  @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
+  divisions: DivisionEntity[];
 
-  @OneToMany(() => ApplicationTable, (application) => application.competition)
-  applications: ApplicationTable[];
+  @OneToMany(() => ApplicationEntity, (application) => application.competition)
+  applications: ApplicationEntity[];
 }

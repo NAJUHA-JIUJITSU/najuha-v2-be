@@ -1,7 +1,7 @@
 import { ICombinationDiscountSnapshot } from '../interface/combination-discount-snapshot.interface';
 import { ICompetition } from '../interface/competition.interface';
 
-export class CombinationDiscountSnapshotEntity {
+export class CombinationDiscountSnapshotModel {
   public readonly id: ICombinationDiscountSnapshot['id'];
   public readonly combinationDiscountRules: ICombinationDiscountSnapshot['combinationDiscountRules'];
   public readonly createdAt: ICombinationDiscountSnapshot['createdAt'];

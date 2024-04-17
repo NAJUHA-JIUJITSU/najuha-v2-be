@@ -1,7 +1,7 @@
 import { ICompetition } from '../interface/competition.interface';
 import { IEarlybirdDiscountSnapshot } from '../interface/earlybird-discount-snapshot.interface';
 
-export class EarlybirdDiscountSnapshotEntity {
+export class EarlybirdDiscountSnapshotModel {
   public readonly id: IEarlybirdDiscountSnapshot['id'];
   public readonly earlybirdStartDate: IEarlybirdDiscountSnapshot['earlybirdStartDate'];
   public readonly earlybirdEndDate: IEarlybirdDiscountSnapshot['earlybirdEndDate'];

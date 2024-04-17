@@ -1,10 +1,10 @@
-import { PolicyConsentTable } from 'src/infrastructure/database/tables/user/policy-consent.entity';
+import { PolicyConsentEntity } from 'src/infrastructure/database/entity/user/policy-consent.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { ApplicationTable } from '../application/application.table';
+import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 @Entity('user')
-export class UserTable {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: IUser['id'];
 
@@ -50,9 +50,9 @@ export class UserTable {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: IUser['updatedAt'];
 
-  @OneToMany(() => PolicyConsentTable, (policyConsent) => policyConsent.user)
-  policyConsents: PolicyConsentTable[];
+  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user)
+  policyConsents: PolicyConsentEntity[];
 
-  @OneToMany(() => ApplicationTable, (application) => application.user)
-  applications: ApplicationTable[];
+  @OneToMany(() => ApplicationEntity, (application) => application.user)
+  applications: ApplicationEntity[];
 }

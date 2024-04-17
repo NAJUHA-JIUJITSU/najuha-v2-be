@@ -19,6 +19,13 @@ export interface IApplication {
   updatedAt: Date | string;
 
   /**
+   * - type.
+   * - SELF: 본인 신청
+   * - PROXY: 대리 신청
+   */
+  type: 'SELF' | 'PROXY';
+
+  /**
    * - status.
    * - READY: 결제 대기중
    * - DONE: 결제 완료

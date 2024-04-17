@@ -18,7 +18,7 @@ import {
   UpdateCompetitionRet,
   UpdateCompetitionStatusParam,
 } from './dtos';
-import { CompetitionEntity } from '../domain/entity/competition.entity';
+import { CompetitionModel } from '../domain/model/competition.model';
 import { ulid } from 'ulid';
 import { ICompetition } from '../domain/interface/competition.interface';
 
@@ -76,22 +76,22 @@ export class CompetitionsAppService {
     competitionId,
     status,
   }: UpdateCompetitionStatusParam): Promise<UpdateCompetitionRet> {
-    const competitionEntityData = await this.competitionRepository.getCompetition({
+    const competitionModelData = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionEntity(competitionEntityData);
+    const competition = new CompetitionModel(competitionModelData);
     competition.updateStatus(status);
     await this.competitionRepository.saveCompetition(competition);
     return { competition };
   }
 
   async createDivisions({ competitionId, divisionPacks }: CreateDivisionsParam): Promise<CreateDivisionsRet> {
-    const competitionEntityData = await this.competitionRepository.getCompetition({
+    const competitionModelData = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionEntity(competitionEntityData);
+    const competition = new CompetitionModel(competitionModelData);
     const divisions = this.divisionFactory.createDivisions(competition.id, divisionPacks);
     competition.addDivisions(divisions);
     await this.competitionRepository.saveDivisions(divisions);

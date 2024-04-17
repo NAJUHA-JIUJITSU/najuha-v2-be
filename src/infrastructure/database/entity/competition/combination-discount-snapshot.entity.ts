@@ -1,10 +1,10 @@
 import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { CompetitionTable } from './competition.table';
+import { CompetitionEntity } from './competition.entity';
 import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 
 @Entity('combination_discount_snapshot')
-export class CombinationDiscountSnapshotTable {
+export class CombinationDiscountSnapshotEntity {
   @Column('varchar', { length: 26, primary: true })
   id: ICombinationDiscountSnapshot['id'];
 
@@ -17,7 +17,7 @@ export class CombinationDiscountSnapshotTable {
   @Column()
   competitionId: ICompetition['id'];
 
-  @ManyToOne(() => CompetitionTable, (competition) => competition.combinationDiscountSnapshots)
+  @ManyToOne(() => CompetitionEntity, (competition) => competition.combinationDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionTable;
+  competition: CompetitionEntity;
 }

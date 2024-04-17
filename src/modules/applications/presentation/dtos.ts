@@ -10,7 +10,10 @@ import {
 
 // Presentation Layer Request Dto ---------------------------------------------------
 export interface CreateApplicationReqBody
-  extends Pick<CreateApplicationParam, 'competitionId' | 'participationDivisionIds' | 'createPlayerSnapshotDto'> {}
+  extends Pick<
+    CreateApplicationParam,
+    'competitionId' | 'participationDivisionIds' | 'createPlayerSnapshotDto' | 'applicationType'
+  > {}
 
 export interface UpdateReadyApplicationReqBody
   extends Pick<UpdateReadyApplicationParam, 'participationDivisionIds' | 'createPlayerSnapshotDto'> {}
