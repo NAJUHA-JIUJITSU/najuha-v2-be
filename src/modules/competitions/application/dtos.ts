@@ -6,39 +6,20 @@ import { IEarlybirdDiscountSnapshot } from '../domain/interface/earlybird-discou
 
 // Application Layer Param DTOs ----------------------------------------------
 export interface CreateCompetitionParam {
-  creatCompetitionDto: Partial<
-    Omit<
-      ICompetition,
-      | 'id'
-      | 'status'
-      | 'viewCount'
-      | 'createdAt'
-      | 'updatedAt'
-      | 'divisions'
-      | 'earlybirdDiscountSnapshots'
-      | 'combinationDiscountSnapshots'
-    >
-  >;
+  creatCompetitionDto: ICompetition.CreateDto;
 }
 
 export interface UpdateCompetitionParam {
-  updateCompetition: Pick<ICompetition, 'id'> &
-    Partial<
-      Omit<
-        ICompetition,
-        | 'id'
-        | 'status'
-        | 'viewCount'
-        | 'createdAt'
-        | 'updatedAt'
-        | 'divisions'
-        | 'earlybirdDiscountSnapshots'
-        | 'combinationDiscountSnapshots'
-      >
-    >;
+  updateCompetitionDto: ICompetition.UpdateDto;
 }
 
 export interface FindCompetitionsParam {
+  page: ICompetition.Query.Page;
+  limit?: ICompetition.Query.Limit;
+  dateFilter?: ICompetition.Query.DateFilter;
+  locationFilter?: ICompetition.Query.LocationFilter;
+  selectFilter?: ICompetition.Query.SelectFilter[];
+  sortOption?: ICompetition.Query.SortOption;
   status?: ICompetition['status'];
 }
 
@@ -83,6 +64,7 @@ export interface UpdateCompetitionRet {
 
 export interface FindCompetitionsRet {
   competitions: Omit<ICompetition, 'divisions' | 'combinationDiscountSnapshots'>[];
+  nextPage: number | null;
 }
 
 export interface GetCompetitionRet {

@@ -55,10 +55,10 @@ export class CompetitionTable {
   @Column('varchar', { length: 16, default: 'INACTIVE' })
   status: ICompetition['status'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: ICompetition['createdAt'];
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: ICompetition['updatedAt'];
 
   @OneToMany(() => EarlybirdDiscountSnapshotTable, (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition)

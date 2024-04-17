@@ -8,7 +8,7 @@ export class PolicyConsentTable {
   @PrimaryGeneratedColumn()
   id: IPolicyConsent['id'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IPolicyConsent['createdAt'];
 
   @Column()

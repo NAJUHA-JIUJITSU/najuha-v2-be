@@ -10,7 +10,7 @@ export class ParticipationDivisionInfoPaymentTable {
   @Column('varchar', { length: 26, primary: true })
   id: IParticipationDivisionInfoPayment['id'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IParticipationDivisionInfoPayment['createdAt'];
 
   @Column()

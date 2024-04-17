@@ -31,7 +31,7 @@ export class PlayerSnapshotTable {
   @Column('varchar', { length: 64 })
   masterName: IPlayerSnapshot['masterName'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IPlayerSnapshot['createdAt'];
 
   @Column()

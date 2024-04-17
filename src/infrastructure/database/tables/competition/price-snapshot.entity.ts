@@ -11,7 +11,7 @@ export class PriceSnapshotTable {
   @Column('int')
   price: IPriceSnapshot['price'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IPriceSnapshot['createdAt'];
 
   @Column()

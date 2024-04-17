@@ -1,4 +1,3 @@
-import exp from 'constants';
 import {
   CreateCombinationDiscountSnapshotParam,
   CreateCombinationDiscountSnapshotRet,
@@ -8,6 +7,7 @@ import {
   CreateDivisionsRet,
   CreateEarlybirdDiscountSnapshotParam,
   CreateEarlybirdDiscountSnapshotRet,
+  FindCompetitionsParam,
   FindCompetitionsRet,
   GetCompetitionRet,
   UpdateCompetitionParam,
@@ -18,9 +18,11 @@ import {
 // Presentation Layer Request DTOs --------------------------------------------
 export type CreateCompetitionReqBody = CreateCompetitionParam['creatCompetitionDto'];
 
-export type UpdateCompetitionReqBody = Omit<UpdateCompetitionParam['updateCompetition'], 'id'>;
+export type UpdateCompetitionReqBody = Omit<UpdateCompetitionParam['updateCompetitionDto'], 'id'>;
 
 export interface UpdateCompetitionStatusReqBody extends Pick<UpdateCompetitionStatusParam, 'status'> {}
+
+export interface FindCompetitionsReqQuery extends FindCompetitionsParam {}
 
 export interface CreateDivisionsReqBody extends Pick<CreateDivisionsParam, 'divisionPacks'> {}
 

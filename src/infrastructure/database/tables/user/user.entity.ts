@@ -44,10 +44,10 @@ export class UserTable {
   @Column('varchar', { length: 16, default: 'ACTIVE' })
   status: IUser['status'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IUser['createdAt'];
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: IUser['updatedAt'];
 
   @OneToMany(() => PolicyConsentTable, (policyConsent) => policyConsent.user)

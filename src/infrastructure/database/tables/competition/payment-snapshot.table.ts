@@ -7,7 +7,7 @@ export class PaymentSnapshotTable {
   @Column('varchar', { length: 26, primary: true })
   id: IPaymentSnapshot['id'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IPaymentSnapshot['createdAt'];
 
   @Column('int', { unsigned: true })

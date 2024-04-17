@@ -11,7 +11,7 @@ export class CombinationDiscountSnapshotTable {
   @Column('jsonb')
   combinationDiscountRules: ICombinationDiscountSnapshot['combinationDiscountRules'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: ICombinationDiscountSnapshot['createdAt'];
 
   @Column()

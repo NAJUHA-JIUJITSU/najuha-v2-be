@@ -34,10 +34,10 @@ export class DivisionTable {
   @Column('varchar', { length: 16, default: 'ACTIVE' })
   status: IDivision['status'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IDivision['createdAt'];
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: IDivision['updatedAt'];
 
   @Column()

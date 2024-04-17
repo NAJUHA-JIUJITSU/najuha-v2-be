@@ -22,7 +22,7 @@ export class PolicyTable {
   @Column('text')
   content: IPolicy['content'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IPolicy['createdAt'];
 
   @OneToMany(() => PolicyConsentTable, (policyConsent) => policyConsent.policy)

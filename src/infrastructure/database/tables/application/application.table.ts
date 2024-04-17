@@ -11,10 +11,10 @@ export class ApplicationTable {
   @Column('varchar', { length: 26, primary: true })
   id: IApplication['id'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IApplication['createdAt'];
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: IApplication['updatedAt'];
 
   @Column('varchar', { length: 16, default: 'READY' })

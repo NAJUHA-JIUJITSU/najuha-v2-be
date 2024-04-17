@@ -2,7 +2,7 @@ import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } fr
 import { CompetitionTable } from './competition.table';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 
-@Entity('early_bird_discount_snapshot')
+@Entity('earlybird_discount_snapshot')
 export class EarlybirdDiscountSnapshotTable {
   @Column('varchar', { length: 26, primary: true })
   id: IEarlybirdDiscountSnapshot['id'];
@@ -16,7 +16,7 @@ export class EarlybirdDiscountSnapshotTable {
   @Column('int')
   discountAmount: IEarlybirdDiscountSnapshot['discountAmount'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IEarlybirdDiscountSnapshot['createdAt'];
 
   @Column()

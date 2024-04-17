@@ -20,6 +20,7 @@ import {
 } from './dtos';
 import { CompetitionEntity } from '../domain/entity/competition.entity';
 import { ulid } from 'ulid';
+import { ICompetition } from '../domain/interface/competition.interface';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -33,26 +34,34 @@ export class CompetitionsAppService {
     return { competition };
   }
 
-  async updateCompetition({ updateCompetition }: UpdateCompetitionParam): Promise<UpdateCompetitionRet> {
+  async updateCompetition({ updateCompetitionDto }: UpdateCompetitionParam): Promise<UpdateCompetitionRet> {
     let competition = await this.competitionRepository.getCompetition({
-      where: { id: updateCompetition.id },
+      where: { id: updateCompetitionDto.id },
     });
 
     competition = await this.competitionRepository.saveCompetition({
       ...competition,
-      ...updateCompetition,
+      ...updateCompetitionDto,
     });
 
     return { competition };
   }
 
-  async findCompetitions(param?: FindCompetitionsParam | null): Promise<FindCompetitionsRet> {
-    const competitions = await this.competitionRepository.findCompetitons({
-      where: { status: param?.status },
-      relations: ['earlybirdDiscountSnapshots'],
+  async findCompetitions(query: FindCompetitionsParam): Promise<FindCompetitionsRet> {
+    const { page, limit = 10, dateFilter, locationFilter, selectFilter, sortOption = '일자순', status } = query;
+    const parsedDateFilter = dateFilter ? new Date(dateFilter) : new Date();
+    const competitions = await this.competitionRepository.findCompetitionsWithQuery({
+      page,
+      limit,
+      parsedDateFilter,
+      locationFilter,
+      selectFilter,
+      sortOption,
+      status,
     });
-
-    return { competitions };
+    const nextPage = competitions.length === limit ? page + 1 : null;
+    console.log('competition.length', competitions.length);
+    return { competitions, nextPage };
   }
 
   async getCompetition({ competitionId, status }: GetCompetitionParam): Promise<GetCompetitionRet> {

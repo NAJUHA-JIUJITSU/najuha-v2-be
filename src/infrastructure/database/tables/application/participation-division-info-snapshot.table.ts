@@ -8,7 +8,7 @@ export class ParticipationDivisionInfoSnapshotTable {
   @Column('varchar', { length: 26, primary: true })
   id: IParticipationDivisionInfoSnapshot['id'];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: IParticipationDivisionInfoSnapshot['createdAt'];
 
   /** - participation division id. */
