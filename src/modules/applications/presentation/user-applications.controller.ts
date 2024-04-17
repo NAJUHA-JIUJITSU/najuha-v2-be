@@ -10,6 +10,7 @@ import {
   GetApplicationRes,
   GetExpectedPaymentRes,
   UpdateDoneApplicationReqBody,
+  UpdateDoneApplicationRes,
   UpdateReadyApplicationReqBody,
   UpdateReadyApplicationRes,
 } from './dtos';
@@ -89,13 +90,14 @@ export class UserApplicationsController {
     @Req() req: Request,
     @TypedParam('applicationId') applicationId: IApplication['id'],
     @TypedBody() body: UpdateDoneApplicationReqBody,
-  ): Promise<ResponseForm<any>> {
-    const application = await this.ApplicationAppService.updateDoneApplication({
-      userId: req['userId'],
-      applicationId,
-      ...body,
-    });
-    return createResponseForm({ application });
+  ): Promise<ResponseForm<UpdateDoneApplicationRes>> {
+    return createResponseForm(
+      await this.ApplicationAppService.updateDoneApplication({
+        userId: req['userId'],
+        applicationId,
+        ...body,
+      }),
+    );
   }
 
   /**

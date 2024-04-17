@@ -32,9 +32,7 @@ export class ApplicationEntity {
   @OneToMany(
     () => ParticipationDivisionInfoEntity,
     (participationDivisionInfo) => participationDivisionInfo.application,
-    {
-      cascade: true,
-    },
+    { cascade: true },
   )
   participationDivisionInfos: ParticipationDivisionInfoEntity[];
 

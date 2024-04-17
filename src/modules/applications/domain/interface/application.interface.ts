@@ -30,8 +30,9 @@ export interface IApplication {
    * - READY: 결제 대기중
    * - DONE: 결제 완료
    * - CANCELED: 결제 취소
+   * - DELETED: 삭제됨 (DB에는 남아있으나 유저에게 보여지지 않음)
    */
-  status: 'READY' | 'DONE' | 'CANCELED';
+  status: 'READY' | 'DONE' | 'CANCELED' | 'DELETED';
 
   /** - competition id. */
   competitionId: ICompetition['id'];

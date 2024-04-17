@@ -33,6 +33,7 @@ export class ParticipationDivisionInfoPaymentEntity {
   @OneToOne(
     () => ParticipationDivisionInfoEntity,
     (participationDivisionInfo) => participationDivisionInfo.participationDivisionInfoPayment,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'participationDivisionInfoId' })
   participationDivisionInfo: ParticipationDivisionInfoEntity;

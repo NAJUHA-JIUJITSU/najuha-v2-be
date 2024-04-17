@@ -37,7 +37,6 @@ export class PlayerSnapshotEntity {
   @Column()
   applicationId: ApplicationEntity['id'];
 
-  /** - application 정보 */
   @ManyToOne(() => ApplicationEntity, (application) => application.playerSnapshots)
   @JoinColumn({ name: 'applicationId' })
   application: ApplicationEntity;

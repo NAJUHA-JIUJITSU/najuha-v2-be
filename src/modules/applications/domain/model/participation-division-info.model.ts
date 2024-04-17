@@ -8,13 +8,12 @@ export class ParticipationDivisionInfoModel {
   public applicationId: IApplication['id'];
   public participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[];
 
-  constructor(participationDivisionInfo: IParticipationDivisionInfo) {
-    this.id = participationDivisionInfo.id;
-    this.createdAt = participationDivisionInfo.createdAt;
-    this.applicationId = participationDivisionInfo.applicationId;
-    this.participationDivisionInfoSnapshots = participationDivisionInfo.participationDivisionInfoSnapshots.map(
-      (participationDivisionInfoSnapshot) =>
-        new ParticipationDivisionInfoSnapshotModel(participationDivisionInfoSnapshot),
+  constructor(props: IParticipationDivisionInfo) {
+    this.id = props.id;
+    this.createdAt = props.createdAt;
+    this.applicationId = props.applicationId;
+    this.participationDivisionInfoSnapshots = props.participationDivisionInfoSnapshots.map(
+      (snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot),
     );
   }
 }

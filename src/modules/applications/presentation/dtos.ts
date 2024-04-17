@@ -29,3 +29,5 @@ export interface GetApplicationRes extends GetApplicationRet {}
 export interface GetExpectedPaymentRes extends GetExpectedPaymentRet {}
 
 export interface UpdateReadyApplicationRes extends UpdateReadyApplicationRet {}
+
+export interface UpdateDoneApplicationRes extends UpdateReadyApplicationRet {}

@@ -225,14 +225,14 @@ export type APPLICATIONS_DIVISION_AGE_NOT_MATCH = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7001;
-  result: '신청 부문의 나이가 맞지 않습니다.';
+  result: '선수의 나이와 신청 부문의 나이가 맞지 않습니다.';
 };
 
 export type APPLICATIONS_DIVISION_GENDER_NOT_MATCH = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7002;
-  result: '신청 부문의 성별이 맞지 않습니다.';
+  result: '선수의 성별과 신청 부문의 성별이 맞지 않습니다.';
 };
 
 export type APPLICATIONS_REGISTRATION_NOT_STARTED = ErrorResponse & {

@@ -5,6 +5,7 @@ import { DivisionModel } from 'src/modules/competitions/domain/model/division.mo
 import { CombinationDiscountSnapshotModel } from 'src/modules/competitions/domain/model/combination-discount-snapshot.model';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IApplication } from './interface/application.interface';
+import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 
 @Injectable()
 export class ApplicationDomainService {
@@ -56,7 +57,7 @@ export class ApplicationDomainService {
    * @param divisions
    * @returns normal amount
    */
-  private calculateNormalAmount(divisions: DivisionModel[]): number {
+  private calculateNormalAmount(divisions: IDivision[]): number {
     return divisions.reduce((acc, division) => {
       acc += division.priceSnapshots[division.priceSnapshots.length - 1].price || 0;
       return acc;
@@ -89,7 +90,7 @@ export class ApplicationDomainService {
    */
   private calculateCombinationDiscountAmount(
     combinationDiscountSnapshot: CombinationDiscountSnapshotModel,
-    divisions: DivisionModel[],
+    divisions: IDivision[],
   ): number {
     if (combinationDiscountSnapshot === null) return 0;
     const divisionUnits = divisions.map((division) => ({

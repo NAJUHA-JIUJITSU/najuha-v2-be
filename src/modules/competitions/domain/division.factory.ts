@@ -3,14 +3,15 @@ import { IDivisionPack } from './interface/division-pack.interface';
 import { IDivision } from './interface/division.interface';
 import { ICompetition } from './interface/competition.interface';
 import { ulid } from 'ulid';
+import { DivisionModel } from './model/division.model';
 
 @Injectable()
 export class DivisionFactory {
-  createDivisions(competitionId: ICompetition['id'], divisionPacks: IDivisionPack[]): IDivision[] {
+  createDivisions(competitionId: ICompetition['id'], divisionPacks: IDivisionPack[]): DivisionModel[] {
     const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
       return [...acc, ...this.unpack(competitionId, divisionPack)];
     }, []);
-    return unpackedDivisions;
+    return unpackedDivisions.map((division) => new DivisionModel(division));
   }
 
   private unpack(competitionId: ICompetition['id'], divisionPack: IDivisionPack): IDivision[] {

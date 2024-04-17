@@ -9,11 +9,11 @@ export class ParticipationDivisionInfoSnapshotModel {
   public readonly participationDivisionId: IDivision['id'];
   public readonly division: IDivision;
 
-  constructor(participationDivisionInfoSnapshot: IParticipationDivisionInfoSnapshot) {
-    this.id = participationDivisionInfoSnapshot.id;
-    this.createdAt = participationDivisionInfoSnapshot.createdAt;
-    this.participationDivisionInfoId = participationDivisionInfoSnapshot.participationDivisionInfoId;
-    this.participationDivisionId = participationDivisionInfoSnapshot.participationDivisionId;
-    this.division = participationDivisionInfoSnapshot.division;
+  constructor(props: IParticipationDivisionInfoSnapshot) {
+    this.id = props.id;
+    this.createdAt = props.createdAt;
+    this.participationDivisionInfoId = props.participationDivisionInfoId;
+    this.participationDivisionId = props.participationDivisionId;
+    this.division = props.division;
   }
 }

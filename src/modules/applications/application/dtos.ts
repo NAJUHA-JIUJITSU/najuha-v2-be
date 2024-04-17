@@ -38,12 +38,12 @@ export interface UpdateReadyApplicationParam {
 export interface UpdateDoneApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
-  createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
+  createPlayerSnapshotDto?: IPlayerSnapshot.CreateDto;
   /**
    * - Division info update data list.
    * @minItems 1
    */
-  participationDivisionInfoUpdateDataList: IParticipationDivisionInfoUpdateData[];
+  participationDivisionInfoUpdateDataList?: IParticipationDivisionInfoUpdateData[];
 }
 
 export interface GetExpectedPaymentParam {
@@ -61,6 +61,10 @@ export interface GetApplicationRet {
 }
 
 export interface UpdateReadyApplicationRet {
+  application: IApplication;
+}
+
+export interface UpdateDoneApplicationRet {
   application: IApplication;
 }
 

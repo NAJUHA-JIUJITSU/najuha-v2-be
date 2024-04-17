@@ -14,17 +14,17 @@ export class PlayerSnapshotModel {
   public readonly createdAt: IPlayerSnapshot['createdAt'];
   public readonly applicationId: IApplication['id'];
 
-  constructor(playerSnapshot: PlayerSnapshotModel) {
-    this.id = playerSnapshot.id;
-    this.name = playerSnapshot.name;
-    this.gender = playerSnapshot.gender;
-    this.birth = playerSnapshot.birth;
-    this.phoneNumber = playerSnapshot.phoneNumber;
-    this.belt = playerSnapshot.belt;
-    this.network = playerSnapshot.network;
-    this.team = playerSnapshot.team;
-    this.masterName = playerSnapshot.masterName;
-    this.createdAt = playerSnapshot.createdAt;
-    this.applicationId = playerSnapshot.applicationId;
+  constructor(props: IPlayerSnapshot) {
+    this.id = props.id;
+    this.name = props.name;
+    this.gender = props.gender;
+    this.birth = props.birth;
+    this.phoneNumber = props.phoneNumber;
+    this.belt = props.belt;
+    this.network = props.network;
+    this.team = props.team;
+    this.masterName = props.masterName;
+    this.createdAt = props.createdAt;
+    this.applicationId = props.applicationId;
   }
 }

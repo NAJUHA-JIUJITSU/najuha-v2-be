@@ -8,7 +8,7 @@ export interface IParticipationDivisionInfoUpdateData {
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
 
   /**
-   * 수정하고자 하는 참가부문 ID
+   * 새로 참가 하고자 하는 부문 ID
    */
   newParticipationDivisionId: IDivision['id'];
 }

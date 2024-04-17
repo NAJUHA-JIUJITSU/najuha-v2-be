@@ -33,21 +33,23 @@ export class ApplicationsAppService {
     competitionId,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = await this.applicationRepository.getUser(userId);
-    const competitionModelData = await this.applicationRepository.getCompetition({
+    const competitionModelProps = await this.applicationRepository.getCompetition({
       where: { id: competitionId, status: 'ACTIVE' },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionModel(competitionModelData);
-
-    competition.validateApplicationAbility(createPlayerSnapshotDto, participationDivisionIds);
+    const competition = new CompetitionModel(competitionModelProps);
+    competition.validateApplicationPeriod();
+    const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
 
     const application = this.applicationFactory.createApplication(
-      user,
-      createPlayerSnapshotDto,
-      participationDivisionIds,
+      user.id,
+      competition.id,
+      divisions,
       applicationType,
-      competitionModelData,
+      createPlayerSnapshotDto,
     );
+    application.validateApplicationType(user);
+    application.validateDivisionSuitability();
 
     await this.applicationRepository.saveApplication(application);
     return { application };
@@ -72,8 +74,7 @@ export class ApplicationsAppService {
    * Update ready application.
    * - READY status 를 가진 application 을 업데이트 합니다.
    * - CANCELED, DONE 상태의 application 은 업데이트 할 수 없습니다.
-   * - 기존 ParticipationDivisionInfos 를 삭제하고 새로운 ParticipationDivisionInfos 를 생성합니다.
-   * TODO: Transaction
+   * - 기존 application 을 DELETEED 상태로 변경하고 새로운 application 을 생성합니다.
    */
   async updateReadyApplication({
     userId,
@@ -82,8 +83,7 @@ export class ApplicationsAppService {
     participationDivisionIds,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
     const user = await this.applicationRepository.getUser(userId);
-
-    const applicationModelData = await this.applicationRepository.getApplication({
+    const applicationProps = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'READY' },
       relations: [
         'playerSnapshots',
@@ -93,10 +93,9 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const application = new ApplicationModel(applicationModelData);
-
+    const oldApplication = new ApplicationModel(applicationProps);
     const competitionModelData = await this.applicationRepository.getCompetition({
-      where: { id: application.competitionId },
+      where: { id: applicationProps.competitionId },
       relations: [
         'divisions',
         'divisions.priceSnapshots',
@@ -105,22 +104,24 @@ export class ApplicationsAppService {
       ],
     });
     const competition = new CompetitionModel(competitionModelData);
-    competition.validateApplicationAbility(createPlayerSnapshotDto, participationDivisionIds);
-    await this.applicationRepository.deletePlayerSnapshots(application.playerSnapshots);
-    await this.applicationRepository.deleteParticipationDivisionInfos(application.participationDivisionInfos);
-    const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(
-      user,
+    competition.validateApplicationPeriod();
+    const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
+
+    const newApplication = this.applicationFactory.createApplication(
+      user.id,
+      competition.id,
+      divisions,
+      oldApplication.type,
       createPlayerSnapshotDto,
-      applicationId,
     );
-    const newParticipationDivisionInfos = this.applicationFactory.createParticipationDivisionInfos(
-      participationDivisionIds,
-      competition.divisions,
-      applicationId,
-    );
-    application.updateReadyApplication(newPlayerSnapshot, newParticipationDivisionInfos);
-    await this.applicationRepository.saveApplication(application);
-    return { application };
+    newApplication.validateApplicationType(user);
+    newApplication.validateDivisionSuitability();
+
+    oldApplication.updateStatusToDeleted();
+    // TODO: Transaction
+    await this.applicationRepository.saveApplication(oldApplication);
+    await this.applicationRepository.saveApplication(newApplication);
+    return { application: newApplication };
   }
 
   /** Update done application. */
@@ -130,8 +131,13 @@ export class ApplicationsAppService {
     createPlayerSnapshotDto,
     participationDivisionInfoUpdateDataList,
   }: UpdateDoneApplicationParam): Promise<any> {
+    // TODO: 에러 표준화
+    if (!createPlayerSnapshotDto && !participationDivisionInfoUpdateDataList)
+      throw new Error(
+        'createPlayerSnapshotDto, participationDivisionInfoUpdateDataList 둘중에 하나는 필수다 이말이야.',
+      );
     const user = await this.applicationRepository.getUser(userId);
-    const applicationModelData = await this.applicationRepository.getApplication({
+    const applicationProps = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'DONE' },
       relations: [
         'playerSnapshots',
@@ -141,7 +147,8 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const application = new ApplicationModel(applicationModelData);
+    const application = new ApplicationModel(applicationProps);
+
     const competitionModelData = await this.applicationRepository.getCompetition({
       where: { id: application.competitionId },
       relations: [
@@ -152,23 +159,30 @@ export class ApplicationsAppService {
       ],
     });
     const competition = new CompetitionModel(competitionModelData);
-    competition.validateApplicationAbility(
-      createPlayerSnapshotDto,
-      participationDivisionInfoUpdateDataList.map((participationDivisionInfoUpdateData) => {
-        return participationDivisionInfoUpdateData.newParticipationDivisionId;
-      }),
-    );
-    const newPlayerSnapshots = this.applicationFactory.createPlayerSnapshot(
-      user,
-      createPlayerSnapshotDto,
-      applicationId,
-    );
-    const newParticipationDivisionInfoSnapshots = this.applicationFactory.createParticipationDivisionInfoSnapshots(
-      competition.divisions,
-      participationDivisionInfoUpdateDataList,
-    );
-    application.updateDoneApplication(newPlayerSnapshots, newParticipationDivisionInfoSnapshots);
-    await this.applicationRepository.saveApplication(application);
+    competition.validateApplicationPeriod();
+
+    if (createPlayerSnapshotDto) {
+      const newPlayerSnapshots = this.applicationFactory.createPlayerSnapshot(applicationId, createPlayerSnapshotDto);
+      application.addPlayerSnapshot(newPlayerSnapshots);
+    }
+
+    if (participationDivisionInfoUpdateDataList) {
+      const participationDivisionIds = participationDivisionInfoUpdateDataList.map(
+        (participationDivisionInfoUpdateData) => {
+          return participationDivisionInfoUpdateData.newParticipationDivisionId;
+        },
+      );
+      const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
+      const newParticipationDivisionInfoSnapshots = this.applicationFactory.createParticipationDivisionInfoSnapshots(
+        divisions,
+        participationDivisionInfoUpdateDataList,
+      );
+      application.addParticipationDivisionInfoSnapshots(newParticipationDivisionInfoSnapshots);
+    }
+
+    application.validateApplicationType(user);
+    application.validateDivisionSuitability();
+    this.applicationRepository.saveApplication(application);
     return { application };
   }
 

@@ -78,7 +78,7 @@ export class CompetitionModel {
     this.status = newStatus;
   }
 
-  addDivisions(newDivisions: IDivision[]) {
+  addDivisions(newDivisions: DivisionModel[]) {
     const duplicatedDivisions = this.divisions.filter((division) => {
       return newDivisions.some(
         (newDivision) =>
@@ -103,16 +103,7 @@ export class CompetitionModel {
     this.divisions = [...this.divisions, ...newDivisions];
   }
 
-  validateApplicationAbility(
-    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
-    participationDivisionIds: IDivision['id'][],
-    now = new Date(),
-  ) {
-    this.validateApplicationPeriod(now);
-    this.validateDivisionSuitable(createPlayerSnapshotDto, participationDivisionIds);
-  }
-
-  private validateApplicationPeriod(now = new Date()) {
+  validateApplicationPeriod(now = new Date()) {
     if (this.registrationStartDate && now < this.registrationStartDate) {
       throw new BusinessException(
         ApplicationsErrorMap.APPLICATIONS_REGISTRATION_NOT_STARTED,
@@ -127,22 +118,45 @@ export class CompetitionModel {
     }
   }
 
-  private validateDivisionSuitable(
-    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
-    participationDivisionIds: IDivision['id'][],
-  ) {
-    participationDivisionIds.forEach((divisionId) => {
-      const division = this.divisions.find((division) => division.id === divisionId);
-      if (!division)
-        throw new BusinessException(
-          ApplicationsErrorMap.APPLICATIONS_DIVISION_NOT_FOUND,
-          `Missing DivisionId: ${divisionId}`,
-        );
-      // TODO: Implement validateAge, validateGender
-      // division.validateAge(createPlayerSnapshotDto.birth);
-      // division.validateGender(createPlayerSnapshotDto.gender);
-    });
+  validateParticipationAbleDivisions(participationDivisionIds: IDivision['id'][]) {
+    const divisions = this.divisions.filter((division) => participationDivisionIds.includes(division.id));
+    const notFoundDivisionIds = participationDivisionIds.filter(
+      (divisionId) => !divisions.some((division) => division.id === divisionId),
+    );
+    if (notFoundDivisionIds.length > 0) {
+      throw new BusinessException(
+        ApplicationsErrorMap.APPLICATIONS_DIVISION_NOT_FOUND,
+        `Not found DivisionIds: ${notFoundDivisionIds.join(', ')}`,
+      );
+    }
+    return divisions;
   }
+
+  // validateApplicationAbility(
+  //   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+  //   participationDivisionIds: IDivision['id'][],
+  //   now = new Date(),
+  // ) {
+  //   this.validateApplicationPeriod(now);
+  //   this.validateDivisionSuitable(createPlayerSnapshotDto, participationDivisionIds);
+  // }
+
+  // private validateDivisionSuitable(
+  //   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+  //   participationDivisionIds: IDivision['id'][],
+  // ) {
+  //   participationDivisionIds.forEach((divisionId) => {
+  //     const division = this.divisions.find((division) => division.id === divisionId);
+  //     if (!division)
+  //       throw new BusinessException(
+  //         ApplicationsErrorMap.APPLICATIONS_DIVISION_NOT_FOUND,
+  //         `Missing DivisionId: ${divisionId}`,
+  //       );
+  //     // TODO: Implement validateAge, validateGender
+  //     // division.validateAge(createPlayerSnapshotDto.birth);
+  //     // division.validateGender(createPlayerSnapshotDto.gender);
+  //   });
+  // }
 
   // private validateExistDivisions(particiationDivisionIds: IDivision['id'][]): IDivision[] {
   //   const existDivisions: IDivision[] = [];

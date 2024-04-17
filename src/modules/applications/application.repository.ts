@@ -68,34 +68,4 @@ export class ApplicationRepository {
     if (!application) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'Application not found');
     return application;
   }
-
-  // ----------------- ParticipationDivisionInfo -----------------
-  async saveParticipationDivisionInfos(participationDivisionInfos: IParticipationDivisionInfo[]): Promise<void> {
-    await this.participationDivisionInfoRepository.save(participationDivisionInfos);
-  }
-
-  async deleteParticipationDivisionInfos(participationDivisionInfos: ParticipationDivisionInfoModel[]): Promise<void> {
-    await Promise.all(
-      participationDivisionInfos.map(async (participationDivisionInfo) => {
-        await Promise.all(
-          participationDivisionInfo.participationDivisionInfoSnapshots.map(
-            async (participationDivisionInfoSnapshot) => {
-              await this.participationDivisionInfoSnapshotRepository.delete(participationDivisionInfoSnapshot.id);
-            },
-          ),
-        );
-        await this.participationDivisionInfoRepository.delete(participationDivisionInfo.id);
-      }),
-    );
-  }
-
-  // ----------------- PlayerSnapshot -----------------
-  async deletePlayerSnapshots(playerSnapshots: PlayerSnapshotModel[]): Promise<void> {
-    playerSnapshots.forEach(async (playerSnapshot) => {
-      await this.playerSnapshotRepository.delete(playerSnapshot.id);
-    });
-  }
-  async savePlayerSnapshot(playerSnapshot: PlayerSnapshotModel): Promise<void> {
-    await this.playerSnapshotRepository.save(playerSnapshot);
-  }
 }
