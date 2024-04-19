@@ -27,4 +27,20 @@ export class PlayerSnapshotModel {
     this.createdAt = props.createdAt;
     this.applicationId = props.applicationId;
   }
+
+  toValue(): IPlayerSnapshot {
+    return {
+      id: this.id,
+      name: this.name,
+      gender: this.gender,
+      birth: this.birth,
+      phoneNumber: this.phoneNumber,
+      belt: this.belt,
+      network: this.network,
+      team: this.team,
+      masterName: this.masterName,
+      createdAt: this.createdAt,
+      applicationId: this.applicationId,
+    };
+  }
 }

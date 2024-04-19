@@ -16,4 +16,14 @@ export class ParticipationDivisionInfoSnapshotModel {
     this.participationDivisionId = props.participationDivisionId;
     this.division = props.division;
   }
+
+  toValue(): IParticipationDivisionInfoSnapshot {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      participationDivisionInfoId: this.participationDivisionInfoId,
+      participationDivisionId: this.participationDivisionId,
+      division: this.division,
+    };
+  }
 }

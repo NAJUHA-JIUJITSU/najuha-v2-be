@@ -18,7 +18,7 @@ export interface IPlayerSnapshot {
    */
   name: string;
 
-  /** -player gender */
+  /** - player gender */
   gender: 'MALE' | 'FEMALE';
 
   /**

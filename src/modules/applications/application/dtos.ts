@@ -3,8 +3,8 @@ import { ICompetition } from 'src/modules/competitions/domain/interface/competit
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
-import { IParticipationDivisionInfoUpdateData } from '../domain/interface/participation-division-info-update-data.interface';
 import { IPlayerSnapshot } from '../domain/interface/player-snapshot.interface';
+import { IParticipationDivisionInfo } from '../domain/interface/participation-division-info.interface';
 
 // Application Layer Param DTOs ---------------------------------------------------
 export interface CreateApplicationParam {
@@ -32,6 +32,7 @@ export interface UpdateReadyApplicationParam {
    * @minItems 1
    */
   participationDivisionIds: IDivision['id'][];
+  applicationType: IApplication['type'];
   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
 }
 
@@ -43,7 +44,7 @@ export interface UpdateDoneApplicationParam {
    * - Division info update data list.
    * @minItems 1
    */
-  participationDivisionInfoUpdateDataList?: IParticipationDivisionInfoUpdateData[];
+  updateParticipationDivisionInfoDtos?: IParticipationDivisionInfo.UpdateDto[];
 }
 
 export interface GetExpectedPaymentParam {

@@ -10,11 +10,13 @@ import {
   GetExpectedPaymentParam,
   GetExpectedPaymentRet,
   UpdateDoneApplicationParam,
+  UpdateDoneApplicationRet,
   UpdateReadyApplicationParam,
   UpdateReadyApplicationRet,
 } from './dtos';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
 import { ApplicationModel } from '../domain/model/application.model';
+import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -33,15 +35,15 @@ export class ApplicationsAppService {
     competitionId,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = await this.applicationRepository.getUser(userId);
-    const competitionModelProps = await this.applicationRepository.getCompetition({
+    const competitionValue = await this.applicationRepository.getCompetition({
       where: { id: competitionId, status: 'ACTIVE' },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionModel(competitionModelProps);
+    const competition = new CompetitionModel(competitionValue);
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
 
-    const application = this.applicationFactory.createApplication(
+    const application = this.applicationFactory.createReadyApplication(
       user.id,
       competition.id,
       divisions,
@@ -51,8 +53,9 @@ export class ApplicationsAppService {
     application.validateApplicationType(user);
     application.validateDivisionSuitability();
 
-    await this.applicationRepository.saveApplication(application);
-    return { application };
+    const applicationValue = application.toValue();
+    await this.applicationRepository.saveApplication(applicationValue);
+    return { application: applicationValue };
   }
 
   /** Get application. */
@@ -73,17 +76,19 @@ export class ApplicationsAppService {
   /**
    * Update ready application.
    * - READY status 를 가진 application 을 업데이트 합니다.
-   * - CANCELED, DONE 상태의 application 은 업데이트 할 수 없습니다.
+   * - CANCELED, DONE 상태의 application 은 이 api 를 통해 업데이트 할 수 없습니다.
    * - 기존 application 을 DELETEED 상태로 변경하고 새로운 application 을 생성합니다.
+   * - 새로운 application을 생성하는 이유, 기존 applicaiton이 실제로는 결제 됐지만 실패처리 된 후, 업데이트시 기존 결제 정보가 남아있어야하기 때문.
    */
   async updateReadyApplication({
     userId,
     createPlayerSnapshotDto,
     applicationId,
+    applicationType,
     participationDivisionIds,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
-    const user = await this.applicationRepository.getUser(userId);
-    const applicationProps = await this.applicationRepository.getApplication({
+    const userValue = await this.applicationRepository.getUser(userId);
+    const oldApplicationValue = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'READY' },
       relations: [
         'playerSnapshots',
@@ -93,9 +98,9 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const oldApplication = new ApplicationModel(applicationProps);
-    const competitionModelData = await this.applicationRepository.getCompetition({
-      where: { id: applicationProps.competitionId },
+    const oldApplication = new ApplicationModel(oldApplicationValue);
+    const competitionValue = await this.applicationRepository.getCompetition({
+      where: { id: oldApplication.getCompetitionId() },
       relations: [
         'divisions',
         'divisions.priceSnapshots',
@@ -103,25 +108,26 @@ export class ApplicationsAppService {
         'combinationDiscountSnapshots',
       ],
     });
-    const competition = new CompetitionModel(competitionModelData);
+    const competition = new CompetitionModel(competitionValue);
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
 
-    const newApplication = this.applicationFactory.createApplication(
-      user.id,
+    const newApplication = this.applicationFactory.createReadyApplication(
+      userValue.id,
       competition.id,
       divisions,
-      oldApplication.type,
+      applicationType,
       createPlayerSnapshotDto,
     );
-    newApplication.validateApplicationType(user);
+    newApplication.validateApplicationType(userValue);
     newApplication.validateDivisionSuitability();
 
     oldApplication.updateStatusToDeleted();
+
     // TODO: Transaction
-    await this.applicationRepository.saveApplication(oldApplication);
-    await this.applicationRepository.saveApplication(newApplication);
-    return { application: newApplication };
+    await this.applicationRepository.saveApplication(oldApplication.toValue());
+    await this.applicationRepository.saveApplication(newApplication.toValue());
+    return { application: newApplication.toValue() };
   }
 
   /** Update done application. */
@@ -129,15 +135,14 @@ export class ApplicationsAppService {
     userId,
     applicationId,
     createPlayerSnapshotDto,
-    participationDivisionInfoUpdateDataList,
-  }: UpdateDoneApplicationParam): Promise<any> {
-    // TODO: 에러 표준화
-    if (!createPlayerSnapshotDto && !participationDivisionInfoUpdateDataList)
+    updateParticipationDivisionInfoDtos,
+  }: UpdateDoneApplicationParam): Promise<UpdateDoneApplicationRet> {
+    if (!createPlayerSnapshotDto && !updateParticipationDivisionInfoDtos)
       throw new Error(
         'createPlayerSnapshotDto, participationDivisionInfoUpdateDataList 둘중에 하나는 필수다 이말이야.',
-      );
-    const user = await this.applicationRepository.getUser(userId);
-    const applicationProps = await this.applicationRepository.getApplication({
+      ); // TODO: 에러 표준화
+    const userValue = await this.applicationRepository.getUser(userId);
+    const applicationValue = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'DONE' },
       relations: [
         'playerSnapshots',
@@ -147,10 +152,9 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const application = new ApplicationModel(applicationProps);
-
-    const competitionModelData = await this.applicationRepository.getCompetition({
-      where: { id: application.competitionId },
+    const application = new ApplicationModel(applicationValue);
+    const competitionValue = await this.applicationRepository.getCompetition({
+      where: { id: application.getCompetitionId() },
       relations: [
         'divisions',
         'divisions.priceSnapshots',
@@ -158,32 +162,30 @@ export class ApplicationsAppService {
         'combinationDiscountSnapshots',
       ],
     });
-    const competition = new CompetitionModel(competitionModelData);
+    const competition = new CompetitionModel(competitionValue);
     competition.validateApplicationPeriod();
 
     if (createPlayerSnapshotDto) {
-      const newPlayerSnapshots = this.applicationFactory.createPlayerSnapshot(applicationId, createPlayerSnapshotDto);
-      application.addPlayerSnapshot(newPlayerSnapshots);
+      const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(applicationId, createPlayerSnapshotDto);
+      application.addPlayerSnapshot(newPlayerSnapshot);
     }
 
-    if (participationDivisionInfoUpdateDataList) {
-      const participationDivisionIds = participationDivisionInfoUpdateDataList.map(
-        (participationDivisionInfoUpdateData) => {
-          return participationDivisionInfoUpdateData.newParticipationDivisionId;
-        },
-      );
+    if (updateParticipationDivisionInfoDtos) {
+      const participationDivisionIds = updateParticipationDivisionInfoDtos.map((dto) => dto.newParticipationDivisionId);
       const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
       const newParticipationDivisionInfoSnapshots = this.applicationFactory.createParticipationDivisionInfoSnapshots(
         divisions,
-        participationDivisionInfoUpdateDataList,
+        updateParticipationDivisionInfoDtos,
       );
-      application.addParticipationDivisionInfoSnapshots(newParticipationDivisionInfoSnapshots);
+      newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
+        application.updateParticipationDivisionInfo(snapshot.participationDivisionInfoId, snapshot);
+      });
     }
 
-    application.validateApplicationType(user);
+    application.validateApplicationType(userValue);
     application.validateDivisionSuitability();
-    this.applicationRepository.saveApplication(application);
-    return { application };
+    this.applicationRepository.saveApplication(application.toValue());
+    return { application: application.toValue() };
   }
 
   /**

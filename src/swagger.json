@@ -2070,7 +2070,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormany"
+                  "$ref": "#/components/schemas/ResponseFormUpdateDoneApplicationRes"
                 }
               }
             },
@@ -5430,13 +5430,21 @@
           },
           "createPlayerSnapshotDto": {
             "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
+          },
+          "applicationType": {
+            "type": "string",
+            "enum": [
+              "SELF",
+              "PROXY"
+            ]
           }
         },
         "nullable": false,
         "required": [
           "competitionId",
           "participationDivisionIds",
-          "createPlayerSnapshotDto"
+          "createPlayerSnapshotDto",
+          "applicationType"
         ]
       },
       "IPlayerSnapshot.CreateDto": {
@@ -5459,7 +5467,7 @@
               "MALE",
               "FEMALE"
             ],
-            "description": "-player gender"
+            "description": "- player gender"
           },
           "birth": {
             "type": "string",
@@ -5578,14 +5586,23 @@
             ],
             "description": "- updated at."
           },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SELF",
+              "PROXY"
+            ],
+            "description": "- 본인신청과 대리신청을 구별하는 type.\n- SELF: 본인 신청\n- PROXY: 대리 신청"
+          },
           "status": {
             "type": "string",
             "enum": [
               "READY",
               "DONE",
-              "CANCELED"
+              "CANCELED",
+              "DELETED"
             ],
-            "description": "- status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소"
+            "description": "- status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소\n- DELETED: 삭제됨 (DB에는 남아있으나 유저에게 보여지지 않음)"
           },
           "competitionId": {
             "type": "string",
@@ -5613,6 +5630,7 @@
           "id",
           "createdAt",
           "updatedAt",
+          "type",
           "status",
           "competitionId",
           "userId",
@@ -5641,7 +5659,7 @@
               "MALE",
               "FEMALE"
             ],
-            "description": "-player gender"
+            "description": "- player gender"
           },
           "birth": {
             "type": "string",
@@ -5846,12 +5864,20 @@
           },
           "createPlayerSnapshotDto": {
             "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
+          },
+          "applicationType": {
+            "type": "string",
+            "enum": [
+              "SELF",
+              "PROXY"
+            ]
           }
         },
         "nullable": false,
         "required": [
           "participationDivisionIds",
-          "createPlayerSnapshotDto"
+          "createPlayerSnapshotDto",
+          "applicationType"
         ]
       },
       "ResponseFormUpdateReadyApplicationRes": {
@@ -5897,40 +5923,36 @@
           "createPlayerSnapshotDto": {
             "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
           },
-          "participationDivisionInfoUpdateDataList": {
+          "updateParticipationDivisionInfoDtos": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IParticipationDivisionInfoUpdateData"
+              "$ref": "#/components/schemas/IParticipationDivisionInfo.UpdateDto"
             },
             "minItems": 1,
             "description": "- Division info update data list."
           }
         },
-        "nullable": false,
-        "required": [
-          "createPlayerSnapshotDto",
-          "participationDivisionInfoUpdateDataList"
-        ]
+        "nullable": false
       },
-      "IParticipationDivisionInfoUpdateData": {
+      "IParticipationDivisionInfo.UpdateDto": {
         "type": "object",
         "properties": {
-          "participationDivisionInfoId": {
+          "id": {
             "type": "string",
-            "description": "수정하고자 하는 참가부문 정보 ID (식별자)"
+            "description": "- 수정하고자 하는 참가부문 정보 ID (식별자)."
           },
           "newParticipationDivisionId": {
             "type": "string",
-            "description": "수정하고자 하는 참가부문 ID"
+            "description": "- 새로 참가 하고자 하는 부문 ID."
           }
         },
         "nullable": false,
         "required": [
-          "participationDivisionInfoId",
+          "id",
           "newParticipationDivisionId"
         ]
       },
-      "ResponseFormany": {
+      "ResponseFormUpdateDoneApplicationRes": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -5945,13 +5967,26 @@
               200
             ]
           },
-          "result": {}
+          "result": {
+            "$ref": "#/components/schemas/UpdateDoneApplicationRes"
+          }
         },
         "nullable": false,
         "required": [
           "isSuccess",
-          "code",
-          "result"
+          "code"
+        ]
+      },
+      "UpdateDoneApplicationRes": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/IApplication"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "application"
         ]
       },
       "ResponseFormvoid": {

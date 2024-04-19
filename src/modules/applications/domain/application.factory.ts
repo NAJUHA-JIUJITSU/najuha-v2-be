@@ -6,21 +6,20 @@ import { IParticipationDivisionInfo } from './interface/participation-division-i
 import { IPlayerSnapshot } from './interface/player-snapshot.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ApplicationModel } from './model/application.model';
-import { ParticipationDivisionInfoModel } from './model/participation-division-info.model';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { ParticipationDivisionInfoSnapshotModel } from './model/participation-division-info-snapshot.model';
 import { PlayerSnapshotModel } from './model/player-snapshot.model';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { IParticipationDivisionInfoUpdateData } from './interface/participation-division-info-update-data.interface';
+import { ParticipationDivisionInfoModel } from './model/participation-division-info.model';
 
 @Injectable()
 export class ApplicationFactory {
-  createApplication(
+  createReadyApplication(
     userId: IUser['id'],
     competitionId: ICompetition['id'],
     divisions: IDivision[],
     applicationType: IApplication['type'],
     createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
-  ): ApplicationModel {
+  ) {
     const applicationId = ulid();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, createPlayerSnapshotDto);
     const participationDivisionInfos = this.createParticipationDivisionInfos(applicationId, divisions);
@@ -30,19 +29,19 @@ export class ApplicationFactory {
       userId,
       competitionId,
       playerSnapshots: [playerSnapshot],
-      participationDivisionInfos,
+      participationDivisionInfos: participationDivisionInfos.map((participationDivisionInfo) =>
+        participationDivisionInfo.toValue(),
+      ),
       status: 'READY',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
   }
 
-  createPlayerSnapshot(
-    applicationId: IApplication['id'],
-    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
-  ): PlayerSnapshotModel {
+  createPlayerSnapshot(applicationId: IApplication['id'], createPlayerSnapshotDto: IPlayerSnapshot.CreateDto) {
     return new PlayerSnapshotModel({
       id: ulid(),
+      applicationId,
       name: createPlayerSnapshotDto.name,
       gender: createPlayerSnapshotDto.gender,
       birth: createPlayerSnapshotDto.birth,
@@ -51,15 +50,11 @@ export class ApplicationFactory {
       network: createPlayerSnapshotDto.network,
       team: createPlayerSnapshotDto.team,
       masterName: createPlayerSnapshotDto.masterName,
-      applicationId,
       createdAt: new Date(),
     });
   }
 
-  createParticipationDivisionInfos(
-    applicationId: IApplication['id'],
-    divisions: IDivision[],
-  ): ParticipationDivisionInfoModel[] {
+  createParticipationDivisionInfos(applicationId: IApplication['id'], divisions: IDivision[]) {
     return divisions.map((division) => {
       const participationDivisionInfoId = ulid();
       const participationDivisionInfosSnapshot = this.createParticipationDivisionInfoSnapshot(
@@ -78,7 +73,7 @@ export class ApplicationFactory {
   createParticipationDivisionInfoSnapshot(
     participationDivisionInfoId: IParticipationDivisionInfo['id'],
     division: IDivision,
-  ): ParticipationDivisionInfoSnapshotModel {
+  ) {
     return new ParticipationDivisionInfoSnapshotModel({
       id: ulid(),
       participationDivisionId: division.id,
@@ -90,16 +85,15 @@ export class ApplicationFactory {
 
   createParticipationDivisionInfoSnapshots(
     divisions: IDivision[],
-    participationDivisionInfoUpdateDataList: IParticipationDivisionInfoUpdateData[],
-  ): ParticipationDivisionInfoSnapshotModel[] {
-    return participationDivisionInfoUpdateDataList.map((participationDivisionInfoUpdateData) => {
+    updateParticipationDivisionInfoDtos: IParticipationDivisionInfo.UpdateDto[],
+  ) {
+    return updateParticipationDivisionInfoDtos.map((updateParticipationDivisionInfoDto) => {
       const division = divisions.find(
-        (division) => division.id === participationDivisionInfoUpdateData.newParticipationDivisionId,
+        (division) => division.id === updateParticipationDivisionInfoDto.newParticipationDivisionId,
       );
       if (!division) throw new Error('Division not found');
-      return this.createParticipationDivisionInfoSnapshot(
-        participationDivisionInfoUpdateData.participationDivisionInfoId,
-        division,
+      return new ParticipationDivisionInfoSnapshotModel(
+        this.createParticipationDivisionInfoSnapshot(updateParticipationDivisionInfoDto.id, division),
       );
     });
   }

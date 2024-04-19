@@ -25,7 +25,6 @@ export class CompetitionRepository {
   ) {}
 
   // ----------------- Competition -----------------
-
   async createCompetition(dto: Partial<ICompetition>): Promise<ICompetition> {
     return await this.competitionRepository.save(dto);
   }

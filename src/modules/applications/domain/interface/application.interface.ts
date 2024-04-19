@@ -19,7 +19,7 @@ export interface IApplication {
   updatedAt: Date | string;
 
   /**
-   * - type.
+   * - 본인신청과 대리신청을 구별하는 type.
    * - SELF: 본인 신청
    * - PROXY: 대리 신청
    */

@@ -8,11 +8,8 @@ import { ICompetition } from '../competitions/domain/interface/competition.inter
 import { IApplication } from './domain/interface/application.interface';
 import { CompetitionEntity } from 'src/infrastructure/database/entity/competition/competition.entity';
 import { ParticipationDivisionInfoEntity } from 'src/infrastructure/database/entity/application/participation-division-info.entity';
-import { IParticipationDivisionInfo } from './domain/interface/participation-division-info.interface';
 import { PlayerSnapshotEntity } from 'src/infrastructure/database/entity/application/player-snapshot.entity';
 import { ParticipationDivisionInfoSnapshotEntity } from 'src/infrastructure/database/entity/application/participation-division-info-snapshot.entity';
-import { ParticipationDivisionInfoModel } from './domain/model/participation-division-info.model';
-import { PlayerSnapshotModel } from './domain/model/player-snapshot.model';
 import { ApplicationEntity } from 'src/infrastructure/database/entity/application/application.entity';
 
 @Injectable()
