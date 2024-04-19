@@ -16,7 +16,6 @@ import {
 } from './dtos';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
 import { ApplicationModel } from '../domain/model/application.model';
-import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -82,9 +81,8 @@ export class ApplicationsAppService {
    */
   async updateReadyApplication({
     userId,
-    createPlayerSnapshotDto,
+    updatePlayerSnapshotDto,
     applicationId,
-    applicationType,
     participationDivisionIds,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
     const userValue = await this.applicationRepository.getUser(userId);
@@ -116,8 +114,8 @@ export class ApplicationsAppService {
       userValue.id,
       competition.id,
       divisions,
-      applicationType,
-      createPlayerSnapshotDto,
+      oldApplication.getType(),
+      updatePlayerSnapshotDto,
     );
     newApplication.validateApplicationType(userValue);
     newApplication.validateDivisionSuitability();
@@ -134,10 +132,10 @@ export class ApplicationsAppService {
   async updateDoneApplication({
     userId,
     applicationId,
-    createPlayerSnapshotDto,
+    updatePlayerSnapshotDto,
     updateParticipationDivisionInfoDtos,
   }: UpdateDoneApplicationParam): Promise<UpdateDoneApplicationRet> {
-    if (!createPlayerSnapshotDto && !updateParticipationDivisionInfoDtos)
+    if (!updatePlayerSnapshotDto && !updateParticipationDivisionInfoDtos)
       throw new Error(
         'createPlayerSnapshotDto, participationDivisionInfoUpdateDataList 둘중에 하나는 필수다 이말이야.',
       ); // TODO: 에러 표준화
@@ -165,8 +163,8 @@ export class ApplicationsAppService {
     const competition = new CompetitionModel(competitionValue);
     competition.validateApplicationPeriod();
 
-    if (createPlayerSnapshotDto) {
-      const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(applicationId, createPlayerSnapshotDto);
+    if (updatePlayerSnapshotDto) {
+      const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(applicationId, updatePlayerSnapshotDto);
       application.addPlayerSnapshot(newPlayerSnapshot);
     }
 

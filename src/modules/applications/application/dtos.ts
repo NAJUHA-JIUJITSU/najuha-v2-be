@@ -32,14 +32,13 @@ export interface UpdateReadyApplicationParam {
    * @minItems 1
    */
   participationDivisionIds: IDivision['id'][];
-  applicationType: IApplication['type'];
-  createPlayerSnapshotDto: IPlayerSnapshot.CreateDto;
+  updatePlayerSnapshotDto: IPlayerSnapshot.CreateDto;
 }
 
 export interface UpdateDoneApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
-  createPlayerSnapshotDto?: IPlayerSnapshot.CreateDto;
+  updatePlayerSnapshotDto?: IPlayerSnapshot.CreateDto;
   /**
    * - Division info update data list.
    * @minItems 1

@@ -16,13 +16,10 @@ export interface CreateApplicationReqBody
   > {}
 
 export interface UpdateReadyApplicationReqBody
-  extends Pick<
-    UpdateReadyApplicationParam,
-    'participationDivisionIds' | 'createPlayerSnapshotDto' | 'applicationType'
-  > {}
+  extends Pick<UpdateReadyApplicationParam, 'participationDivisionIds' | 'updatePlayerSnapshotDto'> {}
 
 export interface UpdateDoneApplicationReqBody
-  extends Pick<UpdateDoneApplicationParam, 'createPlayerSnapshotDto' | 'updateParticipationDivisionInfoDtos'> {}
+  extends Pick<UpdateDoneApplicationParam, 'updatePlayerSnapshotDto' | 'updateParticipationDivisionInfoDtos'> {}
 
 // Presentation Layer Response Dto ---------------------------------------------------
 export interface CreateApplicationRes extends CreateApplicationRet {}

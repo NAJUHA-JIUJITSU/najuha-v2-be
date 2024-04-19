@@ -5862,22 +5862,22 @@
             "minItems": 1,
             "description": "- Division IDs to participate."
           },
-          "createPlayerSnapshotDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
-          },
           "applicationType": {
             "type": "string",
             "enum": [
               "SELF",
               "PROXY"
             ]
+          },
+          "updatePlayerSnapshotDto": {
+            "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
           }
         },
         "nullable": false,
         "required": [
           "participationDivisionIds",
-          "createPlayerSnapshotDto",
-          "applicationType"
+          "applicationType",
+          "updatePlayerSnapshotDto"
         ]
       },
       "ResponseFormUpdateReadyApplicationRes": {
@@ -5920,7 +5920,7 @@
       "UpdateDoneApplicationReqBody": {
         "type": "object",
         "properties": {
-          "createPlayerSnapshotDto": {
+          "updatePlayerSnapshotDto": {
             "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
           },
           "updateParticipationDivisionInfoDtos": {
