@@ -2,22 +2,34 @@ import { IDivision } from 'src/modules/competitions/domain/interface/division.in
 import { IApplication } from '../interface/application.interface';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
-import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
+import { ParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.model';
 import { ApplicationsErrorMap, BusinessException } from 'src/common/response/errorResponse';
+import { assert } from 'typia';
 
-export class ParticipationDivisionInfoModel {
+export class ParticipationDivisionInfo {
   private id: IParticipationDivisionInfo['id'];
   private createdAt: IParticipationDivisionInfo['createdAt'];
   private applicationId: IApplication['id'];
-  private participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[];
+  private participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
 
-  constructor(props: IParticipationDivisionInfo) {
-    this.id = props.id;
-    this.createdAt = props.createdAt;
-    this.applicationId = props.applicationId;
-    this.participationDivisionInfoSnapshots = props.participationDivisionInfoSnapshots.map(
-      (snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot),
+  constructor(value: IParticipationDivisionInfo.ModelValue.Base) {
+    assert<IParticipationDivisionInfo.ModelValue.Base>(value);
+    this.id = value.id;
+    this.createdAt = value.createdAt;
+    this.applicationId = value.applicationId;
+    this.participationDivisionInfoSnapshots = value.participationDivisionInfoSnapshots.map(
+      (snapshot) => new ParticipationDivisionInfoSnapshot(snapshot),
     );
+  }
+  toModelValue(): IParticipationDivisionInfo.ModelValue.Base {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      applicationId: this.applicationId,
+      participationDivisionInfoSnapshots: this.participationDivisionInfoSnapshots.map((snapshot) =>
+        snapshot.toModelValue(),
+      ),
+    };
   }
 
   getId() {
@@ -50,16 +62,7 @@ export class ParticipationDivisionInfoModel {
     }
   }
 
-  addParticipationDivisionInfoSnapshot(snapshot: ParticipationDivisionInfoSnapshotModel) {
+  addParticipationDivisionInfoSnapshot(snapshot: ParticipationDivisionInfoSnapshot) {
     this.participationDivisionInfoSnapshots.push(snapshot);
-  }
-
-  toValue(): IParticipationDivisionInfo {
-    return {
-      id: this.id,
-      createdAt: this.createdAt,
-      applicationId: this.applicationId,
-      participationDivisionInfoSnapshots: this.participationDivisionInfoSnapshots.map((snapshot) => snapshot.toValue()),
-    };
   }
 }

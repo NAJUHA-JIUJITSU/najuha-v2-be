@@ -14,12 +14,12 @@ export interface UpdateCompetitionParam {
 }
 
 export interface FindCompetitionsParam {
-  page: ICompetition.Query.Page;
-  limit?: ICompetition.Query.Limit;
-  dateFilter?: ICompetition.Query.DateFilter;
-  locationFilter?: ICompetition.Query.LocationFilter;
-  selectFilter?: ICompetition.Query.SelectFilter[];
-  sortOption?: ICompetition.Query.SortOption;
+  page: ICompetition.QueryOptions.Page;
+  limit?: ICompetition.QueryOptions.Limit;
+  dateFilter?: ICompetition.QueryOptions.DateFilter;
+  locationFilter?: ICompetition.QueryOptions.LocationFilter;
+  selectFilter?: ICompetition.QueryOptions.SelectFilter[];
+  sortOption?: ICompetition.QueryOptions.SortOption;
   status?: ICompetition['status'];
 }
 

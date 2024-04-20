@@ -98,6 +98,12 @@ export interface ICompetition {
 }
 
 export namespace ICompetition {
+  export namespace ModelValue {
+    // base
+    // active
+    // inactive
+  }
+
   export interface CreateDto
     extends Partial<
       Omit<
@@ -129,7 +135,7 @@ export namespace ICompetition {
         >
       > {}
 
-  export namespace Query {
+  export namespace QueryOptions {
     /** - 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다. */
     export type Page = number;
 
@@ -180,7 +186,7 @@ export namespace ICompetition {
     export type SortOption = '일자순' | '조회순' | '마감임박순';
   }
 
-  export namespace Read {
-    export interface FindCompetitions extends Omit<ICompetition, 'combinationDiscountSnapshots' | 'divisions'> {}
-  }
+  // export interface FindOneRet extends
+
+  export interface FindManyRet extends Omit<ICompetition, 'combinationDiscountSnapshots' | 'divisions'> {}
 }

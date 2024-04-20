@@ -69,5 +69,13 @@ export interface IPlayerSnapshot {
 }
 
 export namespace IPlayerSnapshot {
-  export interface CreateDto extends Omit<IPlayerSnapshot, 'id' | 'createdAt' | 'applicationId'> {}
+  export namespace ModelValue {
+    export interface Base extends IPlayerSnapshot {}
+  }
+
+  export interface CreateDto
+    extends Pick<
+      IPlayerSnapshot,
+      'name' | 'gender' | 'birth' | 'phoneNumber' | 'belt' | 'network' | 'team' | 'masterName'
+    > {}
 }

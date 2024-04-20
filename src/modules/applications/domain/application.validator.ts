@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ApplicationsErrorMap, BusinessException } from 'src/common/response/errorResponse';
 import { IPlayerSnapshot } from './interface/player-snapshot.interface';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
-import { PlayerSnapshotModel } from './model/player-snapshot.model';
+import { PlayerSnapshot } from './model/player-snapshot.model';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 
@@ -17,13 +17,13 @@ export class ApplicationValidator {
    *    - 3-2. validate division gender.
    */
   validateApplicationAbility(
-    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+    playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
     divisionIds: IDivision['id'][],
     competition: ICompetition,
     now: Date = new Date(),
   ): void {
     this.validateApplicationPeriod(competition.registrationStartDate, competition.registrationEndDate, now);
-    this.validateDivisionSuitable(createPlayerSnapshotDto, divisionIds, competition.divisions);
+    this.validateDivisionSuitable(playerSnapshotCreateDto, divisionIds, competition.divisions);
   }
 
   validateApplicationPeriod(
@@ -46,14 +46,14 @@ export class ApplicationValidator {
   }
 
   validateDivisionSuitable(
-    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+    playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
     particiationDivisionIds: IDivision['id'][],
     competitionDivisions: IDivision[],
   ) {
     const existDivisions = this.validateExistDivisions(particiationDivisionIds, competitionDivisions);
     existDivisions.forEach((division) => {
-      this.validateDivisionAge(createPlayerSnapshotDto.birth, division);
-      this.validateDivisionGender(createPlayerSnapshotDto.gender, division);
+      this.validateDivisionAge(playerSnapshotCreateDto.birth, division);
+      this.validateDivisionGender(playerSnapshotCreateDto.gender, division);
     });
   }
 
@@ -73,7 +73,7 @@ export class ApplicationValidator {
     return existDivisions;
   }
 
-  validateDivisionAge(playerBirth: PlayerSnapshotModel['birth'], division: IDivision): void {
+  validateDivisionAge(playerBirth: PlayerSnapshot['birth'], division: IDivision): void {
     const birthYear = +playerBirth.slice(0, 4);
     if (birthYear < +division.birthYearRangeStart || birthYear > +division.birthYearRangeEnd) {
       throw new BusinessException(
@@ -83,7 +83,7 @@ export class ApplicationValidator {
     }
   }
 
-  validateDivisionGender(playerGender: PlayerSnapshotModel['gender'], division: IDivision): void {
+  validateDivisionGender(playerGender: PlayerSnapshot['gender'], division: IDivision): void {
     if (division.gender === 'MIXED') return;
     if (playerGender !== division.gender) {
       throw new BusinessException(

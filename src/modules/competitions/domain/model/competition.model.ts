@@ -4,7 +4,6 @@ import { CombinationDiscountSnapshotModel } from './combination-discount-snapsho
 import { DivisionModel } from './division.model';
 import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.entity';
 import { IDivision } from '../interface/division.interface';
-import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
 
 export class CompetitionModel {
   public id: ICompetition['id'];
@@ -133,16 +132,16 @@ export class CompetitionModel {
   }
 
   // validateApplicationAbility(
-  //   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+  //   playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
   //   participationDivisionIds: IDivision['id'][],
   //   now = new Date(),
   // ) {
   //   this.validateApplicationPeriod(now);
-  //   this.validateDivisionSuitable(createPlayerSnapshotDto, participationDivisionIds);
+  //   this.validateDivisionSuitable(playerSnapshotCreateDto, participationDivisionIds);
   // }
 
   // private validateDivisionSuitable(
-  //   createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+  //   playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
   //   participationDivisionIds: IDivision['id'][],
   // ) {
   //   participationDivisionIds.forEach((divisionId) => {
@@ -153,8 +152,8 @@ export class CompetitionModel {
   //         `Missing DivisionId: ${divisionId}`,
   //       );
   //     // TODO: Implement validateAge, validateGender
-  //     // division.validateAge(createPlayerSnapshotDto.birth);
-  //     // division.validateGender(createPlayerSnapshotDto.gender);
+  //     // division.validateAge(playerSnapshotCreateDto.birth);
+  //     // division.validateGender(playerSnapshotCreateDto.gender);
   //   });
   // }
 

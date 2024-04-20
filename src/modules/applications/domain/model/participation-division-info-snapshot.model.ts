@@ -1,23 +1,25 @@
 import { IParticipationDivisionInfoSnapshot } from '../interface/participation-division-info-snapshot.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
+import { assert } from 'typia';
 
-export class ParticipationDivisionInfoSnapshotModel {
+export class ParticipationDivisionInfoSnapshot {
   public readonly id: IParticipationDivisionInfoSnapshot['id'];
   public readonly createdAt: IParticipationDivisionInfoSnapshot['createdAt'];
   public readonly participationDivisionInfoId: IParticipationDivisionInfo['id'];
   public readonly participationDivisionId: IDivision['id'];
   public readonly division: IDivision;
 
-  constructor(props: IParticipationDivisionInfoSnapshot) {
-    this.id = props.id;
-    this.createdAt = props.createdAt;
-    this.participationDivisionInfoId = props.participationDivisionInfoId;
-    this.participationDivisionId = props.participationDivisionId;
-    this.division = props.division;
+  constructor(value: IParticipationDivisionInfoSnapshot.ModelValue.Base) {
+    assert<IParticipationDivisionInfoSnapshot.ModelValue.Base>(value);
+    this.id = value.id;
+    this.createdAt = value.createdAt;
+    this.participationDivisionInfoId = value.participationDivisionInfoId;
+    this.participationDivisionId = value.participationDivisionId;
+    this.division = value.division;
   }
 
-  toValue(): IParticipationDivisionInfoSnapshot {
+  toModelValue(): IParticipationDivisionInfoSnapshot.ModelValue.Base {
     return {
       id: this.id,
       createdAt: this.createdAt,

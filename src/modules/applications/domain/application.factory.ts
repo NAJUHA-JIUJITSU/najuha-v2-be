@@ -5,11 +5,11 @@ import { ulid } from 'ulid';
 import { IParticipationDivisionInfo } from './interface/participation-division-info.interface';
 import { IPlayerSnapshot } from './interface/player-snapshot.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { ApplicationModel } from './model/application.model';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { ParticipationDivisionInfoSnapshotModel } from './model/participation-division-info-snapshot.model';
-import { PlayerSnapshotModel } from './model/player-snapshot.model';
-import { ParticipationDivisionInfoModel } from './model/participation-division-info.model';
+import { ParticipationDivisionInfoSnapshot } from './model/participation-division-info-snapshot.model';
+import { PlayerSnapshot } from './model/player-snapshot.model';
+import { ParticipationDivisionInfo } from './model/participation-division-info.model';
+import { ReadyApplication } from './model/ready-application.model';
 
 @Injectable()
 export class ApplicationFactory {
@@ -18,19 +18,19 @@ export class ApplicationFactory {
     competitionId: ICompetition['id'],
     divisions: IDivision[],
     applicationType: IApplication['type'],
-    createPlayerSnapshotDto: IPlayerSnapshot.CreateDto,
+    playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
   ) {
     const applicationId = ulid();
-    const playerSnapshot = this.createPlayerSnapshot(applicationId, createPlayerSnapshotDto);
+    const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
     const participationDivisionInfos = this.createParticipationDivisionInfos(applicationId, divisions);
-    return new ApplicationModel({
+    return new ReadyApplication({
       id: applicationId,
       type: applicationType,
       userId,
       competitionId,
       playerSnapshots: [playerSnapshot],
       participationDivisionInfos: participationDivisionInfos.map((participationDivisionInfo) =>
-        participationDivisionInfo.toValue(),
+        participationDivisionInfo.toModelValue(),
       ),
       status: 'READY',
       createdAt: new Date(),
@@ -38,18 +38,18 @@ export class ApplicationFactory {
     });
   }
 
-  createPlayerSnapshot(applicationId: IApplication['id'], createPlayerSnapshotDto: IPlayerSnapshot.CreateDto) {
-    return new PlayerSnapshotModel({
+  createPlayerSnapshot(applicationId: IApplication['id'], playerSnapshotCreateDto: IPlayerSnapshot.CreateDto) {
+    return new PlayerSnapshot({
       id: ulid(),
       applicationId,
-      name: createPlayerSnapshotDto.name,
-      gender: createPlayerSnapshotDto.gender,
-      birth: createPlayerSnapshotDto.birth,
-      phoneNumber: createPlayerSnapshotDto.phoneNumber,
-      belt: createPlayerSnapshotDto.belt,
-      network: createPlayerSnapshotDto.network,
-      team: createPlayerSnapshotDto.team,
-      masterName: createPlayerSnapshotDto.masterName,
+      name: playerSnapshotCreateDto.name,
+      gender: playerSnapshotCreateDto.gender,
+      birth: playerSnapshotCreateDto.birth,
+      phoneNumber: playerSnapshotCreateDto.phoneNumber,
+      belt: playerSnapshotCreateDto.belt,
+      network: playerSnapshotCreateDto.network,
+      team: playerSnapshotCreateDto.team,
+      masterName: playerSnapshotCreateDto.masterName,
       createdAt: new Date(),
     });
   }
@@ -61,7 +61,7 @@ export class ApplicationFactory {
         participationDivisionInfoId,
         division,
       );
-      return new ParticipationDivisionInfoModel({
+      return new ParticipationDivisionInfo({
         id: participationDivisionInfoId,
         applicationId,
         participationDivisionInfoSnapshots: [participationDivisionInfosSnapshot],
@@ -74,7 +74,7 @@ export class ApplicationFactory {
     participationDivisionInfoId: IParticipationDivisionInfo['id'],
     division: IDivision,
   ) {
-    return new ParticipationDivisionInfoSnapshotModel({
+    return new ParticipationDivisionInfoSnapshot({
       id: ulid(),
       participationDivisionId: division.id,
       division,
@@ -85,14 +85,14 @@ export class ApplicationFactory {
 
   createParticipationDivisionInfoSnapshots(
     divisions: IDivision[],
-    updateParticipationDivisionInfoDtos: IParticipationDivisionInfo.UpdateDto[],
+    participationDivisionInfoUpdateDtos: IParticipationDivisionInfo.UpdateDto[],
   ) {
-    return updateParticipationDivisionInfoDtos.map((updateParticipationDivisionInfoDto) => {
+    return participationDivisionInfoUpdateDtos.map((updateParticipationDivisionInfoDto) => {
       const division = divisions.find(
         (division) => division.id === updateParticipationDivisionInfoDto.newParticipationDivisionId,
       );
       if (!division) throw new Error('Division not found');
-      return new ParticipationDivisionInfoSnapshotModel(
+      return new ParticipationDivisionInfoSnapshot(
         this.createParticipationDivisionInfoSnapshot(updateParticipationDivisionInfoDto.id, division),
       );
     });

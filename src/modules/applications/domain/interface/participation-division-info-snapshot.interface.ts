@@ -23,3 +23,9 @@ export interface IParticipationDivisionInfoSnapshot {
 
   division: IDivision;
 }
+
+export namespace IParticipationDivisionInfoSnapshot {
+  export namespace ModelValue {
+    export interface Base extends IParticipationDivisionInfoSnapshot {}
+  }
+}

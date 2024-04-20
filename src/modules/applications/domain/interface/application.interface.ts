@@ -40,14 +40,23 @@ export interface IApplication {
   /** - user id. */
   userId: IUser['id'];
 
+  /**
+   * - player snapshots.
+   * @minItems 1
+   */
   playerSnapshots: IPlayerSnapshot[];
 
+  /**
+   * - participation division infos.
+   * @minItems 1
+   */
   participationDivisionInfos: IParticipationDivisionInfo[];
 }
 
 export namespace IApplication {
-  export interface EntityData extends Omit<IApplication, 'playerSnapshots' | 'participationDivisionInfos'> {
-    playerSnapshots?: IPlayerSnapshot[];
-    participationDivisionInfos?: IParticipationDivisionInfo[];
+  export namespace ModelValue {
+    export interface Base extends IApplication {}
+    export interface Ready extends IApplication {}
+    export interface Done extends IApplication {}
   }
 }

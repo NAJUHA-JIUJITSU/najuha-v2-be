@@ -17,10 +17,18 @@ export interface IParticipationDivisionInfo {
   /** - application id. */
   applicationId: IApplication['id'];
 
+  /**
+   * - 참가 부문 ID.
+   * @minimum 1
+   */
   participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshot[];
 }
 
 export namespace IParticipationDivisionInfo {
+  export namespace ModelValue {
+    export interface Base extends IParticipationDivisionInfo {}
+  }
+
   export interface UpdateDto {
     /** - 수정하고자 하는 참가부문 정보 ID (식별자). */
     id: IParticipationDivisionInfo['id'];

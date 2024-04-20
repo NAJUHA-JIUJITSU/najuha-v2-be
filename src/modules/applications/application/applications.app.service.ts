@@ -15,7 +15,8 @@ import {
   UpdateReadyApplicationRet,
 } from './dtos';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
-import { ApplicationModel } from '../domain/model/application.model';
+import { DoneApplication } from '../domain/model/done-applicatioin.model';
+import { ReadyApplication } from '../domain/model/ready-application.model';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -28,10 +29,10 @@ export class ApplicationsAppService {
   /** Create application. */
   async createApplication({
     userId,
-    createPlayerSnapshotDto,
+    competitionId,
     participationDivisionIds,
     applicationType,
-    competitionId,
+    playerSnapshotCreateDto,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = await this.applicationRepository.getUser(userId);
     const competitionValue = await this.applicationRepository.getCompetition({
@@ -47,12 +48,12 @@ export class ApplicationsAppService {
       competition.id,
       divisions,
       applicationType,
-      createPlayerSnapshotDto,
+      playerSnapshotCreateDto,
     );
     application.validateApplicationType(user);
     application.validateDivisionSuitability();
 
-    const applicationValue = application.toValue();
+    const applicationValue = application.toModelValue();
     await this.applicationRepository.saveApplication(applicationValue);
     return { application: applicationValue };
   }
@@ -81,7 +82,7 @@ export class ApplicationsAppService {
    */
   async updateReadyApplication({
     userId,
-    updatePlayerSnapshotDto,
+    playerSnapshotUpdateDto,
     applicationId,
     participationDivisionIds,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
@@ -96,7 +97,7 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const oldApplication = new ApplicationModel(oldApplicationValue);
+    const oldApplication = new ReadyApplication(oldApplicationValue);
     const competitionValue = await this.applicationRepository.getCompetition({
       where: { id: oldApplication.getCompetitionId() },
       relations: [
@@ -115,7 +116,7 @@ export class ApplicationsAppService {
       competition.id,
       divisions,
       oldApplication.getType(),
-      updatePlayerSnapshotDto,
+      playerSnapshotUpdateDto,
     );
     newApplication.validateApplicationType(userValue);
     newApplication.validateDivisionSuitability();
@@ -123,21 +124,21 @@ export class ApplicationsAppService {
     oldApplication.updateStatusToDeleted();
 
     // TODO: Transaction
-    await this.applicationRepository.saveApplication(oldApplication.toValue());
-    await this.applicationRepository.saveApplication(newApplication.toValue());
-    return { application: newApplication.toValue() };
+    await this.applicationRepository.saveApplication(oldApplication.toModelValue());
+    await this.applicationRepository.saveApplication(newApplication.toModelValue());
+    return { application: newApplication.toModelValue() };
   }
 
   /** Update done application. */
   async updateDoneApplication({
     userId,
     applicationId,
-    updatePlayerSnapshotDto,
-    updateParticipationDivisionInfoDtos,
+    playerSnapshotUpdateDto,
+    participationDivisionInfoUpdateDtos,
   }: UpdateDoneApplicationParam): Promise<UpdateDoneApplicationRet> {
-    if (!updatePlayerSnapshotDto && !updateParticipationDivisionInfoDtos)
+    if (!playerSnapshotUpdateDto && !participationDivisionInfoUpdateDtos)
       throw new Error(
-        'createPlayerSnapshotDto, participationDivisionInfoUpdateDataList 둘중에 하나는 필수다 이말이야.',
+        'playerSnapshotCreateDto, participationDivisionInfoUpdateDataList 둘중에 하나는 필수다 이말이야.',
       ); // TODO: 에러 표준화
     const userValue = await this.applicationRepository.getUser(userId);
     const applicationValue = await this.applicationRepository.getApplication({
@@ -150,7 +151,7 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const application = new ApplicationModel(applicationValue);
+    const application = new DoneApplication(applicationValue);
     const competitionValue = await this.applicationRepository.getCompetition({
       where: { id: application.getCompetitionId() },
       relations: [
@@ -163,17 +164,17 @@ export class ApplicationsAppService {
     const competition = new CompetitionModel(competitionValue);
     competition.validateApplicationPeriod();
 
-    if (updatePlayerSnapshotDto) {
-      const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(applicationId, updatePlayerSnapshotDto);
+    if (playerSnapshotUpdateDto) {
+      const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(applicationId, playerSnapshotUpdateDto);
       application.addPlayerSnapshot(newPlayerSnapshot);
     }
 
-    if (updateParticipationDivisionInfoDtos) {
-      const participationDivisionIds = updateParticipationDivisionInfoDtos.map((dto) => dto.newParticipationDivisionId);
+    if (participationDivisionInfoUpdateDtos) {
+      const participationDivisionIds = participationDivisionInfoUpdateDtos.map((dto) => dto.newParticipationDivisionId);
       const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
       const newParticipationDivisionInfoSnapshots = this.applicationFactory.createParticipationDivisionInfoSnapshots(
         divisions,
-        updateParticipationDivisionInfoDtos,
+        participationDivisionInfoUpdateDtos,
       );
       newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
         application.updateParticipationDivisionInfo(snapshot.participationDivisionInfoId, snapshot);
@@ -182,8 +183,8 @@ export class ApplicationsAppService {
 
     application.validateApplicationType(userValue);
     application.validateDivisionSuitability();
-    this.applicationRepository.saveApplication(application.toValue());
-    return { application: application.toValue() };
+    this.applicationRepository.saveApplication(application.toModelValue());
+    return { application: application.toModelValue() };
   }
 
   /**

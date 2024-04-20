@@ -20,7 +20,6 @@ import {
 } from './dtos';
 import { CompetitionModel } from '../domain/model/competition.model';
 import { ulid } from 'ulid';
-import { ICompetition } from '../domain/interface/competition.interface';
 
 @Injectable()
 export class CompetitionsAppService {
