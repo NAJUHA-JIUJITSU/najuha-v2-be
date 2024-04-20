@@ -14,7 +14,6 @@ import {
   UpdateReadyApplicationReqBody,
   UpdateReadyApplicationRes,
 } from './dtos';
-import { Type } from 'class-transformer';
 
 @Controller('user/applications')
 export class UserApplicationsController {

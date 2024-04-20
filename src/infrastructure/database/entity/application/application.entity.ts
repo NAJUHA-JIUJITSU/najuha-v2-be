@@ -49,6 +49,4 @@ export class ApplicationEntity {
   @ManyToOne(() => UserEntity, (user) => user.applications)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
-
-  updateReadyApplication(): void {}
 }
