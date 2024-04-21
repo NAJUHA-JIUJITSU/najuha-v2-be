@@ -17,7 +17,8 @@ export class KakaoStrategy implements SnsAuthStrategy {
       const kakaoUserData = await this.getUserData(snsAccessToken);
 
       return this.convertUserDataToCreateUserReqDto(kakaoUserData);
-    } catch (e) {
+    } catch (e: any) {
+      // TODO: any 타입 수정 필요
       throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL, e.response.data);
     }
   }

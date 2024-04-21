@@ -8,51 +8,51 @@ import { IDivision } from 'src/modules/competitions/domain/interface/division.in
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
 export class DivisionEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: IDivision['id'];
+  id!: IDivision['id'];
 
   @Column('varchar', { length: 64 })
-  category: IDivision['category'];
+  category!: IDivision['category'];
 
   @Column('varchar', { length: 16 })
-  uniform: IDivision['uniform'];
+  uniform!: IDivision['uniform'];
 
   @Column('varchar', { length: 16 })
-  gender: IDivision['gender'];
+  gender!: IDivision['gender'];
 
   @Column('varchar', { length: 64 })
-  belt: IDivision['belt'];
+  belt!: IDivision['belt'];
 
   @Column('varchar', { length: 64 })
-  weight: IDivision['weight'];
+  weight!: IDivision['weight'];
 
   @Column('varchar', { length: 4 })
-  birthYearRangeStart: IDivision['birthYearRangeStart'];
+  birthYearRangeStart!: IDivision['birthYearRangeStart'];
 
   @Column('varchar', { length: 4 })
-  birthYearRangeEnd: IDivision['birthYearRangeEnd'];
+  birthYearRangeEnd!: IDivision['birthYearRangeEnd'];
 
   @Column('varchar', { length: 16, default: 'ACTIVE' })
-  status: IDivision['status'];
+  status!: IDivision['status'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IDivision['createdAt'];
+  createdAt!: IDivision['createdAt'];
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: IDivision['updatedAt'];
+  updatedAt!: IDivision['updatedAt'];
 
   @Column()
-  competitionId: CompetitionEntity['id'];
+  competitionId!: CompetitionEntity['id'];
 
   @ManyToOne(() => CompetitionEntity, (competition) => competition.divisions)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionEntity;
+  competition!: CompetitionEntity;
 
   @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
-  priceSnapshots: PriceSnapshotEntity[];
+  priceSnapshots!: PriceSnapshotEntity[];
 
   @OneToMany(
     () => ParticipationDivisionInfoSnapshotEntity,
     (participationDivisionInfoSnapshot) => participationDivisionInfoSnapshot.division,
   )
-  participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotEntity[];
+  participationDivisionInfoSnapshots!: ParticipationDivisionInfoSnapshotEntity[];
 }

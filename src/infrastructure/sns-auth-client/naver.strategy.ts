@@ -17,7 +17,8 @@ export class NaverStrategy implements SnsAuthStrategy {
       const naverUserData = await this.getUserData(snsAccessToken);
 
       return this.convertUserDataToCreateUserReqDto(naverUserData);
-    } catch (e) {
+    } catch (e: any) {
+      // TODO: any 타입 수정 필요
       throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL, e.response.data);
     }
   }

@@ -7,9 +7,6 @@ import { IUser } from '../users/domain/interface/user.interface';
 import { ICompetition } from '../competitions/domain/interface/competition.interface';
 import { IApplication } from './domain/interface/application.interface';
 import { CompetitionEntity } from 'src/infrastructure/database/entity/competition/competition.entity';
-import { ParticipationDivisionInfoEntity } from 'src/infrastructure/database/entity/application/participation-division-info.entity';
-import { PlayerSnapshotEntity } from 'src/infrastructure/database/entity/application/player-snapshot.entity';
-import { ParticipationDivisionInfoSnapshotEntity } from 'src/infrastructure/database/entity/application/participation-division-info-snapshot.entity';
 import { ApplicationEntity } from 'src/infrastructure/database/entity/application/application.entity';
 
 @Injectable()
@@ -21,12 +18,6 @@ export class ApplicationRepository {
     private readonly applicationRepository: Repository<ApplicationEntity>,
     @InjectRepository(CompetitionEntity)
     private readonly competitionRepository: Repository<CompetitionEntity>,
-    @InjectRepository(ParticipationDivisionInfoEntity)
-    private readonly participationDivisionInfoRepository: Repository<ParticipationDivisionInfoEntity>,
-    @InjectRepository(PlayerSnapshotEntity)
-    private readonly playerSnapshotRepository: Repository<PlayerSnapshotEntity>,
-    @InjectRepository(ParticipationDivisionInfoSnapshotEntity)
-    private readonly participationDivisionInfoSnapshotRepository: Repository<ParticipationDivisionInfoSnapshotEntity>,
   ) {}
 
   // ----------------- User -----------------

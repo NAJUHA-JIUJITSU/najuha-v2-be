@@ -6,14 +6,14 @@ import { IParticipationDivisionInfoSnapshot } from 'src/modules/applications/dom
 @Entity('participation_divsion_info_snapshot')
 export class ParticipationDivisionInfoSnapshotEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: IParticipationDivisionInfoSnapshot['id'];
+  id!: IParticipationDivisionInfoSnapshot['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IParticipationDivisionInfoSnapshot['createdAt'];
+  createdAt!: IParticipationDivisionInfoSnapshot['createdAt'];
 
   /** - participation division id. */
   @Column()
-  participationDivisionInfoId: ParticipationDivisionInfoEntity['id'];
+  participationDivisionInfoId!: ParticipationDivisionInfoEntity['id'];
 
   /** - participation division */
   @ManyToOne(
@@ -21,14 +21,14 @@ export class ParticipationDivisionInfoSnapshotEntity {
     (participationDivisionInfo) => participationDivisionInfo.participationDivisionInfoSnapshots,
   )
   @JoinColumn({ name: 'participationDivisionInfoId' })
-  participationDivisionInfo: ParticipationDivisionInfoEntity;
+  participationDivisionInfo!: ParticipationDivisionInfoEntity;
 
   /** - division id. */
   @Column()
-  participationDivisionId: DivisionEntity['id'];
+  participationDivisionId!: DivisionEntity['id'];
 
   /** - division */
   @ManyToOne(() => DivisionEntity, (division) => division.participationDivisionInfoSnapshots)
   @JoinColumn({ name: 'participationDivisionId' })
-  division: DivisionEntity;
+  division!: DivisionEntity;
 }

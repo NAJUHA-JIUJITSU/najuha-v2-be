@@ -8,28 +8,28 @@ import { IApplication } from 'src/modules/applications/domain/interface/applicat
 @Entity('participation_division_info')
 export class ParticipationDivisionInfoEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: IParticipationDivisionInfo['id'];
+  id!: IParticipationDivisionInfo['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IParticipationDivisionInfo['createdAt'];
+  createdAt!: IParticipationDivisionInfo['createdAt'];
 
   @Column()
-  applicationId: IApplication['id'];
+  applicationId!: IApplication['id'];
 
   @ManyToOne(() => ApplicationEntity, (application) => application.participationDivisionInfos)
   @JoinColumn({ name: 'applicationId' })
-  application: ApplicationEntity;
+  application!: ApplicationEntity;
 
   @OneToMany(
     () => ParticipationDivisionInfoSnapshotEntity,
     (participationDivisionInfoSnapshot) => participationDivisionInfoSnapshot.participationDivisionInfo,
     { cascade: true },
   )
-  participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotEntity[];
+  participationDivisionInfoSnapshots!: ParticipationDivisionInfoSnapshotEntity[];
 
   @OneToOne(
     () => ParticipationDivisionInfoPaymentEntity,
     (participationDivisionInfoPayment) => participationDivisionInfoPayment.participationDivisionInfo,
   )
-  participationDivisionInfoPayment: ParticipationDivisionInfoPaymentEntity;
+  participationDivisionInfoPayment!: ParticipationDivisionInfoPaymentEntity;
 }

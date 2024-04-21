@@ -53,7 +53,8 @@ export class RoleGuard implements CanActivate {
       return await this.jwtService.verifyAsync(accessToken, {
         secret: appEnv.jwtAccessTokenSecret,
       });
-    } catch (e) {
+    } catch (e: any) {
+      // TODO: any 타입 수정 필요
       throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_UNAUTHORIZED, e.message);
     }
   }

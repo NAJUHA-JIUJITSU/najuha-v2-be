@@ -6,53 +6,53 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 @Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  id: IUser['id'];
+  id!: IUser['id'];
 
   @Column('varchar', { length: 16, default: 'TEMPORARY_USER' })
-  role: IUser['role'];
+  role!: IUser['role'];
 
   @Column('varchar', { length: 16 })
-  snsAuthProvider: IUser['snsAuthProvider'];
+  snsAuthProvider!: IUser['snsAuthProvider'];
 
   @Column('varchar', { length: 256 })
-  snsId: IUser['snsId'];
+  snsId!: IUser['snsId'];
 
   @Column('varchar', { length: 320 })
-  email: IUser['email'];
+  email!: IUser['email'];
 
   @Column('varchar', { length: 256, nullable: true })
-  name: IUser['name'];
+  name!: IUser['name'];
 
   @Column('varchar', { length: 16, nullable: true })
-  phoneNumber: IUser['phoneNumber'];
+  phoneNumber!: IUser['phoneNumber'];
 
   @Column('varchar', { length: 64, nullable: true, unique: true })
-  nickname: IUser['nickname'];
+  nickname!: IUser['nickname'];
 
   @Column('varchar', { length: 16, nullable: true })
-  gender: IUser['gender'];
+  gender!: IUser['gender'];
 
   @Column('varchar', { length: 8, nullable: true })
-  birth: IUser['birth'];
+  birth!: IUser['birth'];
 
   @Column('varchar', { length: 16, nullable: true })
-  belt: IUser['belt'];
+  belt!: IUser['belt'];
 
   @Column('varchar', { length: 128, nullable: true })
-  profileImageUrlKey: IUser['profileImageUrlKey'];
+  profileImageUrlKey!: IUser['profileImageUrlKey'];
 
   @Column('varchar', { length: 16, default: 'ACTIVE' })
-  status: IUser['status'];
+  status!: IUser['status'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IUser['createdAt'];
+  createdAt!: IUser['createdAt'];
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: IUser['updatedAt'];
+  updatedAt!: IUser['updatedAt'];
 
   @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user)
-  policyConsents: PolicyConsentEntity[];
+  policyConsents!: PolicyConsentEntity[];
 
   @OneToMany(() => ApplicationEntity, (application) => application.user)
-  applications: ApplicationEntity[];
+  applications!: ApplicationEntity[];
 }

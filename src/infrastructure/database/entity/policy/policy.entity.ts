@@ -5,26 +5,26 @@ import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 @Entity('policy')
 export class PolicyEntity {
   @PrimaryGeneratedColumn()
-  id: IPolicy['id'];
+  id!: IPolicy['id'];
 
   @Column('int', { default: 1 })
-  version: IPolicy['version'];
+  version!: IPolicy['version'];
 
   @Column('varchar', { length: 64 })
-  type: IPolicy['type'];
+  type!: IPolicy['type'];
 
   @Column('boolean', { default: false })
-  isMandatory: IPolicy['isMandatory'];
+  isMandatory!: IPolicy['isMandatory'];
 
   @Column('varchar', { length: 128 })
-  title: IPolicy['title'];
+  title!: IPolicy['title'];
 
   @Column('text')
-  content: IPolicy['content'];
+  content!: IPolicy['content'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IPolicy['createdAt'];
+  createdAt!: IPolicy['createdAt'];
 
   @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.policy)
-  policyConsents: PolicyConsentEntity[];
+  policyConsents!: PolicyConsentEntity[];
 }

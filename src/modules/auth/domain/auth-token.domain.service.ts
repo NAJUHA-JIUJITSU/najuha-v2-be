@@ -57,7 +57,8 @@ export class AuthTokenDomainService {
       payload = this.jwtService.verify(refreshToken, {
         secret: appEnv.jwtRefreshTokenSecret,
       });
-    } catch (e) {
+    } catch (e: any) {
+      // TODO: any 타입 수정 필요
       if (payload?.userId) await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
       throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
     }

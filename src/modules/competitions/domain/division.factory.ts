@@ -8,7 +8,7 @@ import { DivisionModel } from './model/division.model';
 @Injectable()
 export class DivisionFactory {
   createDivisions(competitionId: ICompetition['id'], divisionPacks: IDivisionPack[]): DivisionModel[] {
-    const unpackedDivisions = divisionPacks.reduce((acc, divisionPack) => {
+    const unpackedDivisions = divisionPacks.reduce<IDivision[]>((acc, divisionPack) => {
       return [...acc, ...this.unpack(competitionId, divisionPack)];
     }, []);
     return unpackedDivisions.map((division) => new DivisionModel(division));

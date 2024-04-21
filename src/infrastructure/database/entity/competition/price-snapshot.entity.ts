@@ -6,24 +6,24 @@ import { ParticipationDivisionInfoPaymentEntity } from '../application/participa
 @Entity('price_snapshot')
 export class PriceSnapshotEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: IPriceSnapshot['id'];
+  id!: IPriceSnapshot['id'];
 
   @Column('int')
-  price: IPriceSnapshot['price'];
+  price!: IPriceSnapshot['price'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IPriceSnapshot['createdAt'];
+  createdAt!: IPriceSnapshot['createdAt'];
 
   @Column()
-  divisionId: DivisionEntity['id'];
+  divisionId!: DivisionEntity['id'];
 
   @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)
   @JoinColumn({ name: 'divisionId' })
-  division: DivisionEntity;
+  division!: DivisionEntity;
 
   @OneToMany(
     () => ParticipationDivisionInfoPaymentEntity,
     (participationDivisionInfoPayment) => participationDivisionInfoPayment.priceSnapshot,
   )
-  participationDivisionInfoPayments: ParticipationDivisionInfoPaymentEntity[];
+  participationDivisionInfoPayments!: ParticipationDivisionInfoPaymentEntity[];
 }

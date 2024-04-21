@@ -8,27 +8,27 @@ import { ParticipationDivisionInfoEntity } from './participation-division-info.e
 @Entity('participation_division_info_payment')
 export class ParticipationDivisionInfoPaymentEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: IParticipationDivisionInfoPayment['id'];
+  id!: IParticipationDivisionInfoPayment['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IParticipationDivisionInfoPayment['createdAt'];
+  createdAt!: IParticipationDivisionInfoPayment['createdAt'];
 
   @Column()
-  divisionId: DivisionEntity['id'];
+  divisionId!: DivisionEntity['id'];
 
   @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)
   @JoinColumn({ name: 'divisionId' })
-  division: DivisionEntity;
+  division!: DivisionEntity;
 
   @Column()
-  priceSnapshotId: IParticipationDivisionInfoPayment['priceSnapshotId'];
+  priceSnapshotId!: IParticipationDivisionInfoPayment['priceSnapshotId'];
 
   @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.participationDivisionInfoPayments)
   @JoinColumn({ name: 'priceSnapshotId' })
-  priceSnapshot: PriceSnapshotEntity;
+  priceSnapshot!: PriceSnapshotEntity;
 
   @Column()
-  participationDivisionInfoId: IParticipationDivisionInfo['id'];
+  participationDivisionInfoId!: IParticipationDivisionInfo['id'];
 
   @OneToOne(
     () => ParticipationDivisionInfoEntity,
@@ -36,5 +36,5 @@ export class ParticipationDivisionInfoPaymentEntity {
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'participationDivisionInfoId' })
-  participationDivisionInfo: ParticipationDivisionInfoEntity;
+  participationDivisionInfo!: ParticipationDivisionInfoEntity;
 }

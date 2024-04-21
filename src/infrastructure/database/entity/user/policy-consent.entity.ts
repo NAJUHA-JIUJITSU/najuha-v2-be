@@ -6,25 +6,25 @@ import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-con
 @Entity('policy_consent')
 export class PolicyConsentEntity {
   @PrimaryGeneratedColumn()
-  id: IPolicyConsent['id'];
+  id!: IPolicyConsent['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IPolicyConsent['createdAt'];
+  createdAt!: IPolicyConsent['createdAt'];
 
   @Column()
-  userId: UserEntity['id'];
+  userId!: UserEntity['id'];
 
   /** - user */
   @ManyToOne(() => UserEntity, (user) => user.policyConsents)
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user!: UserEntity;
 
   /** - policyId. */
   @Column()
-  policyId: PolicyEntity['id'];
+  policyId!: PolicyEntity['id'];
 
   /** - policy */
   @ManyToOne(() => PolicyEntity, (policy) => policy.policyConsents)
   @JoinColumn({ name: 'policyId' })
-  policy: PolicyEntity;
+  policy!: PolicyEntity;
 }

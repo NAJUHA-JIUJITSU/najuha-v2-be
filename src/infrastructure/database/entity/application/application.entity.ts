@@ -9,44 +9,44 @@ import { IApplication } from 'src/modules/applications/domain/interface/applicat
 @Entity('application')
 export class ApplicationEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: IApplication['id'];
+  id!: IApplication['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IApplication['createdAt'];
+  createdAt!: IApplication['createdAt'];
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: IApplication['updatedAt'];
+  updatedAt!: IApplication['updatedAt'];
 
   @Column('varchar', { length: 16, default: 'SELF' })
-  type: IApplication['type'];
+  type!: IApplication['type'];
 
   @Column('varchar', { length: 16, default: 'READY' })
-  status: IApplication['status'];
+  status!: IApplication['status'];
 
   @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application, { cascade: true })
-  playerSnapshots: PlayerSnapshotEntity[];
+  playerSnapshots!: PlayerSnapshotEntity[];
 
   @OneToMany(() => PaymentSnapshotEntity, (paymentSnapshot) => paymentSnapshot.application)
-  paymentSnapshots: PaymentSnapshotEntity[];
+  paymentSnapshots!: PaymentSnapshotEntity[];
 
   @OneToMany(
     () => ParticipationDivisionInfoEntity,
     (participationDivisionInfo) => participationDivisionInfo.application,
     { cascade: true },
   )
-  participationDivisionInfos: ParticipationDivisionInfoEntity[];
+  participationDivisionInfos!: ParticipationDivisionInfoEntity[];
 
   @Column()
-  competitionId: CompetitionEntity['id'];
+  competitionId!: CompetitionEntity['id'];
 
   @ManyToOne(() => CompetitionEntity, (competition) => competition.applications)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionEntity;
+  competition!: CompetitionEntity;
 
   @Column()
-  userId: UserEntity['id'];
+  userId!: UserEntity['id'];
 
   @ManyToOne(() => UserEntity, (user) => user.applications)
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user!: UserEntity;
 }

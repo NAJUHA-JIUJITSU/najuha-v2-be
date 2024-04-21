@@ -5,24 +5,24 @@ import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/inte
 @Entity('earlybird_discount_snapshot')
 export class EarlybirdDiscountSnapshotEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: IEarlybirdDiscountSnapshot['id'];
+  id!: IEarlybirdDiscountSnapshot['id'];
 
   @Column('timestamptz')
-  earlybirdStartDate: IEarlybirdDiscountSnapshot['earlybirdStartDate'];
+  earlybirdStartDate!: IEarlybirdDiscountSnapshot['earlybirdStartDate'];
 
   @Column('timestamptz')
-  earlybirdEndDate: IEarlybirdDiscountSnapshot['earlybirdEndDate'];
+  earlybirdEndDate!: IEarlybirdDiscountSnapshot['earlybirdEndDate'];
 
   @Column('int')
-  discountAmount: IEarlybirdDiscountSnapshot['discountAmount'];
+  discountAmount!: IEarlybirdDiscountSnapshot['discountAmount'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: IEarlybirdDiscountSnapshot['createdAt'];
+  createdAt!: IEarlybirdDiscountSnapshot['createdAt'];
 
   @Column()
-  competitionId: CompetitionEntity['id'];
+  competitionId!: CompetitionEntity['id'];
 
   @ManyToOne(() => CompetitionEntity, (competition) => competition.earlybirdDiscountSnapshots)
   @JoinColumn({ name: 'competitionId' })
-  competition: CompetitionEntity;
+  competition!: CompetitionEntity;
 }

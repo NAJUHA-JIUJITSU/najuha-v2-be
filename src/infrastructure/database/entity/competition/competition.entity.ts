@@ -8,74 +8,74 @@ import { ICompetition } from 'src/modules/competitions/domain/interface/competit
 @Entity('competition')
 export class CompetitionEntity {
   @Column('varchar', { length: 26, primary: true })
-  id: ICompetition['id'];
+  id!: ICompetition['id'];
 
   @Column('varchar', { length: 256, default: 'DEFAULT TITLE' })
-  title: ICompetition['title'];
+  title!: ICompetition['title'];
 
   @Column('varchar', { length: 256, default: 'DEFAULT ADDRESS' })
-  address: ICompetition['address'];
+  address!: ICompetition['address'];
 
   @Column('timestamptz', { nullable: true })
-  competitionDate: ICompetition['competitionDate'];
+  competitionDate!: ICompetition['competitionDate'];
 
   @Column('timestamptz', { nullable: true })
-  registrationStartDate: ICompetition['registrationStartDate'];
+  registrationStartDate!: ICompetition['registrationStartDate'];
 
   @Column('timestamptz', { nullable: true })
-  registrationEndDate: ICompetition['registrationEndDate'];
+  registrationEndDate!: ICompetition['registrationEndDate'];
 
   @Column('timestamptz', { nullable: true })
-  refundDeadlineDate: ICompetition['refundDeadlineDate'];
+  refundDeadlineDate!: ICompetition['refundDeadlineDate'];
 
   @Column('timestamptz', { nullable: true })
-  soloRegistrationAdjustmentStartDate: ICompetition['soloRegistrationAdjustmentStartDate'];
+  soloRegistrationAdjustmentStartDate!: ICompetition['soloRegistrationAdjustmentStartDate'];
 
   @Column('timestamptz', { nullable: true })
-  soloRegistrationAdjustmentEndDate: ICompetition['soloRegistrationAdjustmentEndDate'];
+  soloRegistrationAdjustmentEndDate!: ICompetition['soloRegistrationAdjustmentEndDate'];
 
   @Column('timestamptz', { nullable: true })
-  registrationListOpenDate: ICompetition['registrationListOpenDate'];
+  registrationListOpenDate!: ICompetition['registrationListOpenDate'];
 
   @Column('timestamptz', { nullable: true })
-  bracketOpenDate: ICompetition['bracketOpenDate'];
+  bracketOpenDate!: ICompetition['bracketOpenDate'];
 
   @Column('text', { default: 'DEFAULT DESCRIPTION' })
-  description: ICompetition['description'];
+  description!: ICompetition['description'];
 
   @Column('boolean', { default: false })
-  isPartnership: ICompetition['isPartnership'];
+  isPartnership!: ICompetition['isPartnership'];
 
   @Column('int', { default: 0 })
-  viewCount: ICompetition['viewCount'];
+  viewCount!: ICompetition['viewCount'];
 
   @Column('varchar', { length: 256, nullable: true })
-  posterImgUrlKey: ICompetition['posterImgUrlKey'];
+  posterImgUrlKey!: ICompetition['posterImgUrlKey'];
 
   @Column('varchar', { length: 16, default: 'INACTIVE' })
-  status: ICompetition['status'];
+  status!: ICompetition['status'];
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: ICompetition['createdAt'];
+  createdAt!: ICompetition['createdAt'];
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: ICompetition['updatedAt'];
+  updatedAt!: ICompetition['updatedAt'];
 
   @OneToMany(
     () => EarlybirdDiscountSnapshotEntity,
     (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
   )
-  earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotEntity[];
+  earlybirdDiscountSnapshots!: EarlybirdDiscountSnapshotEntity[];
 
   @OneToMany(
     () => CombinationDiscountSnapshotEntity,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
   )
-  combinationDiscountSnapshots: CombinationDiscountSnapshotEntity[];
+  combinationDiscountSnapshots!: CombinationDiscountSnapshotEntity[];
 
   @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
-  divisions: DivisionEntity[];
+  divisions!: DivisionEntity[];
 
   @OneToMany(() => ApplicationEntity, (application) => application.competition)
-  applications: ApplicationEntity[];
+  applications!: ApplicationEntity[];
 }
