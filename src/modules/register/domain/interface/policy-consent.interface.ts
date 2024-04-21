@@ -1,10 +1,12 @@
 /** - 사용자가 동의한 약관 정보. */
 export interface IPolicyConsent {
   /**
-   * - id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /** - 동의 날짜. */
   createdAt: Date | string;

@@ -19,7 +19,6 @@ export class SnsAuthClient {
     const { snsAuthProvider, snsAuthCode } = SnsLoginReqDto;
 
     switch (snsAuthProvider) {
-      // TODO: enum 으로 변경후 하나로 관리하기 (case User['snsProvider'].KAKAO:)
       case 'KAKAO':
         return await this.kakaoStrategy.validate(snsAuthCode);
       case 'NAVER':

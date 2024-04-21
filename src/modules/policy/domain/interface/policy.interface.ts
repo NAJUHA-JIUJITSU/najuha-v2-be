@@ -5,10 +5,12 @@
  */
 export interface IPolicy {
   /**
-   * - id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /**
    * - 약관의 버전.

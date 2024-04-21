@@ -9,16 +9,18 @@ import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
  */
 export interface IUser {
   /**
-   * - id.
-   * @type uint32
+   * - ULID.
+   * @type string
+   * @minLength 26
+   * @maxLength 26
    */
-  id: number;
+  id: string;
 
   /** - 사용자 역할. 사용자의 접근 권한을 나타냅니다. */
   role: 'ADMIN' | 'USER' | 'TEMPORARY_USER';
 
   /** - SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다. */
-  snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE'; //TODO: enum으로 변경
+  snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';
 
   /**
    * - SNS ID. 소셜 로그인을 위한 고유 식별자입니다.
