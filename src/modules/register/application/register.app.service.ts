@@ -78,8 +78,7 @@ export class RegisterAppService {
     );
 
     const registerUserModel = new RegisterUserModel(registerUserEntity);
-    registerUserModel.ensurePhoneNumberRegistered();
-    registerUserModel.ensureMandatoryPoliciesConsented(mandatoryPolicies);
+    registerUserModel.register(userRegisterDto, mandatoryPolicies);
 
     await this.registerRepository.saveUser(registerUserModel.toEntity());
 

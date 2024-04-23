@@ -68,13 +68,23 @@ export class RegisterUserModel {
     return this.role;
   }
 
-  ensurePhoneNumberRegistered() {
+  register(userRegisterDto: IUser.Dto.Register, mandatoryPolicies: IPolicy[]) {
+    this.ensurePhoneNumberRegistered();
+    this.ensureMandatoryPoliciesConsented(mandatoryPolicies);
+    this.nickname = userRegisterDto.nickname;
+    this.gender = userRegisterDto.gender;
+    this.belt = userRegisterDto.belt;
+    this.birth = userRegisterDto.birth;
+    this.role = 'USER';
+  }
+
+  private ensurePhoneNumberRegistered() {
     if (!this.phoneNumber) {
       throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
     }
   }
 
-  ensureMandatoryPoliciesConsented(mandatoryPolicies: IPolicy[]) {
+  private ensureMandatoryPoliciesConsented(mandatoryPolicies: IPolicy[]) {
     const missingConsents = mandatoryPolicies.filter(
       (policy) => !this.policyConsents?.some((consent) => consent.policyId === policy.id),
     );
