@@ -56,6 +56,9 @@ export class UserApplicationsController {
   /**
    * u-6-3 update ready status application.
    * - RoleLevel: USER.
+   * - READY(결제전) application 을 업데이트 합니다.
+   * - CANCELED, DONE 상태의 application은 이 api 를 통해 업데이트 할 수 없습니다.
+   * - 기존 application을 DELETED 상태로 변경하고 새로운 application 을 생성합니다. (이유, 기존 applicaiton이 실제로는 결제 됐지만 실패처리 된 후, 업데이트시 기존 결제 정보가 남아있어야하기 때문).
    *
    * @tag u-6 applications
    * @returns application
@@ -79,6 +82,12 @@ export class UserApplicationsController {
   /**
    * u-6-4 update done status application.
    * - RoleLevel: USER.
+   * - DONE(결제완료) application 을 업데이트 합니다.
+   * - CANCELED, READY 상태의 application 은 이 api 를 통해 업데이트 할 수 없습니다.
+   * - playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 중 하나는 필수로 전달해야 합니다.
+   * - playerSnapshotUpdateDto 를 전달하면 playerSnapshot을 새로 생성합니다.
+   * - participationDivisionInfoUpdateDtos 를 전달하면 participationDivisionInfoSnapshots을 새로 생성합니다.
+   * - playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 둘 다 전달하면 둘 다 새로 생성합니다.
    *
    * @tag u-6 applications
    * @returns application
@@ -100,7 +109,7 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-5 delete application.
+   * u-6-5 delete application (아직구현 안됨).
    * - RoleLevel: USER.
    *
    * @tag u-6 applications

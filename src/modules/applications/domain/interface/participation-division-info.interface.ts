@@ -24,10 +24,10 @@ export namespace IParticipationDivisionInfo {
 
   export namespace Dto {
     export interface Update {
-      /** - 수정하고자 하는 참가부문 정보 ID (식별자). */
+      /** 수정하고자 하는 참가부문 정보 ID (식별자). */
       id: IParticipationDivisionInfo['id'];
 
-      /** - 새로 참가 하고자 하는 부문 ID. */
+      /** 새로 참가 하고자 하는 부문 ID. */
       newParticipationDivisionId: IDivision['id'];
     }
   }
