@@ -16,7 +16,7 @@ export interface CreateApplicationParam {
    */
   participationDivisionIds: IDivision['id'][];
   applicationType: IApplication['type'];
-  playerSnapshotCreateDto: IPlayerSnapshot.CreateDto;
+  playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create;
 }
 
 export interface GetApplicationParam {
@@ -32,18 +32,18 @@ export interface UpdateReadyApplicationParam {
    * @minItems 1
    */
   participationDivisionIds: IDivision['id'][];
-  playerSnapshotUpdateDto: IPlayerSnapshot.CreateDto;
+  playerSnapshotUpdateDto: IPlayerSnapshot.Dto.Create;
 }
 
 export interface UpdateDoneApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
-  playerSnapshotUpdateDto?: IPlayerSnapshot.CreateDto;
+  playerSnapshotUpdateDto?: IPlayerSnapshot.Dto.Create;
   /**
    * - Division info update data list.
    * @minItems 1
    */
-  participationDivisionInfoUpdateDtos?: IParticipationDivisionInfo.UpdateDto[];
+  participationDivisionInfoUpdateDtos?: IParticipationDivisionInfo.Dto.Update[];
 }
 
 export interface GetExpectedPaymentParam {

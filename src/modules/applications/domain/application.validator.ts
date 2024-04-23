@@ -17,7 +17,7 @@ export class ApplicationValidator {
    *    - 3-2. validate division gender.
    */
   validateApplicationAbility(
-    playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
+    playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
     divisionIds: IDivision['id'][],
     competition: ICompetition,
     now: Date = new Date(),
@@ -46,7 +46,7 @@ export class ApplicationValidator {
   }
 
   validateDivisionSuitable(
-    playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
+    playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
     particiationDivisionIds: IDivision['id'][],
     competitionDivisions: IDivision[],
   ) {

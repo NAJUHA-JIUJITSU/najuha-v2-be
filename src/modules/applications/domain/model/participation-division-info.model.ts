@@ -12,8 +12,8 @@ export class ParticipationDivisionInfo {
   private applicationId: IApplication['id'];
   private participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
 
-  constructor(entity: IParticipationDivisionInfo.Entity.Base) {
-    assert<IParticipationDivisionInfo.Entity.Base>(entity);
+  constructor(entity: IParticipationDivisionInfo.Entity.ParticipationDivisionInfo) {
+    assert<IParticipationDivisionInfo.Entity.ParticipationDivisionInfo>(entity);
     this.id = entity.id;
     this.createdAt = entity.createdAt;
     this.applicationId = entity.applicationId;
@@ -21,7 +21,7 @@ export class ParticipationDivisionInfo {
       (snapshot) => new ParticipationDivisionInfoSnapshot(snapshot),
     );
   }
-  toEntity(): IParticipationDivisionInfo.Entity.Base {
+  toEntity(): IParticipationDivisionInfo.Entity.ParticipationDivisionInfo {
     return {
       id: this.id,
       createdAt: this.createdAt,

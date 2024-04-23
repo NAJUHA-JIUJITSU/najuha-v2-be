@@ -6,11 +6,11 @@ import { IEarlybirdDiscountSnapshot } from '../domain/interface/earlybird-discou
 
 // Application Layer Param DTOs ----------------------------------------------
 export interface CreateCompetitionParam {
-  creatCompetitionDto: ICompetition.CreateDto;
+  competitionCreateDto: ICompetition.Dto.Create;
 }
 
 export interface UpdateCompetitionParam {
-  updateCompetitionDto: ICompetition.UpdateDto;
+  competitionUpdateDto: ICompetition.Dto.Update;
 }
 
 export interface FindCompetitionsParam {

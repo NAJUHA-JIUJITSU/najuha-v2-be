@@ -16,9 +16,9 @@ import {
 } from '../application/dtos';
 
 // Presentation Layer Request DTOs --------------------------------------------
-export type CreateCompetitionReqBody = CreateCompetitionParam['creatCompetitionDto'];
+export type CreateCompetitionReqBody = CreateCompetitionParam['competitionCreateDto'];
 
-export type UpdateCompetitionReqBody = Omit<UpdateCompetitionParam['updateCompetitionDto'], 'id'>;
+export type UpdateCompetitionReqBody = Omit<UpdateCompetitionParam['competitionUpdateDto'], 'id'>;
 
 export interface UpdateCompetitionStatusReqBody extends Pick<UpdateCompetitionStatusParam, 'status'> {}
 

@@ -18,7 +18,7 @@ export class ApplicationFactory {
     competitionId: ICompetition['id'],
     divisions: IDivision[],
     applicationType: IApplication['type'],
-    playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
+    playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
   ) {
     const applicationId = ulid();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
@@ -38,7 +38,7 @@ export class ApplicationFactory {
     });
   }
 
-  createPlayerSnapshot(applicationId: IApplication['id'], playerSnapshotCreateDto: IPlayerSnapshot.CreateDto) {
+  createPlayerSnapshot(applicationId: IApplication['id'], playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create) {
     return new PlayerSnapshot({
       id: ulid(),
       applicationId,
@@ -85,7 +85,7 @@ export class ApplicationFactory {
 
   createParticipationDivisionInfoSnapshots(
     divisions: IDivision[],
-    participationDivisionInfoUpdateDtos: IParticipationDivisionInfo.UpdateDto[],
+    participationDivisionInfoUpdateDtos: IParticipationDivisionInfo.Dto.Update[],
   ) {
     return participationDivisionInfoUpdateDtos.map((updateParticipationDivisionInfoDto) => {
       const division = divisions.find(

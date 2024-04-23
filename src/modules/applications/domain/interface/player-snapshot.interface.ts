@@ -41,12 +41,14 @@ export interface IPlayerSnapshot {
 
 export namespace IPlayerSnapshot {
   export namespace Entity {
-    export interface Base extends IPlayerSnapshot {}
+    export interface PlayerSnapshot extends IPlayerSnapshot {}
   }
 
-  export interface CreateDto
-    extends Pick<
-      IPlayerSnapshot,
-      'name' | 'gender' | 'birth' | 'phoneNumber' | 'belt' | 'network' | 'team' | 'masterName'
-    > {}
+  export namespace Dto {
+    export interface Create
+      extends Pick<
+        IPlayerSnapshot,
+        'name' | 'gender' | 'birth' | 'phoneNumber' | 'belt' | 'network' | 'team' | 'masterName'
+      > {}
+  }
 }

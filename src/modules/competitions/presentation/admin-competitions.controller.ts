@@ -35,7 +35,7 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
   async createCompetition(@TypedBody() body: CreateCompetitionReqBody): Promise<ResponseForm<CreateCompetitionRes>> {
-    return createResponseForm(await this.competitionsAppService.createCompetition({ creatCompetitionDto: body }));
+    return createResponseForm(await this.competitionsAppService.createCompetition({ competitionCreateDto: body }));
   }
 
   /**
@@ -88,7 +88,7 @@ export class AdminCompetitionsController {
     @TypedBody() body: UpdateCompetitionReqBody,
   ): Promise<ResponseForm<UpdateCompetitionRes>> {
     return createResponseForm(
-      await this.competitionsAppService.updateCompetition({ updateCompetitionDto: { id, ...body } }),
+      await this.competitionsAppService.updateCompetition({ competitionUpdateDto: { id, ...body } }),
     );
   }
 

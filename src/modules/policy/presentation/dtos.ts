@@ -1,8 +1,14 @@
-import { CreatePolicyRet, FindAllTypesOfLatestPoliciesRet, FindPoliciesRet, FindPolicyRet } from '../application/dtos';
+import {
+  CreatePolicyParam,
+  CreatePolicyRet,
+  FindAllTypesOfLatestPoliciesRet,
+  FindPoliciesRet,
+  FindPolicyRet,
+} from '../application/dtos';
 import { IPolicy } from '../domain/interface/policy.interface';
 
 // Presentation Layer Request DTOs
-export interface CreatePolicyReqBody extends Pick<IPolicy, 'type' | 'isMandatory' | 'title' | 'content'> {}
+export type CreatePolicyReqBody = CreatePolicyParam['policyCreateDto'];
 
 export interface FindPoliciesReqQuery {
   type?: IPolicy['type'];

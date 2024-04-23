@@ -28,19 +28,19 @@ export class CompetitionsAppService {
     private readonly divisionFactory: DivisionFactory,
   ) {}
 
-  async createCompetition({ creatCompetitionDto }: CreateCompetitionParam): Promise<CreateCompetitionRet> {
-    const competition = await this.competitionRepository.createCompetition({ ...creatCompetitionDto, id: ulid() });
+  async createCompetition({ competitionCreateDto }: CreateCompetitionParam): Promise<CreateCompetitionRet> {
+    const competition = await this.competitionRepository.createCompetition({ ...competitionCreateDto, id: ulid() });
     return { competition };
   }
 
-  async updateCompetition({ updateCompetitionDto }: UpdateCompetitionParam): Promise<UpdateCompetitionRet> {
+  async updateCompetition({ competitionUpdateDto }: UpdateCompetitionParam): Promise<UpdateCompetitionRet> {
     let competition = await this.competitionRepository.getCompetition({
-      where: { id: updateCompetitionDto.id },
+      where: { id: competitionUpdateDto.id },
     });
 
     competition = await this.competitionRepository.saveCompetition({
       ...competition,
-      ...updateCompetitionDto,
+      ...competitionUpdateDto,
     });
 
     return { competition };

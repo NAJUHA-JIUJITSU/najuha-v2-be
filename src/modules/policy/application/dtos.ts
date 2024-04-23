@@ -1,6 +1,6 @@
 import { IPolicy } from '../domain/interface/policy.interface';
 
-// Application Layer Param Dtos
+// Application Layer Param Dtos ----------------------------------------------
 export interface CreatePolicyParam {
   policyCreateDto: Pick<IPolicy, 'type' | 'isMandatory' | 'title' | 'content'>;
 }
@@ -13,7 +13,7 @@ export interface FindPolicyParam {
   id: IPolicy['id'];
 }
 
-// Application Layer Result Dtos
+// Application Layer Result Dtos ----------------------------------------------
 export interface CreatePolicyRet {
   policy: IPolicy;
 }

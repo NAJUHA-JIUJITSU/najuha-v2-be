@@ -132,7 +132,7 @@ export class CompetitionModel {
   }
 
   // validateApplicationAbility(
-  //   playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
+  //   playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
   //   participationDivisionIds: IDivision['id'][],
   //   now = new Date(),
   // ) {
@@ -141,7 +141,7 @@ export class CompetitionModel {
   // }
 
   // private validateDivisionSuitable(
-  //   playerSnapshotCreateDto: IPlayerSnapshot.CreateDto,
+  //   playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
   //   participationDivisionIds: IDivision['id'][],
   // ) {
   //   participationDivisionIds.forEach((divisionId) => {
@@ -173,7 +173,7 @@ export class CompetitionModel {
   //   return existDivisions;
   // }
 
-  // private validateDivisionAge(playerBirth: IPlayerSnapshot.CreateDto['birth'], division: IDivision): void {
+  // private validateDivisionAge(playerBirth: IPlayerSnapshot.Dto.Create['birth'], division: IDivision): void {
   //   const birthYear = +playerBirth.slice(0, 4);
   //   if (birthYear < +division.birthYearRangeStart || birthYear > +division.birthYearRangeEnd) {
   //     throw new BusinessException(
@@ -183,7 +183,7 @@ export class CompetitionModel {
   //   }
   // }
 
-  // private validateDivisionGender(playerGender: IPlayerSnapshot.CreateDto['gender'], division: IDivision): void {
+  // private validateDivisionGender(playerGender: IPlayerSnapshot.Dto.Create['gender'], division: IDivision): void {
   //   if (division.gender === 'MIXED') return;
   //   if (playerGender !== division.gender) {
   //     throw new BusinessException(

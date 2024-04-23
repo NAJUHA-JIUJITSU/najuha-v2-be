@@ -19,14 +19,16 @@ export interface IParticipationDivisionInfo {
 
 export namespace IParticipationDivisionInfo {
   export namespace Entity {
-    export interface Base extends IParticipationDivisionInfo {}
+    export interface ParticipationDivisionInfo extends IParticipationDivisionInfo {}
   }
 
-  export interface UpdateDto {
-    /** - 수정하고자 하는 참가부문 정보 ID (식별자). */
-    id: IParticipationDivisionInfo['id'];
+  export namespace Dto {
+    export interface Update {
+      /** - 수정하고자 하는 참가부문 정보 ID (식별자). */
+      id: IParticipationDivisionInfo['id'];
 
-    /** - 새로 참가 하고자 하는 부문 ID. */
-    newParticipationDivisionId: IDivision['id'];
+      /** - 새로 참가 하고자 하는 부문 ID. */
+      newParticipationDivisionId: IDivision['id'];
+    }
   }
 }

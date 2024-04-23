@@ -16,8 +16,8 @@ export class PlayerSnapshot {
   public readonly createdAt: IPlayerSnapshot['createdAt'];
   public readonly applicationId: IApplication['id'];
 
-  constructor(entity: IPlayerSnapshot.Entity.Base) {
-    assert<IPlayerSnapshot.Entity.Base>(entity);
+  constructor(entity: IPlayerSnapshot.Entity.PlayerSnapshot) {
+    assert<IPlayerSnapshot.Entity.PlayerSnapshot>(entity);
     this.id = entity.id;
     this.name = entity.name;
     this.gender = entity.gender;
@@ -31,7 +31,7 @@ export class PlayerSnapshot {
     this.applicationId = entity.applicationId;
   }
 
-  toEntity(): IPlayerSnapshot.Entity.Base {
+  toEntity(): IPlayerSnapshot.Entity.PlayerSnapshot {
     return {
       id: this.id,
       name: this.name,

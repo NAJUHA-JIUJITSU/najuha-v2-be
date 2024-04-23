@@ -1093,7 +1093,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePolicyReqBody"
+                "$ref": "#/components/schemas/PickIPolicytypeisMandatorytitlecontent"
               }
             }
           },
@@ -1331,7 +1331,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ICompetition.CreateDto"
+                "$ref": "#/components/schemas/ICompetition.Dto.Create"
               }
             }
           },
@@ -3921,16 +3921,9 @@
         ],
         "description": "약관.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
-      "CreatePolicyReqBody": {
+      "PickIPolicytypeisMandatorytitlecontent": {
         "type": "object",
         "properties": {
-          "title": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "title": "약관의 제목",
-            "description": "약관의 제목.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
           "type": {
             "type": "string",
             "enum": [
@@ -3947,6 +3940,13 @@
             "title": "약관동의 필수여수",
             "description": "약관동의 필수여수.\n- true: 필수.\n- false: 선택."
           },
+          "title": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "약관의 제목",
+            "description": "약관의 제목.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
           "content": {
             "type": "string",
             "minLength": 1,
@@ -3956,11 +3956,12 @@
         },
         "nullable": false,
         "required": [
-          "title",
           "type",
           "isMandatory",
+          "title",
           "content"
-        ]
+        ],
+        "description": "From T, pick a set of properties whose keys are in the union K"
       },
       "ResponseFormCreatePolicyRes": {
         "type": "object",
@@ -4177,6 +4178,13 @@
             "title": "ULID",
             "description": "ULID."
           },
+          "title": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "대회명",
+            "description": "대회명."
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -4224,13 +4232,6 @@
             },
             "title": "얼리버드 할인 정보",
             "description": "얼리버드 할인 정보.\n- 배열의 길이가 0이면 얼리버드 할인이 없는 대회입니다.\n- 배열의 마지막 요소가 현재 적용중인 얼리버드 할인 정보입니다."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "title": "대회명",
-            "description": "대회명."
           },
           "address": {
             "type": "string",
@@ -4382,12 +4383,12 @@
         "nullable": false,
         "required": [
           "id",
+          "title",
           "status",
           "viewCount",
           "createdAt",
           "updatedAt",
           "earlybirdDiscountSnapshots",
-          "title",
           "address",
           "competitionDate",
           "registrationStartDate",
@@ -5043,7 +5044,7 @@
           "weightType"
         ]
       },
-      "ICompetition.CreateDto": {
+      "ICompetition.Dto.Create": {
         "type": "object",
         "properties": {
           "title": {
@@ -5249,6 +5250,13 @@
             "title": "ULID",
             "description": "ULID."
           },
+          "title": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "대회명",
+            "description": "대회명."
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -5288,13 +5296,6 @@
             ],
             "title": "UpdatedAt",
             "description": "UpdatedAt."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "title": "대회명",
-            "description": "대회명."
           },
           "address": {
             "type": "string",
@@ -5446,11 +5447,11 @@
         "nullable": false,
         "required": [
           "id",
+          "title",
           "status",
           "viewCount",
           "createdAt",
           "updatedAt",
-          "title",
           "address",
           "competitionDate",
           "registrationStartDate",
@@ -6026,7 +6027,7 @@
             "description": "- Division IDs to participate."
           },
           "playerSnapshotCreateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
+            "$ref": "#/components/schemas/IPlayerSnapshot.Dto.Create"
           },
           "applicationType": {
             "type": "string",
@@ -6044,7 +6045,7 @@
           "applicationType"
         ]
       },
-      "IPlayerSnapshot.CreateDto": {
+      "IPlayerSnapshot.Dto.Create": {
         "type": "object",
         "properties": {
           "name": {
@@ -6634,7 +6635,7 @@
             "description": "- Division IDs to participate."
           },
           "playerSnapshotUpdateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
+            "$ref": "#/components/schemas/IPlayerSnapshot.Dto.Create"
           }
         },
         "nullable": false,
@@ -6684,12 +6685,12 @@
         "type": "object",
         "properties": {
           "playerSnapshotUpdateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshot.CreateDto"
+            "$ref": "#/components/schemas/IPlayerSnapshot.Dto.Create"
           },
           "participationDivisionInfoUpdateDtos": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IParticipationDivisionInfo.UpdateDto"
+              "$ref": "#/components/schemas/IParticipationDivisionInfo.Dto.Update"
             },
             "minItems": 1,
             "title": "- Division info update data list",
@@ -6698,7 +6699,7 @@
         },
         "nullable": false
       },
-      "IParticipationDivisionInfo.UpdateDto": {
+      "IParticipationDivisionInfo.Dto.Update": {
         "type": "object",
         "properties": {
           "id": {

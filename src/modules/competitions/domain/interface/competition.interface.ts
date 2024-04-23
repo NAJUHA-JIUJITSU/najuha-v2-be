@@ -85,29 +85,13 @@ export interface ICompetition {
 
 export namespace ICompetition {
   export namespace Entity {
-    // base
-    // active
-    // inactive
+    export interface Competition extends ICompetition {}
+    export interface FindMany extends Omit<ICompetition, 'combinationDiscountSnapshots' | 'divisions'> {}
   }
 
-  export interface CreateDto
-    extends Partial<
-      Omit<
-        ICompetition,
-        | 'id'
-        | 'status'
-        | 'viewCount'
-        | 'createdAt'
-        | 'updatedAt'
-        | 'divisions'
-        | 'earlybirdDiscountSnapshots'
-        | 'combinationDiscountSnapshots'
-      >
-    > {}
-
-  export interface UpdateDto
-    extends Pick<ICompetition, 'id'>,
-      Partial<
+  export namespace Dto {
+    export interface Create
+      extends Partial<
         Omit<
           ICompetition,
           | 'id'
@@ -120,6 +104,22 @@ export namespace ICompetition {
           | 'combinationDiscountSnapshots'
         >
       > {}
+    export interface Update
+      extends Pick<ICompetition, 'id'>,
+        Partial<
+          Omit<
+            ICompetition,
+            | 'id'
+            | 'status'
+            | 'viewCount'
+            | 'createdAt'
+            | 'updatedAt'
+            | 'divisions'
+            | 'earlybirdDiscountSnapshots'
+            | 'combinationDiscountSnapshots'
+          >
+        > {}
+  }
 
   export namespace QueryOptions {
     /** - 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다. */
@@ -171,8 +171,4 @@ export namespace ICompetition {
      */
     export type SortOption = '일자순' | '조회순' | '마감임박순';
   }
-
-  // export interface FindOneRet extends
-
-  export interface FindManyRet extends Omit<ICompetition, 'combinationDiscountSnapshots' | 'divisions'> {}
 }
