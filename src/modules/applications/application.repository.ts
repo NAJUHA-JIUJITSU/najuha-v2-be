@@ -8,6 +8,7 @@ import { ICompetition } from '../competitions/domain/interface/competition.inter
 import { IApplication } from './domain/interface/application.interface';
 import { CompetitionEntity } from 'src/infrastructure/database/entity/competition/competition.entity';
 import { ApplicationEntity } from 'src/infrastructure/database/entity/application/application.entity';
+import { assert } from 'typia';
 
 @Injectable()
 export class ApplicationRepository {
@@ -21,10 +22,10 @@ export class ApplicationRepository {
   ) {}
 
   // ----------------- User -----------------
-  async getUser(userId: IUser['id']): Promise<IUser> {
+  async getUser(userId: IUser['id']): Promise<IUser.Entity.User> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
-    return user;
+    return assert<IUser.Entity.User>(user);
   }
 
   // ----------------- Competition -----------------

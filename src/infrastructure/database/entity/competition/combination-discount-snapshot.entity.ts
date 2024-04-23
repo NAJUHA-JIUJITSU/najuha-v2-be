@@ -2,10 +2,11 @@ import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } fr
 import { CompetitionEntity } from './competition.entity';
 import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { ulid } from 'ulid';
 
 @Entity('combination_discount_snapshot')
 export class CombinationDiscountSnapshotEntity {
-  @Column('varchar', { length: 26, primary: true })
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: ICombinationDiscountSnapshot['id'];
 
   @Column('jsonb')

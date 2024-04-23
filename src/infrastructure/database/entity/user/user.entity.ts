@@ -1,11 +1,12 @@
 import { PolicyConsentEntity } from 'src/infrastructure/database/entity/user/policy-consent.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ulid } from 'ulid';
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryGeneratedColumn()
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IUser['id'];
 
   @Column('varchar', { length: 16, default: 'TEMPORARY_USER' })
@@ -24,19 +25,19 @@ export class UserEntity {
   name!: IUser['name'];
 
   @Column('varchar', { length: 16, nullable: true })
-  phoneNumber!: IUser['phoneNumber'];
+  phoneNumber!: IUser['phoneNumber'] | null;
 
   @Column('varchar', { length: 64, nullable: true, unique: true })
-  nickname!: IUser['nickname'];
+  nickname!: IUser['nickname'] | null;
 
   @Column('varchar', { length: 16, nullable: true })
-  gender!: IUser['gender'];
+  gender!: IUser['gender'] | null;
 
   @Column('varchar', { length: 8, nullable: true })
-  birth!: IUser['birth'];
+  birth!: IUser['birth'] | null;
 
   @Column('varchar', { length: 16, nullable: true })
-  belt!: IUser['belt'];
+  belt!: IUser['belt'] | null;
 
   @Column('varchar', { length: 128, nullable: true })
   profileImageUrlKey!: IUser['profileImageUrlKey'];
@@ -50,7 +51,7 @@ export class UserEntity {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: IUser['updatedAt'];
 
-  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user)
+  @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user, { cascade: true })
   policyConsents!: PolicyConsentEntity[];
 
   @OneToMany(() => ApplicationEntity, (application) => application.user)

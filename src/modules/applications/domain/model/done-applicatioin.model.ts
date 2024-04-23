@@ -6,13 +6,13 @@ import { ParticipationDivisionInfoSnapshot } from './participation-division-info
 import { assert } from 'typia';
 
 export class DoneApplication extends Application {
-  constructor(value: IApplication.ModelValue.Done) {
-    assert<IApplication.ModelValue.Done>(value);
-    if (value.status !== 'DONE') throw new Error('Application status is not DONE');
-    super(value);
+  constructor(entity: IApplication.Entity.Done) {
+    assert<IApplication.Entity.Done>(entity);
+    if (entity.status !== 'DONE') throw new Error('Application status is not DONE');
+    super(entity);
   }
 
-  toModelValue(): IApplication.ModelValue.Done {
+  toEntity(): IApplication.Entity.Done {
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -21,8 +21,8 @@ export class DoneApplication extends Application {
       status: this.status,
       competitionId: this.competitionId,
       userId: this.userId,
-      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toModelValue()),
-      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toModelValue()),
+      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toEntity()),
+      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toEntity()),
     };
   }
 

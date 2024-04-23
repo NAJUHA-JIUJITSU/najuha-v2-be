@@ -1,10 +1,11 @@
 import { Column, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
 import { IPaymentSnapshot } from 'src/modules/competitions/domain/interface/payment-snapshot.interface';
+import { ulid } from 'ulid';
 
 @Entity('payment_snapshot')
 export class PaymentSnapshotEntity {
-  @Column('varchar', { length: 26, primary: true })
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IPaymentSnapshot['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

@@ -1,11 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { PolicyEntity } from 'src/infrastructure/database/entity/policy/policy.entity';
 import { UserEntity } from './user.entity';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
+import { ulid } from 'ulid';
 
 @Entity('policy_consent')
 export class PolicyConsentEntity {
-  @PrimaryGeneratedColumn()
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IPolicyConsent['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

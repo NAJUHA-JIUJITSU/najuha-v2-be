@@ -5,10 +5,11 @@ import { CompetitionEntity } from '../competition/competition.entity';
 import { UserEntity } from '../user/user.entity';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
+import { ulid } from 'ulid';
 
 @Entity('application')
 export class ApplicationEntity {
-  @Column('varchar', { length: 26, primary: true })
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IApplication['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

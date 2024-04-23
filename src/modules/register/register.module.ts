@@ -8,19 +8,12 @@ import { PolicyEntity } from '../../infrastructure/database/entity/policy/policy
 import { PolicyConsentEntity } from '../../infrastructure/database/entity/user/policy-consent.entity';
 import { RegisterRepository } from './register.repository';
 import { UserEntity } from '../../infrastructure/database/entity/user/user.entity';
-import { RegisterUserFactory } from './domain/register-user.factory';
-import { RegisterValidator } from './domain/register.validator';
+import { RegisterUserEntityFactory } from './domain/register-user.factory';
 
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([UserEntity, PolicyEntity, PolicyConsentEntity])],
   controllers: [UserRegisterController],
-  providers: [
-    RegisterAppService,
-    PhoneNumberAuthCodeDomainService,
-    RegisterRepository,
-    RegisterValidator,
-    RegisterUserFactory,
-  ],
+  providers: [RegisterAppService, PhoneNumberAuthCodeDomainService, RegisterRepository, RegisterUserEntityFactory],
   exports: [RegisterAppService],
 })
 export class RegisterModule {}

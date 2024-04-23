@@ -3,13 +3,13 @@ import { IApplication } from '../interface/application.interface';
 import { assert } from 'typia';
 
 export class ReadyApplication extends Application {
-  constructor(value: IApplication.ModelValue.Ready) {
-    assert<IApplication.ModelValue.Ready>(value);
-    if (value.status !== 'READY') throw new Error('Application status is not READY');
-    super(value);
+  constructor(entity: IApplication.Entity.Ready) {
+    assert<IApplication.Entity.Ready>(entity);
+    if (entity.status !== 'READY') throw new Error('Application status is not READY');
+    super(entity);
   }
 
-  toModelValue(): IApplication.ModelValue.Ready {
+  toEntity(): IApplication.Entity.Ready {
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -18,8 +18,8 @@ export class ReadyApplication extends Application {
       status: this.status,
       competitionId: this.competitionId,
       userId: this.userId,
-      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toModelValue()),
-      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toModelValue()),
+      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toEntity()),
+      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toEntity()),
     };
   }
 

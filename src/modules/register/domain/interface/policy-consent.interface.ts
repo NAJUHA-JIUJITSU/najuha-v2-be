@@ -1,19 +1,17 @@
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { tags } from 'typia';
+
 /** - 사용자가 동의한 약관 정보. */
 export interface IPolicyConsent {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  /** - 동의 날짜. */
+  /** 약관 동의 날짜. */
   createdAt: Date | string;
 
-  /** - userId. */
-  userId: number;
+  /** UserId. */
+  userId: IUser['id'];
 
-  /** - policyId. */
-  policyId: number;
+  /** PolicyId. */
+  policyId: IPolicyConsent['id'];
 }

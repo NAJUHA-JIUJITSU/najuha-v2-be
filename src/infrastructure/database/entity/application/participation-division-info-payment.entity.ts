@@ -4,10 +4,11 @@ import { IParticipationDivisionInfoPayment } from 'src/modules/applications/doma
 import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
 import { IParticipationDivisionInfo } from 'src/modules/applications/domain/interface/participation-division-info.interface';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
+import { ulid } from 'ulid';
 
 @Entity('participation_division_info_payment')
 export class ParticipationDivisionInfoPaymentEntity {
-  @Column('varchar', { length: 26, primary: true })
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IParticipationDivisionInfoPayment['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

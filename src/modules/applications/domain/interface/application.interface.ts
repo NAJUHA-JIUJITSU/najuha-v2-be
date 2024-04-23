@@ -2,31 +2,27 @@ import { ICompetition } from 'src/modules/competitions/domain/interface/competit
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPlayerSnapshot } from './player-snapshot.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
+import { tags } from 'typia';
 
 export interface IApplication {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  /**  - created at. */
+  /**  Created at. */
   createdAt: Date | string;
 
-  /** - updated at. */
+  /** Updated at. */
   updatedAt: Date | string;
 
   /**
-   * - 본인신청과 대리신청을 구별하는 type.
+   * 본인신청과 대리신청을 구별하는 type.
    * - SELF: 본인 신청
    * - PROXY: 대리 신청
    */
   type: 'SELF' | 'PROXY';
 
   /**
-   * - status.
+   * Status.
    * - READY: 결제 대기중
    * - DONE: 결제 완료
    * - CANCELED: 결제 취소
@@ -34,27 +30,21 @@ export interface IApplication {
    */
   status: 'READY' | 'DONE' | 'CANCELED' | 'DELETED';
 
-  /** - competition id. */
+  /** Competition id. */
   competitionId: ICompetition['id'];
 
-  /** - user id. */
+  /** User id. */
   userId: IUser['id'];
 
-  /**
-   * - player snapshots.
-   * @minItems 1
-   */
-  playerSnapshots: IPlayerSnapshot[];
+  /** Player snapshots. */
+  playerSnapshots: IPlayerSnapshot[] & tags.MinItems<1>;
 
-  /**
-   * - participation division infos.
-   * @minItems 1
-   */
-  participationDivisionInfos: IParticipationDivisionInfo[];
+  /** Participation division infos. */
+  participationDivisionInfos: IParticipationDivisionInfo[] & tags.MinItems<1>;
 }
 
 export namespace IApplication {
-  export namespace ModelValue {
+  export namespace Entity {
     export interface Base extends IApplication {}
     export interface Ready extends IApplication {}
     export interface Done extends IApplication {}

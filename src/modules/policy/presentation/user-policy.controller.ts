@@ -3,9 +3,8 @@ import { TypedParam, TypedRoute } from '@nestia/core';
 import { PolicyAppService } from '../application/policy.app.service';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
-import { FindPolicyResDto } from '../dto/response/find-policy.res.dto';
 import { IPolicy } from '../domain/interface/policy.interface';
+import { FindAllRecentPoliciesRes, FindPolicyRes } from './dtos';
 
 @Controller('user/policy')
 export class UserPolicyController {
@@ -21,9 +20,8 @@ export class UserPolicyController {
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/recent')
-  async findAllRecentPolicies(): Promise<ResponseForm<FindPoliciesResDto>> {
-    const policies = await this.PolicyAppService.findAllTypesOfLatestPolicies();
-    return createResponseForm({ policies });
+  async findAllRecentPolicies(): Promise<ResponseForm<FindAllRecentPoliciesRes>> {
+    return createResponseForm(await this.PolicyAppService.findAllTypesOfLatestPolicies());
   }
 
   /**
@@ -36,8 +34,7 @@ export class UserPolicyController {
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:id')
-  async findPolicy(@TypedParam('id') id: IPolicy['id']): Promise<ResponseForm<FindPolicyResDto>> {
-    const policy = await this.PolicyAppService.findPolicy(id);
-    return createResponseForm({ policy });
+  async findPolicy(@TypedParam('id') id: IPolicy['id']): Promise<ResponseForm<FindPolicyRes>> {
+    return createResponseForm(await this.PolicyAppService.findPolicy({ id }));
   }
 }

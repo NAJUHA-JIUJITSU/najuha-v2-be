@@ -75,22 +75,22 @@ export class CompetitionsAppService {
     competitionId,
     status,
   }: UpdateCompetitionStatusParam): Promise<UpdateCompetitionRet> {
-    const competitionValue = await this.competitionRepository.getCompetition({
+    const competitionEntity = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionModel(competitionValue);
+    const competition = new CompetitionModel(competitionEntity);
     competition.updateStatus(status);
     await this.competitionRepository.saveCompetition(competition);
     return { competition };
   }
 
   async createDivisions({ competitionId, divisionPacks }: CreateDivisionsParam): Promise<CreateDivisionsRet> {
-    const competitionValue = await this.competitionRepository.getCompetition({
+    const competitionEntity = await this.competitionRepository.getCompetition({
       where: { id: competitionId },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionModel(competitionValue);
+    const competition = new CompetitionModel(competitionEntity);
     const divisions = this.divisionFactory.createDivisions(competition.id, divisionPacks);
     competition.addDivisions(divisions);
     await this.competitionRepository.saveDivisions(divisions);

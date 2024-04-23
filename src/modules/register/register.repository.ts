@@ -5,10 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PolicyEntity } from '../../infrastructure/database/entity/policy/policy.entity';
 import { PolicyConsentEntity } from '../../infrastructure/database/entity/user/policy-consent.entity';
 import { UserEntity } from '../../infrastructure/database/entity/user/user.entity';
-import { IRegisterUser } from './domain/interface/register-user.interface';
 import { IPolicy } from '../policy/domain/interface/policy.interface';
 import { IPolicyConsent } from './domain/interface/policy-consent.interface';
+import { IUser } from '../users/domain/interface/user.interface';
+import { assert } from 'typia';
 
+// TODO : 구체적 Entity 사용하기
 @Injectable()
 export class RegisterRepository {
   constructor(
@@ -21,17 +23,28 @@ export class RegisterRepository {
   ) {}
 
   // ------------------ User ------------------
-  async findUser({ where, relations }: FindOneOptions<IRegisterUser>): Promise<IRegisterUser | null> {
+  async findUser({ where, relations }: FindOneOptions<UserEntity>): Promise<UserEntity | null> {
     return this.userRepository.findOne({ where, relations });
   }
 
-  async getUser(options?: { where: Partial<Pick<IRegisterUser, 'id'>>; relations?: string[] }): Promise<IRegisterUser> {
-    const user = await this.userRepository.findOne({ where: options?.where, relations: options?.relations });
+  async getTemporaryUser(userId: IUser['id']): Promise<IUser.Entity.TemporaryUser> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
-    return user;
+    return assert<IUser.Entity.TemporaryUser>(user);
   }
 
-  async updateUser(dto: Pick<IRegisterUser, 'id'> & Partial<IRegisterUser>): Promise<void> {
+  async getRegisterUser(userId: IUser['id']): Promise<IUser.Entity.RegisterUser> {
+    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['policyConsents'] });
+    if (!user) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
+    return assert<IUser.Entity.RegisterUser>(user);
+  }
+
+  async saveUser(entity: IUser.Entity.RegisterUser): Promise<IUser.Entity.RegisterUser> {
+    const user = await this.userRepository.save(entity);
+    return assert<IUser.Entity.RegisterUser>(user);
+  }
+
+  async updateUser(dto: Pick<UserEntity, 'id'> & Partial<UserEntity>): Promise<void> {
     const result = await this.userRepository.update({ id: dto.id }, dto);
     if (!result.affected) throw new BusinessException(CommonErrorMap.ENTITY_NOT_FOUND, 'User not found');
   }

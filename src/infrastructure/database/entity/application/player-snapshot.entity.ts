@@ -1,10 +1,11 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
+import { ulid } from 'ulid';
 
 @Entity('player_snapshot')
 export class PlayerSnapshotEntity {
-  @Column('varchar', { length: 26, primary: true })
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IPlayerSnapshot['id'];
 
   @Column('varchar', { length: 64 })

@@ -1,14 +1,10 @@
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
+import { tags } from 'typia';
 
 export interface IParticipationDivisionInfoPayment {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   createdAt: Date | string;
 

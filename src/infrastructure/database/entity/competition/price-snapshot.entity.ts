@@ -2,10 +2,11 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany } fr
 import { DivisionEntity } from './division.entity';
 import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
+import { ulid } from 'ulid';
 
 @Entity('price_snapshot')
 export class PriceSnapshotEntity {
-  @Column('varchar', { length: 26, primary: true })
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IPriceSnapshot['id'];
 
   @Column('int')

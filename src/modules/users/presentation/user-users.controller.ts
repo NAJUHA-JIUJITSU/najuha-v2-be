@@ -2,11 +2,9 @@ import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
-import { UpdateUserReqDto } from 'src/modules/users/dto/request/update-user.req.dto';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
-import { UserResDto } from '../dto/response/user.res.dto';
 import { ENTITY_NOT_FOUND } from 'src/common/response/errorResponse';
+import { CreateUserReqBody, CreateUserRes, GetMeRes, UpdateUserReqBody, UpdateUserRes } from './dtos';
 
 @Controller('user/users')
 export class UserUsersController {
@@ -21,9 +19,8 @@ export class UserUsersController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
-  async postUser(@TypedBody() dto: CreateUserReqDto): Promise<ResponseForm<UserResDto>> {
-    const user = await this.UsersAppService.createUser(dto);
-    return createResponseForm({ user });
+  async postUser(@TypedBody() body: CreateUserReqBody): Promise<ResponseForm<CreateUserRes>> {
+    return createResponseForm(await this.UsersAppService.createUser({ userCreateDto: body }));
   }
 
   /**
@@ -37,9 +34,8 @@ export class UserUsersController {
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
-  async patchUser(@Req() req: Request, @TypedBody() dto: UpdateUserReqDto): Promise<ResponseForm<UserResDto>> {
-    const user = await this.UsersAppService.updateUser(req['userId'], dto);
-    return createResponseForm({ user });
+  async patchUser(@Req() req: Request, @TypedBody() body: UpdateUserReqBody): Promise<ResponseForm<UpdateUserRes>> {
+    return createResponseForm(await this.UsersAppService.updateUser({ userUpdateDto: { ...body, id: req['userId'] } }));
   }
 
   /**
@@ -52,8 +48,7 @@ export class UserUsersController {
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
-  async getMe(@Req() req: Request): Promise<ResponseForm<UserResDto>> {
-    const user = await this.UsersAppService.getMe(req['userId']);
-    return createResponseForm({ user });
+  async getMe(@Req() req: Request): Promise<ResponseForm<GetMeRes>> {
+    return createResponseForm(await this.UsersAppService.getMe(req['userId']));
   }
 }

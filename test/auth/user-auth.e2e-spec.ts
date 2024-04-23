@@ -3,11 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { SnsLoginReqDto } from '../../src/modules/auth/dto/request/sns-login.dto';
 import appEnv from '../../src/common/app-env';
-import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
 import { ResponseForm } from 'src/common/response/response';
-import { AuthTokensResDto } from 'src/modules/auth/dto/response/auth-tokens.res.dto';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -17,14 +14,20 @@ import {
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SnsAuthErrorMap,
 } from 'src/common/response/errorResponse';
-import { KakaoStrategy } from 'src/infrastructure/sns-auth-client/kakao.strategy';
-import { NaverStrategy } from 'src/infrastructure/sns-auth-client/naver.strategy';
-import { GoogleStrategy } from 'src/infrastructure/sns-auth-client/google.strategy';
-import { DataSource, EntityManager } from 'typeorm';
+import { KakaoStrategy } from 'src/modules/sns-auth-client/kakao.strategy';
+import { NaverStrategy } from 'src/modules/sns-auth-client/naver.strategy';
+import { GoogleStrategy } from 'src/modules/sns-auth-client/google.strategy';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { CreateUserReqBody } from 'src/modules/users/presentation/dtos';
+import { IValidatedUserData } from 'src/modules/sns-auth-client/interface/validated-user-data.interface';
+import { AcquireAdminRoleRes, RefreshTokenRes, SnsLoginReqBody, SnsLoginRes } from 'src/modules/auth/presentation/dtos';
+import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { ulid } from 'ulid';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {
@@ -39,6 +42,7 @@ describe('E2E u-1 user-auth test', () => {
   let kakaoStrategy: KakaoStrategy;
   let naverStrategy: NaverStrategy;
   let googleStrategy: GoogleStrategy;
+  let userRepository: Repository<UserEntity>;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -55,6 +59,7 @@ describe('E2E u-1 user-auth test', () => {
     kakaoStrategy = testingModule.get<KakaoStrategy>(KakaoStrategy);
     naverStrategy = testingModule.get<NaverStrategy>(NaverStrategy);
     googleStrategy = testingModule.get<GoogleStrategy>(GoogleStrategy);
+    userRepository = testingModule.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -68,51 +73,54 @@ describe('E2E u-1 user-auth test', () => {
   });
 
   describe('u-1-1 POST /user/auth/sns-login ------------------------------------------', () => {
-    it('기존 유저 KAKAO 로그인 성공 시', async () => {
+    it('KAKAO 기존 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'KAKAO';
-      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
-      existUserDto.role = 'USER';
-      existUserDto.birth = '19980101';
-      existUserDto.snsAuthProvider = snsAuthProvider;
-      const existUser = await userService.createUser(existUserDto);
+      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      existUserEntity.id = ulid();
+      existUserEntity.birth = '19980101';
+      existUserEntity.role = 'USER';
+      existUserEntity.snsAuthProvider = snsAuthProvider;
+      await userRepository.save(userRepository.create(existUserEntity));
 
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret: CreateUserReqDto = {
-          snsId: existUser.snsId,
-          snsAuthProvider: existUser.snsAuthProvider,
-          name: existUser.name,
-          email: existUser.email,
-          phoneNumber: existUser.phoneNumber,
-          gender: existUser.gender,
+        const ret: IValidatedUserData = {
+          snsId: existUserEntity.snsId,
+          snsAuthProvider: existUserEntity.snsAuthProvider,
+          name: existUserEntity.name,
+          email: existUserEntity.email,
+          phoneNumber: existUserEntity.phoneNumber,
+          gender: existUserEntity.gender,
         };
         return ret;
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
 
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
-    it('신규 유저 KAKAO 로그인 성공 시', async () => {
+    it('KAKAO 신규 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'KAKAO';
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret = typia.random<CreateUserReqDto>();
+        const ret = typia.random<IValidatedUserData>();
+        console.log('ret!!!!!!!!!!!!!!!!!!!!!!', ret);
         ret.snsAuthProvider = snsAuthProvider;
         return ret;
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
+      console.log('res.body!!!!!!!!!!!!!!!!!!!!!!', res.body);
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
@@ -123,7 +131,7 @@ describe('E2E u-1 user-auth test', () => {
         throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL, 'test error message');
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
@@ -131,51 +139,52 @@ describe('E2E u-1 user-auth test', () => {
       expect(typia.is<SNS_AUTH_KAKAO_LOGIN_FAIL>(res.body)).toBe(true);
     });
 
-    it('기존 유저 NAVER 로그인 성공 시', async () => {
+    it('NAVER 기존 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'NAVER';
-      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
-      existUserDto.role = 'USER';
-      existUserDto.birth = '19980101';
-      existUserDto.snsAuthProvider = snsAuthProvider;
-      const existUser = await userService.createUser(existUserDto);
+      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      existUserEntity.id = ulid();
+      existUserEntity.birth = '19980101';
+      existUserEntity.role = 'USER';
+      existUserEntity.snsAuthProvider = snsAuthProvider;
+      await userRepository.save(userRepository.create(existUserEntity));
 
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret: CreateUserReqDto = {
-          snsId: existUser.snsId,
-          snsAuthProvider: existUser.snsAuthProvider,
-          name: existUser.name,
-          email: existUser.email,
-          phoneNumber: existUser.phoneNumber,
-          gender: existUser.gender,
+        const ret: IValidatedUserData = {
+          snsId: existUserEntity.snsId,
+          snsAuthProvider: existUserEntity.snsAuthProvider,
+          name: existUserEntity.name,
+          email: existUserEntity.email,
+          phoneNumber: existUserEntity.phoneNumber,
+          gender: existUserEntity.gender,
         };
         return ret;
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
 
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
-    it('신규 유저 NAVER 로그인 성공 시', async () => {
+    it('NAVER 신규 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'NAVER';
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret = typia.random<CreateUserReqDto>();
+        const ret = typia.random<IValidatedUserData>();
         ret.snsAuthProvider = snsAuthProvider;
         return ret;
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
@@ -186,7 +195,7 @@ describe('E2E u-1 user-auth test', () => {
         throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL, 'test error message');
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
@@ -194,49 +203,50 @@ describe('E2E u-1 user-auth test', () => {
       expect(typia.is<SNS_AUTH_NAVER_LOGIN_FAIL>(res.body)).toBe(true);
     });
 
-    it('기존 유저 GOOGLE 로그인 성공 시', async () => {
+    it('GOOGLE 기존 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'GOOGLE';
-      const existUserDto = typia.random<Omit<IUser, 'createdAt' | 'updatedAt' | 'id'>>();
-      existUserDto.role = 'USER';
-      existUserDto.birth = '19980101';
-      existUserDto.snsAuthProvider = snsAuthProvider;
-      const exiDtostUser = await userService.createUser(existUserDto);
+      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      existUserEntity.id = ulid();
+      existUserEntity.birth = '19980101';
+      existUserEntity.role = 'USER';
+      existUserEntity.snsAuthProvider = snsAuthProvider;
+      await userRepository.save(userRepository.create(existUserEntity));
 
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret: CreateUserReqDto = {
-          snsId: exiDtostUser.snsId,
-          snsAuthProvider: exiDtostUser.snsAuthProvider,
-          name: exiDtostUser.name,
-          email: exiDtostUser.email,
+        const ret: IValidatedUserData = {
+          snsId: existUserEntity.snsId,
+          snsAuthProvider: existUserEntity.snsAuthProvider,
+          name: existUserEntity.name,
+          email: existUserEntity.email,
         };
         return ret;
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
 
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
-    it('신규 유저 GOOGLE 로그인 성공 시', async () => {
+    it('GOOGLE 신규 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'GOOGLE';
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret = typia.random<CreateUserReqDto>();
+        const ret = typia.random<CreateUserReqBody>();
         ret.snsAuthProvider = snsAuthProvider;
         return ret;
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
@@ -247,7 +257,7 @@ describe('E2E u-1 user-auth test', () => {
         throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL, 'test error message');
       });
 
-      const SnsLoginReqDto = typia.random<SnsLoginReqDto>();
+      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
       SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
 
       const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
@@ -273,7 +283,7 @@ describe('E2E u-1 user-auth test', () => {
         .post('/user/auth/token')
         .send({ refreshToken: authorizedRefreshToken });
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<RefreshTokenRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
@@ -318,38 +328,41 @@ describe('E2E u-1 user-auth test', () => {
 
   describe('u-1-3 PATCH /user/auth/acquire-admin-role -----------------------------------', () => {
     it('관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.', async () => {
-      const user = typia.random<CreateUserReqDto>();
-      user.snsId = 'test-sns-id';
-      user.snsAuthProvider = 'KAKAO';
-      const User = await userService.createUser(user);
+      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      existUserEntity.id = ulid();
+      existUserEntity.birth = '19980101';
+      existUserEntity.role = 'USER';
+      existUserEntity.snsId = 'test-sns-id';
+      existUserEntity.snsAuthProvider = 'KAKAO';
+      const savedUser = await userRepository.save(userRepository.create(existUserEntity));
 
       const res = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')
         .set(
           'Authorization',
           `Bearer ${jwtService.sign(
-            { userId: User.id, userRole: 'USER' },
+            { userId: existUserEntity.id, userRole: 'USER' },
             { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
           )}`,
         );
 
-      expect(typia.is<ResponseForm<AuthTokensResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<AcquireAdminRoleRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('ADMIN');
     });
 
     it('등록되지 않은 관리자 계정입니다.', async () => {
-      const user = typia.random<CreateUserReqDto>();
-      user.snsId = 'unregistered-admin-sns-id';
-      user.snsAuthProvider = 'KAKAO';
-      const User = await userService.createUser(user);
+      const userCreateDto = typia.random<CreateUserReqBody>();
+      userCreateDto.snsId = 'unregistered-admin-sns-id';
+      userCreateDto.snsAuthProvider = 'KAKAO';
+      const user = (await userService.createUser({ userCreateDto: userCreateDto })).user;
 
       const res = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')
         .set(
           'Authorization',
           `Bearer ${jwtService.sign(
-            { userId: User.id, userRole: 'USER' },
+            { userId: user.id, userRole: 'USER' },
             { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
           )}`,
         );

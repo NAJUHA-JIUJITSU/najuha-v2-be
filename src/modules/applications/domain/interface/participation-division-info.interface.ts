@@ -1,31 +1,24 @@
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IApplication } from './application.interface';
 import { IParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.interface';
+import { tags } from 'typia';
 
 export interface IParticipationDivisionInfo {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  /** - created at. */
+  /** CreatedAt. */
   createdAt: Date | string;
 
-  /** - application id. */
+  /** Application id. */
   applicationId: IApplication['id'];
 
-  /**
-   * - 참가 부문 ID.
-   * @minimum 1
-   */
-  participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshot[];
+  /** 참가부문 정보 스냅샷. */
+  participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshot[] & tags.MinItems<1>;
 }
 
 export namespace IParticipationDivisionInfo {
-  export namespace ModelValue {
+  export namespace Entity {
     export interface Base extends IParticipationDivisionInfo {}
   }
 

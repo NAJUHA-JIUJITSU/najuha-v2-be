@@ -35,11 +35,11 @@ export class ApplicationsAppService {
     playerSnapshotCreateDto,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = await this.applicationRepository.getUser(userId);
-    const competitionValue = await this.applicationRepository.getCompetition({
+    const competitionEntity = await this.applicationRepository.getCompetition({
       where: { id: competitionId, status: 'ACTIVE' },
       relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
     });
-    const competition = new CompetitionModel(competitionValue);
+    const competition = new CompetitionModel(competitionEntity);
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
 
@@ -53,9 +53,9 @@ export class ApplicationsAppService {
     application.validateApplicationType(user);
     application.validateDivisionSuitability();
 
-    const applicationValue = application.toModelValue();
-    await this.applicationRepository.saveApplication(applicationValue);
-    return { application: applicationValue };
+    const applicationEntity = application.toEntity();
+    await this.applicationRepository.saveApplication(applicationEntity);
+    return { application: applicationEntity };
   }
 
   /** Get application. */
@@ -86,8 +86,8 @@ export class ApplicationsAppService {
     applicationId,
     participationDivisionIds,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
-    const userValue = await this.applicationRepository.getUser(userId);
-    const oldApplicationValue = await this.applicationRepository.getApplication({
+    const userEntity = await this.applicationRepository.getUser(userId);
+    const oldApplicationEntity = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'READY' },
       relations: [
         'playerSnapshots',
@@ -97,8 +97,8 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const oldApplication = new ReadyApplication(oldApplicationValue);
-    const competitionValue = await this.applicationRepository.getCompetition({
+    const oldApplication = new ReadyApplication(oldApplicationEntity);
+    const competitionEntity = await this.applicationRepository.getCompetition({
       where: { id: oldApplication.getCompetitionId() },
       relations: [
         'divisions',
@@ -107,26 +107,26 @@ export class ApplicationsAppService {
         'combinationDiscountSnapshots',
       ],
     });
-    const competition = new CompetitionModel(competitionValue);
+    const competition = new CompetitionModel(competitionEntity);
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
 
     const newApplication = this.applicationFactory.createReadyApplication(
-      userValue.id,
+      userEntity.id,
       competition.id,
       divisions,
       oldApplication.getType(),
       playerSnapshotUpdateDto,
     );
-    newApplication.validateApplicationType(userValue);
+    newApplication.validateApplicationType(userEntity);
     newApplication.validateDivisionSuitability();
 
     oldApplication.updateStatusToDeleted();
 
     // TODO: Transaction
-    await this.applicationRepository.saveApplication(oldApplication.toModelValue());
-    await this.applicationRepository.saveApplication(newApplication.toModelValue());
-    return { application: newApplication.toModelValue() };
+    await this.applicationRepository.saveApplication(oldApplication.toEntity());
+    await this.applicationRepository.saveApplication(newApplication.toEntity());
+    return { application: newApplication.toEntity() };
   }
 
   /** Update done application. */
@@ -140,8 +140,8 @@ export class ApplicationsAppService {
       throw new Error(
         'playerSnapshotCreateDto, participationDivisionInfoUpdateDataList 둘중에 하나는 필수다 이말이야.',
       ); // TODO: 에러 표준화
-    const userValue = await this.applicationRepository.getUser(userId);
-    const applicationValue = await this.applicationRepository.getApplication({
+    const userEntity = await this.applicationRepository.getUser(userId);
+    const applicationEntity = await this.applicationRepository.getApplication({
       where: { userId, id: applicationId, status: 'DONE' },
       relations: [
         'playerSnapshots',
@@ -151,8 +151,8 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
       ],
     });
-    const application = new DoneApplication(applicationValue);
-    const competitionValue = await this.applicationRepository.getCompetition({
+    const application = new DoneApplication(applicationEntity);
+    const competitionEntity = await this.applicationRepository.getCompetition({
       where: { id: application.getCompetitionId() },
       relations: [
         'divisions',
@@ -161,7 +161,7 @@ export class ApplicationsAppService {
         'combinationDiscountSnapshots',
       ],
     });
-    const competition = new CompetitionModel(competitionValue);
+    const competition = new CompetitionModel(competitionEntity);
     competition.validateApplicationPeriod();
 
     if (playerSnapshotUpdateDto) {
@@ -181,10 +181,10 @@ export class ApplicationsAppService {
       });
     }
 
-    application.validateApplicationType(userValue);
+    application.validateApplicationType(userEntity);
     application.validateDivisionSuitability();
-    this.applicationRepository.saveApplication(application.toModelValue());
-    return { application: application.toModelValue() };
+    this.applicationRepository.saveApplication(application.toEntity());
+    return { application: application.toEntity() };
   }
 
   /**

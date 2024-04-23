@@ -14,21 +14,21 @@ export abstract class Application {
   protected playerSnapshots: PlayerSnapshot[];
   protected participationDivisionInfos: ParticipationDivisionInfo[];
 
-  constructor(value: IApplication.ModelValue.Base) {
-    this.id = value.id;
-    this.type = value.type;
-    this.userId = value.userId;
-    this.competitionId = value.competitionId;
-    this.createdAt = value.createdAt;
-    this.updatedAt = value.updatedAt;
-    this.status = value.status;
-    this.playerSnapshots = value.playerSnapshots.map((snapshot) => new PlayerSnapshot(snapshot));
-    this.participationDivisionInfos = value.participationDivisionInfos.map(
+  constructor(entity: IApplication.Entity.Base) {
+    this.id = entity.id;
+    this.type = entity.type;
+    this.userId = entity.userId;
+    this.competitionId = entity.competitionId;
+    this.createdAt = entity.createdAt;
+    this.updatedAt = entity.updatedAt;
+    this.status = entity.status;
+    this.playerSnapshots = entity.playerSnapshots.map((snapshot) => new PlayerSnapshot(snapshot));
+    this.participationDivisionInfos = entity.participationDivisionInfos.map(
       (info) => new ParticipationDivisionInfo(info),
     );
   }
 
-  abstract toModelValue(): IApplication.ModelValue.Base;
+  abstract toEntity(): IApplication.Entity.Base;
 
   getCompetitionId() {
     return this.competitionId;
@@ -38,10 +38,10 @@ export abstract class Application {
     return this.type;
   }
 
-  validateApplicationType(userValue: IUser) {
+  validateApplicationType(userEntity: IUser) {
     if (this.type === 'PROXY') return;
     const player = this.playerSnapshots[this.playerSnapshots.length - 1];
-    player.validateSelfApplication(userValue);
+    player.validateSelfApplication(userEntity);
   }
 
   validateDivisionSuitability() {

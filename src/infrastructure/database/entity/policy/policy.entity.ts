@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, CreateDateColumn, OneToMany } from 'typeorm';
 import { PolicyConsentEntity } from '../user/policy-consent.entity';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { ulid } from 'ulid';
 
 @Entity('policy')
 export class PolicyEntity {
-  @PrimaryGeneratedColumn()
+  @Column('varchar', { length: 26, primary: true, default: ulid() })
   id!: IPolicy['id'];
 
   @Column('int', { default: 1 })

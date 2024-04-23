@@ -53,19 +53,19 @@ export interface GetExpectedPaymentParam {
 
 // Application Layer Result DTOs -----------------------------------------------------
 export interface CreateApplicationRet {
-  application: IApplication.ModelValue.Ready;
+  application: IApplication.Entity.Ready;
 }
 
 export interface GetApplicationRet {
-  application: IApplication.ModelValue.Ready | IApplication.ModelValue.Done;
+  application: IApplication.Entity.Ready | IApplication.Entity.Done;
 }
 
 export interface UpdateReadyApplicationRet {
-  application: IApplication.ModelValue.Ready;
+  application: IApplication.Entity.Ready;
 }
 
 export interface UpdateDoneApplicationRet {
-  application: IApplication.ModelValue.Done;
+  application: IApplication.Entity.Done;
 }
 
 export interface GetExpectedPaymentRet {

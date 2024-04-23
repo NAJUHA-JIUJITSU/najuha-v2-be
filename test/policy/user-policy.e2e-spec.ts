@@ -10,9 +10,8 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { FindPoliciesResDto } from 'src/modules/policy/dto/response/find-policies.res.dto';
-import { PolicyResDto } from 'src/modules/policy/dto/response/policy.res.dto';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { FindPoliciesRes, FindPolicyRes } from 'src/modules/policy/presentation/dtos';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {
@@ -57,31 +56,35 @@ describe('E2E u-4 user-policy test', () => {
       await Promise.all(
         policyTypes.map((type) => {
           return policyAppService.createPolicy({
-            type: type,
-            isMandatory: true,
-            title: `${type} 제목`,
-            content: `${type} 내용`,
+            policyCreateDto: {
+              type: type,
+              isMandatory: true,
+              title: `${type} 제목`,
+              content: `${type} 내용`,
+            },
           });
         }),
       );
 
       const res = await request(app.getHttpServer()).get('/user/policy/recent');
-      expect(typia.is<ResponseForm<FindPoliciesResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
       expect(res.body.result.policies.every((policy) => policyTypes.includes(policy.type))).toBe(true);
     });
   });
 
   describe('u-4-2 GET /user/policy/:id --------------------------------------------------', () => {
     it('약관 ID로 약관을 가져오기 성공 시', async () => {
-      const policy = await policyAppService.createPolicy({
-        type: 'TERMS_OF_SERVICE',
-        isMandatory: true,
-        title: `TERMS_OF_SERVICE 제목`,
-        content: `TERMS_OF_SERVICE 내용`,
+      const { policy } = await policyAppService.createPolicy({
+        policyCreateDto: {
+          type: 'TERMS_OF_SERVICE',
+          isMandatory: true,
+          title: `TERMS_OF_SERVICE 제목`,
+          content: `TERMS_OF_SERVICE 내용`,
+        },
       });
 
       const res = await request(app.getHttpServer()).get(`/user/policy/${policy.id}`);
-      expect(typia.is<ResponseForm<PolicyResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<FindPolicyRes>>(res.body)).toBe(true);
       expect(res.body.result.policy.id).toEqual(policy.id);
     });
   });

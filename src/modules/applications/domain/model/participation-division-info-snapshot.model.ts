@@ -10,16 +10,16 @@ export class ParticipationDivisionInfoSnapshot {
   public readonly participationDivisionId: IDivision['id'];
   public readonly division: IDivision;
 
-  constructor(value: IParticipationDivisionInfoSnapshot.ModelValue.Base) {
-    assert<IParticipationDivisionInfoSnapshot.ModelValue.Base>(value);
-    this.id = value.id;
-    this.createdAt = value.createdAt;
-    this.participationDivisionInfoId = value.participationDivisionInfoId;
-    this.participationDivisionId = value.participationDivisionId;
-    this.division = value.division;
+  constructor(entity: IParticipationDivisionInfoSnapshot.Entity.Base) {
+    assert<IParticipationDivisionInfoSnapshot.Entity.Base>(entity);
+    this.id = entity.id;
+    this.createdAt = entity.createdAt;
+    this.participationDivisionInfoId = entity.participationDivisionInfoId;
+    this.participationDivisionId = entity.participationDivisionId;
+    this.division = entity.division;
   }
 
-  toModelValue(): IParticipationDivisionInfoSnapshot.ModelValue.Base {
+  toEntity(): IParticipationDivisionInfoSnapshot.Entity.Base {
     return {
       id: this.id,
       createdAt: this.createdAt,

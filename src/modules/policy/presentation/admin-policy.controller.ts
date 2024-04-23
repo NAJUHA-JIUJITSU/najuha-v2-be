@@ -1,12 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { PolicyAppService } from '../application/policy.app.service';
-import { CreatePolicyReqDto } from '../dto/request/create-policy.req.dto';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { FindPoliciesReqDto } from '../dto/request/find-policies.req.dto';
-import { PolicyResDto } from '../dto/response/policy.res.dto';
-import { FindPoliciesResDto } from '../dto/response/find-policies.res.dto';
+import { CreatePolicyReqBody, CreatePolicyRes, FindPoliciesReqQuery, FindPoliciesRes } from './dtos';
 
 @Controller('admin/policy')
 export class AdminPolicyController {
@@ -21,9 +18,8 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
-  async postPolicy(@TypedBody() dto: CreatePolicyReqDto): Promise<ResponseForm<PolicyResDto>> {
-    const policy = await this.PolicyAppService.createPolicy(dto);
-    return createResponseForm({ policy });
+  async postPolicy(@TypedBody() body: CreatePolicyReqBody): Promise<ResponseForm<CreatePolicyRes>> {
+    return createResponseForm(await this.PolicyAppService.createPolicy({ policyCreateDto: body }));
   }
 
   /**
@@ -36,8 +32,7 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
-  async findPolicies(@TypedQuery() query: FindPoliciesReqDto): Promise<ResponseForm<FindPoliciesResDto>> {
-    const policies = await this.PolicyAppService.findPolicies(query.type);
-    return createResponseForm({ policies });
+  async findPolicies(@TypedQuery() query: FindPoliciesReqQuery): Promise<ResponseForm<FindPoliciesRes>> {
+    return createResponseForm(await this.PolicyAppService.findPolicies({ type: query.type }));
   }
 }

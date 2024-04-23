@@ -1,75 +1,46 @@
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { IApplication } from './application.interface';
+import { tags } from 'typia';
 
 export interface IPlayerSnapshot {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /**
-   * - player name.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
+   * Player name. (한글, 영문, 숫자, 공백 입력 가능합니다).
    */
-  name: string;
+  name: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$'>;
 
-  /** - player gender */
+  /** Player gender. */
   gender: 'MALE' | 'FEMALE';
 
-  /**
-   * - player birth (BirtDate YYYYMMDD).
-   * @pattern ^[0-9]{8}$
-   */
-  birth: string & BirthDate;
+  /** Player birth (BirtDate YYYYMMDD). */
+  birth: string & BirthDate & tags.Pattern<'^[0-9]{8}$'>;
 
-  /**
-   * - player phone number.
-   * - ex) 01012345678.
-   * @pattern ^01[0-9]{9}$
-   */
-  phoneNumber: string;
+  /** Player phoneNumber. ex) 01012345678. */
+  phoneNumber: string & tags.Pattern<'^01[0-9]{9}$'>;
 
-  /** - player belt */
+  /** Player belt. */
   belt: '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
-  /**
-   * - 주짓수 네트워크.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
-   */
-  network: string;
+  /** 주짓수 네트워크. (한글, 영문, 숫자, 공백 입력 가능합니다). */
+  network: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$'>;
 
-  /**
-   * - 소속 팀.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
-   */
-  team: string;
+  /** 소속 팀. (한글, 영문, 숫자, 공백 입력 가능합니다). */
+  team: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$'>;
 
-  /**
-   * - 관장님 성함.
-   * @minLength 1
-   * @maxLength 64
-   * @patter ^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$
-   */
-  masterName: string;
+  /** 관장님 성함. */
+  masterName: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$'>;
 
-  /** - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다. */
+  /** CreatedAt */
   createdAt: Date | string;
 
-  /** - application id. */
+  /** Application id. */
   applicationId: IApplication['id'];
 }
 
 export namespace IPlayerSnapshot {
-  export namespace ModelValue {
+  export namespace Entity {
     export interface Base extends IPlayerSnapshot {}
   }
 

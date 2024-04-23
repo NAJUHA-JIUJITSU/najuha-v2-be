@@ -1,20 +1,17 @@
+import { tags } from 'typia';
 import { ICombinationDiscountRule } from './combination-discount-rule.interface';
 import { ICompetition } from './competition.interface';
 
 export interface ICombinationDiscountSnapshot {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  combinationDiscountRules: ICombinationDiscountRule[];
+  /** 조합 할인 규칙. */
+  combinationDiscountRules: ICombinationDiscountRule[] & tags.MinItems<1>;
 
-  /** - 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다. */
+  /** CreatedAt. */
   createdAt: Date | string;
 
-  /** - competition id. */
+  /** Competition id. */
   competitionId: ICompetition['id'];
 }

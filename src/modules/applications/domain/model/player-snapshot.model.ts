@@ -16,22 +16,22 @@ export class PlayerSnapshot {
   public readonly createdAt: IPlayerSnapshot['createdAt'];
   public readonly applicationId: IApplication['id'];
 
-  constructor(value: IPlayerSnapshot.ModelValue.Base) {
-    assert<IPlayerSnapshot.ModelValue.Base>(value);
-    this.id = value.id;
-    this.name = value.name;
-    this.gender = value.gender;
-    this.birth = value.birth;
-    this.phoneNumber = value.phoneNumber;
-    this.belt = value.belt;
-    this.network = value.network;
-    this.team = value.team;
-    this.masterName = value.masterName;
-    this.createdAt = value.createdAt;
-    this.applicationId = value.applicationId;
+  constructor(entity: IPlayerSnapshot.Entity.Base) {
+    assert<IPlayerSnapshot.Entity.Base>(entity);
+    this.id = entity.id;
+    this.name = entity.name;
+    this.gender = entity.gender;
+    this.birth = entity.birth;
+    this.phoneNumber = entity.phoneNumber;
+    this.belt = entity.belt;
+    this.network = entity.network;
+    this.team = entity.team;
+    this.masterName = entity.masterName;
+    this.createdAt = entity.createdAt;
+    this.applicationId = entity.applicationId;
   }
 
-  toModelValue(): IPlayerSnapshot.ModelValue.Base {
+  toEntity(): IPlayerSnapshot.Entity.Base {
     return {
       id: this.id,
       name: this.name,
@@ -47,12 +47,12 @@ export class PlayerSnapshot {
     };
   }
 
-  validateSelfApplication(userValue: IUser) {
+  validateSelfApplication(userEntity: IUser.Entity.User) {
     const mismatchs: string[] = [];
-    if (this.name !== userValue.name) mismatchs.push('name');
-    if (this.phoneNumber !== userValue.phoneNumber) mismatchs.push('phoneNumber');
-    if (this.birth !== userValue.birth) mismatchs.push('birth');
-    if (this.gender !== userValue.gender) mismatchs.push('gender');
+    if (this.name !== userEntity.name) mismatchs.push('name');
+    if (this.phoneNumber !== userEntity.phoneNumber) mismatchs.push('phoneNumber');
+    if (this.birth !== userEntity.birth) mismatchs.push('birth');
+    if (this.gender !== userEntity.gender) mismatchs.push('gender');
     // TODO: 에러 표준화
     if (mismatchs.length > 0) throw new Error(`Mismatched fields: ${mismatchs.join(', ')}`);
   }

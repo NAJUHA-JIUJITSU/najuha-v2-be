@@ -1,91 +1,111 @@
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
+import { Nullable } from 'src/common/utility-types';
+import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
+import { tags } from 'typia';
 
 /**
- * - 각 snsAuthProvider 마다 제공되는 정보.
+ * 각 snsAuthProvider 마다 제공되는 정보.
  * - kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
  * - naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
  * - google : snsId, email, name.
  * - apple  : snsId, email, name.
  */
 export interface IUser {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  /** - 사용자 역할. 사용자의 접근 권한을 나타냅니다. */
+  /**
+   * User 역할. User의 접근 권한을 나타냅니다.
+   * - ADMIN: 관리자 권한.
+   * - USER: 일반 User 권한.
+   * - TEMPORARY_USER: 회원가입을 완료하지 않은 User 권한.
+   */
   role: 'ADMIN' | 'USER' | 'TEMPORARY_USER';
 
-  /** - SNS 공급자. 사용자가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다. */
+  /** SNS 공급자. User가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다. */
   snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';
 
-  /**
-   * - SNS ID. 소셜 로그인을 위한 고유 식별자입니다.
-   * @minLength 1
-   * @maxLength 256
-   */
-  snsId: string;
+  /** SNS ID. 소셜 로그인을 위한 고유 식별자입니다. */
+  snsId: string & tags.MinLength<1> & tags.MaxLength<256>;
+
+  /** User 이메일 주소. */
+  email: string & tags.MinLength<1> & tags.MaxLength<320> & tags.Format<'email'>;
 
   /**
-   * - 사용자 이메일 주소.
-   * @minLength 1
-   * @maxLength 320
-   * @format email
+   * User 이름.
+   * - 컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.
+   * - User 이름은 한글, 영문, 숫자만 입력 가능합니다.
    */
-  email: string;
+  name: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$'>;
 
   /**
-   * - 사용자 이름. (컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.)
-   * @minLength 1
-   * @maxLength 64
-   * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$
-   */
-  name: string;
-
-  /**
-   * - 사용자 전화번호. 01012345678.
+   * User 전화번호.
    * - 전화번호가 저장되어 있으면 인증된 전화번호 입니다.
-   * @pattern ^01[0-9]{9}$
+   * - ex) 01012345678.
    */
-  phoneNumber: string;
+  phoneNumber: string & tags.Pattern<'^01[0-9]{9}$'>;
 
   /**
-   * - 사용자 별명. (영문, 한글, 숫자만 입력 가능합니다.)
-   * @minLength 1
-   * @maxLength 64
-   * @pattern ^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$
-   */
-  nickname: string;
+   * User 별명.
+   * - 영문, 한글, 숫자만 입력 가능합니다. */
+  nickname: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$'>;
 
-  /** - 사용자 성별. */
+  /** User 성별. */
   gender: 'MALE' | 'FEMALE';
 
-  /**
-   * - 사용자 생년월일 (BirtDate YYYYMMDD).
-   * @pattern ^[0-9]{8}$
-   */
-  birth: string & BirthDate;
+  /** User 생년월일 (BirtDate YYYYMMDD). */
+  birth: string & BirthDate & tags.Pattern<'^[0-9]{8}$'>;
 
-  /** - 사용자 주짓수 벨트. */
+  /** User 주짓수 벨트. */
   belt: '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
   /**
-   * - 사용자 프로필 이미지 키 (이미지 파일 이름). (썸네일 이미지 역할).
+   * User 프로필 이미지 키 (이미지 파일 이름).
    * - 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
-   * @minLength 1
-   * @maxLength 128
    */
-  profileImageUrlKey: string;
+  profileImageUrlKey: (string & tags.MinLength<1> & tags.MaxLength<128>) | null;
 
-  /**- 사용자 상태. 활성, 비활성 등을 나타냅니다. */
+  /**
+   * User 상태.
+   * - ACTIVE: 활성.
+   * - INACTIVE: 비활성.
+   */
   status: 'ACTIVE' | 'INACTIVE';
 
-  /** - 생성 시간. 데이터베이스에 엔티티가 처음 저장될 때 자동으로 설정됩니다. */
+  /** CreatedAt. */
   createdAt: string | Date;
 
-  /** - 최종 업데이트 시간. 엔티티가 수정될 때마다 자동으로 업데이트됩니다. */
+  /** UpdatedAt. */
   updatedAt: string | Date;
+}
+
+export namespace IUser {
+  /** Dto */
+  export namespace Dto {
+    export interface Create
+      extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,
+        Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>> {}
+
+    export interface Update
+      extends Pick<IUser, 'id'>,
+        Partial<Pick<IUser, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>> {}
+
+    export interface Register extends Pick<IUser, 'id' | 'nickname' | 'gender' | 'belt' | 'birth'> {}
+  }
+
+  /** Entity */
+  export namespace Entity {
+    export interface TemporaryUser
+      extends Pick<
+          IUser,
+          'id' | 'role' | 'snsAuthProvider' | 'snsId' | 'email' | 'name' | 'status' | 'createdAt' | 'updatedAt'
+        >,
+        Nullable<Pick<IUser, 'phoneNumber' | 'nickname' | 'gender' | 'birth' | 'belt' | 'profileImageUrlKey'>> {}
+
+    export interface User extends IUser {}
+
+    export interface RegisterUser extends TemporaryUser {
+      policyConsents: IPolicyConsent[];
+    }
+  }
 }

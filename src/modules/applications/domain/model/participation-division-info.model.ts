@@ -12,22 +12,22 @@ export class ParticipationDivisionInfo {
   private applicationId: IApplication['id'];
   private participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
 
-  constructor(value: IParticipationDivisionInfo.ModelValue.Base) {
-    assert<IParticipationDivisionInfo.ModelValue.Base>(value);
-    this.id = value.id;
-    this.createdAt = value.createdAt;
-    this.applicationId = value.applicationId;
-    this.participationDivisionInfoSnapshots = value.participationDivisionInfoSnapshots.map(
+  constructor(entity: IParticipationDivisionInfo.Entity.Base) {
+    assert<IParticipationDivisionInfo.Entity.Base>(entity);
+    this.id = entity.id;
+    this.createdAt = entity.createdAt;
+    this.applicationId = entity.applicationId;
+    this.participationDivisionInfoSnapshots = entity.participationDivisionInfoSnapshots.map(
       (snapshot) => new ParticipationDivisionInfoSnapshot(snapshot),
     );
   }
-  toModelValue(): IParticipationDivisionInfo.ModelValue.Base {
+  toEntity(): IParticipationDivisionInfo.Entity.Base {
     return {
       id: this.id,
       createdAt: this.createdAt,
       applicationId: this.applicationId,
       participationDivisionInfoSnapshots: this.participationDivisionInfoSnapshots.map((snapshot) =>
-        snapshot.toModelValue(),
+        snapshot.toEntity(),
       ),
     };
   }

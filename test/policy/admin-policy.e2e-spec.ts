@@ -10,10 +10,8 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { CreatePolicyReqDto } from 'src/modules/policy/dto/request/create-policy.req.dto';
-import { PolicyResDto } from 'src/modules/policy/dto/response/policy.res.dto';
-import { FindPoliciesResDto } from 'src/modules/policy/dto/response/find-policies.res.dto';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { CreatePolicyReqBody, CreatePolicyRes, FindPoliciesRes } from 'src/modules/policy/presentation/dtos';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
@@ -54,7 +52,7 @@ describe('E2E a-4 admin-policy test', () => {
 
   describe('a-4-1 POST /admin/policy -----------------------------------------------------', () => {
     it('약관 생성하기 성공 시', async () => {
-      const CreatePolicyReqDto = typia.random<CreatePolicyReqDto>();
+      const CreatePolicyReqDto = typia.random<CreatePolicyReqBody>();
       const accessToken = jwtService.sign(
         { userId: 1, userRole: 'ADMIN' },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -64,7 +62,7 @@ describe('E2E a-4 admin-policy test', () => {
         .post('/admin/policy')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(CreatePolicyReqDto);
-      expect(typia.is<ResponseForm<PolicyResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<CreatePolicyRes>>(res.body)).toBe(true);
     });
   });
 
@@ -77,10 +75,13 @@ describe('E2E a-4 admin-policy test', () => {
         await Promise.all(
           policyTypes.map((type) => {
             return policyAppService.createPolicy({
-              type: type,
-              isMandatory: true,
-              title: `${type} 제목`,
-              content: `${type} 내용`,
+              policyCreateDto: {
+                type: type,
+                isMandatory: true,
+                title: `${type} 제목`,
+
+                content: `${type} 내용`,
+              },
             });
           }),
         );
@@ -92,7 +93,7 @@ describe('E2E a-4 admin-policy test', () => {
       );
 
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<FindPoliciesResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
       expect(res.body.result.policies.length).toEqual(policyTypes.length * maxVersion);
     });
 
@@ -105,10 +106,12 @@ describe('E2E a-4 admin-policy test', () => {
         await Promise.all(
           policyTypes.map((type) => {
             return policyAppService.createPolicy({
-              type: type,
-              isMandatory: true,
-              title: `${type} 제목 ${version}`,
-              content: `${type} 내용 ${version}`,
+              policyCreateDto: {
+                type: type,
+                isMandatory: true,
+                title: `${type} 제목 ${version}`,
+                content: `${type} 내용 ${version}`,
+              },
             });
           }),
         );
@@ -124,7 +127,7 @@ describe('E2E a-4 admin-policy test', () => {
         .query(query)
         .set('Authorization', `Bearer ${accessToken}`);
 
-      expect(typia.is<ResponseForm<FindPoliciesResDto>>(res.body)).toBe(true);
+      expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
       expect(res.body.result.policies.length).toEqual(policyTypes.length);
       expect(res.body.result.policies[0].type).toEqual(query.type);
     });

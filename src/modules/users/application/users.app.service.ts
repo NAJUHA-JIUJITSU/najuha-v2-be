@@ -1,22 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserReqDto } from 'src/modules/users/dto/request/create-user.req.dto';
-import { UpdateUserReqDto } from '../dto/request/update-user.req.dto';
 import { UserRepository } from 'src/modules/users/user.repository';
-import { IUser } from '../domain/interface/user.interface';
+import { UserEntityFactory } from '../domain/user-entity.factory';
+import { CreateUserParam, CreateUserRet, GetMeParam, GetMeRet, UpdateUserParam, UpdateUserRet } from './dtos';
 
 @Injectable()
 export class UsersAppService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly UserEntityFactory: UserEntityFactory,
+  ) {}
 
-  async createUser(dto: CreateUserReqDto): Promise<IUser> {
-    return await this.userRepository.createUser(dto);
+  async createUser({ userCreateDto }: CreateUserParam): Promise<CreateUserRet> {
+    const user = await this.userRepository.createUser(this.UserEntityFactory.creatTemporaryUser(userCreateDto));
+    return { user };
   }
 
-  async updateUser(userId: IUser['id'], dto: UpdateUserReqDto): Promise<IUser> {
-    return await this.userRepository.saveUser({ id: userId, ...dto });
+  async updateUser({ userUpdateDto }: UpdateUserParam): Promise<UpdateUserRet> {
+    const user = await this.userRepository.saveUser(userUpdateDto);
+    return { user };
   }
 
-  async getMe(userId: IUser['id']): Promise<IUser> {
-    return await this.userRepository.getUser({ where: { id: userId } });
+  async getMe({ userId }: GetMeParam): Promise<GetMeRet> {
+    const user = await this.userRepository.getUser({ where: { id: userId } });
+    return { user };
   }
 }

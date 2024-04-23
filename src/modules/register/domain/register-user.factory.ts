@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { IRegisterUser } from './interface/register-user.interface';
-import { RegisterRepository } from '../register.repository';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { ulid } from 'ulid';
 
 @Injectable()
-export class RegisterUserFactory {
-  constructor(private readonly registerRepository: RegisterRepository) {}
-
-  async create(userId: IUser['id'], consentPolicyTypes: string[]): Promise<IRegisterUser> {
-    const user = await this.registerRepository.getUser({ where: { id: userId }, relations: ['policyConsents'] });
-    const latestPolicies = await this.registerRepository.findAllTypesOfLatestPolicies();
-
+export class RegisterUserEntityFactory {
+  async createRegisterUser(
+    user: IUser.Entity.RegisterUser,
+    latestPolicies: IPolicy[],
+    consentPolicyTypes: string[],
+  ): Promise<IUser.Entity.RegisterUser> {
     const unconsentedPolicies = latestPolicies.filter(
       (policy) =>
         !user.policyConsents.some((consent) => consent.policyId === policy.id) &&
@@ -19,7 +18,7 @@ export class RegisterUserFactory {
 
     const newPolicyConsents = unconsentedPolicies.map((policy) => {
       const policyConsent = {
-        id: 0, // TODO: id 어떻게 처리할지 고민
+        id: ulid(),
         userId: user.id,
         policyId: policy.id,
         createdAt: new Date(),

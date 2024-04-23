@@ -1,25 +1,19 @@
+import { tags } from 'typia';
+
 /**
- * - 약관 테이블.
+ * 약관.
  * - 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.
  * - 새로운 약관이 생성될 때마다 버전을 올립니다.
  */
 export interface IPolicy {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+
+  /** 약관의 버전. */
+  version: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /**
-   * - 약관의 버전.
-   * - 버전이 변경될 때마다 새로운 약관으로 간주합니다.
-   */
-  version: number;
-
-  /**
-   * - 약관의 종류.
+   * 약관의 종류.
    * - TERMS_OF_SERVICE: 서비스 이용 약관.
    * - PRIVACY: 개인정보 처리 방침.
    * - REFUND: 환불 정책.
@@ -28,26 +22,24 @@ export interface IPolicy {
   type: 'TERMS_OF_SERVICE' | 'PRIVACY' | 'REFUND' | 'ADVERTISEMENT';
 
   /**
-   * - 약관동의 필수여수
-   * - true: 필수
-   * - false: 선택
+   * 약관동의 필수여수.
+   * - true: 필수.
+   * - false: 선택.
    */
   isMandatory: boolean;
 
   /**
-   * - 약관의 제목. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책.
-   * @minLength 1
-   * @maxLength 128
+   * 약관의 제목.
+   * - ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책.
    */
-  title: string;
+  title: string & tags.MinLength<1> & tags.MaxLength<128>;
 
   /**
-   * // TODO: html 혹은 markdown 형식으로 저장할지 고민중
-   * - 약관의 내용. ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책.
-   * @minLength 1
+   * 약관의 내용.
+   * - ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책.
    */
-  content: string;
+  content: string & tags.MinLength<1>;
 
-  /** - 약관 생성 날짜 */
+  /** CreatedAt. */
   createdAt: Date | string;
 }

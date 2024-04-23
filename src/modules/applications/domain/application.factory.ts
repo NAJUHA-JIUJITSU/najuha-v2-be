@@ -30,7 +30,7 @@ export class ApplicationFactory {
       competitionId,
       playerSnapshots: [playerSnapshot],
       participationDivisionInfos: participationDivisionInfos.map((participationDivisionInfo) =>
-        participationDivisionInfo.toModelValue(),
+        participationDivisionInfo.toEntity(),
       ),
       status: 'READY',
       createdAt: new Date(),

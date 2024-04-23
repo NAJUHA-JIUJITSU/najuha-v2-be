@@ -1,31 +1,26 @@
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
+import { tags } from 'typia';
 
 export interface IParticipationDivisionInfoSnapshot {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  /**
-   * - 엔티티가 데이터베이스에 처음 저장될 때의 생성 시간. 자동으로 설정됩니다.
-   */
+  /** CreatedAt */
   createdAt: Date | string;
 
-  /** - participation division Info id. */
+  /** - Participation division Info id. */
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
 
-  /** - division id */
+  /** - Division id (참가한 부문 id). */
   participationDivisionId: IDivision['id'];
 
+  /** - Division. (참가한 부문).*/
   division: IDivision;
 }
 
 export namespace IParticipationDivisionInfoSnapshot {
-  export namespace ModelValue {
+  export namespace Entity {
     export interface Base extends IParticipationDivisionInfoSnapshot {}
   }
 }

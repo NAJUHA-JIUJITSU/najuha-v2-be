@@ -1,44 +1,27 @@
 import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
+import { tags } from 'typia';
 
 export interface IPaymentSnapshot {
-  /**
-   * - ULID.
-   * @type string
-   * @minLength 26
-   * @maxLength 26
-   */
-  id: string;
+  /** ULID. */
+  id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  /** - entity 생성 시간. */
+  /** CreatedAt */
   createdAt: Date | string;
 
-  /**
-   * - pacage total amount.
-   * @type uint32
-   * @minimum 0
-   */
-  normalAmount: number;
+  /** 할인이 적용되지 않은 총 금액 (원). */
+  normalAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
+
+  /** Earlybird discount amount. (원). */
+  earlybirdDiscountAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
+
+  /** Combination discount amount. (원). */
+  combinationDiscountAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /**
-   * - earlybird discount amount.
-   * @type uint32
-   * @minimum 0
+   * Total amount 할인이 적용된 최종금액. (원).
+   * - 계산 방법 : normalAmount - earlybirdDiscountAmount - combinationDiscountAmount.
    */
-  earlybirdDiscountAmount: number;
-
-  /**
-   * - combination discount amount.
-   * @type uint32
-   * @minimum 0
-   */
-  combinationDiscountAmount: number;
-
-  /**
-   * - total amount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount.
-   * @type uint32
-   * @minimum 0
-   */
-  totalAmount: number;
+  totalAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /** - application id. */
   applicationId: IApplication['id'];
