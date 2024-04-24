@@ -59,7 +59,6 @@ export class CompetitionsAppService {
       status,
     });
     const nextPage = competitions.length === limit ? page + 1 : null;
-    console.log('competition.length', competitions.length);
     return { competitions, nextPage };
   }
 

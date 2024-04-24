@@ -1,4 +1,0 @@
-
-> najuha-v2-be@0.0.1 test:e2e
-> jest --config ./test/jest-e2e.json --detectOpenHandles ./test/register
-
