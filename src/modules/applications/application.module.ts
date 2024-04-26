@@ -1,31 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ApplicationEntity } from '../../infrastructure/database/entity/application/application.entity';
-import { ParticipationDivisionInfoEntity } from '../../infrastructure/database/entity/application/participation-division-info.entity';
-import { PlayerSnapshotEntity } from '../../infrastructure/database/entity/application/player-snapshot.entity';
-import { ParticipationDivisionInfoSnapshotEntity } from '../../infrastructure/database/entity/application/participation-division-info-snapshot.entity';
 import { UserApplicationsController } from './presentation/user-applications.controller';
 import { ApplicationsAppService } from './application/applications.app.service';
-import { CompetitionEntity } from '../../infrastructure/database/entity/competition/competition.entity';
-import { UserEntity } from '../../infrastructure/database/entity/user/user.entity';
 import { ApplicationFactory } from './domain/application.factory';
-import { PaymentSnapshotEntity } from '../../infrastructure/database/entity/competition/payment-snapshot.entity';
 import { ApplicationDomainService } from './domain/application.domain.service';
-import { ParticipationDivisionInfoPaymentEntity } from 'src/infrastructure/database/entity/application/participation-division-info-payment.entity';
+import { DatabaseModule } from 'src/infrastructure/database/database.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      UserEntity,
-      ApplicationEntity,
-      PlayerSnapshotEntity,
-      ParticipationDivisionInfoEntity,
-      ParticipationDivisionInfoSnapshotEntity,
-      CompetitionEntity,
-      PaymentSnapshotEntity,
-      ParticipationDivisionInfoPaymentEntity,
-    ]),
-  ],
+  imports: [DatabaseModule],
   controllers: [UserApplicationsController],
   providers: [ApplicationsAppService, ApplicationFactory, ApplicationDomainService],
 })

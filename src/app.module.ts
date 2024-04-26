@@ -4,7 +4,6 @@ import { LoggerModule } from 'src/infrastructure/logger/logger.module';
 import { ApiConventionsModule } from './modules/api-conventions/api-conventions.module';
 import { FilterModule } from './infrastructure/filter/filter.module';
 import { GuardModule } from './infrastructure/guard/guard.module';
-import { DatabaseModule } from './infrastructure/database/database.module';
 import { MiddlewareModule } from './infrastructure/middleware/middleware.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { UsersModule } from 'src/modules/users/users.module';
@@ -13,13 +12,15 @@ import { RegisterModule } from './modules/register/register.module';
 import { CompetitionsModule } from './modules/competitions/competitions.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
 import { ApplicationModule } from './modules/applications/application.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfigAsync } from './infrastructure/database/typeorm.config';
 
 @Module({
   imports: [
     /**
      * Infra Modules: These modules ard used to provide the basic functionality to the application
      */
-    DatabaseModule,
+    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     FilterModule,
     GuardModule,
     JwtModule,

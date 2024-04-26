@@ -9,16 +9,11 @@ import {
   FindPolicyParam,
   FindPolicyRet,
 } from './dtos';
-import { InjectRepository } from '@nestjs/typeorm';
-import { PolicyEntity } from 'src/infrastructure/database/entity/policy/policy.entity';
-import { Repository } from 'typeorm';
+import { PolicyRepository } from 'src/infrastructure/database/custom-repository/policy.repository';
 
 @Injectable()
 export class PolicyAppService {
-  constructor(
-    @InjectRepository(PolicyEntity)
-    private readonly policyRepository: Repository<PolicyEntity>,
-  ) {}
+  constructor(private readonly policyRepository: PolicyRepository) {}
 
   async createPolicy({ policyCreateDto }: CreatePolicyParam): Promise<CreatePolicyRet> {
     const existingPolicyEntity = await this.policyRepository.findOne({
@@ -49,13 +44,7 @@ export class PolicyAppService {
 
   // TODO content 는 제외
   async findAllTypesOfLatestPolicies(): Promise<FindAllTypesOfLatestPoliciesRet> {
-    // findAllTypesOfLatestPolicies
-    const policies = await this.policyRepository
-      .createQueryBuilder('policy')
-      .distinctOn(['policy.type'])
-      .orderBy('policy.type')
-      .addOrderBy('policy.createdAt', 'DESC')
-      .getMany();
+    const policies = await this.policyRepository.findAllTypesOfLatestPolicies();
     return { policies };
   }
 }

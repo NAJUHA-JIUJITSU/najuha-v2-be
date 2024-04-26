@@ -12,11 +12,9 @@ import {
   SnsLoginRet,
 } from './dtos';
 import { UserEntityFactory } from 'src/modules/users/domain/user-entity.factory';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
-import { Repository } from 'typeorm';
 import { assert } from 'typia';
 import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
+import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
 
 @Injectable()
 export class AuthAppService {
@@ -24,8 +22,7 @@ export class AuthAppService {
     private readonly snsAuthClient: SnsAuthClient,
     private readonly AuthTokenDomainService: AuthTokenDomainService,
     private readonly UserEntityFactory: UserEntityFactory,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async snsLogin(snsLoginParam: SnsLoginParam): Promise<SnsLoginRet> {

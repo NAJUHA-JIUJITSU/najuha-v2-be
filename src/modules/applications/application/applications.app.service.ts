@@ -18,27 +18,22 @@ import { DoneApplication } from '../domain/model/done-applicatioin.model';
 import { ReadyApplicationModel } from '../domain/model/ready-application.model';
 import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
-import { Repository } from 'typeorm';
-import { ApplicationEntity } from 'src/infrastructure/database/entity/application/application.entity';
-import { CompetitionEntity } from 'src/infrastructure/database/entity/competition/competition.entity';
 import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { UserModel } from 'src/modules/users/domain/model/user.model';
+import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
+import { ApplicationRepository } from 'src/infrastructure/database/custom-repository/application.repository';
+import { CompetitionRepository } from 'src/infrastructure/database/custom-repository/competition.repository';
 
 @Injectable()
 export class ApplicationsAppService {
   constructor(
     private readonly applicationFactory: ApplicationFactory,
     private readonly applicationDomainService: ApplicationDomainService,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(ApplicationEntity)
-    private readonly applicationRepository: Repository<ApplicationEntity>,
-    @InjectRepository(CompetitionEntity)
-    private readonly competitionRepository: Repository<CompetitionEntity>,
+    private readonly userRepository: UserRepository,
+    private readonly applicationRepository: ApplicationRepository,
+    private readonly competitionRepository: CompetitionRepository,
   ) {}
 
   /** Create application. */

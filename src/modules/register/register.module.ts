@@ -3,14 +3,11 @@ import { UserRegisterController } from './presentation/user-register.controller'
 import { RegisterAppService } from './application/register.app.service';
 import { PhoneNumberAuthCodeDomainService } from './domain/phone-number-auth-code.domain.service';
 import { AuthModule } from '../auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PolicyEntity } from '../../infrastructure/database/entity/policy/policy.entity';
-import { PolicyConsentEntity } from '../../infrastructure/database/entity/user/policy-consent.entity';
-import { UserEntity } from '../../infrastructure/database/entity/user/user.entity';
 import { RegisterUserEntityFactory } from './domain/register-user.factory';
+import { DatabaseModule } from 'src/infrastructure/database/database.module';
 
 @Module({
-  imports: [AuthModule, TypeOrmModule.forFeature([UserEntity, PolicyEntity, PolicyConsentEntity])],
+  imports: [AuthModule, DatabaseModule],
   controllers: [UserRegisterController],
   providers: [RegisterAppService, PhoneNumberAuthCodeDomainService, RegisterUserEntityFactory],
   exports: [RegisterAppService],

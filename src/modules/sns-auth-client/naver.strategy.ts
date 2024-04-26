@@ -56,11 +56,11 @@ export class NaverStrategy implements ISnsAuthStrategy {
 
   private formatUserData(data: INaverUserData): IValidatedUserData {
     const dto: IValidatedUserData = {
-      snsAuthProvider: 'NAVER', // TODO: type으로 관리
+      snsAuthProvider: 'NAVER',
       snsId: data.id,
       name: data.name,
       email: data.email,
-      gender: data.gender === 'M' ? 'MALE' : 'FEMALE', // TODO: type으로 관리
+      gender: data.gender === 'M' ? 'MALE' : 'FEMALE',
       birth: data.birthyear + data.birthday.split('-').join(''),
     };
 

@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { CompetitionEntity } from '../../infrastructure/database/entity/competition/competition.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ICompetitionQueryOptions } from './domain/interface/competition.interface';
+import { DataSource, Repository } from 'typeorm';
+import { CompetitionEntity } from '../entity/competition/competition.entity';
+import { ICompetitionQueryOptions } from 'src/modules/competitions/domain/interface/competition.interface';
 
 @Injectable()
-export class CompetitionPagenationRepository {
-  constructor(
-    @InjectRepository(CompetitionEntity)
-    private readonly competitionRepository: Repository<CompetitionEntity>,
-  ) {}
+export class CompetitionRepository extends Repository<CompetitionEntity> {
+  constructor(private dataSource: DataSource) {
+    super(CompetitionEntity, dataSource.createEntityManager());
+  }
 
-  async findMany({
+  async findManyWithQueryOptions({
     page,
     limit,
     parsedDateFilter,
@@ -25,7 +23,7 @@ export class CompetitionPagenationRepository {
   >) {
     const now = new Date();
 
-    let qb = this.competitionRepository.createQueryBuilder('competition');
+    let qb = this.createQueryBuilder('competition');
 
     qb = qb.leftJoinAndSelect(
       'competition.earlybirdDiscountSnapshots',

@@ -18,32 +18,24 @@ import {
   UpdateCompetitionStatusParam,
 } from './dtos';
 import { CompetitionModel } from '../domain/model/competition.model';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CompetitionEntity } from 'src/infrastructure/database/entity/competition/competition.entity';
-import { DivisionEntity } from 'src/infrastructure/database/entity/competition/division.entity';
-import { Repository } from 'typeorm';
-import { EarlybirdDiscountSnapshotEntity } from 'src/infrastructure/database/entity/competition/earlybird-discount-snapshot.entity';
-import { CombinationDiscountSnapshotEntity } from 'src/infrastructure/database/entity/competition/combination-discount-snapshot.entity';
 import { assert } from 'typia';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
-import { CompetitionPagenationRepository } from '../competition-pagenation.repository';
 import { CompetitionFactory } from '../domain/competition.factory';
+import { CompetitionRepository } from 'src/infrastructure/database/custom-repository/competition.repository';
+import { DivisionRepository } from 'src/infrastructure/database/custom-repository/division.repository';
+import { EarlybirdDiscountSnapshotRepository } from 'src/infrastructure/database/custom-repository/earlybird-discount-snapshot.repository';
+import { CombinationDiscountSnapshotRepository } from 'src/infrastructure/database/custom-repository/combination-discount-snapshot.repository';
 
 @Injectable()
 export class CompetitionsAppService {
   constructor(
     private readonly divisionFactory: DivisionFactory,
     private readonly competitionFactory: CompetitionFactory,
-    private readonly competitionPagenationRepository: CompetitionPagenationRepository,
-    @InjectRepository(CompetitionEntity)
-    private readonly competitionRepository: Repository<CompetitionEntity>,
-    @InjectRepository(DivisionEntity)
-    private readonly divisionRepository: Repository<DivisionEntity>,
-    @InjectRepository(EarlybirdDiscountSnapshotEntity)
-    private readonly earlybirdDiscountSnapshotRepository: Repository<EarlybirdDiscountSnapshotEntity>,
-    @InjectRepository(CombinationDiscountSnapshotEntity)
-    private readonly combinationDiscountSnapshotRepository: Repository<CombinationDiscountSnapshotEntity>,
+    private readonly competitionRepository: CompetitionRepository,
+    private readonly divisionRepository: DivisionRepository,
+    private readonly earlybirdDiscountSnapshotRepository: EarlybirdDiscountSnapshotRepository,
+    private readonly combinationDiscountSnapshotRepository: CombinationDiscountSnapshotRepository,
   ) {}
 
   async createCompetition({ competitionCreateDto }: CreateCompetitionParam): Promise<CreateCompetitionRet> {
@@ -71,7 +63,7 @@ export class CompetitionsAppService {
 
   async findCompetitions(query: FindCompetitionsParam): Promise<FindCompetitionsRet> {
     const competitionEntites = assert<Omit<ICompetition, 'divisions' | 'combinationDiscountSnapshots'>[]>(
-      await this.competitionPagenationRepository.findMany({
+      await this.competitionRepository.findManyWithQueryOptions({
         ...query,
       }),
     );

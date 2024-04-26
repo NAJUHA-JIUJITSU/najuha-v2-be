@@ -16,13 +16,11 @@ import {
   SendPhoneNumberAuthCodeRet,
 } from './dtos';
 import { RegisterUserModel } from '../domain/model/register-user.model';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
-import { Repository } from 'typeorm';
 import { assert } from 'typia';
 import { IRegisterUser, ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
-import { PolicyEntity } from 'src/infrastructure/database/entity/policy/policy.entity';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { PolicyRepository } from 'src/infrastructure/database/custom-repository/policy.repository';
+import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
 
 @Injectable()
 export class RegisterAppService {
@@ -30,10 +28,8 @@ export class RegisterAppService {
     private readonly authTokenDomainService: AuthTokenDomainService,
     private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeDomainService,
     private readonly regiterUserEntityFactory: RegisterUserEntityFactory,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(PolicyEntity)
-    private readonly policyRepository: Repository<PolicyEntity>,
+    private readonly userRepository: UserRepository,
+    private readonly policyRepository: PolicyRepository,
   ) {}
 
   async getTemporaryUser({ userId }: GetTemporaryUserParam): Promise<GetTemporaryUserRet> {
@@ -93,15 +89,7 @@ export class RegisterAppService {
         }),
     );
 
-    // findAllTypesOfLatestPolicies
-    const latestPolicies = assert<IPolicy[]>(
-      await this.policyRepository
-        .createQueryBuilder('policy')
-        .distinctOn(['policy.type'])
-        .orderBy('policy.type')
-        .addOrderBy('policy.createdAt', 'DESC')
-        .getMany(),
-    );
+    const latestPolicies = assert<IPolicy[]>(await this.policyRepository.findAllTypesOfLatestPolicies());
     const mandatoryPolicies = latestPolicies.filter((policy) => policy.isMandatory);
 
     registerUserEntity = await this.regiterUserEntityFactory.createRegisterUser(
