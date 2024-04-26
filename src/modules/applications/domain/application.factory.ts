@@ -2,14 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { IApplication } from './interface/application.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { ulid } from 'ulid';
-import { IParticipationDivisionInfo } from './interface/participation-division-info.interface';
-import { IPlayerSnapshot } from './interface/player-snapshot.interface';
+import {
+  IParticipationDivisionInfo,
+  IParticipationDivisionInfoUpdateDto,
+} from './interface/participation-division-info.interface';
+import { IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { ParticipationDivisionInfoSnapshot } from './model/participation-division-info-snapshot.model';
 import { PlayerSnapshot } from './model/player-snapshot.model';
 import { ParticipationDivisionInfo } from './model/participation-division-info.model';
-import { ReadyApplication } from './model/ready-application.model';
+import { ReadyApplicationModel } from './model/ready-application.model';
 
 @Injectable()
 export class ApplicationFactory {
@@ -18,12 +21,12 @@ export class ApplicationFactory {
     competitionId: ICompetition['id'],
     divisions: IDivision[],
     applicationType: IApplication['type'],
-    playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
+    playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
   ) {
     const applicationId = ulid();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
     const participationDivisionInfos = this.createParticipationDivisionInfos(applicationId, divisions);
-    return new ReadyApplication({
+    return new ReadyApplicationModel({
       id: applicationId,
       type: applicationType,
       userId,
@@ -38,7 +41,7 @@ export class ApplicationFactory {
     });
   }
 
-  createPlayerSnapshot(applicationId: IApplication['id'], playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create) {
+  createPlayerSnapshot(applicationId: IApplication['id'], playerSnapshotCreateDto: IPlayerSnapshotCreateDto) {
     return new PlayerSnapshot({
       id: ulid(),
       applicationId,
@@ -85,7 +88,7 @@ export class ApplicationFactory {
 
   createParticipationDivisionInfoSnapshots(
     divisions: IDivision[],
-    participationDivisionInfoUpdateDtos: IParticipationDivisionInfo.Dto.Update[],
+    participationDivisionInfoUpdateDtos: IParticipationDivisionInfoUpdateDto[],
   ) {
     return participationDivisionInfoUpdateDtos.map((updateParticipationDivisionInfoDto) => {
       const division = divisions.find(

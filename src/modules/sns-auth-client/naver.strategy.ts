@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
-import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
+import { BusinessException, SnsAuthErrors } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 import { INaverUserData } from './interface/naver-user-data.type';
 import { ISnsAuthStrategy } from './interface/sns-auth.stratege.interface';
@@ -19,7 +19,7 @@ export class NaverStrategy implements ISnsAuthStrategy {
       return this.formatUserData(naverUserData);
     } catch (e: any) {
       // TODO: any 타입 수정 필요
-      throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL, e.response.data);
+      throw new BusinessException(SnsAuthErrors.SNS_AUTH_NAVER_LOGIN_FAIL, e.response.data);
     }
   }
 

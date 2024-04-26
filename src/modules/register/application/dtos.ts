@@ -1,4 +1,4 @@
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ITemporaryUser, IUser, IUserRgistertDto } from 'src/modules/users/domain/interface/user.interface';
 import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.type';
 import { IAuthTokens } from 'src/modules/auth/domain/interface/auth-tokens.interface';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
@@ -24,13 +24,13 @@ export interface ConfirmAuthCodeParam {
 }
 
 export interface RegisterUserParam {
-  userRegisterDto: IUser.Dto.Register;
+  userRegisterDto: IUserRgistertDto;
   consentPolicyTypes: IPolicy['type'][];
 }
 
 // Application layer Result DTOs
 export interface GetTemporaryUserRet {
-  user: IUser.Entity.TemporaryUser;
+  user: ITemporaryUser;
 }
 
 export interface IsDuplicateNicknameRet {

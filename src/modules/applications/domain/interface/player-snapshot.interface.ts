@@ -33,22 +33,14 @@ export interface IPlayerSnapshot {
   masterName: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$'>;
 
   /** CreatedAt */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** Application id. */
   applicationId: IApplication['id'];
 }
 
-export namespace IPlayerSnapshot {
-  export namespace Entity {
-    export interface PlayerSnapshot extends IPlayerSnapshot {}
-  }
-
-  export namespace Dto {
-    export interface Create
-      extends Pick<
-        IPlayerSnapshot,
-        'name' | 'gender' | 'birth' | 'phoneNumber' | 'belt' | 'network' | 'team' | 'masterName'
-      > {}
-  }
-}
+export interface IPlayerSnapshotCreateDto
+  extends Pick<
+    IPlayerSnapshot,
+    'name' | 'gender' | 'birth' | 'phoneNumber' | 'belt' | 'network' | 'team' | 'masterName'
+  > {}

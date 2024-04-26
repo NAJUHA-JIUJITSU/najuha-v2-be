@@ -37,7 +37,7 @@ export type ENTITY_NOT_FOUND = ErrorResponse & {
   result: 'Entity Not Found';
 };
 
-export const CommonErrorMap = {
+export const CommonErrors = {
   INTERNAL_SERVER_ERROR: typia.random<INTERNAL_SERVER_ERROR>(),
   ENTITY_NOT_FOUND: typia.random<ENTITY_NOT_FOUND>(),
 };
@@ -80,7 +80,7 @@ export type AUTH_UNREGISTERED_ADMIN_CREDENTIALS = ErrorResponse & {
   result: '등록되지 않은 관리자 계정입니다.';
 };
 
-export const AuthErrorMap = {
+export const AuthErrors = {
   AUTH_ACCESS_TOKEN_MISSING: typia.random<AUTH_ACCESS_TOKEN_MISSING>(),
   AUTH_ACCESS_TOKEN_UNAUTHORIZED: typia.random<AUTH_ACCESS_TOKEN_UNAUTHORIZED>(),
   AUTH_REFRESH_TOKEN_UNAUTHORIZED: typia.random<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(),
@@ -119,7 +119,7 @@ export type SNS_AUTH_GOOGLE_LOGIN_FAIL = ErrorResponse & {
   result: '구글 로그인에 실패했습니다.';
 };
 
-export const SnsAuthErrorMap = {
+export const SnsAuthErrors = {
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER: typia.random<SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER>(),
   SNS_AUTH_KAKAO_LOGIN_FAIL: typia.random<SNS_AUTH_KAKAO_LOGIN_FAIL>(),
   SNS_AUTH_NAVER_LOGIN_FAIL: typia.random<SNS_AUTH_NAVER_LOGIN_FAIL>(),
@@ -157,7 +157,7 @@ export type REGISTER_PHONE_NUMBER_REQUIRED = ErrorResponse & {
   result: '회원가입을 위해서는 휴대폰 번호인증이 필요합니다.';
 };
 
-export const RegisterErrorMap = {
+export const RegisterErrors = {
   REGISTER_NICKNAME_DUPLICATED: typia.random<REGISTER_NICKNAME_DUPLICATED>(),
   REGISTER_BIRTH_INVALID: typia.random<REGISTER_BIRTH_INVALID>(),
   REGISTER_POLICY_CONSENT_REQUIRED: typia.random<REGISTER_POLICY_CONSENT_REQUIRED>(),
@@ -174,7 +174,7 @@ export const RegisterErrorMap = {
 //   result: '존재하지 않는 유저입니다.';
 // };
 
-export const UsersErrorMap = {};
+export const UsersErrors = {};
 
 /** ----------------------------------------------------------------------------
  * Policy 5000 ~ 5999
@@ -186,7 +186,7 @@ export const UsersErrorMap = {};
 //   result: '존재하지 않는 약관입니다.';
 // };
 
-export const PolicyErrorMap = {};
+export const PolicyErrors = {};
 
 /** ----------------------------------------------------------------------------
  * Competitions 6000 ~ 6999
@@ -249,7 +249,7 @@ export type APPLICATIONS_REGISTRATION_ENDED = ErrorResponse & {
   result: '대회 신청 기간이 종료되었습니다.';
 };
 
-export const ApplicationsErrorMap = {
+export const ApplicationsErrors = {
   APPLICATIONS_DIVISION_NOT_FOUND: typia.random<APPLICATIONS_DIVISION_NOT_FOUND>(),
   APPLICATIONS_DIVISION_AGE_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_AGE_NOT_MATCH>(),
   APPLICATIONS_DIVISION_GENDER_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_GENDER_NOT_MATCH>(),

@@ -7,7 +7,7 @@ export interface IParticipationDivisionInfoSnapshot {
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /** CreatedAt */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** - Participation division Info id. */
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
@@ -17,10 +17,4 @@ export interface IParticipationDivisionInfoSnapshot {
 
   /** - Division. (참가한 부문).*/
   division: IDivision;
-}
-
-export namespace IParticipationDivisionInfoSnapshot {
-  export namespace Entity {
-    export interface Base extends IParticipationDivisionInfoSnapshot {}
-  }
 }

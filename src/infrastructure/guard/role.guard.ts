@@ -3,7 +3,7 @@ import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
+import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 
 const ROLE_LEVEL_KEY = Symbol('roleLevel');
@@ -35,7 +35,7 @@ export class RoleGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromHeader(request);
-    if (!accessToken) throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_MISSING);
+    if (!accessToken) throw new BusinessException(AuthErrors.AUTH_ACCESS_TOKEN_MISSING);
 
     const payload = await this.verifyToken(accessToken);
 
@@ -55,13 +55,13 @@ export class RoleGuard implements CanActivate {
       });
     } catch (e: any) {
       // TODO: any 타입 수정 필요
-      throw new BusinessException(AuthErrorMap.AUTH_ACCESS_TOKEN_UNAUTHORIZED, e.message);
+      throw new BusinessException(AuthErrors.AUTH_ACCESS_TOKEN_UNAUTHORIZED, e.message);
     }
   }
 
   private validateRoleLevel(userRole: string, requiredRoleLevel: RoleLevel): any {
     if (requiredRoleLevel > RoleLevel[userRole]) {
-      throw new BusinessException(AuthErrorMap.AUTH_LEVEL_FORBIDDEN);
+      throw new BusinessException(AuthErrors.AUTH_LEVEL_FORBIDDEN);
     }
   }
 

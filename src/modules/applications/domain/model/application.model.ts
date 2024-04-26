@@ -3,18 +3,18 @@ import { PlayerSnapshot } from './player-snapshot.model';
 import { ParticipationDivisionInfo } from './participation-division-info.model';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
-export abstract class Application {
-  protected id: IApplication['id'];
-  protected userId: IApplication['userId'];
-  protected competitionId: IApplication['competitionId'];
-  protected createdAt: IApplication['createdAt'];
-  protected updatedAt: IApplication['updatedAt'];
-  protected type: IApplication['type'];
+export abstract class ApplicationModel {
+  protected readonly id: IApplication['id'];
+  protected readonly type: IApplication['type'];
+  protected readonly competitionId: IApplication['competitionId'];
+  protected readonly userId: IApplication['userId'];
+  protected readonly createdAt: IApplication['createdAt'];
+  protected readonly updatedAt: IApplication['updatedAt'];
+  protected readonly playerSnapshots: PlayerSnapshot[];
+  protected readonly participationDivisionInfos: ParticipationDivisionInfo[];
   protected status: IApplication['status'];
-  protected playerSnapshots: PlayerSnapshot[];
-  protected participationDivisionInfos: ParticipationDivisionInfo[];
 
-  constructor(entity: IApplication.Entity.Base) {
+  constructor(entity: IApplication) {
     this.id = entity.id;
     this.type = entity.type;
     this.userId = entity.userId;
@@ -28,14 +28,18 @@ export abstract class Application {
     );
   }
 
-  abstract toEntity(): IApplication.Entity.Base;
+  abstract toEntity(): IApplication;
 
-  getCompetitionId() {
-    return this.competitionId;
+  getId() {
+    return this.id;
   }
 
   getType() {
     return this.type;
+  }
+
+  getCompetitionId() {
+    return this.competitionId;
   }
 
   validateApplicationType(userEntity: IUser) {

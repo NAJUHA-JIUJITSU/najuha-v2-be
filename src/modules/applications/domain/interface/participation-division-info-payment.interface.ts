@@ -6,7 +6,7 @@ export interface IParticipationDivisionInfoPayment {
   /** ULID. */
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   divisionId: IDivision['id'];
 

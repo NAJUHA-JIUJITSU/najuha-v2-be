@@ -1,4 +1,4 @@
-import { ApplicationsErrorMap, BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
+import { ApplicationsErrors, BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
 import { ICompetition } from '../interface/competition.interface';
 import { CombinationDiscountSnapshotModel } from './combination-discount-snapshot.model';
 import { DivisionModel } from './division.model';
@@ -6,54 +6,84 @@ import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.en
 import { IDivision } from '../interface/division.interface';
 
 export class CompetitionModel {
-  public id: ICompetition['id'];
-  public title: ICompetition['title'];
-  public address: ICompetition['address'];
-  public competitionDate: ICompetition['competitionDate'];
-  public registrationStartDate: ICompetition['registrationStartDate'];
-  public registrationEndDate: ICompetition['registrationEndDate'];
-  public refundDeadlineDate: ICompetition['refundDeadlineDate'];
-  public soloRegistrationAdjustmentStartDate: ICompetition['soloRegistrationAdjustmentStartDate'];
-  public soloRegistrationAdjustmentEndDate: ICompetition['soloRegistrationAdjustmentEndDate'];
-  public registrationListOpenDate: ICompetition['registrationListOpenDate'];
-  public bracketOpenDate: ICompetition['bracketOpenDate'];
-  public description: ICompetition['description'];
-  public isPartnership: ICompetition['isPartnership'];
-  public viewCount: ICompetition['viewCount'];
-  public posterImgUrlKey: ICompetition['posterImgUrlKey'];
-  public status: ICompetition['status'];
-  public createdAt: ICompetition['createdAt'];
-  public updatedAt: ICompetition['updatedAt'];
-  public divisions: DivisionModel[];
-  public earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
-  public combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
+  private readonly id: ICompetition['id'];
+  private title: ICompetition['title'];
+  private address: ICompetition['address'];
+  private competitionDate: ICompetition['competitionDate'];
+  private registrationStartDate: ICompetition['registrationStartDate'];
+  private registrationEndDate: ICompetition['registrationEndDate'];
+  private refundDeadlineDate: ICompetition['refundDeadlineDate'];
+  private soloRegistrationAdjustmentStartDate: ICompetition['soloRegistrationAdjustmentStartDate'];
+  private soloRegistrationAdjustmentEndDate: ICompetition['soloRegistrationAdjustmentEndDate'];
+  private registrationListOpenDate: ICompetition['registrationListOpenDate'];
+  private bracketOpenDate: ICompetition['bracketOpenDate'];
+  private description: ICompetition['description'];
+  private isPartnership: ICompetition['isPartnership'];
+  private viewCount: ICompetition['viewCount'];
+  private posterImgUrlKey: ICompetition['posterImgUrlKey'];
+  private status: ICompetition['status'];
+  private readonly createdAt: ICompetition['createdAt'];
+  private readonly updatedAt: ICompetition['updatedAt'];
+  private readonly divisions: DivisionModel[];
+  private readonly earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
+  private readonly combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
 
-  constructor(competition: ICompetition) {
-    this.id = competition.id;
-    this.title = competition.title;
-    this.address = competition.address;
-    this.competitionDate = competition.competitionDate;
-    this.registrationStartDate = competition.registrationStartDate;
-    this.registrationEndDate = competition.registrationEndDate;
-    this.refundDeadlineDate = competition.refundDeadlineDate;
-    this.soloRegistrationAdjustmentStartDate = competition.soloRegistrationAdjustmentStartDate;
-    this.soloRegistrationAdjustmentEndDate = competition.soloRegistrationAdjustmentEndDate;
-    this.registrationListOpenDate = competition.registrationListOpenDate;
-    this.bracketOpenDate = competition.bracketOpenDate;
-    this.description = competition.description;
-    this.isPartnership = competition.isPartnership;
-    this.viewCount = competition.viewCount;
-    this.posterImgUrlKey = competition.posterImgUrlKey;
-    this.status = competition.status;
-    this.createdAt = competition.createdAt;
-    this.updatedAt = competition.updatedAt;
-    this.divisions = competition.divisions.map((division) => new DivisionModel(division));
-    this.earlybirdDiscountSnapshots = competition.earlybirdDiscountSnapshots.map(
+  constructor(entity: ICompetition) {
+    this.id = entity.id;
+    this.title = entity.title;
+    this.address = entity.address;
+    this.competitionDate = entity.competitionDate;
+    this.registrationStartDate = entity.registrationStartDate;
+    this.registrationEndDate = entity.registrationEndDate;
+    this.refundDeadlineDate = entity.refundDeadlineDate;
+    this.soloRegistrationAdjustmentStartDate = entity.soloRegistrationAdjustmentStartDate;
+    this.soloRegistrationAdjustmentEndDate = entity.soloRegistrationAdjustmentEndDate;
+    this.registrationListOpenDate = entity.registrationListOpenDate;
+    this.bracketOpenDate = entity.bracketOpenDate;
+    this.description = entity.description;
+    this.isPartnership = entity.isPartnership;
+    this.viewCount = entity.viewCount;
+    this.posterImgUrlKey = entity.posterImgUrlKey;
+    this.status = entity.status;
+    this.createdAt = entity.createdAt;
+    this.updatedAt = entity.updatedAt;
+    this.divisions = entity.divisions.map((division) => new DivisionModel(division));
+    this.earlybirdDiscountSnapshots = entity.earlybirdDiscountSnapshots.map(
       (snapshot) => new EarlybirdDiscountSnapshotModel(snapshot),
     );
-    this.combinationDiscountSnapshots = competition.combinationDiscountSnapshots.map(
+    this.combinationDiscountSnapshots = entity.combinationDiscountSnapshots.map(
       (snapshot) => new CombinationDiscountSnapshotModel(snapshot),
     );
+  }
+
+  toEntity(): ICompetition {
+    return {
+      id: this.id,
+      title: this.title,
+      address: this.address,
+      competitionDate: this.competitionDate,
+      registrationStartDate: this.registrationStartDate,
+      registrationEndDate: this.registrationEndDate,
+      refundDeadlineDate: this.refundDeadlineDate,
+      soloRegistrationAdjustmentStartDate: this.soloRegistrationAdjustmentStartDate,
+      soloRegistrationAdjustmentEndDate: this.soloRegistrationAdjustmentEndDate,
+      registrationListOpenDate: this.registrationListOpenDate,
+      bracketOpenDate: this.bracketOpenDate,
+      description: this.description,
+      isPartnership: this.isPartnership,
+      viewCount: this.viewCount,
+      posterImgUrlKey: this.posterImgUrlKey,
+      status: this.status,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      divisions: this.divisions.map((division) => division.toEntity()),
+      earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
+      combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
+    };
+  }
+
+  getId() {
+    return this.id;
   }
 
   updateStatus(newStatus: ICompetition['status']) {
@@ -99,19 +129,19 @@ export class CompetitionModel {
           .join(', ')}`,
       );
     }
-    this.divisions = [...this.divisions, ...newDivisions];
+    this.divisions.push(...newDivisions);
   }
 
   validateApplicationPeriod(now = new Date()) {
     if (this.registrationStartDate && now < this.registrationStartDate) {
       throw new BusinessException(
-        ApplicationsErrorMap.APPLICATIONS_REGISTRATION_NOT_STARTED,
+        ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,
         `registrationStartDate: ${this.registrationStartDate}`,
       );
     }
     if (this.registrationEndDate && now > this.registrationEndDate) {
       throw new BusinessException(
-        ApplicationsErrorMap.APPLICATIONS_REGISTRATION_ENDED,
+        ApplicationsErrors.APPLICATIONS_REGISTRATION_ENDED,
         `registrationEndDate: ${this.registrationEndDate}`,
       );
     }
@@ -124,7 +154,7 @@ export class CompetitionModel {
     );
     if (notFoundDivisionIds.length > 0) {
       throw new BusinessException(
-        ApplicationsErrorMap.APPLICATIONS_DIVISION_NOT_FOUND,
+        ApplicationsErrors.APPLICATIONS_DIVISION_NOT_FOUND,
         `Not found DivisionIds: ${notFoundDivisionIds.join(', ')}`,
       );
     }
@@ -132,7 +162,7 @@ export class CompetitionModel {
   }
 
   // validateApplicationAbility(
-  //   playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
+  //   playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
   //   participationDivisionIds: IDivision['id'][],
   //   now = new Date(),
   // ) {
@@ -141,14 +171,14 @@ export class CompetitionModel {
   // }
 
   // private validateDivisionSuitable(
-  //   playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create,
+  //   playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
   //   participationDivisionIds: IDivision['id'][],
   // ) {
   //   participationDivisionIds.forEach((divisionId) => {
   //     const division = this.divisions.find((division) => division.id === divisionId);
   //     if (!division)
   //       throw new BusinessException(
-  //         ApplicationsErrorMap.APPLICATIONS_DIVISION_NOT_FOUND,
+  //         ApplicationsErrors.APPLICATIONS_DIVISION_NOT_FOUND,
   //         `Missing DivisionId: ${divisionId}`,
   //       );
   //     // TODO: Implement validateAge, validateGender
@@ -166,28 +196,28 @@ export class CompetitionModel {
   //   });
   //   if (existDivisions.length !== particiationDivisionIds.length) {
   //     throw new BusinessException(
-  //       ApplicationsErrorMap.APPLICATIONS_DIVISION_NOT_FOUND,
+  //       ApplicationsErrors.APPLICATIONS_DIVISION_NOT_FOUND,
   //       `divisionIds: ${particiationDivisionIds.join(', ')}`,
   //     );
   //   }
   //   return existDivisions;
   // }
 
-  // private validateDivisionAge(playerBirth: IPlayerSnapshot.Dto.Create['birth'], division: IDivision): void {
+  // private validateDivisionAge(playerBirth: IPlayerSnapshotCreateDto['birth'], division: IDivision): void {
   //   const birthYear = +playerBirth.slice(0, 4);
   //   if (birthYear < +division.birthYearRangeStart || birthYear > +division.birthYearRangeEnd) {
   //     throw new BusinessException(
-  //       ApplicationsErrorMap.APPLICATIONS_DIVISION_AGE_NOT_MATCH,
+  //       ApplicationsErrors.APPLICATIONS_DIVISION_AGE_NOT_MATCH,
   //       `divisionId: ${division.id}, divisionBirthRangeStart: ${division.birthYearRangeStart}, divisionBirthRangeEnd: ${division.birthYearRangeEnd}, playerBirth: ${playerBirth}`,
   //     );
   //   }
   // }
 
-  // private validateDivisionGender(playerGender: IPlayerSnapshot.Dto.Create['gender'], division: IDivision): void {
+  // private validateDivisionGender(playerGender: IPlayerSnapshotCreateDto['gender'], division: IDivision): void {
   //   if (division.gender === 'MIXED') return;
   //   if (playerGender !== division.gender) {
   //     throw new BusinessException(
-  //       ApplicationsErrorMap.APPLICATIONS_DIVISION_GENDER_NOT_MATCH,
+  //       ApplicationsErrors.APPLICATIONS_DIVISION_GENDER_NOT_MATCH,
   //       `divisionId: ${division.id}, divisionGender: ${division.gender}, playerGender: ${playerGender}`,
   //     );
   //   }

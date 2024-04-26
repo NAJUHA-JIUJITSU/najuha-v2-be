@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PolicyRepository } from '../policy.repository';
 import { ulid } from 'ulid';
 import {
   CreatePolicyParam,
@@ -10,41 +9,53 @@ import {
   FindPolicyParam,
   FindPolicyRet,
 } from './dtos';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PolicyEntity } from 'src/infrastructure/database/entity/policy/policy.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PolicyAppService {
-  constructor(private readonly policyRepository: PolicyRepository) {}
+  constructor(
+    @InjectRepository(PolicyEntity)
+    private readonly policyRepository: Repository<PolicyEntity>,
+  ) {}
 
   async createPolicy({ policyCreateDto }: CreatePolicyParam): Promise<CreatePolicyRet> {
-    // 같은 타입의 약관이 이미 존재하는지 확인, 가장 최근에 등록된 약관을 가져을
-    const existingPolicy = await this.policyRepository.findPolicy({
+    const existingPolicyEntity = await this.policyRepository.findOne({
       where: { type: policyCreateDto.type },
       order: { createdAt: 'DESC' },
     });
+
     // 같은 타입의 약관이 존재하면 버전을 1 증가시킴
-    const newVersion = existingPolicy ? existingPolicy.version + 1 : 1;
-    const policy = await this.policyRepository.createPolicy({
+    const newVersion = existingPolicyEntity ? existingPolicyEntity.version + 1 : 1;
+    const policyEntity = this.policyRepository.create({
       id: ulid(),
       ...policyCreateDto,
       version: newVersion,
     });
-    return { policy };
+    return { policy: policyEntity };
   }
 
   // TODO content 는 제외
   async findPolicies({ type }: FindPoliciesParam): Promise<FindPoliciesRet> {
-    const policies = await this.policyRepository.findPolicies({ where: { type } });
+    const policies = await this.policyRepository.find({ where: { type } });
     return { policies };
   }
 
   async findPolicy({ id }: FindPolicyParam): Promise<FindPolicyRet> {
-    const policy = await this.policyRepository.findPolicy({ where: { id } });
+    const policy = await this.policyRepository.findOne({ where: { id } });
     return { policy };
   }
 
   // TODO content 는 제외
   async findAllTypesOfLatestPolicies(): Promise<FindAllTypesOfLatestPoliciesRet> {
-    const policies = await this.policyRepository.findAllTypesOfLatestPolicies();
+    // findAllTypesOfLatestPolicies
+    const policies = await this.policyRepository
+      .createQueryBuilder('policy')
+      .distinctOn(['policy.type'])
+      .orderBy('policy.type')
+      .addOrderBy('policy.createdAt', 'DESC')
+      .getMany();
     return { policies };
   }
 }

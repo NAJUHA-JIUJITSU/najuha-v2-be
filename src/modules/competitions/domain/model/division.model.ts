@@ -1,6 +1,4 @@
-import { ICompetition } from '../interface/competition.interface';
 import { IDivision } from '../interface/division.interface';
-import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 import { PriceSnapshotModel } from './price-snapshot.model';
 
 export class DivisionModel {
@@ -15,22 +13,40 @@ export class DivisionModel {
   public readonly status: IDivision['status'];
   public readonly createdAt: IDivision['createdAt'];
   public readonly updatedAt: IDivision['updatedAt'];
-  public readonly competitionId: ICompetition['id'];
-  public readonly priceSnapshots: IPriceSnapshot[];
+  public readonly competitionId: IDivision['competitionId'];
+  public readonly priceSnapshots: PriceSnapshotModel[];
 
-  constructor(division: IDivision) {
-    this.id = division.id;
-    this.category = division.category;
-    this.uniform = division.uniform;
-    this.gender = division.gender;
-    this.belt = division.belt;
-    this.weight = division.weight;
-    this.birthYearRangeStart = division.birthYearRangeStart;
-    this.birthYearRangeEnd = division.birthYearRangeEnd;
-    this.status = division.status;
-    this.createdAt = division.createdAt;
-    this.updatedAt = division.updatedAt;
-    this.competitionId = division.competitionId;
-    this.priceSnapshots = division.priceSnapshots.map((priceSnapshot) => new PriceSnapshotModel(priceSnapshot));
+  constructor(entity: IDivision) {
+    this.id = entity.id;
+    this.category = entity.category;
+    this.uniform = entity.uniform;
+    this.gender = entity.gender;
+    this.belt = entity.belt;
+    this.weight = entity.weight;
+    this.birthYearRangeStart = entity.birthYearRangeStart;
+    this.birthYearRangeEnd = entity.birthYearRangeEnd;
+    this.status = entity.status;
+    this.createdAt = entity.createdAt;
+    this.updatedAt = entity.updatedAt;
+    this.competitionId = entity.competitionId;
+    this.priceSnapshots = entity.priceSnapshots.map((priceSnapshot) => new PriceSnapshotModel(priceSnapshot));
+  }
+
+  toEntity(): IDivision {
+    return {
+      id: this.id,
+      category: this.category,
+      uniform: this.uniform,
+      gender: this.gender,
+      belt: this.belt,
+      weight: this.weight,
+      birthYearRangeStart: this.birthYearRangeStart,
+      birthYearRangeEnd: this.birthYearRangeEnd,
+      status: this.status,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      competitionId: this.competitionId,
+      priceSnapshots: this.priceSnapshots.map((priceSnapshot) => priceSnapshot.toEntity()),
+    };
   }
 }

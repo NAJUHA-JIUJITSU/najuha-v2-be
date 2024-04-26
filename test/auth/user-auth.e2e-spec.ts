@@ -12,7 +12,7 @@ import {
   SNS_AUTH_GOOGLE_LOGIN_FAIL,
   SNS_AUTH_KAKAO_LOGIN_FAIL,
   SNS_AUTH_NAVER_LOGIN_FAIL,
-  SnsAuthErrorMap,
+  SnsAuthErrors,
 } from 'src/common/response/errorResponse';
 import { KakaoStrategy } from 'src/modules/sns-auth-client/kakao.strategy';
 import { NaverStrategy } from 'src/modules/sns-auth-client/naver.strategy';
@@ -75,7 +75,7 @@ describe('E2E u-1 user-auth test', () => {
   describe('u-1-1 POST /user/auth/sns-login ------------------------------------------', () => {
     it('KAKAO 기존 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'KAKAO';
-      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserEntity.id = ulid();
       existUserEntity.birth = '19980101';
       existUserEntity.role = 'USER';
@@ -128,7 +128,7 @@ describe('E2E u-1 user-auth test', () => {
     it('KAKAO 로그인 실패 시', async () => {
       const snsAuthProvider = 'KAKAO';
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_KAKAO_LOGIN_FAIL, 'test error message');
+        throw new BusinessException(SnsAuthErrors.SNS_AUTH_KAKAO_LOGIN_FAIL, 'test error message');
       });
 
       const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
@@ -141,7 +141,7 @@ describe('E2E u-1 user-auth test', () => {
 
     it('NAVER 기존 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'NAVER';
-      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserEntity.id = ulid();
       existUserEntity.birth = '19980101';
       existUserEntity.role = 'USER';
@@ -192,7 +192,7 @@ describe('E2E u-1 user-auth test', () => {
     it('NAVER 로그인 실패 시', async () => {
       const snsAuthProvider = 'NAVER';
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_NAVER_LOGIN_FAIL, 'test error message');
+        throw new BusinessException(SnsAuthErrors.SNS_AUTH_NAVER_LOGIN_FAIL, 'test error message');
       });
 
       const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
@@ -205,7 +205,7 @@ describe('E2E u-1 user-auth test', () => {
 
     it('GOOGLE 기존 유저 로그인 성공 시', async () => {
       const snsAuthProvider = 'GOOGLE';
-      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserEntity.id = ulid();
       existUserEntity.birth = '19980101';
       existUserEntity.role = 'USER';
@@ -254,7 +254,7 @@ describe('E2E u-1 user-auth test', () => {
     it('GOOGLE 로그인 실패 시', async () => {
       const snsAuthProvider = 'GOOGLE';
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL, 'test error message');
+        throw new BusinessException(SnsAuthErrors.SNS_AUTH_GOOGLE_LOGIN_FAIL, 'test error message');
       });
 
       const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
@@ -328,7 +328,7 @@ describe('E2E u-1 user-auth test', () => {
 
   describe('u-1-3 PATCH /user/auth/acquire-admin-role -----------------------------------', () => {
     it('관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.', async () => {
-      const existUserEntity = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       existUserEntity.id = ulid();
       existUserEntity.birth = '19980101';
       existUserEntity.role = 'USER';

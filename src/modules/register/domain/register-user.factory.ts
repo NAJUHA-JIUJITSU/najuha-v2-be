@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IRegisterUser, IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { ulid } from 'ulid';
 
 @Injectable()
 export class RegisterUserEntityFactory {
   async createRegisterUser(
-    user: IUser.Entity.RegisterUser,
+    user: IRegisterUser,
     latestPolicies: IPolicy[],
     consentPolicyTypes: string[],
-  ): Promise<IUser.Entity.RegisterUser> {
+  ): Promise<IRegisterUser> {
     const unconsentedPolicies = latestPolicies.filter(
       (policy) =>
         !user.policyConsents.some((consent) => consent.policyId === policy.id) &&

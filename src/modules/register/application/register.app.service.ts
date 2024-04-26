@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
+import { BusinessException, CommonErrors, RegisterErrors } from 'src/common/response/errorResponse';
 import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
 import { PhoneNumberAuthCodeDomainService } from '../domain/phone-number-auth-code.domain.service';
-import { RegisterRepository } from '../register.repository';
 import { RegisterUserEntityFactory } from '../domain/register-user.factory';
 import {
   ConfirmAuthCodeParam,
@@ -17,19 +16,33 @@ import {
   SendPhoneNumberAuthCodeRet,
 } from './dtos';
 import { RegisterUserModel } from '../domain/model/register-user.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
+import { Repository } from 'typeorm';
+import { assert } from 'typia';
+import { IRegisterUser, ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
+import { PolicyEntity } from 'src/infrastructure/database/entity/policy/policy.entity';
+import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 
 @Injectable()
 export class RegisterAppService {
   constructor(
     private readonly authTokenDomainService: AuthTokenDomainService,
     private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeDomainService,
-    private readonly registerRepository: RegisterRepository,
     private readonly regiterUserEntityFactory: RegisterUserEntityFactory,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(PolicyEntity)
+    private readonly policyRepository: Repository<PolicyEntity>,
   ) {}
 
   async getTemporaryUser({ userId }: GetTemporaryUserParam): Promise<GetTemporaryUserRet> {
-    const user = await this.registerRepository.getTemporaryUser(userId);
-    return { user };
+    const temporaryUserEntity = assert<ITemporaryUser>(
+      await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      }),
+    );
+    return { user: temporaryUserEntity };
   }
 
   /**
@@ -40,9 +53,11 @@ export class RegisterAppService {
    */
   async isDuplicateNickname({ userId, nickname }: IsDuplicateNicknameParam): Promise<IsDuplicateNicknameRet> {
     // domain service로 분리 ?
-    const user = await this.registerRepository.findUser({ where: { nickname } });
-    if (user === null) return { isDuplicated: false };
-    if (user.id === userId) return { isDuplicated: false };
+    const userEntity = assert<IUser | ITemporaryUser | null>(
+      await this.userRepository.findOne({ where: { nickname } }),
+    );
+    if (userEntity === null) return { isDuplicated: false };
+    if (userEntity.id === userId) return { isDuplicated: false };
     return { isDuplicated: true };
   }
 
@@ -66,10 +81,28 @@ export class RegisterAppService {
       userId: userRegisterDto.id,
       nickname: userRegisterDto.nickname,
     });
-    if (isDuplicated) throw new BusinessException(RegisterErrorMap.REGISTER_NICKNAME_DUPLICATED);
-    let registerUserEntity = await this.registerRepository.getRegisterUser(userRegisterDto.id);
-    const latestPolicies = await this.registerRepository.findAllTypesOfLatestPolicies();
-    const mandatoryPolicies = await this.registerRepository.findAllMandatoryPolicies();
+    if (isDuplicated) throw new BusinessException(RegisterErrors.REGISTER_NICKNAME_DUPLICATED);
+    let registerUserEntity = assert<IRegisterUser>(
+      await this.userRepository
+        .findOneOrFail({
+          where: { id: userRegisterDto.id },
+          relations: ['policyConsents'],
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
+    );
+
+    // findAllTypesOfLatestPolicies
+    const latestPolicies = assert<IPolicy[]>(
+      await this.policyRepository
+        .createQueryBuilder('policy')
+        .distinctOn(['policy.type'])
+        .orderBy('policy.type')
+        .addOrderBy('policy.createdAt', 'DESC')
+        .getMany(),
+    );
+    const mandatoryPolicies = latestPolicies.filter((policy) => policy.isMandatory);
 
     registerUserEntity = await this.regiterUserEntityFactory.createRegisterUser(
       registerUserEntity,
@@ -80,7 +113,7 @@ export class RegisterAppService {
     const registerUserModel = new RegisterUserModel(registerUserEntity);
     registerUserModel.register(userRegisterDto, mandatoryPolicies);
 
-    await this.registerRepository.saveUser(registerUserModel.toEntity());
+    await this.userRepository.save(registerUserModel.toEntity());
 
     const authTokens = await this.authTokenDomainService.createAuthTokens(
       registerUserModel.getId(),

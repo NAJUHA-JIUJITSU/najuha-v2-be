@@ -44,10 +44,10 @@ export interface IDivision {
   status: 'ACTIVE' | 'INACTIVE';
 
   /** CreatedAt. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** UpdatedAt. */
-  updatedAt: Date | string;
+  updatedAt: Date | (string & tags.Format<'date-time'>);
 
   /** CompetitionId. */
   competitionId: ICompetition['id'];

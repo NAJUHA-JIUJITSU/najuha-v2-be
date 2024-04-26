@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import Redis from 'ioredis';
-import { AuthErrorMap, BusinessException } from 'src/common/response/errorResponse';
+import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 import { IAuthTokens } from './interface/auth-tokens.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
@@ -60,14 +60,14 @@ export class AuthTokenDomainService {
     } catch (e: any) {
       // TODO: any 타입 수정 필요
       if (payload?.userId) await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
-      throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
+      throw new BusinessException(AuthErrors.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
     }
 
     const storedRefreshToken = await this.redisClient.get(`userId:${payload.userId}:refreshToken`);
 
     if (!storedRefreshToken || storedRefreshToken !== refreshToken) {
       await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
-      throw new BusinessException(AuthErrorMap.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
+      throw new BusinessException(AuthErrors.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
     }
 
     return payload;

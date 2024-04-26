@@ -8,7 +8,7 @@ export interface IParticipationDivisionInfo {
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /** CreatedAt. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** Application id. */
   applicationId: IApplication['id'];
@@ -17,18 +17,10 @@ export interface IParticipationDivisionInfo {
   participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshot[] & tags.MinItems<1>;
 }
 
-export namespace IParticipationDivisionInfo {
-  export namespace Entity {
-    export interface ParticipationDivisionInfo extends IParticipationDivisionInfo {}
-  }
+export interface IParticipationDivisionInfoUpdateDto {
+  /** 수정하고자 하는 참가부문 정보 ID (식별자). */
+  id: IParticipationDivisionInfo['id'];
 
-  export namespace Dto {
-    export interface Update {
-      /** 수정하고자 하는 참가부문 정보 ID (식별자). */
-      id: IParticipationDivisionInfo['id'];
-
-      /** 새로 참가 하고자 하는 부문 ID. */
-      newParticipationDivisionId: IDivision['id'];
-    }
-  }
+  /** 새로 참가 하고자 하는 부문 ID. */
+  newParticipationDivisionId: IDivision['id'];
 }

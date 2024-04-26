@@ -1,8 +1,8 @@
 import { ulid } from 'ulid';
-import { IUser } from './interface/user.interface';
+import { ITemporaryUser, ITemporaryUserCreateDto } from './interface/user.interface';
 
 export class UserEntityFactory {
-  creatTemporaryUser(dto: IUser.Dto.Create): IUser.Entity.TemporaryUser {
+  creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {
     return {
       id: ulid(),
       role: 'TEMPORARY_USER',
@@ -17,8 +17,8 @@ export class UserEntityFactory {
       belt: null,
       profileImageUrlKey: null,
       status: 'ACTIVE',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
   }
 }

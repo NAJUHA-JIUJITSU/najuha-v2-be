@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { IGoogleUserData } from 'src/modules/sns-auth-client/interface/google-user-data.interface';
-import { BusinessException, SnsAuthErrorMap } from 'src/common/response/errorResponse';
+import { BusinessException, SnsAuthErrors } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 import { ISnsAuthStrategy } from './interface/sns-auth.stratege.interface';
 import { IValidatedUserData } from './interface/validated-user-data.interface';
@@ -20,7 +20,7 @@ export class GoogleStrategy implements ISnsAuthStrategy {
       return this.formatUserData(userData);
     } catch (e: any) {
       // TODO: any 타입 수정 필요
-      throw new BusinessException(SnsAuthErrorMap.SNS_AUTH_GOOGLE_LOGIN_FAIL, e.response.data);
+      throw new BusinessException(SnsAuthErrors.SNS_AUTH_GOOGLE_LOGIN_FAIL, e.response.data);
     }
   }
 

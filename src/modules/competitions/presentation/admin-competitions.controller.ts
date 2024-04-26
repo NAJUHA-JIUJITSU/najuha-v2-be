@@ -20,6 +20,7 @@ import {
 } from './dtos';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { GetCompetitionRet } from '../application/dtos';
+import { create } from 'domain';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -44,12 +45,12 @@ export class AdminCompetitionsController {
    * - ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.
    *
    * Query: FindCompetitionsReqQuery
-   * - page: 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다.
-   * - limit: 한페이지에 표시할 데이터 갯수. 요청하지 않을시 10을 기본값으로 사용.
-   * - dateFilter: 대회 날짜를 기준으로 필터링합니다. ex) '2023-04'.
+   * - page: 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다. (default: 0).
+   * - limit: 한페이지에 표시할 데이터 갯수. (default: 10).
+   * - dateFilter: 대회 날짜를 기준으로 필터링합니다. ex) '2023-04'. (default: Now).
    * - locationFilter: 대회가 열리는 위치로 필터링합니다. ex) 서울, 부산, 인천, 대구, 대전, 광주, 울산, 세종, 경기, 충북, 충남, 전남, 경북, 경남, 강원, 전북, 제주.
    * - selectFilter: 태그를 기준으로 필터링합니다. ex) ['간편결제', '얼리버드', '신청가능', '단독출전조정'].
-   * - sortOption: 대회를 정렬하는 옵션입니다. ex) '일자순', '조회순', '마감임박순'.
+   * - sortOption: 대회를 정렬하는 옵션입니다. ex) '일자순', '조회순', '마감임박순'. (default: '일자순').
    *
    * @tag a-5 competitions
    * @returns competitions
@@ -57,7 +58,16 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
   async findCompetitions(@TypedQuery() query: FindCompetitionsReqQuery): Promise<ResponseForm<FindCompetitionsRes>> {
-    return createResponseForm(await this.competitionsAppService.findCompetitions({ ...query }));
+    return createResponseForm(
+      await this.competitionsAppService.findCompetitions({
+        page: query.page ?? 0,
+        limit: query.limit ?? 10,
+        parsedDateFilter: query.dateFilter ? new Date(query.dateFilter) : new Date(),
+        sortOption: query.sortOption ?? '일자순',
+        locationFilter: query.locationFilter,
+        selectFilter: query.selectFilter,
+      }),
+    );
   }
 
   /**
@@ -146,8 +156,7 @@ export class AdminCompetitionsController {
   ): Promise<ResponseForm<CreateEarlybirdDiscountSnapshotRes>> {
     return createResponseForm(
       await this.competitionsAppService.createEarlybirdDiscountSnapshot({
-        competitionId: id,
-        earlybirdDiscount: body,
+        earlybirdDiscountSnapshotCreateDto: { competitionId: id, ...body },
       }),
     );
   }
@@ -167,8 +176,7 @@ export class AdminCompetitionsController {
   ): Promise<ResponseForm<CreateCombinationDiscountSnapshotRes>> {
     return createResponseForm(
       await this.competitionsAppService.createCombinationDiscountSnapshot({
-        competitionId: id,
-        combinationDiscount: dto,
+        combinationDiscountSnapshotCreateDto: { competitionId: id, ...dto },
       }),
     );
   }

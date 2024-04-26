@@ -1,5 +1,5 @@
-import { IUser } from '../../users/domain/interface/user.interface';
+import { ITemporaryUserCreateDto } from '../../users/domain/interface/user.interface';
 
 export interface ISnsAuthStrategy {
-  validate(snsAuthCode: string): Promise<IUser.Dto.Create>;
+  validate(snsAuthCode: string): Promise<ITemporaryUserCreateDto>;
 }

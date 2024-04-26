@@ -1,11 +1,10 @@
 import { IExpectedPayment } from './interface/expected-payment.interface';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { Injectable } from '@nestjs/common';
-import { DivisionModel } from 'src/modules/competitions/domain/model/division.model';
-import { CombinationDiscountSnapshotModel } from 'src/modules/competitions/domain/model/combination-discount-snapshot.model';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IApplication } from './interface/application.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 
 @Injectable()
 export class ApplicationDomainService {
@@ -89,7 +88,7 @@ export class ApplicationDomainService {
    * @returns combination discount amount
    */
   private calculateCombinationDiscountAmount(
-    combinationDiscountSnapshot: CombinationDiscountSnapshotModel,
+    combinationDiscountSnapshot: ICombinationDiscountSnapshot,
     divisions: IDivision[],
   ): number {
     if (combinationDiscountSnapshot === null) return 0;

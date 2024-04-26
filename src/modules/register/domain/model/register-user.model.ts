@@ -1,26 +1,27 @@
-import { BusinessException, RegisterErrorMap } from 'src/common/response/errorResponse';
+import { BusinessException, RegisterErrors } from 'src/common/response/errorResponse';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IRegisterUser, IUserRgistertDto } from 'src/modules/users/domain/interface/user.interface';
+import { IPolicyConsent } from '../interface/policy-consent.interface';
 
 export class RegisterUserModel {
-  private id: IUser.Entity.RegisterUser['id'];
-  private role: IUser.Entity.RegisterUser['role'];
-  private snsAuthProvider: IUser.Entity.RegisterUser['snsAuthProvider'];
-  private snsId: IUser.Entity.RegisterUser['snsId'];
-  private email: IUser.Entity.RegisterUser['email'];
-  private name: IUser.Entity.RegisterUser['name'];
-  private phoneNumber: IUser.Entity.RegisterUser['phoneNumber'];
-  private nickname: IUser.Entity.RegisterUser['nickname'];
-  private gender: IUser.Entity.RegisterUser['gender'];
-  private birth: IUser.Entity.RegisterUser['birth'];
-  private belt: IUser.Entity.RegisterUser['belt'];
-  private profileImageUrlKey: IUser.Entity.RegisterUser['profileImageUrlKey'];
-  private status: IUser.Entity.RegisterUser['status'];
-  private createdAt: IUser.Entity.RegisterUser['createdAt'];
-  private updatedAt: IUser.Entity.RegisterUser['updatedAt'];
-  private policyConsents: IUser.Entity.RegisterUser['policyConsents'];
+  private readonly id: IRegisterUser['id'];
+  private role: IRegisterUser['role'];
+  private snsAuthProvider: IRegisterUser['snsAuthProvider'];
+  private snsId: IRegisterUser['snsId'];
+  private email: IRegisterUser['email'];
+  private name: IRegisterUser['name'];
+  private phoneNumber: IRegisterUser['phoneNumber'];
+  private nickname: IRegisterUser['nickname'];
+  private gender: IRegisterUser['gender'];
+  private birth: IRegisterUser['birth'];
+  private belt: IRegisterUser['belt'];
+  private profileImageUrlKey: IRegisterUser['profileImageUrlKey'];
+  private status: IRegisterUser['status'];
+  private readonly createdAt: IRegisterUser['createdAt'];
+  private readonly updatedAt: IRegisterUser['updatedAt'];
+  private readonly policyConsents: IPolicyConsent[];
 
-  constructor(entity: IUser.Entity.RegisterUser) {
+  constructor(entity: IRegisterUser) {
     this.id = entity.id;
     this.role = entity.role;
     this.snsAuthProvider = entity.snsAuthProvider;
@@ -39,7 +40,7 @@ export class RegisterUserModel {
     this.policyConsents = entity.policyConsents;
   }
 
-  toEntity(): IUser.Entity.RegisterUser {
+  toEntity(): IRegisterUser {
     return {
       id: this.id,
       role: this.role,
@@ -68,7 +69,7 @@ export class RegisterUserModel {
     return this.role;
   }
 
-  register(userRegisterDto: IUser.Dto.Register, mandatoryPolicies: IPolicy[]) {
+  register(userRegisterDto: IUserRgistertDto, mandatoryPolicies: IPolicy[]) {
     this.ensurePhoneNumberRegistered();
     this.ensureMandatoryPoliciesConsented(mandatoryPolicies);
     this.nickname = userRegisterDto.nickname;
@@ -80,7 +81,7 @@ export class RegisterUserModel {
 
   private ensurePhoneNumberRegistered() {
     if (!this.phoneNumber) {
-      throw new BusinessException(RegisterErrorMap.REGISTER_PHONE_NUMBER_REQUIRED);
+      throw new BusinessException(RegisterErrors.REGISTER_PHONE_NUMBER_REQUIRED);
     }
   }
 
@@ -91,7 +92,7 @@ export class RegisterUserModel {
     if (missingConsents.length > 0) {
       const missingPolicyTypes = missingConsents.map((policy) => policy.type).join(', ');
       throw new BusinessException(
-        RegisterErrorMap.REGISTER_POLICY_CONSENT_REQUIRED,
+        RegisterErrors.REGISTER_POLICY_CONSENT_REQUIRED,
         `다음 필수 약관에 동의하지 않았습니다: ${missingPolicyTypes}`,
       );
     }

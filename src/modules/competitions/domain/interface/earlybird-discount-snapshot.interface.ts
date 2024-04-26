@@ -6,10 +6,10 @@ export interface IEarlybirdDiscountSnapshot {
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /** 얼리버드 할인 시작일. */
-  earlybirdStartDate: Date | string;
+  earlybirdStartDate: Date | (string & tags.Format<'date-time'>);
 
   /** 얼리버드 할인 마감일. */
-  earlybirdEndDate: Date | string;
+  earlybirdEndDate: Date | (string & tags.Format<'date-time'>);
 
   /**
    * 얼리버드 할인 가격.
@@ -20,8 +20,14 @@ export interface IEarlybirdDiscountSnapshot {
   discountAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /** CreatedAt. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** Competition id. */
   competitionId: ICompetition['id'];
 }
+
+export interface IEarlybirdDiscountSnapshotCreateDto
+  extends Pick<
+    IEarlybirdDiscountSnapshot,
+    'earlybirdStartDate' | 'earlybirdEndDate' | 'discountAmount' | 'competitionId'
+  > {}

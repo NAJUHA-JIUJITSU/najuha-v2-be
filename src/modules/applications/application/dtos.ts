@@ -3,8 +3,8 @@ import { ICompetition } from 'src/modules/competitions/domain/interface/competit
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
-import { IParticipationDivisionInfo } from '../domain/interface/participation-division-info.interface';
-import { IPlayerSnapshot } from '../domain/interface/player-snapshot.interface';
+import { IParticipationDivisionInfoUpdateDto } from '../domain/interface/participation-division-info.interface';
+import { IPlayerSnapshotCreateDto } from '../domain/interface/player-snapshot.interface';
 
 // Application Layer Param DTOs ---------------------------------------------------
 export interface CreateApplicationParam {
@@ -16,7 +16,7 @@ export interface CreateApplicationParam {
    */
   participationDivisionIds: IDivision['id'][];
   applicationType: IApplication['type'];
-  playerSnapshotCreateDto: IPlayerSnapshot.Dto.Create;
+  playerSnapshotCreateDto: IPlayerSnapshotCreateDto;
 }
 
 export interface GetApplicationParam {
@@ -32,18 +32,18 @@ export interface UpdateReadyApplicationParam {
    * @minItems 1
    */
   participationDivisionIds: IDivision['id'][];
-  playerSnapshotUpdateDto: IPlayerSnapshot.Dto.Create;
+  playerSnapshotUpdateDto: IPlayerSnapshotCreateDto;
 }
 
 export interface UpdateDoneApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
-  playerSnapshotUpdateDto?: IPlayerSnapshot.Dto.Create;
+  playerSnapshotUpdateDto?: IPlayerSnapshotCreateDto;
   /**
    * - Division info update data list.
    * @minItems 1
    */
-  participationDivisionInfoUpdateDtos?: IParticipationDivisionInfo.Dto.Update[];
+  participationDivisionInfoUpdateDtos?: IParticipationDivisionInfoUpdateDto[];
 }
 
 export interface GetExpectedPaymentParam {
@@ -53,19 +53,19 @@ export interface GetExpectedPaymentParam {
 
 // Application Layer Result DTOs -----------------------------------------------------
 export interface CreateApplicationRet {
-  application: IApplication.Entity.Ready;
+  application: IApplication;
 }
 
 export interface GetApplicationRet {
-  application: IApplication.Entity.Ready | IApplication.Entity.Done;
+  application: IApplication;
 }
 
 export interface UpdateReadyApplicationRet {
-  application: IApplication.Entity.Ready;
+  application: IApplication;
 }
 
 export interface UpdateDoneApplicationRet {
-  application: IApplication.Entity.Done;
+  application: IApplication;
 }
 
 export interface GetExpectedPaymentRet {

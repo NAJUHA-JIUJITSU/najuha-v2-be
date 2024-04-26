@@ -21,7 +21,7 @@ export class UserEntity {
   @Column('varchar', { length: 320 })
   email!: IUser['email'];
 
-  @Column('varchar', { length: 256, nullable: true })
+  @Column('varchar', { length: 256 })
   name!: IUser['name'];
 
   @Column('varchar', { length: 16, nullable: true })

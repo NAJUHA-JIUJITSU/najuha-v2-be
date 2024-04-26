@@ -7,10 +7,11 @@ import { CompetitionEntity } from '../../infrastructure/database/entity/competit
 import { DivisionEntity } from '../../infrastructure/database/entity/competition/division.entity';
 import { EarlybirdDiscountSnapshotEntity } from '../../infrastructure/database/entity/competition/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshotEntity } from '../../infrastructure/database/entity/competition/combination-discount-snapshot.entity';
-import { CompetitionRepository } from './competition.repository';
 import { PaymentSnapshotEntity } from '../../infrastructure/database/entity/competition/payment-snapshot.entity';
 import { PriceSnapshotEntity } from '../../infrastructure/database/entity/competition/price-snapshot.entity';
 import { DivisionFactory } from './domain/division.factory';
+import { CompetitionPagenationRepository } from './competition-pagenation.repository';
+import { CompetitionFactory } from './domain/competition.factory';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { DivisionFactory } from './domain/division.factory';
     ]),
   ],
   controllers: [UserCompetitionsController, AdminCompetitionsController],
-  providers: [CompetitionsAppService, CompetitionRepository, DivisionFactory],
+  providers: [CompetitionsAppService, CompetitionPagenationRepository, DivisionFactory, CompetitionFactory],
 })
 export class CompetitionsModule {}

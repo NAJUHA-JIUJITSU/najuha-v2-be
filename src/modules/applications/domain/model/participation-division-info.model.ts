@@ -3,17 +3,15 @@ import { IApplication } from '../interface/application.interface';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
 import { ParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.model';
-import { ApplicationsErrorMap, BusinessException } from 'src/common/response/errorResponse';
-import { assert } from 'typia';
+import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 
 export class ParticipationDivisionInfo {
-  private id: IParticipationDivisionInfo['id'];
-  private createdAt: IParticipationDivisionInfo['createdAt'];
-  private applicationId: IApplication['id'];
-  private participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
+  private readonly id: IParticipationDivisionInfo['id'];
+  private readonly createdAt: IParticipationDivisionInfo['createdAt'];
+  private readonly applicationId: IApplication['id'];
+  private readonly participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
 
-  constructor(entity: IParticipationDivisionInfo.Entity.ParticipationDivisionInfo) {
-    assert<IParticipationDivisionInfo.Entity.ParticipationDivisionInfo>(entity);
+  constructor(entity: IParticipationDivisionInfo) {
     this.id = entity.id;
     this.createdAt = entity.createdAt;
     this.applicationId = entity.applicationId;
@@ -21,7 +19,7 @@ export class ParticipationDivisionInfo {
       (snapshot) => new ParticipationDivisionInfoSnapshot(snapshot),
     );
   }
-  toEntity(): IParticipationDivisionInfo.Entity.ParticipationDivisionInfo {
+  toEntity(): IParticipationDivisionInfo {
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -47,7 +45,7 @@ export class ParticipationDivisionInfo {
     const parsedBirthYear = +playerBirth.slice(0, 4);
     if (parsedBirthYear < +division.birthYearRangeStart || parsedBirthYear > +division.birthYearRangeEnd) {
       throw new BusinessException(
-        ApplicationsErrorMap.APPLICATIONS_DIVISION_AGE_NOT_MATCH,
+        ApplicationsErrors.APPLICATIONS_DIVISION_AGE_NOT_MATCH,
         `divisionId: ${division.id}, division: ${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight} ${division.birthYearRangeStart}~${division.birthYearRangeEnd}, playerBirth: ${playerBirth}`,
       );
     }
@@ -56,7 +54,7 @@ export class ParticipationDivisionInfo {
   private validateDivisionGender(division: IDivision, playerGender: IPlayerSnapshot['gender']) {
     if (division.gender !== 'MIXED' && playerGender !== division.gender) {
       throw new BusinessException(
-        ApplicationsErrorMap.APPLICATIONS_DIVISION_GENDER_NOT_MATCH,
+        ApplicationsErrors.APPLICATIONS_DIVISION_GENDER_NOT_MATCH,
         `divisionId: ${division.id}, division: ${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight} ${division.birthYearRangeStart}~${division.birthYearRangeEnd}, playerGender: ${playerGender}`,
       );
     }

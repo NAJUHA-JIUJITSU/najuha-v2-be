@@ -41,5 +41,5 @@ export interface IPolicy {
   content: string & tags.MinLength<1>;
 
   /** CreatedAt. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 }

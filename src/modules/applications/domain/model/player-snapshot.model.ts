@@ -1,7 +1,5 @@
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { IApplication } from '../interface/application.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
-import { assert } from 'typia';
 
 export class PlayerSnapshot {
   public readonly id: IPlayerSnapshot['id'];
@@ -14,10 +12,9 @@ export class PlayerSnapshot {
   public readonly team: IPlayerSnapshot['team'];
   public readonly masterName: IPlayerSnapshot['masterName'];
   public readonly createdAt: IPlayerSnapshot['createdAt'];
-  public readonly applicationId: IApplication['id'];
+  public readonly applicationId: IPlayerSnapshot['applicationId'];
 
-  constructor(entity: IPlayerSnapshot.Entity.PlayerSnapshot) {
-    assert<IPlayerSnapshot.Entity.PlayerSnapshot>(entity);
+  constructor(entity: IPlayerSnapshot) {
     this.id = entity.id;
     this.name = entity.name;
     this.gender = entity.gender;
@@ -31,7 +28,7 @@ export class PlayerSnapshot {
     this.applicationId = entity.applicationId;
   }
 
-  toEntity(): IPlayerSnapshot.Entity.PlayerSnapshot {
+  toEntity(): IPlayerSnapshot {
     return {
       id: this.id,
       name: this.name,
@@ -47,7 +44,7 @@ export class PlayerSnapshot {
     };
   }
 
-  validateSelfApplication(userEntity: IUser.Entity.User) {
+  validateSelfApplication(userEntity: IUser) {
     const mismatchs: string[] = [];
     if (this.name !== userEntity.name) mismatchs.push('name');
     if (this.phoneNumber !== userEntity.phoneNumber) mismatchs.push('phoneNumber');

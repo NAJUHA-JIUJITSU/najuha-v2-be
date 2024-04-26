@@ -53,7 +53,7 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-2 PATCH /user/users --------------------------------------------------', () => {
     it('유저 정보 수정 성공 시', async () => {
-      const dummyUser = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const dummyUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       dummyUser.id = ulid();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';
@@ -82,7 +82,7 @@ describe('E2E u-3 user-users test', () => {
 
   describe('u-3-3 GET /user/users/me --------------------------------------------------', () => {
     it('내 정보 조회 성공 시', async () => {
-      const dummyUser = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const dummyUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       dummyUser.id = ulid();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';

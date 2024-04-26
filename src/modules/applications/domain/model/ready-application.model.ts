@@ -1,15 +1,13 @@
-import { Application } from './application.model';
+import { ApplicationModel } from './application.model';
 import { IApplication } from '../interface/application.interface';
-import { assert } from 'typia';
 
-export class ReadyApplication extends Application {
-  constructor(entity: IApplication.Entity.Ready) {
-    assert<IApplication.Entity.Ready>(entity);
+export class ReadyApplicationModel extends ApplicationModel {
+  constructor(entity: IApplication) {
     if (entity.status !== 'READY') throw new Error('Application status is not READY');
     super(entity);
   }
 
-  toEntity(): IApplication.Entity.Ready {
+  toEntity(): IApplication {
     return {
       id: this.id,
       createdAt: this.createdAt,

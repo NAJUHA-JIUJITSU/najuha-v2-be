@@ -1,27 +1,30 @@
-import { ICombinationDiscountSnapshot } from '../domain/interface/combination-discount-snapshot.interface';
-import { ICompetition } from '../domain/interface/competition.interface';
+import {
+  ICombinationDiscountSnapshot,
+  ICombinationDiscountSnapshotCreateDto,
+} from '../domain/interface/combination-discount-snapshot.interface';
+import {
+  ICompetition,
+  ICompetitionCreateDto,
+  ICompetitionQueryOptions,
+  ICompetitionUpdateDto,
+} from '../domain/interface/competition.interface';
 import { IDivisionPack } from '../domain/interface/division-pack.interface';
 import { IDivision } from '../domain/interface/division.interface';
-import { IEarlybirdDiscountSnapshot } from '../domain/interface/earlybird-discount-snapshot.interface';
+import {
+  IEarlybirdDiscountSnapshot,
+  IEarlybirdDiscountSnapshotCreateDto,
+} from '../domain/interface/earlybird-discount-snapshot.interface';
 
 // Application Layer Param DTOs ----------------------------------------------
 export interface CreateCompetitionParam {
-  competitionCreateDto: ICompetition.Dto.Create;
+  competitionCreateDto: ICompetitionCreateDto;
 }
 
 export interface UpdateCompetitionParam {
-  competitionUpdateDto: ICompetition.Dto.Update;
+  competitionUpdateDto: ICompetitionUpdateDto;
 }
 
-export interface FindCompetitionsParam {
-  page: ICompetition.QueryOptions.Page;
-  limit?: ICompetition.QueryOptions.Limit;
-  dateFilter?: ICompetition.QueryOptions.DateFilter;
-  locationFilter?: ICompetition.QueryOptions.LocationFilter;
-  selectFilter?: ICompetition.QueryOptions.SelectFilter[];
-  sortOption?: ICompetition.QueryOptions.SortOption;
-  status?: ICompetition['status'];
-}
+export interface FindCompetitionsParam extends ICompetitionQueryOptions {}
 
 export interface GetCompetitionParam {
   competitionId: ICompetition['id'];
@@ -44,13 +47,11 @@ export interface CreateDivisionsParam {
 }
 
 export interface CreateEarlybirdDiscountSnapshotParam {
-  competitionId: ICompetition['id'];
-  earlybirdDiscount: Pick<IEarlybirdDiscountSnapshot, 'earlybirdStartDate' | 'earlybirdEndDate' | 'discountAmount'>;
+  earlybirdDiscountSnapshotCreateDto: IEarlybirdDiscountSnapshotCreateDto;
 }
 
 export interface CreateCombinationDiscountSnapshotParam {
-  competitionId: ICompetition['id'];
-  combinationDiscount: Pick<ICombinationDiscountSnapshot, 'combinationDiscountRules'>;
+  combinationDiscountSnapshotCreateDto: ICombinationDiscountSnapshotCreateDto;
 }
 
 // Application Layer Result DTOs ----------------------------------------------

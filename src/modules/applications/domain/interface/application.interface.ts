@@ -9,10 +9,10 @@ export interface IApplication {
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /**  Created at. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** Updated at. */
-  updatedAt: Date | string;
+  updatedAt: Date | (string & tags.Format<'date-time'>);
 
   /**
    * 본인신청과 대리신청을 구별하는 type.
@@ -41,12 +41,4 @@ export interface IApplication {
 
   /** Participation division infos. */
   participationDivisionInfos: IParticipationDivisionInfo[] & tags.MinItems<1>;
-}
-
-export namespace IApplication {
-  export namespace Entity {
-    export interface Base extends IApplication {}
-    export interface Ready extends IApplication {}
-    export interface Done extends IApplication {}
-  }
 }

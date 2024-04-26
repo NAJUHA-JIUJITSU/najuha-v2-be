@@ -66,7 +66,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-1 GET /user/users/me --------------------------------------------------', () => {
     it('TEMPORARY_USER 권한으로 내 정보 조회 성공 시', async () => {
-      const user = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -87,13 +87,13 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-2 GET /user/users/:nickname/is-duplicated ----------------------------', () => {
     it('닉네임 중복검사 - 중복된 닉네임인 경우', async () => {
-      const ohterUser = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const ohterUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       ohterUser.id = ulid();
       ohterUser.role = 'TEMPORARY_USER';
       ohterUser.birth = '19980101';
       await userRepository.save(userRepository.create(ohterUser));
 
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -113,7 +113,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
-      const user = typia.random<Omit<IUser.Entity.User, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -133,7 +133,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('닉네임 중복검사 - 중복되지 않은 닉네임(사용가능)', async () => {
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -155,7 +155,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-3 POST /user/register/phone-number/auth-code', () => {
     it('전화번호로 인증코드 전송', async () => {
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -175,7 +175,7 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-4 POST /user/register/phone-number/authcode/confirm --------', () => {
     it('전화번호로 인증코드 확인 성공 시', async () => {
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -199,7 +199,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('전화번호로 인증코드 확인 실패 시', async () => {
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -241,7 +241,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -282,7 +282,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const ohterUser = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const ohterUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       ohterUser.id = ulid();
       ohterUser.role = 'TEMPORARY_USER';
       ohterUser.birth = '19980101';
@@ -290,7 +290,7 @@ describe('E2E u-2 register test', () => {
       ohterUser.nickname = 'existingNickname';
       await userRepository.save(userRepository.create(ohterUser));
 
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -332,7 +332,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -375,7 +375,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const user = typia.random<Omit<IUser.Entity.TemporaryUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';

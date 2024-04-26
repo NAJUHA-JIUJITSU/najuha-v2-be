@@ -1,3 +1,4 @@
+import { tags } from 'typia';
 import {
   CreateCombinationDiscountSnapshotParam,
   CreateCombinationDiscountSnapshotRet,
@@ -14,6 +15,7 @@ import {
   UpdateCompetitionRet,
   UpdateCompetitionStatusParam,
 } from '../application/dtos';
+import { ICompetitionQueryOptions } from '../domain/interface/competition.interface';
 
 // Presentation Layer Request DTOs --------------------------------------------
 export type CreateCompetitionReqBody = CreateCompetitionParam['competitionCreateDto'];
@@ -22,13 +24,23 @@ export type UpdateCompetitionReqBody = Omit<UpdateCompetitionParam['competitionU
 
 export interface UpdateCompetitionStatusReqBody extends Pick<UpdateCompetitionStatusParam, 'status'> {}
 
-export interface FindCompetitionsReqQuery extends FindCompetitionsParam {}
+export interface FindCompetitionsReqQuery
+  extends Partial<Pick<ICompetitionQueryOptions, 'page' | 'limit' | 'sortOption' | 'locationFilter' | 'selectFilter'>> {
+  /** - 날짜 필터. YYYY-MM 형식입니다. */
+  dateFilter?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
+}
 
 export interface CreateDivisionsReqBody extends Pick<CreateDivisionsParam, 'divisionPacks'> {}
 
-export type CreateEarlybirdDiscountSnapshotReqBody = CreateEarlybirdDiscountSnapshotParam['earlybirdDiscount'];
+export type CreateEarlybirdDiscountSnapshotReqBody = Omit<
+  CreateEarlybirdDiscountSnapshotParam['earlybirdDiscountSnapshotCreateDto'],
+  'competitionId'
+>;
 
-export type CreateCombinationDiscountSnapshotReqBody = CreateCombinationDiscountSnapshotParam['combinationDiscount'];
+export type CreateCombinationDiscountSnapshotReqBody = Omit<
+  CreateCombinationDiscountSnapshotParam['combinationDiscountSnapshotCreateDto'],
+  'competitionId'
+>;
 
 // Presentation Layer Response DTOs -------------------------------------------
 export interface CreateCompetitionRes extends CreateCompetitionRet {}

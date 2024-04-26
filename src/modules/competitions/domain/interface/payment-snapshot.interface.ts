@@ -6,7 +6,7 @@ export interface IPaymentSnapshot {
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /** CreatedAt */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** 할인이 적용되지 않은 총 금액 (원). */
   normalAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;

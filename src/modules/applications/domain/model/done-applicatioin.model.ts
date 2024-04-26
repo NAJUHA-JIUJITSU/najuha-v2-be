@@ -1,18 +1,16 @@
-import { Application } from './application.model';
+import { ApplicationModel } from './application.model';
 import { IApplication } from '../interface/application.interface';
 import { PlayerSnapshot } from './player-snapshot.model';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { ParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.model';
-import { assert } from 'typia';
 
-export class DoneApplication extends Application {
-  constructor(entity: IApplication.Entity.Done) {
-    assert<IApplication.Entity.Done>(entity);
+export class DoneApplication extends ApplicationModel {
+  constructor(entity: IApplication) {
     if (entity.status !== 'DONE') throw new Error('Application status is not DONE');
     super(entity);
   }
 
-  toEntity(): IApplication.Entity.Done {
+  toEntity(): IApplication {
     return {
       id: this.id,
       createdAt: this.createdAt,

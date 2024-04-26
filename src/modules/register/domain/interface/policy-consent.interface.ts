@@ -7,7 +7,7 @@ export interface IPolicyConsent {
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /** 약관 동의 날짜. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** UserId. */
   userId: IUser['id'];

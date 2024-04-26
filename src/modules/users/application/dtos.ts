@@ -1,12 +1,12 @@
-import { IUser } from '../domain/interface/user.interface';
+import { ITemporaryUser, ITemporaryUserCreateDto, IUser, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // Application Layer Param DTOs ----------------------------------------------
 export interface CreateUserParam {
-  userCreateDto: IUser.Dto.Create;
+  userCreateDto: ITemporaryUserCreateDto;
 }
 
 export interface UpdateUserParam {
-  userUpdateDto: IUser.Dto.Update;
+  userUpdateDto: IUserUpdateDto;
 }
 
 export interface GetMeParam {
@@ -15,13 +15,13 @@ export interface GetMeParam {
 
 // Application Layer Result DTOs ----------------------------------------------
 export interface CreateUserRet {
-  user: IUser.Entity.TemporaryUser;
+  user: ITemporaryUser;
 }
 
 export interface UpdateUserRet {
-  user: IUser.Entity.TemporaryUser | IUser.Entity.User;
+  user: IUser;
 }
 
 export interface GetMeRet {
-  user: IUser.Entity.TemporaryUser | IUser.Entity.User;
+  user: IUser;
 }

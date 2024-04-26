@@ -3,6 +3,7 @@ import { Nullable } from 'src/common/utility-types';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
 import { tags } from 'typia';
 
+// Entity ---------------------------------------------------------------------
 /**
  * 각 snsAuthProvider 마다 제공되는 정보.
  * - kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
@@ -63,7 +64,7 @@ export interface IUser {
    * User 프로필 이미지 키 (이미지 파일 이름).
    * - 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
    */
-  profileImageUrlKey: (string & tags.MinLength<1> & tags.MaxLength<128>) | null;
+  profileImageUrlKey: null | (string & tags.MinLength<1> & tags.MaxLength<128>);
 
   /**
    * User 상태.
@@ -73,39 +74,39 @@ export interface IUser {
   status: 'ACTIVE' | 'INACTIVE';
 
   /** CreatedAt. */
-  createdAt: string | Date;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** UpdatedAt. */
-  updatedAt: string | Date;
+  updatedAt: Date | (string & tags.Format<'date-time'>);
 }
 
-export namespace IUser {
-  /** Dto */
-  export namespace Dto {
-    export interface Create
-      extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,
-        Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>> {}
+export interface ITemporaryUser
+  extends Pick<
+      IUser,
+      | 'id'
+      | 'role'
+      | 'snsAuthProvider'
+      | 'snsId'
+      | 'email'
+      | 'name'
+      | 'profileImageUrlKey'
+      | 'status'
+      | 'createdAt'
+      | 'updatedAt'
+    >,
+    Nullable<Pick<IUser, 'phoneNumber' | 'nickname' | 'gender' | 'birth' | 'belt'>> {}
 
-    export interface Update
-      extends Pick<IUser, 'id'>,
-        Partial<Pick<IUser, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>> {}
-
-    export interface Register extends Pick<IUser, 'id' | 'nickname' | 'gender' | 'belt' | 'birth'> {}
-  }
-
-  /** Entity */
-  export namespace Entity {
-    export interface TemporaryUser
-      extends Pick<
-          IUser,
-          'id' | 'role' | 'snsAuthProvider' | 'snsId' | 'email' | 'name' | 'status' | 'createdAt' | 'updatedAt'
-        >,
-        Nullable<Pick<IUser, 'phoneNumber' | 'nickname' | 'gender' | 'birth' | 'belt' | 'profileImageUrlKey'>> {}
-
-    export interface User extends IUser {}
-
-    export interface RegisterUser extends TemporaryUser {
-      policyConsents: IPolicyConsent[];
-    }
-  }
+export interface IRegisterUser extends ITemporaryUser {
+  policyConsents: IPolicyConsent[];
 }
+
+// DTO ------------------------------------------------------------------------
+export interface ITemporaryUserCreateDto
+  extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,
+    Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>> {}
+
+export interface IUserUpdateDto
+  extends Pick<IUser, 'id'>,
+    Partial<Pick<IUser, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>> {}
+
+export interface IUserRgistertDto extends Pick<IUser, 'id' | 'nickname' | 'gender' | 'belt' | 'birth'> {}

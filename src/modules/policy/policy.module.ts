@@ -5,11 +5,10 @@ import { AdminPolicyController } from './presentation/admin-policy.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PolicyEntity } from '../../infrastructure/database/entity/policy/policy.entity';
 import { PolicyConsentEntity } from '../../infrastructure/database/entity/user/policy-consent.entity';
-import { PolicyRepository } from './policy.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PolicyEntity, PolicyConsentEntity])],
   controllers: [UserPolicyController, AdminPolicyController],
-  providers: [PolicyAppService, PolicyRepository],
+  providers: [PolicyAppService],
 })
 export class PolicyModule {}

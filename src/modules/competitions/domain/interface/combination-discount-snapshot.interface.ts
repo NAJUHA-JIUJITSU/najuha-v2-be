@@ -10,8 +10,11 @@ export interface ICombinationDiscountSnapshot {
   combinationDiscountRules: ICombinationDiscountRule[] & tags.MinItems<1>;
 
   /** CreatedAt. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** Competition id. */
   competitionId: ICompetition['id'];
 }
+
+export interface ICombinationDiscountSnapshotCreateDto
+  extends Pick<ICombinationDiscountSnapshot, 'combinationDiscountRules' | 'competitionId'> {}

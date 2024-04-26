@@ -1,4 +1,3 @@
-import { ICompetition } from '../interface/competition.interface';
 import { IEarlybirdDiscountSnapshot } from '../interface/earlybird-discount-snapshot.interface';
 
 export class EarlybirdDiscountSnapshotModel {
@@ -7,14 +6,25 @@ export class EarlybirdDiscountSnapshotModel {
   public readonly earlybirdEndDate: IEarlybirdDiscountSnapshot['earlybirdEndDate'];
   public readonly discountAmount: IEarlybirdDiscountSnapshot['discountAmount'];
   public readonly createdAt: IEarlybirdDiscountSnapshot['createdAt'];
-  public readonly competitionId: ICompetition['id'];
+  public readonly competitionId: IEarlybirdDiscountSnapshot['competitionId'];
 
-  constructor(earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot) {
-    this.id = earlybirdDiscountSnapshot.id;
-    this.earlybirdStartDate = earlybirdDiscountSnapshot.earlybirdStartDate;
-    this.earlybirdEndDate = earlybirdDiscountSnapshot.earlybirdEndDate;
-    this.discountAmount = earlybirdDiscountSnapshot.discountAmount;
-    this.createdAt = earlybirdDiscountSnapshot.createdAt;
-    this.competitionId = earlybirdDiscountSnapshot.competitionId;
+  constructor(entity: IEarlybirdDiscountSnapshot) {
+    this.id = entity.id;
+    this.earlybirdStartDate = entity.earlybirdStartDate;
+    this.earlybirdEndDate = entity.earlybirdEndDate;
+    this.discountAmount = entity.discountAmount;
+    this.createdAt = entity.createdAt;
+    this.competitionId = entity.competitionId;
+  }
+
+  toEntity(): IEarlybirdDiscountSnapshot {
+    return {
+      id: this.id,
+      earlybirdStartDate: this.earlybirdStartDate,
+      earlybirdEndDate: this.earlybirdEndDate,
+      discountAmount: this.discountAmount,
+      createdAt: this.createdAt,
+      competitionId: this.competitionId,
+    };
   }
 }

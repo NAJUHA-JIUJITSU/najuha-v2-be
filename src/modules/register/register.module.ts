@@ -6,14 +6,13 @@ import { AuthModule } from '../auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PolicyEntity } from '../../infrastructure/database/entity/policy/policy.entity';
 import { PolicyConsentEntity } from '../../infrastructure/database/entity/user/policy-consent.entity';
-import { RegisterRepository } from './register.repository';
 import { UserEntity } from '../../infrastructure/database/entity/user/user.entity';
 import { RegisterUserEntityFactory } from './domain/register-user.factory';
 
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([UserEntity, PolicyEntity, PolicyConsentEntity])],
   controllers: [UserRegisterController],
-  providers: [RegisterAppService, PhoneNumberAuthCodeDomainService, RegisterRepository, RegisterUserEntityFactory],
+  providers: [RegisterAppService, PhoneNumberAuthCodeDomainService, RegisterUserEntityFactory],
   exports: [RegisterAppService],
 })
 export class RegisterModule {}

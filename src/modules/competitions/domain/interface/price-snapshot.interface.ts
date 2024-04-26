@@ -9,7 +9,7 @@ export interface IPriceSnapshot {
   price: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /** CreatedAt. */
-  createdAt: Date | string;
+  createdAt: Date | (string & tags.Format<'date-time'>);
 
   /** Division id. */
   divisionId: IDivision['id'];

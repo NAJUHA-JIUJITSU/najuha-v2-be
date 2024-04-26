@@ -7,6 +7,15 @@ import { DivisionModel } from './model/division.model';
 
 @Injectable()
 export class DivisionFactory {
+  /**
+   * Create all possible combinations of the given arrays.
+   * ex input: cartesian([1, 2], ['a', 'b'], ['x', 'y'])
+   * ex output: [[1, 'a', 'x'], [1, 'a', 'y'], [1, 'b', 'x'], [1, 'b', 'y'], [2, 'a', 'x'], [2, 'a', 'y'], [2, 'b', 'x'], [2, 'b', 'y']]
+   */
+  private cartesian(...arrays: any[][]): any[][] {
+    return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
+  }
+
   createDivisions(competitionId: ICompetition['id'], divisionPacks: IDivisionPack[]): DivisionModel[] {
     const unpackedDivisions = divisionPacks.reduce<IDivision[]>((acc, divisionPack) => {
       return [...acc, ...this.unpack(competitionId, divisionPack)];
@@ -50,9 +59,5 @@ export class DivisionFactory {
       return division;
     });
     return divisions;
-  }
-
-  private cartesian(...arrays: any[][]): any[][] {
-    return arrays.reduce((acc, curr) => acc.flatMap((c) => curr.map((n) => [].concat(c, n))), [[]]);
   }
 }
