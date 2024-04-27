@@ -3,7 +3,7 @@ import { IDivision } from 'src/modules/competitions/domain/interface/division.in
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { DivisionModel } from 'src/modules/competitions/domain/model/division.model';
 
-export class ParticipationDivisionInfoSnapshot {
+export class ParticipationDivisionInfoSnapshotModel {
   public readonly id: IParticipationDivisionInfoSnapshot['id'];
   public readonly createdAt: IParticipationDivisionInfoSnapshot['createdAt'];
   public readonly participationDivisionInfoId: IParticipationDivisionInfo['id'];

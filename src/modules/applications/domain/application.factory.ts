@@ -9,7 +9,7 @@ import {
 import { IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { ParticipationDivisionInfoSnapshot } from './model/participation-division-info-snapshot.model';
+import { ParticipationDivisionInfoSnapshotModel } from './model/participation-division-info-snapshot.model';
 import { PlayerSnapshotModel } from './model/player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './model/participation-division-info.model';
 import { ReadyApplicationModel } from './model/ready-application.model';
@@ -77,7 +77,7 @@ export class ApplicationFactory {
     participationDivisionInfoId: IParticipationDivisionInfo['id'],
     division: IDivision,
   ) {
-    return new ParticipationDivisionInfoSnapshot({
+    return new ParticipationDivisionInfoSnapshotModel({
       id: ulid(),
       participationDivisionId: division.id,
       division,
@@ -95,7 +95,7 @@ export class ApplicationFactory {
         (division) => division.id === updateParticipationDivisionInfoDto.newParticipationDivisionId,
       );
       if (!division) throw new Error('Division not found');
-      return new ParticipationDivisionInfoSnapshot(
+      return new ParticipationDivisionInfoSnapshotModel(
         this.createParticipationDivisionInfoSnapshot(
           updateParticipationDivisionInfoDto.participationDivisionInfoId,
           division,

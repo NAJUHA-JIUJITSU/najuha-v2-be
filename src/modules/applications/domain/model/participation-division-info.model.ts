@@ -2,21 +2,21 @@ import { IDivision } from 'src/modules/competitions/domain/interface/division.in
 import { IApplication } from '../interface/application.interface';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
-import { ParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.model';
+import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 
 export class ParticipationDivisionInfoModel {
   public readonly id: IParticipationDivisionInfo['id'];
   public readonly createdAt: IParticipationDivisionInfo['createdAt'];
   public readonly applicationId: IApplication['id'];
-  public readonly participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
+  public readonly participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[];
 
   constructor(entity: IParticipationDivisionInfo) {
     this.id = entity.id;
     this.createdAt = entity.createdAt;
     this.applicationId = entity.applicationId;
     this.participationDivisionInfoSnapshots = entity.participationDivisionInfoSnapshots.map(
-      (snapshot) => new ParticipationDivisionInfoSnapshot(snapshot),
+      (snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot),
     );
   }
   toEntity(): IParticipationDivisionInfo {
@@ -60,7 +60,7 @@ export class ParticipationDivisionInfoModel {
     }
   }
 
-  addParticipationDivisionInfoSnapshot(snapshot: ParticipationDivisionInfoSnapshot) {
+  addParticipationDivisionInfoSnapshot(snapshot: ParticipationDivisionInfoSnapshotModel) {
     this.participationDivisionInfoSnapshots.push(snapshot);
   }
 }

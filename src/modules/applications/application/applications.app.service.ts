@@ -13,7 +13,7 @@ import {
   UpdateReadyApplicationRet,
 } from './dtos';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
-import { DoneApplication } from '../domain/model/done-applicatioin.model';
+import { DoneApplicationModel } from '../domain/model/done-applicatioin.model';
 import { ReadyApplicationModel } from '../domain/model/ready-application.model';
 import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
@@ -182,12 +182,11 @@ export class ApplicationsAppService {
         }),
       ),
     );
-    const application = new DoneApplication(
+    const application = new DoneApplicationModel(
       assert<IApplication>(
         await this.applicationRepository
           .findOneOrFail({
-            where: { userId, id: applicationId },
-            // where: { userId, id: applicationId, status: 'DONE' },
+            where: { userId, id: applicationId, status: 'DONE' },
             relations: [
               'playerSnapshots',
               'participationDivisionInfos',

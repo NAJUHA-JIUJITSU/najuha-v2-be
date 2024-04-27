@@ -1,12 +1,12 @@
 import { ApplicationModel } from './application.model';
 import { IApplication } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
-import { ParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.model';
+import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 
-export class DoneApplication extends ApplicationModel {
+export class DoneApplicationModel extends ApplicationModel {
   constructor(entity: IApplication) {
-    // if (entity.status !== 'DONE') throw new Error('Application status is not DONE');
+    if (entity.status !== 'DONE') throw new Error('Application status is not DONE');
     super(entity);
   }
 
@@ -28,7 +28,9 @@ export class DoneApplication extends ApplicationModel {
     this.playerSnapshots.push(newPlayerSnapshot);
   }
 
-  addParticipationDivisionInfoSnapshots(newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[]) {
+  addParticipationDivisionInfoSnapshots(
+    newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[],
+  ) {
     newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
       const participationDivisionInfo = this.participationDivisionInfos.find(
         (info) => info.getId() === snapshot.participationDivisionInfoId,

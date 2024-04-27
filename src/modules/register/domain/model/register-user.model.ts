@@ -1,5 +1,5 @@
 import { BusinessException, RegisterErrors } from 'src/common/response/errorResponse';
-import { IPolicy, IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
+import { IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
 import { IRegisterUser, IUserRgistertDto } from 'src/modules/users/domain/interface/user.interface';
 import { IPolicyConsent } from '../interface/policy-consent.interface';
 
