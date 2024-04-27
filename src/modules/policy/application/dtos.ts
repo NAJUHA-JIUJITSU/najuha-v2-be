@@ -1,4 +1,4 @@
-import { IPolicy } from '../domain/interface/policy.interface';
+import { IPolicy, IPolicyFindMany } from '../domain/interface/policy.interface';
 
 // Application Layer Param Dtos ----------------------------------------------
 export interface CreatePolicyParam {
@@ -19,7 +19,7 @@ export interface CreatePolicyRet {
 }
 
 export interface FindPoliciesRet {
-  policies: Pick<IPolicy, 'id' | 'version' | 'type' | 'isMandatory' | 'title' | 'createdAt'>[];
+  policies: IPolicyFindMany[];
 }
 
 export interface FindPolicyRet {
@@ -27,5 +27,5 @@ export interface FindPolicyRet {
 }
 
 export interface FindAllTypesOfLatestPoliciesRet {
-  policies: Pick<IPolicy, 'id' | 'version' | 'type' | 'isMandatory' | 'title' | 'createdAt'>[];
+  policies: IPolicyFindMany[];
 }

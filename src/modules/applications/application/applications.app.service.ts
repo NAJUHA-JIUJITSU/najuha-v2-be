@@ -236,7 +236,6 @@ export class ApplicationsAppService {
   /**
    * Get expected payment.
    * - 현재 가격, 할인 정보를 바탕으로 application 의 예상 결제 금액을 계산합니다.
-   * TODO: domain logic 으로 캡슐화
    */
   async getExpectedPayment({ userId, applicationId }: GetExpectedPaymentParam): Promise<GetExpectedPaymentRet> {
     const application = new ReadyApplicationModel(

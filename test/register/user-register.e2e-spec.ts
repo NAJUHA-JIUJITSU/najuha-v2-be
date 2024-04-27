@@ -16,7 +16,7 @@ import {
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
 import {
   ConfirmAuthCodeRes,
   GetTemporaryUserRes,
@@ -199,7 +199,7 @@ describe('E2E u-2 register test', () => {
     });
 
     it('전화번호로 인증코드 확인 실패 시', async () => {
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -290,7 +290,7 @@ describe('E2E u-2 register test', () => {
       ohterUser.nickname = 'existingNickname';
       await userRepository.save(userRepository.create(ohterUser));
 
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -332,7 +332,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
@@ -375,7 +375,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
 
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
+      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';

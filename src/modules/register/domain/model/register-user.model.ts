@@ -1,22 +1,22 @@
 import { BusinessException, RegisterErrors } from 'src/common/response/errorResponse';
-import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { IPolicy, IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
 import { IRegisterUser, IUserRgistertDto } from 'src/modules/users/domain/interface/user.interface';
 import { IPolicyConsent } from '../interface/policy-consent.interface';
 
 export class RegisterUserModel {
   private readonly id: IRegisterUser['id'];
   private role: IRegisterUser['role'];
-  private snsAuthProvider: IRegisterUser['snsAuthProvider'];
-  private snsId: IRegisterUser['snsId'];
-  private email: IRegisterUser['email'];
-  private name: IRegisterUser['name'];
-  private phoneNumber: IRegisterUser['phoneNumber'];
   private nickname: IRegisterUser['nickname'];
   private gender: IRegisterUser['gender'];
   private birth: IRegisterUser['birth'];
   private belt: IRegisterUser['belt'];
-  private profileImageUrlKey: IRegisterUser['profileImageUrlKey'];
-  private status: IRegisterUser['status'];
+  private readonly snsAuthProvider: IRegisterUser['snsAuthProvider'];
+  private readonly snsId: IRegisterUser['snsId'];
+  private readonly email: IRegisterUser['email'];
+  private readonly name: IRegisterUser['name'];
+  private readonly phoneNumber: IRegisterUser['phoneNumber'];
+  private readonly profileImageUrlKey: IRegisterUser['profileImageUrlKey'];
+  private readonly status: IRegisterUser['status'];
   private readonly createdAt: IRegisterUser['createdAt'];
   private readonly updatedAt: IRegisterUser['updatedAt'];
   private readonly policyConsents: IPolicyConsent[];
@@ -69,7 +69,14 @@ export class RegisterUserModel {
     return this.role;
   }
 
-  register(userRegisterDto: IUserRgistertDto, mandatoryPolicies: IPolicy[]) {
+  addPolicyConsent(policyConsents: IPolicyConsent[]) {
+    const newPolicyConsents = policyConsents.filter(
+      (policyConsent) => !this.policyConsents.some((consent) => consent.policyId === policyConsent.policyId),
+    );
+    this.policyConsents.push(...newPolicyConsents);
+  }
+
+  register(userRegisterDto: IUserRgistertDto, mandatoryPolicies: IPolicyFindMany[]) {
     this.ensurePhoneNumberRegistered();
     this.ensureMandatoryPoliciesConsented(mandatoryPolicies);
     this.nickname = userRegisterDto.nickname;
@@ -85,7 +92,7 @@ export class RegisterUserModel {
     }
   }
 
-  private ensureMandatoryPoliciesConsented(mandatoryPolicies: IPolicy[]) {
+  private ensureMandatoryPoliciesConsented(mandatoryPolicies: IPolicyFindMany[]) {
     const missingConsents = mandatoryPolicies.filter(
       (policy) => !this.policyConsents?.some((consent) => consent.policyId === policy.id),
     );

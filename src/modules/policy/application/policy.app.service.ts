@@ -23,10 +23,14 @@ export class PolicyAppService {
 
     // 같은 타입의 약관이 존재하면 버전을 1 증가시킴
     const newVersion = existingPolicyEntity ? existingPolicyEntity.version + 1 : 1;
-    const policyEntity = this.policyRepository.create({
+    const policyEntity = await this.policyRepository.save({
       id: ulid(),
-      ...policyCreateDto,
+      type: policyCreateDto.type,
+      isMandatory: policyCreateDto.isMandatory,
+      title: policyCreateDto.title,
+      content: policyCreateDto.content,
       version: newVersion,
+      createdAt: new Date(),
     });
     return { policy: policyEntity };
   }

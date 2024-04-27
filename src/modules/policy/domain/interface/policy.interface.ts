@@ -43,3 +43,5 @@ export interface IPolicy {
   /** CreatedAt. */
   createdAt: Date | (string & tags.Format<'date-time'>);
 }
+
+export interface IPolicyFindMany extends Omit<IPolicy, 'content'> {}
