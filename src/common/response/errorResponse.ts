@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import exp from 'constants';
 import typia from 'typia';
 
 export type ErrorResponse = {
   isSuccess: false;
   status: HttpStatus;
-  code: number | string;
+  code: number;
+  type: string;
   result: string;
   detail?: any;
 };
@@ -24,6 +24,7 @@ export type INTERNAL_SERVER_ERROR = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.INTERNAL_SERVER_ERROR;
   code: 500;
+  type: 'INTERNAL_SERVER_ERROR';
   result: 'Internal Server Error';
 };
 
@@ -34,6 +35,7 @@ export type ENTITY_NOT_FOUND = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.NOT_FOUND;
   code: 404;
+  type: 'ENTITY_NOT_FOUND';
   result: 'Entity Not Found';
 };
 
@@ -49,6 +51,7 @@ export type AUTH_ACCESS_TOKEN_MISSING = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 1000;
+  type: 'AUTH_ACCESS_TOKEN_MISSING';
   result: 'accssToken이 없습니다.';
 };
 
@@ -56,6 +59,7 @@ export type AUTH_ACCESS_TOKEN_UNAUTHORIZED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.UNAUTHORIZED;
   code: 1001;
+  type: 'AUTH_ACCESS_TOKEN_UNAUTHORIZED';
   result: '유효하지 않은 accessToken 입니다.';
 };
 
@@ -63,6 +67,7 @@ export type AUTH_REFRESH_TOKEN_UNAUTHORIZED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.UNAUTHORIZED;
   code: 1002;
+  type: 'AUTH_REFRESH_TOKEN_UNAUTHORIZED';
   result: '유효하지 않은 refreshToken 입니다.';
 };
 
@@ -70,6 +75,7 @@ export type AUTH_LEVEL_FORBIDDEN = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.FORBIDDEN;
   code: 1003;
+  type: 'AUTH_LEVEL_FORBIDDEN';
   result: 'API 호출 권한이 없습니다.';
 };
 
@@ -77,6 +83,7 @@ export type AUTH_UNREGISTERED_ADMIN_CREDENTIALS = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.FORBIDDEN;
   code: 1004;
+  type: 'AUTH_UNREGISTERED_ADMIN_CREDENTIALS';
   result: '등록되지 않은 관리자 계정입니다.';
 };
 
@@ -95,6 +102,7 @@ export type SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2000;
+  type: 'SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER';
   result: '지원하지 않는 SNS AUTH PROVIDER 입니다.';
 };
 
@@ -102,6 +110,7 @@ export type SNS_AUTH_KAKAO_LOGIN_FAIL = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2001;
+  type: 'SNS_AUTH_KAKAO_LOGIN_FAIL';
   result: '카카오 로그인에 실패했습니다.';
 };
 
@@ -109,6 +118,7 @@ export type SNS_AUTH_NAVER_LOGIN_FAIL = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2002;
+  type: 'SNS_AUTH_NAVER_LOGIN_FAIL';
   result: '네이버 로그인에 실패했습니다.';
 };
 
@@ -116,6 +126,7 @@ export type SNS_AUTH_GOOGLE_LOGIN_FAIL = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 2003;
+  type: 'SNS_AUTH_GOOGLE_LOGIN_FAIL';
   result: '구글 로그인에 실패했습니다.';
 };
 
@@ -133,6 +144,7 @@ export type REGISTER_NICKNAME_DUPLICATED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.CONFLICT;
   code: 3000;
+  type: 'REGISTER_NICKNAME_DUPLICATED';
   result: '이미 사용중인 닉네임입니다.';
 };
 
@@ -140,6 +152,7 @@ export type REGISTER_BIRTH_INVALID = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 3001;
+  type: 'REGISTER_BIRTH_INVALID';
   result: '생년월일이 유효하지 않습니다.';
 };
 
@@ -147,6 +160,7 @@ export type REGISTER_POLICY_CONSENT_REQUIRED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 3002;
+  type: 'REGISTER_POLICY_CONSENT_REQUIRED';
   result: '필수 동의 항목을 모두 동의해야 합니다.';
 };
 
@@ -154,6 +168,7 @@ export type REGISTER_PHONE_NUMBER_REQUIRED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 3003;
+  type: 'REGISTER_PHONE_NUMBER_REQUIRED';
   result: '회원가입을 위해서는 휴대폰 번호인증이 필요합니다.';
 };
 
@@ -195,6 +210,7 @@ export type COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 6000;
+  type: 'COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE';
   result: '대회의 상태를 ACTIVE로 변경할 수 없습니다.';
 };
 
@@ -202,6 +218,7 @@ export type COMPETITIONS_DIVISION_DUPLICATED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 6001;
+  type: 'COMPETITIONS_DIVISION_DUPLICATED';
   result: '대회 부문이 중복되었습니다.';
 };
 
@@ -218,6 +235,7 @@ export type APPLICATIONS_DIVISION_NOT_FOUND = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.NOT_FOUND;
   code: 7000;
+  type: 'APPLICATIONS_DIVISION_NOT_FOUND';
   result: '신청 부문을 찾을 수 없습니다.';
 };
 
@@ -225,6 +243,7 @@ export type APPLICATIONS_DIVISION_AGE_NOT_MATCH = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7001;
+  type: 'APPLICATIONS_DIVISION_AGE_NOT_MATCH';
   result: '선수의 나이와 신청 부문의 나이가 맞지 않습니다.';
 };
 
@@ -232,6 +251,7 @@ export type APPLICATIONS_DIVISION_GENDER_NOT_MATCH = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7002;
+  type: 'APPLICATIONS_DIVISION_GENDER_NOT_MATCH';
   result: '선수의 성별과 신청 부문의 성별이 맞지 않습니다.';
 };
 
@@ -239,6 +259,7 @@ export type APPLICATIONS_REGISTRATION_NOT_STARTED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7003;
+  type: 'APPLICATIONS_REGISTRATION_NOT_STARTED';
   result: '대회 신청 기간 이전입니다.';
 };
 
@@ -246,6 +267,7 @@ export type APPLICATIONS_REGISTRATION_ENDED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7004;
+  type: 'APPLICATIONS_REGISTRATION_ENDED';
   result: '대회 신청 기간이 종료되었습니다.';
 };
 
@@ -253,6 +275,7 @@ export type APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED = ErrorRespon
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7005;
+  type: 'APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED';
   result: 'PlayerSnapshotUpdateDto or ParticipationDivisionInfoUpdateDtos must be provided.';
 };
 
@@ -260,7 +283,16 @@ export type APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
   code: 7007;
+  type: 'APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED';
   result: '본인 신청의 경우 선수 정보와 사용자 정보가 일치해야 합니다';
+};
+
+export type APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.NOT_FOUND;
+  code: 7008;
+  type: 'APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND';
+  result: '변경하고자 하는 participationDivisionInfo가 존재하지 않습니다.';
 };
 
 export const ApplicationsErrors = {
@@ -272,4 +304,6 @@ export const ApplicationsErrors = {
   APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED:
     typia.random<APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED>(),
   APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED: typia.random<APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED>(),
+  APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND:
+    typia.random<APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND>(),
 };
