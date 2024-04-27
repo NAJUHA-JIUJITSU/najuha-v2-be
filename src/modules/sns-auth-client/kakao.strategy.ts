@@ -18,7 +18,6 @@ export class KakaoStrategy implements ISnsAuthStrategy {
 
       return this.formatUserData(kakaoUserData);
     } catch (e: any) {
-      // TODO: any 타입 수정 필요
       throw new BusinessException(SnsAuthErrors.SNS_AUTH_KAKAO_LOGIN_FAIL, e.response.data);
     }
   }

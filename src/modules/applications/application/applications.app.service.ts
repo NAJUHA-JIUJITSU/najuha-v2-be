@@ -18,7 +18,7 @@ import { DoneApplication } from '../domain/model/done-applicatioin.model';
 import { ReadyApplicationModel } from '../domain/model/ready-application.model';
 import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
+import { ApplicationsErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { UserModel } from 'src/modules/users/domain/model/user.model';
@@ -179,9 +179,7 @@ export class ApplicationsAppService {
     participationDivisionInfoUpdateDtos,
   }: UpdateDoneApplicationParam): Promise<UpdateDoneApplicationRet> {
     if (!playerSnapshotUpdateDto && !participationDivisionInfoUpdateDtos)
-      throw new Error(
-        'playerSnapshotCreateDto, participationDivisionInfoUpdateDataList 둘중에 하나는 필수다 이말이야.',
-      ); // TODO: 에러 표준화
+      throw new BusinessException(ApplicationsErrors.APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED);
     const user = new UserModel(
       assert<IUser>(
         await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {

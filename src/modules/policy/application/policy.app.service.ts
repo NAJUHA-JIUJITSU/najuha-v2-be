@@ -31,9 +31,11 @@ export class PolicyAppService {
     return { policy: policyEntity };
   }
 
-  // TODO content 는 제외
   async findPolicies({ type }: FindPoliciesParam): Promise<FindPoliciesRet> {
-    const policies = await this.policyRepository.find({ where: { type } });
+    const policies = await this.policyRepository.find({
+      where: { type },
+      select: ['id', 'version', 'type', 'isMandatory', 'title', 'createdAt'],
+    });
     return { policies };
   }
 
@@ -42,7 +44,6 @@ export class PolicyAppService {
     return { policy };
   }
 
-  // TODO content 는 제외
   async findAllTypesOfLatestPolicies(): Promise<FindAllTypesOfLatestPoliciesRet> {
     const policies = await this.policyRepository.findAllTypesOfLatestPolicies();
     return { policies };

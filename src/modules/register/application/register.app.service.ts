@@ -62,13 +62,13 @@ export class RegisterAppService {
     userId,
     phoneNumber,
   }: SendPhoneNumberAuthCodeParam): Promise<SendPhoneNumberAuthCodeRet> {
-    const phoneNumberAuthCode = await this.phoneAuthCodeProvider.issueAuthCode(userId, phoneNumber);
+    const phoneNumberAuthCode = await this.phoneAuthCodeProvider.issuePhoneNumberAuthCode(userId, phoneNumber);
     // TODO: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
     return { phoneNumberAuthCode };
   }
 
   async confirmAuthCode({ userId, authCode }: ConfirmAuthCodeParam): Promise<ConfirmAuthCodeRet> {
-    const isConfirmed = await this.phoneAuthCodeProvider.isAuthCodeValid(userId, authCode);
+    const isConfirmed = await this.phoneAuthCodeProvider.isPhoneNumberAuthCodeValid(userId, authCode);
     return { isConfirmed };
   }
 
@@ -103,10 +103,10 @@ export class RegisterAppService {
 
     await this.userRepository.save(registerUserModel.toEntity());
 
-    const authTokens = await this.authTokenDomainService.createAuthTokens(
-      registerUserModel.getId(),
-      registerUserModel.getRole(),
-    );
+    const authTokens = await this.authTokenDomainService.createAuthTokens({
+      userId: registerUserModel.getId(),
+      userRole: registerUserModel.getRole(),
+    });
     return { authTokens };
   }
 }

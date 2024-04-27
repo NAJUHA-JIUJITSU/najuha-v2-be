@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
+import { IAuthTokenPayload } from 'src/modules/auth/domain/interface/auth-token-payload.interfac';
 
 const ROLE_LEVEL_KEY = Symbol('roleLevel');
 
@@ -29,18 +30,16 @@ export class RoleGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (requiredRoleLevel === RoleLevel.PUBLIC) {
-      return true;
-    }
+    if (requiredRoleLevel === RoleLevel.PUBLIC) return true;
 
     const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromHeader(request);
     if (!accessToken) throw new BusinessException(AuthErrors.AUTH_ACCESS_TOKEN_MISSING);
 
-    const payload = await this.verifyToken(accessToken);
+    const payload = this.verifyToken(accessToken);
 
     // 사용자의 인증 레벨 검증
-    this.validateRoleLevel(payload.userRole, requiredRoleLevel);
+    this.validateUserRoleLevel(payload.userRole, requiredRoleLevel);
 
     request['userId'] = payload.userId;
     request['userRole'] = payload.userRole;
@@ -48,18 +47,17 @@ export class RoleGuard implements CanActivate {
     return true;
   }
 
-  private async verifyToken(accessToken: string): Promise<any> {
+  private verifyToken(accessToken: string): IAuthTokenPayload {
     try {
-      return await this.jwtService.verifyAsync(accessToken, {
+      return this.jwtService.verify(accessToken, {
         secret: appEnv.jwtAccessTokenSecret,
       });
     } catch (e: any) {
-      // TODO: any 타입 수정 필요
       throw new BusinessException(AuthErrors.AUTH_ACCESS_TOKEN_UNAUTHORIZED, e.message);
     }
   }
 
-  private validateRoleLevel(userRole: string, requiredRoleLevel: RoleLevel): any {
+  private validateUserRoleLevel(userRole: string, requiredRoleLevel: RoleLevel): any {
     if (requiredRoleLevel > RoleLevel[userRole]) {
       throw new BusinessException(AuthErrors.AUTH_LEVEL_FORBIDDEN);
     }

@@ -18,7 +18,6 @@ export class NaverStrategy implements ISnsAuthStrategy {
 
       return this.formatUserData(naverUserData);
     } catch (e: any) {
-      // TODO: any 타입 수정 필요
       throw new BusinessException(SnsAuthErrors.SNS_AUTH_NAVER_LOGIN_FAIL, e.response.data);
     }
   }

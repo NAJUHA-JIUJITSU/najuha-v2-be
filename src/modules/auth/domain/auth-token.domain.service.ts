@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 import { IAuthTokens } from './interface/auth-tokens.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IAuthTokenPayload } from './interface/auth-token-payload.interfac';
 
 @Injectable()
 export class AuthTokenDomainService {
@@ -13,30 +13,29 @@ export class AuthTokenDomainService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createAuthTokens(userId: IUser['id'], userRole: IUser['role']): Promise<IAuthTokens> {
-    const accessToken = this.createAccessToken(userId, userRole);
-    const refreshToken = this.createRefreshToken(userId, userRole);
-
-    await this.redisClient.set(`userId:${userId}:refreshToken`, refreshToken);
-
-    // this.testPrintAllRedisData('createAuthTokens');
-
+  async createAuthTokens({ userId, userRole }: IAuthTokenPayload): Promise<IAuthTokens> {
+    const accessToken = this.createAccessToken({ userId, userRole });
+    const refreshToken = this.createRefreshToken({ userId, userRole });
+    await this.redisClient.set(
+      `userId:${userId}:refreshToken`,
+      refreshToken,
+      'EX',
+      appEnv.redisRefreshTokenExpirationTime,
+    );
     return {
       accessToken,
       refreshToken,
     };
   }
 
-  private createAccessToken(userId: IUser['id'], userRole: IUser['role']): string {
-    const payload = { userId, userRole };
+  private createAccessToken(payload: IAuthTokenPayload): string {
     return this.jwtService.sign(payload, {
       secret: appEnv.jwtAccessTokenSecret,
       expiresIn: appEnv.jwtAccessTokenExpirationTime,
     });
   }
 
-  private createRefreshToken(userId: IUser['id'], userRole: IUser['role']): string {
-    const payload = { userId, userRole };
+  private createRefreshToken(payload: IAuthTokenPayload): string {
     return this.jwtService.sign(payload, {
       secret: appEnv.jwtRefreshTokenSecret,
       expiresIn: appEnv.jwtRefreshTokenExpirationTime,
@@ -50,26 +49,23 @@ export class AuthTokenDomainService {
    *
    * 오류 발생시 redis에 저장된 refreshToken 삭제(로그아웃 처리)
    */
-  async verifyRefreshToken(refreshToken: string): Promise<any> {
-    let payload; // TODO: any 타입 수정 필요
-
+  async verifyRefreshToken(refreshToken: string): Promise<IAuthTokenPayload> {
+    let payload: IAuthTokenPayload;
     try {
       payload = this.jwtService.verify(refreshToken, {
         secret: appEnv.jwtRefreshTokenSecret,
       });
     } catch (e: any) {
-      // TODO: any 타입 수정 필요
-      if (payload?.userId) await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
+      const decoded = this.jwtService.decode(refreshToken);
+      if (decoded?.userId) this.redisClient.del(`userId:${decoded.userId}:refreshToken`);
       throw new BusinessException(AuthErrors.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
     }
 
     const storedRefreshToken = await this.redisClient.get(`userId:${payload.userId}:refreshToken`);
-
     if (!storedRefreshToken || storedRefreshToken !== refreshToken) {
       await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
       throw new BusinessException(AuthErrors.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
     }
-
     return payload;
   }
 

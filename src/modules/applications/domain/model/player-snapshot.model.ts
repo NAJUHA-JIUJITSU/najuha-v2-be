@@ -1,5 +1,6 @@
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
+import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 
 export class PlayerSnapshot {
   public readonly id: IPlayerSnapshot['id'];
@@ -50,7 +51,10 @@ export class PlayerSnapshot {
     if (this.phoneNumber !== userEntity.phoneNumber) mismatchs.push('phoneNumber');
     if (this.birth !== userEntity.birth) mismatchs.push('birth');
     if (this.gender !== userEntity.gender) mismatchs.push('gender');
-    // TODO: 에러 표준화
-    if (mismatchs.length > 0) throw new Error(`Mismatched fields: ${mismatchs.join(', ')}`);
+    if (mismatchs.length > 0)
+      throw new BusinessException(
+        ApplicationsErrors.APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED,
+        `불일치된 정보: ${mismatchs.join(', ')}`,
+      );
   }
 }

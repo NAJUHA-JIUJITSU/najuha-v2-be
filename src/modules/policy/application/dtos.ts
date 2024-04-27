@@ -19,7 +19,7 @@ export interface CreatePolicyRet {
 }
 
 export interface FindPoliciesRet {
-  policies: IPolicy[];
+  policies: Pick<IPolicy, 'id' | 'version' | 'type' | 'isMandatory' | 'title' | 'createdAt'>[];
 }
 
 export interface FindPolicyRet {
@@ -27,5 +27,5 @@ export interface FindPolicyRet {
 }
 
 export interface FindAllTypesOfLatestPoliciesRet {
-  policies: IPolicy[];
+  policies: Pick<IPolicy, 'id' | 'version' | 'type' | 'isMandatory' | 'title' | 'createdAt'>[];
 }

@@ -11,6 +11,7 @@ export class PolicyRepository extends Repository<PolicyEntity> {
   findAllTypesOfLatestPolicies() {
     return this.createQueryBuilder('policy')
       .distinctOn(['policy.type'])
+      .select(['policy.id', 'policy.version', 'policy.type', 'policy.isMandatory', 'policy.title', 'policy.createdAt'])
       .orderBy('policy.type')
       .addOrderBy('policy.createdAt', 'DESC')
       .getMany();

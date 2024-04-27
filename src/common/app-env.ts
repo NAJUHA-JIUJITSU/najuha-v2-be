@@ -33,15 +33,17 @@ type appEnv = {
   dbpassword: string;
   dbDatabase: string;
   dbSynchronize: boolean;
-  // REDIS ----------------------------------------------------------------------------
+  // REDIS -------------------------------------------------------------------------
   redisHost: string;
   redisPort: number;
+  // REDIS EXPIRATION TIME ---------------------------------------------------------
+  redisPhoneNumberAuthCodeExpirationTime: number;
+  redisRefreshTokenExpirationTime: number;
   // JWT ---------------------------------------------------------------------------
   jwtAccessTokenSecret: string;
   jwtAccessTokenExpirationTime: string;
   jwtRefreshTokenSecret: string;
   jwtRefreshTokenExpirationTime: string;
-
   // ADMIN CREDENTIALS -------------------------------------------------------------
   adminCredentials: { snsId: string; snsAuthProvider: string }[];
 };
@@ -71,9 +73,12 @@ const loadConfig = (): appEnv => {
     dbpassword: process.env.DB_PASSWORD,
     dbDatabase: process.env.DB_DATABASE,
     dbSynchronize: process.env.DB_SYNCHRONIZE === 'true',
-    // REDIS ----------------------------------------------------------------------------
+    // REDIS --------------------------------------------------------------------------
     redisHost: process.env.REDIS_HOST,
     redisPort: Number(process.env.REDIS_PORT),
+    // REDIS EXPIRATION TIME ---------------------------------------------------------
+    redisPhoneNumberAuthCodeExpirationTime: Number(process.env.REDIS_PHONE_NUMBER_AUTH_CODE_EXPIRATION_TIME),
+    redisRefreshTokenExpirationTime: Number(process.env.REDIS_REFRESH_TOKEN_EXPIRATION_TIME),
     // JWT ---------------------------------------------------------------------------
     jwtAccessTokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET,
     jwtAccessTokenExpirationTime: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,

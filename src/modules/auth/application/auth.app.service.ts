@@ -37,7 +37,10 @@ export class AuthAppService {
       userEntity = this.UserEntityFactory.creatTemporaryUser(validatedUserData);
       await this.userRepository.save(userEntity);
     }
-    const authTokens = await this.AuthTokenDomainService.createAuthTokens(userEntity.id, userEntity.role);
+    const authTokens = await this.AuthTokenDomainService.createAuthTokens({
+      userId: userEntity.id,
+      userRole: userEntity.role,
+    });
     // TODO: 지우기
     console.log('authTokens', authTokens);
     return { authTokens };
@@ -45,7 +48,10 @@ export class AuthAppService {
 
   async refreshToken({ refreshToken }: RefreshTokenParam): Promise<RefreshTokenRet> {
     const payload = await this.AuthTokenDomainService.verifyRefreshToken(refreshToken);
-    const authTokens = await this.AuthTokenDomainService.createAuthTokens(payload.userId, payload.userRole);
+    const authTokens = await this.AuthTokenDomainService.createAuthTokens({
+      userId: payload.userId,
+      userRole: payload.userRole,
+    });
 
     return { authTokens };
   }
@@ -62,7 +68,7 @@ export class AuthAppService {
     );
     if (!isCurrentAdmin) throw new BusinessException(AuthErrors.AUTH_UNREGISTERED_ADMIN_CREDENTIALS);
     await this.userRepository.update(userId, { role: 'ADMIN' });
-    const authTokens = await this.AuthTokenDomainService.createAuthTokens(userId, 'ADMIN');
+    const authTokens = await this.AuthTokenDomainService.createAuthTokens({ userId, userRole: 'ADMIN' });
     return { authTokens };
   }
 }

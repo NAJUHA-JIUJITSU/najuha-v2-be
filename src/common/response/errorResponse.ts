@@ -249,10 +249,27 @@ export type APPLICATIONS_REGISTRATION_ENDED = ErrorResponse & {
   result: '대회 신청 기간이 종료되었습니다.';
 };
 
+export type APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7005;
+  result: 'PlayerSnapshotUpdateDto or ParticipationDivisionInfoUpdateDtos must be provided.';
+};
+
+export type APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7007;
+  result: '본인 신청의 경우 선수 정보와 사용자 정보가 일치해야 합니다';
+};
+
 export const ApplicationsErrors = {
   APPLICATIONS_DIVISION_NOT_FOUND: typia.random<APPLICATIONS_DIVISION_NOT_FOUND>(),
   APPLICATIONS_DIVISION_AGE_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_AGE_NOT_MATCH>(),
   APPLICATIONS_DIVISION_GENDER_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_GENDER_NOT_MATCH>(),
   APPLICATIONS_REGISTRATION_NOT_STARTED: typia.random<APPLICATIONS_REGISTRATION_NOT_STARTED>(),
   APPLICATIONS_REGISTRATION_ENDED: typia.random<APPLICATIONS_REGISTRATION_ENDED>(),
+  APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED:
+    typia.random<APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED>(),
+  APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED: typia.random<APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED>(),
 };
