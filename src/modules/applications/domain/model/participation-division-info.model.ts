@@ -5,11 +5,11 @@ import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
 import { ParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 
-export class ParticipationDivisionInfo {
-  private readonly id: IParticipationDivisionInfo['id'];
-  private readonly createdAt: IParticipationDivisionInfo['createdAt'];
-  private readonly applicationId: IApplication['id'];
-  private readonly participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
+export class ParticipationDivisionInfoModel {
+  public readonly id: IParticipationDivisionInfo['id'];
+  public readonly createdAt: IParticipationDivisionInfo['createdAt'];
+  public readonly applicationId: IApplication['id'];
+  public readonly participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[];
 
   constructor(entity: IParticipationDivisionInfo) {
     this.id = entity.id;

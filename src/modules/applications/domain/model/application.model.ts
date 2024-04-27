@@ -1,6 +1,6 @@
 import { IApplication } from '../interface/application.interface';
-import { PlayerSnapshot } from './player-snapshot.model';
-import { ParticipationDivisionInfo } from './participation-division-info.model';
+import { PlayerSnapshotModel } from './player-snapshot.model';
+import { ParticipationDivisionInfoModel } from './participation-division-info.model';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 export abstract class ApplicationModel {
@@ -10,8 +10,8 @@ export abstract class ApplicationModel {
   protected readonly userId: IApplication['userId'];
   protected readonly createdAt: IApplication['createdAt'];
   protected readonly updatedAt: IApplication['updatedAt'];
-  protected readonly playerSnapshots: PlayerSnapshot[];
-  protected readonly participationDivisionInfos: ParticipationDivisionInfo[];
+  protected readonly playerSnapshots: PlayerSnapshotModel[];
+  protected readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
   protected status: IApplication['status'];
 
   constructor(entity: IApplication) {
@@ -22,9 +22,9 @@ export abstract class ApplicationModel {
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
     this.status = entity.status;
-    this.playerSnapshots = entity.playerSnapshots.map((snapshot) => new PlayerSnapshot(snapshot));
+    this.playerSnapshots = entity.playerSnapshots.map((snapshot) => new PlayerSnapshotModel(snapshot));
     this.participationDivisionInfos = entity.participationDivisionInfos.map(
-      (info) => new ParticipationDivisionInfo(info),
+      (info) => new ParticipationDivisionInfoModel(info),
     );
   }
 

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ApplicationFactory } from '../domain/application.factory';
-import { ApplicationDomainService } from '../domain/application.domain.service';
 import {
   CreateApplicationParam,
   CreateApplicationRet,
@@ -30,7 +29,6 @@ import { CompetitionRepository } from 'src/infrastructure/database/custom-reposi
 export class ApplicationsAppService {
   constructor(
     private readonly applicationFactory: ApplicationFactory,
-    private readonly applicationDomainService: ApplicationDomainService,
     private readonly userRepository: UserRepository,
     private readonly applicationRepository: ApplicationRepository,
     private readonly competitionRepository: CompetitionRepository,
@@ -152,7 +150,6 @@ export class ApplicationsAppService {
     );
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
-
     const newApplication = this.applicationFactory.createReadyApplication(
       user.getId(),
       competition.getId(),
@@ -162,9 +159,7 @@ export class ApplicationsAppService {
     );
     newApplication.validateApplicationType(user.toEntity());
     newApplication.validateDivisionSuitability();
-
     oldApplication.updateStatusToDeleted();
-
     // TODO: Transaction
     await this.applicationRepository.save(oldApplication.toEntity());
     await this.applicationRepository.save(newApplication.toEntity());
@@ -191,7 +186,8 @@ export class ApplicationsAppService {
       assert<IApplication>(
         await this.applicationRepository
           .findOneOrFail({
-            where: { userId, id: applicationId, status: 'DONE' },
+            where: { userId, id: applicationId },
+            // where: { userId, id: applicationId, status: 'DONE' },
             relations: [
               'playerSnapshots',
               'participationDivisionInfos',
@@ -218,12 +214,10 @@ export class ApplicationsAppService {
       ),
     );
     competition.validateApplicationPeriod();
-
     if (playerSnapshotUpdateDto) {
       const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(applicationId, playerSnapshotUpdateDto);
       application.addPlayerSnapshot(newPlayerSnapshot);
     }
-
     if (participationDivisionInfoUpdateDtos) {
       const participationDivisionIds = participationDivisionInfoUpdateDtos.map((dto) => dto.newParticipationDivisionId);
       const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
@@ -231,11 +225,8 @@ export class ApplicationsAppService {
         divisions,
         participationDivisionInfoUpdateDtos,
       );
-      newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
-        application.updateParticipationDivisionInfo(snapshot.participationDivisionInfoId, snapshot);
-      });
+      application.addParticipationDivisionInfoSnapshots(newParticipationDivisionInfoSnapshots);
     }
-
     application.validateApplicationType(user.toEntity());
     application.validateDivisionSuitability();
     this.applicationRepository.save(application.toEntity());
@@ -245,36 +236,39 @@ export class ApplicationsAppService {
   /**
    * Get expected payment.
    * - 현재 가격, 할인 정보를 바탕으로 application 의 예상 결제 금액을 계산합니다.
-   * TOD: domain logic 으로 캡슐화
+   * TODO: domain logic 으로 캡슐화
    */
   async getExpectedPayment({ userId, applicationId }: GetExpectedPaymentParam): Promise<GetExpectedPaymentRet> {
-    const applicationEntity = assert<IApplication>(
-      await this.applicationRepository
-        .findOneOrFail({
-          where: { userId, id: applicationId },
-          relations: [
-            'playerSnapshots',
-            'participationDivisionInfos',
-            'participationDivisionInfos.participationDivisionInfoSnapshots',
-            'participationDivisionInfos.participationDivisionInfoSnapshots.division',
-            'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
-          ],
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
-        }),
+    const application = new ReadyApplicationModel(
+      assert<IApplication>(
+        await this.applicationRepository
+          .findOneOrFail({
+            where: { userId, id: applicationId },
+            relations: [
+              'playerSnapshots',
+              'participationDivisionInfos',
+              'participationDivisionInfos.participationDivisionInfoSnapshots',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+            ],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+          }),
+      ),
     );
-    const competitionEntity = assert<ICompetition>(
-      await this.competitionRepository
-        .findOneOrFail({
-          where: { id: applicationEntity.competitionId },
-          relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
-        }),
+    const competition = new CompetitionModel(
+      assert<ICompetition>(
+        await this.competitionRepository
+          .findOneOrFail({
+            where: { id: application.getCompetitionId() },
+            relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          }),
+      ),
     );
-    const expectedPayment = await this.applicationDomainService.calculatePayment(applicationEntity, competitionEntity);
-    return { expectedPayment };
+    return { expectedPayment: competition.calculateExpectedPayment(application.getParticipationDivisionIds()) };
   }
 }

@@ -10,8 +10,8 @@ import { IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface'
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { ParticipationDivisionInfoSnapshot } from './model/participation-division-info-snapshot.model';
-import { PlayerSnapshot } from './model/player-snapshot.model';
-import { ParticipationDivisionInfo } from './model/participation-division-info.model';
+import { PlayerSnapshotModel } from './model/player-snapshot.model';
+import { ParticipationDivisionInfoModel } from './model/participation-division-info.model';
 import { ReadyApplicationModel } from './model/ready-application.model';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class ApplicationFactory {
   }
 
   createPlayerSnapshot(applicationId: IApplication['id'], playerSnapshotCreateDto: IPlayerSnapshotCreateDto) {
-    return new PlayerSnapshot({
+    return new PlayerSnapshotModel({
       id: ulid(),
       applicationId,
       name: playerSnapshotCreateDto.name,
@@ -64,7 +64,7 @@ export class ApplicationFactory {
         participationDivisionInfoId,
         division,
       );
-      return new ParticipationDivisionInfo({
+      return new ParticipationDivisionInfoModel({
         id: participationDivisionInfoId,
         applicationId,
         participationDivisionInfoSnapshots: [participationDivisionInfosSnapshot],
@@ -96,7 +96,10 @@ export class ApplicationFactory {
       );
       if (!division) throw new Error('Division not found');
       return new ParticipationDivisionInfoSnapshot(
-        this.createParticipationDivisionInfoSnapshot(updateParticipationDivisionInfoDto.id, division),
+        this.createParticipationDivisionInfoSnapshot(
+          updateParticipationDivisionInfoDto.participationDivisionInfoId,
+          division,
+        ),
       );
     });
   }

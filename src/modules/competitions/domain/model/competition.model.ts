@@ -4,6 +4,8 @@ import { CombinationDiscountSnapshotModel } from './combination-discount-snapsho
 import { DivisionModel } from './division.model';
 import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.entity';
 import { IDivision } from '../interface/division.interface';
+import { CalculatePaymentService } from 'src/modules/applications/domain/calculate-payment.service';
+import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];
@@ -159,5 +161,21 @@ export class CompetitionModel {
       );
     }
     return divisions;
+  }
+
+  calculateExpectedPayment(participationDivisionIds: IDivision['id'][]) {
+    const divisions = this.divisions.filter((division) => participationDivisionIds.includes(division.id));
+    const priceSnapshots = divisions.reduce<IPriceSnapshot[]>((acc, division) => {
+      acc.push(division.priceSnapshots[division.priceSnapshots.length - 1]);
+      return acc;
+    }, []);
+    const earlybirdDiscountSnapshot = this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
+    const combinationDiscountSnapshot = this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1];
+    return CalculatePaymentService.calculate(
+      divisions,
+      priceSnapshots,
+      earlybirdDiscountSnapshot,
+      combinationDiscountSnapshot,
+    );
   }
 }

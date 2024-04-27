@@ -26,9 +26,9 @@ export interface IDivision {
 
   /**
    * 체급.
-   * - ex) '-40', '-45', '-50', '+50', 'ABSOLUTE'.
+   * - ex) '-40', '-45.5', '-50', '+50', 'ABSOLUTE'.
    */
-  weight: string & tags.MinLength<1> & tags.MaxLength<64>;
+  weight: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[-+][0-9]+(\\.[0-9]+)?$|ABSOLUTE$'>;
 
   /** 출생년도 범위 시작. YYYY. */
   birthYearRangeStart: string & tags.MinLength<4> & tags.Pattern<'^[0-9]{4}$'>;

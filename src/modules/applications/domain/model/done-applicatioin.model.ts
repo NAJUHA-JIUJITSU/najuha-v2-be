@@ -1,12 +1,12 @@
 import { ApplicationModel } from './application.model';
 import { IApplication } from '../interface/application.interface';
-import { PlayerSnapshot } from './player-snapshot.model';
-import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
+import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.model';
+import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 
 export class DoneApplication extends ApplicationModel {
   constructor(entity: IApplication) {
-    if (entity.status !== 'DONE') throw new Error('Application status is not DONE');
+    // if (entity.status !== 'DONE') throw new Error('Application status is not DONE');
     super(entity);
   }
 
@@ -24,18 +24,18 @@ export class DoneApplication extends ApplicationModel {
     };
   }
 
-  addPlayerSnapshot(newPlayerSnapshot: PlayerSnapshot) {
+  addPlayerSnapshot(newPlayerSnapshot: PlayerSnapshotModel) {
     this.playerSnapshots.push(newPlayerSnapshot);
   }
 
-  updateParticipationDivisionInfo(
-    participationDivisionInfoId: IParticipationDivisionInfo['id'],
-    newParticipationDivisionInfoSnapshot: ParticipationDivisionInfoSnapshot,
-  ) {
-    const participationDivisionInfo = this.participationDivisionInfos.find(
-      (info) => info.getId() === participationDivisionInfoId,
-    );
-    if (!participationDivisionInfo) throw new Error('Participation division info not found');
-    participationDivisionInfo.addParticipationDivisionInfoSnapshot(newParticipationDivisionInfoSnapshot);
+  addParticipationDivisionInfoSnapshots(newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshot[]) {
+    newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
+      const participationDivisionInfo = this.participationDivisionInfos.find(
+        (info) => info.getId() === snapshot.participationDivisionInfoId,
+      );
+      if (!participationDivisionInfo)
+        throw new BusinessException(ApplicationsErrors.APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND);
+      participationDivisionInfo.addParticipationDivisionInfoSnapshot(snapshot);
+    });
   }
 }

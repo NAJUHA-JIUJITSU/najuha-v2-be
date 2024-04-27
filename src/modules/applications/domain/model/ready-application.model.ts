@@ -24,4 +24,10 @@ export class ReadyApplicationModel extends ApplicationModel {
   updateStatusToDeleted() {
     this.status = 'DELETED';
   }
+
+  getParticipationDivisionIds() {
+    return this.participationDivisionInfos.map(
+      (info) => info.participationDivisionInfoSnapshots[info.participationDivisionInfoSnapshots.length - 1].division.id,
+    );
+  }
 }

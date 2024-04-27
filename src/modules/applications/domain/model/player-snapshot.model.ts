@@ -2,7 +2,7 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 
-export class PlayerSnapshot {
+export class PlayerSnapshotModel {
   public readonly id: IPlayerSnapshot['id'];
   public readonly name: IPlayerSnapshot['name'];
   public readonly gender: IPlayerSnapshot['gender'];
