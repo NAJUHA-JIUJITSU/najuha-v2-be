@@ -6,6 +6,8 @@ import { IEarlybirdDiscountSnapshotCreateDto } from './interface/earlybird-disco
 import { EarlybirdDiscountSnapshotModel } from './model/earlybird-discount-snapshot.entity';
 import { ICombinationDiscountSnapshotCreateDto } from './interface/combination-discount-snapshot.interface';
 import { CombinationDiscountSnapshotModel } from './model/combination-discount-snapshot.model';
+import { RequiredAddtionalInfoModel } from './model/required-addtional-info.model';
+import { IRequiredAddtionalInfoCreateDto } from './interface/required-addtional-info.interface';
 
 @Injectable()
 export class CompetitionFactory {
@@ -32,6 +34,7 @@ export class CompetitionFactory {
       divisions: [],
       earlybirdDiscountSnapshots: [],
       combinationDiscountSnapshots: [],
+      requiredAddtionalInfos: [],
     });
   }
 
@@ -55,6 +58,18 @@ export class CompetitionFactory {
       id: ulid(),
       combinationDiscountRules: combinationDiscountSnapshotCreateDto.combinationDiscountRules,
       competitionId: combinationDiscountSnapshotCreateDto.competitionId,
+      createdAt: new Date(),
+    });
+  }
+
+  createRequiredAddtionalInfo(
+    requiredAddtionalInfoCreateDto: IRequiredAddtionalInfoCreateDto,
+  ): RequiredAddtionalInfoModel {
+    return new RequiredAddtionalInfoModel({
+      id: ulid(),
+      type: requiredAddtionalInfoCreateDto.type,
+      description: requiredAddtionalInfoCreateDto.description,
+      competitionId: requiredAddtionalInfoCreateDto.competitionId,
       createdAt: new Date(),
     });
   }

@@ -6,6 +6,7 @@ import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.en
 import { IDivision } from '../interface/division.interface';
 import { CalculatePaymentService } from 'src/modules/applications/domain/calculate-payment.service';
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
+import { RequiredAddtionalInfoModel } from './required-addtional-info.model';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];
@@ -27,8 +28,9 @@ export class CompetitionModel {
   private readonly createdAt: ICompetition['createdAt'];
   private readonly updatedAt: ICompetition['updatedAt'];
   private readonly divisions: DivisionModel[];
-  private readonly earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
-  private readonly combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
+  private earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
+  private combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
+  private requiredAddtionalInfos: RequiredAddtionalInfoModel[];
 
   constructor(entity: ICompetition) {
     this.id = entity.id;
@@ -49,13 +51,13 @@ export class CompetitionModel {
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
-    this.divisions = entity.divisions.map((division) => new DivisionModel(division));
-    this.earlybirdDiscountSnapshots = entity.earlybirdDiscountSnapshots.map(
-      (snapshot) => new EarlybirdDiscountSnapshotModel(snapshot),
-    );
-    this.combinationDiscountSnapshots = entity.combinationDiscountSnapshots.map(
-      (snapshot) => new CombinationDiscountSnapshotModel(snapshot),
-    );
+    this.divisions = entity.divisions?.map((division) => new DivisionModel(division)) || [];
+    this.earlybirdDiscountSnapshots =
+      entity.earlybirdDiscountSnapshots?.map((snapshot) => new EarlybirdDiscountSnapshotModel(snapshot)) || [];
+    this.combinationDiscountSnapshots =
+      entity.combinationDiscountSnapshots?.map((snapshot) => new CombinationDiscountSnapshotModel(snapshot)) || [];
+    this.requiredAddtionalInfos =
+      entity.requiredAddtionalInfos?.map((info) => new RequiredAddtionalInfoModel(info)) || [];
   }
 
   toEntity(): ICompetition {
@@ -81,6 +83,7 @@ export class CompetitionModel {
       divisions: this.divisions.map((division) => division.toEntity()),
       earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
       combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
+      requiredAddtionalInfos: this.requiredAddtionalInfos,
     };
   }
 
@@ -177,5 +180,17 @@ export class CompetitionModel {
       earlybirdDiscountSnapshot,
       combinationDiscountSnapshot,
     );
+  }
+
+  addRequiredAddtionalInfo(newRequiredAddtionalInfo: RequiredAddtionalInfoModel) {
+    this.requiredAddtionalInfos.forEach((info) => {
+      if (info.type === newRequiredAddtionalInfo.type) {
+        throw new BusinessException(
+          CompetitionsErrorMap.COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED,
+          `type: ${newRequiredAddtionalInfo.type}`,
+        );
+      }
+    });
+    this.requiredAddtionalInfos.push(newRequiredAddtionalInfo);
   }
 }

@@ -216,15 +216,24 @@ export type COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE = ErrorResponse & {
 
 export type COMPETITIONS_DIVISION_DUPLICATED = ErrorResponse & {
   isSuccess: false;
-  status: HttpStatus.BAD_REQUEST;
+  status: HttpStatus.CONFLICT;
   code: 6001;
   type: 'COMPETITIONS_DIVISION_DUPLICATED';
   result: '대회 부문이 중복되었습니다.';
 };
 
+export type COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.CONFLICT;
+  code: 6002;
+  type: 'COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED';
+  result: '대회 추가 정보가 중복되었습니다.';
+};
+
 export const CompetitionsErrorMap = {
   COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(),
   COMPETITIONS_DIVISION_DUPLICATED: typia.random<COMPETITIONS_DIVISION_DUPLICATED>(),
+  COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED: typia.random<COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED>(),
 };
 
 /** ----------------------------------------------------------------------------

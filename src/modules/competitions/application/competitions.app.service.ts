@@ -16,16 +16,28 @@ import {
   UpdateCompetitionParam,
   UpdateCompetitionRet,
   UpdateCompetitionStatusParam,
+  CreateRequiredAddtionalInfoParam,
+  createRequiredAddtionalInfoRet,
+  DeleteRequiredAddtionalInfoParam,
+  UpdateRequiredAddtionalInfoParam,
 } from './dtos';
 import { CompetitionModel } from '../domain/model/competition.model';
 import { assert } from 'typia';
-import { ICompetition } from '../domain/interface/competition.interface';
+import {
+  ICompetitioinWithoutRelations,
+  ICompetitionWithDivisions,
+  ICompetitionWithEarlybirdDiscountSnapshots,
+  ICompetitionWithRelations,
+  ICompetitionWithRequiredAddtionalInfo,
+} from '../domain/interface/competition.interface';
 import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
 import { CompetitionFactory } from '../domain/competition.factory';
 import { CompetitionRepository } from 'src/infrastructure/database/custom-repository/competition.repository';
 import { DivisionRepository } from 'src/infrastructure/database/custom-repository/division.repository';
 import { EarlybirdDiscountSnapshotRepository } from 'src/infrastructure/database/custom-repository/earlybird-discount-snapshot.repository';
 import { CombinationDiscountSnapshotRepository } from 'src/infrastructure/database/custom-repository/combination-discount-snapshot.repository';
+import { RequiredAddtionalInfoRepository } from 'src/infrastructure/database/custom-repository/required-addtional-info.repository';
+import { IRequiredAddtionalInfo } from '../domain/interface/required-addtional-info.interface';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -36,6 +48,7 @@ export class CompetitionsAppService {
     private readonly divisionRepository: DivisionRepository,
     private readonly earlybirdDiscountSnapshotRepository: EarlybirdDiscountSnapshotRepository,
     private readonly combinationDiscountSnapshotRepository: CombinationDiscountSnapshotRepository,
+    private readonly requiredAddtionalInfoRepository: RequiredAddtionalInfoRepository,
   ) {}
 
   async createCompetition({ competitionCreateDto }: CreateCompetitionParam): Promise<CreateCompetitionRet> {
@@ -46,23 +59,22 @@ export class CompetitionsAppService {
   }
 
   async updateCompetition({ competitionUpdateDto }: UpdateCompetitionParam): Promise<UpdateCompetitionRet> {
-    let competitionEntity = assert<ICompetition>(
+    let competitionEntity = assert<ICompetitioinWithoutRelations>(
       await this.competitionRepository
         .findOneOrFail({
           where: { id: competitionUpdateDto.id },
-          relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
         })
         .catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
         }),
     );
-    competitionEntity = assert<ICompetition>({ ...competitionEntity, ...competitionUpdateDto });
+    competitionEntity = assert<ICompetitioinWithoutRelations>({ ...competitionEntity, ...competitionUpdateDto });
     await this.competitionRepository.save(competitionEntity);
     return { competition: competitionEntity };
   }
 
   async findCompetitions(query: FindCompetitionsParam): Promise<FindCompetitionsRet> {
-    const competitionEntites = assert<Omit<ICompetition, 'divisions' | 'combinationDiscountSnapshots'>[]>(
+    const competitionEntites = assert<ICompetitionWithEarlybirdDiscountSnapshots[]>(
       await this.competitionRepository.findManyWithQueryOptions({
         ...query,
       }),
@@ -72,11 +84,16 @@ export class CompetitionsAppService {
   }
 
   async getCompetition({ competitionId, status }: GetCompetitionParam): Promise<GetCompetitionRet> {
-    const competitionEntity = assert<ICompetition>(
+    const competitionEntity = assert<ICompetitionWithRelations>(
       await this.competitionRepository
         .findOneOrFail({
           where: { id: competitionId, status },
-          relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+          relations: [
+            'divisions',
+            'earlybirdDiscountSnapshots',
+            'combinationDiscountSnapshots',
+            'requiredAddtionalInfos',
+          ],
         })
         .catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
@@ -90,11 +107,10 @@ export class CompetitionsAppService {
     status,
   }: UpdateCompetitionStatusParam): Promise<UpdateCompetitionRet> {
     const competition = new CompetitionModel(
-      assert<ICompetition>(
+      assert<ICompetitioinWithoutRelations>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: competitionId },
-            relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
@@ -109,11 +125,11 @@ export class CompetitionsAppService {
 
   async createDivisions({ competitionId, divisionPacks }: CreateDivisionsParam): Promise<CreateDivisionsRet> {
     const competition = new CompetitionModel(
-      assert<ICompetition>(
+      assert<ICompetitionWithDivisions>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: competitionId },
-            relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+            relations: ['divisions'],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
@@ -161,5 +177,55 @@ export class CompetitionsAppService {
     const combinationDiscountSnapshotEntity = combinationDiscountSnapshotModel.toEntity();
     await this.combinationDiscountSnapshotRepository.save(combinationDiscountSnapshotEntity);
     return { combinationDiscountSnapshot: combinationDiscountSnapshotEntity };
+  }
+
+  async createRequiredAddtionalInfo({
+    requiredAddtionalInfoCreateDto,
+  }: CreateRequiredAddtionalInfoParam): Promise<createRequiredAddtionalInfoRet> {
+    const competitionModel = new CompetitionModel(
+      assert<ICompetitionWithRequiredAddtionalInfo>(
+        await this.competitionRepository
+          .findOneOrFail({
+            where: { id: requiredAddtionalInfoCreateDto.competitionId },
+            relations: ['requiredAddtionalInfos'],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          }),
+      ),
+    );
+    const requiredAddtionalInfoModel =
+      this.competitionFactory.createRequiredAddtionalInfo(requiredAddtionalInfoCreateDto);
+    competitionModel.addRequiredAddtionalInfo(requiredAddtionalInfoModel);
+    const requiredAddtionalInfoEntity = requiredAddtionalInfoModel.toEntity();
+    await this.requiredAddtionalInfoRepository.save(requiredAddtionalInfoEntity);
+    return { requiredAddtionalInfo: requiredAddtionalInfoEntity };
+  }
+
+  async updateRequiredAddtionalInfo({ requiredAddtionalInfoUpdateDto }: UpdateRequiredAddtionalInfoParam) {
+    const requiredAddtionalInfoEntity = assert<IRequiredAddtionalInfo>(
+      await this.requiredAddtionalInfoRepository
+        .findOneOrFail({
+          where: { id: requiredAddtionalInfoUpdateDto.id, competitionId: requiredAddtionalInfoUpdateDto.competitionId },
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Required Addtional Info not found');
+        }),
+    );
+    const updatedRequiredAddtionalInfoEntity = assert<IRequiredAddtionalInfo>({
+      ...requiredAddtionalInfoEntity,
+      ...requiredAddtionalInfoUpdateDto,
+    });
+    await this.requiredAddtionalInfoRepository.save(updatedRequiredAddtionalInfoEntity);
+    return { requiredAddtionalInfo: updatedRequiredAddtionalInfoEntity };
+  }
+
+  async deleteRequiredAddtionalInfo({
+    competitionId,
+    requiredAddtionalInfoId,
+  }: DeleteRequiredAddtionalInfoParam): Promise<void> {
+    await this.requiredAddtionalInfoRepository.delete({ id: requiredAddtionalInfoId, competitionId }).catch(() => {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Required Addtional Info not found');
+    });
   }
 }

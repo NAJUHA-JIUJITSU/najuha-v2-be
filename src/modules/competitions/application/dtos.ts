@@ -3,8 +3,10 @@ import {
   ICombinationDiscountSnapshotCreateDto,
 } from '../domain/interface/combination-discount-snapshot.interface';
 import {
+  ICompetitioinWithoutRelations,
   ICompetition,
   ICompetitionCreateDto,
+  ICompetitionWithEarlybirdDiscountSnapshots,
   ICompetitionQueryOptions,
   ICompetitionUpdateDto,
 } from '../domain/interface/competition.interface';
@@ -14,6 +16,11 @@ import {
   IEarlybirdDiscountSnapshot,
   IEarlybirdDiscountSnapshotCreateDto,
 } from '../domain/interface/earlybird-discount-snapshot.interface';
+import {
+  IRequiredAddtionalInfo,
+  IRequiredAddtionalInfoCreateDto,
+  IRequiredAddtionalInfoUpdateDto,
+} from '../domain/interface/required-addtional-info.interface';
 
 // Application Layer Param DTOs ----------------------------------------------
 export interface CreateCompetitionParam {
@@ -38,11 +45,6 @@ export interface UpdateCompetitionStatusParam {
 
 export interface CreateDivisionsParam {
   competitionId: ICompetition['id'];
-  /**
-   * - Division packs.
-   *
-   * @minItems 1
-   */
   divisionPacks: IDivisionPack[];
 }
 
@@ -54,22 +56,35 @@ export interface CreateCombinationDiscountSnapshotParam {
   combinationDiscountSnapshotCreateDto: ICombinationDiscountSnapshotCreateDto;
 }
 
+export interface CreateRequiredAddtionalInfoParam {
+  requiredAddtionalInfoCreateDto: IRequiredAddtionalInfoCreateDto;
+}
+
+export interface UpdateRequiredAddtionalInfoParam {
+  requiredAddtionalInfoUpdateDto: IRequiredAddtionalInfoUpdateDto;
+}
+
+export interface DeleteRequiredAddtionalInfoParam {
+  competitionId: ICompetition['id'];
+  requiredAddtionalInfoId: IRequiredAddtionalInfo['id'];
+}
+
 // Application Layer Result DTOs ----------------------------------------------
 export interface CreateCompetitionRet {
-  competition: Omit<ICompetition, 'divisions' | 'earlybirdDiscountSnapshots' | 'combinationDiscountSnapshots'>;
+  competition: ICompetitioinWithoutRelations;
 }
 
 export interface UpdateCompetitionRet {
-  competition: Omit<ICompetition, 'divisions' | 'earlybirdDiscountSnapshots' | 'combinationDiscountSnapshots'>;
+  competition: ICompetitioinWithoutRelations;
 }
 
 export interface FindCompetitionsRet {
-  competitions: Omit<ICompetition, 'divisions' | 'combinationDiscountSnapshots'>[];
+  competitions: ICompetitionWithEarlybirdDiscountSnapshots[];
   nextPage: number | null;
 }
 
 export interface GetCompetitionRet {
-  competition: ICompetition;
+  competition: Required<ICompetition>;
 }
 
 export interface CreateDivisionsRet {
@@ -82,4 +97,8 @@ export interface CreateEarlybirdDiscountSnapshotRet {
 
 export interface CreateCombinationDiscountSnapshotRet {
   combinationDiscountSnapshot: ICombinationDiscountSnapshot;
+}
+
+export interface createRequiredAddtionalInfoRet {
+  requiredAddtionalInfo: IRequiredAddtionalInfo;
 }

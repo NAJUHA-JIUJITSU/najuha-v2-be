@@ -1,28 +1,34 @@
 import { tags } from 'typia';
 import {
-  CreateCombinationDiscountSnapshotParam,
   CreateCombinationDiscountSnapshotRet,
-  CreateCompetitionParam,
   CreateCompetitionRet,
-  CreateDivisionsParam,
   CreateDivisionsRet,
-  CreateEarlybirdDiscountSnapshotParam,
   CreateEarlybirdDiscountSnapshotRet,
-  FindCompetitionsParam,
   FindCompetitionsRet,
   GetCompetitionRet,
-  UpdateCompetitionParam,
   UpdateCompetitionRet,
-  UpdateCompetitionStatusParam,
+  createRequiredAddtionalInfoRet,
 } from '../application/dtos';
-import { ICompetitionQueryOptions } from '../domain/interface/competition.interface';
+import {
+  ICompetition,
+  ICompetitionCreateDto,
+  ICompetitionQueryOptions,
+  ICompetitionUpdateDto,
+} from '../domain/interface/competition.interface';
+import { IDivisionPack } from '../domain/interface/division-pack.interface';
+import { IEarlybirdDiscountSnapshotCreateDto } from '../domain/interface/earlybird-discount-snapshot.interface';
+import { ICombinationDiscountSnapshotCreateDto } from '../domain/interface/combination-discount-snapshot.interface';
+import {
+  IRequiredAddtionalInfoCreateDto,
+  IRequiredAddtionalInfoUpdateDto,
+} from '../domain/interface/required-addtional-info.interface';
 
 // Presentation Layer Request DTOs --------------------------------------------
-export type CreateCompetitionReqBody = CreateCompetitionParam['competitionCreateDto'];
+export interface CreateCompetitionReqBody extends ICompetitionCreateDto {}
 
-export type UpdateCompetitionReqBody = Omit<UpdateCompetitionParam['competitionUpdateDto'], 'id'>;
+export interface UpdateCompetitionReqBody extends Omit<ICompetitionUpdateDto, 'id'> {}
 
-export interface UpdateCompetitionStatusReqBody extends Pick<UpdateCompetitionStatusParam, 'status'> {}
+export interface UpdateCompetitionStatusReqBody extends Pick<ICompetition, 'status'> {}
 
 export interface FindCompetitionsReqQuery
   extends Partial<Pick<ICompetitionQueryOptions, 'page' | 'limit' | 'sortOption' | 'locationFilter' | 'selectFilter'>> {
@@ -30,17 +36,25 @@ export interface FindCompetitionsReqQuery
   dateFilter?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
 }
 
-export interface CreateDivisionsReqBody extends Pick<CreateDivisionsParam, 'divisionPacks'> {}
+export interface CreateDivisionsReqBody {
+  /**
+   * - Division packs.
+   *
+   * @minItems 1
+   */
+  divisionPacks: IDivisionPack[];
+}
 
-export type CreateEarlybirdDiscountSnapshotReqBody = Omit<
-  CreateEarlybirdDiscountSnapshotParam['earlybirdDiscountSnapshotCreateDto'],
-  'competitionId'
->;
+export interface CreateEarlybirdDiscountSnapshotReqBody
+  extends Omit<IEarlybirdDiscountSnapshotCreateDto, 'competitionId'> {}
 
-export type CreateCombinationDiscountSnapshotReqBody = Omit<
-  CreateCombinationDiscountSnapshotParam['combinationDiscountSnapshotCreateDto'],
-  'competitionId'
->;
+export interface CreateCombinationDiscountSnapshotReqBody
+  extends Omit<ICombinationDiscountSnapshotCreateDto, 'competitionId'> {}
+
+export interface CreateRequiredAddtionalInfoReqBody extends Omit<IRequiredAddtionalInfoCreateDto, 'competitionId'> {}
+
+export interface UpdateRequiredAddtionalInfoReqBody
+  extends Omit<IRequiredAddtionalInfoUpdateDto, 'competitionId' | 'id'> {}
 
 // Presentation Layer Response DTOs -------------------------------------------
 export interface CreateCompetitionRes extends CreateCompetitionRet {}
@@ -58,3 +72,5 @@ export interface CreateDivisionsRes extends CreateDivisionsRet {}
 export interface CreateEarlybirdDiscountSnapshotRes extends CreateEarlybirdDiscountSnapshotRet {}
 
 export interface CreateCombinationDiscountSnapshotRes extends CreateCombinationDiscountSnapshotRet {}
+
+export interface CreateRequiredAddtionalInfoRes extends createRequiredAddtionalInfoRet {}

@@ -41,6 +41,7 @@ export class ApplicationsAppService {
     participationDivisionIds,
     applicationType,
     playerSnapshotCreateDto,
+    // TODO: addtionalInfoCreateDto,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = new UserModel(
       assert<IUser>(
@@ -63,6 +64,7 @@ export class ApplicationsAppService {
     );
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
+    // TODO: competition.validateAdditionalInfo(addtionalInfoCreateDto);
 
     const readyApplication = this.applicationFactory.createReadyApplication(
       user.getId(),

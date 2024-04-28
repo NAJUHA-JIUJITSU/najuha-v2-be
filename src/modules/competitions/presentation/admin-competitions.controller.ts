@@ -12,15 +12,17 @@ import {
   CreateDivisionsRes,
   CreateEarlybirdDiscountSnapshotReqBody,
   CreateEarlybirdDiscountSnapshotRes,
+  CreateRequiredAddtionalInfoReqBody,
   FindCompetitionsReqQuery,
   FindCompetitionsRes,
   UpdateCompetitionReqBody,
   UpdateCompetitionRes,
   UpdateCompetitionStatusReqBody,
+  UpdateRequiredAddtionalInfoReqBody,
 } from './dtos';
 import { ICompetition } from '../domain/interface/competition.interface';
-import { GetCompetitionRet } from '../application/dtos';
-import { create } from 'domain';
+import { GetCompetitionRet, createRequiredAddtionalInfoRet } from '../application/dtos';
+import { IRequiredAddtionalInfo } from '../domain/interface/required-addtional-info.interface';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -79,9 +81,11 @@ export class AdminCompetitionsController {
    * @returns competition
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Get('/:id')
-  async findCompetition(@TypedParam('id') id: ICompetition['id']): Promise<ResponseForm<GetCompetitionRet>> {
-    return createResponseForm(await this.competitionsAppService.getCompetition({ competitionId: id }));
+  @TypedRoute.Get('/:competitionId')
+  async findCompetition(
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
+  ): Promise<ResponseForm<GetCompetitionRet>> {
+    return createResponseForm(await this.competitionsAppService.getCompetition({ competitionId }));
   }
 
   /**
@@ -92,13 +96,13 @@ export class AdminCompetitionsController {
    * @returns updated competition
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Patch('/:id')
+  @TypedRoute.Patch('/:competitionId')
   async updateCompetition(
-    @TypedParam('id') id: ICompetition['id'],
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() body: UpdateCompetitionReqBody,
   ): Promise<ResponseForm<UpdateCompetitionRes>> {
     return createResponseForm(
-      await this.competitionsAppService.updateCompetition({ competitionUpdateDto: { id, ...body } }),
+      await this.competitionsAppService.updateCompetition({ competitionUpdateDto: { id: competitionId, ...body } }),
     );
   }
 
@@ -112,12 +116,12 @@ export class AdminCompetitionsController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:id/status')
   async updateCompetitionStatus(
-    @TypedParam('id') id: ICompetition['id'],
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() body: UpdateCompetitionStatusReqBody,
   ): Promise<ResponseForm<UpdateCompetitionRes>> {
     return createResponseForm(
       await this.competitionsAppService.updateCompetitionStatus({
-        competitionId: id,
+        competitionId,
         status: body.status,
       }),
     );
@@ -131,13 +135,13 @@ export class AdminCompetitionsController {
    * @returns created divisions
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Post('/:id/divisions')
+  @TypedRoute.Post('/:competitionId/divisions')
   async createDivisions(
-    @TypedParam('id') id: ICompetition['id'],
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() body: CreateDivisionsReqBody,
   ): Promise<ResponseForm<CreateDivisionsRes>> {
     return createResponseForm(
-      await this.competitionsAppService.createDivisions({ competitionId: id, divisionPacks: body.divisionPacks }),
+      await this.competitionsAppService.createDivisions({ competitionId, divisionPacks: body.divisionPacks }),
     );
   }
 
@@ -149,14 +153,14 @@ export class AdminCompetitionsController {
    * @returns created earlybird discount snapshot
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Post('/:id/earlybird-discount-snapshots')
+  @TypedRoute.Post('/:competitionId/earlybird-discount-snapshots')
   async createEarlybirdDiscountSnapshot(
-    @TypedParam('id') id: ICompetition['id'],
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() body: CreateEarlybirdDiscountSnapshotReqBody,
   ): Promise<ResponseForm<CreateEarlybirdDiscountSnapshotRes>> {
     return createResponseForm(
       await this.competitionsAppService.createEarlybirdDiscountSnapshot({
-        earlybirdDiscountSnapshotCreateDto: { competitionId: id, ...body },
+        earlybirdDiscountSnapshotCreateDto: { competitionId, ...body },
       }),
     );
   }
@@ -169,14 +173,76 @@ export class AdminCompetitionsController {
    * @returns created combination discount snapshot
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Post('/:id/combination-discount-snapshots')
+  @TypedRoute.Post('/:competitionId/combination-discount-snapshots')
   async createCombinationDiscountSnapshot(
-    @TypedParam('id') id: ICompetition['id'],
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() dto: CreateCombinationDiscountSnapshotReqBody,
   ): Promise<ResponseForm<CreateCombinationDiscountSnapshotRes>> {
     return createResponseForm(
       await this.competitionsAppService.createCombinationDiscountSnapshot({
-        combinationDiscountSnapshotCreateDto: { competitionId: id, ...dto },
+        combinationDiscountSnapshotCreateDto: { competitionId, ...dto },
+      }),
+    );
+  }
+
+  /**
+   * a-5-9 create required addtional info.
+   * - RoleLevel: ADMIN.
+   *
+   * @tag a-5 competitions
+   * @returns created required addtional info
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Post('/:competitionId/required-addtional-infos')
+  async createRequiredAddtionalInfo(
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
+    @TypedBody() dto: CreateRequiredAddtionalInfoReqBody,
+  ): Promise<ResponseForm<createRequiredAddtionalInfoRet>> {
+    return createResponseForm(
+      await this.competitionsAppService.createRequiredAddtionalInfo({
+        requiredAddtionalInfoCreateDto: { competitionId, ...dto },
+      }),
+    );
+  }
+
+  /**
+   * a-5-10 update required addtional info.
+   * - RoleLevel: ADMIN.
+   *
+   * @tag a-5 competitions
+   * @returns updated required addtional info
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Patch('/:competitionId/required-addtional-infos/:requiredAddtionalInfoId')
+  async updateRequiredAddtionalInfo(
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
+    @TypedParam('requiredAddtionalInfoId') requiredAddtionalInfoId: IRequiredAddtionalInfo['id'],
+    @TypedBody() dto: UpdateRequiredAddtionalInfoReqBody,
+  ): Promise<ResponseForm<createRequiredAddtionalInfoRet>> {
+    return createResponseForm(
+      await this.competitionsAppService.updateRequiredAddtionalInfo({
+        requiredAddtionalInfoUpdateDto: { competitionId, id: requiredAddtionalInfoId, ...dto },
+      }),
+    );
+  }
+
+  /**
+   * a-5-11 delete required addtional info.
+   * - RoleLevel: ADMIN.
+   *
+   * @tag a-5 competitions
+   * @returns void
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Delete('/:competitionId/required-addtional-infos/:requiredAddtionalInfoId')
+  async deleteRequiredAddtionalInfo(
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
+    @TypedParam('requiredAddtionalInfoId') requiredAddtionalInfoId: IRequiredAddtionalInfo['id'],
+  ): Promise<ResponseForm<void>> {
+    return createResponseForm(
+      await this.competitionsAppService.deleteRequiredAddtionalInfo({
+        competitionId,
+        requiredAddtionalInfoId,
       }),
     );
   }
