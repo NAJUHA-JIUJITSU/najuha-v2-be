@@ -80,7 +80,7 @@ export interface UpdateCompetitionRet {
 
 export interface FindCompetitionsRet {
   competitions: ICompetitionWithEarlybirdDiscountSnapshots[];
-  nextPage: number | null;
+  nextPage?: number;
 }
 
 export interface GetCompetitionRet {

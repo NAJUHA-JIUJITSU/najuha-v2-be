@@ -80,8 +80,9 @@ export class CompetitionsAppService {
         ...query,
       }),
     );
-    const nextPage = competitionEntites.length === query.limit ? query.page + 1 : null;
-    return { competitions: competitionEntites, nextPage };
+    let ret: FindCompetitionsRet = { competitions: competitionEntites };
+    if (competitionEntites.length === query.limit) ret = { ...ret, nextPage: query.page + 1 };
+    return ret;
   }
 
   async getCompetition({ competitionId, status }: GetCompetitionParam): Promise<GetCompetitionRet> {

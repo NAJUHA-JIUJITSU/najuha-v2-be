@@ -17,7 +17,7 @@ import {
 import { RegisterUserModel } from '../domain/model/register-user.model';
 import { assert } from 'typia';
 import { IRegisterUser, ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
-import { IPolicy, IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
+import { IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
 import { PolicyRepository } from 'src/infrastructure/database/custom-repository/policy.repository';
 import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
 import { PolicyConsentFactory } from '../domain/policy-conset.factory';
