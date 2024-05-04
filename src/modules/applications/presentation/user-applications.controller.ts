@@ -57,7 +57,6 @@ export class UserApplicationsController {
    * u-6-3 update ready status application.
    * - RoleLevel: USER.
    * - READY(결제전) application 을 업데이트 합니다.
-   * - CANCELED, DONE 상태의 application은 이 api 를 통해 업데이트 할 수 없습니다.
    * - 기존 application을 DELETED 상태로 변경하고 새로운 application 을 생성합니다. (이유, 기존 applicaiton이 실제로는 결제 됐지만 서버 오류로 실패처리 된 경우, 기존 결제 정보가 남아있어야하기 때문).
    *
    * @tag u-6 applications
@@ -121,6 +120,7 @@ export class UserApplicationsController {
   ): Promise<ResponseForm<void>> {
     return createResponseForm();
   }
+
   /**
    * u-6-6 get expected payment.
    * - RoleLevel: USER.

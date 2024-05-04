@@ -91,6 +91,8 @@ export interface ICompetition {
 }
 
 // relation이 없는 competition
+export interface ICompetitionWithRelations extends Required<ICompetition> {}
+
 export interface ICompetitioinWithoutRelations
   extends Pick<
     ICompetition,
@@ -113,8 +115,6 @@ export interface ICompetitioinWithoutRelations
     | 'createdAt'
     | 'updatedAt'
   > {}
-
-export interface ICompetitionWithRelations extends Required<ICompetition> {}
 
 export interface ICompetitionWithEarlybirdDiscountSnapshots
   extends ICompetitioinWithoutRelations,

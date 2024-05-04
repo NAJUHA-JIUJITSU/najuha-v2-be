@@ -782,7 +782,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ITemporaryUserCreateDto"
+                "$ref": "#/components/schemas/CreateUserReqBody"
               }
             }
           },
@@ -1009,14 +1009,14 @@
         "x-nestia-method": "GET"
       }
     },
-    "/user/policy/{id}": {
+    "/user/policy/{policyId}": {
       "get": {
         "tags": [
           "u-4 policy"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "policyId",
             "in": "path",
             "schema": {
               "type": "string",
@@ -1093,7 +1093,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PickIPolicytypeisMandatorytitlecontent"
+                "$ref": "#/components/schemas/CreatePolicyReqBody"
               }
             }
           },
@@ -1331,7 +1331,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ICompetitionCreateDto"
+                "$ref": "#/components/schemas/CreateCompetitionReqBody"
               }
             }
           },
@@ -1430,14 +1430,14 @@
         "x-nestia-method": "GET"
       }
     },
-    "/admin/competitions/{id}": {
+    "/admin/competitions/{competitionId}": {
       "get": {
         "tags": [
           "a-5 competitions"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "competitionId",
             "in": "path",
             "schema": {
               "type": "string",
@@ -1492,7 +1492,7 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "competitionId",
             "in": "path",
             "schema": {
               "type": "string",
@@ -1553,14 +1553,14 @@
         "x-nestia-method": "PATCH"
       }
     },
-    "/admin/competitions/{id}/status": {
+    "/admin/competitions/{competitionId}/status": {
       "patch": {
         "tags": [
           "a-5 competitions"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "competitionId",
             "in": "path",
             "schema": {
               "type": "string",
@@ -1621,14 +1621,14 @@
         "x-nestia-method": "PATCH"
       }
     },
-    "/admin/competitions/{id}/divisions": {
+    "/admin/competitions/{competitionId}/divisions": {
       "post": {
         "tags": [
           "a-5 competitions"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "competitionId",
             "in": "path",
             "schema": {
               "type": "string",
@@ -1689,14 +1689,14 @@
         "x-nestia-method": "POST"
       }
     },
-    "/admin/competitions/{id}/earlybird-discount-snapshots": {
+    "/admin/competitions/{competitionId}/earlybird-discount-snapshots": {
       "post": {
         "tags": [
           "a-5 competitions"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "competitionId",
             "in": "path",
             "schema": {
               "type": "string",
@@ -1757,14 +1757,14 @@
         "x-nestia-method": "POST"
       }
     },
-    "/admin/competitions/{id}/combination-discount-snapshots": {
+    "/admin/competitions/{competitionId}/combination-discount-snapshots": {
       "post": {
         "tags": [
           "a-5 competitions"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "competitionId",
             "in": "path",
             "schema": {
               "type": "string",
@@ -1823,6 +1823,219 @@
           }
         ],
         "x-nestia-method": "POST"
+      }
+    },
+    "/admin/competitions/{competitionId}/required-addtional-infos": {
+      "post": {
+        "tags": [
+          "a-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 26,
+              "minLength": 26
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRequiredAdditionalInfoReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "created required addtional info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormcreateRequiredAdditionalInfoRet"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-5-9 create required addtional info",
+        "description": "a-5-9 create required addtional info.\n- RoleLevel: ADMIN.",
+        "x-nestia-namespace": "admin.competitions.required-addtional-infos.createRequiredAdditionalInfo",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "created required addtional info",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/admin/competitions/{competitionId}/required-addtional-infos/{requiredAdditionalInfoId}": {
+      "patch": {
+        "tags": [
+          "a-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 26,
+              "minLength": 26
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "requiredAdditionalInfoId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 26,
+              "minLength": 26
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequiredAdditionalInfoReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "updated required addtional info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormcreateRequiredAdditionalInfoRet"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-5-10 update required addtional info",
+        "description": "a-5-10 update required addtional info.\n- RoleLevel: ADMIN.",
+        "x-nestia-namespace": "admin.competitions.required-addtional-infos.updateRequiredAdditionalInfo",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "updated required addtional info",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      },
+      "delete": {
+        "tags": [
+          "a-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 26,
+              "minLength": 26
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "requiredAdditionalInfoId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 26,
+              "minLength": 26
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-5-11 delete required addtional info",
+        "description": "a-5-11 delete required addtional info.\n- RoleLevel: ADMIN.",
+        "x-nestia-namespace": "admin.competitions.required-addtional-infos.deleteRequiredAdditionalInfo",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
       }
     },
     "/user/applications": {
@@ -2104,7 +2317,7 @@
           }
         },
         "summary": "u-6-4 update done status application",
-        "description": "u-6-4 update done status application.\n- RoleLevel: USER.\n- DONE(결제완료) application 을 업데이트 합니다.\n- CANCELED, READY 상태의 application 은 이 api 를 통해 업데이트 할 수 없습니다.\n- playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 중 하나는 필수로 전달해야 합니다.\n- playerSnapshotUpdateDto 를 전달하면 playerSnapshot을 새로 생성합니다.\n- participationDivisionInfoUpdateDtos 를 전달하면 participationDivisionInfoSnapshots을 새로 생성합니다.\n- playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 둘 다 전달하면 둘 다 새로 생성합니다.",
+        "description": "u-6-4 update done status application.\n- RoleLevel: USER.\n- DONE(결제완료) application 을 업데이트 합니다.\n- playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 중 하나는 필수로 전달해야 합니다.\n- playerSnapshotUpdateDto 를 전달하면 playerSnapshot을 새로 생성합니다.\n- participationDivisionInfoUpdateDtos 를 전달하면 participationDivisionInfoSnapshots을 새로 생성합니다.\n- playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 둘 다 전달하면 둘 다 새로 생성합니다.",
         "x-nestia-namespace": "user.applications.done.updateDoneCompetitionApplication",
         "x-nestia-jsDocTags": [
           {
@@ -2852,14 +3065,6 @@
             "title": "ULID",
             "description": "ULID."
           },
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "title": "User 이름",
-            "description": "User 이름.\n- 컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.\n- User 이름은 한글, 영문, 숫자만 입력 가능합니다."
-          },
           "snsAuthProvider": {
             "type": "string",
             "enum": [
@@ -2895,6 +3100,14 @@
             "minLength": 1,
             "title": "User 이메일 주소",
             "description": "User 이메일 주소."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "title": "User 이름",
+            "description": "User 이름.\n- 컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.\n- User 이름은 한글, 영문, 숫자만 입력 가능합니다."
           },
           "profileImageUrlKey": {
             "type": "string",
@@ -2950,6 +3163,13 @@
             "title": "User 별명",
             "description": "User 별명.\n- 영문, 한글, 숫자만 입력 가능합니다."
           },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^01[0-9]{9}$",
+            "nullable": true,
+            "title": "User 전화번호",
+            "description": "User 전화번호.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다.\n- ex) 01012345678."
+          },
           "gender": {
             "type": "string",
             "enum": [
@@ -2959,6 +3179,13 @@
             "nullable": true,
             "title": "User 성별",
             "description": "User 성별."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "nullable": true,
+            "title": "User 생년월일 (BirtDate YYYYMMDD)",
+            "description": "User 생년월일 (BirtDate YYYYMMDD)."
           },
           "belt": {
             "type": "string",
@@ -2973,39 +3200,25 @@
             "nullable": true,
             "title": "User 주짓수 벨트",
             "description": "User 주짓수 벨트."
-          },
-          "birth": {
-            "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "nullable": true,
-            "title": "User 생년월일 (BirtDate YYYYMMDD)",
-            "description": "User 생년월일 (BirtDate YYYYMMDD)."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "pattern": "^01[0-9]{9}$",
-            "nullable": true,
-            "title": "User 전화번호",
-            "description": "User 전화번호.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다.\n- ex) 01012345678."
           }
         },
         "nullable": false,
         "required": [
           "id",
-          "name",
           "snsAuthProvider",
           "role",
           "snsId",
           "email",
+          "name",
           "profileImageUrlKey",
           "status",
           "createdAt",
           "updatedAt",
           "nickname",
+          "phoneNumber",
           "gender",
-          "belt",
           "birth",
-          "phoneNumber"
+          "belt"
         ]
       },
       "ResponseFormIsDuplicatedNicknameRes": {
@@ -3154,7 +3367,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/PickIUsernicknamegenderbeltbirth"
+            "$ref": "#/components/schemas/PickIUsernicknamegenderbirthbelt"
           },
           "consentPolicyTypes": {
             "type": "array",
@@ -3175,7 +3388,7 @@
           "consentPolicyTypes"
         ]
       },
-      "PickIUsernicknamegenderbeltbirth": {
+      "PickIUsernicknamegenderbirthbelt": {
         "type": "object",
         "properties": {
           "nickname": {
@@ -3195,6 +3408,12 @@
             "title": "User 성별",
             "description": "User 성별."
           },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "title": "User 생년월일 (BirtDate YYYYMMDD)",
+            "description": "User 생년월일 (BirtDate YYYYMMDD)."
+          },
           "belt": {
             "type": "string",
             "enum": [
@@ -3207,20 +3426,14 @@
             ],
             "title": "User 주짓수 벨트",
             "description": "User 주짓수 벨트."
-          },
-          "birth": {
-            "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "title": "User 생년월일 (BirtDate YYYYMMDD)",
-            "description": "User 생년월일 (BirtDate YYYYMMDD)."
           }
         },
         "nullable": false,
         "required": [
           "nickname",
           "gender",
-          "belt",
-          "birth"
+          "birth",
+          "belt"
         ],
         "description": "From T, pick a set of properties whose keys are in the union K"
       },
@@ -3394,17 +3607,9 @@
           "authTokens"
         ]
       },
-      "ITemporaryUserCreateDto": {
+      "CreateUserReqBody": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
-            "title": "User 이름",
-            "description": "User 이름.\n- 컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.\n- User 이름은 한글, 영문, 숫자만 입력 가능합니다."
-          },
           "snsAuthProvider": {
             "type": "string",
             "enum": [
@@ -3431,6 +3636,20 @@
             "title": "User 이메일 주소",
             "description": "User 이메일 주소."
           },
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
+            "title": "User 이름",
+            "description": "User 이름.\n- 컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.\n- User 이름은 한글, 영문, 숫자만 입력 가능합니다."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^01[0-9]{9}$",
+            "title": "User 전화번호",
+            "description": "User 전화번호.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다.\n- ex) 01012345678."
+          },
           "gender": {
             "type": "string",
             "enum": [
@@ -3445,20 +3664,14 @@
             "pattern": "^[0-9]{8}$",
             "title": "User 생년월일 (BirtDate YYYYMMDD)",
             "description": "User 생년월일 (BirtDate YYYYMMDD)."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "pattern": "^01[0-9]{9}$",
-            "title": "User 전화번호",
-            "description": "User 전화번호.\n- 전화번호가 저장되어 있으면 인증된 전화번호 입니다.\n- ex) 01012345678."
           }
         },
         "nullable": false,
         "required": [
-          "name",
           "snsAuthProvider",
           "snsId",
-          "email"
+          "email",
+          "name"
         ]
       },
       "ResponseFormCreateUserRes": {
@@ -3526,6 +3739,12 @@
             "title": "User 성별",
             "description": "User 성별."
           },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "title": "User 생년월일 (BirtDate YYYYMMDD)",
+            "description": "User 생년월일 (BirtDate YYYYMMDD)."
+          },
           "belt": {
             "type": "string",
             "enum": [
@@ -3538,12 +3757,6 @@
             ],
             "title": "User 주짓수 벨트",
             "description": "User 주짓수 벨트."
-          },
-          "birth": {
-            "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "title": "User 생년월일 (BirtDate YYYYMMDD)",
-            "description": "User 생년월일 (BirtDate YYYYMMDD)."
           }
         },
         "nullable": false
@@ -3815,7 +4028,7 @@
           "policies": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PickIPolicyidtypeisMandatorytitlecreatedAtversion"
+              "$ref": "#/components/schemas/IPolicyFindMany"
             }
           }
         },
@@ -3824,7 +4037,7 @@
           "policies"
         ]
       },
-      "PickIPolicyidtypeisMandatorytitlecreatedAtversion": {
+      "IPolicyFindMany": {
         "type": "object",
         "properties": {
           "id": {
@@ -3833,29 +4046,6 @@
             "minLength": 26,
             "title": "ULID",
             "description": "ULID."
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "ADVERTISEMENT",
-              "PRIVACY",
-              "REFUND",
-              "TERMS_OF_SERVICE"
-            ],
-            "title": "약관의 종류",
-            "description": "약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
-          },
-          "isMandatory": {
-            "type": "boolean",
-            "title": "약관동의 필수여수",
-            "description": "약관동의 필수여수.\n- true: 필수.\n- false: 선택."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "title": "약관의 제목",
-            "description": "약관의 제목.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
           },
           "createdAt": {
             "oneOf": [
@@ -3871,23 +4061,45 @@
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ADVERTISEMENT",
+              "PRIVACY",
+              "REFUND",
+              "TERMS_OF_SERVICE"
+            ],
+            "title": "약관의 종류",
+            "description": "약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
+          },
           "version": {
             "type": "integer",
             "minimum": 0,
             "title": "약관의 버전",
             "description": "약관의 버전."
+          },
+          "isMandatory": {
+            "type": "boolean",
+            "title": "약관동의 필수여수",
+            "description": "약관동의 필수여수.\n- true: 필수.\n- false: 선택."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "약관의 제목",
+            "description": "약관의 제목.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
           }
         },
         "nullable": false,
         "required": [
           "id",
-          "type",
-          "isMandatory",
-          "title",
           "createdAt",
-          "version"
-        ],
-        "description": "From T, pick a set of properties whose keys are in the union K"
+          "type",
+          "version",
+          "isMandatory",
+          "title"
+        ]
       },
       "ResponseFormFindPolicyRes": {
         "type": "object",
@@ -3998,7 +4210,7 @@
         ],
         "description": "약관.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
-      "PickIPolicytypeisMandatorytitlecontent": {
+      "CreatePolicyReqBody": {
         "type": "object",
         "properties": {
           "type": {
@@ -4012,6 +4224,12 @@
             "title": "약관의 종류",
             "description": "약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "title": "약관의 내용",
+            "description": "약관의 내용.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
+          },
           "isMandatory": {
             "type": "boolean",
             "title": "약관동의 필수여수",
@@ -4023,22 +4241,15 @@
             "minLength": 1,
             "title": "약관의 제목",
             "description": "약관의 제목.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1,
-            "title": "약관의 내용",
-            "description": "약관의 내용.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
           }
         },
         "nullable": false,
         "required": [
           "type",
+          "content",
           "isMandatory",
-          "title",
-          "content"
-        ],
-        "description": "From T, pick a set of properties whose keys are in the union K"
+          "title"
+        ]
       },
       "ResponseFormCreatePolicyRes": {
         "type": "object",
@@ -4195,7 +4406,7 @@
           "policies": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PickIPolicyidtypeisMandatorytitlecreatedAtversion"
+              "$ref": "#/components/schemas/IPolicyFindMany"
             }
           }
         },
@@ -4301,21 +4512,19 @@
           "competitions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/OmitICompetitiondivisionscombinationDiscountSnapshots"
+              "$ref": "#/components/schemas/ICompetitionWithEarlybirdDiscountSnapshots"
             }
           },
           "nextPage": {
-            "type": "number",
-            "nullable": true
+            "type": "number"
           }
         },
         "nullable": false,
         "required": [
-          "competitions",
-          "nextPage"
+          "competitions"
         ]
       },
-      "OmitICompetitiondivisionscombinationDiscountSnapshots": {
+      "ICompetitionWithEarlybirdDiscountSnapshots": {
         "type": "object",
         "properties": {
           "id": {
@@ -4324,6 +4533,43 @@
             "minLength": 26,
             "title": "ULID",
             "description": "ULID."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "title": "대회의 상태",
+            "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "title": "UpdatedAt",
+            "description": "UpdatedAt."
           },
           "title": {
             "type": "string",
@@ -4478,43 +4724,6 @@
             "title": "- 협약 대회 여부",
             "description": "- 협약 대회 여부."
           },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
-            "title": "대회의 상태",
-            "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ],
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ],
-            "title": "UpdatedAt",
-            "description": "UpdatedAt."
-          },
           "viewCount": {
             "type": "integer",
             "title": "조회수",
@@ -4540,6 +4749,9 @@
         "nullable": false,
         "required": [
           "id",
+          "status",
+          "createdAt",
+          "updatedAt",
           "title",
           "address",
           "competitionDate",
@@ -4552,14 +4764,10 @@
           "bracketOpenDate",
           "description",
           "isPartnership",
-          "status",
-          "createdAt",
-          "updatedAt",
           "viewCount",
           "posterImgUrlKey",
           "earlybirdDiscountSnapshots"
-        ],
-        "description": "Construct a type with the properties of T except for those in type K."
+        ]
       },
       "IEarlybirdDiscountSnapshot": {
         "type": "object",
@@ -4666,7 +4874,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/RequiredICompetition"
           }
         },
         "nullable": false,
@@ -4674,7 +4882,7 @@
           "competition"
         ]
       },
-      "ICompetition": {
+      "RequiredICompetition": {
         "type": "object",
         "properties": {
           "id": {
@@ -4910,6 +5118,14 @@
             },
             "title": "조합 할인 정보",
             "description": "조합 할인 정보.\n- 배열의 길이가 0이면 조합 할인이 없는 대회입니다.\n- 배열의 마지막 요소가 현재 적용중인 조합 할인 정보입니다."
+          },
+          "requiredAdditionalInfos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IRequiredAdditionalInfo"
+            },
+            "title": "대회 신청시 추가저으로 필요로하는 정보를 정의합니다",
+            "description": "대회 신청시 추가저으로 필요로하는 정보를 정의합니다.\n- ex) 주민번호, 주소"
           }
         },
         "nullable": false,
@@ -4934,8 +5150,10 @@
           "updatedAt",
           "divisions",
           "earlybirdDiscountSnapshots",
-          "combinationDiscountSnapshots"
-        ]
+          "combinationDiscountSnapshots",
+          "requiredAdditionalInfos"
+        ],
+        "description": "Make all properties in T required"
       },
       "IDivision": {
         "type": "object",
@@ -4984,8 +5202,9 @@
             "type": "string",
             "maxLength": 64,
             "minLength": 1,
+            "pattern": "^[-+][0-9]+(\\.[0-9]+)?$|ABSOLUTE$",
             "title": "체급",
-            "description": "체급.\n- ex) '-40', '-45', '-50', '+50', 'ABSOLUTE'."
+            "description": "체급.\n- ex) '-40', '-45.5', '-50', '+50', 'ABSOLUTE'."
           },
           "birthYearRangeStart": {
             "type": "string",
@@ -5218,7 +5437,62 @@
           "weightType"
         ]
       },
-      "ICompetitionCreateDto": {
+      "IRequiredAdditionalInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 26,
+            "minLength": 26,
+            "title": "ULID",
+            "description": "ULID."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ADDRESS",
+              "SOCIAL_SECURITY_NUMBER"
+            ],
+            "description": "Type"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Description",
+            "description": "Description."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "competitionId": {
+            "type": "string",
+            "maxLength": 26,
+            "minLength": 26,
+            "description": "Competition Id"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "type",
+          "description",
+          "createdAt",
+          "competitionId"
+        ]
+      },
+      "CreateCompetitionReqBody": {
         "type": "object",
         "properties": {
           "title": {
@@ -5406,7 +5680,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/OmitICompetitiondivisionscombinationDiscountSnapshotsearlybirdDiscountSnapshots"
+            "$ref": "#/components/schemas/ICompetitioinWithoutRelations"
           }
         },
         "nullable": false,
@@ -5414,7 +5688,7 @@
           "competition"
         ]
       },
-      "OmitICompetitiondivisionscombinationDiscountSnapshotsearlybirdDiscountSnapshots": {
+      "ICompetitioinWithoutRelations": {
         "type": "object",
         "properties": {
           "id": {
@@ -5423,6 +5697,43 @@
             "minLength": 26,
             "title": "ULID",
             "description": "ULID."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "title": "대회의 상태",
+            "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "title": "UpdatedAt",
+            "description": "UpdatedAt."
           },
           "title": {
             "type": "string",
@@ -5577,43 +5888,6 @@
             "title": "- 협약 대회 여부",
             "description": "- 협약 대회 여부."
           },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
-            "title": "대회의 상태",
-            "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
-          },
-          "createdAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ],
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          },
-          "updatedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              }
-            ],
-            "title": "UpdatedAt",
-            "description": "UpdatedAt."
-          },
           "viewCount": {
             "type": "integer",
             "title": "조회수",
@@ -5631,6 +5905,9 @@
         "nullable": false,
         "required": [
           "id",
+          "status",
+          "createdAt",
+          "updatedAt",
           "title",
           "address",
           "competitionDate",
@@ -5643,13 +5920,9 @@
           "bracketOpenDate",
           "description",
           "isPartnership",
-          "status",
-          "createdAt",
-          "updatedAt",
           "viewCount",
           "posterImgUrlKey"
-        ],
-        "description": "Construct a type with the properties of T except for those in type K."
+        ]
       },
       "ResponseFormGetCompetitionRet": {
         "type": "object",
@@ -5680,7 +5953,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/RequiredICompetition"
           }
         },
         "nullable": false,
@@ -5876,7 +6149,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/OmitICompetitiondivisionscombinationDiscountSnapshotsearlybirdDiscountSnapshots"
+            "$ref": "#/components/schemas/ICompetitioinWithoutRelations"
           }
         },
         "nullable": false,
@@ -5892,7 +6165,9 @@
             "enum": [
               "ACTIVE",
               "INACTIVE"
-            ]
+            ],
+            "title": "대회의 상태",
+            "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
           }
         },
         "nullable": false,
@@ -5975,7 +6250,8 @@
             "items": {
               "type": "string",
               "maxLength": 64,
-              "minLength": 1
+              "minLength": 1,
+              "pattern": "^[-+][0-9]+(\\.[0-9]+)?$|ABSOLUTE$"
             },
             "minItems": 1,
             "title": "생성하고자 하는 체급",
@@ -6191,6 +6467,106 @@
           "combinationDiscountSnapshot"
         ]
       },
+      "CreateRequiredAdditionalInfoReqBody": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ADDRESS",
+              "SOCIAL_SECURITY_NUMBER"
+            ],
+            "description": "Type"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Description",
+            "description": "Description."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "description"
+        ]
+      },
+      "ResponseFormcreateRequiredAdditionalInfoRet": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/createRequiredAdditionalInfoRet"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "createRequiredAdditionalInfoRet": {
+        "type": "object",
+        "properties": {
+          "requiredAdditionalInfo": {
+            "$ref": "#/components/schemas/IRequiredAdditionalInfo"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "requiredAdditionalInfo"
+        ]
+      },
+      "UpdateRequiredAdditionalInfoReqBody": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Description",
+            "description": "Description."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "description"
+        ]
+      },
+      "ResponseFormvoid": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
       "CreateApplicationReqBody": {
         "type": "object",
         "properties": {
@@ -6210,23 +6586,36 @@
             "title": "- Division IDs to participate",
             "description": "- Division IDs to participate."
           },
-          "playerSnapshotCreateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
-          },
           "applicationType": {
             "type": "string",
             "enum": [
               "PROXY",
               "SELF"
             ]
+          },
+          "playerSnapshotCreateDto": {
+            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
+          },
+          "additionalInfoCreateDtos": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                },
+                {
+                  "$ref": "#/components/schemas/AddressInfo"
+                }
+              ]
+            }
           }
         },
         "nullable": false,
         "required": [
           "competitionId",
           "participationDivisionIds",
-          "playerSnapshotCreateDto",
-          "applicationType"
+          "applicationType",
+          "playerSnapshotCreateDto"
         ]
       },
       "IPlayerSnapshotCreateDto": {
@@ -6240,6 +6629,12 @@
             "title": "Player name. (한글, 영문, 숫자, 공백 입력 가능합니다)",
             "description": "Player name. (한글, 영문, 숫자, 공백 입력 가능합니다)."
           },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^01[0-9]{9}$",
+            "title": "Player phoneNumber. ex) 01012345678",
+            "description": "Player phoneNumber. ex) 01012345678."
+          },
           "gender": {
             "type": "string",
             "enum": [
@@ -6248,6 +6643,12 @@
             ],
             "title": "Player gender",
             "description": "Player gender."
+          },
+          "birth": {
+            "type": "string",
+            "pattern": "^[0-9]{8}$",
+            "title": "Player birth (BirtDate YYYYMMDD)",
+            "description": "Player birth (BirtDate YYYYMMDD)."
           },
           "belt": {
             "type": "string",
@@ -6260,18 +6661,6 @@
             ],
             "title": "Player belt",
             "description": "Player belt."
-          },
-          "birth": {
-            "type": "string",
-            "pattern": "^[0-9]{8}$",
-            "title": "Player birth (BirtDate YYYYMMDD)",
-            "description": "Player birth (BirtDate YYYYMMDD)."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "pattern": "^01[0-9]{9}$",
-            "title": "Player phoneNumber. ex) 01012345678",
-            "description": "Player phoneNumber. ex) 01012345678."
           },
           "network": {
             "type": "string",
@@ -6301,13 +6690,54 @@
         "nullable": false,
         "required": [
           "name",
-          "gender",
-          "belt",
-          "birth",
           "phoneNumber",
+          "gender",
+          "birth",
+          "belt",
           "network",
           "team",
           "masterName"
+        ]
+      },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
+      "AddressInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ADDRESS"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
         ]
       },
       "ResponseFormCreateApplicationRes": {
@@ -6436,6 +6866,13 @@
             "minItems": 1,
             "title": "Participation division infos",
             "description": "Participation division infos."
+          },
+          "additionalInfos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IAdditionalInfo"
+            },
+            "description": "Addtional infos"
           }
         },
         "nullable": false,
@@ -6448,7 +6885,8 @@
           "competitionId",
           "userId",
           "playerSnapshots",
-          "participationDivisionInfos"
+          "participationDivisionInfos",
+          "additionalInfos"
         ]
       },
       "IPlayerSnapshot": {
@@ -6663,6 +7101,76 @@
           "division"
         ]
       },
+      "IAdditionalInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 26,
+            "minLength": 26,
+            "title": "ULID",
+            "description": "ULID."
+          },
+          "createdAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "title": "Created at",
+            "description": "Created at."
+          },
+          "updatedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "title": "Updated at",
+            "description": "Updated at."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ADDRESS",
+              "SOCIAL_SECURITY_NUMBER"
+            ],
+            "title": "Type",
+            "description": "Type."
+          },
+          "value": {
+            "type": "string",
+            "title": "Value",
+            "description": "Value."
+          },
+          "applicationId": {
+            "type": "string",
+            "maxLength": 26,
+            "minLength": 26,
+            "title": "Application id",
+            "description": "Application id."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "type",
+          "value",
+          "applicationId"
+        ]
+      },
       "ResponseFormGetApplicationRes": {
         "type": "object",
         "properties": {
@@ -6716,6 +7224,19 @@
           },
           "playerSnapshotUpdateDto": {
             "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
+          },
+          "additionalInfoCreateDtos": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                },
+                {
+                  "$ref": "#/components/schemas/AddressInfo"
+                }
+              ]
+            }
           }
         },
         "nullable": false,
@@ -6764,9 +7285,6 @@
       "UpdateDoneApplicationReqBody": {
         "type": "object",
         "properties": {
-          "playerSnapshotUpdateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
-          },
           "participationDivisionInfoUpdateDtos": {
             "type": "array",
             "items": {
@@ -6775,6 +7293,22 @@
             "minItems": 1,
             "title": "- Division info update data list",
             "description": "- Division info update data list."
+          },
+          "playerSnapshotUpdateDto": {
+            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
+          },
+          "additionalInfoUpdateDtos": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                },
+                {
+                  "$ref": "#/components/schemas/AddressInfo"
+                }
+              ]
+            }
           }
         },
         "nullable": false
@@ -6838,28 +7372,6 @@
         "nullable": false,
         "required": [
           "application"
-        ]
-      },
-      "ResponseFormvoid": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              200
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "isSuccess",
-          "code"
         ]
       },
       "ResponseFormGetExpectedPaymentRes": {
