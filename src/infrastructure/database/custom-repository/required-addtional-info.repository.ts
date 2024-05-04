@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { RequiredAddtionalInfoEntity } from '../entity/competition/required-addtional-info.entity';
+import { RequiredAdditionalInfoEntity } from '../entity/competition/required-additional-info.entity';
 
 @Injectable()
-export class RequiredAddtionalInfoRepository extends Repository<RequiredAddtionalInfoEntity> {
+export class RequiredAdditionalInfoRepository extends Repository<RequiredAdditionalInfoEntity> {
   constructor(private dataSource: DataSource) {
-    super(RequiredAddtionalInfoEntity, dataSource.createEntityManager());
+    super(RequiredAdditionalInfoEntity, dataSource.createEntityManager());
   }
 }

@@ -1,4 +1,4 @@
-import { ApplicationsErrors, BusinessException, CompetitionsErrorMap } from 'src/common/response/errorResponse';
+import { ApplicationsErrors, BusinessException, CompetitionsErrors } from 'src/common/response/errorResponse';
 import { ICompetition } from '../interface/competition.interface';
 import { CombinationDiscountSnapshotModel } from './combination-discount-snapshot.model';
 import { DivisionModel } from './division.model';
@@ -6,7 +6,8 @@ import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.en
 import { IDivision } from '../interface/division.interface';
 import { CalculatePaymentService } from 'src/modules/applications/domain/calculate-payment.service';
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
-import { RequiredAddtionalInfoModel } from './required-addtional-info.model';
+import { RequiredAdditionalInfoModel } from './required-addtional-info.model';
+import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interface/additional-info.interface';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];
@@ -30,7 +31,7 @@ export class CompetitionModel {
   private readonly divisions: DivisionModel[];
   private earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
   private combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
-  private requiredAddtionalInfos: RequiredAddtionalInfoModel[];
+  private requiredAdditionalInfos: RequiredAdditionalInfoModel[];
 
   constructor(entity: ICompetition) {
     this.id = entity.id;
@@ -56,8 +57,8 @@ export class CompetitionModel {
       entity.earlybirdDiscountSnapshots?.map((snapshot) => new EarlybirdDiscountSnapshotModel(snapshot)) || [];
     this.combinationDiscountSnapshots =
       entity.combinationDiscountSnapshots?.map((snapshot) => new CombinationDiscountSnapshotModel(snapshot)) || [];
-    this.requiredAddtionalInfos =
-      entity.requiredAddtionalInfos?.map((info) => new RequiredAddtionalInfoModel(info)) || [];
+    this.requiredAdditionalInfos =
+      entity.requiredAdditionalInfos?.map((info) => new RequiredAdditionalInfoModel(info)) || [];
   }
 
   toEntity(): ICompetition {
@@ -83,7 +84,7 @@ export class CompetitionModel {
       divisions: this.divisions.map((division) => division.toEntity()),
       earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
       combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
-      requiredAddtionalInfos: this.requiredAddtionalInfos,
+      requiredAdditionalInfos: this.requiredAdditionalInfos,
     };
   }
 
@@ -104,7 +105,7 @@ export class CompetitionModel {
 
       if (missingProperties.length > 0) {
         throw new BusinessException(
-          CompetitionsErrorMap.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
+          CompetitionsErrors.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
           `다음 항목을 작성해주세요: ${missingProperties.join(', ')}`,
         );
       }
@@ -125,7 +126,7 @@ export class CompetitionModel {
     });
     if (duplicatedDivisions.length > 0) {
       throw new BusinessException(
-        CompetitionsErrorMap.COMPETITIONS_DIVISION_DUPLICATED,
+        CompetitionsErrors.COMPETITIONS_DIVISION_DUPLICATED,
         `${duplicatedDivisions
           .map(
             (division) =>
@@ -182,15 +183,30 @@ export class CompetitionModel {
     );
   }
 
-  addRequiredAddtionalInfo(newRequiredAddtionalInfo: RequiredAddtionalInfoModel) {
-    this.requiredAddtionalInfos.forEach((info) => {
-      if (info.type === newRequiredAddtionalInfo.type) {
+  addRequiredAdditionalInfo(newRequiredAdditionalInfo: RequiredAdditionalInfoModel) {
+    this.requiredAdditionalInfos.forEach((info) => {
+      if (info.type === newRequiredAdditionalInfo.type) {
         throw new BusinessException(
-          CompetitionsErrorMap.COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED,
-          `type: ${newRequiredAddtionalInfo.type}`,
+          CompetitionsErrors.COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED,
+          `type: ${newRequiredAdditionalInfo.type}`,
         );
       }
     });
-    this.requiredAddtionalInfos.push(newRequiredAddtionalInfo);
+    this.requiredAdditionalInfos.push(newRequiredAdditionalInfo);
+  }
+
+  validateAdditionalInfo(additionalInfoCreateDtos?: IAdditionalInfoCreateDto[]) {
+    this.requiredAdditionalInfos.forEach((requiredAdditionalInfo) => {
+      if (
+        !additionalInfoCreateDtos?.some((additionalInfoCreateDto) => {
+          return additionalInfoCreateDto.type === requiredAdditionalInfo.type;
+        })
+      ) {
+        throw new BusinessException(
+          ApplicationsErrors.APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_FOUND,
+          `type: ${requiredAdditionalInfo.type}`,
+        );
+      }
+    });
   }
 }

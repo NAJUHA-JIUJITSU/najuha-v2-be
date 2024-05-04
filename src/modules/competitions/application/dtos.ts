@@ -17,9 +17,9 @@ import {
   IEarlybirdDiscountSnapshotCreateDto,
 } from '../domain/interface/earlybird-discount-snapshot.interface';
 import {
-  IRequiredAddtionalInfo,
-  IRequiredAddtionalInfoCreateDto,
-  IRequiredAddtionalInfoUpdateDto,
+  IRequiredAdditionalInfo,
+  IRequiredAdditionalInfoCreateDto,
+  IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
 
 // Application Layer Param DTOs ----------------------------------------------
@@ -56,17 +56,17 @@ export interface CreateCombinationDiscountSnapshotParam {
   combinationDiscountSnapshotCreateDto: ICombinationDiscountSnapshotCreateDto;
 }
 
-export interface CreateRequiredAddtionalInfoParam {
-  requiredAddtionalInfoCreateDto: IRequiredAddtionalInfoCreateDto;
+export interface CreateRequiredAdditionalInfoParam {
+  requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto;
 }
 
-export interface UpdateRequiredAddtionalInfoParam {
-  requiredAddtionalInfoUpdateDto: IRequiredAddtionalInfoUpdateDto;
+export interface UpdateRequiredAdditionalInfoParam {
+  requiredAdditionalInfoUpdateDto: IRequiredAdditionalInfoUpdateDto;
 }
 
-export interface DeleteRequiredAddtionalInfoParam {
+export interface DeleteRequiredAdditionalInfoParam {
   competitionId: ICompetition['id'];
-  requiredAddtionalInfoId: IRequiredAddtionalInfo['id'];
+  requiredAdditionalInfoId: IRequiredAdditionalInfo['id'];
 }
 
 // Application Layer Result DTOs ----------------------------------------------
@@ -99,6 +99,6 @@ export interface CreateCombinationDiscountSnapshotRet {
   combinationDiscountSnapshot: ICombinationDiscountSnapshot;
 }
 
-export interface createRequiredAddtionalInfoRet {
-  requiredAddtionalInfo: IRequiredAddtionalInfo;
+export interface createRequiredAdditionalInfoRet {
+  requiredAdditionalInfo: IRequiredAdditionalInfo;
 }

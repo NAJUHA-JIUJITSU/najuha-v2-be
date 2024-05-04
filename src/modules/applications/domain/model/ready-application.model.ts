@@ -18,6 +18,7 @@ export class ReadyApplicationModel extends ApplicationModel {
       userId: this.userId,
       playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toEntity()),
       participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toEntity()),
+      additionalInfos: this.additionaInfos.map((info) => info.toEntity()),
     };
   }
 

@@ -12,14 +12,24 @@ import {
 export interface CreateApplicationReqBody
   extends Pick<
     CreateApplicationParam,
-    'competitionId' | 'participationDivisionIds' | 'playerSnapshotCreateDto' | 'applicationType'
+    | 'competitionId'
+    | 'participationDivisionIds'
+    | 'playerSnapshotCreateDto'
+    | 'applicationType'
+    | 'additionalInfoCreateDtos'
   > {}
 
 export interface UpdateReadyApplicationReqBody
-  extends Pick<UpdateReadyApplicationParam, 'participationDivisionIds' | 'playerSnapshotUpdateDto'> {}
+  extends Pick<
+    UpdateReadyApplicationParam,
+    'participationDivisionIds' | 'playerSnapshotUpdateDto' | 'additionalInfoCreateDtos'
+  > {}
 
 export interface UpdateDoneApplicationReqBody
-  extends Pick<UpdateDoneApplicationParam, 'playerSnapshotUpdateDto' | 'participationDivisionInfoUpdateDtos'> {}
+  extends Pick<
+    UpdateDoneApplicationParam,
+    'playerSnapshotUpdateDto' | 'participationDivisionInfoUpdateDtos' | 'additionalInfoUpdateDtos'
+  > {}
 
 // Presentation Layer Response Dto ---------------------------------------------------
 export interface CreateApplicationRes extends CreateApplicationRet {}

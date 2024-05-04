@@ -6,6 +6,7 @@ import { UserEntity } from '../user/user.entity';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
 import { ulid } from 'ulid';
+import { AdditionalInfoEntity } from './additional-info.entity';
 
 @Entity('application')
 export class ApplicationEntity {
@@ -50,4 +51,7 @@ export class ApplicationEntity {
   @ManyToOne(() => UserEntity, (user) => user.applications)
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
+
+  @OneToMany(() => AdditionalInfoEntity, (additionalInfo) => additionalInfo.application, { cascade: true })
+  additionalInfos!: AdditionalInfoEntity[];
 }

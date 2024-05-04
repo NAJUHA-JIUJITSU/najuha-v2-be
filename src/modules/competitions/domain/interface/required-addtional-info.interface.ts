@@ -5,7 +5,7 @@ import { ICompetition } from './competition.interface';
  * 대회신청시 추가 정보 입력 규칙.
  * - ex) 주민번호, 주소
  */
-export interface IRequiredAddtionalInfo {
+export interface IRequiredAdditionalInfo {
   /** ULID. */
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
@@ -22,8 +22,8 @@ export interface IRequiredAddtionalInfo {
   competitionId: ICompetition['id'];
 }
 
-export interface IRequiredAddtionalInfoCreateDto
-  extends Pick<IRequiredAddtionalInfo, 'type' | 'description' | 'competitionId'> {}
+export interface IRequiredAdditionalInfoCreateDto
+  extends Pick<IRequiredAdditionalInfo, 'type' | 'description' | 'competitionId'> {}
 
-export interface IRequiredAddtionalInfoUpdateDto
-  extends Pick<IRequiredAddtionalInfo, 'id' | 'description' | 'competitionId'> {}
+export interface IRequiredAdditionalInfoUpdateDto
+  extends Pick<IRequiredAdditionalInfo, 'id' | 'description' | 'competitionId'> {}

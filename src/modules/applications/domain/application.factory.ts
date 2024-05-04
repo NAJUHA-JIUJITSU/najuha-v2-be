@@ -6,13 +6,11 @@ import {
   IParticipationDivisionInfo,
   IParticipationDivisionInfoUpdateDto,
 } from './interface/participation-division-info.interface';
-import { IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
+import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { ParticipationDivisionInfoSnapshotModel } from './model/participation-division-info-snapshot.model';
-import { PlayerSnapshotModel } from './model/player-snapshot.model';
-import { ParticipationDivisionInfoModel } from './model/participation-division-info.model';
-import { ReadyApplicationModel } from './model/ready-application.model';
+import { IParticipationDivisionInfoSnapshot } from './interface/participation-division-info-snapshot.interface';
+import { IAdditionalInfo, IAdditionalInfoCreateDto } from './interface/additional-info.interface';
 
 @Injectable()
 export class ApplicationFactory {
@@ -22,27 +20,31 @@ export class ApplicationFactory {
     divisions: IDivision[],
     applicationType: IApplication['type'],
     playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
-  ) {
+    additionalInfoCreateDtos?: IAdditionalInfoCreateDto[],
+  ): IApplication {
     const applicationId = ulid();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
     const participationDivisionInfos = this.createParticipationDivisionInfos(applicationId, divisions);
-    return new ReadyApplicationModel({
+    const additionalInfos = this.createAdditionalInfos(applicationId, additionalInfoCreateDtos || []);
+    return {
       id: applicationId,
       type: applicationType,
       userId,
       competitionId,
-      playerSnapshots: [playerSnapshot],
-      participationDivisionInfos: participationDivisionInfos.map((participationDivisionInfo) =>
-        participationDivisionInfo.toEntity(),
-      ),
       status: 'READY',
       createdAt: new Date(),
       updatedAt: new Date(),
-    });
+      playerSnapshots: [playerSnapshot],
+      participationDivisionInfos,
+      additionalInfos,
+    };
   }
 
-  createPlayerSnapshot(applicationId: IApplication['id'], playerSnapshotCreateDto: IPlayerSnapshotCreateDto) {
-    return new PlayerSnapshotModel({
+  createPlayerSnapshot(
+    applicationId: IApplication['id'],
+    playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
+  ): IPlayerSnapshot {
+    return {
       id: ulid(),
       applicationId,
       name: playerSnapshotCreateDto.name,
@@ -54,53 +56,70 @@ export class ApplicationFactory {
       team: playerSnapshotCreateDto.team,
       masterName: playerSnapshotCreateDto.masterName,
       createdAt: new Date(),
-    });
+    };
   }
 
-  createParticipationDivisionInfos(applicationId: IApplication['id'], divisions: IDivision[]) {
+  createParticipationDivisionInfos(
+    applicationId: IApplication['id'],
+    divisions: IDivision[],
+  ): IParticipationDivisionInfo[] {
     return divisions.map((division) => {
       const participationDivisionInfoId = ulid();
       const participationDivisionInfosSnapshot = this.createParticipationDivisionInfoSnapshot(
         participationDivisionInfoId,
         division,
       );
-      return new ParticipationDivisionInfoModel({
+      return {
         id: participationDivisionInfoId,
         applicationId,
         participationDivisionInfoSnapshots: [participationDivisionInfosSnapshot],
         createdAt: new Date(),
-      });
+      };
     });
   }
 
   createParticipationDivisionInfoSnapshot(
     participationDivisionInfoId: IParticipationDivisionInfo['id'],
     division: IDivision,
-  ) {
-    return new ParticipationDivisionInfoSnapshotModel({
+  ): IParticipationDivisionInfoSnapshot {
+    return {
       id: ulid(),
       participationDivisionId: division.id,
       division,
       participationDivisionInfoId,
       createdAt: new Date(),
-    });
+    };
   }
 
   createParticipationDivisionInfoSnapshots(
     divisions: IDivision[],
     participationDivisionInfoUpdateDtos: IParticipationDivisionInfoUpdateDto[],
-  ) {
+  ): IParticipationDivisionInfoSnapshot[] {
     return participationDivisionInfoUpdateDtos.map((updateParticipationDivisionInfoDto) => {
       const division = divisions.find(
         (division) => division.id === updateParticipationDivisionInfoDto.newParticipationDivisionId,
       );
       if (!division) throw new Error('Division not found');
-      return new ParticipationDivisionInfoSnapshotModel(
-        this.createParticipationDivisionInfoSnapshot(
-          updateParticipationDivisionInfoDto.participationDivisionInfoId,
-          division,
-        ),
+      return this.createParticipationDivisionInfoSnapshot(
+        updateParticipationDivisionInfoDto.participationDivisionInfoId,
+        division,
       );
+    });
+  }
+
+  createAdditionalInfos(
+    applicationId: IApplication['id'],
+    additionalInfoCreateDtos: IAdditionalInfoCreateDto[],
+  ): IAdditionalInfo[] {
+    return additionalInfoCreateDtos.map((additionalInfoCreateDto) => {
+      return {
+        id: ulid(),
+        applicationId,
+        type: additionalInfoCreateDto.type,
+        value: additionalInfoCreateDto.value,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
     });
   }
 }

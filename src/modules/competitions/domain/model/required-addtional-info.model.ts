@@ -1,13 +1,13 @@
-import { IRequiredAddtionalInfo } from '../interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../interface/required-addtional-info.interface';
 
-export class RequiredAddtionalInfoModel {
-  public readonly id: IRequiredAddtionalInfo['id'];
-  public readonly type: IRequiredAddtionalInfo['type'];
-  public readonly description: IRequiredAddtionalInfo['description'];
-  public readonly createdAt: IRequiredAddtionalInfo['createdAt'];
-  public readonly competitionId: IRequiredAddtionalInfo['competitionId'];
+export class RequiredAdditionalInfoModel {
+  public readonly id: IRequiredAdditionalInfo['id'];
+  public readonly type: IRequiredAdditionalInfo['type'];
+  public readonly description: IRequiredAdditionalInfo['description'];
+  public readonly createdAt: IRequiredAdditionalInfo['createdAt'];
+  public readonly competitionId: IRequiredAdditionalInfo['competitionId'];
 
-  constructor(entity: IRequiredAddtionalInfo) {
+  constructor(entity: IRequiredAdditionalInfo) {
     this.id = entity.id;
     this.type = entity.type;
     this.description = entity.description;
@@ -15,7 +15,7 @@ export class RequiredAddtionalInfoModel {
     this.competitionId = entity.competitionId;
   }
 
-  toEntity(): IRequiredAddtionalInfo {
+  toEntity(): IRequiredAdditionalInfo {
     return {
       id: this.id,
       type: this.type,

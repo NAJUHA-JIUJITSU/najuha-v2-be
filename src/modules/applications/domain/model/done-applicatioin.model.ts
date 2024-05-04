@@ -3,6 +3,7 @@ import { IApplication } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
+import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 
 export class DoneApplicationModel extends ApplicationModel {
   constructor(entity: IApplication) {
@@ -21,6 +22,7 @@ export class DoneApplicationModel extends ApplicationModel {
       userId: this.userId,
       playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toEntity()),
       participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toEntity()),
+      additionalInfos: this.additionaInfos.map((info) => info.toEntity()),
     };
   }
 
@@ -38,6 +40,14 @@ export class DoneApplicationModel extends ApplicationModel {
       if (!participationDivisionInfo)
         throw new BusinessException(ApplicationsErrors.APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND);
       participationDivisionInfo.addParticipationDivisionInfoSnapshot(snapshot);
+    });
+  }
+
+  updateAdditionalInfos(additionalInfoUpdateDtos: IAdditionalInfoUpdateDto[]) {
+    additionalInfoUpdateDtos.forEach((updateDto) => {
+      const additionalInfo = this.additionaInfos.find((info) => info.getType() === updateDto.type);
+      if (!additionalInfo) throw new BusinessException(ApplicationsErrors.APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND);
+      additionalInfo.updateValue(updateDto.value);
     });
   }
 }

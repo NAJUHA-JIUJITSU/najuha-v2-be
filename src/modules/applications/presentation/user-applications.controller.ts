@@ -83,7 +83,6 @@ export class UserApplicationsController {
    * u-6-4 update done status application.
    * - RoleLevel: USER.
    * - DONE(결제완료) application 을 업데이트 합니다.
-   * - CANCELED, READY 상태의 application 은 이 api 를 통해 업데이트 할 수 없습니다.
    * - playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 중 하나는 필수로 전달해야 합니다.
    * - playerSnapshotUpdateDto 를 전달하면 playerSnapshot을 새로 생성합니다.
    * - participationDivisionInfoUpdateDtos 를 전달하면 participationDivisionInfoSnapshots을 새로 생성합니다.

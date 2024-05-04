@@ -5,7 +5,7 @@ import { CombinationDiscountSnapshotEntity } from './combination-discount-snapsh
 import { ApplicationEntity } from '../application/application.entity';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { ulid } from 'ulid';
-import { RequiredAddtionalInfoEntity } from './required-addtional-info.entity';
+import { RequiredAdditionalInfoEntity } from './required-additional-info.entity';
 
 @Entity('competition')
 export class CompetitionEntity {
@@ -81,6 +81,6 @@ export class CompetitionEntity {
   @OneToMany(() => ApplicationEntity, (application) => application.competition)
   applications!: ApplicationEntity[];
 
-  @OneToMany(() => RequiredAddtionalInfoEntity, (requiredAddtionalInfo) => requiredAddtionalInfo.competition)
-  requiredAddtionalInfos!: RequiredAddtionalInfoEntity[];
+  @OneToMany(() => RequiredAdditionalInfoEntity, (requiredAdditionalInfo) => requiredAdditionalInfo.competition)
+  requiredAdditionalInfos!: RequiredAdditionalInfoEntity[];
 }

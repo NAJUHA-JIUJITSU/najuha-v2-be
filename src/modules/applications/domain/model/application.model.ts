@@ -2,6 +2,7 @@ import { IApplication } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { AdditionalInfoModel } from './additional-info.model';
 
 export abstract class ApplicationModel {
   protected readonly id: IApplication['id'];
@@ -12,6 +13,7 @@ export abstract class ApplicationModel {
   protected readonly updatedAt: IApplication['updatedAt'];
   protected readonly playerSnapshots: PlayerSnapshotModel[];
   protected readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
+  protected readonly additionaInfos: AdditionalInfoModel[];
   protected status: IApplication['status'];
 
   constructor(entity: IApplication) {
@@ -26,6 +28,7 @@ export abstract class ApplicationModel {
     this.participationDivisionInfos = entity.participationDivisionInfos.map(
       (info) => new ParticipationDivisionInfoModel(info),
     );
+    this.additionaInfos = entity.additionalInfos.map((info) => new AdditionalInfoModel(info));
   }
 
   abstract toEntity(): IApplication;

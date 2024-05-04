@@ -7,7 +7,7 @@ import {
   FindCompetitionsRet,
   GetCompetitionRet,
   UpdateCompetitionRet,
-  createRequiredAddtionalInfoRet,
+  createRequiredAdditionalInfoRet,
 } from '../application/dtos';
 import {
   ICompetition,
@@ -19,8 +19,8 @@ import { IDivisionPack } from '../domain/interface/division-pack.interface';
 import { IEarlybirdDiscountSnapshotCreateDto } from '../domain/interface/earlybird-discount-snapshot.interface';
 import { ICombinationDiscountSnapshotCreateDto } from '../domain/interface/combination-discount-snapshot.interface';
 import {
-  IRequiredAddtionalInfoCreateDto,
-  IRequiredAddtionalInfoUpdateDto,
+  IRequiredAdditionalInfoCreateDto,
+  IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
 
 // Presentation Layer Request DTOs --------------------------------------------
@@ -51,10 +51,10 @@ export interface CreateEarlybirdDiscountSnapshotReqBody
 export interface CreateCombinationDiscountSnapshotReqBody
   extends Omit<ICombinationDiscountSnapshotCreateDto, 'competitionId'> {}
 
-export interface CreateRequiredAddtionalInfoReqBody extends Omit<IRequiredAddtionalInfoCreateDto, 'competitionId'> {}
+export interface CreateRequiredAdditionalInfoReqBody extends Omit<IRequiredAdditionalInfoCreateDto, 'competitionId'> {}
 
-export interface UpdateRequiredAddtionalInfoReqBody
-  extends Omit<IRequiredAddtionalInfoUpdateDto, 'competitionId' | 'id'> {}
+export interface UpdateRequiredAdditionalInfoReqBody
+  extends Omit<IRequiredAdditionalInfoUpdateDto, 'competitionId' | 'id'> {}
 
 // Presentation Layer Response DTOs -------------------------------------------
 export interface CreateCompetitionRes extends CreateCompetitionRet {}
@@ -73,4 +73,4 @@ export interface CreateEarlybirdDiscountSnapshotRes extends CreateEarlybirdDisco
 
 export interface CreateCombinationDiscountSnapshotRes extends CreateCombinationDiscountSnapshotRet {}
 
-export interface CreateRequiredAddtionalInfoRes extends createRequiredAddtionalInfoRet {}
+export interface CreateRequiredAdditionalInfoRes extends createRequiredAdditionalInfoRet {}

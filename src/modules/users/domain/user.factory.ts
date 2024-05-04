@@ -1,7 +1,7 @@
 import { ulid } from 'ulid';
 import { ITemporaryUser, ITemporaryUserCreateDto } from './interface/user.interface';
 
-export class UserEntityFactory {
+export class UserFactory {
   creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {
     return {
       id: ulid(),

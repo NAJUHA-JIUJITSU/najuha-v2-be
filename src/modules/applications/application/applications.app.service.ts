@@ -18,12 +18,17 @@ import { ReadyApplicationModel } from '../domain/model/ready-application.model';
 import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ApplicationsErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import {
+  ICompetition,
+  ICompetitionWithRelations,
+} from 'src/modules/competitions/domain/interface/competition.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { UserModel } from 'src/modules/users/domain/model/user.model';
 import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
 import { ApplicationRepository } from 'src/infrastructure/database/custom-repository/application.repository';
 import { CompetitionRepository } from 'src/infrastructure/database/custom-repository/competition.repository';
+import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
+import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -41,7 +46,7 @@ export class ApplicationsAppService {
     participationDivisionIds,
     applicationType,
     playerSnapshotCreateDto,
-    // TODO: addtionalInfoCreateDto,
+    additionalInfoCreateDtos,
   }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = new UserModel(
       assert<IUser>(
@@ -51,11 +56,16 @@ export class ApplicationsAppService {
       ),
     );
     const competition = new CompetitionModel(
-      assert<ICompetition>(
+      assert<ICompetitionWithRelations>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: competitionId, status: 'ACTIVE' },
-            relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+            relations: [
+              'divisions',
+              'earlybirdDiscountSnapshots',
+              'combinationDiscountSnapshots',
+              'requiredAdditionalInfos',
+            ],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
@@ -64,14 +74,17 @@ export class ApplicationsAppService {
     );
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
-    // TODO: competition.validateAdditionalInfo(addtionalInfoCreateDto);
+    competition.validateAdditionalInfo(additionalInfoCreateDtos);
 
-    const readyApplication = this.applicationFactory.createReadyApplication(
-      user.getId(),
-      competition.getId(),
-      divisions,
-      applicationType,
-      playerSnapshotCreateDto,
+    const readyApplication = new ReadyApplicationModel(
+      this.applicationFactory.createReadyApplication(
+        user.getId(),
+        competition.getId(),
+        divisions,
+        applicationType,
+        playerSnapshotCreateDto,
+        additionalInfoCreateDtos,
+      ),
     );
     readyApplication.validateApplicationType(user.toEntity());
     readyApplication.validateDivisionSuitability();
@@ -86,6 +99,7 @@ export class ApplicationsAppService {
         .findOneOrFail({
           where: { userId, id: applicationId },
           relations: [
+            'additionalInfos',
             'playerSnapshots',
             'participationDivisionInfos',
             'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -112,6 +126,7 @@ export class ApplicationsAppService {
     playerSnapshotUpdateDto,
     applicationId,
     participationDivisionIds,
+    additionalInfoCreateDtos,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
     const user = new UserModel(
       assert<IUser>(
@@ -126,6 +141,7 @@ export class ApplicationsAppService {
           .findOneOrFail({
             where: { userId, id: applicationId, status: 'READY' },
             relations: [
+              'additionalInfos',
               'playerSnapshots',
               'participationDivisionInfos',
               'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -139,11 +155,16 @@ export class ApplicationsAppService {
       ),
     );
     const competition = new CompetitionModel(
-      assert<ICompetition>(
+      assert<ICompetitionWithRelations>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: oldApplication.getCompetitionId() },
-            relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+            relations: [
+              'divisions',
+              'earlybirdDiscountSnapshots',
+              'combinationDiscountSnapshots',
+              'requiredAdditionalInfos',
+            ],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
@@ -152,16 +173,22 @@ export class ApplicationsAppService {
     );
     competition.validateApplicationPeriod();
     const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
-    const newApplication = this.applicationFactory.createReadyApplication(
-      user.getId(),
-      competition.getId(),
-      divisions,
-      oldApplication.getType(),
-      playerSnapshotUpdateDto,
+    competition.validateAdditionalInfo(additionalInfoCreateDtos);
+
+    const newApplication = new ReadyApplicationModel(
+      this.applicationFactory.createReadyApplication(
+        user.getId(),
+        competition.getId(),
+        divisions,
+        oldApplication.getType(),
+        playerSnapshotUpdateDto,
+        additionalInfoCreateDtos,
+      ),
     );
     newApplication.validateApplicationType(user.toEntity());
     newApplication.validateDivisionSuitability();
     oldApplication.updateStatusToDeleted();
+
     // TODO: Transaction
     await this.applicationRepository.save(oldApplication.toEntity());
     await this.applicationRepository.save(newApplication.toEntity());
@@ -174,6 +201,7 @@ export class ApplicationsAppService {
     applicationId,
     playerSnapshotUpdateDto,
     participationDivisionInfoUpdateDtos,
+    additionalInfoUpdateDtos,
   }: UpdateDoneApplicationParam): Promise<UpdateDoneApplicationRet> {
     if (!playerSnapshotUpdateDto && !participationDivisionInfoUpdateDtos)
       throw new BusinessException(ApplicationsErrors.APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED);
@@ -190,6 +218,7 @@ export class ApplicationsAppService {
           .findOneOrFail({
             where: { userId, id: applicationId, status: 'DONE' },
             relations: [
+              'additionalInfos',
               'playerSnapshots',
               'participationDivisionInfos',
               'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -203,31 +232,46 @@ export class ApplicationsAppService {
       ),
     );
     const competition = new CompetitionModel(
-      assert<ICompetition>(
+      assert<ICompetitionWithRelations>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: application.getCompetitionId() },
-            relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+            relations: [
+              'divisions',
+              'earlybirdDiscountSnapshots',
+              'combinationDiscountSnapshots',
+              'requiredAdditionalInfos',
+            ],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
           }),
       ),
     );
+
     competition.validateApplicationPeriod();
+
     if (playerSnapshotUpdateDto) {
-      const newPlayerSnapshot = this.applicationFactory.createPlayerSnapshot(applicationId, playerSnapshotUpdateDto);
+      const newPlayerSnapshot = new PlayerSnapshotModel(
+        this.applicationFactory.createPlayerSnapshot(applicationId, playerSnapshotUpdateDto),
+      );
       application.addPlayerSnapshot(newPlayerSnapshot);
     }
+
     if (participationDivisionInfoUpdateDtos) {
       const participationDivisionIds = participationDivisionInfoUpdateDtos.map((dto) => dto.newParticipationDivisionId);
       const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
-      const newParticipationDivisionInfoSnapshots = this.applicationFactory.createParticipationDivisionInfoSnapshots(
-        divisions,
-        participationDivisionInfoUpdateDtos,
-      );
+      const newParticipationDivisionInfoSnapshots = this.applicationFactory
+        .createParticipationDivisionInfoSnapshots(divisions, participationDivisionInfoUpdateDtos)
+        .map((snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot));
       application.addParticipationDivisionInfoSnapshots(newParticipationDivisionInfoSnapshots);
     }
+
+    if (additionalInfoUpdateDtos) {
+      competition.validateAdditionalInfo(additionalInfoUpdateDtos);
+      application.updateAdditionalInfos(additionalInfoUpdateDtos);
+    }
+
     application.validateApplicationType(user.toEntity());
     application.validateDivisionSuitability();
     this.applicationRepository.save(application.toEntity());
@@ -245,6 +289,7 @@ export class ApplicationsAppService {
           .findOneOrFail({
             where: { userId, id: applicationId },
             relations: [
+              'additionalInfos',
               'playerSnapshots',
               'participationDivisionInfos',
               'participationDivisionInfos.participationDivisionInfoSnapshots',

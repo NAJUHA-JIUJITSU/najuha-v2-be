@@ -11,7 +11,7 @@ import {
   SnsLoginParam,
   SnsLoginRet,
 } from './dtos';
-import { UserEntityFactory } from 'src/modules/users/domain/user-entity.factory';
+import { UserFactory } from 'src/modules/users/domain/user.factory';
 import { assert } from 'typia';
 import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
 import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
@@ -21,7 +21,7 @@ export class AuthAppService {
   constructor(
     private readonly snsAuthClient: SnsAuthClient,
     private readonly AuthTokenDomainService: AuthTokenDomainService,
-    private readonly UserEntityFactory: UserEntityFactory,
+    private readonly UserFactory: UserFactory,
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -34,7 +34,7 @@ export class AuthAppService {
     );
 
     if (!userEntity) {
-      userEntity = this.UserEntityFactory.creatTemporaryUser(validatedUserData);
+      userEntity = this.UserFactory.creatTemporaryUser(validatedUserData);
       await this.userRepository.save(userEntity);
     }
     const authTokens = await this.AuthTokenDomainService.createAuthTokens({

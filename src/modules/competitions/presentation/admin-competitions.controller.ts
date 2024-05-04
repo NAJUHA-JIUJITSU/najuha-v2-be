@@ -12,17 +12,17 @@ import {
   CreateDivisionsRes,
   CreateEarlybirdDiscountSnapshotReqBody,
   CreateEarlybirdDiscountSnapshotRes,
-  CreateRequiredAddtionalInfoReqBody,
+  CreateRequiredAdditionalInfoReqBody,
   FindCompetitionsReqQuery,
   FindCompetitionsRes,
   UpdateCompetitionReqBody,
   UpdateCompetitionRes,
   UpdateCompetitionStatusReqBody,
-  UpdateRequiredAddtionalInfoReqBody,
+  UpdateRequiredAdditionalInfoReqBody,
 } from './dtos';
 import { ICompetition } from '../domain/interface/competition.interface';
-import { GetCompetitionRet, createRequiredAddtionalInfoRet } from '../application/dtos';
-import { IRequiredAddtionalInfo } from '../domain/interface/required-addtional-info.interface';
+import { GetCompetitionRet, createRequiredAdditionalInfoRet } from '../application/dtos';
+import { IRequiredAdditionalInfo } from '../domain/interface/required-addtional-info.interface';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {
@@ -114,7 +114,7 @@ export class AdminCompetitionsController {
    * @returns updated competition
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Patch('/:id/status')
+  @TypedRoute.Patch('/:competitionId/status')
   async updateCompetitionStatus(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() body: UpdateCompetitionStatusReqBody,
@@ -194,13 +194,13 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/required-addtional-infos')
-  async createRequiredAddtionalInfo(
+  async createRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-    @TypedBody() dto: CreateRequiredAddtionalInfoReqBody,
-  ): Promise<ResponseForm<createRequiredAddtionalInfoRet>> {
+    @TypedBody() dto: CreateRequiredAdditionalInfoReqBody,
+  ): Promise<ResponseForm<createRequiredAdditionalInfoRet>> {
     return createResponseForm(
-      await this.competitionsAppService.createRequiredAddtionalInfo({
-        requiredAddtionalInfoCreateDto: { competitionId, ...dto },
+      await this.competitionsAppService.createRequiredAdditionalInfo({
+        requiredAdditionalInfoCreateDto: { competitionId, ...dto },
       }),
     );
   }
@@ -213,15 +213,15 @@ export class AdminCompetitionsController {
    * @returns updated required addtional info
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Patch('/:competitionId/required-addtional-infos/:requiredAddtionalInfoId')
-  async updateRequiredAddtionalInfo(
+  @TypedRoute.Patch('/:competitionId/required-addtional-infos/:requiredAdditionalInfoId')
+  async updateRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-    @TypedParam('requiredAddtionalInfoId') requiredAddtionalInfoId: IRequiredAddtionalInfo['id'],
-    @TypedBody() dto: UpdateRequiredAddtionalInfoReqBody,
-  ): Promise<ResponseForm<createRequiredAddtionalInfoRet>> {
+    @TypedParam('requiredAdditionalInfoId') requiredAdditionalInfoId: IRequiredAdditionalInfo['id'],
+    @TypedBody() dto: UpdateRequiredAdditionalInfoReqBody,
+  ): Promise<ResponseForm<createRequiredAdditionalInfoRet>> {
     return createResponseForm(
-      await this.competitionsAppService.updateRequiredAddtionalInfo({
-        requiredAddtionalInfoUpdateDto: { competitionId, id: requiredAddtionalInfoId, ...dto },
+      await this.competitionsAppService.updateRequiredAdditionalInfo({
+        requiredAdditionalInfoUpdateDto: { competitionId, id: requiredAdditionalInfoId, ...dto },
       }),
     );
   }
@@ -234,15 +234,15 @@ export class AdminCompetitionsController {
    * @returns void
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Delete('/:competitionId/required-addtional-infos/:requiredAddtionalInfoId')
-  async deleteRequiredAddtionalInfo(
+  @TypedRoute.Delete('/:competitionId/required-addtional-infos/:requiredAdditionalInfoId')
+  async deleteRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-    @TypedParam('requiredAddtionalInfoId') requiredAddtionalInfoId: IRequiredAddtionalInfo['id'],
+    @TypedParam('requiredAdditionalInfoId') requiredAdditionalInfoId: IRequiredAdditionalInfo['id'],
   ): Promise<ResponseForm<void>> {
     return createResponseForm(
-      await this.competitionsAppService.deleteRequiredAddtionalInfo({
+      await this.competitionsAppService.deleteRequiredAdditionalInfo({
         competitionId,
-        requiredAddtionalInfoId,
+        requiredAdditionalInfoId,
       }),
     );
   }

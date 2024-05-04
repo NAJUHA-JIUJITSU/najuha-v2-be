@@ -5,6 +5,7 @@ import { IApplication } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
 import { IParticipationDivisionInfoUpdateDto } from '../domain/interface/participation-division-info.interface';
 import { IPlayerSnapshotCreateDto } from '../domain/interface/player-snapshot.interface';
+import { IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from '../domain/interface/additional-info.interface';
 
 // Application Layer Param DTOs ---------------------------------------------------
 export interface CreateApplicationParam {
@@ -17,6 +18,7 @@ export interface CreateApplicationParam {
   participationDivisionIds: IDivision['id'][];
   applicationType: IApplication['type'];
   playerSnapshotCreateDto: IPlayerSnapshotCreateDto;
+  additionalInfoCreateDtos?: IAdditionalInfoCreateDto[];
 }
 
 export interface GetApplicationParam {
@@ -33,6 +35,7 @@ export interface UpdateReadyApplicationParam {
    */
   participationDivisionIds: IDivision['id'][];
   playerSnapshotUpdateDto: IPlayerSnapshotCreateDto;
+  additionalInfoCreateDtos?: IAdditionalInfoCreateDto[];
 }
 
 export interface UpdateDoneApplicationParam {
@@ -44,6 +47,7 @@ export interface UpdateDoneApplicationParam {
    * @minItems 1
    */
   participationDivisionInfoUpdateDtos?: IParticipationDivisionInfoUpdateDto[];
+  additionalInfoUpdateDtos?: IAdditionalInfoUpdateDto[];
 }
 
 export interface GetExpectedPaymentParam {

@@ -7,7 +7,7 @@ import { DivisionRepository } from './custom-repository/division.repository';
 import { EarlybirdDiscountSnapshotRepository } from './custom-repository/earlybird-discount-snapshot.repository';
 import { CombinationDiscountSnapshotRepository } from './custom-repository/combination-discount-snapshot.repository';
 import { ApplicationRepository } from './custom-repository/application.repository';
-import { RequiredAddtionalInfoRepository } from './custom-repository/required-addtional-info.repository';
+import { RequiredAdditionalInfoRepository } from './custom-repository/required-addtional-info.repository';
 
 const repositories = [
   PolicyRepository,
@@ -18,7 +18,7 @@ const repositories = [
   EarlybirdDiscountSnapshotRepository,
   CombinationDiscountSnapshotRepository,
   ApplicationRepository,
-  RequiredAddtionalInfoRepository,
+  RequiredAdditionalInfoRepository,
 ];
 
 @Module({

@@ -3,6 +3,7 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPlayerSnapshot } from './player-snapshot.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
 import { tags } from 'typia';
+import { IAdditionalInfo } from './additional-info.interface';
 
 export interface IApplication {
   /** ULID. */
@@ -41,4 +42,7 @@ export interface IApplication {
 
   /** Participation division infos. */
   participationDivisionInfos: IParticipationDivisionInfo[] & tags.MinItems<1>;
+
+  /** Addtional infos */
+  additionalInfos: IAdditionalInfo[];
 }

@@ -1,18 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { ICompetitionCreateDto } from './interface/competition.interface';
+import { ICompetition, ICompetitionCreateDto } from './interface/competition.interface';
 import { ulid } from 'ulid';
-import { CompetitionModel } from './model/competition.model';
-import { IEarlybirdDiscountSnapshotCreateDto } from './interface/earlybird-discount-snapshot.interface';
-import { EarlybirdDiscountSnapshotModel } from './model/earlybird-discount-snapshot.entity';
-import { ICombinationDiscountSnapshotCreateDto } from './interface/combination-discount-snapshot.interface';
-import { CombinationDiscountSnapshotModel } from './model/combination-discount-snapshot.model';
-import { RequiredAddtionalInfoModel } from './model/required-addtional-info.model';
-import { IRequiredAddtionalInfoCreateDto } from './interface/required-addtional-info.interface';
+import {
+  IEarlybirdDiscountSnapshot,
+  IEarlybirdDiscountSnapshotCreateDto,
+} from './interface/earlybird-discount-snapshot.interface';
+import {
+  ICombinationDiscountSnapshot,
+  ICombinationDiscountSnapshotCreateDto,
+} from './interface/combination-discount-snapshot.interface';
+import {
+  IRequiredAdditionalInfo,
+  IRequiredAdditionalInfoCreateDto,
+} from './interface/required-addtional-info.interface';
 
 @Injectable()
 export class CompetitionFactory {
-  createCompetition(createCompetitionDto: ICompetitionCreateDto): CompetitionModel {
-    return new CompetitionModel({
+  createCompetition(createCompetitionDto: ICompetitionCreateDto): ICompetition {
+    return {
       id: ulid(),
       title: createCompetitionDto.title ?? 'DEFAULT TITLE',
       address: createCompetitionDto.address ?? 'DEFAULT ADDRESS',
@@ -34,43 +39,43 @@ export class CompetitionFactory {
       divisions: [],
       earlybirdDiscountSnapshots: [],
       combinationDiscountSnapshots: [],
-      requiredAddtionalInfos: [],
-    });
+      requiredAdditionalInfos: [],
+    };
   }
 
   createEarlybirdDiscountSnapshot(
     earlybirdDiscountSnapshotCreateDto: IEarlybirdDiscountSnapshotCreateDto,
-  ): EarlybirdDiscountSnapshotModel {
-    return new EarlybirdDiscountSnapshotModel({
+  ): IEarlybirdDiscountSnapshot {
+    return {
       id: ulid(),
       earlybirdStartDate: earlybirdDiscountSnapshotCreateDto.earlybirdStartDate,
       earlybirdEndDate: earlybirdDiscountSnapshotCreateDto.earlybirdEndDate,
       discountAmount: earlybirdDiscountSnapshotCreateDto.discountAmount,
       competitionId: earlybirdDiscountSnapshotCreateDto.competitionId,
       createdAt: new Date(),
-    });
+    };
   }
 
   createCombinationDiscountSnapshot(
     combinationDiscountSnapshotCreateDto: ICombinationDiscountSnapshotCreateDto,
-  ): CombinationDiscountSnapshotModel {
-    return new CombinationDiscountSnapshotModel({
+  ): ICombinationDiscountSnapshot {
+    return {
       id: ulid(),
       combinationDiscountRules: combinationDiscountSnapshotCreateDto.combinationDiscountRules,
       competitionId: combinationDiscountSnapshotCreateDto.competitionId,
       createdAt: new Date(),
-    });
+    };
   }
 
-  createRequiredAddtionalInfo(
-    requiredAddtionalInfoCreateDto: IRequiredAddtionalInfoCreateDto,
-  ): RequiredAddtionalInfoModel {
-    return new RequiredAddtionalInfoModel({
+  createRequiredAdditionalInfo(
+    requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto,
+  ): IRequiredAdditionalInfo {
+    return {
       id: ulid(),
-      type: requiredAddtionalInfoCreateDto.type,
-      description: requiredAddtionalInfoCreateDto.description,
-      competitionId: requiredAddtionalInfoCreateDto.competitionId,
+      type: requiredAdditionalInfoCreateDto.type,
+      description: requiredAdditionalInfoCreateDto.description,
+      competitionId: requiredAdditionalInfoCreateDto.competitionId,
       createdAt: new Date(),
-    });
+    };
   }
 }

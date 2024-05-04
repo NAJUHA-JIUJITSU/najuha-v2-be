@@ -2,7 +2,7 @@ import { tags } from 'typia';
 import { ICombinationDiscountSnapshot } from './combination-discount-snapshot.interface';
 import { IDivision } from './division.interface';
 import { IEarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.interface';
-import { IRequiredAddtionalInfo } from './required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from './required-addtional-info.interface';
 
 export interface ICompetition {
   /** ULID. */
@@ -87,7 +87,7 @@ export interface ICompetition {
    * 대회 신청시 추가저으로 필요로하는 정보를 정의합니다.
    * - ex) 주민번호, 주소
    */
-  requiredAddtionalInfos?: IRequiredAddtionalInfo[];
+  requiredAdditionalInfos?: IRequiredAdditionalInfo[];
 }
 
 // relation이 없는 competition
@@ -124,9 +124,9 @@ export interface ICompetitionWithDivisions
   extends ICompetitioinWithoutRelations,
     Required<Pick<ICompetition, 'divisions'>> {}
 
-export interface ICompetitionWithRequiredAddtionalInfo
+export interface ICompetitionWithRequiredAdditionalInfo
   extends ICompetitioinWithoutRelations,
-    Required<Pick<ICompetition, 'requiredAddtionalInfos'>> {}
+    Required<Pick<ICompetition, 'requiredAdditionalInfos'>> {}
 
 export interface ICompetitionCreateDto
   extends Partial<
