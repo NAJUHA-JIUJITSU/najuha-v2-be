@@ -33,8 +33,8 @@ export class UserPolicyController {
    * @returns policy
    */
   @RoleLevels(RoleLevel.PUBLIC)
-  @TypedRoute.Get('/:id')
-  async findPolicy(@TypedParam('id') id: IPolicy['id']): Promise<ResponseForm<FindPolicyRes>> {
+  @TypedRoute.Get('/:policyId')
+  async findPolicy(@TypedParam('policyId') id: IPolicy['id']): Promise<ResponseForm<FindPolicyRes>> {
     return createResponseForm(await this.PolicyAppService.findPolicy({ id }));
   }
 }
