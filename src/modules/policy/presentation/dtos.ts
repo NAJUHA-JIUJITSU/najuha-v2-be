@@ -8,7 +8,7 @@ import {
 import { IPolicy } from '../domain/interface/policy.interface';
 
 // Presentation Layer Request DTOs
-export type CreatePolicyReqBody = CreatePolicyParam['policyCreateDto'];
+export interface CreatePolicyReqBody extends Pick<IPolicy, 'type' | 'isMandatory' | 'title' | 'content'> {}
 
 export interface FindPoliciesReqQuery {
   type?: IPolicy['type'];

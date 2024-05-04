@@ -1,19 +1,22 @@
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import {
-  ConfirmAuthCodeParam,
   ConfirmAuthCodeRet,
   GetTemporaryUserRet,
   IsDuplicateNicknameRet,
   RegisterUserRet,
-  SendPhoneNumberAuthCodeParam,
   SendPhoneNumberAuthCodeRet,
 } from '../application/dtos';
+import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.type';
 
 // Presentation Layer Request DTOs
-export interface SendPhoneNumberAuthCodeReqBody extends Pick<SendPhoneNumberAuthCodeParam, 'phoneNumber'> {}
+export interface SendPhoneNumberAuthCodeReqBody {
+  phoneNumber: IUser['phoneNumber'];
+}
 
-export interface ConfirmAuthCodeReqBody extends Pick<ConfirmAuthCodeParam, 'authCode'> {}
+export interface ConfirmAuthCodeReqBody {
+  authCode: PhoneNumberAuthCode;
+}
 
 export interface RegisterUserReqBody {
   user: Pick<IUser, 'nickname' | 'gender' | 'belt' | 'birth'>;

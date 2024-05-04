@@ -11,10 +11,6 @@ import { IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from '../domain/in
 export interface CreateApplicationParam {
   userId: IUser['id'];
   competitionId: ICompetition['id'];
-  /**
-   * - Division IDs to participate.
-   * @minItems 1
-   */
   participationDivisionIds: IDivision['id'][];
   applicationType: IApplication['type'];
   playerSnapshotCreateDto: IPlayerSnapshotCreateDto;
@@ -41,12 +37,12 @@ export interface UpdateReadyApplicationParam {
 export interface UpdateDoneApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
-  playerSnapshotUpdateDto?: IPlayerSnapshotCreateDto;
   /**
    * - Division info update data list.
    * @minItems 1
    */
   participationDivisionInfoUpdateDtos?: IParticipationDivisionInfoUpdateDto[];
+  playerSnapshotUpdateDto?: IPlayerSnapshotCreateDto;
   additionalInfoUpdateDtos?: IAdditionalInfoUpdateDto[];
 }
 

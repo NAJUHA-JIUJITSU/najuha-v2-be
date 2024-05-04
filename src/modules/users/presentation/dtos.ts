@@ -1,9 +1,10 @@
-import { CreateUserParam, CreateUserRet, GetMeRet, UpdateUserParam, UpdateUserRet } from '../application/dtos';
+import { CreateUserRet, GetMeRet, UpdateUserRet } from '../application/dtos';
+import { ITemporaryUserCreateDto, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // Presentation Layer Request DTOs ----------------------------------------------
-export type CreateUserReqBody = CreateUserParam['userCreateDto'];
+export interface CreateUserReqBody extends ITemporaryUserCreateDto {}
 
-export type UpdateUserReqBody = Omit<UpdateUserParam['userUpdateDto'], 'id'>;
+export interface UpdateUserReqBody extends Omit<IUserUpdateDto, 'id'> {}
 
 // Presentation Layer Response DTOs ----------------------------------------------
 export interface CreateUserRes extends CreateUserRet {}

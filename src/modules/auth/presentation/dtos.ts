@@ -1,17 +1,19 @@
-import e from 'express';
-import {
-  AcquireAdminRoleParam,
-  AcquireAdminRoleRet,
-  RefreshTokenParam,
-  RefreshTokenRet,
-  SnsLoginParam,
-  SnsLoginRet,
-} from '../application/dtos';
+import { AcquireAdminRoleRet, RefreshTokenRet, SnsLoginRet } from '../application/dtos';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 // Presentation Layer Request DTOs --------------------------------------------
-export interface SnsLoginReqBody extends SnsLoginParam {}
+export interface SnsLoginReqBody {
+  /** - snsProvider. */
+  snsAuthProvider: IUser['snsAuthProvider'];
 
-export interface RefreshTokenReqBody extends RefreshTokenParam {}
+  /** - authCode. */
+  snsAuthCode: string;
+}
+
+export interface RefreshTokenReqBody {
+  /** - refreshToken. */
+  refreshToken: string;
+}
 
 // Presentation Layer Response DTOs -------------------------------------------
 export interface SnsLoginRes extends SnsLoginRet {}
