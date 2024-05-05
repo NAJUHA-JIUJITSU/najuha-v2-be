@@ -27,8 +27,6 @@ export class ReadyApplicationModel extends ApplicationModel {
   }
 
   getParticipationDivisionIds() {
-    return this.participationDivisionInfos.map(
-      (info) => info.participationDivisionInfoSnapshots[info.participationDivisionInfoSnapshots.length - 1].division.id,
-    );
+    return this.participationDivisionInfos.map((info) => info.getLatestParticipationDivisionInfoSnapshot().division.id);
   }
 }

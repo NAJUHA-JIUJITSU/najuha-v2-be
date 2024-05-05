@@ -285,7 +285,7 @@ export type APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED = ErrorRespon
   status: HttpStatus.BAD_REQUEST;
   code: 7005;
   type: 'APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED';
-  result: 'PlayerSnapshotUpdateDto or ParticipationDivisionInfoUpdateDtos must be provided.';
+  result: 'PlayerSnapshotUpdateDto or ParticipationDivisionInfoUpdateDtos or AdditionalInfoUpdateDto must be provided.';
 };
 
 export type APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED = ErrorResponse & {
@@ -312,13 +312,12 @@ export type APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_FOUND = ErrorResponse & {
   result: '대회 신청시 필요한 추가정보를 찾을 수 없습니다.';
 };
 
-// APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND
 export type APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.NOT_FOUND;
   code: 7010;
   type: 'APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND';
-  result: ' 수정하고자 하는 additionalInfo가 존재하지 않습니다.';
+  result: '수정하고자 하는 additionalInfo가 존재하지 않습니다.';
 };
 
 export const ApplicationsErrors = {

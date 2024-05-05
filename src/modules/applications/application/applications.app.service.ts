@@ -191,8 +191,7 @@ export class ApplicationsAppService {
 
     // TODO: Transaction
     await this.applicationRepository.save(oldApplication.toEntity());
-    await this.applicationRepository.save(newApplication.toEntity());
-    return { application: newApplication.toEntity() };
+    return { application: await this.applicationRepository.save(newApplication.toEntity()) };
   }
 
   /** Update done application. */
@@ -203,7 +202,7 @@ export class ApplicationsAppService {
     participationDivisionInfoUpdateDtos,
     additionalInfoUpdateDtos,
   }: UpdateDoneApplicationParam): Promise<UpdateDoneApplicationRet> {
-    if (!playerSnapshotUpdateDto && !participationDivisionInfoUpdateDtos)
+    if (!playerSnapshotUpdateDto && !participationDivisionInfoUpdateDtos && !additionalInfoUpdateDtos)
       throw new BusinessException(ApplicationsErrors.APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED);
     const user = new UserModel(
       assert<IUser>(
@@ -274,8 +273,7 @@ export class ApplicationsAppService {
 
     application.validateApplicationType(user.toEntity());
     application.validateDivisionSuitability();
-    this.applicationRepository.save(application.toEntity());
-    return { application: application.toEntity() };
+    return { application: await this.applicationRepository.save(application.toEntity()) };
   }
 
   /**

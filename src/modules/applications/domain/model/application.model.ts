@@ -45,14 +45,18 @@ export abstract class ApplicationModel {
     return this.competitionId;
   }
 
+  getLatestPlayerSnapshot() {
+    return this.playerSnapshots[this.playerSnapshots.length - 1];
+  }
+
   validateApplicationType(userEntity: IUser) {
     if (this.type === 'PROXY') return;
-    const player = this.playerSnapshots[this.playerSnapshots.length - 1];
+    const player = this.getLatestPlayerSnapshot();
     player.validateSelfApplication(userEntity);
   }
 
   validateDivisionSuitability() {
-    const player = this.playerSnapshots[this.playerSnapshots.length - 1];
+    const player = this.getLatestPlayerSnapshot();
     this.participationDivisionInfos.forEach((participationDivisionInfo) => {
       participationDivisionInfo.validateDivisionSuitability(player.birth, player.gender);
     });

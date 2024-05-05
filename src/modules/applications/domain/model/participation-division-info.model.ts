@@ -19,6 +19,7 @@ export class ParticipationDivisionInfoModel {
       (snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot),
     );
   }
+
   toEntity(): IParticipationDivisionInfo {
     return {
       id: this.id,
@@ -34,9 +35,12 @@ export class ParticipationDivisionInfoModel {
     return this.id;
   }
 
+  getLatestParticipationDivisionInfoSnapshot() {
+    return this.participationDivisionInfoSnapshots[this.participationDivisionInfoSnapshots.length - 1];
+  }
+
   validateDivisionSuitability(playerBirth: IPlayerSnapshot['birth'], playerGender: IPlayerSnapshot['gender']) {
-    const division =
-      this.participationDivisionInfoSnapshots[this.participationDivisionInfoSnapshots.length - 1].division;
+    const division = this.getLatestParticipationDivisionInfoSnapshot().division;
     this.validateDivisionAgeRange(division, playerBirth);
     this.validateDivisionGender(division, playerGender);
   }

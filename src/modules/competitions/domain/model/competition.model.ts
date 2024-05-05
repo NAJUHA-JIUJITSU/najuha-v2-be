@@ -26,12 +26,12 @@ export class CompetitionModel {
   private viewCount: ICompetition['viewCount'];
   private posterImgUrlKey: ICompetition['posterImgUrlKey'];
   private status: ICompetition['status'];
-  private readonly createdAt: ICompetition['createdAt'];
-  private readonly updatedAt: ICompetition['updatedAt'];
-  private readonly divisions: DivisionModel[];
+  private divisions: DivisionModel[];
+  private requiredAdditionalInfos: RequiredAdditionalInfoModel[];
   private earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
   private combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
-  private requiredAdditionalInfos: RequiredAdditionalInfoModel[];
+  private readonly createdAt: ICompetition['createdAt'];
+  private readonly updatedAt: ICompetition['updatedAt'];
 
   constructor(entity: ICompetition) {
     this.id = entity.id;
@@ -90,6 +90,14 @@ export class CompetitionModel {
 
   getId() {
     return this.id;
+  }
+
+  getLatestEarlybirdDiscountSnapshot() {
+    return this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
+  }
+
+  getLatestCombinationDiscountSnapshot() {
+    return this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1];
   }
 
   updateStatus(newStatus: ICompetition['status']) {
@@ -170,11 +178,11 @@ export class CompetitionModel {
   calculateExpectedPayment(participationDivisionIds: IDivision['id'][]) {
     const divisions = this.divisions.filter((division) => participationDivisionIds.includes(division.id));
     const priceSnapshots = divisions.reduce<IPriceSnapshot[]>((acc, division) => {
-      acc.push(division.priceSnapshots[division.priceSnapshots.length - 1]);
+      acc.push(division.getLatestPriceSnapshot());
       return acc;
     }, []);
-    const earlybirdDiscountSnapshot = this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
-    const combinationDiscountSnapshot = this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1];
+    const earlybirdDiscountSnapshot = this.getLatestEarlybirdDiscountSnapshot();
+    const combinationDiscountSnapshot = this.getLatestCombinationDiscountSnapshot();
     return CalculatePaymentService.calculate(
       divisions,
       priceSnapshots,

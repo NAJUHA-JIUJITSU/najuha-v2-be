@@ -49,4 +49,8 @@ export class DivisionModel {
       priceSnapshots: this.priceSnapshots.map((priceSnapshot) => priceSnapshot.toEntity()),
     };
   }
+
+  getLatestPriceSnapshot() {
+    return this.priceSnapshots[this.priceSnapshots.length - 1];
+  }
 }

@@ -32,7 +32,6 @@ export class AuthAppService {
         where: { snsId: validatedUserData.snsId, snsAuthProvider: validatedUserData.snsAuthProvider },
       }),
     );
-
     if (!userEntity) {
       userEntity = this.UserFactory.creatTemporaryUser(validatedUserData);
       await this.userRepository.save(userEntity);
@@ -52,7 +51,6 @@ export class AuthAppService {
       userId: payload.userId,
       userRole: payload.userRole,
     });
-
     return { authTokens };
   }
 
@@ -68,7 +66,6 @@ export class AuthAppService {
     );
     if (!isCurrentAdmin) throw new BusinessException(AuthErrors.AUTH_UNREGISTERED_ADMIN_CREDENTIALS);
     await this.userRepository.update(userId, { role: 'ADMIN' });
-    const authTokens = await this.AuthTokenDomainService.createAuthTokens({ userId, userRole: 'ADMIN' });
-    return { authTokens };
+    return { authTokens: await this.AuthTokenDomainService.createAuthTokens({ userId, userRole: 'ADMIN' }) };
   }
 }
