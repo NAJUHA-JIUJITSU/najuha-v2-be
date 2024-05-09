@@ -21,7 +21,7 @@ import {
   UpdateRequiredAdditionalInfoReqBody,
 } from './dtos';
 import { ICompetition } from '../domain/interface/competition.interface';
-import { GetCompetitionRet, createRequiredAdditionalInfoRet } from '../application/dtos';
+import { GetCompetitionRet, CreateRequiredAdditionalInfoRet } from '../application/dtos';
 import { IRequiredAdditionalInfo } from '../domain/interface/required-addtional-info.interface';
 
 @Controller('admin/competitions')
@@ -193,11 +193,11 @@ export class AdminCompetitionsController {
    * @returns created required addtional info
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Post('/:competitionId/required-addtional-infos')
+  @TypedRoute.Post('/:competitionId/required-additional-infos')
   async createRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() dto: CreateRequiredAdditionalInfoReqBody,
-  ): Promise<ResponseForm<createRequiredAdditionalInfoRet>> {
+  ): Promise<ResponseForm<CreateRequiredAdditionalInfoRet>> {
     return createResponseForm(
       await this.competitionsAppService.createRequiredAdditionalInfo({
         requiredAdditionalInfoCreateDto: { competitionId, ...dto },
@@ -213,12 +213,12 @@ export class AdminCompetitionsController {
    * @returns updated required addtional info
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Patch('/:competitionId/required-addtional-infos/:requiredAdditionalInfoId')
+  @TypedRoute.Patch('/:competitionId/required-additional-infos/:requiredAdditionalInfoId')
   async updateRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedParam('requiredAdditionalInfoId') requiredAdditionalInfoId: IRequiredAdditionalInfo['id'],
     @TypedBody() dto: UpdateRequiredAdditionalInfoReqBody,
-  ): Promise<ResponseForm<createRequiredAdditionalInfoRet>> {
+  ): Promise<ResponseForm<CreateRequiredAdditionalInfoRet>> {
     return createResponseForm(
       await this.competitionsAppService.updateRequiredAdditionalInfo({
         requiredAdditionalInfoUpdateDto: { competitionId, id: requiredAdditionalInfoId, ...dto },
@@ -234,7 +234,7 @@ export class AdminCompetitionsController {
    * @returns void
    */
   @RoleLevels(RoleLevel.ADMIN)
-  @TypedRoute.Delete('/:competitionId/required-addtional-infos/:requiredAdditionalInfoId')
+  @TypedRoute.Delete('/:competitionId/required-additional-infos/:requiredAdditionalInfoId')
   async deleteRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedParam('requiredAdditionalInfoId') requiredAdditionalInfoId: IRequiredAdditionalInfo['id'],

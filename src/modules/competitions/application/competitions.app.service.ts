@@ -16,7 +16,7 @@ import {
   UpdateCompetitionRet,
   UpdateCompetitionStatusParam,
   CreateRequiredAdditionalInfoParam,
-  createRequiredAdditionalInfoRet,
+  CreateRequiredAdditionalInfoRet,
   DeleteRequiredAdditionalInfoParam,
   UpdateRequiredAdditionalInfoParam,
 } from './dtos';
@@ -185,7 +185,7 @@ export class CompetitionsAppService {
 
   async createRequiredAdditionalInfo({
     requiredAdditionalInfoCreateDto,
-  }: CreateRequiredAdditionalInfoParam): Promise<createRequiredAdditionalInfoRet> {
+  }: CreateRequiredAdditionalInfoParam): Promise<CreateRequiredAdditionalInfoRet> {
     const competitionModel = new CompetitionModel(
       assert<ICompetitionWithRequiredAdditionalInfo>(
         await this.competitionRepository

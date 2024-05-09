@@ -7,7 +7,7 @@ import {
   FindCompetitionsRet,
   GetCompetitionRet,
   UpdateCompetitionRet,
-  createRequiredAdditionalInfoRet,
+  CreateRequiredAdditionalInfoRet,
 } from '../application/dtos';
 import {
   ICompetition,
@@ -73,4 +73,4 @@ export interface CreateEarlybirdDiscountSnapshotRes extends CreateEarlybirdDisco
 
 export interface CreateCombinationDiscountSnapshotRes extends CreateCombinationDiscountSnapshotRet {}
 
-export interface CreateRequiredAdditionalInfoRes extends createRequiredAdditionalInfoRet {}
+export interface CreateRequiredAdditionalInfoRes extends CreateRequiredAdditionalInfoRet {}

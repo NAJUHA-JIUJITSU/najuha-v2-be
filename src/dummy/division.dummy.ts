@@ -210,7 +210,7 @@ const divisionPackData: IDivisionPackData[] = [
   },
 ];
 
-export const generateDivisionPacks = (): IDivisionPack[] => {
+export const generateDummyDivisionPacks = (): IDivisionPack[] => {
   return divisionPackData.map((data) =>
     new DivisionPackDummyBuilder()
       .setCategory(data.category)

@@ -99,6 +99,6 @@ export interface CreateCombinationDiscountSnapshotRet {
   combinationDiscountSnapshot: ICombinationDiscountSnapshot;
 }
 
-export interface createRequiredAdditionalInfoRet {
+export interface CreateRequiredAdditionalInfoRet {
   requiredAdditionalInfo: IRequiredAdditionalInfo;
 }

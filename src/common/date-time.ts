@@ -15,46 +15,46 @@ export class DateTime {
     return new DateTime(date);
   }
 
-  // Subtract days, hours, minutes, and seconds
+  // Subtract days, hour, minute, and second
   minus({
     months = 0,
     days = 0,
-    hours = 0,
-    minutes = 0,
-    seconds = 0,
-  }: { months?: number; days?: number; hours?: number; minutes?: number; seconds?: number } = {}): DateTime {
+    hour = 0,
+    minute = 0,
+    second = 0,
+  }: { months?: number; days?: number; hour?: number; minute?: number; second?: number } = {}): DateTime {
     const result = new Date(this.date);
     result.setMonth(result.getMonth() - months);
     result.setDate(result.getDate() - days);
-    result.setHours(result.getHours() - hours);
-    result.setMinutes(result.getMinutes() - minutes);
-    result.setSeconds(result.getSeconds() - seconds);
+    result.setHours(result.getHours() - hour);
+    result.setMinutes(result.getMinutes() - minute);
+    result.setSeconds(result.getSeconds() - second);
     return new DateTime(result);
   }
 
-  // Add days, hours, minutes, and seconds
+  // Add days, hour, minute, and second
   plus({
     months = 0,
     days = 0,
-    hours = 0,
-    minutes = 0,
-    seconds = 0,
-  }: { months?: number; days?: number; hours?: number; minutes?: number; seconds?: number } = {}): DateTime {
+    hour = 0,
+    minute = 0,
+    second = 0,
+  }: { months?: number; days?: number; hour?: number; minute?: number; second?: number } = {}): DateTime {
     const result = new Date(this.date);
     result.setMonth(result.getMonth() + months);
     result.setDate(result.getDate() + days);
-    result.setHours(result.getHours() + hours);
-    result.setMinutes(result.getMinutes() + minutes);
-    result.setSeconds(result.getSeconds() + seconds);
+    result.setHours(result.getHours() + hour);
+    result.setMinutes(result.getMinutes() + minute);
+    result.setSeconds(result.getSeconds() + second);
     return new DateTime(result);
   }
 
-  // Set specific hours, minutes, and seconds
-  set({ hours, minutes, seconds }: { hours?: number; minutes?: number; seconds?: number }): DateTime {
+  // Set specific hour, minute, and second
+  set({ hour, minute, second }: { hour?: number; minute?: number; second?: number }): DateTime {
     const result = new Date(this.date);
-    if (hours !== undefined) result.setHours(hours);
-    if (minutes !== undefined) result.setMinutes(minutes);
-    if (seconds !== undefined) result.setSeconds(seconds);
+    if (hour !== undefined) result.setHours(hour);
+    if (minute !== undefined) result.setMinutes(minute);
+    if (second !== undefined) result.setSeconds(second);
     return new DateTime(result);
   }
 

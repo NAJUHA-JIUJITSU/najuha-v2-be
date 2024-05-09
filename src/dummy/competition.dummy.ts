@@ -11,8 +11,8 @@ import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/inte
 import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
 import typia, { tags } from 'typia';
 import { ulid } from 'ulid';
-import { generateDivisionPacks } from './division-dummy';
-import { dummyCombinationDiscountRules } from './combination-discount-snapshot-dummy';
+import { generateDummyDivisionPacks } from './division.dummy';
+import { dummyCombinationDiscountRules } from './combination-discount-snapshot.dummy';
 import { ICombinationDiscountRule } from 'src/modules/competitions/domain/interface/combination-discount-rule.interface';
 
 export class CompetitionDummyBuilder {
@@ -103,8 +103,13 @@ export class CompetitionDummyBuilder {
       throw new Error('setEarlybirdDiscountSnapshots: registrationStartDate or registrationEndDate is null');
     const snapshot: IEarlybirdDiscountSnapshot = {
       id: ulid(),
-      earlybirdStartDate: this.adjustDate(new Date(this.competition.registrationStartDate), 0, 0, 0, 0),
-      earlybirdEndDate: this.adjustDate(new Date(this.competition.registrationEndDate), -7, 23, 59, 59),
+      earlybirdStartDate: DateTime.fromJSDate(new Date(this.competition.registrationStartDate))
+        .set({ hour: 0, minute: 0, second: 0 })
+        .toJSDate(),
+      earlybirdEndDate: DateTime.fromJSDate(new Date(this.competition.registrationEndDate))
+        .minus({ days: 7 })
+        .set({ hour: 23, minute: 59, second: 59 })
+        .toJSDate(),
       discountAmount,
       createdAt: this.competition.createdAt,
       competitionId: this.competition.id,
@@ -148,28 +153,30 @@ export class CompetitionDummyBuilder {
     return this;
   }
 
-  private adjustDate(baseDate: Date, days: number, hours: number, minutes: number, seconds: number): Date {
-    const dt = DateTime.fromJSDate(baseDate).plus({ days }).set({ hours, minutes, seconds });
-    return dt.toJSDate();
-  }
-
   private generateCompetitionDates(baseDate: Date): void {
-    let competitionDate: Date;
-    let registrationStartDate: Date;
-    let registrationEndDate: Date;
-    let refundDeadlineDate: Date;
-    let soloRegistrationAdjustmentStartDate: Date;
-    let soloRegistrationAdjustmentEndDate: Date;
-    let registrationListOpenDate: Date;
-    let bracketOpenDate: Date;
-    competitionDate = this.adjustDate(baseDate, 0, 23, 59, 59);
-    registrationStartDate = this.adjustDate(baseDate, -50, 0, 0, 0);
-    registrationEndDate = this.adjustDate(baseDate, -14, 23, 59, 59);
-    refundDeadlineDate = this.adjustDate(baseDate, -14, 23, 59, 59);
-    soloRegistrationAdjustmentStartDate = this.adjustDate(registrationEndDate, +1, 0, 0, 0);
-    soloRegistrationAdjustmentEndDate = this.adjustDate(soloRegistrationAdjustmentStartDate, +2, 23, 59, 59);
-    registrationListOpenDate = this.adjustDate(registrationEndDate, -7, 0, 0, 0);
-    bracketOpenDate = this.adjustDate(registrationEndDate, +3, 0, 0, 0);
+    const base = DateTime.fromJSDate(baseDate);
+
+    const competitionDate = base.set({ hour: 23, minute: 59, second: 59 }).toJSDate();
+    const registrationStartDate = base.minus({ days: 50 }).set({ hour: 0, minute: 0, second: 0 }).toJSDate();
+    const registrationEndDate = base.minus({ days: 14 }).set({ hour: 23, minute: 59, second: 59 }).toJSDate();
+    const refundDeadlineDate = base.minus({ days: 14 }).set({ hour: 23, minute: 59, second: 59 }).toJSDate();
+    const soloRegistrationAdjustmentStartDate = DateTime.fromJSDate(registrationEndDate)
+      .plus({ days: 1 })
+      .set({ hour: 0, minute: 0, second: 0 })
+      .toJSDate();
+    const soloRegistrationAdjustmentEndDate = DateTime.fromJSDate(soloRegistrationAdjustmentStartDate)
+      .plus({ days: 2 })
+      .set({ hour: 23, minute: 59, second: 59 })
+      .toJSDate();
+    const registrationListOpenDate = DateTime.fromJSDate(registrationEndDate)
+      .minus({ days: 7 })
+      .set({ hour: 0, minute: 0, second: 0 })
+      .toJSDate();
+    const bracketOpenDate = DateTime.fromJSDate(registrationEndDate)
+      .plus({ days: 3 })
+      .set({ hour: 0, minute: 0, second: 0 })
+      .toJSDate();
+
     this.competition.competitionDate = competitionDate;
     this.competition.registrationStartDate = registrationStartDate;
     this.competition.registrationEndDate = registrationEndDate;
@@ -285,7 +292,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
   const start = DateTime.fromJSDate(today).minus({ days: 49 }).toJSDate();
   const end = DateTime.fromJSDate(today).plus({ days: 50 }).toJSDate();
   const divisionFactory = new DivisionFactory();
-  const dummyDivisons = divisionFactory.createDivisions('tmp-competition-id', generateDivisionPacks());
+  const dummyDivisons = divisionFactory.createDivisions('tmp-competition-id', generateDummyDivisionPacks());
   let count = 0;
   for (
     let competitionDate = new Date(start);
@@ -299,7 +306,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setIsPartnership(false)
         .setCompetitionDates(competitionDate)
         .build(),
-      // 2. 협약
+      // 2. 협약, divisions
       new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle(`${count++}`)
@@ -338,6 +345,6 @@ export const generateDummyCompetitions = (): ICompetition[] => {
   return competitions;
 };
 
-const competitions = generateDummyCompetitions();
-console.log('competitions.length:', competitions.length);
-console.log(JSON.stringify(competitions, null, 2));
+// const competitions = generateDummyCompetitions();
+// console.log('competitions.length:', competitions.length);
+// console.log(JSON.stringify(competitions, null, 2));
