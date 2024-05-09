@@ -41,7 +41,7 @@ export class CompetitionDummyBuilder {
     requiredAdditionalInfos: [],
   };
   private today: Date;
-  private preiodTitle = '';
+  private basicPeriodTitle = '';
   private earlybirdDiscountTitle = '';
   private combinationDiscountTitle = '';
   private additionalInfoTitle = '';
@@ -62,7 +62,7 @@ export class CompetitionDummyBuilder {
 
   public setCompetitionDates(date: Date): this {
     this.generateCompetitionDates(date);
-    this.generateCompetitionTitleRelatideToPreiod();
+    this.setBasicPeriodTitle();
     return this;
   }
 
@@ -122,10 +122,11 @@ export class CompetitionDummyBuilder {
       competitionId: this.competition.id,
     };
     this.competition.combinationDiscountSnapshots = [snapshot];
+    this.setCombinationDiscountTitle();
     return this;
   }
 
-  public setRequiredAdditionalInfos(infos: IRequiredAdditionalInfo[]): this {
+  public setRequiredAdditionalInfos(): this {
     const dummyRequiredAdditionalInfos: IRequiredAdditionalInfo[] = [
       {
         id: ulid(),
@@ -143,6 +144,7 @@ export class CompetitionDummyBuilder {
       },
     ];
     this.competition.requiredAdditionalInfos = dummyRequiredAdditionalInfos;
+    this.setAdditionalInfoTitle();
     return this;
   }
 
@@ -178,7 +180,7 @@ export class CompetitionDummyBuilder {
     this.competition.bracketOpenDate = bracketOpenDate;
   }
 
-  private generateCompetitionTitleRelatideToPreiod(): void {
+  private setBasicPeriodTitle(): void {
     const details: string[] = [];
     const divider = ', ';
 
@@ -218,45 +220,24 @@ export class CompetitionDummyBuilder {
         details.push('단독출전조정기간 후');
       }
     }
-    this.preiodTitle = details.join(divider);
-  }
 
-  private setRegistrationPeriodTitle(): void {
-    if (!this.competition.registrationStartDate || !this.competition.registrationEndDate) return;
-    if (this.today < this.competition.registrationStartDate) {
-      this.preiodTitle = '신청기간 전';
-    } else if (
-      this.competition.registrationStartDate <= this.today &&
-      this.today < this.competition.registrationEndDate
-    ) {
-      this.preiodTitle = '신청기간 중';
-    } else if (this.today >= this.competition.registrationEndDate) {
-      this.preiodTitle = '신청기간 후';
+    if (this.competition.registrationListOpenDate !== null) {
+      if (this.today < this.competition.registrationListOpenDate) {
+        details.push('출전명단공개 전');
+      } else {
+        details.push('출전명단공개 후');
+      }
     }
-  }
 
-  private setRefundPeriodTitle(): void {
-    if (!this.competition.refundDeadlineDate) return;
-    if (this.today < this.competition.refundDeadlineDate) {
-      this.preiodTitle = '환불기간 중';
-    } else {
-      this.preiodTitle = '환불기간 후';
+    if (this.competition.bracketOpenDate !== null) {
+      if (this.today < this.competition.bracketOpenDate) {
+        details.push('대진표공개 전');
+      } else {
+        details.push('대진표공개 후');
+      }
     }
-  }
 
-  private setSoloRegistrationAdjustmentPeriodTitle(): void {
-    if (!this.competition.soloRegistrationAdjustmentStartDate || !this.competition.soloRegistrationAdjustmentEndDate)
-      return;
-    if (this.today < this.competition.soloRegistrationAdjustmentStartDate) {
-      this.preiodTitle = '단독출전조정기간 전';
-    } else if (
-      this.competition.soloRegistrationAdjustmentStartDate <= this.today &&
-      this.today < this.competition.soloRegistrationAdjustmentEndDate
-    ) {
-      this.preiodTitle = '단독출전조정기간 중 (단독출전 선수는 환불가능)';
-    } else if (this.today >= this.competition.soloRegistrationAdjustmentEndDate) {
-      this.preiodTitle = '단독출전조정기간 후';
-    }
+    this.basicPeriodTitle = details.join(divider);
   }
 
   private setEarlybirdDiscountTitle(): void {
@@ -273,12 +254,27 @@ export class CompetitionDummyBuilder {
     }
   }
 
-  public build(): ICompetition {
+  private setCombinationDiscountTitle(): void {
+    if (!this.competition.combinationDiscountSnapshots || this.competition.combinationDiscountSnapshots.length === 0)
+      return;
+    this.combinationDiscountTitle = '조합할인적용';
+  }
+
+  private setAdditionalInfoTitle(): void {
+    if (!this.competition.requiredAdditionalInfos || this.competition.requiredAdditionalInfos.length === 0) return;
+    this.additionalInfoTitle = '추가정보요청';
+  }
+
+  private buildCompetitionTitle(): void {
     this.competition.title = `${this.competition.title}`;
-    if (this.preiodTitle !== '') this.competition.title += ` / ${this.preiodTitle}`;
+    if (this.basicPeriodTitle !== '') this.competition.title += ` / ${this.basicPeriodTitle}`;
     if (this.earlybirdDiscountTitle !== '') this.competition.title += ` / ${this.earlybirdDiscountTitle}`;
     if (this.combinationDiscountTitle !== '') this.competition.title += ` / ${this.combinationDiscountTitle}`;
     if (this.additionalInfoTitle !== '') this.competition.title += ` / ${this.additionalInfoTitle}`;
+  }
+
+  public build(): ICompetition {
+    this.buildCompetitionTitle();
     return this.competition as ICompetition;
   }
 }
@@ -286,7 +282,7 @@ export class CompetitionDummyBuilder {
 export const generateDummyCompetitions = (): ICompetition[] => {
   const competitions: ICompetition[] = [];
   const today = new Date();
-  const start = DateTime.fromJSDate(today).minus({ days: 50 }).toJSDate();
+  const start = DateTime.fromJSDate(today).minus({ days: 49 }).toJSDate();
   const end = DateTime.fromJSDate(today).plus({ days: 50 }).toJSDate();
   const divisionFactory = new DivisionFactory();
   const dummyDivisons = divisionFactory.createDivisions('tmp-competition-id', generateDivisionPacks());
@@ -335,7 +331,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         // .setDivisions(dummyDivisons)
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
-        // .setRequiredAdditionalInfos()
+        .setRequiredAdditionalInfos()
         .build(),
     );
   }
@@ -343,4 +339,5 @@ export const generateDummyCompetitions = (): ICompetition[] => {
 };
 
 const competitions = generateDummyCompetitions();
+console.log('competitions.length:', competitions.length);
 console.log(JSON.stringify(competitions, null, 2));
