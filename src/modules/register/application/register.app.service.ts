@@ -68,8 +68,9 @@ export class RegisterAppService {
   }
 
   async confirmAuthCode({ userId, authCode }: ConfirmAuthCodeParam): Promise<ConfirmAuthCodeRet> {
-    const isConfirmed = await this.phoneAuthCodeProvider.isPhoneNumberAuthCodeValid(userId, authCode);
-    return { isConfirmed };
+    const phoneNumber = await this.phoneAuthCodeProvider.validatePhoneNumberAuthCodeValid(userId, authCode);
+    if (phoneNumber) await this.userRepository.update(userId, { phoneNumber });
+    return { isConfirmed: !!phoneNumber };
   }
 
   async registerUser({ userRegisterDto, consentPolicyTypes }: RegisterUserParam): Promise<RegisterUserRet> {

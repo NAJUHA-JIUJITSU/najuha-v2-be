@@ -49,6 +49,6 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<GetMeRes>> {
-    return createResponseForm(await this.UsersAppService.getMe(req['userId']));
+    return createResponseForm(await this.UsersAppService.getMe({ userId: req['userId'] }));
   }
 }

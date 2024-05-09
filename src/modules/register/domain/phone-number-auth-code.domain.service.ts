@@ -20,9 +20,10 @@ export class PhoneNumberAuthCodeDomainService {
     return authCode;
   }
 
-  async isPhoneNumberAuthCodeValid(userId: IUser['id'], authCode: PhoneNumberAuthCode): Promise<boolean> {
-    const phoneNumber = await this.redisClient.get(`userId:${userId}-authCode:${authCode}`);
-    if (!phoneNumber) return false;
-    return true;
+  async validatePhoneNumberAuthCodeValid(
+    userId: IUser['id'],
+    authCode: PhoneNumberAuthCode,
+  ): Promise<IUser['phoneNumber'] | null> {
+    return await this.redisClient.get(`userId:${userId}-authCode:${authCode}`);
   }
 }
