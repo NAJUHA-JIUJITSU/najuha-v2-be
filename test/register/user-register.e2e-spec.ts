@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import {
@@ -25,7 +25,6 @@ import {
   SendPhoneNumberAuthCodeRes,
 } from 'src/modules/register/presentation/dtos';
 import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { ulid } from 'ulid';
 
 describe('E2E u-2 register test', () => {
@@ -37,7 +36,6 @@ describe('E2E u-2 register test', () => {
   let jwtService: JwtService;
   let usersAppService: UsersAppService;
   let policyAppService: PolicyAppService;
-  let userRepository: Repository<UserEntity>;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -51,7 +49,6 @@ describe('E2E u-2 register test', () => {
     jwtService = testingModule.get<JwtService>(JwtService);
     usersAppService = testingModule.get<UsersAppService>(UsersAppService);
     policyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
-    userRepository = testingModule.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -70,7 +67,7 @@ describe('E2E u-2 register test', () => {
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const myAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -91,13 +88,13 @@ describe('E2E u-2 register test', () => {
       ohterUser.id = ulid();
       ohterUser.role = 'TEMPORARY_USER';
       ohterUser.birth = '19980101';
-      await userRepository.save(userRepository.create(ohterUser));
+      await entityEntityManager.save(UserEntity, ohterUser);
 
       const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
 
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
@@ -117,7 +114,7 @@ describe('E2E u-2 register test', () => {
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
 
       const myAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
@@ -137,7 +134,7 @@ describe('E2E u-2 register test', () => {
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const accessToken = jwtService.sign(
         { userId: 1, userRole: 'TEMPORARY_USER' },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -159,7 +156,7 @@ describe('E2E u-2 register test', () => {
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -179,7 +176,7 @@ describe('E2E u-2 register test', () => {
       user.id = ulid();
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -204,7 +201,7 @@ describe('E2E u-2 register test', () => {
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
       user.phoneNumber = null;
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -246,7 +243,7 @@ describe('E2E u-2 register test', () => {
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
       user.phoneNumber = '01012345678';
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -288,7 +285,7 @@ describe('E2E u-2 register test', () => {
       ohterUser.birth = '19980101';
       ohterUser.phoneNumber = '01012345678';
       ohterUser.nickname = 'existingNickname';
-      await userRepository.save(userRepository.create(ohterUser));
+      await entityEntityManager.save(UserEntity, ohterUser);
 
       const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
       user.id = ulid();
@@ -296,7 +293,7 @@ describe('E2E u-2 register test', () => {
       user.birth = '19980101';
       user.phoneNumber = '01012345678';
       user.nickname = null;
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -338,7 +335,7 @@ describe('E2E u-2 register test', () => {
       user.birth = '19980101';
       user.phoneNumber = '01012345678';
       user.nickname = null;
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -380,7 +377,7 @@ describe('E2E u-2 register test', () => {
       user.role = 'TEMPORARY_USER';
       user.birth = '19980101';
       user.phoneNumber = null;
-      await userRepository.save(userRepository.create(user));
+      await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },

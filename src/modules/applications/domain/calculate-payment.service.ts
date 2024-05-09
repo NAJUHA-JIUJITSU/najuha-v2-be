@@ -42,7 +42,7 @@ export class CalculatePaymentService {
   ): number {
     if (combinationDiscountSnapshot === null) return 0;
     const divisionUnits = divisions.map((division) => ({
-      weightType: division.weight === 'ABSOLUTE' ? 'ABSOLUTE' : 'WEIGHT',
+      weightType: division.weight.includes('ABSOLUTE') ? 'ABSOLUTE' : 'WEIGHT',
       uniformType: division.uniform,
     }));
     let maxDiscountAmount = 0;

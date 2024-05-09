@@ -1,5 +1,6 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
+import { DateOrStringDate } from 'src/common/common-types';
 
 /*
  * 대회신청시 추가 정보 입력 규칙.
@@ -16,7 +17,7 @@ export interface IRequiredAdditionalInfo {
   description: string & tags.MinLength<1> & tags.MaxLength<512>;
 
   /** CreatedAt. */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 
   /** Competition Id  */
   competitionId: ICompetition['id'];

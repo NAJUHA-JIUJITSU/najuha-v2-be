@@ -1,5 +1,6 @@
 import { tags } from 'typia';
 import { IDivision } from './division.interface';
+import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IPriceSnapshot {
   /** ULID. */
@@ -9,7 +10,7 @@ export interface IPriceSnapshot {
   price: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /** CreatedAt. */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 
   /** Division id. */
   divisionId: IDivision['id'];

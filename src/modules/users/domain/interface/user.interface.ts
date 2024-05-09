@@ -1,3 +1,4 @@
+import { DateOrStringDate } from 'src/common/common-types';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { Nullable } from 'src/common/utility-types';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
@@ -74,10 +75,10 @@ export interface IUser {
   status: 'ACTIVE' | 'INACTIVE';
 
   /** CreatedAt. */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 
   /** UpdatedAt. */
-  updatedAt: Date | (string & tags.Format<'date-time'>);
+  updatedAt: DateOrStringDate;
 }
 
 export interface ITemporaryUser

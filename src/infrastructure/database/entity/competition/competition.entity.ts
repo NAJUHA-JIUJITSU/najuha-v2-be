@@ -75,7 +75,7 @@ export class CompetitionEntity {
   )
   combinationDiscountSnapshots!: CombinationDiscountSnapshotEntity[];
 
-  @OneToMany(() => DivisionEntity, (division) => division.competition)
+  @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
   divisions!: DivisionEntity[];
 
   @OneToMany(() => ApplicationEntity, (application) => application.competition)

@@ -147,6 +147,7 @@ export class CompetitionModel {
   }
 
   validateApplicationPeriod(now = new Date()) {
+    // TODO: null 값인지 확인
     if (this.registrationStartDate && now < this.registrationStartDate) {
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,

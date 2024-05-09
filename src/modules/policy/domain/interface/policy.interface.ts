@@ -1,3 +1,4 @@
+import { DateOrStringDate } from 'src/common/common-types';
 import { tags } from 'typia';
 
 /**
@@ -41,7 +42,7 @@ export interface IPolicy {
   content: string & tags.MinLength<1>;
 
   /** CreatedAt. */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 }
 
 export interface IPolicyFindMany extends Omit<IPolicy, 'content'> {}

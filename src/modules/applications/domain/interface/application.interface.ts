@@ -4,16 +4,17 @@ import { IPlayerSnapshot } from './player-snapshot.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
 import { tags } from 'typia';
 import { IAdditionalInfo } from './additional-info.interface';
+import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IApplication {
   /** ULID. */
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /**  Created at. */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 
   /** Updated at. */
-  updatedAt: Date | (string & tags.Format<'date-time'>);
+  updatedAt: DateOrStringDate;
 
   /**
    * 본인신청과 대리신청을 구별하는 type.

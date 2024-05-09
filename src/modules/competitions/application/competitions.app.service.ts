@@ -121,7 +121,7 @@ export class CompetitionsAppService {
     );
     competition.updateStatus(status);
     const updatedCompetitionEntity = competition.toEntity();
-    await this.competitionRepository.save(updatedCompetitionEntity);
+    await this.competitionRepository.update(competitionId, { status: updatedCompetitionEntity.status });
     return { competition: updatedCompetitionEntity };
   }
 

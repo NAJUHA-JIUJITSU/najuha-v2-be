@@ -17,7 +17,7 @@ import {
 import { KakaoStrategy } from 'src/modules/sns-auth-client/kakao.strategy';
 import { NaverStrategy } from 'src/modules/sns-auth-client/naver.strategy';
 import { GoogleStrategy } from 'src/modules/sns-auth-client/google.strategy';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
@@ -25,9 +25,8 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { CreateUserReqBody } from 'src/modules/users/presentation/dtos';
 import { IValidatedUserData } from 'src/modules/sns-auth-client/interface/validated-user-data.interface';
 import { AcquireAdminRoleRes, RefreshTokenRes, SnsLoginReqBody, SnsLoginRes } from 'src/modules/auth/presentation/dtos';
-import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { ulid } from 'ulid';
+import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {
@@ -42,7 +41,6 @@ describe('E2E u-1 user-auth test', () => {
   let kakaoStrategy: KakaoStrategy;
   let naverStrategy: NaverStrategy;
   let googleStrategy: GoogleStrategy;
-  let userRepository: Repository<UserEntity>;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -59,7 +57,6 @@ describe('E2E u-1 user-auth test', () => {
     kakaoStrategy = testingModule.get<KakaoStrategy>(KakaoStrategy);
     naverStrategy = testingModule.get<NaverStrategy>(NaverStrategy);
     googleStrategy = testingModule.get<GoogleStrategy>(GoogleStrategy);
-    userRepository = testingModule.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -80,7 +77,7 @@ describe('E2E u-1 user-auth test', () => {
       existUserEntity.birth = '19980101';
       existUserEntity.role = 'USER';
       existUserEntity.snsAuthProvider = snsAuthProvider;
-      await userRepository.save(userRepository.create(existUserEntity));
+      await entityEntityManager.save(UserEntity, existUserEntity);
 
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         const ret: IValidatedUserData = {
@@ -146,7 +143,7 @@ describe('E2E u-1 user-auth test', () => {
       existUserEntity.birth = '19980101';
       existUserEntity.role = 'USER';
       existUserEntity.snsAuthProvider = snsAuthProvider;
-      await userRepository.save(userRepository.create(existUserEntity));
+      await entityEntityManager.save(UserEntity, existUserEntity);
 
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         const ret: IValidatedUserData = {
@@ -210,7 +207,7 @@ describe('E2E u-1 user-auth test', () => {
       existUserEntity.birth = '19980101';
       existUserEntity.role = 'USER';
       existUserEntity.snsAuthProvider = snsAuthProvider;
-      await userRepository.save(userRepository.create(existUserEntity));
+      await entityEntityManager.save(UserEntity, existUserEntity);
 
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         const ret: IValidatedUserData = {
@@ -334,7 +331,7 @@ describe('E2E u-1 user-auth test', () => {
       existUserEntity.role = 'USER';
       existUserEntity.snsId = 'test-sns-id';
       existUserEntity.snsAuthProvider = 'KAKAO';
-      const savedUser = await userRepository.save(userRepository.create(existUserEntity));
+      await entityEntityManager.save(UserEntity, existUserEntity);
 
       const res = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')
@@ -352,10 +349,12 @@ describe('E2E u-1 user-auth test', () => {
     });
 
     it('등록되지 않은 관리자 계정입니다.', async () => {
-      const userCreateDto = typia.random<CreateUserReqBody>();
-      userCreateDto.snsId = 'unregistered-admin-sns-id';
-      userCreateDto.snsAuthProvider = 'KAKAO';
-      const user = (await userService.createUser({ userCreateDto: userCreateDto })).user;
+      const user = typia.random<IUser>();
+      user.snsId = 'unregistered-admin-sns-id';
+      user.snsAuthProvider = 'KAKAO';
+      user.role = 'USER';
+      user.birth = '19980101';
+      await entityEntityManager.save(UserEntity, user);
 
       const res = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')

@@ -1,6 +1,7 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
 import { IPriceSnapshot } from './price-snapshot.interface';
+import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IDivision {
   /** ULID. */
@@ -26,9 +27,10 @@ export interface IDivision {
 
   /**
    * 체급.
-   * - ex) '-40', '-45.5', '-50', '+50', 'ABSOLUTE'.
+   * - weight type: '-45', '+45', '-60.5', '+60.5'
+   * - absolute type: '-45_ABSOLUTE', '+45_ABSOLUTE', '-60.5_ABSOLUTE', '+60.5_ABSOLUTE', 'ABSOLUTE'
    */
-  weight: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[-+][0-9]+(\\.[0-9]+)?$|ABSOLUTE$'>;
+  weight: WeightType | AbsoluteType;
 
   /** 출생년도 범위 시작. YYYY. */
   birthYearRangeStart: string & tags.MinLength<4> & tags.Pattern<'^[0-9]{4}$'>;
@@ -44,10 +46,10 @@ export interface IDivision {
   status: 'ACTIVE' | 'INACTIVE';
 
   /** CreatedAt. */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 
   /** UpdatedAt. */
-  updatedAt: Date | (string & tags.Format<'date-time'>);
+  updatedAt: DateOrStringDate;
 
   /** CompetitionId. */
   competitionId: ICompetition['id'];
@@ -55,3 +57,18 @@ export interface IDivision {
   /** 가격 스냅샷. */
   priceSnapshots: IPriceSnapshot[] & tags.MinItems<1>;
 }
+
+/**
+ * 일반 체급 타입.
+ * - ex) '-45', '+45', '-60.5', '+60.5'
+ */
+type WeightType = string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[-+]\\d+(\\.\\d+)?$'>;
+
+/**
+ * 앱솔루트 체급 타입.
+ * - ex) '-45_ABSOLUTE', '+45_ABSOLUTE', '-60.5_ABSOLUTE', '+60.5_ABSOLUTE', 'ABSOLUTE'
+ */
+type AbsoluteType = string &
+  tags.MinLength<1> &
+  tags.MaxLength<64> &
+  tags.Pattern<'^[-+]\\d+(\\.\\d+)?_ABSOLUTE$|ABSOLUTE$'>;

@@ -1,3 +1,4 @@
+import { DateOrStringDate } from 'src/common/common-types';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { tags } from 'typia';
 
@@ -7,7 +8,7 @@ export interface IPolicyConsent {
   id: string & tags.MinLength<26> & tags.MaxLength<26>;
 
   /** 약관 동의 날짜. */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 
   /** UserId. */
   userId: IUser['id'];

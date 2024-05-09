@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
 import { ResponseForm } from 'src/common/response/response';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
@@ -13,7 +13,6 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
 import { ulid } from 'ulid';
 import { GetMeRes, UpdateUserReqBody, UpdateUserRes } from 'src/modules/users/presentation/dtos';
-import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('E2E u-3 user-users test', () => {
   let app: INestApplication;
@@ -24,7 +23,6 @@ describe('E2E u-3 user-users test', () => {
   let redisClient: Redis;
   let jwtService: JwtService;
   let userService: UsersAppService;
-  let userRepository: Repository<UserEntity>;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -38,7 +36,6 @@ describe('E2E u-3 user-users test', () => {
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersAppService>(UsersAppService);
-    userRepository = testingModule.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -57,7 +54,7 @@ describe('E2E u-3 user-users test', () => {
       dummyUser.id = ulid();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';
-      await userRepository.save(userRepository.create(dummyUser));
+      await entityEntityManager.save(UserEntity, dummyUser);
       const accessToken = jwtService.sign(
         { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -86,7 +83,7 @@ describe('E2E u-3 user-users test', () => {
       dummyUser.id = ulid();
       dummyUser.role = 'USER';
       dummyUser.birth = '19980101';
-      await userRepository.save(userRepository.create(dummyUser));
+      await entityEntityManager.save(UserEntity, dummyUser);
       const accessToken = jwtService.sign(
         { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },

@@ -1,6 +1,7 @@
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { IApplication } from './application.interface';
 import { tags } from 'typia';
+import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IPlayerSnapshot {
   /** ULID. */
@@ -33,7 +34,7 @@ export interface IPlayerSnapshot {
   masterName: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$'>;
 
   /** CreatedAt */
-  createdAt: Date | (string & tags.Format<'date-time'>);
+  createdAt: DateOrStringDate;
 
   /** Application id. */
   applicationId: IApplication['id'];
