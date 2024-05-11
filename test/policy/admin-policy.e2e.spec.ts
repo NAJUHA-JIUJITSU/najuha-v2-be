@@ -12,6 +12,9 @@ import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { CreatePolicyReqBody, CreatePolicyRes, FindPoliciesRes } from 'src/modules/policy/presentation/dtos';
+import { UserDummyBuilder } from 'src/dummy/user-dummy';
+import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
+import { ulid } from 'ulid';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
@@ -52,81 +55,83 @@ describe('E2E a-4 admin-policy test', () => {
 
   describe('a-4-1 POST /admin/policy -----------------------------------------------------', () => {
     it('약관 생성하기 성공 시', async () => {
-      const CreatePolicyReqDto = typia.random<CreatePolicyReqBody>();
+      /** pre condition. */
+      const createPolicyReqDto = typia.random<CreatePolicyReqBody>();
+      const dummyUser = new UserDummyBuilder().setRole('ADMIN').build();
       const accessToken = jwtService.sign(
-        { userId: 1, userRole: 'ADMIN' },
+        { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .post('/admin/policy')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(CreatePolicyReqDto);
+        .send(createPolicyReqDto);
       expect(typia.is<ResponseForm<CreatePolicyRes>>(res.body)).toBe(true);
     });
   });
 
   describe('a-4-2 GET /admin/policy ------------------------------------------------------', () => {
     it('모든 약관 가져오기 성공 시', async () => {
+      /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const maxVersion = 4;
-
       for (let version = 1; version <= maxVersion; version++) {
         await Promise.all(
           policyTypes.map((type) => {
-            return policyAppService.createPolicy({
-              policyCreateDto: {
-                type: type,
-                isMandatory: true,
-                title: `${type} 제목`,
-
-                content: `${type} 내용`,
-              },
+            return entityEntityManager.save(PolicyEntity, {
+              id: ulid(),
+              type: type,
+              isMandatory: true,
+              title: `${type} 제목 ${version}`,
+              content: `${type} 내용 ${version}`,
+              version: version,
+              createdAt: new Date(),
             });
           }),
         );
       }
-
+      const dummyUser = new UserDummyBuilder().setRole('ADMIN').build();
       const accessToken = jwtService.sign(
-        { userId: 1, userRole: 'ADMIN' },
+        { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
       expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
       expect(res.body.result.policies.length).toEqual(policyTypes.length * maxVersion);
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
+      /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       const query = { type: typia.random<IPolicy['type']>() };
       const maxVersion = 4;
-
       for (let version = 1; version <= maxVersion; version++) {
         await Promise.all(
           policyTypes.map((type) => {
-            return policyAppService.createPolicy({
-              policyCreateDto: {
-                type: type,
-                isMandatory: true,
-                title: `${type} 제목 ${version}`,
-                content: `${type} 내용 ${version}`,
-              },
+            return entityEntityManager.save(PolicyEntity, {
+              id: ulid(),
+              type: type,
+              isMandatory: true,
+              title: `${type} 제목 ${version}`,
+              content: `${type} 내용 ${version}`,
+              version: version,
+              createdAt: new Date(),
             });
           }),
         );
       }
-
+      const dummyUser = new UserDummyBuilder().setRole('ADMIN').build();
       const accessToken = jwtService.sign(
-        { userId: 1, userRole: 'ADMIN' },
+        { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .get('/admin/policy')
         .query(query)
         .set('Authorization', `Bearer ${accessToken}`);
-
       expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
       expect(res.body.result.policies.length).toEqual(policyTypes.length);
       expect(res.body.result.policies[0].type).toEqual(query.type);

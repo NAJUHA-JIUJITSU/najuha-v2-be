@@ -21,13 +21,10 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { CreateUserReqBody } from 'src/modules/users/presentation/dtos';
-import { IValidatedUserData } from 'src/modules/sns-auth-client/interface/validated-user-data.interface';
+import { ISnsAuthValidatedUserData } from 'src/modules/sns-auth-client/interface/validated-user-data.interface';
 import { AcquireAdminRoleRes, RefreshTokenRes, SnsLoginReqBody, SnsLoginRes } from 'src/modules/auth/presentation/dtos';
-import { ulid } from 'ulid';
 import { UserEntity } from 'src//database/entity/user/user.entity';
-// import * as Apis from '../../src/api/functional';
+import { UserDummyBuilder } from 'src/dummy/user-dummy';
 
 describe('E2E u-1 user-auth test', () => {
   let app: INestApplication;
@@ -71,200 +68,189 @@ describe('E2E u-1 user-auth test', () => {
 
   describe('u-1-1 POST /user/auth/sns-login ------------------------------------------', () => {
     it('KAKAO 기존 유저 로그인 성공 시', async () => {
-      const snsAuthProvider = 'KAKAO';
-      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      existUserEntity.id = ulid();
-      existUserEntity.birth = '19980101';
-      existUserEntity.role = 'USER';
-      existUserEntity.snsAuthProvider = snsAuthProvider;
-      await entityEntityManager.save(UserEntity, existUserEntity);
-
+      /** pre condition. */
+      const existDummyUser = new UserDummyBuilder().setRole('USER').setSnsAuthProvider('KAKAO').build();
+      await entityEntityManager.save(UserEntity, existDummyUser);
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret: IValidatedUserData = {
-          snsId: existUserEntity.snsId,
-          snsAuthProvider: existUserEntity.snsAuthProvider,
-          name: existUserEntity.name,
-          email: existUserEntity.email,
-          phoneNumber: existUserEntity.phoneNumber,
-          gender: existUserEntity.gender,
+        const ret: ISnsAuthValidatedUserData = {
+          snsId: existDummyUser.snsId,
+          snsAuthProvider: existDummyUser.snsAuthProvider,
+          name: existDummyUser.name,
+          email: existDummyUser.email,
+          phoneNumber: existDummyUser.phoneNumber,
+          gender: existDummyUser.gender,
         };
         return ret;
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider: existDummyUser.snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
     it('KAKAO 신규 유저 로그인 성공 시', async () => {
+      /** pre condition. */
       const snsAuthProvider = 'KAKAO';
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret = typia.random<IValidatedUserData>();
-        console.log('ret!!!!!!!!!!!!!!!!!!!!!!', ret);
+        const ret = typia.random<ISnsAuthValidatedUserData>();
         ret.snsAuthProvider = snsAuthProvider;
         return ret;
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-      console.log('res.body!!!!!!!!!!!!!!!!!!!!!!', res.body);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
     it('KAKAO 로그인 실패 시', async () => {
+      /** pre condition. */
       const snsAuthProvider = 'KAKAO';
       jest.spyOn(kakaoStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         throw new BusinessException(SnsAuthErrors.SNS_AUTH_KAKAO_LOGIN_FAIL, 'test error message');
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<SNS_AUTH_KAKAO_LOGIN_FAIL>(res.body)).toBe(true);
     });
 
     it('NAVER 기존 유저 로그인 성공 시', async () => {
-      const snsAuthProvider = 'NAVER';
-      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      existUserEntity.id = ulid();
-      existUserEntity.birth = '19980101';
-      existUserEntity.role = 'USER';
-      existUserEntity.snsAuthProvider = snsAuthProvider;
-      await entityEntityManager.save(UserEntity, existUserEntity);
-
+      /** pre condition. */
+      const existDummyUser = new UserDummyBuilder().setRole('USER').setSnsAuthProvider('NAVER').build();
+      await entityEntityManager.save(UserEntity, existDummyUser);
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret: IValidatedUserData = {
-          snsId: existUserEntity.snsId,
-          snsAuthProvider: existUserEntity.snsAuthProvider,
-          name: existUserEntity.name,
-          email: existUserEntity.email,
-          phoneNumber: existUserEntity.phoneNumber,
-          gender: existUserEntity.gender,
+        const ret: ISnsAuthValidatedUserData = {
+          snsId: existDummyUser.snsId,
+          snsAuthProvider: existDummyUser.snsAuthProvider,
+          name: existDummyUser.name,
+          email: existDummyUser.email,
+          phoneNumber: existDummyUser.phoneNumber,
+          gender: existDummyUser.gender,
         };
         return ret;
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider: existDummyUser.snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
     it('NAVER 신규 유저 로그인 성공 시', async () => {
+      /** pre condition. */
       const snsAuthProvider = 'NAVER';
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret = typia.random<IValidatedUserData>();
+        const ret = typia.random<ISnsAuthValidatedUserData>();
         ret.snsAuthProvider = snsAuthProvider;
         return ret;
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
     it('NAVER 로그인 실패 시', async () => {
+      /** pre condition. */
       const snsAuthProvider = 'NAVER';
       jest.spyOn(naverStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         throw new BusinessException(SnsAuthErrors.SNS_AUTH_NAVER_LOGIN_FAIL, 'test error message');
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<SNS_AUTH_NAVER_LOGIN_FAIL>(res.body)).toBe(true);
     });
 
     it('GOOGLE 기존 유저 로그인 성공 시', async () => {
-      const snsAuthProvider = 'GOOGLE';
-      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      existUserEntity.id = ulid();
-      existUserEntity.birth = '19980101';
-      existUserEntity.role = 'USER';
-      existUserEntity.snsAuthProvider = snsAuthProvider;
-      await entityEntityManager.save(UserEntity, existUserEntity);
-
+      /** pre condition. */
+      const existDummyUser = new UserDummyBuilder().setRole('USER').setSnsAuthProvider('GOOGLE').build();
+      await entityEntityManager.save(UserEntity, existDummyUser);
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret: IValidatedUserData = {
-          snsId: existUserEntity.snsId,
-          snsAuthProvider: existUserEntity.snsAuthProvider,
-          name: existUserEntity.name,
-          email: existUserEntity.email,
+        const ret: ISnsAuthValidatedUserData = {
+          snsId: existDummyUser.snsId,
+          snsAuthProvider: existDummyUser.snsAuthProvider,
+          name: existDummyUser.name,
+          email: existDummyUser.email,
+          phoneNumber: existDummyUser.phoneNumber,
+          gender: existDummyUser.gender,
         };
         return ret;
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider: existDummyUser.snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
     it('GOOGLE 신규 유저 로그인 성공 시', async () => {
+      /** pre condition. */
       const snsAuthProvider = 'GOOGLE';
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
-        const ret = typia.random<CreateUserReqBody>();
+        const ret = typia.random<ISnsAuthValidatedUserData>();
         ret.snsAuthProvider = snsAuthProvider;
         return ret;
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
     it('GOOGLE 로그인 실패 시', async () => {
+      /** pre condition. */
       const snsAuthProvider = 'GOOGLE';
       jest.spyOn(googleStrategy, 'validate').mockImplementation(async (snsAuthCode: string) => {
         throw new BusinessException(SnsAuthErrors.SNS_AUTH_GOOGLE_LOGIN_FAIL, 'test error message');
       });
-
-      const SnsLoginReqDto = typia.random<SnsLoginReqBody>();
-      SnsLoginReqDto.snsAuthProvider = snsAuthProvider;
-
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(SnsLoginReqDto);
-
+      /** main test. */
+      const snsLoginReqBody: SnsLoginReqBody = {
+        snsAuthCode: 'test-sns-auth-code',
+        snsAuthProvider,
+      };
+      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
       expect(typia.is<SNS_AUTH_GOOGLE_LOGIN_FAIL>(res.body)).toBe(true);
     });
   });
 
   describe('u-1-2 POST /user/auth/token -------------------------------------------------', () => {
     it('refresh token이 유효한 경우', async () => {
+      /** pre condition. */
       const payload = {
         userId: 1,
         userRole: 'USER',
@@ -273,19 +259,18 @@ describe('E2E u-1 user-auth test', () => {
         secret: appEnv.jwtRefreshTokenSecret,
         expiresIn: appEnv.jwtRefreshTokenExpirationTime,
       });
-
       await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .post('/user/auth/token')
         .send({ refreshToken: authorizedRefreshToken });
-
       expect(typia.is<ResponseForm<RefreshTokenRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
     it('refresh token이 redis에 저장되어있지 않은 경우', async () => {
+      /** pre condition. */
       const payload = {
         userId: 1,
         userRole: 'USER',
@@ -294,15 +279,15 @@ describe('E2E u-1 user-auth test', () => {
         secret: appEnv.jwtRefreshTokenSecret,
         expiresIn: appEnv.jwtRefreshTokenExpirationTime,
       });
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .post('/user/auth/token')
         .send({ refreshToken: authorizedRefreshToken });
-
       expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
     });
 
     it('refresh token이 만료된 경우', async () => {
+      /** pre condition. */
       const payload = {
         userId: 1,
         userRole: 'USER',
@@ -311,61 +296,54 @@ describe('E2E u-1 user-auth test', () => {
         secret: appEnv.jwtRefreshTokenSecret,
         expiresIn: '1ms',
       });
-
       await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
-
       await new Promise((resolve) => setTimeout(resolve, 2));
+      /** main test. */
       const res = await request(app.getHttpServer())
         .post('/user/auth/token')
         .send({ refreshToken: authorizedRefreshToken });
-
       expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
     });
   });
 
   describe('u-1-3 PATCH /user/auth/acquire-admin-role -----------------------------------', () => {
-    it('관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.', async () => {
-      const existUserEntity = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      existUserEntity.id = ulid();
-      existUserEntity.birth = '19980101';
-      existUserEntity.role = 'USER';
-      existUserEntity.snsId = 'test-sns-id';
-      existUserEntity.snsAuthProvider = 'KAKAO';
-      await entityEntityManager.save(UserEntity, existUserEntity);
-
+    it('관리자로 등록되어있는 유저의 role을 ADMIN으로 변경성공시.', async () => {
+      /** pre condition. */
+      const existDummyUser = new UserDummyBuilder()
+        .setRole('USER')
+        .setSnsId('test-sns-id')
+        .setSnsAuthProvider('KAKAO')
+        .build();
+      await entityEntityManager.save(UserEntity, existDummyUser);
+      const existDummyUserAccessToken = jwtService.sign(
+        { userId: existDummyUser.id, userRole: existDummyUser.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      /** main test. */
       const res = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')
-        .set(
-          'Authorization',
-          `Bearer ${jwtService.sign(
-            { userId: existUserEntity.id, userRole: 'USER' },
-            { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
-          )}`,
-        );
-
+        .set('Authorization', `Bearer ${existDummyUserAccessToken}`);
       expect(typia.is<ResponseForm<AcquireAdminRoleRes>>(res.body)).toBe(true);
       const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('ADMIN');
     });
 
     it('등록되지 않은 관리자 계정입니다.', async () => {
-      const user = typia.random<IUser>();
-      user.snsId = 'unregistered-admin-sns-id';
-      user.snsAuthProvider = 'KAKAO';
-      user.role = 'USER';
-      user.birth = '19980101';
-      await entityEntityManager.save(UserEntity, user);
-
+      /** pre condition. */
+      const unregisteredUser = new UserDummyBuilder()
+        .setRole('USER')
+        .setSnsId('unregistered-admin-sns-id')
+        .setSnsAuthProvider('KAKAO')
+        .build();
+      await entityEntityManager.save(UserEntity, unregisteredUser);
+      const unregisteredUserAccessToken = jwtService.sign(
+        { userId: unregisteredUser.id, userRole: unregisteredUser.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      /** main test. */
       const res = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')
-        .set(
-          'Authorization',
-          `Bearer ${jwtService.sign(
-            { userId: user.id, userRole: 'USER' },
-            { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
-          )}`,
-        );
-
+        .set('Authorization', `Bearer ${unregisteredUserAccessToken}`);
       expect(typia.is<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(res.body)).toBe(true);
     });
   });

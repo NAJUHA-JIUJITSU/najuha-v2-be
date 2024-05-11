@@ -9,10 +9,9 @@ import { DataSource, EntityManager } from 'typeorm';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { UserEntity } from 'src//database/entity/user/user.entity';
-import { ulid } from 'ulid';
 import { GetMeRes, UpdateUserReqBody, UpdateUserRes } from 'src/modules/users/presentation/dtos';
+import { UserDummyBuilder } from 'src/dummy/user-dummy';
 
 describe('E2E u-3 user-users test', () => {
   let app: INestApplication;
@@ -49,17 +48,14 @@ describe('E2E u-3 user-users test', () => {
   });
 
   describe('u-3-2 PATCH /user/users --------------------------------------------------', () => {
+    /** pre condition. */
     it('유저 정보 수정 성공 시', async () => {
-      const dummyUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      dummyUser.id = ulid();
-      dummyUser.role = 'USER';
-      dummyUser.birth = '19980101';
+      const dummyUser = new UserDummyBuilder().build();
       await entityEntityManager.save(UserEntity, dummyUser);
       const accessToken = jwtService.sign(
         { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
       const UpdateUserReqDto: UpdateUserReqBody = {
         name: 'updateName',
         nickname: 'updateNickname',
@@ -67,28 +63,25 @@ describe('E2E u-3 user-users test', () => {
         belt: '블랙',
         birth: '19980101',
       };
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .patch('/user/users')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(UpdateUserReqDto);
-
       expect(typia.is<ResponseForm<UpdateUserRes>>(res.body)).toBe(true);
     });
   });
 
   describe('u-3-3 GET /user/users/me --------------------------------------------------', () => {
     it('내 정보 조회 성공 시', async () => {
-      const dummyUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      dummyUser.id = ulid();
-      dummyUser.role = 'USER';
-      dummyUser.birth = '19980101';
+      /** pre condition. */
+      const dummyUser = new UserDummyBuilder().build();
       await entityEntityManager.save(UserEntity, dummyUser);
       const accessToken = jwtService.sign(
         { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .get('/user/users/me')
         .set('Authorization', `Bearer ${accessToken}`);

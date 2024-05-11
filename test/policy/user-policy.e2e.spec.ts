@@ -12,6 +12,8 @@ import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { FindPoliciesRes, FindPolicyRes } from 'src/modules/policy/presentation/dtos';
+import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
+import { ulid } from 'ulid';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {
@@ -52,20 +54,22 @@ describe('E2E u-4 user-policy test', () => {
 
   describe('u-4-1 GET /user/policy/recent --------------------------------------------------', () => {
     it('가장 최근에 등록된 모든 타입의 약관을 가져오기 성공 시', async () => {
+      /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return policyAppService.createPolicy({
-            policyCreateDto: {
-              type: type,
-              isMandatory: true,
-              title: `${type} 제목`,
-              content: `${type} 내용`,
-            },
+          return entityEntityManager.save(PolicyEntity, {
+            id: ulid(),
+            type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+            version: 1,
+            createdAt: new Date(),
           });
         }),
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer()).get('/user/policy/recent');
       expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
       expect(res.body.result.policies.every((policy) => policyTypes.includes(policy.type))).toBe(true);
@@ -74,15 +78,17 @@ describe('E2E u-4 user-policy test', () => {
 
   describe('u-4-2 GET /user/policy/:id --------------------------------------------------', () => {
     it('약관 ID로 약관을 가져오기 성공 시', async () => {
-      const { policy } = await policyAppService.createPolicy({
-        policyCreateDto: {
-          type: 'TERMS_OF_SERVICE',
-          isMandatory: true,
-          title: `TERMS_OF_SERVICE 제목`,
-          content: `TERMS_OF_SERVICE 내용`,
-        },
+      /** pre condition. */
+      const policy = await entityEntityManager.save(PolicyEntity, {
+        id: ulid(),
+        type: 'TERMS_OF_SERVICE',
+        isMandatory: true,
+        title: `TERMS_OF_SERVICE 제목`,
+        content: `TERMS_OF_SERVICE 내용`,
+        version: 1,
+        createdAt: new Date(),
       });
-
+      /** main test. */
       const res = await request(app.getHttpServer()).get(`/user/policy/${policy.id}`);
       expect(typia.is<ResponseForm<FindPolicyRes>>(res.body)).toBe(true);
       expect(res.body.result.policy.id).toEqual(policy.id);

@@ -60,9 +60,49 @@ export class CompetitionDummyBuilder {
     return this;
   }
 
-  public setCompetitionDates(date: Date): this {
+  public setCompetitionBasicDates(date: Date): this {
     this.generateCompetitionDates(date);
     this.setBasicPeriodTitle();
+    return this;
+  }
+
+  public setCompetitionDate(date: Date | null): this {
+    this.competition.competitionDate = date;
+    return this;
+  }
+
+  public setRegistrationStartDate(date: Date | null): this {
+    this.competition.registrationStartDate = date;
+    return this;
+  }
+
+  public setRegistrationEndDate(date: Date | null): this {
+    this.competition.registrationEndDate = date;
+    return this;
+  }
+
+  public setRefundDeadlineDate(date: Date | null): this {
+    this.competition.refundDeadlineDate = date;
+    return this;
+  }
+
+  public setSoloRegistrationAdjustmentStartDate(date: Date | null): this {
+    this.competition.soloRegistrationAdjustmentStartDate = date;
+    return this;
+  }
+
+  public setSoloRegistrationAdjustmentEndDate(date: Date | null): this {
+    this.competition.soloRegistrationAdjustmentEndDate = date;
+    return this;
+  }
+
+  public setRegistrationListOpenDate(date: Date | null): this {
+    this.competition.registrationListOpenDate = date;
+    return this;
+  }
+
+  public setBracketOpenDate(date: Date | null): this {
+    this.competition.bracketOpenDate = date;
     return this;
   }
 
@@ -306,20 +346,20 @@ export const generateDummyCompetitions = (): ICompetition[] => {
       new CompetitionDummyBuilder()
         .setTitle(`${count++}`)
         .setIsPartnership(false)
-        .setCompetitionDates(competitionDate)
+        .setCompetitionBasicDates(competitionDate)
         .build(),
       // 2. 협약, divisions
       new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle(`${count++}`)
-        .setCompetitionDates(competitionDate)
+        .setCompetitionBasicDates(competitionDate)
         // .setDivisions(dummyDivisons)
         .build(),
       // 3. 2 + 얼리버드 할인
       new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle(`${count++}`)
-        .setCompetitionDates(competitionDate)
+        .setCompetitionBasicDates(competitionDate)
         // .setDivisions(dummyDivisons)
         .setEarlybirdDiscountSnapshots(10000)
         .build(),
@@ -327,7 +367,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
       new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle(`${count++}`)
-        .setCompetitionDates(competitionDate)
+        .setCompetitionBasicDates(competitionDate)
         // .setDivisions(dummyDivisons)
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
@@ -336,7 +376,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
       new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle(`${count++}`)
-        .setCompetitionDates(competitionDate)
+        .setCompetitionBasicDates(competitionDate)
         // .setDivisions(dummyDivisons)
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)

@@ -4,7 +4,7 @@ import { GoogleStrategy } from 'src/modules/sns-auth-client/google.strategy';
 import { KakaoStrategy } from 'src/modules/sns-auth-client/kakao.strategy';
 import { NaverStrategy } from 'src/modules/sns-auth-client/naver.strategy';
 import { SnsLoginParam } from '../auth/application/dtos';
-import { IValidatedUserData } from './interface/validated-user-data.interface';
+import { ISnsAuthValidatedUserData } from './interface/validated-user-data.interface';
 
 @Injectable()
 export class SnsAuthClient {
@@ -15,7 +15,7 @@ export class SnsAuthClient {
     // private readonly appleStrategy: AppleStrategy,
   ) {}
 
-  async validate({ snsAuthProvider, snsAuthCode }: SnsLoginParam): Promise<IValidatedUserData> {
+  async validate({ snsAuthProvider, snsAuthCode }: SnsLoginParam): Promise<ISnsAuthValidatedUserData> {
     switch (snsAuthProvider) {
       case 'KAKAO':
         return await this.kakaoStrategy.validate(snsAuthCode);

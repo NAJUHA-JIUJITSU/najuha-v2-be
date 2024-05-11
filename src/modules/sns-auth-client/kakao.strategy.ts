@@ -5,13 +5,13 @@ import { BusinessException, SnsAuthErrors } from 'src/common/response/errorRespo
 import appEnv from 'src/common/app-env';
 import { IKakaoUserData } from './interface/kakao-user-data.interface';
 import { ISnsAuthStrategy } from './interface/sns-auth.stratege.interface';
-import { IValidatedUserData } from './interface/validated-user-data.interface';
+import { ISnsAuthValidatedUserData } from './interface/validated-user-data.interface';
 
 @Injectable()
 export class KakaoStrategy implements ISnsAuthStrategy {
   constructor(private readonly httpService: HttpService) {}
 
-  async validate(snsAuthCode: string): Promise<IValidatedUserData> {
+  async validate(snsAuthCode: string): Promise<ISnsAuthValidatedUserData> {
     try {
       const snsAccessToken = await this.getAccessToken(snsAuthCode);
       const kakaoUserData = await this.getUserData(snsAccessToken);
@@ -52,8 +52,8 @@ export class KakaoStrategy implements ISnsAuthStrategy {
     return response.data;
   }
 
-  private formatUserData(data: IKakaoUserData): IValidatedUserData {
-    const dto: IValidatedUserData = {
+  private formatUserData(data: IKakaoUserData): ISnsAuthValidatedUserData {
+    const dto: ISnsAuthValidatedUserData = {
       snsAuthProvider: 'KAKAO',
       snsId: data.id.toString(),
       name: data.kakao_account.name,

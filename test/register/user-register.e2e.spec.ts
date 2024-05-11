@@ -13,10 +13,7 @@ import {
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
 } from 'src/common/response/errorResponse';
-import { UsersAppService } from 'src/modules/users/application/users.app.service';
-import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
-import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
 import {
   ConfirmAuthCodeRes,
   GetTemporaryUserRes,
@@ -26,6 +23,8 @@ import {
 } from 'src/modules/register/presentation/dtos';
 import { UserEntity } from 'src//database/entity/user/user.entity';
 import { ulid } from 'ulid';
+import { TemporaryUserDummyBuilder, UserDummyBuilder } from 'src/dummy/user-dummy';
+import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;
@@ -34,8 +33,6 @@ describe('E2E u-2 register test', () => {
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
-  let usersAppService: UsersAppService;
-  let policyAppService: PolicyAppService;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -47,8 +44,6 @@ describe('E2E u-2 register test', () => {
     tableNames = entityEntityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
-    usersAppService = testingModule.get<UsersAppService>(UsersAppService);
-    policyAppService = testingModule.get<PolicyAppService>(PolicyAppService);
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -63,88 +58,70 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-1 GET /user/users/me --------------------------------------------------', () => {
     it('TEMPORARY_USER 권한으로 내 정보 조회 성공 시', async () => {
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      await entityEntityManager.save(UserEntity, user);
+      /** pre condition. */
+      const tempraryUser = new TemporaryUserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, tempraryUser);
       const myAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: tempraryUser.id, userRole: tempraryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .get('/user/register/users/me')
         .set('Authorization', `Bearer ${myAccessToken}`);
-
       expect(typia.is<ResponseForm<GetTemporaryUserRes>>(res.body)).toBe(true);
-      expect(res.body.result.user.id).toEqual(user.id);
+      expect(res.body.result.user.id).toEqual(tempraryUser.id);
     });
   });
 
   describe('u-2-2 GET /user/users/:nickname/is-duplicated ----------------------------', () => {
     it('닉네임 중복검사 - 중복된 닉네임인 경우', async () => {
-      const ohterUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      ohterUser.id = ulid();
-      ohterUser.role = 'TEMPORARY_USER';
-      ohterUser.birth = '19980101';
-      await entityEntityManager.save(UserEntity, ohterUser);
-
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      await entityEntityManager.save(UserEntity, user);
-
+      /** pre condition. */
+      const otherUser = new UserDummyBuilder().setNickname('otherUserNickname').build();
+      await entityEntityManager.save(UserEntity, otherUser);
+      const temporaryUser = new TemporaryUserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
-        .get(`/user/register/users/${ohterUser.nickname}/is-duplicated`)
+        .get(`/user/register/users/${otherUser.nickname}/is-duplicated`)
         .set('Authorization', `Bearer ${userAccessToken}`);
-
       expect(typia.is<ResponseForm<IsDuplicatedNicknameRes>>(res.body)).toBe(true);
       expect(res.body.result.isDuplicated).toEqual(true);
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      await entityEntityManager.save(UserEntity, user);
-
+      /** pre condition. */
+      const tempraryUser = new TemporaryUserDummyBuilder().setNickname('myNickname').build();
+      await entityEntityManager.save(UserEntity, tempraryUser);
       const myAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: tempraryUser.id, userRole: tempraryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
-        .get(`/user/register/users/${user.nickname}/is-duplicated`)
+        .get(`/user/register/users/${tempraryUser.nickname}/is-duplicated`)
         .set('Authorization', `Bearer ${myAccessToken}`);
-
       expect(typia.is<ResponseForm<IsDuplicatedNicknameRes>>(res.body)).toBe(true);
       expect(res.body.result.isDuplicated).toEqual(false);
     });
 
     it('닉네임 중복검사 - 중복되지 않은 닉네임(사용가능)', async () => {
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      await entityEntityManager.save(UserEntity, user);
+      /** pre condition. */
+      const temporaryUser = new TemporaryUserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, temporaryUser);
       const accessToken = jwtService.sign(
-        { userId: 1, userRole: 'TEMPORARY_USER' },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       const unusedNickname = 'unusedNickname';
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .get(`/user/register/users/${unusedNickname}/is-duplicated`)
         .set('Authorization', `Bearer ${accessToken}`);
-
       expect(typia.is<ResponseForm<IsDuplicatedNicknameRes>>(res.body)).toBe(true);
       expect(res.body.result.isDuplicated).toEqual(false);
     });
@@ -152,41 +129,40 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-3 POST /user/register/phone-number/auth-code', () => {
     it('전화번호로 인증코드 전송', async () => {
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      await entityEntityManager.save(UserEntity, user);
+      /** pre condition. */
+      const temporaryUser = new TemporaryUserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
+      /** main test. */
       const res = await request(app.getHttpServer())
         .post('/user/register/phone-number/auth-code')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send({ phoneNumber: '01012345678' });
-
       expect(typia.is<ResponseForm<SendPhoneNumberAuthCodeRes>>(res.body)).toBe(true);
     });
   });
 
   describe('u-2-4 POST /user/register/phone-number/authcode/confirm --------', () => {
     it('전화번호로 인증코드 확인 성공 시', async () => {
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      await entityEntityManager.save(UserEntity, user);
+      const temporaryUser = new TemporaryUserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
       // 이전에 전화번호로 전송된 인증코드가 레디스에 저장되어 있다고 가정.
       const authCode = '123456';
       const phoneNumber = '01012345678';
-      redisClient.set(`userId:${user.id}-authCode:${authCode}`, phoneNumber, 'EX', 300);
-
+      redisClient.set(
+        `userId:${temporaryUser.id}-authCode:${authCode}`,
+        phoneNumber,
+        'EX',
+        appEnv.redisPhoneNumberAuthCodeExpirationTime,
+      );
+      /** main test. */
       const res = await request(app.getHttpServer())
         .post(`/user/register/phone-number/auth-code/confirm`)
         .set('Authorization', `Bearer ${userAccessToken}`)
@@ -196,22 +172,23 @@ describe('E2E u-2 register test', () => {
     });
 
     it('전화번호로 인증코드 확인 실패 시', async () => {
-      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      user.phoneNumber = null;
-      await entityEntityManager.save(UserEntity, user);
+      /** pre condition. */
+      const temporaryUser = new TemporaryUserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
       // 이전에 전화번호로 전송된 인증코드가 레디스에 저장되어 있다고 가정.
       const authCode = '123456';
       const phoneNumber = '01012345678';
-      redisClient.set(`userId:${user.id}-authCode:${authCode}`, phoneNumber, 'EX', 300);
-
+      redisClient.set(
+        `userId:${temporaryUser.id}-authCode:${authCode}`,
+        phoneNumber,
+        'EX',
+        appEnv.redisPhoneNumberAuthCodeExpirationTime,
+      );
+      /** main test. */
       const wrongCode = '999999';
       const res = await request(app.getHttpServer())
         .post(`/user/register/phone-number/auth-code/confirm`)
@@ -224,34 +201,31 @@ describe('E2E u-2 register test', () => {
 
   describe('u-2-5 PATCH /user/register ------------------------------------------------', () => {
     it('유저 등록 성공 시', async () => {
+      /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
-      const ret = await Promise.all(
+      await Promise.all(
         policyTypes.map((type) => {
-          return policyAppService.createPolicy({
-            policyCreateDto: {
-              type: type,
-              isMandatory: true,
-              title: `${type} 제목`,
-              content: `${type} 내용`,
-            },
+          return entityEntityManager.save(PolicyEntity, {
+            id: ulid(),
+            type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+            version: 1,
+            createdAt: new Date(),
           });
         }),
       );
-
-      const user = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      user.phoneNumber = '01012345678';
-      await entityEntityManager.save(UserEntity, user);
-      const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+      const temporaryUser = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
+      await entityEntityManager.save(UserEntity, temporaryUser);
+      const temporaryUserAccessToken = jwtService.sign(
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .patch('/user/register')
-        .set('Authorization', `Bearer ${userAccessToken}`)
+        .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
         .send({
           user: {
             nickname: 'nickname',
@@ -265,46 +239,36 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 닉네임 중복', async () => {
+      /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return policyAppService.createPolicy({
-            policyCreateDto: {
-              type: type,
-              isMandatory: true,
-              title: `${type} 제목`,
-              content: `${type} 내용`,
-            },
+          return entityEntityManager.save(PolicyEntity, {
+            id: ulid(),
+            type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+            version: 1,
+            createdAt: new Date(),
           });
         }),
       );
-
-      const ohterUser = typia.random<Omit<IUser, 'createdAt' | 'updatedAt'>>();
-      ohterUser.id = ulid();
-      ohterUser.role = 'TEMPORARY_USER';
-      ohterUser.birth = '19980101';
-      ohterUser.phoneNumber = '01012345678';
-      ohterUser.nickname = 'existingNickname';
-      await entityEntityManager.save(UserEntity, ohterUser);
-
-      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      user.phoneNumber = '01012345678';
-      user.nickname = null;
+      const otherUser = new UserDummyBuilder().setNickname('otherUserNickname').build();
+      await entityEntityManager.save(UserEntity, otherUser);
+      const user = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
       await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .patch('/user/register')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send({
           user: {
-            nickname: ohterUser.nickname,
+            nickname: otherUser.nickname,
             birth: '19980101',
             belt: '블랙',
             gender: 'MALE',
@@ -315,32 +279,28 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 필수 약관 미동의', async () => {
+      /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return policyAppService.createPolicy({
-            policyCreateDto: {
-              type: type,
-              isMandatory: true,
-              title: `${type} 제목`,
-              content: `${type} 내용`,
-            },
+          return entityEntityManager.save(PolicyEntity, {
+            id: ulid(),
+            type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+            version: 1,
+            createdAt: new Date(),
           });
         }),
       );
-
-      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      user.phoneNumber = '01012345678';
-      user.nickname = null;
+      const user = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
       await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .patch('/user/register')
         .set('Authorization', `Bearer ${userAccessToken}`)
@@ -358,31 +318,28 @@ describe('E2E u-2 register test', () => {
     });
 
     it('유저 등록 실패 시 - 전화번호 미등록', async () => {
+      /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
       await Promise.all(
         policyTypes.map((type) => {
-          return policyAppService.createPolicy({
-            policyCreateDto: {
-              type: type,
-              isMandatory: true,
-              title: `${type} 제목`,
-              content: `${type} 내용`,
-            },
+          return entityEntityManager.save(PolicyEntity, {
+            id: ulid(),
+            type,
+            isMandatory: true,
+            title: `${type} 제목`,
+            content: `${type} 내용`,
+            version: 1,
+            createdAt: new Date(),
           });
         }),
       );
-
-      const user = typia.random<Omit<ITemporaryUser, 'createdAt' | 'updatedAt'>>();
-      user.id = ulid();
-      user.role = 'TEMPORARY_USER';
-      user.birth = '19980101';
-      user.phoneNumber = null;
+      const user = new TemporaryUserDummyBuilder().build();
       await entityEntityManager.save(UserEntity, user);
       const userAccessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-
+      /** main test. */
       const res = await request(app.getHttpServer())
         .patch('/user/register')
         .set('Authorization', `Bearer ${userAccessToken}`)

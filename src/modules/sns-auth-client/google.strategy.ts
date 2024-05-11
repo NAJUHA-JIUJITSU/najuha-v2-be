@@ -5,13 +5,13 @@ import { IGoogleUserData } from 'src/modules/sns-auth-client/interface/google-us
 import { BusinessException, SnsAuthErrors } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 import { ISnsAuthStrategy } from './interface/sns-auth.stratege.interface';
-import { IValidatedUserData } from './interface/validated-user-data.interface';
+import { ISnsAuthValidatedUserData } from './interface/validated-user-data.interface';
 
 @Injectable()
 export class GoogleStrategy implements ISnsAuthStrategy {
   constructor(private readonly httpService: HttpService) {}
 
-  async validate(snsAuthCode: string): Promise<IValidatedUserData> {
+  async validate(snsAuthCode: string): Promise<ISnsAuthValidatedUserData> {
     try {
       const accessToken = await this.getAccessToken(snsAuthCode);
       const userData = await this.getUserData(accessToken);
@@ -54,8 +54,8 @@ export class GoogleStrategy implements ISnsAuthStrategy {
     return response.data;
   }
 
-  formatUserData(data: any): IValidatedUserData {
-    const dto: IValidatedUserData = {
+  formatUserData(data: any): ISnsAuthValidatedUserData {
+    const dto: ISnsAuthValidatedUserData = {
       snsAuthProvider: 'GOOGLE',
       snsId: data.sub,
       name: data.name.replace(/\s/g, ''),
