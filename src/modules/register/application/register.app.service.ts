@@ -57,13 +57,13 @@ export class RegisterAppService {
     return { isDuplicated: true };
   }
 
-  // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
+  // todo!: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
   async sendPhoneNumberAuthCode({
     userId,
     phoneNumber,
   }: SendPhoneNumberAuthCodeParam): Promise<SendPhoneNumberAuthCodeRet> {
     const phoneNumberAuthCode = await this.phoneAuthCodeProvider.issuePhoneNumberAuthCode(userId, phoneNumber);
-    // TODO: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
+    // todo!: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
     return { phoneNumberAuthCode };
   }
 

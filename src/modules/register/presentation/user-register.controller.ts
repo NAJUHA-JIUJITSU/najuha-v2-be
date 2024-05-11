@@ -73,7 +73,7 @@ export class UserRegisterController {
     @Req() req: Request,
     @TypedBody() body: SendPhoneNumberAuthCodeReqBody,
   ): Promise<ResponseForm<SendPhoneNumberAuthCodeRes>> {
-    // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
+    // todo!: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
     return createResponseForm(
       await this.RegisterAppService.sendPhoneNumberAuthCode({
         userId: req['userId'],

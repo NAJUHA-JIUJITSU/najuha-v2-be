@@ -7,7 +7,6 @@ import { ParticipationDivisionInfoSnapshotModel } from './participation-division
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 
-// TODO: 에러 표준화
 export class ApplicationModel {
   private readonly id: IApplication['id'];
   private readonly type: IApplication['type'];
@@ -88,12 +87,14 @@ export class ApplicationModel {
 
   // READY Status -------------------------------------------------------------
   delete() {
+    // todo!!: 에러 표준화
     if (this.status !== 'READY') throw new Error('Application status is not READY');
     this.deletedAt = new Date();
   }
 
   // DONE Status --------------------------------------------------------------
   addPlayerSnapshot(newPlayerSnapshot: PlayerSnapshotModel) {
+    // todo!!: 에러 표준화
     if (this.status !== 'DONE') throw new Error('Application status is not DONE');
     this.playerSnapshots.push(newPlayerSnapshot);
   }
@@ -101,6 +102,7 @@ export class ApplicationModel {
   addParticipationDivisionInfoSnapshots(
     newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[],
   ) {
+    // todo!!: 에러 표준화
     if (this.status !== 'DONE') throw new Error('Application status is not DONE');
     newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
       const participationDivisionInfo = this.participationDivisionInfos.find(
@@ -113,6 +115,7 @@ export class ApplicationModel {
   }
 
   updateAdditionalInfos(additionalInfoUpdateDtos: IAdditionalInfoUpdateDto[]) {
+    // todo!!: 에러 표준화
     if (this.status !== 'DONE') throw new Error('Application status is not DONE');
     additionalInfoUpdateDtos.forEach((updateDto) => {
       const additionalInfo = this.additionaInfos.find((info) => info.getType() === updateDto.type);

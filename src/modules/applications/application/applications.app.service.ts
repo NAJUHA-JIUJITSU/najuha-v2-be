@@ -180,7 +180,7 @@ export class ApplicationsAppService {
     newApplication.validateApplicationType(user.toEntity());
     newApplication.validateDivisionSuitability();
     oldApplication.delete();
-    // TODO: Transaction
+    // todo!!: Transaction
     await this.applicationRepository.save(oldApplication.toEntity());
     return { application: await this.applicationRepository.save(newApplication.toEntity()) };
   }

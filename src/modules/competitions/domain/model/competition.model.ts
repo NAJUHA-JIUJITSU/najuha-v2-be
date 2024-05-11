@@ -99,7 +99,7 @@ export class CompetitionModel {
     return this.id;
   }
 
-  // TODO: this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1]; undefined 안나오나?
+  // todo!!!: this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1]; undefined 안나오나?
   getLatestEarlybirdDiscountSnapshot() {
     return this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
   }

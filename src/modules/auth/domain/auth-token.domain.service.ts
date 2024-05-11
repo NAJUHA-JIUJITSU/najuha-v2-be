@@ -69,7 +69,7 @@ export class AuthTokenDomainService {
     return payload;
   }
 
-  // TODO: 지워야함
+  // todo!: 지워야함
   private async testPrintAllRedisData(message: string) {
     console.log(`[TEST REDIS] ${message}--------------------------------`);
 

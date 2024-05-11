@@ -7,13 +7,9 @@ import appEnv from 'src/common/app-env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-
-  app.use(cors()); // TODO: cors 설정 옵션 확인하기
-
+  app.use(cors()); // todo!: cors 설정 옵션 확인하기
   SwaggerSetting(app);
-
   await app.listen(appEnv.appPort);
 }
 bootstrap();

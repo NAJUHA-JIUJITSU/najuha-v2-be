@@ -40,7 +40,7 @@ export class AuthAppService {
       userId: userEntity.id,
       userRole: userEntity.role,
     });
-    // TODO: 지우기
+    // todo!: 지우기
     console.log('authTokens', authTokens);
     return { authTokens };
   }
