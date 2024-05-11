@@ -4463,7 +4463,7 @@
           "competitions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ICompetitionWithEarlybirdDiscountSnapshots"
+              "$ref": "#/components/schemas/ICompetitionForFind"
             }
           },
           "nextPage": {
@@ -4475,7 +4475,7 @@
           "competitions"
         ]
       },
-      "ICompetitionWithEarlybirdDiscountSnapshots": {
+      "ICompetitionForFind": {
         "type": "object",
         "properties": {
           "id": {
@@ -4784,7 +4784,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/RequiredICompetition"
+            "$ref": "#/components/schemas/ICompetition"
           }
         },
         "nullable": false,
@@ -4792,7 +4792,7 @@
           "competition"
         ]
       },
-      "RequiredICompetition": {
+      "ICompetition": {
         "type": "object",
         "properties": {
           "id": {
@@ -5041,8 +5041,7 @@
           "earlybirdDiscountSnapshots",
           "combinationDiscountSnapshots",
           "requiredAdditionalInfos"
-        ],
-        "description": "Make all properties in T required"
+        ]
       },
       "IDivision": {
         "type": "object",
@@ -5977,257 +5976,6 @@
         "nullable": false,
         "required": [
           "competition"
-        ]
-      },
-      "ICompetition": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "maxLength": 26,
-            "minLength": 26,
-            "title": "ULID",
-            "description": "ULID."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "title": "대회명",
-            "description": "대회명."
-          },
-          "address": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "title": "대회가 열리는 위치 (도로명 주소)",
-            "description": "대회가 열리는 위치 (도로명 주소)."
-          },
-          "competitionDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "대회 날짜",
-            "description": "대회 날짜."
-          },
-          "registrationStartDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "참가 신청 시작일",
-            "description": "참가 신청 시작일."
-          },
-          "registrationEndDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "참가 신청 마감일",
-            "description": "참가 신청 마감일."
-          },
-          "refundDeadlineDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "환불 가능 기간 마감일",
-            "description": "환불 가능 기간 마감일."
-          },
-          "soloRegistrationAdjustmentStartDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "단독 참가자의 부문 조정 시작일",
-            "description": "단독 참가자의 부문 조정 시작일.\n- 부문에 참가자가 한 명만 있는 경우, 해당 참가자를 다른 체급이나 부문으로 조정할 수 있는 기간의 시작을 나타냅니다."
-          },
-          "soloRegistrationAdjustmentEndDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "단독 참가자의 부문 조정 마감일",
-            "description": "단독 참가자의 부문 조정 마감일."
-          },
-          "registrationListOpenDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "참가자 명단 공개일",
-            "description": "참가자 명단 공개일."
-          },
-          "bracketOpenDate": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "대진표 공개일",
-            "description": "대진표 공개일."
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 10000,
-            "minLength": 1,
-            "title": "대회 상세 정보",
-            "description": "대회 상세 정보."
-          },
-          "isPartnership": {
-            "type": "boolean",
-            "title": "협약 대회 여부",
-            "description": "협약 대회 여부."
-          },
-          "viewCount": {
-            "type": "integer",
-            "title": "조회수",
-            "description": "조회수."
-          },
-          "posterImgUrlKey": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "nullable": true,
-            "title": "대회 포스터 이미지 URL Key",
-            "description": "대회 포스터 이미지 URL Key."
-          },
-          "status": {
-            "$ref": "#/components/schemas/CompetitionStatus",
-            "title": "대회의 상태",
-            "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          },
-          "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
-            "title": "UpdatedAt",
-            "description": "UpdatedAt."
-          },
-          "divisions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IDivision"
-            },
-            "title": "대회 부문 정보",
-            "description": "대회 부문 정보."
-          },
-          "earlybirdDiscountSnapshots": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IEarlybirdDiscountSnapshot"
-            },
-            "title": "얼리버드 할인 정보",
-            "description": "얼리버드 할인 정보.\n- 배열의 길이가 0이면 얼리버드 할인이 없는 대회입니다.\n- 배열의 마지막 요소가 현재 적용중인 얼리버드 할인 정보입니다."
-          },
-          "combinationDiscountSnapshots": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICombinationDiscountSnapshot"
-            },
-            "title": "조합 할인 정보",
-            "description": "조합 할인 정보.\n- 배열의 길이가 0이면 조합 할인이 없는 대회입니다.\n- 배열의 마지막 요소가 현재 적용중인 조합 할인 정보입니다."
-          },
-          "requiredAdditionalInfos": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IRequiredAdditionalInfo"
-            },
-            "title": "대회 신청시 추가저으로 필요로하는 정보를 정의합니다",
-            "description": "대회 신청시 추가저으로 필요로하는 정보를 정의합니다.\n- ex) 주민번호, 주소"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "title",
-          "address",
-          "competitionDate",
-          "registrationStartDate",
-          "registrationEndDate",
-          "refundDeadlineDate",
-          "soloRegistrationAdjustmentStartDate",
-          "soloRegistrationAdjustmentEndDate",
-          "registrationListOpenDate",
-          "bracketOpenDate",
-          "description",
-          "isPartnership",
-          "viewCount",
-          "posterImgUrlKey",
-          "status",
-          "createdAt",
-          "updatedAt",
-          "divisions",
-          "earlybirdDiscountSnapshots",
-          "combinationDiscountSnapshots",
-          "requiredAdditionalInfos"
         ]
       },
       "UpdateCompetitionStatusReqBody": {

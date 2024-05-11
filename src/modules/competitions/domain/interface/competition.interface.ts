@@ -97,9 +97,8 @@ export interface ICompetitionWithoutRelations
     'divisions' | 'earlybirdDiscountSnapshots' | 'combinationDiscountSnapshots' | 'requiredAdditionalInfos'
   > {}
 
-export interface ICompetitionWithEarlybirdDiscountSnapshots
-  extends ICompetitionWithoutRelations,
-    Required<Pick<ICompetition, 'earlybirdDiscountSnapshots'>> {}
+export interface ICompetitionForFind
+  extends Omit<ICompetition, 'divisions' | 'combinationDiscountSnapshots' | 'requiredAdditionalInfos'> {}
 
 export interface ICompetitionCreateDto
   extends Partial<

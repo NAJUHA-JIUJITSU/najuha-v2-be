@@ -3,7 +3,7 @@ import {
   ICompetitionWithoutRelations,
   ICompetition,
   ICompetitionCreateDto,
-  ICompetitionWithEarlybirdDiscountSnapshots,
+  ICompetitionForFind,
   ICompetitionQueryOptions,
   ICompetitionUpdateDto,
 } from '../domain/interface/competition.interface';
@@ -76,12 +76,12 @@ export interface UpdateCompetitionStatusRet {
 }
 
 export interface FindCompetitionsRet {
-  competitions: ICompetitionWithEarlybirdDiscountSnapshots[];
+  competitions: ICompetitionForFind[];
   nextPage?: number;
 }
 
 export interface GetCompetitionRet {
-  competition: Required<ICompetition>;
+  competition: ICompetition;
 }
 
 export interface CreateCompetitionDivisionsRet {
