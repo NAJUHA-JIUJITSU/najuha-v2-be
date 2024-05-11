@@ -4375,13 +4375,13 @@
           },
           "page": {
             "type": "number",
-            "description": "- 현제 페이지 번호입니다. default: 0"
+            "description": "현제 페이지 번호입니다. default: 0"
           },
           "limit": {
             "type": "integer",
             "maximum": 100,
             "minimum": 1,
-            "description": "- 한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 100"
+            "description": "한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 100"
           },
           "sortOption": {
             "type": "string",
@@ -4390,7 +4390,7 @@
               "일자순",
               "조회순"
             ],
-            "description": "- 대회를 정렬하는 옵션입니다. default: '일자순'\n- 일자순: 대회 날짜 순으로 정렬\n- 조회순: 조회수 순으로 정렬\n- 마감임박순: 참가 신청 마감일이 가까운 순으로 정렬"
+            "description": "대회를 정렬하는 옵션입니다. default: '일자순'\n- 일자순: 대회 날짜 순으로 정렬\n- 조회순: 조회수 순으로 정렬\n- 마감임박순: 참가 신청 마감일이 가까운 순으로 정렬"
           },
           "locationFilter": {
             "type": "string",
@@ -4427,7 +4427,7 @@
                 "얼리버드"
               ]
             },
-            "description": "- 태그를 기준으로 필터링합니다. 중복 선택 가능합니다\n- 간편결제: 간편결제 가능한 대회 (협약 대회)\n- 얼리버드: 얼리버드 할인 기간 중인 대회\n- 신청가능: 참가 신청 가능한 대회\n- 단독출전조정: 단독 참가자의 부문 조정 기간 중인 대회"
+            "description": "태그를 기준으로 필터링합니다. 중복 선택 가능합니다\n- 간편결제: 간편결제 가능한 대회 (협약 대회)\n- 얼리버드: 얼리버드 할인 기간 중인 대회\n- 신청가능: 참가 신청 가능한 대회\n- 단독출전조정: 단독 참가자의 부문 조정 기간 중인 대회"
           }
         },
         "nullable": false
@@ -4527,8 +4527,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대회 날짜",
-            "description": "- 대회 날짜."
+            "title": "대회 날짜",
+            "description": "대회 날짜."
           },
           "registrationStartDate": {
             "oneOf": [
@@ -4543,7 +4543,8 @@
                 "nullable": true
               }
             ],
-            "description": "- 참가 신청 시작일"
+            "title": "참가 신청 시작일",
+            "description": "참가 신청 시작일."
           },
           "registrationEndDate": {
             "oneOf": [
@@ -4558,8 +4559,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가 신청 마감일",
-            "description": "- 참가 신청 마감일."
+            "title": "참가 신청 마감일",
+            "description": "참가 신청 마감일."
           },
           "refundDeadlineDate": {
             "oneOf": [
@@ -4574,8 +4575,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 환불 가능 기간 마감일",
-            "description": "- 환불 가능 기간 마감일."
+            "title": "환불 가능 기간 마감일",
+            "description": "환불 가능 기간 마감일."
           },
           "soloRegistrationAdjustmentStartDate": {
             "oneOf": [
@@ -4606,8 +4607,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 단독 참가자의 부문 조정 마감일",
-            "description": "- 단독 참가자의 부문 조정 마감일."
+            "title": "단독 참가자의 부문 조정 마감일",
+            "description": "단독 참가자의 부문 조정 마감일."
           },
           "registrationListOpenDate": {
             "oneOf": [
@@ -4622,8 +4623,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가자 명단 공개일",
-            "description": "- 참가자 명단 공개일."
+            "title": "참가자 명단 공개일",
+            "description": "참가자 명단 공개일."
           },
           "bracketOpenDate": {
             "oneOf": [
@@ -4638,8 +4639,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대진표 공개일",
-            "description": "- 대진표 공개일."
+            "title": "대진표 공개일",
+            "description": "대진표 공개일."
           },
           "description": {
             "type": "string",
@@ -4650,8 +4651,8 @@
           },
           "isPartnership": {
             "type": "boolean",
-            "title": "- 협약 대회 여부",
-            "description": "- 협약 대회 여부."
+            "title": "협약 대회 여부",
+            "description": "협약 대회 여부."
           },
           "viewCount": {
             "type": "integer",
@@ -4828,8 +4829,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대회 날짜",
-            "description": "- 대회 날짜."
+            "title": "대회 날짜",
+            "description": "대회 날짜."
           },
           "registrationStartDate": {
             "oneOf": [
@@ -4844,7 +4845,8 @@
                 "nullable": true
               }
             ],
-            "description": "- 참가 신청 시작일"
+            "title": "참가 신청 시작일",
+            "description": "참가 신청 시작일."
           },
           "registrationEndDate": {
             "oneOf": [
@@ -4859,8 +4861,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가 신청 마감일",
-            "description": "- 참가 신청 마감일."
+            "title": "참가 신청 마감일",
+            "description": "참가 신청 마감일."
           },
           "refundDeadlineDate": {
             "oneOf": [
@@ -4875,8 +4877,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 환불 가능 기간 마감일",
-            "description": "- 환불 가능 기간 마감일."
+            "title": "환불 가능 기간 마감일",
+            "description": "환불 가능 기간 마감일."
           },
           "soloRegistrationAdjustmentStartDate": {
             "oneOf": [
@@ -4907,8 +4909,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 단독 참가자의 부문 조정 마감일",
-            "description": "- 단독 참가자의 부문 조정 마감일."
+            "title": "단독 참가자의 부문 조정 마감일",
+            "description": "단독 참가자의 부문 조정 마감일."
           },
           "registrationListOpenDate": {
             "oneOf": [
@@ -4923,8 +4925,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가자 명단 공개일",
-            "description": "- 참가자 명단 공개일."
+            "title": "참가자 명단 공개일",
+            "description": "참가자 명단 공개일."
           },
           "bracketOpenDate": {
             "oneOf": [
@@ -4939,8 +4941,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대진표 공개일",
-            "description": "- 대진표 공개일."
+            "title": "대진표 공개일",
+            "description": "대진표 공개일."
           },
           "description": {
             "type": "string",
@@ -4951,8 +4953,8 @@
           },
           "isPartnership": {
             "type": "boolean",
-            "title": "- 협약 대회 여부",
-            "description": "- 협약 대회 여부."
+            "title": "협약 대회 여부",
+            "description": "협약 대회 여부."
           },
           "viewCount": {
             "type": "integer",
@@ -5398,8 +5400,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대회 날짜",
-            "description": "- 대회 날짜."
+            "title": "대회 날짜",
+            "description": "대회 날짜."
           },
           "registrationStartDate": {
             "oneOf": [
@@ -5414,7 +5416,8 @@
                 "nullable": true
               }
             ],
-            "description": "- 참가 신청 시작일"
+            "title": "참가 신청 시작일",
+            "description": "참가 신청 시작일."
           },
           "registrationEndDate": {
             "oneOf": [
@@ -5429,8 +5432,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가 신청 마감일",
-            "description": "- 참가 신청 마감일."
+            "title": "참가 신청 마감일",
+            "description": "참가 신청 마감일."
           },
           "refundDeadlineDate": {
             "oneOf": [
@@ -5445,8 +5448,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 환불 가능 기간 마감일",
-            "description": "- 환불 가능 기간 마감일."
+            "title": "환불 가능 기간 마감일",
+            "description": "환불 가능 기간 마감일."
           },
           "soloRegistrationAdjustmentStartDate": {
             "oneOf": [
@@ -5477,8 +5480,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 단독 참가자의 부문 조정 마감일",
-            "description": "- 단독 참가자의 부문 조정 마감일."
+            "title": "단독 참가자의 부문 조정 마감일",
+            "description": "단독 참가자의 부문 조정 마감일."
           },
           "registrationListOpenDate": {
             "oneOf": [
@@ -5493,8 +5496,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가자 명단 공개일",
-            "description": "- 참가자 명단 공개일."
+            "title": "참가자 명단 공개일",
+            "description": "참가자 명단 공개일."
           },
           "bracketOpenDate": {
             "oneOf": [
@@ -5509,8 +5512,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대진표 공개일",
-            "description": "- 대진표 공개일."
+            "title": "대진표 공개일",
+            "description": "대진표 공개일."
           },
           "description": {
             "type": "string",
@@ -5521,8 +5524,8 @@
           },
           "isPartnership": {
             "type": "boolean",
-            "title": "- 협약 대회 여부",
-            "description": "- 협약 대회 여부."
+            "title": "협약 대회 여부",
+            "description": "협약 대회 여부."
           }
         },
         "nullable": false
@@ -5616,8 +5619,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대회 날짜",
-            "description": "- 대회 날짜."
+            "title": "대회 날짜",
+            "description": "대회 날짜."
           },
           "registrationStartDate": {
             "oneOf": [
@@ -5632,7 +5635,8 @@
                 "nullable": true
               }
             ],
-            "description": "- 참가 신청 시작일"
+            "title": "참가 신청 시작일",
+            "description": "참가 신청 시작일."
           },
           "registrationEndDate": {
             "oneOf": [
@@ -5647,8 +5651,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가 신청 마감일",
-            "description": "- 참가 신청 마감일."
+            "title": "참가 신청 마감일",
+            "description": "참가 신청 마감일."
           },
           "refundDeadlineDate": {
             "oneOf": [
@@ -5663,8 +5667,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 환불 가능 기간 마감일",
-            "description": "- 환불 가능 기간 마감일."
+            "title": "환불 가능 기간 마감일",
+            "description": "환불 가능 기간 마감일."
           },
           "soloRegistrationAdjustmentStartDate": {
             "oneOf": [
@@ -5695,8 +5699,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 단독 참가자의 부문 조정 마감일",
-            "description": "- 단독 참가자의 부문 조정 마감일."
+            "title": "단독 참가자의 부문 조정 마감일",
+            "description": "단독 참가자의 부문 조정 마감일."
           },
           "registrationListOpenDate": {
             "oneOf": [
@@ -5711,8 +5715,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가자 명단 공개일",
-            "description": "- 참가자 명단 공개일."
+            "title": "참가자 명단 공개일",
+            "description": "참가자 명단 공개일."
           },
           "bracketOpenDate": {
             "oneOf": [
@@ -5727,8 +5731,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대진표 공개일",
-            "description": "- 대진표 공개일."
+            "title": "대진표 공개일",
+            "description": "대진표 공개일."
           },
           "description": {
             "type": "string",
@@ -5739,8 +5743,8 @@
           },
           "isPartnership": {
             "type": "boolean",
-            "title": "- 협약 대회 여부",
-            "description": "- 협약 대회 여부."
+            "title": "협약 대회 여부",
+            "description": "협약 대회 여부."
           },
           "viewCount": {
             "type": "integer",
@@ -5808,8 +5812,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대회 날짜",
-            "description": "- 대회 날짜."
+            "title": "대회 날짜",
+            "description": "대회 날짜."
           },
           "registrationStartDate": {
             "oneOf": [
@@ -5824,7 +5828,8 @@
                 "nullable": true
               }
             ],
-            "description": "- 참가 신청 시작일"
+            "title": "참가 신청 시작일",
+            "description": "참가 신청 시작일."
           },
           "registrationEndDate": {
             "oneOf": [
@@ -5839,8 +5844,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가 신청 마감일",
-            "description": "- 참가 신청 마감일."
+            "title": "참가 신청 마감일",
+            "description": "참가 신청 마감일."
           },
           "refundDeadlineDate": {
             "oneOf": [
@@ -5855,8 +5860,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 환불 가능 기간 마감일",
-            "description": "- 환불 가능 기간 마감일."
+            "title": "환불 가능 기간 마감일",
+            "description": "환불 가능 기간 마감일."
           },
           "soloRegistrationAdjustmentStartDate": {
             "oneOf": [
@@ -5887,8 +5892,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 단독 참가자의 부문 조정 마감일",
-            "description": "- 단독 참가자의 부문 조정 마감일."
+            "title": "단독 참가자의 부문 조정 마감일",
+            "description": "단독 참가자의 부문 조정 마감일."
           },
           "registrationListOpenDate": {
             "oneOf": [
@@ -5903,8 +5908,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가자 명단 공개일",
-            "description": "- 참가자 명단 공개일."
+            "title": "참가자 명단 공개일",
+            "description": "참가자 명단 공개일."
           },
           "bracketOpenDate": {
             "oneOf": [
@@ -5919,8 +5924,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대진표 공개일",
-            "description": "- 대진표 공개일."
+            "title": "대진표 공개일",
+            "description": "대진표 공개일."
           },
           "description": {
             "type": "string",
@@ -5931,8 +5936,8 @@
           },
           "isPartnership": {
             "type": "boolean",
-            "title": "- 협약 대회 여부",
-            "description": "- 협약 대회 여부."
+            "title": "협약 대회 여부",
+            "description": "협약 대회 여부."
           }
         },
         "nullable": false
@@ -6011,8 +6016,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대회 날짜",
-            "description": "- 대회 날짜."
+            "title": "대회 날짜",
+            "description": "대회 날짜."
           },
           "registrationStartDate": {
             "oneOf": [
@@ -6027,7 +6032,8 @@
                 "nullable": true
               }
             ],
-            "description": "- 참가 신청 시작일"
+            "title": "참가 신청 시작일",
+            "description": "참가 신청 시작일."
           },
           "registrationEndDate": {
             "oneOf": [
@@ -6042,8 +6048,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가 신청 마감일",
-            "description": "- 참가 신청 마감일."
+            "title": "참가 신청 마감일",
+            "description": "참가 신청 마감일."
           },
           "refundDeadlineDate": {
             "oneOf": [
@@ -6058,8 +6064,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 환불 가능 기간 마감일",
-            "description": "- 환불 가능 기간 마감일."
+            "title": "환불 가능 기간 마감일",
+            "description": "환불 가능 기간 마감일."
           },
           "soloRegistrationAdjustmentStartDate": {
             "oneOf": [
@@ -6090,8 +6096,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 단독 참가자의 부문 조정 마감일",
-            "description": "- 단독 참가자의 부문 조정 마감일."
+            "title": "단독 참가자의 부문 조정 마감일",
+            "description": "단독 참가자의 부문 조정 마감일."
           },
           "registrationListOpenDate": {
             "oneOf": [
@@ -6106,8 +6112,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 참가자 명단 공개일",
-            "description": "- 참가자 명단 공개일."
+            "title": "참가자 명단 공개일",
+            "description": "참가자 명단 공개일."
           },
           "bracketOpenDate": {
             "oneOf": [
@@ -6122,8 +6128,8 @@
                 "nullable": true
               }
             ],
-            "title": "- 대진표 공개일",
-            "description": "- 대진표 공개일."
+            "title": "대진표 공개일",
+            "description": "대진표 공개일."
           },
           "description": {
             "type": "string",
@@ -6134,8 +6140,8 @@
           },
           "isPartnership": {
             "type": "boolean",
-            "title": "- 협약 대회 여부",
-            "description": "- 협약 대회 여부."
+            "title": "협약 대회 여부",
+            "description": "협약 대회 여부."
           },
           "viewCount": {
             "type": "integer",

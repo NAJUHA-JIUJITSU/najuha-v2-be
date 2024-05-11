@@ -15,16 +15,16 @@ export interface ICompetition {
   /** 대회가 열리는 위치 (도로명 주소).*/
   address: string & tags.MinLength<1> & tags.MaxLength<256>;
 
-  /** - 대회 날짜. */
+  /** 대회 날짜. */
   competitionDate: null | DateOrStringDate;
 
-  /** - 참가 신청 시작일 */
+  /** 참가 신청 시작일.  */
   registrationStartDate: null | DateOrStringDate;
 
-  /** - 참가 신청 마감일. */
+  /** 참가 신청 마감일. */
   registrationEndDate: null | DateOrStringDate;
 
-  /** - 환불 가능 기간 마감일. */
+  /** 환불 가능 기간 마감일. */
   refundDeadlineDate: null | DateOrStringDate;
 
   /**
@@ -33,19 +33,19 @@ export interface ICompetition {
    */
   soloRegistrationAdjustmentStartDate: null | DateOrStringDate;
 
-  /** - 단독 참가자의 부문 조정 마감일. */
+  /** 단독 참가자의 부문 조정 마감일. */
   soloRegistrationAdjustmentEndDate: null | DateOrStringDate;
 
-  /** - 참가자 명단 공개일. */
+  /** 참가자 명단 공개일. */
   registrationListOpenDate: null | DateOrStringDate;
 
-  /** - 대진표 공개일. */
+  /** 대진표 공개일. */
   bracketOpenDate: null | DateOrStringDate;
 
   /** 대회 상세 정보. */
   description: string & tags.MinLength<1> & tags.MaxLength<10000>;
 
-  /** - 협약 대회 여부. */
+  /** 협약 대회 여부. */
   isPartnership: boolean;
 
   /** 조회수. */
@@ -141,17 +141,17 @@ export interface ICompetitionUpdateDto
   > {}
 
 export interface ICompetitionQueryOptions {
-  /** - 현제 페이지 번호입니다. default: 0 */
+  /** 현제 페이지 번호입니다. default: 0 */
   page: number;
 
-  /** - 한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 100 */
+  /** 한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 100 */
   limit: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<100>;
 
-  /** - YYYY-MM 형식의 날짜 필터를 Date로 파싱한 결과입니다. default: Now */
+  /** YYYY-MM 형식의 날짜 필터를 Date로 파싱한 결과입니다. default: Now */
   parsedDateFilter: Date;
 
   /**
-   * - 대회를 정렬하는 옵션입니다. default: '일자순'
+   * 대회를 정렬하는 옵션입니다. default: '일자순'
    * - 일자순: 대회 날짜 순으로 정렬
    * - 조회순: 조회수 순으로 정렬
    * - 마감임박순: 참가 신청 마감일이 가까운 순으로 정렬
@@ -162,7 +162,7 @@ export interface ICompetitionQueryOptions {
   locationFilter?: CompetitionLocationFilter;
 
   /**
-   * - 태그를 기준으로 필터링합니다. 중복 선택 가능합니다
+   * 태그를 기준으로 필터링합니다. 중복 선택 가능합니다
    * - 간편결제: 간편결제 가능한 대회 (협약 대회)
    * - 얼리버드: 얼리버드 할인 기간 중인 대회
    * - 신청가능: 참가 신청 가능한 대회
