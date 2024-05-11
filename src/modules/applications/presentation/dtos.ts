@@ -12,20 +12,20 @@ import { IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from '../domain/in
 import { IParticipationDivisionInfoUpdateDto } from '../domain/interface/participation-division-info.interface';
 
 // Presentation Layer Request Dto ---------------------------------------------------
-
 export interface CreateApplicationReqBody {
+  applicationType: IApplication['type'];
   competitionId: ICompetition['id'];
   /**
    * - Division IDs to participate.
    * @minItems 1
    */
   participationDivisionIds: IDivision['id'][];
-  applicationType: IApplication['type'];
   playerSnapshotCreateDto: IPlayerSnapshotCreateDto;
   additionalInfoCreateDtos?: IAdditionalInfoCreateDto[];
 }
 
 export interface UpdateReadyApplicationReqBody {
+  applicationType: IApplication['type'];
   /**
    * - Division IDs to participate.
    * @minItems 1

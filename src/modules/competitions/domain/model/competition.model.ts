@@ -99,6 +99,7 @@ export class CompetitionModel {
     return this.id;
   }
 
+  // TODO: this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1]; undefined 안나오나?
   getLatestEarlybirdDiscountSnapshot() {
     return this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
   }
@@ -181,48 +182,29 @@ export class CompetitionModel {
     const requiredAdditionalInfo = this.requiredAdditionalInfos.find(
       (info) => info.id === requiredAdditionalInfoUpdateDto.id,
     );
-    if (!requiredAdditionalInfo) {
+    if (!requiredAdditionalInfo)
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
-    }
     requiredAdditionalInfo.update(requiredAdditionalInfoUpdateDto);
   }
 
   deleteRequiredAdditionalInfo(requiredAdditionalInfoId: RequiredAdditionalInfoModel['id']) {
     const requiredAdditionalInfo = this.requiredAdditionalInfos.find((info) => info.id === requiredAdditionalInfoId);
-    if (!requiredAdditionalInfo) {
+    if (!requiredAdditionalInfo)
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
-    }
     requiredAdditionalInfo.delete();
   }
 
   validateApplicationPeriod(now = new Date()) {
-    // TODO: null 값인지 확인
-    if (this.registrationStartDate && now < this.registrationStartDate) {
+    if (this.registrationStartDate && now < this.registrationStartDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,
         `registrationStartDate: ${this.registrationStartDate}`,
       );
-    }
-    if (this.registrationEndDate && now > this.registrationEndDate) {
+    if (this.registrationEndDate && now > this.registrationEndDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_ENDED,
         `registrationEndDate: ${this.registrationEndDate}`,
       );
-    }
-  }
-
-  validateParticipationAbleDivisions(participationDivisionIds: IDivision['id'][]) {
-    const divisions = this.divisions.filter((division) => participationDivisionIds.includes(division.id));
-    const notFoundDivisionIds = participationDivisionIds.filter(
-      (divisionId) => !divisions.some((division) => division.id === divisionId),
-    );
-    if (notFoundDivisionIds.length > 0) {
-      throw new BusinessException(
-        ApplicationsErrors.APPLICATIONS_DIVISION_NOT_FOUND,
-        `Not found DivisionIds: ${notFoundDivisionIds.join(', ')}`,
-      );
-    }
-    return divisions;
   }
 
   calculateExpectedPayment(participationDivisionIds: IDivision['id'][]) {
@@ -254,17 +236,30 @@ export class CompetitionModel {
   }
 
   validateAdditionalInfo(additionalInfoCreateDtos?: IAdditionalInfoCreateDto[]) {
-    this.requiredAdditionalInfos.forEach((requiredAdditionalInfo) => {
-      if (
-        !additionalInfoCreateDtos?.some((additionalInfoCreateDto) => {
-          return additionalInfoCreateDto.type === requiredAdditionalInfo.type;
-        })
-      ) {
-        throw new BusinessException(
-          ApplicationsErrors.APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_FOUND,
-          `type: ${requiredAdditionalInfo.type}`,
-        );
-      }
-    });
+    const requiredAdditionalInfoTypes = this.requiredAdditionalInfos.map((info) => info.type);
+    const additionalInfoTypes = additionalInfoCreateDtos?.map((info) => info.type) ?? [];
+    const missingTypes = requiredAdditionalInfoTypes.filter((type) => !additionalInfoTypes.includes(type));
+    if (missingTypes.length > 0) {
+      throw new BusinessException(
+        ApplicationsErrors.APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH,
+        `type: ${missingTypes.join(', ')}`,
+      );
+    }
+  }
+
+  getDivision(divisionId: IDivision['id']): DivisionModel {
+    const division = this.divisions.find((division) => division.id === divisionId);
+    if (!division) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, `Not found DivisionId: ${divisionId}`);
+    }
+    return division;
+  }
+
+  getManyDivisions(divisionIds: IDivision['id'][]): DivisionModel[] {
+    const divisions = this.divisions.filter((division) => divisionIds.includes(division.id));
+    if (divisions.length === 0) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, `Not found DivisionIds: ${divisionIds.join(', ')}`);
+    }
+    return divisions;
   }
 }

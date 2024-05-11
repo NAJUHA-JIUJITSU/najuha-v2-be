@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  UpdateDateColumn,
+} from 'typeorm';
 import { PlayerSnapshotEntity } from './player-snapshot.entity';
 import { PaymentSnapshotEntity } from '../competition/payment-snapshot.entity';
 import { CompetitionEntity } from '../competition/competition.entity';
@@ -18,6 +27,9 @@ export class ApplicationEntity {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: IApplication['updatedAt'];
+
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt!: IApplication['deletedAt'];
 
   @Column('varchar', { length: 16, default: 'SELF' })
   type!: IApplication['type'];

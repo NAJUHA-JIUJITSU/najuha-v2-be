@@ -7,33 +7,38 @@ import {
   IParticipationDivisionInfoUpdateDto,
 } from './interface/participation-division-info.interface';
 import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IParticipationDivisionInfoSnapshot } from './interface/participation-division-info-snapshot.interface';
 import { IAdditionalInfo, IAdditionalInfoCreateDto } from './interface/additional-info.interface';
+import { UserModel } from 'src/modules/users/domain/model/user.model';
+import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
 
 @Injectable()
 export class ApplicationFactory {
-  createReadyApplication(
-    userId: IUser['id'],
-    competitionId: ICompetition['id'],
-    divisions: IDivision[],
+  async createReadyApplication(
+    user: UserModel,
+    competition: CompetitionModel,
     applicationType: IApplication['type'],
+    participationDivisionIds: IDivision['id'][],
     playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
     additionalInfoCreateDtos?: IAdditionalInfoCreateDto[],
-  ): IApplication {
+  ): Promise<IApplication> {
     const applicationId = ulid();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
-    const participationDivisionInfos = this.createParticipationDivisionInfos(applicationId, divisions);
-    const additionalInfos = this.createAdditionalInfos(applicationId, additionalInfoCreateDtos || []);
+    const participationDivisionInfos = await this.createParticipationDivisionInfos(
+      applicationId,
+      competition,
+      participationDivisionIds,
+    );
+    const additionalInfos = this.createAdditionalInfos(applicationId, additionalInfoCreateDtos ?? []);
     return {
       id: applicationId,
       type: applicationType,
-      userId,
-      competitionId,
+      userId: user.getId(),
+      competitionId: competition.getId(),
       status: 'READY',
       createdAt: new Date(),
       updatedAt: new Date(),
+      deletedAt: null,
       playerSnapshots: [playerSnapshot],
       participationDivisionInfos,
       additionalInfos,
@@ -59,10 +64,12 @@ export class ApplicationFactory {
     };
   }
 
-  createParticipationDivisionInfos(
+  async createParticipationDivisionInfos(
     applicationId: IApplication['id'],
-    divisions: IDivision[],
-  ): IParticipationDivisionInfo[] {
+    competition: CompetitionModel,
+    participationDivisionIds: IParticipationDivisionInfo['id'][],
+  ): Promise<IParticipationDivisionInfo[]> {
+    const divisions = competition.getManyDivisions(participationDivisionIds);
     return divisions.map((division) => {
       const participationDivisionInfoId = ulid();
       const participationDivisionInfosSnapshot = this.createParticipationDivisionInfoSnapshot(
@@ -91,15 +98,12 @@ export class ApplicationFactory {
     };
   }
 
-  createParticipationDivisionInfoSnapshots(
-    divisions: IDivision[],
+  createManyParticipationDivisionInfoSnapshots(
+    competition: CompetitionModel,
     participationDivisionInfoUpdateDtos: IParticipationDivisionInfoUpdateDto[],
   ): IParticipationDivisionInfoSnapshot[] {
     return participationDivisionInfoUpdateDtos.map((updateParticipationDivisionInfoDto) => {
-      const division = divisions.find(
-        (division) => division.id === updateParticipationDivisionInfoDto.newParticipationDivisionId,
-      );
-      if (!division) throw new Error('Division not found');
+      const division = competition.getDivision(updateParticipationDivisionInfoDto.newParticipationDivisionId);
       return this.createParticipationDivisionInfoSnapshot(
         updateParticipationDivisionInfoDto.participationDivisionInfoId,
         division,

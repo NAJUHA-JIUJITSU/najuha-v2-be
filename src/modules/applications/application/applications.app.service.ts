@@ -13,8 +13,6 @@ import {
   UpdateReadyApplicationRet,
 } from './dtos';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
-import { DoneApplicationModel } from '../domain/model/done-applicatioin.model';
-import { ReadyApplicationModel } from '../domain/model/ready-application.model';
 import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ApplicationsErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
@@ -26,6 +24,7 @@ import { ApplicationRepository } from 'src//database/custom-repository/applicati
 import { CompetitionRepository } from 'src//database/custom-repository/competition.repository';
 import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
+import { ApplicationModel } from '../domain/model/application.model';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -69,23 +68,20 @@ export class ApplicationsAppService {
           }),
       ),
     );
-    competition.validateApplicationPeriod();
-    const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
-    competition.validateAdditionalInfo(additionalInfoCreateDtos);
-
-    const readyApplication = new ReadyApplicationModel(
-      this.applicationFactory.createReadyApplication(
-        user.getId(),
-        competition.getId(),
-        divisions,
+    const readyApplication = new ApplicationModel(
+      await this.applicationFactory.createReadyApplication(
+        user,
+        competition,
         applicationType,
+        participationDivisionIds,
         playerSnapshotCreateDto,
         additionalInfoCreateDtos,
       ),
     );
+    competition.validateApplicationPeriod();
+    competition.validateAdditionalInfo(additionalInfoCreateDtos);
     readyApplication.validateApplicationType(user.toEntity());
     readyApplication.validateDivisionSuitability();
-
     return { application: await this.applicationRepository.save(readyApplication.toEntity()) };
   }
 
@@ -122,6 +118,7 @@ export class ApplicationsAppService {
     userId,
     playerSnapshotUpdateDto,
     applicationId,
+    applicationType,
     participationDivisionIds,
     additionalInfoCreateDtos,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
@@ -132,7 +129,7 @@ export class ApplicationsAppService {
         }),
       ),
     );
-    const oldApplication = new ReadyApplicationModel(
+    const oldApplication = new ApplicationModel(
       assert<IApplication>(
         await this.applicationRepository
           .findOneOrFail({
@@ -168,24 +165,21 @@ export class ApplicationsAppService {
           }),
       ),
     );
-    competition.validateApplicationPeriod();
-    const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
-    competition.validateAdditionalInfo(additionalInfoCreateDtos);
-
-    const newApplication = new ReadyApplicationModel(
-      this.applicationFactory.createReadyApplication(
-        user.getId(),
-        competition.getId(),
-        divisions,
-        oldApplication.getType(),
+    const newApplication = new ApplicationModel(
+      await this.applicationFactory.createReadyApplication(
+        user,
+        competition,
+        applicationType,
+        participationDivisionIds,
         playerSnapshotUpdateDto,
         additionalInfoCreateDtos,
       ),
     );
+    competition.validateApplicationPeriod();
+    competition.validateAdditionalInfo(additionalInfoCreateDtos);
     newApplication.validateApplicationType(user.toEntity());
     newApplication.validateDivisionSuitability();
-    oldApplication.updateStatusToDeleted();
-
+    oldApplication.delete();
     // TODO: Transaction
     await this.applicationRepository.save(oldApplication.toEntity());
     return { application: await this.applicationRepository.save(newApplication.toEntity()) };
@@ -208,7 +202,7 @@ export class ApplicationsAppService {
         }),
       ),
     );
-    const application = new DoneApplicationModel(
+    const application = new ApplicationModel(
       assert<IApplication>(
         await this.applicationRepository
           .findOneOrFail({
@@ -244,30 +238,23 @@ export class ApplicationsAppService {
           }),
       ),
     );
-
-    competition.validateApplicationPeriod();
-
     if (playerSnapshotUpdateDto) {
-      const newPlayerSnapshot = new PlayerSnapshotModel(
-        this.applicationFactory.createPlayerSnapshot(applicationId, playerSnapshotUpdateDto),
+      application.addPlayerSnapshot(
+        new PlayerSnapshotModel(this.applicationFactory.createPlayerSnapshot(applicationId, playerSnapshotUpdateDto)),
       );
-      application.addPlayerSnapshot(newPlayerSnapshot);
     }
-
     if (participationDivisionInfoUpdateDtos) {
-      const participationDivisionIds = participationDivisionInfoUpdateDtos.map((dto) => dto.newParticipationDivisionId);
-      const divisions = competition.validateParticipationAbleDivisions(participationDivisionIds);
-      const newParticipationDivisionInfoSnapshots = this.applicationFactory
-        .createParticipationDivisionInfoSnapshots(divisions, participationDivisionInfoUpdateDtos)
-        .map((snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot));
-      application.addParticipationDivisionInfoSnapshots(newParticipationDivisionInfoSnapshots);
+      application.addParticipationDivisionInfoSnapshots(
+        this.applicationFactory
+          .createManyParticipationDivisionInfoSnapshots(competition, participationDivisionInfoUpdateDtos)
+          .map((snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot)),
+      );
     }
-
     if (additionalInfoUpdateDtos) {
       competition.validateAdditionalInfo(additionalInfoUpdateDtos);
       application.updateAdditionalInfos(additionalInfoUpdateDtos);
     }
-
+    competition.validateApplicationPeriod();
     application.validateApplicationType(user.toEntity());
     application.validateDivisionSuitability();
     return { application: await this.applicationRepository.save(application.toEntity()) };
@@ -278,7 +265,7 @@ export class ApplicationsAppService {
    * - 현재 가격, 할인 정보를 바탕으로 application 의 예상 결제 금액을 계산합니다.
    */
   async getExpectedPayment({ userId, applicationId }: GetExpectedPaymentParam): Promise<GetExpectedPaymentRet> {
-    const application = new ReadyApplicationModel(
+    const application = new ApplicationModel(
       assert<IApplication>(
         await this.applicationRepository
           .findOneOrFail({

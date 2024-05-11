@@ -6450,6 +6450,13 @@
       "CreateApplicationReqBody": {
         "type": "object",
         "properties": {
+          "applicationType": {
+            "type": "string",
+            "enum": [
+              "PROXY",
+              "SELF"
+            ]
+          },
           "competitionId": {
             "type": "string",
             "maxLength": 26,
@@ -6465,13 +6472,6 @@
             "minItems": 1,
             "title": "- Division IDs to participate",
             "description": "- Division IDs to participate."
-          },
-          "applicationType": {
-            "type": "string",
-            "enum": [
-              "PROXY",
-              "SELF"
-            ]
           },
           "playerSnapshotCreateDto": {
             "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
@@ -6492,9 +6492,9 @@
         },
         "nullable": false,
         "required": [
+          "applicationType",
           "competitionId",
           "participationDivisionIds",
-          "applicationType",
           "playerSnapshotCreateDto"
         ]
       },
@@ -6677,6 +6677,22 @@
             "title": "Updated at",
             "description": "Updated at."
           },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "title": "Deleted at",
+            "description": "Deleted at."
+          },
           "type": {
             "type": "string",
             "enum": [
@@ -6690,12 +6706,11 @@
             "type": "string",
             "enum": [
               "CANCELED",
-              "DELETED",
               "DONE",
               "READY"
             ],
             "title": "Status",
-            "description": "Status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소\n- DELETED: 삭제됨 (DB에는 남아있으나 유저에게 보여지지 않음)"
+            "description": "Status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소"
           },
           "competitionId": {
             "type": "string",
@@ -6742,6 +6757,7 @@
           "id",
           "createdAt",
           "updatedAt",
+          "deletedAt",
           "type",
           "status",
           "competitionId",
@@ -7028,6 +7044,13 @@
       "UpdateReadyApplicationReqBody": {
         "type": "object",
         "properties": {
+          "applicationType": {
+            "type": "string",
+            "enum": [
+              "PROXY",
+              "SELF"
+            ]
+          },
           "participationDivisionIds": {
             "type": "array",
             "items": {
@@ -7058,6 +7081,7 @@
         },
         "nullable": false,
         "required": [
+          "applicationType",
           "participationDivisionIds",
           "playerSnapshotUpdateDto"
         ]

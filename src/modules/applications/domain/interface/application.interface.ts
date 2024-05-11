@@ -1,6 +1,6 @@
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { IPlayerSnapshot } from './player-snapshot.interface';
+import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './player-snapshot.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
 import { tags } from 'typia';
 import { IAdditionalInfo } from './additional-info.interface';
@@ -16,6 +16,9 @@ export interface IApplication {
   /** Updated at. */
   updatedAt: DateOrStringDate;
 
+  /** Deleted at. */
+  deletedAt: DateOrStringDate | null;
+
   /**
    * 본인신청과 대리신청을 구별하는 type.
    * - SELF: 본인 신청
@@ -28,9 +31,8 @@ export interface IApplication {
    * - READY: 결제 대기중
    * - DONE: 결제 완료
    * - CANCELED: 결제 취소
-   * - DELETED: 삭제됨 (DB에는 남아있으나 유저에게 보여지지 않음)
    */
-  status: 'READY' | 'DONE' | 'CANCELED' | 'DELETED';
+  status: 'READY' | 'DONE' | 'CANCELED';
 
   /** Competition id. */
   competitionId: ICompetition['id'];

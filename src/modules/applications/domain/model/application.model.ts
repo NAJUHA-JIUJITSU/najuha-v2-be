@@ -3,18 +3,23 @@ import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { AdditionalInfoModel } from './additional-info.model';
+import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
+import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
+import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 
-export abstract class ApplicationModel {
-  protected readonly id: IApplication['id'];
-  protected readonly type: IApplication['type'];
-  protected readonly competitionId: IApplication['competitionId'];
-  protected readonly userId: IApplication['userId'];
-  protected readonly createdAt: IApplication['createdAt'];
-  protected readonly updatedAt: IApplication['updatedAt'];
-  protected readonly playerSnapshots: PlayerSnapshotModel[];
-  protected readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
-  protected readonly additionaInfos: AdditionalInfoModel[];
-  protected status: IApplication['status'];
+// TODO: 에러 표준화
+export class ApplicationModel {
+  private readonly id: IApplication['id'];
+  private readonly type: IApplication['type'];
+  private readonly competitionId: IApplication['competitionId'];
+  private readonly userId: IApplication['userId'];
+  private readonly createdAt: IApplication['createdAt'];
+  private readonly updatedAt: IApplication['updatedAt'];
+  private readonly playerSnapshots: PlayerSnapshotModel[];
+  private readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
+  private readonly additionaInfos: AdditionalInfoModel[];
+  private status: IApplication['status'];
+  private deletedAt: IApplication['deletedAt'];
 
   constructor(entity: IApplication) {
     this.id = entity.id;
@@ -23,6 +28,7 @@ export abstract class ApplicationModel {
     this.competitionId = entity.competitionId;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
+    this.deletedAt = entity.deletedAt;
     this.status = entity.status;
     this.playerSnapshots = entity.playerSnapshots.map((snapshot) => new PlayerSnapshotModel(snapshot));
     this.participationDivisionInfos = entity.participationDivisionInfos.map(
@@ -31,7 +37,21 @@ export abstract class ApplicationModel {
     this.additionaInfos = entity.additionalInfos.map((info) => new AdditionalInfoModel(info));
   }
 
-  abstract toEntity(): IApplication;
+  toEntity(): IApplication {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      deletedAt: this.deletedAt,
+      type: this.type,
+      status: this.status,
+      competitionId: this.competitionId,
+      userId: this.userId,
+      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toEntity()),
+      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toEntity()),
+      additionalInfos: this.additionaInfos.map((info) => info.toEntity()),
+    };
+  }
 
   getId() {
     return this.id;
@@ -49,6 +69,10 @@ export abstract class ApplicationModel {
     return this.playerSnapshots[this.playerSnapshots.length - 1];
   }
 
+  getParticipationDivisionIds() {
+    return this.participationDivisionInfos.map((info) => info.getLatestParticipationDivisionInfoSnapshot().division.id);
+  }
+
   validateApplicationType(userEntity: IUser) {
     if (this.type === 'PROXY') return;
     const player = this.getLatestPlayerSnapshot();
@@ -59,6 +83,41 @@ export abstract class ApplicationModel {
     const player = this.getLatestPlayerSnapshot();
     this.participationDivisionInfos.forEach((participationDivisionInfo) => {
       participationDivisionInfo.validateDivisionSuitability(player.birth, player.gender);
+    });
+  }
+
+  // READY Status -------------------------------------------------------------
+  delete() {
+    if (this.status !== 'READY') throw new Error('Application status is not READY');
+    this.deletedAt = new Date();
+  }
+
+  // DONE Status --------------------------------------------------------------
+  addPlayerSnapshot(newPlayerSnapshot: PlayerSnapshotModel) {
+    if (this.status !== 'DONE') throw new Error('Application status is not DONE');
+    this.playerSnapshots.push(newPlayerSnapshot);
+  }
+
+  addParticipationDivisionInfoSnapshots(
+    newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[],
+  ) {
+    if (this.status !== 'DONE') throw new Error('Application status is not DONE');
+    newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
+      const participationDivisionInfo = this.participationDivisionInfos.find(
+        (info) => info.getId() === snapshot.participationDivisionInfoId,
+      );
+      if (!participationDivisionInfo)
+        throw new BusinessException(ApplicationsErrors.APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND);
+      participationDivisionInfo.addParticipationDivisionInfoSnapshot(snapshot);
+    });
+  }
+
+  updateAdditionalInfos(additionalInfoUpdateDtos: IAdditionalInfoUpdateDto[]) {
+    if (this.status !== 'DONE') throw new Error('Application status is not DONE');
+    additionalInfoUpdateDtos.forEach((updateDto) => {
+      const additionalInfo = this.additionaInfos.find((info) => info.getType() === updateDto.type);
+      if (!additionalInfo) throw new BusinessException(ApplicationsErrors.APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND);
+      additionalInfo.updateValue(updateDto.value);
     });
   }
 }
