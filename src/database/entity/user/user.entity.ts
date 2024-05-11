@@ -1,4 +1,4 @@
-import { PolicyConsentEntity } from 'src/infrastructure/database/entity/user/policy-consent.entity';
+import { PolicyConsentEntity } from 'src//database/entity/user/policy-consent.entity';
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';

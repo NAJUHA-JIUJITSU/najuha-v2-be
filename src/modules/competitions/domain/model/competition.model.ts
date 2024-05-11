@@ -1,5 +1,10 @@
-import { ApplicationsErrors, BusinessException, CompetitionsErrors } from 'src/common/response/errorResponse';
-import { ICompetition } from '../interface/competition.interface';
+import {
+  ApplicationsErrors,
+  BusinessException,
+  CommonErrors,
+  CompetitionsErrors,
+} from 'src/common/response/errorResponse';
+import { ICompetition, ICompetitionUpdateDto } from '../interface/competition.interface';
 import { CombinationDiscountSnapshotModel } from './combination-discount-snapshot.model';
 import { DivisionModel } from './division.model';
 import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.entity';
@@ -8,6 +13,7 @@ import { CalculatePaymentService } from 'src/modules/applications/domain/calcula
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 import { RequiredAdditionalInfoModel } from './required-addtional-info.model';
 import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interface/additional-info.interface';
+import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtional-info.interface';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];
@@ -52,13 +58,14 @@ export class CompetitionModel {
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
-    this.divisions = entity.divisions?.map((division) => new DivisionModel(division)) || [];
-    this.earlybirdDiscountSnapshots =
-      entity.earlybirdDiscountSnapshots?.map((snapshot) => new EarlybirdDiscountSnapshotModel(snapshot)) || [];
-    this.combinationDiscountSnapshots =
-      entity.combinationDiscountSnapshots?.map((snapshot) => new CombinationDiscountSnapshotModel(snapshot)) || [];
-    this.requiredAdditionalInfos =
-      entity.requiredAdditionalInfos?.map((info) => new RequiredAdditionalInfoModel(info)) || [];
+    this.divisions = entity.divisions.map((division) => new DivisionModel(division));
+    this.earlybirdDiscountSnapshots = entity.earlybirdDiscountSnapshots.map(
+      (snapshot) => new EarlybirdDiscountSnapshotModel(snapshot),
+    );
+    this.combinationDiscountSnapshots = entity.combinationDiscountSnapshots.map(
+      (snapshot) => new CombinationDiscountSnapshotModel(snapshot),
+    );
+    this.requiredAdditionalInfos = entity.requiredAdditionalInfos.map((info) => new RequiredAdditionalInfoModel(info));
   }
 
   toEntity(): ICompetition {
@@ -100,6 +107,23 @@ export class CompetitionModel {
     return this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1];
   }
 
+  update(updateDto: ICompetitionUpdateDto) {
+    if (updateDto.title) this.title = updateDto.title;
+    if (updateDto.address) this.address = updateDto.address;
+    if (updateDto.competitionDate) this.competitionDate = updateDto.competitionDate;
+    if (updateDto.registrationStartDate) this.registrationStartDate = updateDto.registrationStartDate;
+    if (updateDto.registrationEndDate) this.registrationEndDate = updateDto.registrationEndDate;
+    if (updateDto.refundDeadlineDate) this.refundDeadlineDate = updateDto.refundDeadlineDate;
+    if (updateDto.soloRegistrationAdjustmentStartDate)
+      this.soloRegistrationAdjustmentStartDate = updateDto.soloRegistrationAdjustmentStartDate;
+    if (updateDto.soloRegistrationAdjustmentEndDate)
+      this.soloRegistrationAdjustmentEndDate = updateDto.soloRegistrationAdjustmentEndDate;
+    if (updateDto.registrationListOpenDate) this.registrationListOpenDate = updateDto.registrationListOpenDate;
+    if (updateDto.bracketOpenDate) this.bracketOpenDate = updateDto.bracketOpenDate;
+    if (updateDto.description) this.description = updateDto.description;
+    if (updateDto.isPartnership) this.isPartnership = updateDto.isPartnership;
+  }
+
   updateStatus(newStatus: ICompetition['status']) {
     if (newStatus === 'ACTIVE') {
       const missingProperties: string[] = [];
@@ -110,7 +134,6 @@ export class CompetitionModel {
       if (this.registrationEndDate === null) missingProperties.push('registrationEndDate');
       if (this.refundDeadlineDate === null) missingProperties.push('refundDeadlineDate');
       if (this.description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
-
       if (missingProperties.length > 0) {
         throw new BusinessException(
           CompetitionsErrors.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
@@ -144,6 +167,32 @@ export class CompetitionModel {
       );
     }
     this.divisions.push(...newDivisions);
+  }
+
+  addEarlybirdDiscountSnapshot(newEarlybirdDiscountSnapshot: EarlybirdDiscountSnapshotModel) {
+    this.earlybirdDiscountSnapshots.push(newEarlybirdDiscountSnapshot);
+  }
+
+  addCombinationDiscountSnapshot(newCombinationDiscountSnapshot: CombinationDiscountSnapshotModel) {
+    this.combinationDiscountSnapshots.push(newCombinationDiscountSnapshot);
+  }
+
+  updateRequiredAdditionalInfo(requiredAdditionalInfoUpdateDto: IRequiredAdditionalInfoUpdateDto) {
+    const requiredAdditionalInfo = this.requiredAdditionalInfos.find(
+      (info) => info.id === requiredAdditionalInfoUpdateDto.id,
+    );
+    if (!requiredAdditionalInfo) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
+    }
+    requiredAdditionalInfo.update(requiredAdditionalInfoUpdateDto);
+  }
+
+  deleteRequiredAdditionalInfo(requiredAdditionalInfoId: RequiredAdditionalInfoModel['id']) {
+    const requiredAdditionalInfo = this.requiredAdditionalInfos.find((info) => info.id === requiredAdditionalInfoId);
+    if (!requiredAdditionalInfo) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
+    }
+    requiredAdditionalInfo.delete();
   }
 
   validateApplicationPeriod(now = new Date()) {

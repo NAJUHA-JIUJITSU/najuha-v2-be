@@ -18,15 +18,12 @@ import { ReadyApplicationModel } from '../domain/model/ready-application.model';
 import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ApplicationsErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
-import {
-  ICompetition,
-  ICompetitionWithRelations,
-} from 'src/modules/competitions/domain/interface/competition.interface';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { UserModel } from 'src/modules/users/domain/model/user.model';
-import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
-import { ApplicationRepository } from 'src/infrastructure/database/custom-repository/application.repository';
-import { CompetitionRepository } from 'src/infrastructure/database/custom-repository/competition.repository';
+import { UserRepository } from 'src//database/custom-repository/user.repository';
+import { ApplicationRepository } from 'src//database/custom-repository/application.repository';
+import { CompetitionRepository } from 'src//database/custom-repository/competition.repository';
 import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
 
@@ -56,7 +53,7 @@ export class ApplicationsAppService {
       ),
     );
     const competition = new CompetitionModel(
-      assert<ICompetitionWithRelations>(
+      assert<ICompetition>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: competitionId, status: 'ACTIVE' },
@@ -155,7 +152,7 @@ export class ApplicationsAppService {
       ),
     );
     const competition = new CompetitionModel(
-      assert<ICompetitionWithRelations>(
+      assert<ICompetition>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: oldApplication.getCompetitionId() },
@@ -231,7 +228,7 @@ export class ApplicationsAppService {
       ),
     );
     const competition = new CompetitionModel(
-      assert<ICompetitionWithRelations>(
+      assert<ICompetition>(
         await this.competitionRepository
           .findOneOrFail({
             where: { id: application.getCompetitionId() },
@@ -305,7 +302,12 @@ export class ApplicationsAppService {
         await this.competitionRepository
           .findOneOrFail({
             where: { id: application.getCompetitionId() },
-            relations: ['divisions', 'earlybirdDiscountSnapshots', 'combinationDiscountSnapshots'],
+            relations: [
+              'divisions',
+              'earlybirdDiscountSnapshots',
+              'combinationDiscountSnapshots',
+              'requiredAdditionalInfos',
+            ],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');

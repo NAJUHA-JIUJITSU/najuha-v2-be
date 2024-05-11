@@ -24,7 +24,7 @@ export interface IAdditionalInfo {
 }
 
 export type IAdditionalInfoCreateDto = SocialScurityNumberInfo | AddressInfo;
-export type IAdditionalInfoUpdateDto = IAdditionalInfoCreateDto;
+export type IAdditionalInfoUpdateDto = SocialScurityNumberInfo | AddressInfo;
 
 export type SocialScurityNumberInfo = {
   type: 'SOCIAL_SECURITY_NUMBER';

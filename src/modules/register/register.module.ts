@@ -3,7 +3,7 @@ import { UserRegisterController } from './presentation/user-register.controller'
 import { RegisterAppService } from './application/register.app.service';
 import { PhoneNumberAuthCodeDomainService } from './domain/phone-number-auth-code.domain.service';
 import { AuthModule } from '../auth/auth.module';
-import { DatabaseModule } from 'src/infrastructure/database/database.module';
+import { DatabaseModule } from 'src//database/database.module';
 import { PolicyConsentFactory } from './domain/policy-conset.factory';
 
 @Module({

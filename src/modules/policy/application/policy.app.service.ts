@@ -9,7 +9,7 @@ import {
   FindPolicyParam,
   FindPolicyRet,
 } from './dtos';
-import { PolicyRepository } from 'src/infrastructure/database/custom-repository/policy.repository';
+import { PolicyRepository } from 'src//database/custom-repository/policy.repository';
 
 @Injectable()
 export class PolicyAppService {

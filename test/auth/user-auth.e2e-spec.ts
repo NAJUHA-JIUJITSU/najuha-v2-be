@@ -26,7 +26,7 @@ import { CreateUserReqBody } from 'src/modules/users/presentation/dtos';
 import { IValidatedUserData } from 'src/modules/sns-auth-client/interface/validated-user-data.interface';
 import { AcquireAdminRoleRes, RefreshTokenRes, SnsLoginReqBody, SnsLoginRes } from 'src/modules/auth/presentation/dtos';
 import { ulid } from 'ulid';
-import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
+import { UserEntity } from 'src//database/entity/user/user.entity';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-1 user-auth test', () => {

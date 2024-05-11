@@ -68,66 +68,38 @@ export interface ICompetition {
   updatedAt: DateOrStringDate;
 
   /** 대회 부문 정보. */
-  divisions?: IDivision[];
+  divisions: IDivision[];
 
   /**
    * 얼리버드 할인 정보.
    * - 배열의 길이가 0이면 얼리버드 할인이 없는 대회입니다.
    * - 배열의 마지막 요소가 현재 적용중인 얼리버드 할인 정보입니다.
    */
-  earlybirdDiscountSnapshots?: IEarlybirdDiscountSnapshot[];
+  earlybirdDiscountSnapshots: IEarlybirdDiscountSnapshot[];
 
   /**
    * 조합 할인 정보.
    * - 배열의 길이가 0이면 조합 할인이 없는 대회입니다.
    * - 배열의 마지막 요소가 현재 적용중인 조합 할인 정보입니다.
    */
-  combinationDiscountSnapshots?: ICombinationDiscountSnapshot[];
+  combinationDiscountSnapshots: ICombinationDiscountSnapshot[];
 
   /**
    * 대회 신청시 추가저으로 필요로하는 정보를 정의합니다.
    * - ex) 주민번호, 주소
    */
-  requiredAdditionalInfos?: IRequiredAdditionalInfo[];
+  requiredAdditionalInfos: IRequiredAdditionalInfo[];
 }
 
-// relation이 없는 competition
-export interface ICompetitionWithRelations extends Required<ICompetition> {}
-
-export interface ICompetitioinWithoutRelations
-  extends Pick<
+export interface ICompetitionWithoutRelations
+  extends Omit<
     ICompetition,
-    | 'id'
-    | 'title'
-    | 'address'
-    | 'competitionDate'
-    | 'registrationStartDate'
-    | 'registrationEndDate'
-    | 'refundDeadlineDate'
-    | 'soloRegistrationAdjustmentStartDate'
-    | 'soloRegistrationAdjustmentEndDate'
-    | 'registrationListOpenDate'
-    | 'bracketOpenDate'
-    | 'description'
-    | 'isPartnership'
-    | 'viewCount'
-    | 'posterImgUrlKey'
-    | 'status'
-    | 'createdAt'
-    | 'updatedAt'
+    'divisions' | 'earlybirdDiscountSnapshots' | 'combinationDiscountSnapshots' | 'requiredAdditionalInfos'
   > {}
 
 export interface ICompetitionWithEarlybirdDiscountSnapshots
-  extends ICompetitioinWithoutRelations,
+  extends ICompetitionWithoutRelations,
     Required<Pick<ICompetition, 'earlybirdDiscountSnapshots'>> {}
-
-export interface ICompetitionWithDivisions
-  extends ICompetitioinWithoutRelations,
-    Required<Pick<ICompetition, 'divisions'>> {}
-
-export interface ICompetitionWithRequiredAdditionalInfo
-  extends ICompetitioinWithoutRelations,
-    Required<Pick<ICompetition, 'requiredAdditionalInfos'>> {}
 
 export interface ICompetitionCreateDto
   extends Partial<

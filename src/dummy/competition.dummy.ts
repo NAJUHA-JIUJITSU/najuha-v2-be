@@ -138,6 +138,7 @@ export class CompetitionDummyBuilder {
         type: 'ADDRESS',
         description: '지역구 주짓수대회 인구조사를 위한 주소 요청',
         createdAt: this.competition.createdAt,
+        deletedAt: null,
         competitionId: this.competition.id,
       },
       {
@@ -145,6 +146,7 @@ export class CompetitionDummyBuilder {
         type: 'SOCIAL_SECURITY_NUMBER',
         description: '지역구 주짓수대회 인구조사를 위한 주민번호 요청',
         createdAt: this.competition.createdAt,
+        deletedAt: null,
         competitionId: this.competition.id,
       },
     ];

@@ -1,13 +1,13 @@
 import { tags } from 'typia';
 import {
-  CreateCombinationDiscountSnapshotRet,
+  CreateCompetitionCombinationDiscountSnapshotRet,
   CreateCompetitionRet,
-  CreateDivisionsRet,
-  CreateEarlybirdDiscountSnapshotRet,
+  CreateCompetitionDivisionsRet,
+  CreateCompetitionEarlybirdDiscountSnapshotRet,
   FindCompetitionsRet,
   GetCompetitionRet,
   UpdateCompetitionRet,
-  CreateRequiredAdditionalInfoRet,
+  CreateCompetitionRequiredAdditionalInfoRet,
 } from '../application/dtos';
 import {
   ICompetition,
@@ -51,7 +51,8 @@ export interface CreateEarlybirdDiscountSnapshotReqBody
 export interface CreateCombinationDiscountSnapshotReqBody
   extends Omit<ICombinationDiscountSnapshotCreateDto, 'competitionId'> {}
 
-export interface CreateRequiredAdditionalInfoReqBody extends Omit<IRequiredAdditionalInfoCreateDto, 'competitionId'> {}
+export interface CreateCompetitionRequiredAdditionalInfoReqBody
+  extends Omit<IRequiredAdditionalInfoCreateDto, 'competitionId'> {}
 
 export interface UpdateRequiredAdditionalInfoReqBody
   extends Omit<IRequiredAdditionalInfoUpdateDto, 'competitionId' | 'id'> {}
@@ -67,10 +68,14 @@ export interface UpdateCompetitionRes extends UpdateCompetitionRet {}
 
 export interface UpdateCompetitionStatusRes extends UpdateCompetitionRet {}
 
-export interface CreateDivisionsRes extends CreateDivisionsRet {}
+export interface CreateCompetitionDivisionsRes extends CreateCompetitionDivisionsRet {}
 
-export interface CreateEarlybirdDiscountSnapshotRes extends CreateEarlybirdDiscountSnapshotRet {}
+export interface CreateEarlybirdDiscountSnapshotRes extends CreateCompetitionEarlybirdDiscountSnapshotRet {}
 
-export interface CreateCombinationDiscountSnapshotRes extends CreateCombinationDiscountSnapshotRet {}
+export interface CreateCombinationDiscountSnapshotRes extends CreateCompetitionCombinationDiscountSnapshotRet {}
 
-export interface CreateRequiredAdditionalInfoRes extends CreateRequiredAdditionalInfoRet {}
+export interface CreateCompetitionRequiredAdditionalInfoRes extends CreateCompetitionRequiredAdditionalInfoRet {}
+
+export interface UpdateCompetitionRequiredAdditionalInfoRes extends CreateCompetitionRequiredAdditionalInfoRet {}
+
+export interface DeleteCompetitionRequiredAdditionalInfoRes extends CreateCompetitionRequiredAdditionalInfoRet {}

@@ -24,7 +24,7 @@ import {
   RegisterUserRes,
   SendPhoneNumberAuthCodeRes,
 } from 'src/modules/register/presentation/dtos';
-import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
+import { UserEntity } from 'src//database/entity/user/user.entity';
 import { ulid } from 'ulid';
 
 describe('E2E u-2 register test', () => {

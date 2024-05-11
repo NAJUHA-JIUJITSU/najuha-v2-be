@@ -63,24 +63,28 @@ export class CompetitionEntity {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: ICompetition['updatedAt'];
 
+  @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
+  divisions!: DivisionEntity[];
+
   @OneToMany(
     () => EarlybirdDiscountSnapshotEntity,
     (earlyBirdDiscountSnapshot) => earlyBirdDiscountSnapshot.competition,
+    { cascade: true },
   )
   earlybirdDiscountSnapshots!: EarlybirdDiscountSnapshotEntity[];
 
   @OneToMany(
     () => CombinationDiscountSnapshotEntity,
     (combinationDiscountSnapshot) => combinationDiscountSnapshot.competition,
+    { cascade: true },
   )
   combinationDiscountSnapshots!: CombinationDiscountSnapshotEntity[];
 
-  @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
-  divisions!: DivisionEntity[];
+  @OneToMany(() => RequiredAdditionalInfoEntity, (requiredAdditionalInfo) => requiredAdditionalInfo.competition, {
+    cascade: true,
+  })
+  requiredAdditionalInfos!: RequiredAdditionalInfoEntity[];
 
   @OneToMany(() => ApplicationEntity, (application) => application.competition)
   applications!: ApplicationEntity[];
-
-  @OneToMany(() => RequiredAdditionalInfoEntity, (requiredAdditionalInfo) => requiredAdditionalInfo.competition)
-  requiredAdditionalInfos!: RequiredAdditionalInfoEntity[];
 }

@@ -19,6 +19,9 @@ export interface IRequiredAdditionalInfo {
   /** CreatedAt. */
   createdAt: DateOrStringDate;
 
+  /** DeletedAT */
+  deletedAt: null | DateOrStringDate;
+
   /** Competition Id  */
   competitionId: ICompetition['id'];
 }

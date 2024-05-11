@@ -4,7 +4,7 @@ import { CompetitionsAppService } from 'src/modules/competitions/application/com
 import { AdminCompetitionsController } from './presentation/admin-competitions.controller';
 import { DivisionFactory } from './domain/division.factory';
 import { CompetitionFactory } from './domain/competition.factory';
-import { DatabaseModule } from 'src/infrastructure/database/database.module';
+import { DatabaseModule } from 'src//database/database.module';
 
 @Module({
   imports: [DatabaseModule],

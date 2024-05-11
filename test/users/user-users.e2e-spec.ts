@@ -10,7 +10,7 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { UserEntity } from 'src/infrastructure/database/entity/user/user.entity';
+import { UserEntity } from 'src//database/entity/user/user.entity';
 import { ulid } from 'ulid';
 import { GetMeRes, UpdateUserReqBody, UpdateUserRes } from 'src/modules/users/presentation/dtos';
 

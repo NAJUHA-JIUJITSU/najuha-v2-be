@@ -1,9 +1,6 @@
+import { ICombinationDiscountSnapshotCreateDto } from '../domain/interface/combination-discount-snapshot.interface';
 import {
-  ICombinationDiscountSnapshot,
-  ICombinationDiscountSnapshotCreateDto,
-} from '../domain/interface/combination-discount-snapshot.interface';
-import {
-  ICompetitioinWithoutRelations,
+  ICompetitionWithoutRelations,
   ICompetition,
   ICompetitionCreateDto,
   ICompetitionWithEarlybirdDiscountSnapshots,
@@ -11,11 +8,7 @@ import {
   ICompetitionUpdateDto,
 } from '../domain/interface/competition.interface';
 import { IDivisionPack } from '../domain/interface/division-pack.interface';
-import { IDivision } from '../domain/interface/division.interface';
-import {
-  IEarlybirdDiscountSnapshot,
-  IEarlybirdDiscountSnapshotCreateDto,
-} from '../domain/interface/earlybird-discount-snapshot.interface';
+import { IEarlybirdDiscountSnapshotCreateDto } from '../domain/interface/earlybird-discount-snapshot.interface';
 import {
   IRequiredAdditionalInfo,
   IRequiredAdditionalInfoCreateDto,
@@ -56,7 +49,7 @@ export interface CreateCombinationDiscountSnapshotParam {
   combinationDiscountSnapshotCreateDto: ICombinationDiscountSnapshotCreateDto;
 }
 
-export interface CreateRequiredAdditionalInfoParam {
+export interface CreateCompetitionRequiredAdditionalInfoParam {
   requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto;
 }
 
@@ -71,11 +64,15 @@ export interface DeleteRequiredAdditionalInfoParam {
 
 // Application Layer Result DTOs ----------------------------------------------
 export interface CreateCompetitionRet {
-  competition: ICompetitioinWithoutRelations;
+  competition: ICompetitionWithoutRelations;
 }
 
 export interface UpdateCompetitionRet {
-  competition: ICompetitioinWithoutRelations;
+  competition: ICompetition;
+}
+
+export interface UpdateCompetitionStatusRet {
+  competition: ICompetition;
 }
 
 export interface FindCompetitionsRet {
@@ -87,18 +84,26 @@ export interface GetCompetitionRet {
   competition: Required<ICompetition>;
 }
 
-export interface CreateDivisionsRet {
-  divisions: IDivision[];
+export interface CreateCompetitionDivisionsRet {
+  competition: ICompetition;
 }
 
-export interface CreateEarlybirdDiscountSnapshotRet {
-  earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot;
+export interface CreateCompetitionEarlybirdDiscountSnapshotRet {
+  competition: ICompetition;
 }
 
-export interface CreateCombinationDiscountSnapshotRet {
-  combinationDiscountSnapshot: ICombinationDiscountSnapshot;
+export interface CreateCompetitionCombinationDiscountSnapshotRet {
+  competition: ICompetition;
 }
 
-export interface CreateRequiredAdditionalInfoRet {
-  requiredAdditionalInfo: IRequiredAdditionalInfo;
+export interface CreateCompetitionRequiredAdditionalInfoRet {
+  competition: ICompetition;
+}
+
+export interface UpdateCompetitionRequiredAdditionalInfoRet {
+  competition: ICompetition;
+}
+
+export interface DeleteCompetitionRequiredAdditionalInfoRet {
+  competition: ICompetition;
 }

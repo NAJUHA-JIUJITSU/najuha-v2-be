@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { ulid } from 'ulid';
@@ -17,6 +17,9 @@ export class RequiredAdditionalInfoEntity {
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IRequiredAdditionalInfo['createdAt'];
+
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt!: IRequiredAdditionalInfo['deletedAt'];
 
   @Column()
   competitionId!: ICompetition['id'];

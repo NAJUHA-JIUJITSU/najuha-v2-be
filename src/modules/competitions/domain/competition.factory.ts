@@ -67,7 +67,7 @@ export class CompetitionFactory {
     };
   }
 
-  createRequiredAdditionalInfo(
+  createCompetitionRequiredAdditionalInfo(
     requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto,
   ): IRequiredAdditionalInfo {
     return {
@@ -76,6 +76,7 @@ export class CompetitionFactory {
       description: requiredAdditionalInfoCreateDto.description,
       competitionId: requiredAdditionalInfoCreateDto.competitionId,
       createdAt: new Date(),
+      deletedAt: null,
     };
   }
 }
