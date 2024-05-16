@@ -99,12 +99,13 @@ export class CompetitionModel {
     return this.id;
   }
 
-  // todo!!!: this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1]; undefined 안나오나?
-  getLatestEarlybirdDiscountSnapshot() {
+  getLatestEarlybirdDiscountSnapshot(): EarlybirdDiscountSnapshotModel | null {
+    if (this.earlybirdDiscountSnapshots.length === 0) return null;
     return this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
   }
 
-  getLatestCombinationDiscountSnapshot() {
+  getLatestCombinationDiscountSnapshot(): CombinationDiscountSnapshotModel | null {
+    if (this.combinationDiscountSnapshots.length === 0) return null;
     return this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1];
   }
 

@@ -9,8 +9,8 @@ export class CalculatePaymentService {
   static calculate(
     divisions: IDivision[],
     priceSnapshots: IPriceSnapshot[],
-    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot,
-    combinationDiscountSnapshot: ICombinationDiscountSnapshot,
+    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot | null,
+    combinationDiscountSnapshot: ICombinationDiscountSnapshot | null,
     now: Date = new Date(),
   ): IExpectedPayment {
     const normalAmount = this.calculateNormalAmount(priceSnapshots);
@@ -28,7 +28,7 @@ export class CalculatePaymentService {
   }
 
   private static calculateEarlybirdDiscountAmount(
-    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot,
+    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot | null,
     now: Date,
   ): number {
     if (earlybirdDiscountSnapshot === null) return 0;
@@ -38,7 +38,7 @@ export class CalculatePaymentService {
   }
 
   private static calculateCombinationDiscountAmount(
-    combinationDiscountSnapshot: ICombinationDiscountSnapshot,
+    combinationDiscountSnapshot: ICombinationDiscountSnapshot | null,
     divisions: IDivision[],
   ): number {
     // todo!!: 더 읽기 편하게 리팩토링
