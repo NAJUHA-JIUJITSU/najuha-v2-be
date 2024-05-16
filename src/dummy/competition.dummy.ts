@@ -10,14 +10,15 @@ import { IDivision } from 'src/modules/competitions/domain/interface/division.in
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
 import typia, { tags } from 'typia';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import { generateDummyDivisionPacks } from './division.dummy';
 import { dummyCombinationDiscountRules } from './combination-discount-snapshot.dummy';
 import { ICombinationDiscountRule } from 'src/modules/competitions/domain/interface/combination-discount-rule.interface';
+import { IDivisionPack } from 'src/modules/competitions/domain/interface/division-pack.interface';
 
 export class CompetitionDummyBuilder {
   private competition: ICompetition = {
-    id: ulid(),
+    id: uuidv7(),
     title: 'Dummy Competition',
     address: typia.random<CompetitionLocationFilter>(),
     description: 'Dummy Competition Description',
@@ -131,10 +132,9 @@ export class CompetitionDummyBuilder {
     return this;
   }
 
-  public setDivisions(divisions: IDivision[]): this {
-    this.competition.divisions = divisions.map((division) => {
-      return { ...division, competitionId: this.competition.id };
-    });
+  public setDivisions(divisionPacks: IDivisionPack[]): this {
+    const divisionFactory = new DivisionFactory();
+    this.competition.divisions = divisionFactory.createDivisions(this.competition.id, divisionPacks);
     return this;
   }
 
@@ -142,7 +142,7 @@ export class CompetitionDummyBuilder {
     if (!this.competition.registrationStartDate || !this.competition.registrationEndDate)
       throw new Error('setEarlybirdDiscountSnapshots: registrationStartDate or registrationEndDate is null');
     const snapshot: IEarlybirdDiscountSnapshot = {
-      id: ulid(),
+      id: uuidv7(),
       earlybirdStartDate: DateTime.fromJSDate(new Date(this.competition.registrationStartDate))
         .set({ hour: 0, minute: 0, second: 0 })
         .toJSDate(),
@@ -161,7 +161,7 @@ export class CompetitionDummyBuilder {
 
   public setCombinationDiscountSnapshots(dummyCombinationDiscountRules: ICombinationDiscountRule[]): this {
     const snapshot: ICombinationDiscountSnapshot = {
-      id: ulid(),
+      id: uuidv7(),
       combinationDiscountRules: dummyCombinationDiscountRules,
       createdAt: this.competition.createdAt,
       competitionId: this.competition.id,
@@ -174,7 +174,7 @@ export class CompetitionDummyBuilder {
   public setRequiredAdditionalInfos(): this {
     const dummyRequiredAdditionalInfos: IRequiredAdditionalInfo[] = [
       {
-        id: ulid(),
+        id: uuidv7(),
         type: 'ADDRESS',
         description: '지역구 주짓수대회 인구조사를 위한 주소 요청',
         createdAt: this.competition.createdAt,
@@ -182,7 +182,7 @@ export class CompetitionDummyBuilder {
         competitionId: this.competition.id,
       },
       {
-        id: ulid(),
+        id: uuidv7(),
         type: 'SOCIAL_SECURITY_NUMBER',
         description: '지역구 주짓수대회 인구조사를 위한 주민번호 요청',
         createdAt: this.competition.createdAt,
@@ -316,6 +316,7 @@ export class CompetitionDummyBuilder {
 
   private buildCompetitionTitle(): void {
     this.competition.title = `${this.competition.title}`;
+    this.competition.title += this.competition.isPartnership ? ' / 협약' : ' / 비협약';
     if (this.basicPeriodTitle !== '') this.competition.title += ` / ${this.basicPeriodTitle}`;
     if (this.earlybirdDiscountTitle !== '') this.competition.title += ` / ${this.earlybirdDiscountTitle}`;
     if (this.combinationDiscountTitle !== '') this.competition.title += ` / ${this.combinationDiscountTitle}`;
@@ -353,14 +354,14 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setIsPartnership(true)
         .setTitle(`${count++}`)
         .setCompetitionBasicDates(competitionDate)
-        // .setDivisions(dummyDivisons)
+        .setDivisions(generateDummyDivisionPacks())
         .build(),
       // 3. 2 + 얼리버드 할인
       new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle(`${count++}`)
         .setCompetitionBasicDates(competitionDate)
-        // .setDivisions(dummyDivisons)
+        .setDivisions(generateDummyDivisionPacks())
         .setEarlybirdDiscountSnapshots(10000)
         .build(),
       // 4. 3 + 조합 할인
@@ -368,7 +369,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setIsPartnership(true)
         .setTitle(`${count++}`)
         .setCompetitionBasicDates(competitionDate)
-        // .setDivisions(dummyDivisons)
+        .setDivisions(generateDummyDivisionPacks())
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
         .build(),
@@ -377,7 +378,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setIsPartnership(true)
         .setTitle(`${count++}`)
         .setCompetitionBasicDates(competitionDate)
-        // .setDivisions(dummyDivisons)
+        .setDivisions(generateDummyDivisionPacks())
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
         .setRequiredAdditionalInfos()

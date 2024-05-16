@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IApplication } from './interface/application.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import {
   IParticipationDivisionInfo,
   IParticipationDivisionInfoUpdateDto,
@@ -14,17 +14,17 @@ import { CompetitionModel } from 'src/modules/competitions/domain/model/competit
 
 @Injectable()
 export class ApplicationFactory {
-  async createReadyApplication(
+  createReadyApplication(
     user: UserModel,
     competition: CompetitionModel,
     applicationType: IApplication['type'],
     participationDivisionIds: IDivision['id'][],
     playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
     additionalInfoCreateDtos?: IAdditionalInfoCreateDto[],
-  ): Promise<IApplication> {
-    const applicationId = ulid();
+  ): IApplication {
+    const applicationId = uuidv7();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
-    const participationDivisionInfos = await this.createParticipationDivisionInfos(
+    const participationDivisionInfos = this.createParticipationDivisionInfos(
       applicationId,
       competition,
       participationDivisionIds,
@@ -50,7 +50,7 @@ export class ApplicationFactory {
     playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
   ): IPlayerSnapshot {
     return {
-      id: ulid(),
+      id: uuidv7(),
       applicationId,
       name: playerSnapshotCreateDto.name,
       gender: playerSnapshotCreateDto.gender,
@@ -64,14 +64,14 @@ export class ApplicationFactory {
     };
   }
 
-  async createParticipationDivisionInfos(
+  createParticipationDivisionInfos(
     applicationId: IApplication['id'],
     competition: CompetitionModel,
     participationDivisionIds: IParticipationDivisionInfo['id'][],
-  ): Promise<IParticipationDivisionInfo[]> {
+  ): IParticipationDivisionInfo[] {
     const divisions = competition.getManyDivisions(participationDivisionIds);
     return divisions.map((division) => {
-      const participationDivisionInfoId = ulid();
+      const participationDivisionInfoId = uuidv7();
       const participationDivisionInfosSnapshot = this.createParticipationDivisionInfoSnapshot(
         participationDivisionInfoId,
         division,
@@ -90,7 +90,7 @@ export class ApplicationFactory {
     division: IDivision,
   ): IParticipationDivisionInfoSnapshot {
     return {
-      id: ulid(),
+      id: uuidv7(),
       participationDivisionId: division.id,
       division,
       participationDivisionInfoId,
@@ -117,7 +117,7 @@ export class ApplicationFactory {
   ): IAdditionalInfo[] {
     return additionalInfoCreateDtos.map((additionalInfoCreateDto) => {
       return {
-        id: ulid(),
+        id: uuidv7(),
         applicationId,
         type: additionalInfoCreateDto.type,
         value: additionalInfoCreateDto.value,

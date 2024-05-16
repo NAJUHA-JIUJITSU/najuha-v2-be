@@ -31,10 +31,10 @@ import { generateDummyDivisionPacks } from 'src/dummy/division.dummy';
 import { dummyCombinationDiscountRules } from 'src/dummy/combination-discount-snapshot.dummy';
 import { CreateCompetitionRequiredAdditionalInfoRet } from 'src/modules/competitions/application/dtos';
 import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from 'src//database/entity/competition/required-additional-info.entity';
 
-describe('E2E u-5 competitions TEST', () => {
+describe('E2E a-5 competitions TEST', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let entityEntityManager: EntityManager;
@@ -293,7 +293,7 @@ describe('E2E u-5 competitions TEST', () => {
         .setCompetitionBasicDates(new Date())
         .build();
       const requiredAdditionalInfo: IRequiredAdditionalInfo = {
-        id: ulid(),
+        id: uuidv7(),
         type: 'ADDRESS',
         description: '주소',
         competitionId: competition.id,
@@ -328,7 +328,7 @@ describe('E2E u-5 competitions TEST', () => {
         .setCompetitionBasicDates(new Date())
         .build();
       const requiredAdditionalInfo: IRequiredAdditionalInfo = {
-        id: ulid(),
+        id: uuidv7(),
         type: 'ADDRESS',
         description: '주소',
         competitionId: competition.id,

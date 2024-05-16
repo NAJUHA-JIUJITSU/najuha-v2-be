@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import {
   CreatePolicyParam,
   CreatePolicyRet,
@@ -24,7 +24,7 @@ export class PolicyAppService {
     // 같은 타입의 약관이 존재하면 버전을 1 증가시킴
     const newVersion = existingPolicyEntity ? existingPolicyEntity.version + 1 : 1;
     const policyEntity = await this.policyRepository.save({
-      id: ulid(),
+      id: uuidv7(),
       type: policyCreateDto.type,
       isMandatory: policyCreateDto.isMandatory,
       title: policyCreateDto.title,

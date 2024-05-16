@@ -4,8 +4,8 @@ import { ICompetition } from './competition.interface';
 import { DateOrStringDate } from 'src/common/common-types';
 
 export interface ICombinationDiscountSnapshot {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /** 조합 할인 규칙. */
   combinationDiscountRules: ICombinationDiscountRule[] & tags.MinItems<1>;

@@ -1,14 +1,14 @@
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './player-snapshot.interface';
+import { IPlayerSnapshot } from './player-snapshot.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
 import { tags } from 'typia';
 import { IAdditionalInfo } from './additional-info.interface';
 import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IApplication {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /**  Created at. */
   createdAt: DateOrStringDate;

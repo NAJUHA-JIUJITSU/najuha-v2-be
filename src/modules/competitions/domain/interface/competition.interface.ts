@@ -6,8 +6,8 @@ import { IRequiredAdditionalInfo } from './required-addtional-info.interface';
 import { DateOrStringDate } from 'src/common/common-types';
 
 export interface ICompetition {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /** 대회명. */
   title: string & tags.MinLength<1> & tags.MaxLength<256>;

@@ -2,11 +2,11 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne } from 'typeorm
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { DivisionEntity } from '../competition/division.entity';
 import { IParticipationDivisionInfoSnapshot } from 'src/modules/applications/domain/interface/participation-division-info-snapshot.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 
 @Entity('participation_divsion_info_snapshot')
 export class ParticipationDivisionInfoSnapshotEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IParticipationDivisionInfoSnapshot['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

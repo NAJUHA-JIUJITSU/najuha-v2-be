@@ -2,11 +2,11 @@ import { PolicyConsentEntity } from 'src//database/entity/user/policy-consent.en
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 
 @Entity('user')
 export class UserEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IUser['id'];
 
   @Column('varchar', { length: 16, default: 'TEMPORARY_USER' })

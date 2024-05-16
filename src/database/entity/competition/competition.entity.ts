@@ -4,12 +4,12 @@ import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.e
 import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
 import { ApplicationEntity } from '../application/application.entity';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from './required-additional-info.entity';
 
 @Entity('competition')
 export class CompetitionEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: ICompetition['id'];
 
   @Column('varchar', { length: 256, default: 'DEFAULT TITLE' })

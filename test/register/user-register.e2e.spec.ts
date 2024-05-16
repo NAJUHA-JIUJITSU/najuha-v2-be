@@ -22,7 +22,7 @@ import {
   SendPhoneNumberAuthCodeRes,
 } from 'src/modules/register/presentation/dtos';
 import { UserEntity } from 'src//database/entity/user/user.entity';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import { TemporaryUserDummyBuilder, UserDummyBuilder } from 'src/dummy/user-dummy';
 import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
 
@@ -206,7 +206,7 @@ describe('E2E u-2 register test', () => {
       await Promise.all(
         policyTypes.map((type) => {
           return entityEntityManager.save(PolicyEntity, {
-            id: ulid(),
+            id: uuidv7(),
             type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -244,7 +244,7 @@ describe('E2E u-2 register test', () => {
       await Promise.all(
         policyTypes.map((type) => {
           return entityEntityManager.save(PolicyEntity, {
-            id: ulid(),
+            id: uuidv7(),
             type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -284,7 +284,7 @@ describe('E2E u-2 register test', () => {
       await Promise.all(
         policyTypes.map((type) => {
           return entityEntityManager.save(PolicyEntity, {
-            id: ulid(),
+            id: uuidv7(),
             type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -323,7 +323,7 @@ describe('E2E u-2 register test', () => {
       await Promise.all(
         policyTypes.map((type) => {
           return entityEntityManager.save(PolicyEntity, {
-            id: ulid(),
+            id: uuidv7(),
             type,
             isMandatory: true,
             title: `${type} 제목`,

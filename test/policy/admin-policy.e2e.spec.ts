@@ -14,7 +14,7 @@ import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { CreatePolicyReqBody, CreatePolicyRes, FindPoliciesRes } from 'src/modules/policy/presentation/dtos';
 import { UserDummyBuilder } from 'src/dummy/user-dummy';
 import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
@@ -80,7 +80,7 @@ describe('E2E a-4 admin-policy test', () => {
         await Promise.all(
           policyTypes.map((type) => {
             return entityEntityManager.save(PolicyEntity, {
-              id: ulid(),
+              id: uuidv7(),
               type: type,
               isMandatory: true,
               title: `${type} 제목 ${version}`,
@@ -111,7 +111,7 @@ describe('E2E a-4 admin-policy test', () => {
         await Promise.all(
           policyTypes.map((type) => {
             return entityEntityManager.save(PolicyEntity, {
-              id: ulid(),
+              id: uuidv7(),
               type: type,
               isMandatory: true,
               title: `${type} 제목 ${version}`,

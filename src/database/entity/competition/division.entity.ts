@@ -3,12 +3,12 @@ import { CompetitionEntity } from './competition.entity';
 import { PriceSnapshotEntity } from './price-snapshot.entity';
 import { ParticipationDivisionInfoSnapshotEntity } from '../application/participation-division-info-snapshot.entity';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
 export class DivisionEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IDivision['id'];
 
   @Column('varchar', { length: 64 })

@@ -1,8 +1,9 @@
 import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { Absolute, IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 import { IExpectedPayment } from './interface/expected-payment.interface';
+import typia from 'typia';
 
 export class CalculatePaymentService {
   static calculate(
@@ -40,9 +41,10 @@ export class CalculatePaymentService {
     combinationDiscountSnapshot: ICombinationDiscountSnapshot,
     divisions: IDivision[],
   ): number {
+    // todo!!: 더 읽기 편하게 리팩토링
     if (combinationDiscountSnapshot === null) return 0;
     const divisionUnits = divisions.map((division) => ({
-      weightType: division.weight.includes('ABSOLUTE') ? 'ABSOLUTE' : 'WEIGHT',
+      weightType: typia.is<Absolute>(division.weight) ? 'ABSOLUTE' : 'WEIGHT',
       uniformType: division.uniform,
     }));
     let maxDiscountAmount = 0;

@@ -7,8 +7,8 @@ import { DateOrStringDate } from 'src/common/common-types';
  * - ex) 주민번호, 주소
  */
 export interface IRequiredAdditionalInfo {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /** Type */
   type: 'SOCIAL_SECURITY_NUMBER' | 'ADDRESS';

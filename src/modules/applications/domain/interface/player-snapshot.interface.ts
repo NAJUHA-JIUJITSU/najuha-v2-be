@@ -4,8 +4,8 @@ import { tags } from 'typia';
 import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IPlayerSnapshot {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /**
    * Player name. (한글, 영문, 숫자, 공백 입력 가능합니다).

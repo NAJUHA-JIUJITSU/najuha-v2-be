@@ -13,7 +13,7 @@ import { PolicyAppService } from 'src/modules/policy/application/policy.app.serv
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { FindPoliciesRes, FindPolicyRes } from 'src/modules/policy/presentation/dtos';
 import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 // import * as Apis from '../../src/api/functional';
 
 describe('E2E u-4 user-policy test', () => {
@@ -59,7 +59,7 @@ describe('E2E u-4 user-policy test', () => {
       await Promise.all(
         policyTypes.map((type) => {
           return entityEntityManager.save(PolicyEntity, {
-            id: ulid(),
+            id: uuidv7(),
             type,
             isMandatory: true,
             title: `${type} 제목`,
@@ -80,7 +80,7 @@ describe('E2E u-4 user-policy test', () => {
     it('약관 ID로 약관을 가져오기 성공 시', async () => {
       /** pre condition. */
       const policy = await entityEntityManager.save(PolicyEntity, {
-        id: ulid(),
+        id: uuidv7(),
         type: 'TERMS_OF_SERVICE',
         isMandatory: true,
         title: `TERMS_OF_SERVICE 제목`,

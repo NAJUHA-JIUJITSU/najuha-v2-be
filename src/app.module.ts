@@ -27,7 +27,6 @@ import { typeOrmConfigAsync } from './database/typeorm.config';
     LoggerModule,
     MiddlewareModule,
     RedisModule,
-
     /**
      * Domain Modules: These modules arr used to provide the business logic to the application
      */

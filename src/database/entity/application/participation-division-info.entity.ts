@@ -4,11 +4,11 @@ import { ApplicationEntity } from './application.entity';
 import { IParticipationDivisionInfo } from 'src/modules/applications/domain/interface/participation-division-info.interface';
 import { ParticipationDivisionInfoPaymentEntity } from './participation-division-info-payment.entity';
 import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 
 @Entity('participation_division_info')
 export class ParticipationDivisionInfoEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IParticipationDivisionInfo['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

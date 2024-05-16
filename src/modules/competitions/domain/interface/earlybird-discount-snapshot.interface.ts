@@ -3,8 +3,8 @@ import { ICompetition } from './competition.interface';
 import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IEarlybirdDiscountSnapshot {
-  /**  ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /**  UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /** 얼리버드 할인 시작일. */
   earlybirdStartDate: DateOrStringDate;

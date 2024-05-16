@@ -4,8 +4,8 @@ import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interfa
 import { DateOrStringDate } from 'src/common/common-types';
 
 export interface IAdditionalInfo {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /**  Created at. */
   createdAt: DateOrStringDate;

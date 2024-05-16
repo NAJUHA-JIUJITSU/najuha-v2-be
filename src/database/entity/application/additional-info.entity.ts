@@ -1,11 +1,11 @@
 import { IAdditionalInfo } from 'src/modules/applications/domain/interface/additional-info.interface';
 import { Column, CreateDateColumn, Entity, ManyToOne, UpdateDateColumn } from 'typeorm';
-import { ulid } from 'ulid';
 import { ApplicationEntity } from './application.entity';
+import { uuidv7 } from 'uuidv7';
 
 @Entity('additional_info')
 export class AdditionalInfoEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IAdditionalInfo['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

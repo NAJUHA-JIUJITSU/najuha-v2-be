@@ -1,15 +1,15 @@
 import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
 import { assert } from 'typia';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 
 export class UserDummyBuilder {
   private user: Partial<IUser> = {};
 
   constructor() {
-    this.user.id = ulid();
+    this.user.id = uuidv7();
     this.user.role = 'USER';
     this.user.snsAuthProvider = 'KAKAO';
-    this.user.snsId = ulid();
+    this.user.snsId = uuidv7();
     this.user.name = 'dummyUser';
     this.user.email = 'dummy@gmail.com';
     this.user.phoneNumber = '01012345678';
@@ -107,10 +107,10 @@ export class TemporaryUserDummyBuilder {
   private user: Partial<ITemporaryUser> = {};
 
   constructor() {
-    this.user.id = ulid();
+    this.user.id = uuidv7();
     this.user.role = 'TEMPORARY_USER';
     this.user.snsAuthProvider = 'KAKAO';
-    this.user.snsId = ulid();
+    this.user.snsId = uuidv7();
     this.user.name = 'dummyTemporaryUser';
     this.user.email = 'dummyTemporaryUser@gmail.com';
     this.user.phoneNumber = null;

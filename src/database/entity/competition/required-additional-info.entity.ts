@@ -1,12 +1,12 @@
 import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
 
 @Entity('required_additional_info')
 export class RequiredAdditionalInfoEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IRequiredAdditionalInfo['id'];
 
   @Column('varchar', { length: 64 })

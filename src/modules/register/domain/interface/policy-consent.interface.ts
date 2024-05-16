@@ -4,8 +4,8 @@ import { tags } from 'typia';
 
 /** - 사용자가 동의한 약관 정보. */
 export interface IPolicyConsent {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /** 약관 동의 날짜. */
   createdAt: DateOrStringDate;

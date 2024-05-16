@@ -14,12 +14,12 @@ import { CompetitionEntity } from '../competition/competition.entity';
 import { UserEntity } from '../user/user.entity';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import { AdditionalInfoEntity } from './additional-info.entity';
 
 @Entity('application')
 export class ApplicationEntity {
-  @Column('varchar', { length: 26, primary: true, default: ulid() })
+  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IApplication['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })

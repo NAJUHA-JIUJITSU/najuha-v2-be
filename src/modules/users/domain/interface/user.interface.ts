@@ -13,8 +13,8 @@ import { tags } from 'typia';
  * - apple  : snsId, email, name.
  */
 export interface IUser {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /**
    * User 역할. User의 접근 권한을 나타냅니다.

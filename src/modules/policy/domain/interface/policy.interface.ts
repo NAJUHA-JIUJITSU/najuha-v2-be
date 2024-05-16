@@ -7,8 +7,8 @@ import { tags } from 'typia';
  * - 새로운 약관이 생성될 때마다 버전을 올립니다.
  */
 export interface IPolicy {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: string & tags.MinLength<36> & tags.MaxLength<36>;
 
   /** 약관의 버전. */
   version: number & tags.Type<'uint32'> & tags.Minimum<0>;
