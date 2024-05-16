@@ -26,13 +26,47 @@ import {
 } from 'src/modules/competitions/presentation/dtos';
 import { CompetitionEntity } from 'src//database/entity/competition/competition.entity';
 import { UserDummyBuilder } from 'src/dummy/user-dummy';
-import { CompetitionDummyBuilder, generateDummyCompetitions } from 'src/dummy/competition.dummy';
+import { CompetitionDummyBuilder } from 'src/dummy/competition.dummy';
 import { generateDummyDivisionPacks } from 'src/dummy/division.dummy';
 import { dummyCombinationDiscountRules } from 'src/dummy/combination-discount-snapshot.dummy';
 import { CreateCompetitionRequiredAdditionalInfoRet } from 'src/modules/competitions/application/dtos';
 import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
 import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from 'src//database/entity/competition/required-additional-info.entity';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { DateTime } from 'src/common/date-time';
+
+export const generateTestDummyCompetitions = (): ICompetition[] => {
+  const competitions: ICompetition[] = [];
+  const today = new Date();
+  const start = DateTime.fromJSDate(today).minus({ days: 49 }).toJSDate();
+  const end = DateTime.fromJSDate(today).plus({ days: 50 }).toJSDate();
+  let count = 0;
+  for (
+    let competitionDate = new Date(start);
+    competitionDate <= end;
+    competitionDate = DateTime.fromJSDate(competitionDate).plus({ days: 1 }).toJSDate()
+  ) {
+    competitions.push(
+      // 1. 비협약
+      new CompetitionDummyBuilder()
+        .setTitle(`${count++}`)
+        .setIsPartnership(false)
+        .setCompetitionBasicDates(competitionDate)
+        .build(),
+      new CompetitionDummyBuilder()
+        .setIsPartnership(true)
+        .setTitle(`${count++}`)
+        .setCompetitionBasicDates(competitionDate)
+        // .setDivisions(generateDummyDivisionPacks())
+        .setEarlybirdDiscountSnapshots(10000)
+        .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
+        .setRequiredAdditionalInfos()
+        .build(),
+    );
+  }
+  return competitions;
+};
 
 describe('E2E a-5 competitions TEST', () => {
   let app: INestApplication;
@@ -92,7 +126,7 @@ describe('E2E a-5 competitions TEST', () => {
   describe('a-5-2 GET /admin/competitions --------------------------------------------------------------------------', () => {
     it('find many competitions 성공시', async () => {
       /** pre condition. */
-      const competitions = generateDummyCompetitions();
+      const competitions = generateTestDummyCompetitions();
       await entityEntityManager.save(CompetitionEntity, competitions);
       /** main test. */
       const res = await request(app.getHttpServer())

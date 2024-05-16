@@ -12,7 +12,8 @@ import { UserEntity } from 'src//database/entity/user/user.entity';
 import { FindCompetitionsRes, GetCompetitionRes } from 'src/modules/competitions/presentation/dtos';
 import { CompetitionEntity } from 'src//database/entity/competition/competition.entity';
 import { UserDummyBuilder } from 'src/dummy/user-dummy';
-import { CompetitionDummyBuilder, generateDummyCompetitions } from 'src/dummy/competition.dummy';
+import { CompetitionDummyBuilder } from 'src/dummy/competition.dummy';
+import { generateTestDummyCompetitions } from './admin-competitions.e2e.spec';
 
 describe('E2E u-5 competitions TEST', () => {
   let app: INestApplication;
@@ -54,7 +55,7 @@ describe('E2E u-5 competitions TEST', () => {
   describe('u-5-1 GET /user/competitions --------------------------------------------------------------------------', () => {
     it('find many competitions 성공시', async () => {
       /** pre condition. */
-      const competitions = generateDummyCompetitions();
+      const competitions = generateTestDummyCompetitions();
       await entityEntityManager.save(CompetitionEntity, competitions);
       /** main test. */
       const res = await request(app.getHttpServer())

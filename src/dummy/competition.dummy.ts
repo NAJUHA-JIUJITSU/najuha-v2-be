@@ -334,8 +334,6 @@ export const generateDummyCompetitions = (): ICompetition[] => {
   const today = new Date();
   const start = DateTime.fromJSDate(today).minus({ days: 49 }).toJSDate();
   const end = DateTime.fromJSDate(today).plus({ days: 50 }).toJSDate();
-  const divisionFactory = new DivisionFactory();
-  const dummyDivisons = divisionFactory.createDivisions('tmp-competition-id', generateDummyDivisionPacks());
   let count = 0;
   for (
     let competitionDate = new Date(start);
