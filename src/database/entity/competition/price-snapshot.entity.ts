@@ -4,6 +4,10 @@ import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-
 import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * PriceSnapshot Entity
+ * @namespace Competition
+ */
 @Entity('price_snapshot')
 export class PriceSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

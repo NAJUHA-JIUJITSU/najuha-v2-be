@@ -6,6 +6,10 @@ import { IParticipationDivisionInfo } from 'src/modules/applications/domain/inte
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * ParticipationDivisionInfoPayment Entity
+ * @namespace Application
+ */
 @Entity('participation_division_info_payment')
 export class ParticipationDivisionInfoPaymentEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

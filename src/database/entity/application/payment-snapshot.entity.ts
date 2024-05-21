@@ -1,8 +1,12 @@
 import { Column, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
-import { ApplicationEntity } from '../application/application.entity';
+import { ApplicationEntity } from './application.entity';
 import { IPaymentSnapshot } from 'src/modules/competitions/domain/interface/payment-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * PaymentSnapshot Entity
+ * @namespace Application
+ */
 @Entity('payment_snapshot')
 export class PaymentSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

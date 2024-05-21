@@ -3,6 +3,10 @@ import { CompetitionEntity } from './competition.entity';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * EarlybirdDiscountSnapshot Entity
+ * @namespace Competition
+ */
 @Entity('earlybird_discount_snapshot')
 export class EarlybirdDiscountSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

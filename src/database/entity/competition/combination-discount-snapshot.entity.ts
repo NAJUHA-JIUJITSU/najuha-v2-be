@@ -4,6 +4,10 @@ import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/in
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * CombinationDiscountSnapshot Entity
+ * @namespace Competition
+ */
 @Entity('combination_discount_snapshot')
 export class CombinationDiscountSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

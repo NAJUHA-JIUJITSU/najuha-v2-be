@@ -4,6 +4,10 @@ import { UserEntity } from './user.entity';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * PolicyConsent Entity
+ * @namespace User
+ */
 @Entity('policy_consent')
 export class PolicyConsentEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

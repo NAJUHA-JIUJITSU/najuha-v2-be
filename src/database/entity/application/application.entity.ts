@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PlayerSnapshotEntity } from './player-snapshot.entity';
-import { PaymentSnapshotEntity } from '../competition/payment-snapshot.entity';
+import { PaymentSnapshotEntity } from './payment-snapshot.entity';
 import { CompetitionEntity } from '../competition/competition.entity';
 import { UserEntity } from '../user/user.entity';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
@@ -17,6 +17,10 @@ import { IApplication } from 'src/modules/applications/domain/interface/applicat
 import { uuidv7 } from 'uuidv7';
 import { AdditionalInfoEntity } from './additional-info.entity';
 
+/**
+ * Application Entity
+ * @namespace Application
+ */
 @Entity('application')
 export class ApplicationEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

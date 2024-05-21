@@ -4,6 +4,10 @@ import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * User Entity
+ * @namespace User
+ */
 @Entity('user')
 export class UserEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

@@ -5,6 +5,10 @@ import { ParticipationDivisionInfoSnapshotEntity } from '../application/particip
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * Division Entity
+ * @namespace Competition
+ */
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
 export class DivisionEntity {

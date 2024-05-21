@@ -7,6 +7,10 @@ import { ICompetition } from 'src/modules/competitions/domain/interface/competit
 import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from './required-additional-info.entity';
 
+/**
+ * Competition Entity
+ * @namespace Competition
+ */
 @Entity('competition')
 export class CompetitionEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

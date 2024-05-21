@@ -3,6 +3,10 @@ import { ApplicationEntity } from './application.entity';
 import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * PlayerSnapshot Entity
+ * @namespace Application
+ */
 @Entity('player_snapshot')
 export class PlayerSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

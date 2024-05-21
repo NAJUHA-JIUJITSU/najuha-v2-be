@@ -4,6 +4,10 @@ import { DivisionEntity } from '../competition/division.entity';
 import { IParticipationDivisionInfoSnapshot } from 'src/modules/applications/domain/interface/participation-division-info-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * ParticipationDivisionInfoSnapshot Entity
+ * @namespace Application
+ */
 @Entity('participation_divsion_info_snapshot')
 export class ParticipationDivisionInfoSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })

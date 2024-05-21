@@ -3,6 +3,10 @@ import { Column, CreateDateColumn, Entity, ManyToOne, UpdateDateColumn } from 't
 import { ApplicationEntity } from './application.entity';
 import { uuidv7 } from 'uuidv7';
 
+/**
+ * AdditionalInfo Entity
+ * @namespace Application
+ */
 @Entity('additional_info')
 export class AdditionalInfoEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
