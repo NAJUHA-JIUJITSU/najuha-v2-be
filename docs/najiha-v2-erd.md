@@ -10,7 +10,6 @@
 
 - [Application](#application)
 - [Competition](#competition)
-- [UnknownNamespace](#unknownnamespace)
 - [User](#user)
 
 
@@ -254,6 +253,11 @@ erDiagram
     timestamp_with_time_zone deletedAt
     character_varying competitionId FK
   }
+  competition_host {
+    character_varying id PK
+    character_varying hostId FK
+    character_varying competitionId FK
+  }
   competition {
     character_varying id PK
     character_varying title
@@ -279,6 +283,7 @@ erDiagram
   earlybird_discount_snapshot }|--|| competition: competition
   combination_discount_snapshot }|--|| competition: competition
   required_additional_info }|--|| competition: competition
+  competition_host }|--|| competition: competition
 ```
 
 ### combination_discount_snapshot
@@ -292,6 +297,20 @@ CombinationDiscountSnapshot Entity
   - `combinationDiscountRules`: 
   - `createdAt`: 
   - `competitionId`: 
+  - `competition`: 
+
+
+### competition_host
+
+Competition Host Map Entity
+@namespace Competition
+
+**Properties**
+
+  - `id`: 
+  - `hostId`: 
+  - `competitionId`: 
+  - `user`: 
   - `competition`: 
 
 
@@ -396,31 +415,6 @@ RequiredAdditionalInfo Entity
   - `createdAt`: 
   - `deletedAt`: 
   - `competitionId`: 
-  - `competition`: 
-
-
-## UnknownNamespace
-
-```mermaid
-erDiagram
-  competition_host {
-    character_varying id PK
-    character_varying userId FK
-    character_varying competitionId FK
-  }
-  
-```
-
-### competition_host
-
-
-
-**Properties**
-
-  - `id`: 
-  - `userId`: 
-  - `competitionId`: 
-  - `user`: 
   - `competition`: 
 
 

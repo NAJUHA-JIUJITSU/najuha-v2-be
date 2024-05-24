@@ -19,10 +19,11 @@ export interface IUser {
   /**
    * User 역할. User의 접근 권한을 나타냅니다.
    * - ADMIN: 관리자 권한.
+   * - HOST: 대회 주최자 권한.
    * - USER: 일반 User 권한.
    * - TEMPORARY_USER: 회원가입을 완료하지 않은 User 권한.
    */
-  role: 'ADMIN' | 'USER' | 'TEMPORARY_USER';
+  role: 'ADMIN' | 'HOST' | 'USER' | 'TEMPORARY_USER';
 
   /** SNS 공급자. User가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다. */
   snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';

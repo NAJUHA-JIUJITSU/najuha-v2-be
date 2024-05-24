@@ -34,7 +34,7 @@ import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interfa
 import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from 'src//database/entity/competition/required-additional-info.entity';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { DateTime } from 'src/common/date-time';
+import { DateTime } from 'src/common/utils/date-time';
 
 export const generateTestDummyCompetitions = (): ICompetition[] => {
   const competitions: ICompetition[] = [];

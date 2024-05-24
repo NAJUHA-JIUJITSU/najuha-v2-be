@@ -142,7 +142,7 @@ export class CompetitionDummyBuilder {
   public setCompetitionHostMaps(hostIds: string[]): this {
     this.competition.competitionHostMaps = hostIds.map((hostId) => ({
       id: uuidv7(),
-      userId: hostId,
+      hostId,
       competitionId: this.competition.id,
     }));
     return this;

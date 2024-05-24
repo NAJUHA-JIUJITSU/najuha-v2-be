@@ -1,3 +1,4 @@
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ICombinationDiscountSnapshotCreateDto } from '../domain/interface/combination-discount-snapshot.interface';
 import {
   ICompetitionWithoutRelations,
@@ -25,6 +26,10 @@ export interface UpdateCompetitionParam {
 }
 
 export interface FindCompetitionsParam extends ICompetitionQueryOptions {}
+
+export interface FindHostingCompetitionsParam extends ICompetitionQueryOptions {
+  hostId: IUser['id'];
+}
 
 export interface GetCompetitionParam {
   competitionId: ICompetition['id'];

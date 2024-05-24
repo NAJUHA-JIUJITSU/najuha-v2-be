@@ -1239,7 +1239,7 @@
           }
         },
         "summary": "u-5-1 find competitions",
-        "description": "u-5-1 find competitions.\n- RoleLevel: USER.\n- ACTIVE 상태인 competition 들을 조회합니다.\n\nQuery: FindCompetitionsReqQuery\n- page: 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다. (default: 0).\n- limit: 한페이지에 표시할 데이터 갯수. (default: 10).\n- dateFilter: 대회 날짜를 기준으로 필터링합니다. ex) '2023-04'. (default: Now).\n- locationFilter: 대회가 열리는 위치로 필터링합니다. ex) 서울, 부산, 인천, 대구, 대전, 광주, 울산, 세종, 경기, 충북, 충남, 전남, 경북, 경남, 강원, 전북, 제주.\n- selectFilter: 태그를 기준으로 필터링합니다. ex) ['간편결제', '얼리버드', '신청가능', '단독출전조정'].\n- sortOption: 대회를 정렬하는 옵션입니다. ex) '일자순', '조회순', '마감임박순'. (default: '일자순').",
+        "description": "u-5-1 find competitions.\n- RoleLevel: PUBLIC.\n- ACTIVE 상태인 competition 들을 조회합니다.\n\nQuery: FindCompetitionsReqQuery\n- page: 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다. (default: 0).\n- limit: 한페이지에 표시할 데이터 갯수. (default: 10).\n- dateFilter: 대회 날짜를 기준으로 필터링합니다. ex) '2023-04'. (default: Now).\n- locationFilter: 대회가 열리는 위치로 필터링합니다. ex) 서울, 부산, 인천, 대구, 대전, 광주, 울산, 세종, 경기, 충북, 충남, 전남, 경북, 경남, 강원, 전북, 제주.\n- selectFilter: 태그를 기준으로 필터링합니다. ex) ['간편결제', '얼리버드', '신청가능', '단독출전조정'].\n- sortOption: 대회를 정렬하는 옵션입니다. ex) '일자순', '조회순', '마감임박순'. (default: '일자순').",
         "x-nestia-namespace": "user.competitions.findCompetitions",
         "x-nestia-jsDocTags": [
           {
@@ -2036,6 +2036,118 @@
           }
         ],
         "x-nestia-method": "DELETE"
+      }
+    },
+    "/host/competitions": {
+      "get": {
+        "tags": [
+          "h-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindCompetitionsReqQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "hosting competitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindCompetitionsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "h-5-1 find hostring competitions",
+        "description": "h-5-1 find hostring competitions.\n- RoleLevel: HOST.\n- 본인이 주최한 대회들을 조회합니다.\n- ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.\n\nQuery: FindCompetitionsReqQuery\n- page: 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다. (default: 0).\n- limit: 한페이지에 표시할 데이터 갯수. (default: 10).\n- dateFilter: 대회 날짜를 기준으로 필터링합니다. ex) '2023-04'. (default: Now).\n- locationFilter: 대회가 열리는 위치로 필터링합니다. ex) 서울, 부산, 인천, 대구, 대전, 광주, 울산, 세종, 경기, 충북, 충남, 전남, 경북, 경남, 강원, 전북, 제주.\n- selectFilter: 태그를 기준으로 필터링합니다. ex) ['간편결제', '얼리버드', '신청가능', '단독출전조정'].\n- sortOption: 대회를 정렬하는 옵션입니다. ex) '일자순', '조회순', '마감임박순'. (default: '일자순').",
+        "x-nestia-namespace": "host.competitions.findCompetitions",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "h-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "hosting competitions",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/host/competitions/{competitionId}": {
+      "get": {
+        "tags": [
+          "h-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "competition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormGetCompetitionRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "h-5-2 get hosting competition",
+        "description": "h-5-2 get hosting competition.\n- RoleLevel: HOST.\n- 본인이 주최한 대회를 조회합니다.\n- ACTIVE, INACTIVE 상태인 competition을 조회합니다.",
+        "x-nestia-namespace": "host.competitions.getCompetition",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "h-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "competition",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
       }
     },
     "/user/applications": {
@@ -3078,11 +3190,12 @@
             "type": "string",
             "enum": [
               "ADMIN",
+              "HOST",
               "TEMPORARY_USER",
               "USER"
             ],
             "title": "User 역할. User의 접근 권한을 나타냅니다",
-            "description": "User 역할. User의 접근 권한을 나타냅니다.\n- ADMIN: 관리자 권한.\n- USER: 일반 User 권한.\n- TEMPORARY_USER: 회원가입을 완료하지 않은 User 권한."
+            "description": "User 역할. User의 접근 권한을 나타냅니다.\n- ADMIN: 관리자 권한.\n- HOST: 대회 주최자 권한.\n- USER: 일반 User 권한.\n- TEMPORARY_USER: 회원가입을 완료하지 않은 User 권한."
           },
           "snsId": {
             "type": "string",
@@ -3807,11 +3920,12 @@
             "type": "string",
             "enum": [
               "ADMIN",
+              "HOST",
               "TEMPORARY_USER",
               "USER"
             ],
             "title": "User 역할. User의 접근 권한을 나타냅니다",
-            "description": "User 역할. User의 접근 권한을 나타냅니다.\n- ADMIN: 관리자 권한.\n- USER: 일반 User 권한.\n- TEMPORARY_USER: 회원가입을 완료하지 않은 User 권한."
+            "description": "User 역할. User의 접근 권한을 나타냅니다.\n- ADMIN: 관리자 권한.\n- HOST: 대회 주최자 권한.\n- USER: 일반 User 권한.\n- TEMPORARY_USER: 회원가입을 완료하지 않은 User 권한."
           },
           "snsAuthProvider": {
             "type": "string",
@@ -5353,7 +5467,7 @@
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
-          "userId": {
+          "hostId": {
             "$ref": "#/components/schemas/TId",
             "title": "주최자 User ID",
             "description": "주최자 User ID."
@@ -5367,7 +5481,7 @@
         "nullable": false,
         "required": [
           "id",
-          "userId",
+          "hostId",
           "competitionId"
         ],
         "description": "대회 주최자 정보 매핑 테이블."

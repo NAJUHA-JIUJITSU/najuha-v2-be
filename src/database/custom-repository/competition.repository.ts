@@ -10,6 +10,7 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
   }
 
   async findManyWithQueryOptions({
+    hostId,
     page,
     limit,
     parsedDateFilter,
@@ -17,10 +18,7 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
     selectFilter,
     sortOption,
     status,
-  }: Pick<
-    ICompetitionQueryOptions,
-    'page' | 'limit' | 'parsedDateFilter' | 'locationFilter' | 'selectFilter' | 'sortOption' | 'status'
-  >) {
+  }: ICompetitionQueryOptions) {
     const now = new Date();
 
     let qb = this.createQueryBuilder('competition');
@@ -30,6 +28,15 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
       'earlybirdDiscountSnapshots',
       'earlybirdDiscountSnapshots.createdAt = (SELECT MAX(e."createdAt") FROM earlybird_discount_snapshot e WHERE e."competitionId" = competition.id)',
     );
+
+    if (hostId) {
+      qb = qb.innerJoin(
+        'competition.competitionHostMaps',
+        'competitionHostMaps',
+        'competitionHostMaps.hostId = :hostId',
+        { hostId },
+      );
+    }
 
     if (status) qb = qb.andWhere('competition.status = :status', { status });
 

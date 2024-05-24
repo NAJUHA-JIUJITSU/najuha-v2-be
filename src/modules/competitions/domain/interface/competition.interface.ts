@@ -5,6 +5,7 @@ import { IEarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.interf
 import { IRequiredAdditionalInfo } from './required-addtional-info.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { ICompetitionHostMap } from './competition-host-map.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 export interface ICompetition {
   /** UUIDv7. */
@@ -147,13 +148,16 @@ export interface ICompetitionUpdateDto
   > {}
 
 export interface ICompetitionQueryOptions {
+  /** 대회 주최자 ID. */
+  hostId?: IUser['id'];
+
   /** 현제 페이지 번호입니다. default: 0 */
   page: number;
 
   /** 한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 100 */
   limit: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<100>;
 
-  /** YYYY-MM 형식의 날짜 필터를 Date로 파싱한 결과입니다. default: Now */
+  /** YYYY-MM 형식의 날짜 필터를 Date로 파싱한 결과입니다. default: now */
   parsedDateFilter: Date;
 
   /**

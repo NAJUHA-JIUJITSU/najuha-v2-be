@@ -1,19 +1,21 @@
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
-import { Controller } from '@nestjs/common';
+import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { FindCompetitionsReqQuery, FindCompetitionsRes, GetCompetitionRes } from './dtos';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
-@Controller('user/competitions')
-export class UserCompetitionsController {
+@Controller('host/competitions')
+export class HostCompetitionsController {
   constructor(private readonly competitionsAppService: CompetitionsAppService) {}
 
   /**
-   * u-5-1 find competitions.
-   * - RoleLevel: PUBLIC.
-   * - ACTIVE 상태인 competition 들을 조회합니다.
+   * h-5-1 find hostring competitions.
+   * - RoleLevel: HOST.
+   * - 본인이 주최한 대회들을 조회합니다.
+   * - ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.
    *
    * Query: FindCompetitionsReqQuery
    * - page: 현제 페이지 번호입니다. 최초 요청 시에는 0을 사용합니다. (default: 0).
@@ -23,38 +25,43 @@ export class UserCompetitionsController {
    * - selectFilter: 태그를 기준으로 필터링합니다. ex) ['간편결제', '얼리버드', '신청가능', '단독출전조정'].
    * - sortOption: 대회를 정렬하는 옵션입니다. ex) '일자순', '조회순', '마감임박순'. (default: '일자순').
    *
-   * @tag u-5 competitions
-   * @returns competitions
+   * @tag h-5 competitions
+   * @returns hosting competitions
    */
-  @RoleLevels(RoleLevel.PUBLIC)
+  @RoleLevels(RoleLevel.HOST)
   @TypedRoute.Get('/')
-  async findCompetitions(@TypedQuery() query: FindCompetitionsReqQuery): Promise<ResponseForm<FindCompetitionsRes>> {
+  async findCompetitions(
+    @Req() req: Request,
+    @TypedQuery() query: FindCompetitionsReqQuery,
+  ): Promise<ResponseForm<FindCompetitionsRes>> {
+    const userId: IUser['id'] = req['userId'];
     return createResponseForm(
-      await this.competitionsAppService.findCompetitions({
+      await this.competitionsAppService.findHostingCompetitions({
+        hostId: userId,
         page: query.page ?? 0,
         limit: query.limit ?? 10,
         parsedDateFilter: query.dateFilter ? new Date(query.dateFilter) : new Date(),
         sortOption: query.sortOption ?? '일자순',
         locationFilter: query.locationFilter,
         selectFilter: query.selectFilter,
-        status: 'ACTIVE',
       }),
     );
   }
 
   /**
-   * u-5-2 get competition.
-   * - RoleLevel: USER.
-   * - ACTIVE 상태인 competition 을 조회합니다.
+   * h-5-2 get hosting competition.
+   * - RoleLevel: HOST.
+   * - 본인이 주최한 대회를 조회합니다.
+   * - ACTIVE, INACTIVE 상태인 competition을 조회합니다.
    *
-   * @tag u-5 competitions
+   * @tag h-5 competitions
    * @returns competition
    */
-  @RoleLevels(RoleLevel.PUBLIC)
+  @RoleLevels(RoleLevel.HOST)
   @TypedRoute.Get('/:competitionId')
   async getCompetition(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
   ): Promise<ResponseForm<GetCompetitionRes>> {
-    return createResponseForm(await this.competitionsAppService.getCompetition({ competitionId, status: 'ACTIVE' }));
+    return createResponseForm(await this.competitionsAppService.getCompetition({ competitionId }));
   }
 }

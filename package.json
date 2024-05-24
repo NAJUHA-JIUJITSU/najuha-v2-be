@@ -8,9 +8,10 @@
   "scripts": {
     "------------------------BUILDS------------------------": "",
     "build": "nest build",
-    "build:swagger": "NODE_ENV=dev npx nestia swagger",
     "build:sdk": "NODE_ENV=dev npx nestia sdk",
+    "build:swagger": "NODE_ENV=dev npx nestia swagger",
     "build:erd": "NODE_ENV=dev node dist/src/generate-erd.js",
+    "build:docs": "NODE_ENV=dev npm run build:swagger && npm run build:erd",
     "------------------------STARTS------------------------": "",
     "start": "nest start",
     "start:dev": "NODE_ENV=dev nest start --watch",

@@ -8,7 +8,7 @@ export interface ICompetitionHostMap {
   id: TId;
 
   /** 주최자 User ID. */
-  userId: IUser['id'];
+  hostId: IUser['id'];
 
   /** 주체 대회 ID. */
   competitionId: ICompetition['id'];
