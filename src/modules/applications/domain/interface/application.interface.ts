@@ -4,20 +4,20 @@ import { IPlayerSnapshot } from './player-snapshot.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
 import { tags } from 'typia';
 import { IAdditionalInfo } from './additional-info.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IApplication {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /**  Created at. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** Updated at. */
-  updatedAt: DateOrStringDate;
+  updatedAt: TDateOrStringDate;
 
   /** Deleted at. */
-  deletedAt: DateOrStringDate | null;
+  deletedAt: TDateOrStringDate | null;
 
   /**
    * 본인신청과 대리신청을 구별하는 type.

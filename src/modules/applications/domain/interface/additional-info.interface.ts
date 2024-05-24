@@ -1,17 +1,17 @@
 import { tags } from 'typia';
 import { IApplication } from './application.interface';
 import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IAdditionalInfo {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /**  Created at. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** Updated at. */
-  updatedAt: DateOrStringDate;
+  updatedAt: TDateOrStringDate;
 
   /** Type. */
   type: IRequiredAdditionalInfo['type'];

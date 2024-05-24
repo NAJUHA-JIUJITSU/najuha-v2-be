@@ -1,12 +1,11 @@
-import { DateTime } from 'src/common/date-time';
+import { DateTime } from 'src/common/utils/date-time';
 import { DivisionFactory } from 'src/modules/competitions/domain/division.factory';
 import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import {
-  CompetitionLocationFilter,
-  CompetitionStatus,
+  TCompetitionLocationFilter,
+  TCompetitionStatus,
   ICompetition,
 } from 'src/modules/competitions/domain/interface/competition.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
 import typia, { tags } from 'typia';
@@ -15,12 +14,13 @@ import { generateDummyDivisionPacks } from './division.dummy';
 import { dummyCombinationDiscountRules } from './combination-discount-snapshot.dummy';
 import { ICombinationDiscountRule } from 'src/modules/competitions/domain/interface/combination-discount-rule.interface';
 import { IDivisionPack } from 'src/modules/competitions/domain/interface/division-pack.interface';
+import appEnv from 'src/common/app-env';
 
 export class CompetitionDummyBuilder {
   private competition: ICompetition = {
     id: uuidv7(),
     title: 'Dummy Competition',
-    address: typia.random<CompetitionLocationFilter>(),
+    address: typia.random<TCompetitionLocationFilter>(),
     description: 'Dummy Competition Description',
     isPartnership: true,
     viewCount: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<1000>>(),
@@ -40,6 +40,7 @@ export class CompetitionDummyBuilder {
     earlybirdDiscountSnapshots: [],
     combinationDiscountSnapshots: [],
     requiredAdditionalInfos: [],
+    competitionHostMaps: [], // todo!!!: competitionHostMaps에 데이터 추가하기
   };
   private today: Date;
   private basicPeriodTitle = '';
@@ -56,7 +57,7 @@ export class CompetitionDummyBuilder {
     return this;
   }
 
-  public setAddress(address: CompetitionLocationFilter): this {
+  public setAddress(address: TCompetitionLocationFilter): this {
     this.competition.address = address;
     return this;
   }
@@ -127,7 +128,7 @@ export class CompetitionDummyBuilder {
     return this;
   }
 
-  public setStatus(status: CompetitionStatus): this {
+  public setStatus(status: TCompetitionStatus): this {
     this.competition.status = status;
     return this;
   }
@@ -135,6 +136,15 @@ export class CompetitionDummyBuilder {
   public setDivisions(divisionPacks: IDivisionPack[]): this {
     const divisionFactory = new DivisionFactory();
     this.competition.divisions = divisionFactory.createDivisions(this.competition.id, divisionPacks);
+    return this;
+  }
+
+  public setCompetitionHostMaps(hostIds: string[]): this {
+    this.competition.competitionHostMaps = hostIds.map((hostId) => ({
+      id: uuidv7(),
+      userId: hostId,
+      competitionId: this.competition.id,
+    }));
     return this;
   }
 
@@ -353,6 +363,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setTitle(`${count++}`)
         .setCompetitionBasicDates(competitionDate)
         .setDivisions(generateDummyDivisionPacks())
+        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
         .build(),
       // 3. 2 + 얼리버드 할인
       new CompetitionDummyBuilder()
@@ -361,6 +372,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setCompetitionBasicDates(competitionDate)
         .setDivisions(generateDummyDivisionPacks())
         .setEarlybirdDiscountSnapshots(10000)
+        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
         .build(),
       // 4. 3 + 조합 할인
       new CompetitionDummyBuilder()
@@ -370,6 +382,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setDivisions(generateDummyDivisionPacks())
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
+        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
         .build(),
       // 5. 4 + 추가정보
       new CompetitionDummyBuilder()
@@ -380,6 +393,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
         .setRequiredAdditionalInfos()
+        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
         .build(),
     );
   }

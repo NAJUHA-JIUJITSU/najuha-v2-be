@@ -3059,9 +3059,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -3127,12 +3125,12 @@
             "description": "User 상태.\n- ACTIVE: 활성.\n- INACTIVE: 비활성."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
           },
@@ -3203,7 +3201,12 @@
           "belt"
         ]
       },
-      "DateOrStringDate": {
+      "TId": {
+        "type": "string",
+        "maxLength": 36,
+        "minLength": 36
+      },
+      "TDateOrStringDate": {
         "oneOf": [
           {
             "type": "string",
@@ -3796,9 +3799,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -3906,12 +3907,12 @@
             "description": "User 상태.\n- ACTIVE: 활성.\n- INACTIVE: 비활성."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
           }
@@ -4017,14 +4018,12 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
@@ -4109,9 +4108,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -4151,7 +4148,7 @@
             "description": "약관의 내용.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           }
@@ -4250,9 +4247,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -4292,7 +4287,7 @@
             "description": "약관의 내용.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           }
@@ -4479,24 +4474,22 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "status": {
-            "$ref": "#/components/schemas/CompetitionStatus",
+            "$ref": "#/components/schemas/TCompetitionStatus",
             "title": "대회의 상태",
             "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
           },
@@ -4699,7 +4692,7 @@
           "earlybirdDiscountSnapshots"
         ]
       },
-      "CompetitionStatus": {
+      "TCompetitionStatus": {
         "type": "string",
         "enum": [
           "ACTIVE",
@@ -4710,19 +4703,17 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "earlybirdStartDate": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "얼리버드 할인 시작일",
             "description": "얼리버드 할인 시작일."
           },
           "earlybirdEndDate": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "얼리버드 할인 마감일",
             "description": "얼리버드 할인 마감일."
           },
@@ -4733,14 +4724,12 @@
             "description": "얼리버드 할인 가격.\n- ex) 10000.\n- 단위 : 원.\n- 음수 값은 허용하지 않습니다."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "competitionId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "Competition id",
             "description": "Competition id."
           }
@@ -4796,9 +4785,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -4970,17 +4957,17 @@
             "description": "대회 포스터 이미지 URL Key."
           },
           "status": {
-            "$ref": "#/components/schemas/CompetitionStatus",
+            "$ref": "#/components/schemas/TCompetitionStatus",
             "title": "대회의 상태",
             "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
           },
@@ -5015,6 +5002,14 @@
             },
             "title": "대회 신청시 추가저으로 필요로하는 정보를 정의합니다",
             "description": "대회 신청시 추가저으로 필요로하는 정보를 정의합니다.\n- ex) 주민번호, 주소"
+          },
+          "competitionHostMaps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICompetitionHostMap"
+            },
+            "title": "대회 주최자 정보 매핑 테이블",
+            "description": "대회 주최자 정보 매핑 테이블."
           }
         },
         "nullable": false,
@@ -5040,16 +5035,15 @@
           "divisions",
           "earlybirdDiscountSnapshots",
           "combinationDiscountSnapshots",
-          "requiredAdditionalInfos"
+          "requiredAdditionalInfos",
+          "competitionHostMaps"
         ]
       },
       "IDivision": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -5122,19 +5116,17 @@
             "description": "활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
           },
           "competitionId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "CompetitionId",
             "description": "CompetitionId."
           },
@@ -5179,9 +5171,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -5192,14 +5182,12 @@
             "description": "price, (원)."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "divisionId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "Division id",
             "description": "Division id."
           }
@@ -5216,9 +5204,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -5232,14 +5218,12 @@
             "description": "조합 할인 규칙."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "competitionId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "Competition id",
             "description": "Competition id."
           }
@@ -5307,9 +5291,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -5329,7 +5311,7 @@
             "description": "Description."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
@@ -5349,9 +5331,7 @@
             "description": "DeletedAT"
           },
           "competitionId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "description": "Competition Id"
           }
         },
@@ -5364,6 +5344,33 @@
           "deletedAt",
           "competitionId"
         ]
+      },
+      "ICompetitionHostMap": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUIDv7",
+            "description": "UUIDv7."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "주최자 User ID",
+            "description": "주최자 User ID."
+          },
+          "competitionId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "주체 대회 ID",
+            "description": "주체 대회 ID."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "userId",
+          "competitionId"
+        ],
+        "description": "대회 주최자 정보 매핑 테이블."
       },
       "CreateCompetitionReqBody": {
         "type": "object",
@@ -5566,24 +5573,22 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "status": {
-            "$ref": "#/components/schemas/CompetitionStatus",
+            "$ref": "#/components/schemas/TCompetitionStatus",
             "title": "대회의 상태",
             "description": "대회의 상태.\n- ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.\n- INACTIVE: 비활성화된 대회 유저에게 노출되지 않음, 참가 신청 불가능."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
           },
@@ -5593,6 +5598,14 @@
             "minLength": 1,
             "title": "대회명",
             "description": "대회명."
+          },
+          "competitionHostMaps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICompetitionHostMap"
+            },
+            "title": "대회 주최자 정보 매핑 테이블",
+            "description": "대회 주최자 정보 매핑 테이블."
           },
           "address": {
             "type": "string",
@@ -5762,6 +5775,7 @@
           "createdAt",
           "updatedAt",
           "title",
+          "competitionHostMaps",
           "address",
           "competitionDate",
           "registrationStartDate",
@@ -6653,19 +6667,17 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "Created at",
             "description": "Created at."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "Updated at",
             "description": "Updated at."
           },
@@ -6705,16 +6717,12 @@
             "description": "Status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소"
           },
           "competitionId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "Competition id",
             "description": "Competition id."
           },
           "userId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "User id",
             "description": "User id."
           },
@@ -6763,9 +6771,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
@@ -6835,13 +6841,11 @@
             "description": "관장님 성함."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "description": "CreatedAt"
           },
           "applicationId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "Application id",
             "description": "Application id."
           }
@@ -6865,21 +6869,17 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
           "applicationId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "Application id",
             "description": "Application id."
           },
@@ -6905,27 +6905,21 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "description": "CreatedAt"
           },
           "participationDivisionInfoId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "- Participation division Info id",
             "description": "- Participation division Info id."
           },
           "participationDivisionId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "- Division id (참가한 부문 id)",
             "description": "- Division id (참가한 부문 id)."
           },
@@ -6948,19 +6942,17 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "UUIDv7",
             "description": "UUIDv7."
           },
           "createdAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "Created at",
             "description": "Created at."
           },
           "updatedAt": {
-            "$ref": "#/components/schemas/DateOrStringDate",
+            "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "Updated at",
             "description": "Updated at."
           },
@@ -6979,9 +6971,7 @@
             "description": "Value."
           },
           "applicationId": {
-            "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "$ref": "#/components/schemas/TId",
             "title": "Application id",
             "description": "Application id."
           }

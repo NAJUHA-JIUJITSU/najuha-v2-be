@@ -1,11 +1,11 @@
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { IApplication } from './application.interface';
 import { tags } from 'typia';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IPlayerSnapshot {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /**
    * Player name. (한글, 영문, 숫자, 공백 입력 가능합니다).
@@ -34,7 +34,7 @@ export interface IPlayerSnapshot {
   masterName: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,64}$'>;
 
   /** CreatedAt */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** Application id. */
   applicationId: IApplication['id'];

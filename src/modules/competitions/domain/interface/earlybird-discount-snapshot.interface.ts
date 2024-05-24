@@ -1,16 +1,16 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IEarlybirdDiscountSnapshot {
   /**  UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /** 얼리버드 할인 시작일. */
-  earlybirdStartDate: DateOrStringDate;
+  earlybirdStartDate: TDateOrStringDate;
 
   /** 얼리버드 할인 마감일. */
-  earlybirdEndDate: DateOrStringDate;
+  earlybirdEndDate: TDateOrStringDate;
 
   /**
    * 얼리버드 할인 가격.
@@ -21,7 +21,7 @@ export interface IEarlybirdDiscountSnapshot {
   discountAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** Competition id. */
   competitionId: ICompetition['id'];

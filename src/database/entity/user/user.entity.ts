@@ -3,6 +3,7 @@ import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 't
 import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
+import { CompetitionHostMapEntity } from '../competition/competition-host.entity';
 
 /**
  * User Entity
@@ -60,4 +61,7 @@ export class UserEntity {
 
   @OneToMany(() => ApplicationEntity, (application) => application.user)
   applications!: ApplicationEntity[];
+
+  @OneToMany(() => CompetitionHostMapEntity, (competitionHost) => competitionHost.user)
+  competitionHostMaps!: CompetitionHostMapEntity[];
 }

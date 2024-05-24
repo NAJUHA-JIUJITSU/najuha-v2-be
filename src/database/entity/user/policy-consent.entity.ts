@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
-import { PolicyEntity } from 'src//database/entity/policy/policy.entity';
+import { PolicyEntity } from '../policy/policy.entity';
 import { UserEntity } from './user.entity';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
 import { uuidv7 } from 'uuidv7';

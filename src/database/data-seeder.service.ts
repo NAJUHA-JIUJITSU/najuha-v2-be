@@ -32,6 +32,8 @@ import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/playe
 import { IParticipationDivisionInfo } from 'src/modules/applications/domain/interface/participation-division-info.interface';
 import { IParticipationDivisionInfoSnapshot } from 'src/modules/applications/domain/interface/participation-division-info-snapshot.interface';
 import { IAdditionalInfo } from 'src/modules/applications/domain/interface/additional-info.interface';
+import { ICompetitionHostMap } from 'src/modules/competitions/domain/interface/competition-host-map.interface';
+import { CompetitionHostMapEntity } from './entity/competition/competition-host.entity';
 
 @Injectable()
 export class DataSeederService {
@@ -40,14 +42,18 @@ export class DataSeederService {
   private policies: IPolicy[] = [];
   private competitions: ICompetition[] = [];
   private applications: IApplication[] = [];
+  // User
   private usersToSave: (IUser | ITemporaryUser)[] = [];
   private policiesToSave: IPolicy[] = [];
+  // Competition
   private competitionsToSave: ICompetition[] = [];
   private divisionsToSave: IDivision[] = [];
   private priceSnapshotsToSave: IPriceSnapshot[] = [];
   private earlybirdDiscountSnapshotsToSave: IEarlybirdDiscountSnapshot[] = [];
   private combinationDiscountSnapshotsToSave: ICombinationDiscountSnapshot[] = [];
   private requiredAdditionalInfosToSave: IRequiredAdditionalInfo[] = [];
+  private competitionHostMapsToSave: ICompetitionHostMap[] = [];
+  // Application
   private applicationsToSave: IApplication[] = [];
   private playerSnapshotsToSave: IPlayerSnapshot[] = [];
   private participationDivisionInfosToSave: IParticipationDivisionInfo[] = [];
@@ -160,6 +166,7 @@ export class DataSeederService {
       (competition) => competition.combinationDiscountSnapshots,
     );
     this.requiredAdditionalInfosToSave = competitions.flatMap((competition) => competition.requiredAdditionalInfos);
+    this.competitionHostMapsToSave = competitions.flatMap((competition) => competition.competitionHostMaps);
     console.timeEnd('Competitions preparation time');
   }
 
@@ -196,14 +203,18 @@ export class DataSeederService {
       console.log('Start seeding data...');
       await this.queryRunner.query('SET session_replication_role = replica');
       await Promise.all([
+        // User
         this.batchInsert(UserEntity, this.usersToSave),
         this.batchInsert(PolicyEntity, this.policiesToSave),
+        // Competition
         this.batchInsert(CompetitionEntity, this.competitionsToSave),
         this.batchInsert(DivisionEntity, this.divisionsToSave),
         this.batchInsert(PriceSnapshotEntity, this.priceSnapshotsToSave),
         this.batchInsert(EarlybirdDiscountSnapshotEntity, this.earlybirdDiscountSnapshotsToSave),
         this.batchInsert(CombinationDiscountSnapshotEntity, this.combinationDiscountSnapshotsToSave),
         this.batchInsert(RequiredAdditionalInfoEntity, this.requiredAdditionalInfosToSave),
+        this.batchInsert(CompetitionHostMapEntity, this.competitionHostMapsToSave),
+        // Application
         this.batchInsert(ApplicationEntity, this.applicationsToSave),
         this.batchInsert(PlayerSnapshotEntity, this.playerSnapshotsToSave),
         this.batchInsert(ParticipationDivisionInfoEntity, this.participationDivisionInfosToSave),
@@ -232,14 +243,18 @@ export class DataSeederService {
     try {
       console.time('Data seeding time');
       console.log('Start seeding data...');
+      // User
       await this.batchInsert(UserEntity, this.usersToSave);
       await this.batchInsert(PolicyEntity, this.policiesToSave);
+      // Competition
       await this.batchInsert(CompetitionEntity, this.competitionsToSave);
       await this.batchInsert(DivisionEntity, this.divisionsToSave);
       await this.batchInsert(PriceSnapshotEntity, this.priceSnapshotsToSave);
       await this.batchInsert(EarlybirdDiscountSnapshotEntity, this.earlybirdDiscountSnapshotsToSave);
       await this.batchInsert(CombinationDiscountSnapshotEntity, this.combinationDiscountSnapshotsToSave);
       await this.batchInsert(RequiredAdditionalInfoEntity, this.requiredAdditionalInfosToSave);
+      await this.batchInsert(CompetitionHostMapEntity, this.competitionHostMapsToSave);
+      // Application
       await this.batchInsert(ApplicationEntity, this.applicationsToSave);
       await this.batchInsert(PlayerSnapshotEntity, this.playerSnapshotsToSave);
       await this.batchInsert(ParticipationDivisionInfoEntity, this.participationDivisionInfosToSave);

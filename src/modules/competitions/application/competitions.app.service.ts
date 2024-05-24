@@ -60,6 +60,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -85,6 +86,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -117,6 +119,7 @@ export class CompetitionsAppService {
             'earlybirdDiscountSnapshots',
             'combinationDiscountSnapshots',
             'requiredAdditionalInfos',
+            'competitionHostMaps',
           ],
         })
         .catch(() => {
@@ -140,6 +143,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -169,6 +173,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -197,6 +202,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -224,6 +230,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -252,6 +259,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -277,6 +285,7 @@ export class CompetitionsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {

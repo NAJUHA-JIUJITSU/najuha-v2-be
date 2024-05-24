@@ -40,6 +40,7 @@ export class CompetitionFactory {
       earlybirdDiscountSnapshots: [],
       combinationDiscountSnapshots: [],
       requiredAdditionalInfos: [],
+      competitionHostMaps: [],
     };
   }
 

@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 /*
  * 대회신청시 추가 정보 입력 규칙.
@@ -8,7 +8,7 @@ import { DateOrStringDate } from 'src/common/common-types';
  */
 export interface IRequiredAdditionalInfo {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /** Type */
   type: 'SOCIAL_SECURITY_NUMBER' | 'ADDRESS';
@@ -17,10 +17,10 @@ export interface IRequiredAdditionalInfo {
   description: string & tags.MinLength<1> & tags.MaxLength<512>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** DeletedAT */
-  deletedAt: null | DateOrStringDate;
+  deletedAt: null | TDateOrStringDate;
 
   /** Competition Id  */
   competitionId: ICompetition['id'];

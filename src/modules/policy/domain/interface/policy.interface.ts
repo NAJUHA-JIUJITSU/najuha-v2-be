@@ -1,4 +1,4 @@
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { tags } from 'typia';
 
 /**
@@ -8,7 +8,7 @@ import { tags } from 'typia';
  */
 export interface IPolicy {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /** 약관의 버전. */
   version: number & tags.Type<'uint32'> & tags.Minimum<0>;
@@ -42,7 +42,7 @@ export interface IPolicy {
   content: string & tags.MinLength<1>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 }
 
 export interface IPolicyFindMany extends Omit<IPolicy, 'content'> {}

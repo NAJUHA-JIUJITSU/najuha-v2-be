@@ -1,4 +1,4 @@
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { Nullable } from 'src/common/utility-types';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
@@ -14,7 +14,7 @@ import { tags } from 'typia';
  */
 export interface IUser {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /**
    * User 역할. User의 접근 권한을 나타냅니다.
@@ -75,10 +75,10 @@ export interface IUser {
   status: 'ACTIVE' | 'INACTIVE';
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** UpdatedAt. */
-  updatedAt: DateOrStringDate;
+  updatedAt: TDateOrStringDate;
 }
 
 export interface ITemporaryUser

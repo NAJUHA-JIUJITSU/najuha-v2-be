@@ -14,6 +14,7 @@ import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 import { RequiredAdditionalInfoModel } from './required-addtional-info.model';
 import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interface/additional-info.interface';
 import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtional-info.interface';
+import { ICompetitionHostMap } from '../interface/competition-host-map.interface';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];
@@ -36,6 +37,7 @@ export class CompetitionModel {
   private requiredAdditionalInfos: RequiredAdditionalInfoModel[];
   private earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
   private combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
+  private competitionHostMaps: ICompetitionHostMap[];
   private readonly createdAt: ICompetition['createdAt'];
   private readonly updatedAt: ICompetition['updatedAt'];
 
@@ -66,6 +68,7 @@ export class CompetitionModel {
       (snapshot) => new CombinationDiscountSnapshotModel(snapshot),
     );
     this.requiredAdditionalInfos = entity.requiredAdditionalInfos.map((info) => new RequiredAdditionalInfoModel(info));
+    this.competitionHostMaps = entity.competitionHostMaps;
   }
 
   toEntity(): ICompetition {
@@ -92,6 +95,7 @@ export class CompetitionModel {
       earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
       combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
       requiredAdditionalInfos: this.requiredAdditionalInfos,
+      competitionHostMaps: this.competitionHostMaps,
     };
   }
 

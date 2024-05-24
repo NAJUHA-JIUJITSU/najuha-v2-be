@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { DivisionEntity } from './division.entity';
-import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
 import { uuidv7 } from 'uuidv7';
+import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 
 /**
  * PriceSnapshot Entity

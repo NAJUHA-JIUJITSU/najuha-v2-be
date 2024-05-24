@@ -1,11 +1,11 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
 import { IPriceSnapshot } from './price-snapshot.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IDivision {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /**
    * 부문 카테고리.
@@ -46,10 +46,10 @@ export interface IDivision {
   status: 'ACTIVE' | 'INACTIVE';
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** UpdatedAt. */
-  updatedAt: DateOrStringDate;
+  updatedAt: TDateOrStringDate;
 
   /** CompetitionId. */
   competitionId: ICompetition['id'];

@@ -1,13 +1,13 @@
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
 import { tags } from 'typia';
 
 export interface IPaymentSnapshot {
   /** UUIDv7. */
-  id: string & tags.MinLength<36> & tags.MaxLength<36>;
+  id: TId;
 
   /** CreatedAt */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** 할인이 적용되지 않은 총 금액 (원). */
   normalAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
