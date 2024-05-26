@@ -56,7 +56,6 @@
     "sqlite3": "^5.1.7",
     "swagger-ui-express": "^5.0.0",
     "typeorm": "^0.3.17",
-    "typeorm-markdown-generator": "^1.0.2",
     "typia": "^6.0.3",
     "uuidv7": "^1.0.0",
     "winston": "^3.11.0",
@@ -87,6 +86,7 @@
     "ts-node": "^10.9.2",
     "ts-patch": "^3.1.1",
     "tsconfig-paths": "^4.2.0",
+    "typeorm-markdown-generator": "^1.0.4",
     "typescript": "^5.3.2"
   },
   "jest": {

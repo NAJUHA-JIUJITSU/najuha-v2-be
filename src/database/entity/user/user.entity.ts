@@ -8,6 +8,8 @@ import { CompetitionHostMapEntity } from '../competition/competition-host.entity
 /**
  * User Entity
  * @namespace User
+ * @erd Competition
+ * @erd Application
  */
 @Entity('user')
 export class UserEntity {
