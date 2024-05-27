@@ -187,10 +187,10 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
-  player_snapshot }o--|| application: application
+  player_snapshot }|--|| application: application
   payment_snapshot }o--|| application: application
-  participation_divsion_info_snapshot }o--|| participation_division_info: participationDivisionInfo
-  participation_division_info }o--|| application: application
+  participation_divsion_info_snapshot }|--|| participation_division_info: participationDivisionInfo
+  participation_division_info }|--|| application: application
   participation_division_info_payment |o--|| participation_division_info: participationDivisionInfo
   additional_info }o--|| application: application
   application }o--|| user: user
@@ -391,7 +391,7 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
-  price_snapshot }o--|| division: division
+  price_snapshot }|--|| division: division
   division }o--|| competition: competition
   earlybird_discount_snapshot }o--|| competition: competition
   combination_discount_snapshot }o--|| competition: competition

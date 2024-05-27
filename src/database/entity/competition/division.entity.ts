@@ -52,6 +52,9 @@ export class DivisionEntity {
   @JoinColumn({ name: 'competitionId' })
   competition!: CompetitionEntity;
 
+  /**
+   * @minitems 1
+   */
   @OneToMany(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.division, { cascade: true, eager: true })
   priceSnapshots!: PriceSnapshotEntity[];
 

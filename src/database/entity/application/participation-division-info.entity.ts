@@ -25,6 +25,9 @@ export class ParticipationDivisionInfoEntity {
   @JoinColumn({ name: 'applicationId' })
   application!: ApplicationEntity;
 
+  /**
+   * @minitems 1
+   */
   @OneToMany(
     () => ParticipationDivisionInfoSnapshotEntity,
     (participationDivisionInfoSnapshot) => participationDivisionInfoSnapshot.participationDivisionInfo,

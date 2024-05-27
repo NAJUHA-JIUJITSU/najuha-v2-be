@@ -41,12 +41,24 @@ export class ApplicationEntity {
   @Column('varchar', { length: 16, default: 'READY' })
   status!: IApplication['status'];
 
+  @Column()
+  competitionId!: CompetitionEntity['id'];
+
+  @Column()
+  userId!: UserEntity['id'];
+
+  /**
+   * @minitems 1
+   */
   @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application, { cascade: true })
   playerSnapshots!: PlayerSnapshotEntity[];
 
   @OneToMany(() => PaymentSnapshotEntity, (paymentSnapshot) => paymentSnapshot.application)
   paymentSnapshots!: PaymentSnapshotEntity[];
 
+  /**
+   * @minitems 1
+   */
   @OneToMany(
     () => ParticipationDivisionInfoEntity,
     (participationDivisionInfo) => participationDivisionInfo.application,
@@ -54,15 +66,9 @@ export class ApplicationEntity {
   )
   participationDivisionInfos!: ParticipationDivisionInfoEntity[];
 
-  @Column()
-  competitionId!: CompetitionEntity['id'];
-
   @ManyToOne(() => CompetitionEntity, (competition) => competition.applications)
   @JoinColumn({ name: 'competitionId' })
   competition!: CompetitionEntity;
-
-  @Column()
-  userId!: UserEntity['id'];
 
   @ManyToOne(() => UserEntity, (user) => user.applications)
   @JoinColumn({ name: 'userId' })
