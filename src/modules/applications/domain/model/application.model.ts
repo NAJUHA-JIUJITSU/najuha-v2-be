@@ -6,6 +6,8 @@ import { AdditionalInfoModel } from './additional-info.model';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
+import { IExpectedPayment } from '../interface/expected-payment.interface';
+import { CalculatePaymentService } from '../calculate-payment.service';
 
 export class ApplicationModel {
   private readonly id: IApplication['id'];
@@ -17,6 +19,7 @@ export class ApplicationModel {
   private readonly playerSnapshots: PlayerSnapshotModel[];
   private readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
   private readonly additionaInfos: AdditionalInfoModel[];
+  private expectedPayment?: IExpectedPayment;
   private status: IApplication['status'];
   private deletedAt: IApplication['deletedAt'];
 
@@ -90,6 +93,14 @@ export class ApplicationModel {
     // todo!!: 에러 표준화
     if (this.status !== 'READY') throw new Error('Application status is not READY');
     this.deletedAt = new Date();
+  }
+
+  caluateExpectedPayment(competition) {
+    const divisions = this.participationDivisionInfos.map(
+      (info) => info.getLatestParticipationDivisionInfoSnapshot().division,
+    );
+    const priceSnapshots = divisions.map((division) => division.getLatestPriceSnapshot());
+    // this.expectedPayment = CalculatePaymentService.calculate();
   }
 
   // DONE Status --------------------------------------------------------------

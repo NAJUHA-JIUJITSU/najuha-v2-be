@@ -61,6 +61,7 @@ export class ApplicationsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -69,7 +70,7 @@ export class ApplicationsAppService {
       ),
     );
     const readyApplication = new ApplicationModel(
-      await this.applicationFactory.createReadyApplication(
+      this.applicationFactory.createReadyApplication(
         user,
         competition,
         applicationType,
@@ -158,6 +159,7 @@ export class ApplicationsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -231,6 +233,7 @@ export class ApplicationsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -294,6 +297,7 @@ export class ApplicationsAppService {
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
+              'competitionHostMaps',
             ],
           })
           .catch(() => {
