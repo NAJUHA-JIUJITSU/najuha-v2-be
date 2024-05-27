@@ -17,7 +17,7 @@ import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ApplicationsErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { IApplication } from '../domain/interface/application.interface';
+import { IApplication, IApplicationWithCompetition } from '../domain/interface/application.interface';
 import { UserModel } from 'src/modules/users/domain/model/user.model';
 import { UserRepository } from 'src//database/custom-repository/user.repository';
 import { ApplicationRepository } from 'src//database/custom-repository/application.repository';
@@ -83,29 +83,39 @@ export class ApplicationsAppService {
     competition.validateAdditionalInfo(additionalInfoCreateDtos);
     readyApplication.validateApplicationType(user.toEntity());
     readyApplication.validateDivisionSuitability();
+    readyApplication.caluateExpectedPayment();
     return { application: await this.applicationRepository.save(readyApplication.toEntity()) };
   }
 
   /** Get application. */
   async getApplication({ userId, applicationId }: GetApplicationParam): Promise<GetApplicationRet> {
-    const applicationEntity = assert<IApplication>(
-      await this.applicationRepository
-        .findOneOrFail({
-          where: { userId, id: applicationId },
-          relations: [
-            'additionalInfos',
-            'playerSnapshots',
-            'participationDivisionInfos',
-            'participationDivisionInfos.participationDivisionInfoSnapshots',
-            'participationDivisionInfos.participationDivisionInfoSnapshots.division',
-            'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
-          ],
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
-        }),
+    const application = new ApplicationModel(
+      assert<IApplicationWithCompetition>(
+        await this.applicationRepository
+          .findOneOrFail({
+            where: { userId, id: applicationId },
+            relations: [
+              'additionalInfos',
+              'playerSnapshots',
+              'participationDivisionInfos',
+              'participationDivisionInfos.participationDivisionInfoSnapshots',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+              'competition',
+              'competition.divisions',
+              'competition.earlybirdDiscountSnapshots',
+              'competition.combinationDiscountSnapshots',
+              'competition.requiredAdditionalInfos',
+              'competition.competitionHostMaps',
+            ],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+          }),
+      ),
     );
-    return { application: applicationEntity };
+    application.caluateExpectedPayment();
+    return { application: application.toEntity() };
   }
 
   /**
@@ -306,5 +316,20 @@ export class ApplicationsAppService {
       ),
     );
     return { expectedPayment: competition.calculateExpectedPayment(application.getParticipationDivisionIds()) };
+  }
+
+  async findApplications({ userId }: { userId: IUser['id'] }): Promise<IApplication[]> {
+    return await this.applicationRepository.find({
+      where: { userId },
+      take: 10,
+      relations: [
+        'additionalInfos',
+        'playerSnapshots',
+        'participationDivisionInfos',
+        'participationDivisionInfos.participationDivisionInfoSnapshots',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+        'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+      ],
+    });
   }
 }

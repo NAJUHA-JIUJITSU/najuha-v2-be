@@ -1,4 +1,4 @@
-import { IApplication } from '../interface/application.interface';
+import { IApplication, IApplicationWithCompetition } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
@@ -7,7 +7,7 @@ import { ParticipationDivisionInfoSnapshotModel } from './participation-division
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 import { IExpectedPayment } from '../interface/expected-payment.interface';
-import { CalculatePaymentService } from '../calculate-payment.service';
+import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
 
 export class ApplicationModel {
   private readonly id: IApplication['id'];
@@ -19,11 +19,12 @@ export class ApplicationModel {
   private readonly playerSnapshots: PlayerSnapshotModel[];
   private readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
   private readonly additionaInfos: AdditionalInfoModel[];
-  private expectedPayment?: IExpectedPayment;
   private status: IApplication['status'];
   private deletedAt: IApplication['deletedAt'];
+  private expectedPayment: IExpectedPayment | null;
+  private readonly competition: CompetitionModel | null;
 
-  constructor(entity: IApplication) {
+  constructor(entity: IApplicationWithCompetition) {
     this.id = entity.id;
     this.type = entity.type;
     this.userId = entity.userId;
@@ -37,6 +38,8 @@ export class ApplicationModel {
       (info) => new ParticipationDivisionInfoModel(info),
     );
     this.additionaInfos = entity.additionalInfos.map((info) => new AdditionalInfoModel(info));
+    this.expectedPayment = null;
+    this.competition = entity.competition ? new CompetitionModel(entity.competition) : null;
   }
 
   toEntity(): IApplication {
@@ -52,6 +55,7 @@ export class ApplicationModel {
       playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toEntity()),
       participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toEntity()),
       additionalInfos: this.additionaInfos.map((info) => info.toEntity()),
+      expectedPayment: this.expectedPayment,
     };
   }
 
@@ -95,12 +99,11 @@ export class ApplicationModel {
     this.deletedAt = new Date();
   }
 
-  caluateExpectedPayment(competition) {
-    const divisions = this.participationDivisionInfos.map(
-      (info) => info.getLatestParticipationDivisionInfoSnapshot().division,
-    );
-    const priceSnapshots = divisions.map((division) => division.getLatestPriceSnapshot());
-    // this.expectedPayment = CalculatePaymentService.calculate();
+  caluateExpectedPayment() {
+    // todo!!: 에러 표준화
+    if (this.status !== 'READY') throw new Error('Application status is not READY');
+    if (this.competition === null) throw new Error('Competition is not loaded');
+    this.expectedPayment = this.competition.calculateExpectedPayment(this.getParticipationDivisionIds());
   }
 
   // DONE Status --------------------------------------------------------------

@@ -17,7 +17,7 @@ import {
 
 @Controller('user/applications')
 export class UserApplicationsController {
-  constructor(private readonly ApplicationAppService: ApplicationsAppService) {}
+  constructor(private readonly applicationAppService: ApplicationsAppService) {}
 
   /**
    * u-6-1 create application.
@@ -32,7 +32,7 @@ export class UserApplicationsController {
     @Req() req: Request,
     @TypedBody() body: CreateApplicationReqBody,
   ): Promise<ResponseForm<CreateApplicationRes>> {
-    return createResponseForm(await this.ApplicationAppService.createApplication({ userId: req['userId'], ...body }));
+    return createResponseForm(await this.applicationAppService.createApplication({ userId: req['userId'], ...body }));
   }
 
   /**
@@ -49,7 +49,7 @@ export class UserApplicationsController {
     @Req() req: Request,
   ): Promise<ResponseForm<GetApplicationRes>> {
     return createResponseForm(
-      await this.ApplicationAppService.getApplication({ userId: req['userId'], applicationId }),
+      await this.applicationAppService.getApplication({ userId: req['userId'], applicationId }),
     );
   }
 
@@ -70,7 +70,7 @@ export class UserApplicationsController {
     @TypedBody() body: UpdateReadyApplicationReqBody,
   ): Promise<ResponseForm<UpdateReadyApplicationRes>> {
     return createResponseForm(
-      await this.ApplicationAppService.updateReadyApplication({
+      await this.applicationAppService.updateReadyApplication({
         userId: req['userId'],
         applicationId,
         ...body,
@@ -98,7 +98,7 @@ export class UserApplicationsController {
     @TypedBody() body: UpdateDoneApplicationReqBody,
   ): Promise<ResponseForm<UpdateDoneApplicationRes>> {
     return createResponseForm(
-      await this.ApplicationAppService.updateDoneApplication({
+      await this.applicationAppService.updateDoneApplication({
         userId: req['userId'],
         applicationId,
         ...body,
@@ -135,7 +135,20 @@ export class UserApplicationsController {
     @Req() req: Request,
   ): Promise<ResponseForm<GetExpectedPaymentRes>> {
     return createResponseForm(
-      await this.ApplicationAppService.getExpectedPayment({ userId: req['userId'], applicationId }),
+      await this.applicationAppService.getExpectedPayment({ userId: req['userId'], applicationId }),
     );
+  }
+
+  /**
+   * u-6-7 find applications.
+   * - RoleLevel: USER.
+   *
+   * @tag u-6 applications
+   * @returns applications
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Get('/')
+  async findApplications(@Req() req: Request): Promise<ResponseForm<IApplication[]>> {
+    return createResponseForm(await this.applicationAppService.findApplications({ userId: req['userId'] }));
   }
 }

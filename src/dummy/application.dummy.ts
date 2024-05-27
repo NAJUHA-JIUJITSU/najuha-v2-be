@@ -431,6 +431,7 @@ export class ApplicationDummyBuilder {
       playerSnapshots: [],
       participationDivisionInfos: [],
       additionalInfos: [],
+      expectedPayment: null,
     };
   }
 

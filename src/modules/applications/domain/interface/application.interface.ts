@@ -5,6 +5,7 @@ import { IParticipationDivisionInfo } from './participation-division-info.interf
 import { tags } from 'typia';
 import { IAdditionalInfo } from './additional-info.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { IExpectedPayment } from './expected-payment.interface';
 
 export interface IApplication {
   /** UUIDv7. */
@@ -48,4 +49,10 @@ export interface IApplication {
 
   /** Addtional infos */
   additionalInfos: IAdditionalInfo[];
+
+  expectedPayment?: IExpectedPayment | null;
+}
+
+export interface IApplicationWithCompetition extends IApplication {
+  competition?: ICompetition;
 }
