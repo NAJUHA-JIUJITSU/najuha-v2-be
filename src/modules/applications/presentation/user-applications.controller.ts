@@ -1,4 +1,4 @@
-import { TypedBody, TypedParam, TypedRoute } from '@nestia/core';
+import { TypedBody, TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
@@ -7,6 +7,8 @@ import { IApplication } from '../domain/interface/application.interface';
 import {
   CreateApplicationReqBody,
   CreateApplicationRes,
+  FindApplicationsQuery,
+  FindApplicationsRes,
   GetApplicationRes,
   GetExpectedPaymentRes,
   UpdateDoneApplicationReqBody,
@@ -148,7 +150,16 @@ export class UserApplicationsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/')
-  async findApplications(@Req() req: Request): Promise<ResponseForm<IApplication[]>> {
-    return createResponseForm(await this.applicationAppService.findApplications({ userId: req['userId'] }));
+  async findApplications(
+    @Req() req: Request,
+    @TypedQuery() query: FindApplicationsQuery,
+  ): Promise<ResponseForm<FindApplicationsRes>> {
+    return createResponseForm(
+      await this.applicationAppService.findApplications({
+        page: query.page ?? 0,
+        limit: query.limit ?? 10,
+        userId: req['userId'],
+      }),
+    );
   }
 }

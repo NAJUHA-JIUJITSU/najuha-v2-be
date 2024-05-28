@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { DivisionEntity } from './division.entity';
 import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
 import { uuidv7 } from 'uuidv7';
@@ -9,6 +9,7 @@ import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-
  * @namespace Competition
  */
 @Entity('price_snapshot')
+// @Index('divisionId_idx', ['divisionId'])
 export class PriceSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IPriceSnapshot['id'];

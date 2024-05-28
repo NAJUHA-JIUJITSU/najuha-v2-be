@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { PlayerSnapshotEntity } from './player-snapshot.entity';
@@ -22,6 +24,8 @@ import { AdditionalInfoEntity } from './additional-info.entity';
  * @namespace Application
  */
 @Entity('application')
+// @Index('competitionId_idx', ['competitionId'])
+// @Index('userId_idx', ['userId'])
 export class ApplicationEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IApplication['id'];

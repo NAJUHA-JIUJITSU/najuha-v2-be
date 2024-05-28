@@ -3,6 +3,8 @@ import { ApplicationFactory } from '../domain/application.factory';
 import {
   CreateApplicationParam,
   CreateApplicationRet,
+  FindApplicationsParam,
+  FindApplicationsRet,
   GetApplicationParam,
   GetApplicationRet,
   GetExpectedPaymentParam,
@@ -25,6 +27,8 @@ import { CompetitionRepository } from 'src//database/custom-repository/competiti
 import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
 import { ApplicationModel } from '../domain/model/application.model';
+import { skip } from 'node:test';
+import { In } from 'typeorm';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -318,18 +322,121 @@ export class ApplicationsAppService {
     return { expectedPayment: competition.calculateExpectedPayment(application.getParticipationDivisionIds()) };
   }
 
-  async findApplications({ userId }: { userId: IUser['id'] }): Promise<IApplication[]> {
-    return await this.applicationRepository.find({
-      where: { userId },
-      take: 10,
-      relations: [
-        'additionalInfos',
-        'playerSnapshots',
-        'participationDivisionInfos',
-        'participationDivisionInfos.participationDivisionInfoSnapshots',
-        'participationDivisionInfos.participationDivisionInfoSnapshots.division',
-        'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
-      ],
+  // /**
+  //  * application + competition join
+  //  * todo!!!: index 적용해보고 성능 확인
+  //  * 인덱스 생성전: 6s (ms 아니라 6초 맞음...)
+  //  */
+  // async findApplications({ userId, page, limit }: FindApplicationsParam): Promise<FindApplicationsRet> {
+  //   console.time('Total Execution Time');
+  //   console.time('DB Query');
+  //   const applicationEntitys = assert<IApplicationWithCompetition[]>(
+  //     await this.applicationRepository.find({
+  //       where: { userId },
+  //       relations: [
+  //         'additionalInfos',
+  //         'playerSnapshots',
+  //         'participationDivisionInfos',
+  //         'participationDivisionInfos.participationDivisionInfoSnapshots',
+  //         'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+  //         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+  //         'competition',
+  //         'competition.divisions',
+  //         'competition.earlybirdDiscountSnapshots',
+  //         'competition.combinationDiscountSnapshots',
+  //         'competition.requiredAdditionalInfos',
+  //         'competition.competitionHostMaps',
+  //       ],
+  //       skip: page * limit,
+  //       take: limit,
+  //     }),
+  //   );
+  //   console.timeEnd('DB Query');
+  //   console.time('Processing Applications');
+  //   const applications = applicationEntitys.map((applicationEntity) => {
+  //     if (applicationEntity.status === 'DONE') return applicationEntity;
+  //     else {
+  //       const application = new ApplicationModel(applicationEntity);
+  //       console.time('Calculate Expected Payment');
+  //       application.caluateExpectedPayment();
+  //       console.timeEnd('Calculate Expected Payment');
+  //       return application.toEntity();
+  //     }
+  //   });
+  //   console.timeEnd('Processing Applications');
+  //   let ret: FindApplicationsRet = { applications };
+  //   if (applicationEntitys.length === limit) {
+  //     ret = { ...ret, nextPage: page + 1 };
+  //   }
+  //   console.timeEnd('Total Execution Time');
+  //   return ret;
+  // }
+
+  /**
+   * seperate application and competition query and mapping
+   * * todo!!!: index 적용해보고 성능 확인
+   * 인덱스 생성전: 300 ~ 400ms
+   */
+  async findApplications({ userId, page, limit }: FindApplicationsParam): Promise<FindApplicationsRet> {
+    console.time('Total Execution Time');
+    console.time('DB Query');
+    console.time('DB Query - Application');
+    const applicationEntitys = assert<IApplicationWithCompetition[]>(
+      await this.applicationRepository.find({
+        where: { userId },
+        relations: [
+          'additionalInfos',
+          'playerSnapshots',
+          'participationDivisionInfos',
+          'participationDivisionInfos.participationDivisionInfoSnapshots',
+          'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+          'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+        ],
+        skip: page * limit,
+        take: limit,
+      }),
+    );
+    console.timeEnd('DB Query - Application');
+    console.time('DB Query - Competition');
+    const competitions = assert<ICompetition[]>(
+      await this.competitionRepository.find({
+        where: { id: In(applicationEntitys.map((applicationEntity) => applicationEntity.competitionId)) },
+        relations: [
+          'divisions',
+          'earlybirdDiscountSnapshots',
+          'combinationDiscountSnapshots',
+          'requiredAdditionalInfos',
+          'competitionHostMaps',
+        ],
+      }),
+    );
+    console.timeEnd('DB Query - Competition');
+    console.timeEnd('DB Query');
+    // mapping competition to application
+    competitions.forEach((competition) => {
+      applicationEntitys.forEach((applicationEntity) => {
+        if (applicationEntity.competitionId === competition.id) {
+          applicationEntity.competition = competition;
+        }
+      });
     });
+    console.time('Processing Applications');
+    const applications = applicationEntitys.map((applicationEntity) => {
+      if (applicationEntity.status === 'DONE') return applicationEntity;
+      else {
+        const application = new ApplicationModel(applicationEntity);
+        console.time('Calculate Expected Payment');
+        application.caluateExpectedPayment();
+        console.timeEnd('Calculate Expected Payment');
+        return application.toEntity();
+      }
+    });
+    console.timeEnd('Processing Applications');
+    let ret: FindApplicationsRet = { applications };
+    if (applicationEntitys.length === limit) {
+      ret = { ...ret, nextPage: page + 1 };
+    }
+    console.timeEnd('Total Execution Time');
+    return ret;
   }
 }

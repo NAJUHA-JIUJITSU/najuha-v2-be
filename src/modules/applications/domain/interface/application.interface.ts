@@ -50,9 +50,24 @@ export interface IApplication {
   /** Addtional infos */
   additionalInfos: IAdditionalInfo[];
 
+  /**
+   * Expected payment.
+   * READY 상태일 때만 조회결과에 포함됩니다.
+   */
   expectedPayment?: IExpectedPayment | null;
 }
 
 export interface IApplicationWithCompetition extends IApplication {
   competition?: ICompetition;
+}
+
+export interface IApplicationQueryOptions {
+  /** 현제 페이지 번호입니다. default: 0 */
+  page: number;
+
+  /** 한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 30 */
+  limit: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<30>;
+
+  /** application status */
+  status?: IApplication['status'];
 }

@@ -52,6 +52,12 @@ export interface GetExpectedPaymentParam {
   applicationId: IApplication['id'];
 }
 
+export interface FindApplicationsParam {
+  userId: IUser['id'];
+  page: number;
+  limit: number;
+}
+
 // Application Layer Result DTOs -----------------------------------------------------
 export interface CreateApplicationRet {
   application: IApplication;
@@ -71,4 +77,9 @@ export interface UpdateDoneApplicationRet {
 
 export interface GetExpectedPaymentRet {
   expectedPayment: IExpectedPayment;
+}
+
+export interface FindApplicationsRet {
+  applications: IApplication[];
+  nextPage?: number;
 }

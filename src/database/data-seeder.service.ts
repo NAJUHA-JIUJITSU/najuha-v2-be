@@ -222,6 +222,7 @@ export class DataSeederService {
         this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave),
       ]);
       await this.queryRunner.query('SET session_replication_role = DEFAULT');
+      // await this.rebuildIndexes();
       await this.queryRunner.commitTransaction();
       console.log('Data seeding completed.');
       console.timeEnd('Data seeding time');
@@ -231,6 +232,30 @@ export class DataSeederService {
     } finally {
       await this.queryRunner.release();
     }
+  }
+
+  private async rebuildIndexes() {
+    console.time('Rebuilding indexes time');
+    const tableNames = [
+      'user',
+      'policy',
+      'competition',
+      'division',
+      'price_snapshot',
+      'earlybird_discount_snapshot',
+      'combination_discount_snapshot',
+      'required_additional_info',
+      'competition_host_map',
+      'application',
+      'player_snapshot',
+      'participation_division_info',
+      'participation_division_info_snapshot',
+      'additional_info',
+    ];
+    for (const tableName of tableNames) {
+      await this.queryRunner.query(`REINDEX TABLE "${tableName}"`);
+    }
+    console.timeEnd('Rebuilding indexes time');
   }
 
   /**

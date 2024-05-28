@@ -1,4 +1,14 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Unique, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { PriceSnapshotEntity } from './price-snapshot.entity';
 import { ParticipationDivisionInfoSnapshotEntity } from '../application/participation-division-info-snapshot.entity';

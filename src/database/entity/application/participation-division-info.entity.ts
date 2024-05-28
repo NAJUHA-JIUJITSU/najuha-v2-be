@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { ParticipationDivisionInfoSnapshotEntity } from './participation-division-info-snapshot.entity';
 import { ApplicationEntity } from './application.entity';
 import { IParticipationDivisionInfo } from 'src/modules/applications/domain/interface/participation-division-info.interface';
@@ -11,6 +11,7 @@ import { uuidv7 } from 'uuidv7';
  * @namespace Application
  */
 @Entity('participation_division_info')
+// @Index('applicationId_idx', ['applicationId'])
 export class ParticipationDivisionInfoEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IParticipationDivisionInfo['id'];

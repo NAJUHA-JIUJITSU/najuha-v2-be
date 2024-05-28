@@ -8,7 +8,7 @@ import { ICompetitionHostMap } from 'src/modules/competitions/domain/interface/c
  * Competition Host Map Entity
  * @namespace Competition
  */
-@Entity('competition_host')
+@Entity('competition_host_map')
 export class CompetitionHostMapEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: ICompetitionHostMap['id'];

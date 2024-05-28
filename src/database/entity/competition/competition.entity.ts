@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Index } from 'typeorm';
 import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
@@ -13,6 +13,8 @@ import { CompetitionHostMapEntity } from './competition-host.entity';
  * @namespace Competition
  */
 @Entity('competition')
+// @Index('competitionDate_idx', ['competitionDate'])
+// @Index('status_idx', ['status'])
 export class CompetitionEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: ICompetition['id'];
