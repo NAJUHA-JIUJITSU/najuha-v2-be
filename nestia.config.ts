@@ -14,6 +14,7 @@ const NESTIA_CONFIG: INestiaConfig = {
   },
   // simulate: true, // supports simulation mode
   output: 'src/api',
+  propagate: true,
   // e2e: 'test',
   distribute: 'packages/api',
   swagger: {
