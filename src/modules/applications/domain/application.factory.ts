@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IApplication, IApplicationWithCompetition } from './interface/application.interface';
+import { IApplication } from './interface/application.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
 import {
@@ -21,7 +21,7 @@ export class ApplicationFactory {
     participationDivisionIds: IDivision['id'][],
     playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
     additionalInfoCreateDtos?: IAdditionalInfoCreateDto[],
-  ): IApplicationWithCompetition {
+  ): IApplication {
     const applicationId = uuidv7();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
     const participationDivisionInfos = this.createParticipationDivisionInfos(
@@ -43,7 +43,6 @@ export class ApplicationFactory {
       participationDivisionInfos,
       additionalInfos,
       expectedPayment: null,
-      competition: competition.toEntity(),
     };
   }
 

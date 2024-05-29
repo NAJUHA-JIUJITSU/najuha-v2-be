@@ -13,8 +13,8 @@ import { CompetitionHostMapEntity } from './competition-host.entity';
  * @namespace Competition
  */
 @Entity('competition')
-// @Index('competitionDate_idx', ['competitionDate'])
-// @Index('status_idx', ['status'])
+@Index('IDX_Competition_competitionDate', ['competitionDate'])
+@Index('IDX_Competition_status', ['status'])
 export class CompetitionEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: ICompetition['id'];
@@ -92,11 +92,11 @@ export class CompetitionEntity {
   })
   requiredAdditionalInfos!: RequiredAdditionalInfoEntity[];
 
-  @OneToMany(() => ApplicationEntity, (application) => application.competition)
-  applications!: ApplicationEntity[];
-
   @OneToMany(() => CompetitionHostMapEntity, (competitionHost) => competitionHost.competition, {
     cascade: true,
   })
   competitionHostMaps!: CompetitionHostMapEntity[];
+
+  @OneToMany(() => ApplicationEntity, (application) => application.competition)
+  applications!: ApplicationEntity[];
 }

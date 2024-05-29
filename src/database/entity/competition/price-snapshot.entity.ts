@@ -7,9 +7,10 @@ import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-
 /**
  * PriceSnapshot Entity
  * @namespace Competition
+ * @erd Application
  */
 @Entity('price_snapshot')
-// @Index('divisionId_idx', ['divisionId'])
+@Index('IDX_PriceSnapshot_divisionId', ['divisionId'])
 export class PriceSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IPriceSnapshot['id'];

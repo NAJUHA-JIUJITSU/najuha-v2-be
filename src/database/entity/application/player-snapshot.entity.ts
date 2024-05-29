@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
@@ -8,6 +8,7 @@ import { uuidv7 } from 'uuidv7';
  * @namespace Application
  */
 @Entity('player_snapshot')
+@Index('IDX_PlayerSnapshot_applicationId', ['applicationId'])
 export class PlayerSnapshotEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IPlayerSnapshot['id'];

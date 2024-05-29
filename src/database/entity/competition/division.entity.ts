@@ -18,9 +18,11 @@ import { uuidv7 } from 'uuidv7';
 /**
  * Division Entity
  * @namespace Competition
+ * @erd Application
  */
 @Entity('division')
 @Unique('UQ_DIVISION', ['category', 'uniform', 'gender', 'belt', 'weight', 'competitionId'])
+@Index('IDX_Division_competitionId', ['competitionId'])
 export class DivisionEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IDivision['id'];

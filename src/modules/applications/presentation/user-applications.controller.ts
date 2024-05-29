@@ -142,7 +142,7 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-7 find applications.
+   * u-6-7 findApplications
    * - RoleLevel: USER.
    *
    * @tag u-6 applications

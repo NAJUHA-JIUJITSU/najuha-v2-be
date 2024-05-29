@@ -35,3 +35,5 @@ volumes:
   postgres_data:
   redis_data:
   pgadmin_data:
+# docker exec -it [container_id_or_name] /bin/bash
+# psql -h localhost -p 5432 -U my_user -d dev_database

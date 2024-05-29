@@ -134,7 +134,7 @@ erDiagram
     integer totalAmount
     varchar applicationId FK
   }
-  participation_divsion_info_snapshot {
+  participation_division_info_snapshot {
     varchar id PK
     timestamptz createdAt
     varchar participationDivisionInfoId FK
@@ -151,6 +151,26 @@ erDiagram
     varchar divisionId FK
     varchar priceSnapshotId FK
     varchar participationDivisionInfoId FK
+  }
+  price_snapshot {
+    varchar id PK
+    integer price
+    timestamptz createdAt
+    varchar divisionId FK
+  }
+  division {
+    varchar id PK
+    varchar category
+    varchar uniform
+    varchar gender
+    varchar belt
+    varchar weight
+    varchar birthYearRangeStart
+    varchar birthYearRangeEnd
+    varchar status
+    timestamptz createdAt
+    timestamptz updatedAt
+    varchar competitionId FK
   }
   additional_info {
     varchar id PK
@@ -189,12 +209,29 @@ erDiagram
   }
   player_snapshot }|--|| application: application
   payment_snapshot }o--|| application: application
-  participation_divsion_info_snapshot }|--|| participation_division_info: participationDivisionInfo
+  participation_division_info_snapshot }|--|| participation_division_info: participationDivisionInfo
+  participation_division_info_snapshot }o--|| division: division
   participation_division_info }|--|| application: application
+  participation_division_info_payment }o--|| division: division
+  participation_division_info_payment }o--|| price_snapshot: priceSnapshot
   participation_division_info_payment |o--|| participation_division_info: participationDivisionInfo
+  price_snapshot }|--|| division: division
   additional_info }o--|| application: application
   application }o--|| user: user
 ```
+
+### Indexes
+
+| Table | Index Name | Columns | Unique | Spatial | Where |
+|-------|-------------|---------|--------|---------|-----------|
+| player_snapshot | IDX_PlayerSnapshot_applicationId | applicationId | false | false |  |
+| participation_division_info_snapshot | IDX_ParticipationDivisionInfoSnapshot_participationDivisionInfoId | participationDivisionInfoId | false | false |  |
+| participation_division_info | IDX_ParticipationDivisionInfo_applicationId | applicationId | false | false |  |
+| price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
+| division | IDX_Division_competitionId | competitionId | false | false |  |
+| additional_info | IDX_AddtionalInfo_applicationId | applicationId | false | false |  |
+| application | IDX_Application_userId_createdAt | userId, createdAt | false | false |  |
+
 
 ### `player_snapshot`
 
@@ -232,7 +269,7 @@ PaymentSnapshot Entity
   - `applicationId`
 
 
-### `participation_divsion_info_snapshot`
+### `participation_division_info_snapshot`
 
 ParticipationDivisionInfoSnapshot Entity   
 @namespace Application
@@ -349,7 +386,7 @@ erDiagram
     timestamptz deletedAt "nullable"
     varchar competitionId FK
   }
-  competition_host {
+  competition_host_map {
     varchar id PK
     varchar hostId FK
     varchar competitionId FK
@@ -396,14 +433,29 @@ erDiagram
   earlybird_discount_snapshot }o--|| competition: competition
   combination_discount_snapshot }o--|| competition: competition
   required_additional_info }o--|| competition: competition
-  competition_host }o--|| user: user
-  competition_host }o--|| competition: competition
+  competition_host_map }o--|| user: user
+  competition_host_map }o--|| competition: competition
 ```
+
+### Indexes
+
+| Table | Index Name | Columns | Unique | Spatial | Where |
+|-------|-------------|---------|--------|---------|-----------|
+| price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
+| division | IDX_Division_competitionId | competitionId | false | false |  |
+| earlybird_discount_snapshot | IDX_EarlybirdDiscountSnapshot_competitionId | competitionId | false | false |  |
+| combination_discount_snapshot | IDX_CombinationDiscountSnapshot_competitionId | competitionId | false | false |  |
+| required_additional_info | IDX_RequiredAdditionalInfo_competitionId | competitionId | false | false |  |
+| competition_host_map | IDX_CompetitionHostMap_competitionId | competitionId | false | false |  |
+| competition | IDX_Competition_status | status | false | false |  |
+| competition | IDX_Competition_competitionDate | competitionDate | false | false |  |
+
 
 ### `price_snapshot`
 
 PriceSnapshot Entity   
-@namespace Competition
+@namespace Competition   
+@erd Application
 
 **Properties**
 
@@ -416,7 +468,8 @@ PriceSnapshot Entity
 ### `division`
 
 Division Entity   
-@namespace Competition
+@namespace Competition   
+@erd Application
 
 **Properties**
 
@@ -477,7 +530,7 @@ RequiredAdditionalInfo Entity
   - `competitionId`
 
 
-### `competition_host`
+### `competition_host_map`
 
 Competition Host Map Entity   
 @namespace Competition

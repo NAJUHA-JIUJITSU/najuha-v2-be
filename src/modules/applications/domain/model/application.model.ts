@@ -1,4 +1,4 @@
-import { IApplication, IApplicationWithCompetition } from '../interface/application.interface';
+import { IApplication } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
@@ -7,7 +7,6 @@ import { ParticipationDivisionInfoSnapshotModel } from './participation-division
 import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 import { IExpectedPayment } from '../interface/expected-payment.interface';
-import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
 
 export class ApplicationModel {
   private readonly id: IApplication['id'];
@@ -22,9 +21,8 @@ export class ApplicationModel {
   private status: IApplication['status'];
   private deletedAt: IApplication['deletedAt'];
   private expectedPayment: IExpectedPayment | null;
-  private readonly competition: CompetitionModel | null;
 
-  constructor(entity: IApplicationWithCompetition) {
+  constructor(entity: IApplication) {
     this.id = entity.id;
     this.type = entity.type;
     this.userId = entity.userId;
@@ -39,7 +37,6 @@ export class ApplicationModel {
     );
     this.additionaInfos = entity.additionalInfos.map((info) => new AdditionalInfoModel(info));
     this.expectedPayment = null;
-    this.competition = entity.competition ? new CompetitionModel(entity.competition) : null;
   }
 
   toEntity(): IApplication {
@@ -65,6 +62,10 @@ export class ApplicationModel {
 
   getType() {
     return this.type;
+  }
+
+  getStatus() {
+    return this.status;
   }
 
   getCompetitionId() {
@@ -99,11 +100,9 @@ export class ApplicationModel {
     this.deletedAt = new Date();
   }
 
-  caluateExpectedPayment() {
-    // todo!!: 에러 표준화
+  setExpectedPayment(expectedPayment: IExpectedPayment) {
     if (this.status !== 'READY') throw new Error('Application status is not READY');
-    if (this.competition === null) throw new Error('Competition is not loaded');
-    this.expectedPayment = this.competition.calculateExpectedPayment(this.getParticipationDivisionIds());
+    this.expectedPayment = expectedPayment;
   }
 
   // DONE Status --------------------------------------------------------------

@@ -19,6 +19,7 @@ const generateErd = async () => {
       entityPath: 'src/database/entity/**/*.ts',
       title: 'NAJUHA V2 ERD',
       outFilePath: 'docs/najiha-v2-erd.md',
+      indexTable: true,
     });
     await typeormMarkdown.build();
     console.log('Document generated successfully.');

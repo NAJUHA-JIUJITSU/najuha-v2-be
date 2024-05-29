@@ -19,7 +19,7 @@ import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { ApplicationsErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { IApplication, IApplicationWithCompetition } from '../domain/interface/application.interface';
+import { IApplication } from '../domain/interface/application.interface';
 import { UserModel } from 'src/modules/users/domain/model/user.model';
 import { UserRepository } from 'src//database/custom-repository/user.repository';
 import { ApplicationRepository } from 'src//database/custom-repository/application.repository';
@@ -27,7 +27,6 @@ import { CompetitionRepository } from 'src//database/custom-repository/competiti
 import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
 import { ApplicationModel } from '../domain/model/application.model';
-import { skip } from 'node:test';
 import { In } from 'typeorm';
 
 @Injectable()
@@ -87,14 +86,16 @@ export class ApplicationsAppService {
     competition.validateAdditionalInfo(additionalInfoCreateDtos);
     readyApplication.validateApplicationType(user.toEntity());
     readyApplication.validateDivisionSuitability();
-    readyApplication.caluateExpectedPayment();
+    readyApplication.setExpectedPayment(
+      competition.calculateExpectedPayment(readyApplication.getParticipationDivisionIds()),
+    );
     return { application: await this.applicationRepository.save(readyApplication.toEntity()) };
   }
 
   /** Get application. */
   async getApplication({ userId, applicationId }: GetApplicationParam): Promise<GetApplicationRet> {
     const application = new ApplicationModel(
-      assert<IApplicationWithCompetition>(
+      assert<IApplication>(
         await this.applicationRepository
           .findOneOrFail({
             where: { userId, id: applicationId },
@@ -105,12 +106,6 @@ export class ApplicationsAppService {
               'participationDivisionInfos.participationDivisionInfoSnapshots',
               'participationDivisionInfos.participationDivisionInfoSnapshots.division',
               'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
-              'competition',
-              'competition.divisions',
-              'competition.earlybirdDiscountSnapshots',
-              'competition.combinationDiscountSnapshots',
-              'competition.requiredAdditionalInfos',
-              'competition.competitionHostMaps',
             ],
           })
           .catch(() => {
@@ -118,7 +113,25 @@ export class ApplicationsAppService {
           }),
       ),
     );
-    application.caluateExpectedPayment();
+    const competition = new CompetitionModel(
+      assert<ICompetition>(
+        await this.competitionRepository
+          .findOneOrFail({
+            where: { id: application.getCompetitionId() },
+            relations: [
+              'divisions',
+              'earlybirdDiscountSnapshots',
+              'combinationDiscountSnapshots',
+              'requiredAdditionalInfos',
+              'competitionHostMaps',
+            ],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          }),
+      ),
+    );
+    application.setExpectedPayment(competition.calculateExpectedPayment(application.getParticipationDivisionIds()));
     return { application: application.toEntity() };
   }
 
@@ -322,66 +335,8 @@ export class ApplicationsAppService {
     return { expectedPayment: competition.calculateExpectedPayment(application.getParticipationDivisionIds()) };
   }
 
-  // /**
-  //  * application + competition join
-  //  * todo!!!: index 적용해보고 성능 확인
-  //  * 인덱스 생성전: 6s (ms 아니라 6초 맞음...)
-  //  */
-  // async findApplications({ userId, page, limit }: FindApplicationsParam): Promise<FindApplicationsRet> {
-  //   console.time('Total Execution Time');
-  //   console.time('DB Query');
-  //   const applicationEntitys = assert<IApplicationWithCompetition[]>(
-  //     await this.applicationRepository.find({
-  //       where: { userId },
-  //       relations: [
-  //         'additionalInfos',
-  //         'playerSnapshots',
-  //         'participationDivisionInfos',
-  //         'participationDivisionInfos.participationDivisionInfoSnapshots',
-  //         'participationDivisionInfos.participationDivisionInfoSnapshots.division',
-  //         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
-  //         'competition',
-  //         'competition.divisions',
-  //         'competition.earlybirdDiscountSnapshots',
-  //         'competition.combinationDiscountSnapshots',
-  //         'competition.requiredAdditionalInfos',
-  //         'competition.competitionHostMaps',
-  //       ],
-  //       skip: page * limit,
-  //       take: limit,
-  //     }),
-  //   );
-  //   console.timeEnd('DB Query');
-  //   console.time('Processing Applications');
-  //   const applications = applicationEntitys.map((applicationEntity) => {
-  //     if (applicationEntity.status === 'DONE') return applicationEntity;
-  //     else {
-  //       const application = new ApplicationModel(applicationEntity);
-  //       console.time('Calculate Expected Payment');
-  //       application.caluateExpectedPayment();
-  //       console.timeEnd('Calculate Expected Payment');
-  //       return application.toEntity();
-  //     }
-  //   });
-  //   console.timeEnd('Processing Applications');
-  //   let ret: FindApplicationsRet = { applications };
-  //   if (applicationEntitys.length === limit) {
-  //     ret = { ...ret, nextPage: page + 1 };
-  //   }
-  //   console.timeEnd('Total Execution Time');
-  //   return ret;
-  // }
-
-  /**
-   * seperate application and competition query and mapping
-   * * todo!!!: index 적용해보고 성능 확인
-   * 인덱스 생성전: 300 ~ 400ms
-   */
   async findApplications({ userId, page, limit }: FindApplicationsParam): Promise<FindApplicationsRet> {
-    console.time('Total Execution Time');
-    console.time('DB Query');
-    console.time('DB Query - Application');
-    const applicationEntitys = assert<IApplicationWithCompetition[]>(
+    const applications = assert<IApplication[]>(
       await this.applicationRepository.find({
         where: { userId },
         relations: [
@@ -392,51 +347,34 @@ export class ApplicationsAppService {
           'participationDivisionInfos.participationDivisionInfoSnapshots.division',
           'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
         ],
+        order: { createdAt: 'DESC' },
         skip: page * limit,
         take: limit,
       }),
-    );
-    console.timeEnd('DB Query - Application');
-    console.time('DB Query - Competition');
+    ).map((applicationEntity) => new ApplicationModel(applicationEntity));
     const competitions = assert<ICompetition[]>(
       await this.competitionRepository.find({
-        where: { id: In(applicationEntitys.map((applicationEntity) => applicationEntity.competitionId)) },
+        where: { id: In(applications.map((application) => application.getCompetitionId())) },
         relations: [
           'divisions',
+          'divisions.priceSnapshots',
           'earlybirdDiscountSnapshots',
           'combinationDiscountSnapshots',
           'requiredAdditionalInfos',
           'competitionHostMaps',
         ],
       }),
-    );
-    console.timeEnd('DB Query - Competition');
-    console.timeEnd('DB Query');
-    // mapping competition to application
-    competitions.forEach((competition) => {
-      applicationEntitys.forEach((applicationEntity) => {
-        if (applicationEntity.competitionId === competition.id) {
-          applicationEntity.competition = competition;
-        }
-      });
+    ).map((competitionEntity) => new CompetitionModel(competitionEntity));
+    applications.forEach((application) => {
+      const competition = competitions.find((competition) => competition.getId() === application.getCompetitionId());
+      if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+      if (application.getStatus() === 'READY')
+        application.setExpectedPayment(competition.calculateExpectedPayment(application.getParticipationDivisionIds()));
     });
-    console.time('Processing Applications');
-    const applications = applicationEntitys.map((applicationEntity) => {
-      if (applicationEntity.status === 'DONE') return applicationEntity;
-      else {
-        const application = new ApplicationModel(applicationEntity);
-        console.time('Calculate Expected Payment');
-        application.caluateExpectedPayment();
-        console.timeEnd('Calculate Expected Payment');
-        return application.toEntity();
-      }
-    });
-    console.timeEnd('Processing Applications');
-    let ret: FindApplicationsRet = { applications };
-    if (applicationEntitys.length === limit) {
+    let ret: FindApplicationsRet = { applications: applications.map((application) => application.toEntity()) };
+    if (applications.length === limit) {
       ret = { ...ret, nextPage: page + 1 };
     }
-    console.timeEnd('Total Execution Time');
     return ret;
   }
 }

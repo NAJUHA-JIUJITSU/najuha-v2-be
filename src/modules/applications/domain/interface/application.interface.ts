@@ -57,10 +57,6 @@ export interface IApplication {
   expectedPayment?: IExpectedPayment | null;
 }
 
-export interface IApplicationWithCompetition extends IApplication {
-  competition?: ICompetition;
-}
-
 export interface IApplicationQueryOptions {
   /** 현제 페이지 번호입니다. default: 0 */
   page: number;

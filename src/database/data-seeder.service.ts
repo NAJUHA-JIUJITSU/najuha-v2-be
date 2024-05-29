@@ -222,7 +222,7 @@ export class DataSeederService {
         this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave),
       ]);
       await this.queryRunner.query('SET session_replication_role = DEFAULT');
-      // await this.rebuildIndexes();
+      await this.rebuildIndexes();
       await this.queryRunner.commitTransaction();
       console.log('Data seeding completed.');
       console.timeEnd('Data seeding time');

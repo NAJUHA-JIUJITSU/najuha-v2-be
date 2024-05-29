@@ -11,7 +11,7 @@ import { uuidv7 } from 'uuidv7';
  * @namespace Application
  */
 @Entity('participation_division_info')
-// @Index('applicationId_idx', ['applicationId'])
+@Index('IDX_ParticipationDivisionInfo_applicationId', ['applicationId'])
 export class ParticipationDivisionInfoEntity {
   @Column('varchar', { length: 36, primary: true, default: uuidv7() })
   id!: IParticipationDivisionInfo['id'];
