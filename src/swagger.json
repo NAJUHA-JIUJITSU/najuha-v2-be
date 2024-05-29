@@ -2204,6 +2204,59 @@
           }
         ],
         "x-nestia-method": "POST"
+      },
+      "get": {
+        "tags": [
+          "u-6 applications"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindApplicationsQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "applications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindApplicationsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-6-7 findApplications\n- RoleLevel: USER",
+        "description": "u-6-7 findApplications\n- RoleLevel: USER.",
+        "x-nestia-namespace": "user.applications.findApplications",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-6 applications",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "applications",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
       }
     },
     "/user/applications/{applicationId}": {
@@ -6864,6 +6917,11 @@
               "$ref": "#/components/schemas/IAdditionalInfo"
             },
             "description": "Addtional infos"
+          },
+          "expectedPayment": {
+            "$ref": "#/components/schemas/IExpectedPayment.Nullable",
+            "title": "Expected payment",
+            "description": "Expected payment.\nREADY 상태일 때만 조회결과에 포함됩니다."
           }
         },
         "nullable": false,
@@ -7098,6 +7156,34 @@
           "type",
           "value",
           "applicationId"
+        ]
+      },
+      "IExpectedPayment.Nullable": {
+        "type": "object",
+        "properties": {
+          "normalAmount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "earlybirdDiscountAmount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "combinationDiscountAmount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalAmount": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "nullable": true,
+        "required": [
+          "normalAmount",
+          "earlybirdDiscountAmount",
+          "combinationDiscountAmount",
+          "totalAmount"
         ]
       },
       "ResponseFormGetApplicationRes": {
@@ -7396,6 +7482,69 @@
           "earlybirdDiscountAmount",
           "combinationDiscountAmount",
           "totalAmount"
+        ]
+      },
+      "FindApplicationsQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number",
+            "description": "현제 페이지 번호입니다. default: 0"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 30,
+            "minimum": 1,
+            "description": "한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 30"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "page",
+          "limit"
+        ]
+      },
+      "ResponseFormFindApplicationsRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/FindApplicationsRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "FindApplicationsRes": {
+        "type": "object",
+        "properties": {
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IApplication"
+            }
+          },
+          "nextPage": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "applications"
         ]
       }
     },
