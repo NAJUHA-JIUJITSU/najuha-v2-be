@@ -10,7 +10,7 @@ export class AdminPolicyController {
   constructor(private readonly PolicyAppService: PolicyAppService) {}
 
   /**
-   * a-4-1 create policy.
+   * a-4-1 createPolicy.
    * - RoleLevel: ADMIN.
    *
    * @tag a-4 policy
@@ -18,12 +18,12 @@ export class AdminPolicyController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
-  async postPolicy(@TypedBody() body: CreatePolicyReqBody): Promise<ResponseForm<CreatePolicyRes>> {
+  async createPolicy(@TypedBody() body: CreatePolicyReqBody): Promise<ResponseForm<CreatePolicyRes>> {
     return createResponseForm(await this.PolicyAppService.createPolicy({ policyCreateDto: body }));
   }
 
   /**
-   * a-4-1 find policies.
+   * a-4-1 findPolicies.
    * - RoleLevel: ADMIN.
    *
    * @tag a-4 policy

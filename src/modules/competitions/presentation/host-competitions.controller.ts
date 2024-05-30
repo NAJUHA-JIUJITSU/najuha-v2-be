@@ -12,7 +12,7 @@ export class HostCompetitionsController {
   constructor(private readonly competitionsAppService: CompetitionsAppService) {}
 
   /**
-   * h-5-1 find hostring competitions.
+   * h-5-1 findCompetitions.
    * - RoleLevel: HOST.
    * - 본인이 주최한 대회들을 조회합니다.
    * - ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.
@@ -49,7 +49,7 @@ export class HostCompetitionsController {
   }
 
   /**
-   * h-5-2 get hosting competition.
+   * h-5-2 getCompetition.
    * - RoleLevel: HOST.
    * - 본인이 주최한 대회를 조회합니다.
    * - ACTIVE, INACTIVE 상태인 competition을 조회합니다.

@@ -22,7 +22,7 @@ export class UserApplicationsController {
   constructor(private readonly applicationAppService: ApplicationsAppService) {}
 
   /**
-   * u-6-1 create application.
+   * u-6-1 createApplication.
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
@@ -30,7 +30,7 @@ export class UserApplicationsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
-  async createCompetitionApplication(
+  async createApplication(
     @Req() req: Request,
     @TypedBody() body: CreateApplicationReqBody,
   ): Promise<ResponseForm<CreateApplicationRes>> {
@@ -38,7 +38,7 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-2 get application.
+   * u-6-2 getApplication.
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
@@ -46,7 +46,7 @@ export class UserApplicationsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:applicationId')
-  async getCompetitionApplication(
+  async getApplication(
     @TypedParam('applicationId') applicationId: IApplication['id'],
     @Req() req: Request,
   ): Promise<ResponseForm<GetApplicationRes>> {
@@ -56,7 +56,7 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-3 update ready status application.
+   * u-6-3 updateReadyApplication.
    * - RoleLevel: USER.
    * - READY(결제전) application 을 업데이트 합니다.
    * - 기존 application을 DELETED 상태로 변경하고 새로운 application 을 생성합니다. (이유, 기존 applicaiton이 실제로는 결제 됐지만 서버 오류로 실패처리 된 경우, 기존 결제 정보가 남아있어야하기 때문).
@@ -66,7 +66,7 @@ export class UserApplicationsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/:applicationId/ready')
-  async updateCompetitionApplication(
+  async updateReadyApplication(
     @Req() req: Request,
     @TypedParam('applicationId') applicationId: IApplication['id'],
     @TypedBody() body: UpdateReadyApplicationReqBody,
@@ -81,7 +81,7 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-4 update done status application.
+   * u-6-4 updateDoneApplication.
    * - RoleLevel: USER.
    * - DONE(결제완료) application 을 업데이트 합니다.
    * - playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 중 하나는 필수로 전달해야 합니다.
@@ -94,7 +94,7 @@ export class UserApplicationsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/:applicationId/done')
-  async updateDoneCompetitionApplication(
+  async updateDoneApplication(
     @Req() req: Request,
     @TypedParam('applicationId') applicationId: IApplication['id'],
     @TypedBody() body: UpdateDoneApplicationReqBody,
@@ -109,7 +109,7 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-5 delete application (아직구현 안됨).
+   * u-6-5 deleteApplication (아직구현 안됨).
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
@@ -117,14 +117,12 @@ export class UserApplicationsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:applicationId')
-  async deleteCompetitionApplication(
-    @TypedParam('applicationId') applicationId: IApplication['id'],
-  ): Promise<ResponseForm<void>> {
+  async deleteApplication(@TypedParam('applicationId') applicationId: IApplication['id']): Promise<ResponseForm<void>> {
     return createResponseForm();
   }
 
   /**
-   * u-6-6 get expected payment.
+   * u-6-6 getExpectedPayment.
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
@@ -142,7 +140,7 @@ export class UserApplicationsController {
   }
 
   /**
-   * u-6-7 findApplications
+   * u-6-7 findApplications.
    * - RoleLevel: USER.
    *
    * @tag u-6 applications

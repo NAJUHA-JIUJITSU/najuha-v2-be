@@ -32,7 +32,7 @@ export class AdminCompetitionsController {
   constructor(private readonly competitionsAppService: CompetitionsAppService) {}
 
   /**
-   * a-5-1 create competition.
+   * a-5-1 createCompetition.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -45,7 +45,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-2 find competitions.
+   * a-5-2 findCompetitions.
    * - RoleLevel: ADMIN.
    * - ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.
    *
@@ -76,7 +76,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-3 get competition.
+   * a-5-3 getCompetition.
    * - RoleLevel: ADMIN.
    * - ACTIVE, INACTIVE 상태인 competition 을 조회합니다.
    *
@@ -85,14 +85,14 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:competitionId')
-  async findCompetition(
+  async getCompetition(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
   ): Promise<ResponseForm<GetCompetitionRes>> {
     return createResponseForm(await this.competitionsAppService.getCompetition({ competitionId }));
   }
 
   /**
-   * a-5-4 update competition.
+   * a-5-4 updateCompetition.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -110,7 +110,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-5 update competition status.
+   * a-5-5 updateCompetitionStatus.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -131,7 +131,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-6 create competition divisions.
+   * a-5-6 createCompetitionDivisions.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -152,7 +152,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-7 create earlybird discount snapshot.
+   * a-5-7 createCompetitionEarlybirdDiscountSnapshot.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -172,7 +172,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-8 create combination discount snapshot.
+   * a-5-8 createCombinationDiscountSnapshot.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -192,7 +192,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-9 create required addtional info.
+   * a-5-9 createCompetitionRequiredAdditionalInfo.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -212,7 +212,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-10 update required addtional info.
+   * a-5-10 updateRequiredAdditionalInfo.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -233,7 +233,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-11 delete required addtional info.
+   * a-5-11 deleteRequiredAdditionalInfo.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions

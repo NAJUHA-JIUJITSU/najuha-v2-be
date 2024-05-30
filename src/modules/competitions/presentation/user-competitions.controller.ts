@@ -11,7 +11,7 @@ export class UserCompetitionsController {
   constructor(private readonly competitionsAppService: CompetitionsAppService) {}
 
   /**
-   * u-5-1 find competitions.
+   * u-5-1 findCompetitions.
    * - RoleLevel: PUBLIC.
    * - ACTIVE 상태인 competition 들을 조회합니다.
    *
@@ -43,7 +43,7 @@ export class UserCompetitionsController {
   }
 
   /**
-   * u-5-2 get competition.
+   * u-5-2 getCompetition.
    * - RoleLevel: USER.
    * - ACTIVE 상태인 competition 을 조회합니다.
    *

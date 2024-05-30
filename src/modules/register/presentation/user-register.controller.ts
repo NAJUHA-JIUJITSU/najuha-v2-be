@@ -26,7 +26,7 @@ export class UserRegisterController {
   constructor(private readonly RegisterAppService: RegisterAppService) {}
 
   /**
-   * u-2-1 get temporary user.
+   * u-2-1 getTemporaryUser.
    * - RoleLevel: TEMPORARY_USER.
    *
    * @tag u-2 register
@@ -40,7 +40,7 @@ export class UserRegisterController {
   }
 
   /**
-   * u-2-2 check duplicated nickname.
+   * u-2-2 isDuplicateNickname.
    * - RoleLevel: TEMPORARY_USER.
    * - 닉네임이 중복되면 true, 중복되지 않으면 false를 반환.
    * - 본인이 사용중인 닉네임이면 false를 반환.
@@ -60,7 +60,7 @@ export class UserRegisterController {
   }
 
   /**
-   * u-2-3 send auth code to phone number.
+   * u-2-3 sendPhoneNumberAuthCode.
    * - RoleLevel: TEMPORARY_USER.
    * - 전화번호로 인증코드를 전송한다.
    *
@@ -83,7 +83,7 @@ export class UserRegisterController {
   }
 
   /**
-   * u-2-4 confirm auth code.
+   * u-2-4 confirmAuthCode.
    * - RoleLevel: TEMPORARY_USER.
    * - 전화번호로 전송된 인증코드를 확인한다.
    * - 인증성공시 User의 phoneNumber를 업데이트한다.
@@ -109,7 +109,7 @@ export class UserRegisterController {
   }
 
   /**
-   * u-2-5 register user.
+   * u-2-5 registerUser.
    * - RoleLevel: TEMPORARY_USER.
    * - 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.
    * - USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.
