@@ -1,15 +1,16 @@
 import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { Absolute, IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 import { IExpectedPayment } from './interface/expected-payment.interface';
+import typia from 'typia';
 
 export class CalculatePaymentService {
   static calculate(
     divisions: IDivision[],
     priceSnapshots: IPriceSnapshot[],
-    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot,
-    combinationDiscountSnapshot: ICombinationDiscountSnapshot,
+    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot | null,
+    combinationDiscountSnapshot: ICombinationDiscountSnapshot | null,
     now: Date = new Date(),
   ): IExpectedPayment {
     const normalAmount = this.calculateNormalAmount(priceSnapshots);
@@ -27,7 +28,7 @@ export class CalculatePaymentService {
   }
 
   private static calculateEarlybirdDiscountAmount(
-    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot,
+    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot | null,
     now: Date,
   ): number {
     if (earlybirdDiscountSnapshot === null) return 0;
@@ -37,12 +38,13 @@ export class CalculatePaymentService {
   }
 
   private static calculateCombinationDiscountAmount(
-    combinationDiscountSnapshot: ICombinationDiscountSnapshot,
+    combinationDiscountSnapshot: ICombinationDiscountSnapshot | null,
     divisions: IDivision[],
   ): number {
+    // todo!!: 더 읽기 편하게 리팩토링
     if (combinationDiscountSnapshot === null) return 0;
     const divisionUnits = divisions.map((division) => ({
-      weightType: division.weight.includes('ABSOLUTE') ? 'ABSOLUTE' : 'WEIGHT',
+      weightType: typia.is<Absolute>(division.weight) ? 'ABSOLUTE' : 'WEIGHT',
       uniformType: division.uniform,
     }));
     let maxDiscountAmount = 0;

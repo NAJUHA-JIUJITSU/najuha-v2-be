@@ -1,5 +1,10 @@
-import { ApplicationsErrors, BusinessException, CompetitionsErrors } from 'src/common/response/errorResponse';
-import { ICompetition } from '../interface/competition.interface';
+import {
+  ApplicationsErrors,
+  BusinessException,
+  CommonErrors,
+  CompetitionsErrors,
+} from 'src/common/response/errorResponse';
+import { ICompetition, ICompetitionUpdateDto } from '../interface/competition.interface';
 import { CombinationDiscountSnapshotModel } from './combination-discount-snapshot.model';
 import { DivisionModel } from './division.model';
 import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.entity';
@@ -8,6 +13,8 @@ import { CalculatePaymentService } from 'src/modules/applications/domain/calcula
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 import { RequiredAdditionalInfoModel } from './required-addtional-info.model';
 import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interface/additional-info.interface';
+import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtional-info.interface';
+import { ICompetitionHostMap } from '../interface/competition-host-map.interface';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];
@@ -30,6 +37,7 @@ export class CompetitionModel {
   private requiredAdditionalInfos: RequiredAdditionalInfoModel[];
   private earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
   private combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
+  private competitionHostMaps: ICompetitionHostMap[];
   private readonly createdAt: ICompetition['createdAt'];
   private readonly updatedAt: ICompetition['updatedAt'];
 
@@ -52,13 +60,15 @@ export class CompetitionModel {
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
-    this.divisions = entity.divisions?.map((division) => new DivisionModel(division)) || [];
-    this.earlybirdDiscountSnapshots =
-      entity.earlybirdDiscountSnapshots?.map((snapshot) => new EarlybirdDiscountSnapshotModel(snapshot)) || [];
-    this.combinationDiscountSnapshots =
-      entity.combinationDiscountSnapshots?.map((snapshot) => new CombinationDiscountSnapshotModel(snapshot)) || [];
-    this.requiredAdditionalInfos =
-      entity.requiredAdditionalInfos?.map((info) => new RequiredAdditionalInfoModel(info)) || [];
+    this.divisions = entity.divisions.map((division) => new DivisionModel(division));
+    this.earlybirdDiscountSnapshots = entity.earlybirdDiscountSnapshots.map(
+      (snapshot) => new EarlybirdDiscountSnapshotModel(snapshot),
+    );
+    this.combinationDiscountSnapshots = entity.combinationDiscountSnapshots.map(
+      (snapshot) => new CombinationDiscountSnapshotModel(snapshot),
+    );
+    this.requiredAdditionalInfos = entity.requiredAdditionalInfos.map((info) => new RequiredAdditionalInfoModel(info));
+    this.competitionHostMaps = entity.competitionHostMaps;
   }
 
   toEntity(): ICompetition {
@@ -85,6 +95,7 @@ export class CompetitionModel {
       earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
       combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
       requiredAdditionalInfos: this.requiredAdditionalInfos,
+      competitionHostMaps: this.competitionHostMaps,
     };
   }
 
@@ -92,12 +103,31 @@ export class CompetitionModel {
     return this.id;
   }
 
-  getLatestEarlybirdDiscountSnapshot() {
+  getLatestEarlybirdDiscountSnapshot(): EarlybirdDiscountSnapshotModel | null {
+    if (this.earlybirdDiscountSnapshots.length === 0) return null;
     return this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
   }
 
-  getLatestCombinationDiscountSnapshot() {
+  getLatestCombinationDiscountSnapshot(): CombinationDiscountSnapshotModel | null {
+    if (this.combinationDiscountSnapshots.length === 0) return null;
     return this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1];
+  }
+
+  update(updateDto: ICompetitionUpdateDto) {
+    if (updateDto.title) this.title = updateDto.title;
+    if (updateDto.address) this.address = updateDto.address;
+    if (updateDto.competitionDate) this.competitionDate = updateDto.competitionDate;
+    if (updateDto.registrationStartDate) this.registrationStartDate = updateDto.registrationStartDate;
+    if (updateDto.registrationEndDate) this.registrationEndDate = updateDto.registrationEndDate;
+    if (updateDto.refundDeadlineDate) this.refundDeadlineDate = updateDto.refundDeadlineDate;
+    if (updateDto.soloRegistrationAdjustmentStartDate)
+      this.soloRegistrationAdjustmentStartDate = updateDto.soloRegistrationAdjustmentStartDate;
+    if (updateDto.soloRegistrationAdjustmentEndDate)
+      this.soloRegistrationAdjustmentEndDate = updateDto.soloRegistrationAdjustmentEndDate;
+    if (updateDto.registrationListOpenDate) this.registrationListOpenDate = updateDto.registrationListOpenDate;
+    if (updateDto.bracketOpenDate) this.bracketOpenDate = updateDto.bracketOpenDate;
+    if (updateDto.description) this.description = updateDto.description;
+    if (updateDto.isPartnership) this.isPartnership = updateDto.isPartnership;
   }
 
   updateStatus(newStatus: ICompetition['status']) {
@@ -110,7 +140,6 @@ export class CompetitionModel {
       if (this.registrationEndDate === null) missingProperties.push('registrationEndDate');
       if (this.refundDeadlineDate === null) missingProperties.push('refundDeadlineDate');
       if (this.description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
-
       if (missingProperties.length > 0) {
         throw new BusinessException(
           CompetitionsErrors.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
@@ -146,34 +175,41 @@ export class CompetitionModel {
     this.divisions.push(...newDivisions);
   }
 
+  addEarlybirdDiscountSnapshot(newEarlybirdDiscountSnapshot: EarlybirdDiscountSnapshotModel) {
+    this.earlybirdDiscountSnapshots.push(newEarlybirdDiscountSnapshot);
+  }
+
+  addCombinationDiscountSnapshot(newCombinationDiscountSnapshot: CombinationDiscountSnapshotModel) {
+    this.combinationDiscountSnapshots.push(newCombinationDiscountSnapshot);
+  }
+
+  updateRequiredAdditionalInfo(requiredAdditionalInfoUpdateDto: IRequiredAdditionalInfoUpdateDto) {
+    const requiredAdditionalInfo = this.requiredAdditionalInfos.find(
+      (info) => info.id === requiredAdditionalInfoUpdateDto.id,
+    );
+    if (!requiredAdditionalInfo)
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
+    requiredAdditionalInfo.update(requiredAdditionalInfoUpdateDto);
+  }
+
+  deleteRequiredAdditionalInfo(requiredAdditionalInfoId: RequiredAdditionalInfoModel['id']) {
+    const requiredAdditionalInfo = this.requiredAdditionalInfos.find((info) => info.id === requiredAdditionalInfoId);
+    if (!requiredAdditionalInfo)
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
+    requiredAdditionalInfo.delete();
+  }
+
   validateApplicationPeriod(now = new Date()) {
-    // TODO: null 값인지 확인
-    if (this.registrationStartDate && now < this.registrationStartDate) {
+    if (this.registrationStartDate && now < this.registrationStartDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,
         `registrationStartDate: ${this.registrationStartDate}`,
       );
-    }
-    if (this.registrationEndDate && now > this.registrationEndDate) {
+    if (this.registrationEndDate && now > this.registrationEndDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_ENDED,
         `registrationEndDate: ${this.registrationEndDate}`,
       );
-    }
-  }
-
-  validateParticipationAbleDivisions(participationDivisionIds: IDivision['id'][]) {
-    const divisions = this.divisions.filter((division) => participationDivisionIds.includes(division.id));
-    const notFoundDivisionIds = participationDivisionIds.filter(
-      (divisionId) => !divisions.some((division) => division.id === divisionId),
-    );
-    if (notFoundDivisionIds.length > 0) {
-      throw new BusinessException(
-        ApplicationsErrors.APPLICATIONS_DIVISION_NOT_FOUND,
-        `Not found DivisionIds: ${notFoundDivisionIds.join(', ')}`,
-      );
-    }
-    return divisions;
   }
 
   calculateExpectedPayment(participationDivisionIds: IDivision['id'][]) {
@@ -205,17 +241,30 @@ export class CompetitionModel {
   }
 
   validateAdditionalInfo(additionalInfoCreateDtos?: IAdditionalInfoCreateDto[]) {
-    this.requiredAdditionalInfos.forEach((requiredAdditionalInfo) => {
-      if (
-        !additionalInfoCreateDtos?.some((additionalInfoCreateDto) => {
-          return additionalInfoCreateDto.type === requiredAdditionalInfo.type;
-        })
-      ) {
-        throw new BusinessException(
-          ApplicationsErrors.APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_FOUND,
-          `type: ${requiredAdditionalInfo.type}`,
-        );
-      }
-    });
+    const requiredAdditionalInfoTypes = this.requiredAdditionalInfos.map((info) => info.type);
+    const additionalInfoTypes = additionalInfoCreateDtos?.map((info) => info.type) ?? [];
+    const missingTypes = requiredAdditionalInfoTypes.filter((type) => !additionalInfoTypes.includes(type));
+    if (missingTypes.length > 0) {
+      throw new BusinessException(
+        ApplicationsErrors.APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH,
+        `type: ${missingTypes.join(', ')}`,
+      );
+    }
+  }
+
+  getDivision(divisionId: IDivision['id']): DivisionModel {
+    const division = this.divisions.find((division) => division.id === divisionId);
+    if (!division) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, `Not found DivisionId: ${divisionId}`);
+    }
+    return division;
+  }
+
+  getManyDivisions(divisionIds: IDivision['id'][]): DivisionModel[] {
+    const divisions = this.divisions.filter((division) => divisionIds.includes(division.id));
+    if (divisions.length === 0) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, `Not found DivisionIds: ${divisionIds.join(', ')}`);
+    }
+    return divisions;
   }
 }

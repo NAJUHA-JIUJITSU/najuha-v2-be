@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IDivisionPack } from './interface/division-pack.interface';
 import { IDivision } from './interface/division.interface';
 import { ICompetition } from './interface/competition.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 
 @Injectable()
 export class DivisionFactory {
@@ -31,7 +31,7 @@ export class DivisionFactory {
     );
 
     const divisions: IDivision[] = combinations.map(([category, uniform, gender, belt, weight]) => {
-      const divisionId = ulid();
+      const divisionId = uuidv7();
       const division: IDivision = {
         id: divisionId,
         competitionId,
@@ -45,7 +45,7 @@ export class DivisionFactory {
         status: 'ACTIVE',
         priceSnapshots: [
           {
-            id: ulid(),
+            id: uuidv7(),
             divisionId: divisionId,
             price: divisionPack.price,
             createdAt: new Date(),

@@ -1,13 +1,13 @@
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
 import { tags } from 'typia';
 
 export interface IParticipationDivisionInfoPayment {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: TId;
 
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   divisionId: IDivision['id'];
 

@@ -18,8 +18,8 @@ import { RegisterUserModel } from '../domain/model/register-user.model';
 import { assert } from 'typia';
 import { IRegisterUser, ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
-import { PolicyRepository } from 'src/infrastructure/database/custom-repository/policy.repository';
-import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
+import { PolicyRepository } from 'src//database/custom-repository/policy.repository';
+import { UserRepository } from 'src//database/custom-repository/user.repository';
 import { PolicyConsentFactory } from '../domain/policy-conset.factory';
 
 @Injectable()
@@ -57,13 +57,13 @@ export class RegisterAppService {
     return { isDuplicated: true };
   }
 
-  // TODO: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
+  // todo!: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
   async sendPhoneNumberAuthCode({
     userId,
     phoneNumber,
   }: SendPhoneNumberAuthCodeParam): Promise<SendPhoneNumberAuthCodeRet> {
     const phoneNumberAuthCode = await this.phoneAuthCodeProvider.issuePhoneNumberAuthCode(userId, phoneNumber);
-    // TODO: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
+    // todo!: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
     return { phoneNumberAuthCode };
   }
 

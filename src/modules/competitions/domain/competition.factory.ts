@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ICompetition, ICompetitionCreateDto } from './interface/competition.interface';
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import {
   IEarlybirdDiscountSnapshot,
   IEarlybirdDiscountSnapshotCreateDto,
@@ -18,7 +18,7 @@ import {
 export class CompetitionFactory {
   createCompetition(createCompetitionDto: ICompetitionCreateDto): ICompetition {
     return {
-      id: ulid(),
+      id: uuidv7(),
       title: createCompetitionDto.title ?? 'DEFAULT TITLE',
       address: createCompetitionDto.address ?? 'DEFAULT ADDRESS',
       competitionDate: createCompetitionDto.competitionDate ?? null,
@@ -40,6 +40,7 @@ export class CompetitionFactory {
       earlybirdDiscountSnapshots: [],
       combinationDiscountSnapshots: [],
       requiredAdditionalInfos: [],
+      competitionHostMaps: [],
     };
   }
 
@@ -47,7 +48,7 @@ export class CompetitionFactory {
     earlybirdDiscountSnapshotCreateDto: IEarlybirdDiscountSnapshotCreateDto,
   ): IEarlybirdDiscountSnapshot {
     return {
-      id: ulid(),
+      id: uuidv7(),
       earlybirdStartDate: earlybirdDiscountSnapshotCreateDto.earlybirdStartDate,
       earlybirdEndDate: earlybirdDiscountSnapshotCreateDto.earlybirdEndDate,
       discountAmount: earlybirdDiscountSnapshotCreateDto.discountAmount,
@@ -60,22 +61,23 @@ export class CompetitionFactory {
     combinationDiscountSnapshotCreateDto: ICombinationDiscountSnapshotCreateDto,
   ): ICombinationDiscountSnapshot {
     return {
-      id: ulid(),
+      id: uuidv7(),
       combinationDiscountRules: combinationDiscountSnapshotCreateDto.combinationDiscountRules,
       competitionId: combinationDiscountSnapshotCreateDto.competitionId,
       createdAt: new Date(),
     };
   }
 
-  createRequiredAdditionalInfo(
+  createCompetitionRequiredAdditionalInfo(
     requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto,
   ): IRequiredAdditionalInfo {
     return {
-      id: ulid(),
+      id: uuidv7(),
       type: requiredAdditionalInfoCreateDto.type,
       description: requiredAdditionalInfoCreateDto.description,
       competitionId: requiredAdditionalInfoCreateDto.competitionId,
       createdAt: new Date(),
+      deletedAt: null,
     };
   }
 }

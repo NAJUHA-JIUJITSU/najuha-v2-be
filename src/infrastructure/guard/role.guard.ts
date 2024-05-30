@@ -13,7 +13,8 @@ export enum RoleLevel {
   PUBLIC = 1,
   TEMPORARY_USER = 2,
   USER = 3,
-  ADMIN = 4,
+  HOST = 4,
+  ADMIN = 5,
 }
 
 export const RoleLevels = (roleLevel: RoleLevel) => SetMetadata(ROLE_LEVEL_KEY, roleLevel);

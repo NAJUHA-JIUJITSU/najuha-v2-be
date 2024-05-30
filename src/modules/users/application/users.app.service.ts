@@ -3,7 +3,7 @@ import { UserFactory } from '../domain/user.factory';
 import { CreateUserParam, CreateUserRet, GetMeParam, GetMeRet, UpdateUserParam, UpdateUserRet } from './dtos';
 import { assert } from 'typia';
 import { IUser } from '../domain/interface/user.interface';
-import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
+import { UserRepository } from 'src//database/custom-repository/user.repository';
 
 @Injectable()
 export class UsersAppService {

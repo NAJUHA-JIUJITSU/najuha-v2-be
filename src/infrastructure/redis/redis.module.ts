@@ -8,7 +8,7 @@ import appEnv from '../../common/app-env';
  * - onModuleDestroy: 모듈이 종료될 때 호출되는 메서드
  * 위와 같은 처리를 안해주면 테스트시 redis 연결이 끊기지 않아서 테스트가 종료돠지 않음.
  *
- * TODO: redis 보안 연결 설정하기
+ * todo!: redis 보안 연결 설정하기
  */
 @Global()
 @Module({

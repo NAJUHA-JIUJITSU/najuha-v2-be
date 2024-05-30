@@ -20,7 +20,7 @@ export class UserAuthController {
   constructor(private readonly AuthAppService: AuthAppService) {}
 
   /**
-   * u-1-1 auth sns login.
+   * u-1-1 snsLogin.
    * - RoleLevel: PUBLIC
    *
    * @tag u-1 auth
@@ -37,7 +37,7 @@ export class UserAuthController {
   }
 
   /**
-   * u-1-2 auth toekn refresh.
+   * u-1-2 refreshToken.
    * - RoleLevel: PUBLIC
    *
    * @tag u-1 auth
@@ -51,7 +51,7 @@ export class UserAuthController {
   }
 
   /**
-   * u-1-3 auth acquire admin role.
+   * u-1-3 aqureAdminRole.
    * - RoleLevel: USER
    * - 관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.
    * - ADMIN 역할을 가진 accessToken 과 refreshToken 을 발급합니다.

@@ -1,10 +1,10 @@
-import { ulid } from 'ulid';
+import { uuidv7 } from 'uuidv7';
 import { ITemporaryUser, ITemporaryUserCreateDto } from './interface/user.interface';
 
 export class UserFactory {
   creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {
     return {
-      id: ulid(),
+      id: uuidv7(),
       role: 'TEMPORARY_USER',
       snsAuthProvider: dto.snsAuthProvider,
       snsId: dto.snsId,

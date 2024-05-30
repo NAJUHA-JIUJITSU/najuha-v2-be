@@ -1,5 +1,6 @@
 import typia from 'typia';
 import * as dotenv from 'dotenv';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 const envPathMap = {
   dev: '.env.dev',
@@ -11,7 +12,7 @@ dotenv.config({ path: envPathMap[`${process.env.NODE_ENV}`] });
 
 type appEnv = {
   // NODE_ENV ---------------------------------------------------------------------
-  nodeEnv: string;
+  nodeEnv: 'dev' | 'test' | 'prod';
   // APP --------------------------------------------------------------------------
   appPort: number;
   // KAKAO API --------------------------------------------------------------------
@@ -45,7 +46,7 @@ type appEnv = {
   jwtRefreshTokenSecret: string;
   jwtRefreshTokenExpirationTime: string;
   // ADMIN CREDENTIALS -------------------------------------------------------------
-  adminCredentials: { snsId: string; snsAuthProvider: string }[];
+  adminCredentials: { snsId: string; snsAuthProvider: IUser['snsAuthProvider']; id: string; name: string }[];
 };
 
 const loadConfig = (): appEnv => {

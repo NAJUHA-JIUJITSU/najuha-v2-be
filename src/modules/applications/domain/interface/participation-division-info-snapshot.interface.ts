@@ -1,14 +1,14 @@
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
 import { tags } from 'typia';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IParticipationDivisionInfoSnapshot {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: TId;
 
   /** CreatedAt */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** - Participation division Info id. */
   participationDivisionInfoId: IParticipationDivisionInfo['id'];

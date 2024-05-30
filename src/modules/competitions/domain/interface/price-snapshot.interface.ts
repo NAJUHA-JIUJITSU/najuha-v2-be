@@ -1,16 +1,16 @@
 import { tags } from 'typia';
 import { IDivision } from './division.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IPriceSnapshot {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: TId;
 
   /** price, (원). */
   price: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** Division id. */
   divisionId: IDivision['id'];

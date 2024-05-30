@@ -5,13 +5,13 @@ import { BusinessException, SnsAuthErrors } from 'src/common/response/errorRespo
 import appEnv from 'src/common/app-env';
 import { INaverUserData } from './interface/naver-user-data.type';
 import { ISnsAuthStrategy } from './interface/sns-auth.stratege.interface';
-import { IValidatedUserData } from './interface/validated-user-data.interface';
+import { ISnsAuthValidatedUserData } from './interface/validated-user-data.interface';
 
 @Injectable()
 export class NaverStrategy implements ISnsAuthStrategy {
   constructor(private readonly httpService: HttpService) {}
 
-  async validate(snsAuthCode: string): Promise<IValidatedUserData> {
+  async validate(snsAuthCode: string): Promise<ISnsAuthValidatedUserData> {
     try {
       const snsAccessToken = await this.getAccessToken(snsAuthCode);
       const naverUserData = await this.getUserData(snsAccessToken);
@@ -53,8 +53,8 @@ export class NaverStrategy implements ISnsAuthStrategy {
     return response.data.response;
   }
 
-  private formatUserData(data: INaverUserData): IValidatedUserData {
-    const dto: IValidatedUserData = {
+  private formatUserData(data: INaverUserData): ISnsAuthValidatedUserData {
+    const dto: ISnsAuthValidatedUserData = {
       snsAuthProvider: 'NAVER',
       snsId: data.id,
       name: data.name,

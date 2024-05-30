@@ -9,19 +9,22 @@ import {
   CreateCompetitionReqBody,
   CreateCompetitionRes,
   CreateDivisionsReqBody,
-  CreateDivisionsRes,
+  CreateCompetitionDivisionsRes,
   CreateEarlybirdDiscountSnapshotReqBody,
   CreateEarlybirdDiscountSnapshotRes,
-  CreateRequiredAdditionalInfoReqBody,
+  CreateCompetitionRequiredAdditionalInfoReqBody,
   FindCompetitionsReqQuery,
   FindCompetitionsRes,
   UpdateCompetitionReqBody,
   UpdateCompetitionRes,
   UpdateCompetitionStatusReqBody,
   UpdateRequiredAdditionalInfoReqBody,
+  CreateCompetitionRequiredAdditionalInfoRes,
+  DeleteCompetitionRequiredAdditionalInfoRes,
+  UpdateCompetitionRequiredAdditionalInfoRes,
+  GetCompetitionRes,
 } from './dtos';
 import { ICompetition } from '../domain/interface/competition.interface';
-import { GetCompetitionRet, CreateRequiredAdditionalInfoRet } from '../application/dtos';
 import { IRequiredAdditionalInfo } from '../domain/interface/required-addtional-info.interface';
 
 @Controller('admin/competitions')
@@ -29,7 +32,7 @@ export class AdminCompetitionsController {
   constructor(private readonly competitionsAppService: CompetitionsAppService) {}
 
   /**
-   * a-5-1 create competition.
+   * a-5-1 createCompetition.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -42,7 +45,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-2 find competitions.
+   * a-5-2 findCompetitions.
    * - RoleLevel: ADMIN.
    * - ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.
    *
@@ -73,7 +76,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-3 get competition.
+   * a-5-3 getCompetition.
    * - RoleLevel: ADMIN.
    * - ACTIVE, INACTIVE 상태인 competition 을 조회합니다.
    *
@@ -82,14 +85,14 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:competitionId')
-  async findCompetition(
+  async getCompetition(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-  ): Promise<ResponseForm<GetCompetitionRet>> {
+  ): Promise<ResponseForm<GetCompetitionRes>> {
     return createResponseForm(await this.competitionsAppService.getCompetition({ competitionId }));
   }
 
   /**
-   * a-5-4 update competition.
+   * a-5-4 updateCompetition.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -107,7 +110,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-5 update competition status.
+   * a-5-5 updateCompetitionStatus.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -128,7 +131,7 @@ export class AdminCompetitionsController {
   }
 
   /**
-   * a-5-6 create divisions.
+   * a-5-6 createCompetitionDivisions.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -136,17 +139,20 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/divisions')
-  async createDivisions(
+  async createCompetitionDivisions(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() body: CreateDivisionsReqBody,
-  ): Promise<ResponseForm<CreateDivisionsRes>> {
+  ): Promise<ResponseForm<CreateCompetitionDivisionsRes>> {
     return createResponseForm(
-      await this.competitionsAppService.createDivisions({ competitionId, divisionPacks: body.divisionPacks }),
+      await this.competitionsAppService.createCompetitionDivisions({
+        competitionId,
+        divisionPacks: body.divisionPacks,
+      }),
     );
   }
 
   /**
-   * a-5-7 create earlybird discount snapshot.
+   * a-5-7 createCompetitionEarlybirdDiscountSnapshot.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -154,19 +160,19 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/earlybird-discount-snapshots')
-  async createEarlybirdDiscountSnapshot(
+  async createCompetitionEarlybirdDiscountSnapshot(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedBody() body: CreateEarlybirdDiscountSnapshotReqBody,
   ): Promise<ResponseForm<CreateEarlybirdDiscountSnapshotRes>> {
     return createResponseForm(
-      await this.competitionsAppService.createEarlybirdDiscountSnapshot({
+      await this.competitionsAppService.createCompetitionEarlybirdDiscountSnapshot({
         earlybirdDiscountSnapshotCreateDto: { competitionId, ...body },
       }),
     );
   }
 
   /**
-   * a-5-8 create combination discount snapshot.
+   * a-5-8 createCombinationDiscountSnapshot.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -179,14 +185,14 @@ export class AdminCompetitionsController {
     @TypedBody() dto: CreateCombinationDiscountSnapshotReqBody,
   ): Promise<ResponseForm<CreateCombinationDiscountSnapshotRes>> {
     return createResponseForm(
-      await this.competitionsAppService.createCombinationDiscountSnapshot({
+      await this.competitionsAppService.createCompetitionCombinationDiscountSnapshot({
         combinationDiscountSnapshotCreateDto: { competitionId, ...dto },
       }),
     );
   }
 
   /**
-   * a-5-9 create required addtional info.
+   * a-5-9 createCompetitionRequiredAdditionalInfo.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -194,19 +200,19 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/required-additional-infos')
-  async createRequiredAdditionalInfo(
+  async createCompetitionRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-    @TypedBody() dto: CreateRequiredAdditionalInfoReqBody,
-  ): Promise<ResponseForm<CreateRequiredAdditionalInfoRet>> {
+    @TypedBody() dto: CreateCompetitionRequiredAdditionalInfoReqBody,
+  ): Promise<ResponseForm<CreateCompetitionRequiredAdditionalInfoRes>> {
     return createResponseForm(
-      await this.competitionsAppService.createRequiredAdditionalInfo({
+      await this.competitionsAppService.createCompetitionRequiredAdditionalInfo({
         requiredAdditionalInfoCreateDto: { competitionId, ...dto },
       }),
     );
   }
 
   /**
-   * a-5-10 update required addtional info.
+   * a-5-10 updateRequiredAdditionalInfo.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -218,16 +224,16 @@ export class AdminCompetitionsController {
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedParam('requiredAdditionalInfoId') requiredAdditionalInfoId: IRequiredAdditionalInfo['id'],
     @TypedBody() dto: UpdateRequiredAdditionalInfoReqBody,
-  ): Promise<ResponseForm<CreateRequiredAdditionalInfoRet>> {
+  ): Promise<ResponseForm<UpdateCompetitionRequiredAdditionalInfoRes>> {
     return createResponseForm(
-      await this.competitionsAppService.updateRequiredAdditionalInfo({
+      await this.competitionsAppService.updateCompetitionRequiredAdditionalInfo({
         requiredAdditionalInfoUpdateDto: { competitionId, id: requiredAdditionalInfoId, ...dto },
       }),
     );
   }
 
   /**
-   * a-5-11 delete required addtional info.
+   * a-5-11 deleteRequiredAdditionalInfo.
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
@@ -238,9 +244,9 @@ export class AdminCompetitionsController {
   async deleteRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedParam('requiredAdditionalInfoId') requiredAdditionalInfoId: IRequiredAdditionalInfo['id'],
-  ): Promise<ResponseForm<void>> {
+  ): Promise<ResponseForm<DeleteCompetitionRequiredAdditionalInfoRes>> {
     return createResponseForm(
-      await this.competitionsAppService.deleteRequiredAdditionalInfo({
+      await this.competitionsAppService.deleteCompetitionRequiredAdditionalInfo({
         competitionId,
         requiredAdditionalInfoId,
       }),

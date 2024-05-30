@@ -1,17 +1,17 @@
 import { tags } from 'typia';
 import { ICombinationDiscountRule } from './combination-discount-rule.interface';
 import { ICompetition } from './competition.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface ICombinationDiscountSnapshot {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: TId;
 
   /** 조합 할인 규칙. */
   combinationDiscountRules: ICombinationDiscountRule[] & tags.MinItems<1>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** Competition id. */
   competitionId: ICompetition['id'];

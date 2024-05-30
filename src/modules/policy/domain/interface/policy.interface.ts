@@ -1,4 +1,4 @@
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { tags } from 'typia';
 
 /**
@@ -7,8 +7,8 @@ import { tags } from 'typia';
  * - 새로운 약관이 생성될 때마다 버전을 올립니다.
  */
 export interface IPolicy {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: TId;
 
   /** 약관의 버전. */
   version: number & tags.Type<'uint32'> & tags.Minimum<0>;
@@ -42,7 +42,7 @@ export interface IPolicy {
   content: string & tags.MinLength<1>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 }
 
 export interface IPolicyFindMany extends Omit<IPolicy, 'content'> {}

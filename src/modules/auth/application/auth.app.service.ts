@@ -14,7 +14,7 @@ import {
 import { UserFactory } from 'src/modules/users/domain/user.factory';
 import { assert } from 'typia';
 import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
-import { UserRepository } from 'src/infrastructure/database/custom-repository/user.repository';
+import { UserRepository } from 'src//database/custom-repository/user.repository';
 
 @Injectable()
 export class AuthAppService {
@@ -40,7 +40,7 @@ export class AuthAppService {
       userId: userEntity.id,
       userRole: userEntity.role,
     });
-    // TODO: 지우기
+    // todo!: 지우기
     console.log('authTokens', authTokens);
     return { authTokens };
   }

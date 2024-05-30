@@ -13,7 +13,7 @@ import { CompetitionsModule } from './modules/competitions/competitions.module';
 import { RedisModule } from './infrastructure/redis/redis.module';
 import { ApplicationModule } from './modules/applications/application.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfigAsync } from './infrastructure/database/typeorm.config';
+import { typeOrmConfigAsync } from './database/typeorm.config';
 
 @Module({
   imports: [
@@ -27,7 +27,6 @@ import { typeOrmConfigAsync } from './infrastructure/database/typeorm.config';
     LoggerModule,
     MiddlewareModule,
     RedisModule,
-
     /**
      * Domain Modules: These modules arr used to provide the business logic to the application
      */

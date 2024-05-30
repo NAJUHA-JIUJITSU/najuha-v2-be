@@ -1,11 +1,11 @@
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IApplication } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
 import { IParticipationDivisionInfoUpdateDto } from '../domain/interface/participation-division-info.interface';
 import { IPlayerSnapshotCreateDto } from '../domain/interface/player-snapshot.interface';
 import { IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from '../domain/interface/additional-info.interface';
+import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 
 // Application Layer Param DTOs ---------------------------------------------------
 export interface CreateApplicationParam {
@@ -25,6 +25,7 @@ export interface GetApplicationParam {
 export interface UpdateReadyApplicationParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
+  applicationType: IApplication['type'];
   /**
    * - Division IDs to participate.
    * @minItems 1
@@ -51,6 +52,12 @@ export interface GetExpectedPaymentParam {
   applicationId: IApplication['id'];
 }
 
+export interface FindApplicationsParam {
+  userId: IUser['id'];
+  page: number;
+  limit: number;
+}
+
 // Application Layer Result DTOs -----------------------------------------------------
 export interface CreateApplicationRet {
   application: IApplication;
@@ -70,4 +77,9 @@ export interface UpdateDoneApplicationRet {
 
 export interface GetExpectedPaymentRet {
   expectedPayment: IExpectedPayment;
+}
+
+export interface FindApplicationsRet {
+  applications: IApplication[];
+  nextPage?: number;
 }

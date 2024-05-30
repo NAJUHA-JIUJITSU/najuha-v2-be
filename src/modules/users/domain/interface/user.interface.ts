@@ -1,4 +1,4 @@
-import { DateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { Nullable } from 'src/common/utility-types';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
@@ -13,16 +13,17 @@ import { tags } from 'typia';
  * - apple  : snsId, email, name.
  */
 export interface IUser {
-  /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  /** UUIDv7. */
+  id: TId;
 
   /**
    * User 역할. User의 접근 권한을 나타냅니다.
    * - ADMIN: 관리자 권한.
+   * - HOST: 대회 주최자 권한.
    * - USER: 일반 User 권한.
    * - TEMPORARY_USER: 회원가입을 완료하지 않은 User 권한.
    */
-  role: 'ADMIN' | 'USER' | 'TEMPORARY_USER';
+  role: 'ADMIN' | 'HOST' | 'USER' | 'TEMPORARY_USER';
 
   /** SNS 공급자. User가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다. */
   snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';
@@ -75,10 +76,10 @@ export interface IUser {
   status: 'ACTIVE' | 'INACTIVE';
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** UpdatedAt. */
-  updatedAt: DateOrStringDate;
+  updatedAt: TDateOrStringDate;
 }
 
 export interface ITemporaryUser

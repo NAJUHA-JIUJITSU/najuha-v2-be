@@ -11,7 +11,7 @@ export class UserUsersController {
   constructor(private readonly UsersAppService: UsersAppService) {}
 
   /**
-   * u-3-1 create user. // TODO: api 삭제 예정(유저 생성은 내부적으로만 사용)).
+   * u-3-1 createUser. // todo!: api 삭제 예정(유저 생성은 내부적으로만 사용)).
    * - RoleLevel: USER.
    *
    * @tag u-3 users
@@ -19,12 +19,12 @@ export class UserUsersController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
-  async postUser(@TypedBody() body: CreateUserReqBody): Promise<ResponseForm<CreateUserRes>> {
+  async createUser(@TypedBody() body: CreateUserReqBody): Promise<ResponseForm<CreateUserRes>> {
     return createResponseForm(await this.UsersAppService.createUser({ userCreateDto: body }));
   }
 
   /**
-   * u-3-2 update user.
+   * u-3-2 updateUser.
    * - RoleLevel: USER.
    *
    * @tag u-3 users
@@ -34,12 +34,12 @@ export class UserUsersController {
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
-  async patchUser(@Req() req: Request, @TypedBody() body: UpdateUserReqBody): Promise<ResponseForm<UpdateUserRes>> {
+  async updateUser(@Req() req: Request, @TypedBody() body: UpdateUserReqBody): Promise<ResponseForm<UpdateUserRes>> {
     return createResponseForm(await this.UsersAppService.updateUser({ userUpdateDto: { ...body, id: req['userId'] } }));
   }
 
   /**
-   * u-3-3 get me.
+   * u-3-3 getMe.
    * - RoleLevel: USER.
    *
    * @tag u-3 users
