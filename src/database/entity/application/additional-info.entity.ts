@@ -1,5 +1,5 @@
 import { IAdditionalInfo } from 'src/modules/applications/domain/interface/additional-info.interface';
-import { Column, CreateDateColumn, Entity, Index, ManyToOne, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { uuidv7 } from 'uuidv7';
 
@@ -10,7 +10,7 @@ import { uuidv7 } from 'uuidv7';
 @Entity('additional_info')
 @Index('IDX_AddtionalInfo_applicationId', ['applicationId'])
 export class AdditionalInfoEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IAdditionalInfo['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
@@ -25,7 +25,7 @@ export class AdditionalInfoEntity {
   @Column('varchar')
   value!: IAdditionalInfo['value'];
 
-  @Column()
+  @Column('uuid')
   applicationId!: IAdditionalInfo['applicationId'];
 
   @ManyToOne(() => ApplicationEntity, (application) => application.additionalInfos)

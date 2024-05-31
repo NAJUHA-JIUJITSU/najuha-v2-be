@@ -1,11 +1,11 @@
 import { tags } from 'typia';
 import { IPost } from './post.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from 'src/common/common-types';
 
 export interface IPostLike {
   /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  id: TId;
 
   /** Post Id. */
   postId: IPost['id'];
@@ -14,5 +14,5 @@ export interface IPostLike {
   userId: IUser['id'];
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 }

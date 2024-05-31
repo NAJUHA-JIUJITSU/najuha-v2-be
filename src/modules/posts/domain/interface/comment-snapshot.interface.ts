@@ -1,10 +1,10 @@
 import { tags } from 'typia';
 import { IComment } from './comment.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from 'src/common/common-types';
 
 export interface ICommentSnapshot {
   /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  id: TId;
 
   /** Comment Id. */
   commentId: IComment['id'];
@@ -13,5 +13,5 @@ export interface ICommentSnapshot {
   body: string & tags.MinLength<1> & tags.MaxLength<1024>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 }

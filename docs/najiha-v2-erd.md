@@ -8,9 +8,224 @@
 
 
 
-- [User](#user)
 - [Application](#application)
+- [User](#user)
 - [Competition](#competition)
+- [Community](#community)
+
+
+## Application
+
+```mermaid
+erDiagram
+  participation_division_info_snapshot {
+    uuid id PK
+    timestamptz createdAt
+    uuid participationDivisionInfoId FK
+    uuid participationDivisionId FK
+  }
+  player_snapshot {
+    uuid id PK
+    varchar name
+    varchar gender
+    varchar birth
+    varchar phoneNumber
+    varchar belt
+    varchar network
+    varchar team
+    varchar masterName
+    timestamptz createdAt
+    uuid applicationId FK
+  }
+  payment_snapshot {
+    uuid id PK
+    timestamptz createdAt
+    integer normalAmount
+    integer earlybirdDiscountAmount
+    integer combinationDiscountAmount
+    integer totalAmount
+    uuid applicationId FK
+  }
+  additional_info {
+    uuid id PK
+    timestamptz createdAt
+    timestamptz updatedAt
+    varchar type
+    varchar value
+    uuid applicationId FK
+  }
+  application {
+    uuid id PK
+    timestamptz createdAt
+    timestamptz updatedAt
+    timestamptz deletedAt "nullable"
+    varchar type
+    varchar status
+    uuid competitionId FK
+    uuid userId FK
+  }
+  participation_division_info {
+    uuid id PK
+    timestamptz createdAt
+    uuid applicationId FK
+  }
+  participation_division_info_payment {
+    uuid id PK
+    timestamptz createdAt
+    uuid divisionId FK
+    uuid priceSnapshotId FK
+    uuid participationDivisionInfoId FK
+  }
+  price_snapshot {
+    uuid id PK
+    integer price
+    timestamptz createdAt
+    uuid divisionId FK
+  }
+  division {
+    uuid id PK
+    varchar category
+    varchar uniform
+    varchar gender
+    varchar belt
+    varchar weight
+    varchar birthYearRangeStart
+    varchar birthYearRangeEnd
+    varchar status
+    timestamptz createdAt
+    timestamptz updatedAt
+    uuid competitionId FK
+  }
+  participation_division_info_snapshot }|--|| participation_division_info: participationDivisionInfo
+  participation_division_info_snapshot }o--|| division: division
+  player_snapshot }|--|| application: application
+  payment_snapshot }o--|| application: application
+  additional_info }o--|| application: application
+  participation_division_info }|--|| application: application
+  participation_division_info_payment }o--|| division: division
+  participation_division_info_payment }o--|| price_snapshot: priceSnapshot
+  participation_division_info_payment |o--|| participation_division_info: participationDivisionInfo
+  price_snapshot }|--|| division: division
+```
+
+### Indexes
+
+| Table | Index Name | Columns | Unique | Spatial | Where |
+|-------|-------------|---------|--------|---------|-----------|
+| participation_division_info_snapshot | IDX_ParticipationDivisionInfoSnapshot_participationDivisionInfoId | participationDivisionInfoId | false | false |  |
+| player_snapshot | IDX_PlayerSnapshot_applicationId | applicationId | false | false |  |
+| additional_info | IDX_AddtionalInfo_applicationId | applicationId | false | false |  |
+| application | IDX_Application_userId_createdAt | userId, createdAt | false | false |  |
+| participation_division_info | IDX_ParticipationDivisionInfo_applicationId | applicationId | false | false |  |
+| price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
+| division | IDX_Division_competitionId | competitionId | false | false |  |
+
+
+### `participation_division_info_snapshot`
+
+ParticipationDivisionInfoSnapshot Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `participationDivisionInfoId`
+  - `participationDivisionId`
+
+
+### `player_snapshot`
+
+PlayerSnapshot Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `name`
+  - `gender`
+  - `birth`
+  - `phoneNumber`
+  - `belt`
+  - `network`
+  - `team`
+  - `masterName`
+  - `createdAt`
+  - `applicationId`
+
+
+### `payment_snapshot`
+
+PaymentSnapshot Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `normalAmount`
+  - `earlybirdDiscountAmount`
+  - `combinationDiscountAmount`
+  - `totalAmount`
+  - `applicationId`
+
+
+### `additional_info`
+
+AdditionalInfo Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `updatedAt`
+  - `type`
+  - `value`
+  - `applicationId`
+
+
+### `application`
+
+Application Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `updatedAt`
+  - `deletedAt`
+  - `type`
+  - `status`
+  - `competitionId`
+  - `userId`
+
+
+### `participation_division_info`
+
+ParticipationDivisionInfo Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `applicationId`
+
+
+### `participation_division_info_payment`
+
+ParticipationDivisionInfoPayment Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `divisionId`
+  - `priceSnapshotId`
+  - `participationDivisionInfoId`
 
 
 ## User
@@ -18,7 +233,7 @@
 ```mermaid
 erDiagram
   policy {
-    varchar id PK
+    uuid id PK
     integer version
     varchar type
     boolean isMandatory
@@ -27,13 +242,13 @@ erDiagram
     timestamptz createdAt
   }
   policy_consent {
-    varchar id PK
+    uuid id PK
     timestamptz createdAt
-    varchar userId FK
-    varchar policyId FK
+    uuid userId FK
+    uuid policyId FK
   }
   user {
-    varchar id PK
+    uuid id PK
     varchar role
     varchar snsAuthProvider
     varchar snsId
@@ -85,9 +300,7 @@ PolicyConsent Entity
 ### `user`
 
 User Entity   
-@namespace User   
-@erd Competition   
-@erd Application
+@namespace User
 
 **Properties**
 
@@ -108,250 +321,23 @@ User Entity
   - `updatedAt`
 
 
-## Application
-
-```mermaid
-erDiagram
-  player_snapshot {
-    varchar id PK
-    varchar name
-    varchar gender
-    varchar birth
-    varchar phoneNumber
-    varchar belt
-    varchar network
-    varchar team
-    varchar masterName
-    timestamptz createdAt
-    varchar applicationId FK
-  }
-  payment_snapshot {
-    varchar id PK
-    timestamptz createdAt
-    integer normalAmount
-    integer earlybirdDiscountAmount
-    integer combinationDiscountAmount
-    integer totalAmount
-    varchar applicationId FK
-  }
-  participation_division_info_snapshot {
-    varchar id PK
-    timestamptz createdAt
-    varchar participationDivisionInfoId FK
-    varchar participationDivisionId FK
-  }
-  participation_division_info {
-    varchar id PK
-    timestamptz createdAt
-    varchar applicationId FK
-  }
-  participation_division_info_payment {
-    varchar id PK
-    timestamptz createdAt
-    varchar divisionId FK
-    varchar priceSnapshotId FK
-    varchar participationDivisionInfoId FK
-  }
-  price_snapshot {
-    varchar id PK
-    integer price
-    timestamptz createdAt
-    varchar divisionId FK
-  }
-  division {
-    varchar id PK
-    varchar category
-    varchar uniform
-    varchar gender
-    varchar belt
-    varchar weight
-    varchar birthYearRangeStart
-    varchar birthYearRangeEnd
-    varchar status
-    timestamptz createdAt
-    timestamptz updatedAt
-    varchar competitionId FK
-  }
-  additional_info {
-    varchar id PK
-    timestamptz createdAt
-    timestamptz updatedAt
-    varchar type
-    varchar value
-    varchar applicationId FK
-  }
-  application {
-    varchar id PK
-    timestamptz createdAt
-    timestamptz updatedAt
-    timestamptz deletedAt "nullable"
-    varchar type
-    varchar status
-    varchar competitionId FK
-    varchar userId FK
-  }
-  user {
-    varchar id PK
-    varchar role
-    varchar snsAuthProvider
-    varchar snsId
-    varchar email
-    varchar name
-    varchar phoneNumber "nullable"
-    varchar nickname "nullable"
-    varchar gender "nullable"
-    varchar birth "nullable"
-    varchar belt "nullable"
-    varchar profileImageUrlKey "nullable"
-    varchar status
-    timestamptz createdAt
-    timestamptz updatedAt
-  }
-  player_snapshot }|--|| application: application
-  payment_snapshot }o--|| application: application
-  participation_division_info_snapshot }|--|| participation_division_info: participationDivisionInfo
-  participation_division_info_snapshot }o--|| division: division
-  participation_division_info }|--|| application: application
-  participation_division_info_payment }o--|| division: division
-  participation_division_info_payment }o--|| price_snapshot: priceSnapshot
-  participation_division_info_payment |o--|| participation_division_info: participationDivisionInfo
-  price_snapshot }|--|| division: division
-  additional_info }o--|| application: application
-  application }o--|| user: user
-```
-
-### Indexes
-
-| Table | Index Name | Columns | Unique | Spatial | Where |
-|-------|-------------|---------|--------|---------|-----------|
-| player_snapshot | IDX_PlayerSnapshot_applicationId | applicationId | false | false |  |
-| participation_division_info_snapshot | IDX_ParticipationDivisionInfoSnapshot_participationDivisionInfoId | participationDivisionInfoId | false | false |  |
-| participation_division_info | IDX_ParticipationDivisionInfo_applicationId | applicationId | false | false |  |
-| price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
-| division | IDX_Division_competitionId | competitionId | false | false |  |
-| additional_info | IDX_AddtionalInfo_applicationId | applicationId | false | false |  |
-| application | IDX_Application_userId_createdAt | userId, createdAt | false | false |  |
-
-
-### `player_snapshot`
-
-PlayerSnapshot Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `name`
-  - `gender`
-  - `birth`
-  - `phoneNumber`
-  - `belt`
-  - `network`
-  - `team`
-  - `masterName`
-  - `createdAt`
-  - `applicationId`
-
-
-### `payment_snapshot`
-
-PaymentSnapshot Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `normalAmount`
-  - `earlybirdDiscountAmount`
-  - `combinationDiscountAmount`
-  - `totalAmount`
-  - `applicationId`
-
-
-### `participation_division_info_snapshot`
-
-ParticipationDivisionInfoSnapshot Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `participationDivisionInfoId`
-  - `participationDivisionId`
-
-
-### `participation_division_info`
-
-ParticipationDivisionInfo Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `applicationId`
-
-
-### `participation_division_info_payment`
-
-ParticipationDivisionInfoPayment Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `divisionId`
-  - `priceSnapshotId`
-  - `participationDivisionInfoId`
-
-
-### `additional_info`
-
-AdditionalInfo Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `updatedAt`
-  - `type`
-  - `value`
-  - `applicationId`
-
-
-### `application`
-
-Application Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `updatedAt`
-  - `deletedAt`
-  - `type`
-  - `status`
-  - `competitionId`
-  - `userId`
-
-
 ## Competition
 
 ```mermaid
 erDiagram
+  competition_host_map {
+    uuid id PK
+    uuid hostId FK
+    uuid competitionId FK
+  }
   price_snapshot {
-    varchar id PK
+    uuid id PK
     integer price
     timestamptz createdAt
-    varchar divisionId FK
+    uuid divisionId FK
   }
   division {
-    varchar id PK
+    uuid id PK
     varchar category
     varchar uniform
     varchar gender
@@ -362,37 +348,24 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
-    varchar competitionId FK
+    uuid competitionId FK
   }
   earlybird_discount_snapshot {
-    varchar id PK
+    uuid id PK
     timestamptz earlybirdStartDate
     timestamptz earlybirdEndDate
     integer discountAmount
     timestamptz createdAt
-    varchar competitionId FK
+    uuid competitionId FK
   }
   combination_discount_snapshot {
-    varchar id PK
+    uuid id PK
     jsonb combinationDiscountRules
     timestamptz createdAt
-    varchar competitionId FK
-  }
-  required_additional_info {
-    varchar id PK
-    varchar type
-    varchar description
-    timestamptz createdAt
-    timestamptz deletedAt "nullable"
-    varchar competitionId FK
-  }
-  competition_host_map {
-    varchar id PK
-    varchar hostId FK
-    varchar competitionId FK
+    uuid competitionId FK
   }
   competition {
-    varchar id PK
+    uuid id PK
     varchar title
     varchar address
     timestamptz competitionDate "nullable"
@@ -411,44 +384,46 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
-  user {
-    varchar id PK
-    varchar role
-    varchar snsAuthProvider
-    varchar snsId
-    varchar email
-    varchar name
-    varchar phoneNumber "nullable"
-    varchar nickname "nullable"
-    varchar gender "nullable"
-    varchar birth "nullable"
-    varchar belt "nullable"
-    varchar profileImageUrlKey "nullable"
-    varchar status
+  required_additional_info {
+    uuid id PK
+    varchar type
+    varchar description
     timestamptz createdAt
-    timestamptz updatedAt
+    timestamptz deletedAt "nullable"
+    uuid competitionId FK
   }
+  competition_host_map }o--|| competition: competition
   price_snapshot }|--|| division: division
   division }o--|| competition: competition
   earlybird_discount_snapshot }o--|| competition: competition
   combination_discount_snapshot }o--|| competition: competition
   required_additional_info }o--|| competition: competition
-  competition_host_map }o--|| user: user
-  competition_host_map }o--|| competition: competition
 ```
 
 ### Indexes
 
 | Table | Index Name | Columns | Unique | Spatial | Where |
 |-------|-------------|---------|--------|---------|-----------|
+| competition_host_map | IDX_CompetitionHostMap_competitionId | competitionId | false | false |  |
 | price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
 | division | IDX_Division_competitionId | competitionId | false | false |  |
 | earlybird_discount_snapshot | IDX_EarlybirdDiscountSnapshot_competitionId | competitionId | false | false |  |
 | combination_discount_snapshot | IDX_CombinationDiscountSnapshot_competitionId | competitionId | false | false |  |
-| required_additional_info | IDX_RequiredAdditionalInfo_competitionId | competitionId | false | false |  |
-| competition_host_map | IDX_CompetitionHostMap_competitionId | competitionId | false | false |  |
 | competition | IDX_Competition_status | status | false | false |  |
 | competition | IDX_Competition_competitionDate | competitionDate | false | false |  |
+| required_additional_info | IDX_RequiredAdditionalInfo_competitionId | competitionId | false | false |  |
+
+
+### `competition_host_map`
+
+Competition Host Map Entity   
+@namespace Competition
+
+**Properties**
+
+  - `id`
+  - `hostId`
+  - `competitionId`
 
 
 ### `price_snapshot`
@@ -515,33 +490,6 @@ CombinationDiscountSnapshot Entity
   - `competitionId`
 
 
-### `required_additional_info`
-
-RequiredAdditionalInfo Entity   
-@namespace Competition
-
-**Properties**
-
-  - `id`
-  - `type`
-  - `description`
-  - `createdAt`
-  - `deletedAt`
-  - `competitionId`
-
-
-### `competition_host_map`
-
-Competition Host Map Entity   
-@namespace Competition
-
-**Properties**
-
-  - `id`
-  - `hostId`
-  - `competitionId`
-
-
 ### `competition`
 
 Competition Entity   
@@ -567,4 +515,249 @@ Competition Entity
   - `status`
   - `createdAt`
   - `updatedAt`
+
+
+### `required_additional_info`
+
+RequiredAdditionalInfo Entity   
+@namespace Competition
+
+**Properties**
+
+  - `id`
+  - `type`
+  - `description`
+  - `createdAt`
+  - `deletedAt`
+  - `competitionId`
+
+
+## Community
+
+```mermaid
+erDiagram
+  post_snapshot {
+    uuid id PK
+    varchar title
+    text body
+    timestamptz createdAt
+    uuid postId FK
+  }
+  post_like {
+    uuid id PK
+    uuid userId FK
+    timestamptz createdAt
+    uuid postId FK
+  }
+  post_report {
+    uuid id PK
+    uuid userId FK
+    timestamptz createdAt
+    uuid postId FK
+  }
+  post {
+    uuid id PK
+    uuid userId FK
+    integer viewCount
+    varchar status
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
+  comment_report {
+    uuid id PK
+    uuid userId FK
+    timestamptz createdAt
+    uuid commentId FK
+  }
+  comment_snapshot {
+    uuid id PK
+    text body
+    timestamptz createdAt
+    uuid commentId FK
+  }
+  comment {
+    uuid id PK
+    uuid userId FK
+    uuid parentId FK "nullable"
+    varchar status
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+    uuid postId FK "nullable"
+  }
+  comment_like {
+    uuid id PK
+    uuid userId FK
+    timestamptz createdAt
+    uuid commentId FK
+  }
+  post_snapshot }|--|| post: post
+  post_like }o--|| post: post
+  post_report }o--|| post: post
+  comment_report }o--|| comment: comment
+  comment_snapshot }|--|| comment: comment
+  comment }o--|| comment: parent
+  comment }o--|| post: post
+  comment_like }o--|| comment: comment
+```
+
+### `post_snapshot`
+
+PostSnapshot.   
+   
+게시글의 스냅샷 정보를 담는 Entity입니다.   
+`post`에서 언급한 것처럼 증거를 보관하고 사기를 방지하기 위해 게시글 레코드에서 게시글 내용을 분리하여 보관합니다.   
+   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `title`: 게시글 제목.
+  - `body`: 게시글 내용.
+  - `createdAt`: 게시글 작성일자.
+  - `postId`: 게시글 Id.
+
+
+### `post_like`
+
+PostLike.   
+   
+게시글 좋아요 정보를 담는 Entity입니다.   
+동일한 유저가 동일한 게시글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
+   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 좋아요를 누른 UserId.
+  - `createdAt`: 좋아요 누른 일자.
+  - `postId`: 좋아요를 누른 게시글의 Id.
+
+
+### `post_report`
+
+PostReport.   
+   
+게시글의 신고정보를 담는 Entity입니다.   
+신고 횟수가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.   
+동일한 유저가 동일한 게시글을 여러 번 신고할 수 없습니다. (중복신고 불가능)   
+   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 신고자 UserId.
+  - `createdAt`: 신고일자.
+  - `postId`: 신고된 게시글의 Id.
+
+
+### `post`
+
+Post.   
+게시글을 식별하는 최상위 엔티티로서 개별 게시글의 메타데이터를 담고 있습니다.   
+   
+게시글의 필수 요소 `title`, `body` 등은 `post`에 존재하지 않고, `post_snapshot`에 저장되어 있습니다.   
+`post`와 `post_snapshot`는 1:N 관계로 연결되어 있는데, 이는 글이 수정될때마다 새로운 스냅샷 레코드가 생성되기 때문입니다.   
+   
+게시글이 수정될때마다 새로운 스냅샷 레코드가 생성되는 이유는 증거를 보존 및 추적하기 위함입니다. 온라인 커뮤니티의 특성상 참여자 간에는 항상 분쟁의 위험이 존재합니다.   
+그리고 분쟁은 글이나 댓글을 통해 발생할 수 있으며, 기존 글을 수정하여 상황을 조작하는 등의 행위를 방지하기 위해 이러한 구조로 설계되었습니다. 즉, 증거를 보관하고 사기를 방지하기 위한 것입니다.   
+   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 게시글 작성자 UserId.
+  - `viewCount`: 게시글 조회수.
+  - `status`
+    > 게시글 상태. default: `ACTIVE`.
+    > - `ACTIVE`: 유저에게 노출.
+    > - `INACTIVE`: 유저에게 노출되지 않음.
+    > 관리자의 판단 하에 `INACTIVE`로 변경될 수 있습니다.
+    > 신고 회수가 10회 이상이면 자동으로 `INACTIVE` 처리됩니다. 관리자의 판단 하에 `ACTIVE`로 변경될 수 있습니다.
+  - `createdAt`: 게시글 작성일자.
+  - `deletedAt`: 게시글 삭제일자.
+
+
+### `comment_report`
+
+CommentReport.   
+   
+댓글의 신고정보를 담는 Entity입니다.   
+신고 횟수가 10회 이상이면 해당 댓글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.   
+동일한 유저가 동일한 댓글을 여러 번 신고할 수 없습니다. (중복신고 불가능)   
+   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 신고자 UserId.
+  - `createdAt`: 신고일자.
+  - `commentId`: 신고된 댓글의 Id.
+
+
+### `comment_snapshot`
+
+CommentSnapshot.   
+   
+댓글의 스냅샷 정보를 담는 Entity입니다.   
+`comment`에서 언급한 것처럼 증거를 보관하고 사기를 방지하기 위해 댓글 레코드에서 댓글 내용을 분리하여 보관합니다.   
+   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `body`: 댓글 내용.
+  - `createdAt`: 댓글 작성일자.
+  - `commentId`: 댓글 Id.
+
+
+### `comment`
+
+Comment.   
+댓글을 식별하는 최상위 엔티티로서 개별 댓글의 메타데이터를 담고 있습니다.   
+   
+댓글의 내용(body) `comment`에 존재하지 않고, `comment_snapshot`에 저장되어 있습니다.   
+`comment`와 `comment_snapshot`는 1:N 관계로 연결되어 있는데, 이는 댓글이 수정될때마다 새로운 스냅샷 레코드가 생성되기 때문입니다.   
+   
+댓글이 수정될때마다 새로운 스냅샷 레코드가 생성되는 이유는 증거를 보존 및 추적하기 위함입니다. 온라인 커뮤니티의 특성상 참여자 간에는 항상 분쟁의 위험이 존재합니다.   
+그리고 분쟁은 글이나 댓글을 통해 발생할 수 있으며, 기존 댓글을 수정하여 상황을 조작하는 등의 행위를 방지하기 위해 이러한 구조로 설계되었습니다. 즉, 증거를 보관하고 사기를 방지하기 위한 것입니다.   
+   
+대댓글은 부모 댓글의 `id`를 `parentId`에 저장하여 관계를 맺습니다. 대댓글의 depth는 1로 제한되어 있습니다. 즉 대댓글의 대댓글은 생성할 수 없습니다.   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 댓글 작성자 UserId.
+  - `parentId`: 부모 댓글 Id.
+  - `status`
+    > 댓글 상태. default: `ACTIVE`.
+    > - `ACTIVE`: 유저에게 노출.
+    > - `INACTIVE`: 유저에게 노출되지 않음.
+    > 관리자의 판단 하에 `INACTIVE`로 변경될 수 있습니다.
+    > 신고 회수가 10회 이상이면 자동으로 `INACTIVE` 처리됩니다. 관리자의 판단 하에 `ACTIVE`로 변경될 수 있습니다.
+  - `createdAt`: 댓글 작성일자.
+  - `deletedAt`: 댓글 삭제일자.
+
+
+### `comment_like`
+
+CommentLike.   
+   
+댓글 좋아요 정보를 담는 Entity입니다.   
+동일한 유저가 동일한 댓글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
+   
+@namespace Community
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 좋아요를 누른 UserId.
+  - `createdAt`: 좋아요 누른 일자.
+  - `commentId`: 좋아요를 누른 댓글의 Id.
 

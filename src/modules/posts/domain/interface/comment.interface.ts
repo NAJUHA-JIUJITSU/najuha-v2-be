@@ -1,10 +1,10 @@
-import { DateOrStringDate } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { tags } from 'typia';
 
 export interface IComment {
   /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  id: TId;
 
   /** Comment writer. */
   userId: IUser['id'];
@@ -12,9 +12,12 @@ export interface IComment {
   /** Comment parent. */
   parentId: IComment['id'] | null;
 
+  /** Comment status. */
+  status: 'ACTIVE' | 'INACTIVE';
+
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 
   /** DeletedAt. */
-  deletedAt: DateOrStringDate | null;
+  deletedAt: TDateOrStringDate | null;
 }

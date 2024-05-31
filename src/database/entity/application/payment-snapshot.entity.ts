@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { IPaymentSnapshot } from 'src/modules/competitions/domain/interface/payment-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
@@ -9,7 +9,7 @@ import { uuidv7 } from 'uuidv7';
  */
 @Entity('payment_snapshot')
 export class PaymentSnapshotEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IPaymentSnapshot['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
@@ -27,7 +27,7 @@ export class PaymentSnapshotEntity {
   @Column('int', { unsigned: true })
   totalAmount!: IPaymentSnapshot['totalAmount'];
 
-  @Column()
+  @Column('uuid')
   applicationId!: ApplicationEntity['id'];
 
   @ManyToOne(() => ApplicationEntity, (application) => application.paymentSnapshots)

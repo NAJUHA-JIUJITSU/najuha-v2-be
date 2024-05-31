@@ -1,19 +1,23 @@
 import { PolicyConsentEntity } from 'src//database/entity/user/policy-consent.entity';
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
 import { CompetitionHostMapEntity } from '../competition/competition-host.entity';
+import { CommentLikeEntity } from '../community/comment-like.entity';
+import { CommentEntity } from '../community/comment.entity';
+import { CommentReportEntity } from '../community/comment-report.entity';
+import { PostLikeEntity } from '../community/post-like.entity';
+import { PostReportEntity } from '../community/post-report.entity';
+import { PostEntity } from '../community/post.entity';
 
 /**
  * User Entity
  * @namespace User
- * @erd Competition
- * @erd Application
  */
 @Entity('user')
 export class UserEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IUser['id'];
 
   @Column('varchar', { length: 16, default: 'TEMPORARY_USER' })
@@ -58,12 +62,34 @@ export class UserEntity {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: IUser['updatedAt'];
 
+  // PolicyConsent ---------------------------------------------------------
   @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user, { cascade: true })
   policyConsents!: PolicyConsentEntity[];
 
+  // Application -----------------------------------------------------------
   @OneToMany(() => ApplicationEntity, (application) => application.user)
   applications!: ApplicationEntity[];
 
+  // Competition -----------------------------------------------------------
   @OneToMany(() => CompetitionHostMapEntity, (competitionHost) => competitionHost.user)
   competitionHostMaps!: CompetitionHostMapEntity[];
+
+  // Community --------------------------------------------------------------
+  @OneToMany(() => CommentLikeEntity, (commentLike) => commentLike.user)
+  commentLikes!: CommentLikeEntity[];
+
+  @OneToMany(() => CommentReportEntity, (commentReport) => commentReport.user)
+  commentReports!: CommentReportEntity[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.user)
+  comments!: CommentEntity[];
+
+  @OneToMany(() => PostLikeEntity, (postLike) => postLike.user)
+  postLikes!: PostLikeEntity[];
+
+  @OneToMany(() => PostReportEntity, (postReport) => postReport.user)
+  postReports!: PostReportEntity[];
+
+  @OneToMany(() => PostEntity, (post) => post.user)
+  posts!: PostEntity[];
 }

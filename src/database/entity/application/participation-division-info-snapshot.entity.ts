@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { DivisionEntity } from '../competition/division.entity';
 import { IParticipationDivisionInfoSnapshot } from 'src/modules/applications/domain/interface/participation-division-info-snapshot.interface';
@@ -11,16 +11,16 @@ import { uuidv7 } from 'uuidv7';
 @Entity('participation_division_info_snapshot')
 @Index('IDX_ParticipationDivisionInfoSnapshot_participationDivisionInfoId', ['participationDivisionInfoId'])
 export class ParticipationDivisionInfoSnapshotEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IParticipationDivisionInfoSnapshot['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IParticipationDivisionInfoSnapshot['createdAt'];
 
-  @Column()
+  @Column('uuid')
   participationDivisionInfoId!: ParticipationDivisionInfoEntity['id'];
 
-  @Column()
+  @Column('uuid')
   participationDivisionId!: DivisionEntity['id'];
 
   @ManyToOne(

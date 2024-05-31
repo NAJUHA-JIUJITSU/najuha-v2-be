@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany, Index } from 'typeorm';
+import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany, Index, PrimaryColumn } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
@@ -11,7 +11,7 @@ import { uuidv7 } from 'uuidv7';
 @Entity('combination_discount_snapshot')
 @Index('IDX_CombinationDiscountSnapshot_competitionId', ['competitionId'])
 export class CombinationDiscountSnapshotEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: ICombinationDiscountSnapshot['id'];
 
   @Column('jsonb')
@@ -20,7 +20,7 @@ export class CombinationDiscountSnapshotEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: ICombinationDiscountSnapshot['createdAt'];
 
-  @Column()
+  @Column('uuid')
   competitionId!: ICompetition['id'];
 
   @ManyToOne(() => CompetitionEntity, (competition) => competition.combinationDiscountSnapshots)

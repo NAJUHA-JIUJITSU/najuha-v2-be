@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { PlayerSnapshotEntity } from './player-snapshot.entity';
@@ -25,7 +26,7 @@ import { AdditionalInfoEntity } from './additional-info.entity';
 @Entity('application')
 @Index('IDX_Application_userId_createdAt', ['userId', 'createdAt'])
 export class ApplicationEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IApplication['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
@@ -43,10 +44,10 @@ export class ApplicationEntity {
   @Column('varchar', { length: 16, default: 'READY' })
   status!: IApplication['status'];
 
-  @Column()
+  @Column('uuid')
   competitionId!: CompetitionEntity['id'];
 
-  @Column()
+  @Column('uuid')
   userId!: UserEntity['id'];
 
   /**

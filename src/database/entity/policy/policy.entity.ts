@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, CreateDateColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { PolicyConsentEntity } from '../user/policy-consent.entity';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 import { uuidv7 } from 'uuidv7';
@@ -9,7 +9,7 @@ import { uuidv7 } from 'uuidv7';
  */
 @Entity('policy')
 export class PolicyEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IPolicy['id'];
 
   @Column('int', { default: 1 })

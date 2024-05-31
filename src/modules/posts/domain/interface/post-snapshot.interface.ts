@@ -1,10 +1,10 @@
 import { tags } from 'typia';
 import { IPost } from './post.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from 'src/common/common-types';
 
 export interface IPostSnapshot {
   /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  id: TId;
 
   /** Post Id. */
   postId: IPost['id'];
@@ -16,5 +16,5 @@ export interface IPostSnapshot {
   body: string & tags.MinLength<1> & tags.MaxLength<4096>;
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 }

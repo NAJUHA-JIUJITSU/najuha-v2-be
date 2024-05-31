@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { DivisionEntity } from './division.entity';
 import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
 import { uuidv7 } from 'uuidv7';
@@ -12,7 +12,7 @@ import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-
 @Entity('price_snapshot')
 @Index('IDX_PriceSnapshot_divisionId', ['divisionId'])
 export class PriceSnapshotEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IPriceSnapshot['id'];
 
   @Column('int')
@@ -21,7 +21,7 @@ export class PriceSnapshotEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IPriceSnapshot['createdAt'];
 
-  @Column()
+  @Column('uuid')
   divisionId!: DivisionEntity['id'];
 
   @ManyToOne(() => DivisionEntity, (division) => division.priceSnapshots)

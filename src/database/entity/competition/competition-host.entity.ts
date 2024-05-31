@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, Index, PrimaryColumn } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
 import { uuidv7 } from 'uuidv7';
 import { UserEntity } from '../user/user.entity';
@@ -11,13 +11,13 @@ import { ICompetitionHostMap } from 'src/modules/competitions/domain/interface/c
 @Entity('competition_host_map')
 @Index('IDX_CompetitionHostMap_competitionId', ['competitionId'])
 export class CompetitionHostMapEntity {
-  @Column('varchar', { length: 36, primary: true, default: uuidv7() })
+  @PrimaryColumn('uuid', { default: uuidv7() })
   id!: ICompetitionHostMap['id'];
 
-  @Column()
+  @Column('uuid')
   hostId!: ICompetitionHostMap['hostId'];
 
-  @Column()
+  @Column('uuid')
   competitionId!: ICompetitionHostMap['competitionId'];
 
   @ManyToOne(() => UserEntity, (user) => user.competitionHostMaps)

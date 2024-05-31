@@ -1,11 +1,11 @@
 import { tags } from 'typia';
 import { IComment } from './comment.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { DateOrStringDate } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from 'src/common/common-types';
 
 export interface ICommentLike {
   /** ULID. */
-  id: string & tags.MinLength<26> & tags.MaxLength<26>;
+  id: TId;
 
   /** Comment Id. */
   commentId: IComment['id'];
@@ -14,5 +14,5 @@ export interface ICommentLike {
   userId: IUser['id'];
 
   /** CreatedAt. */
-  createdAt: DateOrStringDate;
+  createdAt: TDateOrStringDate;
 }
