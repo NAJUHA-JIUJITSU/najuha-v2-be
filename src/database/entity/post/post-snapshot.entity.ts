@@ -9,7 +9,7 @@ import { PostEntity } from './post.entity';
  * 게시글의 스냅샷 정보를 담는 Entity입니다.
  * `post`에서 언급한 것처럼 증거를 보관하고 사기를 방지하기 위해 게시글 레코드에서 게시글 내용을 분리하여 보관합니다.
  *
- * @namespace Community
+ * @namespace Post
  */
 @Entity('post_snapshot')
 export class PostSnapshotEntity {

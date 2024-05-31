@@ -15,6 +15,9 @@ export interface IPost {
   /** Post status. */
   status: 'ACTIVE' | 'INACTIVE';
 
+  /** Post category. */
+  category: 'FREE' | 'COMPETITION' | 'SEMINAR' | 'OPEN_MAT';
+
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
 

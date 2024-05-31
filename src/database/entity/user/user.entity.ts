@@ -4,12 +4,12 @@ import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
 import { CompetitionHostMapEntity } from '../competition/competition-host.entity';
-import { CommentLikeEntity } from '../community/comment-like.entity';
-import { CommentEntity } from '../community/comment.entity';
-import { CommentReportEntity } from '../community/comment-report.entity';
-import { PostLikeEntity } from '../community/post-like.entity';
-import { PostReportEntity } from '../community/post-report.entity';
-import { PostEntity } from '../community/post.entity';
+import { CommentLikeEntity } from '../post/comment-like.entity';
+import { CommentEntity } from '../post/comment.entity';
+import { CommentReportEntity } from '../post/comment-report.entity';
+import { PostLikeEntity } from '../post/post-like.entity';
+import { PostReportEntity } from '../post/post-report.entity';
+import { PostEntity } from '../post/post.entity';
 
 /**
  * User Entity

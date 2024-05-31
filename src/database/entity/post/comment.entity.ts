@@ -27,7 +27,8 @@ import { uuidv7 } from 'uuidv7';
  * 그리고 분쟁은 글이나 댓글을 통해 발생할 수 있으며, 기존 댓글을 수정하여 상황을 조작하는 등의 행위를 방지하기 위해 이러한 구조로 설계되었습니다. 즉, 증거를 보관하고 사기를 방지하기 위한 것입니다.
  *
  * 대댓글은 부모 댓글의 `id`를 `parentId`에 저장하여 관계를 맺습니다. 대댓글의 depth는 1로 제한되어 있습니다. 즉 대댓글의 대댓글은 생성할 수 없습니다.
- * @namespace Community
+ *
+ * @namespace Post
  */
 @Entity('comment')
 export class CommentEntity {

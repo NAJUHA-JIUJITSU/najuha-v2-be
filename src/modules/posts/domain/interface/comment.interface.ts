@@ -1,6 +1,5 @@
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { tags } from 'typia';
 
 export interface IComment {
   /** ULID. */

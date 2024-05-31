@@ -26,7 +26,7 @@ import { UserEntity } from '../user/user.entity';
  * 게시글이 수정될때마다 새로운 스냅샷 레코드가 생성되는 이유는 증거를 보존 및 추적하기 위함입니다. 온라인 커뮤니티의 특성상 참여자 간에는 항상 분쟁의 위험이 존재합니다.
  * 그리고 분쟁은 글이나 댓글을 통해 발생할 수 있으며, 기존 글을 수정하여 상황을 조작하는 등의 행위를 방지하기 위해 이러한 구조로 설계되었습니다. 즉, 증거를 보관하고 사기를 방지하기 위한 것입니다.
  *
- * @namespace Community
+ * @namespace Post
  */
 @Entity('post')
 export class PostEntity {
@@ -51,6 +51,10 @@ export class PostEntity {
    */
   @Column('varchar', { length: 16, default: 'ACTIVE' })
   status!: IPost['status'];
+
+  /** 게시글 카테고리. */
+  @Column('varchar', { length: 32, default: 'FREE' })
+  category!: IPost['category'];
 
   /** 게시글 작성일자. */
   @CreateDateColumn({ type: 'timestamptz' })

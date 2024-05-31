@@ -10,7 +10,7 @@ import { UserEntity } from '../user/user.entity';
  * 게시글 좋아요 정보를 담는 Entity입니다.
  * 동일한 유저가 동일한 게시글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)
  *
- * @namespace Community
+ * @namespace Post
  */
 @Entity('post_like')
 @Unique('UQ_POST_LIKE', ['postId', 'userId'])

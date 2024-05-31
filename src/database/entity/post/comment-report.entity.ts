@@ -11,7 +11,7 @@ import { UserEntity } from '../user/user.entity';
  * 신고 횟수가 10회 이상이면 해당 댓글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.
  * 동일한 유저가 동일한 댓글을 여러 번 신고할 수 없습니다. (중복신고 불가능)
  *
- * @namespace Community
+ * @namespace Post
  */
 @Entity('comment_report')
 @Unique('UQ_COMMENT_REPORT', ['commentId', 'userId'])
