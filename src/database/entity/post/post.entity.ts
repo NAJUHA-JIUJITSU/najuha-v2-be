@@ -52,7 +52,7 @@ export class PostEntity {
   @Column('varchar', { length: 16, default: 'ACTIVE' })
   status!: IPost['status'];
 
-  /** 게시글 카테고리. */
+  /** 게시글 카테고리 ('FREE' | 'COMPETITION' | 'SEMINAR' | 'OPEN_MAT'). */
   @Column('varchar', { length: 32, default: 'FREE' })
   category!: IPost['category'];
 

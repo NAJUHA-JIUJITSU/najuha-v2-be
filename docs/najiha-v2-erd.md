@@ -27,6 +27,12 @@ erDiagram
     text content
     timestamptz createdAt
   }
+  policy_consent {
+    uuid id PK
+    timestamptz createdAt
+    uuid userId FK
+    uuid policyId FK
+  }
   user {
     uuid id PK
     varchar role
@@ -43,12 +49,6 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
-  }
-  policy_consent {
-    uuid id PK
-    timestamptz createdAt
-    uuid userId FK
-    uuid policyId FK
   }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
@@ -68,6 +68,19 @@ Policy Entity
   - `title`
   - `content`
   - `createdAt`
+
+
+### `policy_consent`
+
+PolicyConsent Entity   
+@namespace User
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `userId`
+  - `policyId`: - policyId.
 
 
 ### `user`
@@ -92,19 +105,6 @@ User Entity
   - `status`
   - `createdAt`
   - `updatedAt`
-
-
-### `policy_consent`
-
-PolicyConsent Entity   
-@namespace User
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `userId`
-  - `policyId`: - policyId.
 
 
 ## Application
@@ -560,6 +560,7 @@ erDiagram
     uuid userId FK
     integer viewCount
     varchar status
+    varchar category
     timestamptz createdAt
     timestamptz deletedAt "nullable"
   }
@@ -677,6 +678,7 @@ Post.
     > - `INACTIVE`: 유저에게 노출되지 않음.
     > 관리자의 판단 하에 `INACTIVE`로 변경될 수 있습니다.
     > 신고 회수가 10회 이상이면 자동으로 `INACTIVE` 처리됩니다. 관리자의 판단 하에 `ACTIVE`로 변경될 수 있습니다.
+  - `category`: 게시글 카테고리 ('FREE' | 'COMPETITION' | 'SEMINAR' | 'OPEN_MAT').
   - `createdAt`: 게시글 작성일자.
   - `deletedAt`: 게시글 삭제일자.
 
