@@ -9,6 +9,12 @@ import { CombinationDiscountSnapshotRepository } from './custom-repository/combi
 import { ApplicationRepository } from './custom-repository/application.repository';
 import { RequiredAdditionalInfoRepository } from './custom-repository/required-addtional-info.repository';
 import { DataSeederService } from './data-seeder.service';
+import { PostRepository } from './custom-repository/post.repository';
+import { CommentRepository } from './custom-repository/comment.repository';
+import { PostLikeRepository } from './custom-repository/post-like.repository';
+import { PostReportRepository } from './custom-repository/post-report.repository';
+import { CommentLikeRepository } from './custom-repository/comment-like.repository';
+import { CommentReportRepository } from './custom-repository/comment-report.repository';
 
 const repositories = [
   PolicyRepository,
@@ -20,6 +26,12 @@ const repositories = [
   CombinationDiscountSnapshotRepository,
   ApplicationRepository,
   RequiredAdditionalInfoRepository,
+  PostRepository,
+  PostLikeRepository,
+  PostReportRepository,
+  CommentRepository,
+  CommentLikeRepository,
+  CommentReportRepository,
 ];
 @Module({
   providers: [...repositories, DataSeederService],

@@ -2563,6 +2563,894 @@
         ],
         "x-nestia-method": "GET"
       }
+    },
+    "/user/posts": {
+      "post": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreatePostRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-1 createPost",
+        "description": "u-7-1 createPost.\n- RoleLevel: USER.\n\n새로운 게시글을 작성합니다.",
+        "x-nestia-namespace": "user.posts.createPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "get": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindPostsQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindPostsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-2 findPosts",
+        "description": "u-7-2 findPosts.\n- RoleLevel: USER.\n\n여러 게시글을 조회합니다.\n필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.",
+        "x-nestia-namespace": "user.posts.findPosts",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/user/posts/{postId}": {
+      "get": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormGetPostRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-3 getPost",
+        "description": "u-7-3 getPost.\n- RoleLevel: USER.\n\n특정 게시글을 조회합니다.",
+        "x-nestia-namespace": "user.posts.getPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      },
+      "patch": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUpdatePostRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-4 updatePost",
+        "description": "u-7-4 updatePost.\n- RoleLevel: USER.\n\n기존 게시글을 수정합니다.",
+        "x-nestia-namespace": "user.posts.updatePost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      },
+      "delete": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-5 deletePost",
+        "description": "u-7-5 deletePost.\n- RoleLevel: USER.\n\n특정 게시글을 삭제합니다.",
+        "x-nestia-namespace": "user.posts.deletePost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
+    },
+    "/user/posts/{postId}/like": {
+      "post": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-6 createPostLike",
+        "description": "u-7-6 createPostLike.\n- RoleLevel: USER.\n\n게시글에 좋아요를 추가합니다.",
+        "x-nestia-namespace": "user.posts.like.createPostLike",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "delete": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-7 deletePostLike",
+        "description": "u-7-7 deletePostLike.\n- RoleLevel: USER.\n\n게시글에 대한 좋아요를 취소합니다.",
+        "x-nestia-namespace": "user.posts.like.deletePostLike",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
+    },
+    "/user/posts/{postId}/report": {
+      "post": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-8 createPostReport",
+        "description": "u-7-8 createPostReport.\n- RoleLevel: USER.\n\n게시글을 신고합니다.",
+        "x-nestia-namespace": "user.posts.report.createPostReport",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "delete": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-9 deletePostReport",
+        "description": "u-7-9 deletePostReport.\n- RoleLevel: USER.\n\n게시글 신고를 취소합니다.",
+        "x-nestia-namespace": "user.posts.report.deletePostReport",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
+    },
+    "/user/posts/{postId}/comment": {
+      "post": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateCommentRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-10 createComment",
+        "description": "u-7-10 createComment.\n- RoleLevel: USER.\n\n게시글에 댓글을 추가합니다.",
+        "x-nestia-namespace": "user.posts.comment.createComment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/user/posts/{postId}/comment/{commentId}/reply": {
+      "post": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentReplyReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateCommentReplyRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-11 createCommentReply",
+        "description": "u-7-11 createCommentReply.\n- RoleLevel: USER.\n\n댓글에 대한 답글을 추가합니다.",
+        "x-nestia-namespace": "user.posts.comment.reply.createPostCommentReply",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/user/posts/comment/{commentId}": {
+      "patch": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormUpdateCommentRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-12 updateComment",
+        "description": "u-7-12 updateComment.\n- RoleLevel: USER.\n\n기존 댓글을 수정합니다.",
+        "x-nestia-namespace": "user.posts.comment.updatePostComment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "PATCH"
+      },
+      "delete": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-13 deleteComment",
+        "description": "u-7-13 deleteComment.\n- RoleLevel: USER.\n\n특정 댓글을 삭제합니다.",
+        "x-nestia-namespace": "user.posts.comment.deletePostComment",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
+    },
+    "/user/posts/comment/{commentId}/like": {
+      "post": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-14 createCommentLike",
+        "description": "u-7-14 createCommentLike.\n- RoleLevel: USER.\n\n댓글에 좋아요를 추가합니다.",
+        "x-nestia-namespace": "user.posts.comment.like.createPostCommentLike",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "delete": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-15 deleteCommentLike",
+        "description": "u-7-15 deleteCommentLike.\n- RoleLevel: USER.\n\n댓글에 대한 좋아요를 취소합니다.",
+        "x-nestia-namespace": "user.posts.comment.like.deletePostCommentLike",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
+    },
+    "/user/posts/comment/{commentId}/report": {
+      "post": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-16 createCommentReport",
+        "description": "u-7-16 createCommentReport.\n- RoleLevel: USER.\n\n댓글을 신고합니다.",
+        "x-nestia-namespace": "user.posts.comment.report.createPostCommentReport",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "delete": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-17 deleteCommentReport",
+        "description": "u-7-17 deleteCommentReport.\n- RoleLevel: USER.\n\n댓글 신고를 취소합니다.",
+        "x-nestia-namespace": "user.posts.comment.report.deletePostCommentReport",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
     }
   },
   "components": {
@@ -2609,8 +3497,7 @@
           "code",
           "type",
           "result"
-        ],
-        "description": "----------------------------------------------------------------------------\nAuth 1000 ~ 1999"
+        ]
       },
       "AUTH_ACCESS_TOKEN_UNAUTHORIZED": {
         "type": "object",
@@ -2768,8 +3655,7 @@
           "code",
           "type",
           "result"
-        ],
-        "description": "----------------------------------------------------------------------------\nSnsAuth 2000 ~ 2999"
+        ]
       },
       "SNS_AUTH_KAKAO_LOGIN_FAIL": {
         "type": "object",
@@ -3097,8 +3983,7 @@
           "code",
           "type",
           "result"
-        ],
-        "description": "----------------------------------------------------------------------------\n- Entity Not Found Error 404"
+        ]
       },
       "AUTH_UNREGISTERED_ADMIN_CREDENTIALS": {
         "type": "object",
@@ -3642,8 +4527,7 @@
           "code",
           "type",
           "result"
-        ],
-        "description": "----------------------------------------------------------------------------\nRegister 3000 ~ 3999"
+        ]
       },
       "REGISTER_POLICY_CONSENT_REQUIRED": {
         "type": "object",
@@ -6654,10 +7538,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             }
@@ -6752,26 +7636,6 @@
           "masterName"
         ]
       },
-      "SocialScurityNumberInfo": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "SOCIAL_SECURITY_NUMBER"
-            ]
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^[0-9]{6}-[0-9]{7}$"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "value"
-        ]
-      },
       "AddressInfo": {
         "type": "object",
         "properties": {
@@ -6785,6 +7649,26 @@
             "type": "string",
             "maxLength": 512,
             "minLength": 1
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
           }
         },
         "nullable": false,
@@ -7252,10 +8136,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             }
@@ -7325,10 +8209,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             }
@@ -7545,6 +8429,620 @@
         "nullable": false,
         "required": [
           "applications"
+        ]
+      },
+      "CreatePostReqBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Post title",
+            "description": "Post title."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "COMPETITION",
+              "FREE",
+              "OPEN_MAT",
+              "SEMINAR"
+            ],
+            "title": "Post category",
+            "description": "Post category."
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 1,
+            "title": "Post body",
+            "description": "Post body."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "title",
+          "category",
+          "body"
+        ]
+      },
+      "ResponseFormCreatePostRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreatePostRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "CreatePostRes": {
+        "type": "object",
+        "properties": {
+          "post": {
+            "$ref": "#/components/schemas/IPost"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "post"
+        ]
+      },
+      "IPost": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "ULID",
+            "description": "ULID."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Post writer",
+            "description": "Post writer."
+          },
+          "viewCount": {
+            "type": "integer",
+            "title": "Post view count",
+            "description": "Post view count."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "title": "Post status",
+            "description": "Post status."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "COMPETITION",
+              "FREE",
+              "OPEN_MAT",
+              "SEMINAR"
+            ],
+            "title": "Post category",
+            "description": "Post category."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "title": "DeletedAt",
+            "description": "DeletedAt."
+          },
+          "postSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IPostSnapshot"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "userId",
+          "viewCount",
+          "status",
+          "category",
+          "createdAt",
+          "deletedAt",
+          "postSnapshots"
+        ]
+      },
+      "IPostSnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "ULID",
+            "description": "ULID."
+          },
+          "postId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Post Id",
+            "description": "Post Id."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Post title",
+            "description": "Post title."
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 1,
+            "title": "Post body",
+            "description": "Post body."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "postId",
+          "title",
+          "body",
+          "createdAt"
+        ]
+      },
+      "FindPostsQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "nullable": false
+      },
+      "ResponseFormFindPostsRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/FindPostsRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "FindPostsRes": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IPost"
+            }
+          },
+          "nextPage": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "posts"
+        ]
+      },
+      "ResponseFormGetPostRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/GetPostRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "GetPostRes": {
+        "type": "object",
+        "properties": {
+          "post": {
+            "$ref": "#/components/schemas/IPost"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "post"
+        ]
+      },
+      "UpdatePostReqBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Post title",
+            "description": "Post title."
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 1,
+            "title": "Post body",
+            "description": "Post body."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "title",
+          "body"
+        ]
+      },
+      "ResponseFormUpdatePostRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/UpdatePostRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "UpdatePostRes": {
+        "type": "object",
+        "properties": {
+          "post": {
+            "$ref": "#/components/schemas/IPost"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "post"
+        ]
+      },
+      "CreateCommentReqBody": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Comment body",
+            "description": "Comment body."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "body"
+        ]
+      },
+      "ResponseFormCreateCommentRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateCommentRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "CreateCommentRes": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "$ref": "#/components/schemas/IComment"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "comment"
+        ]
+      },
+      "IComment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "ULID",
+            "description": "ULID."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Comment writer",
+            "description": "Comment writer."
+          },
+          "parentId": {
+            "$ref": "#/components/schemas/TId.Nullable",
+            "title": "Comment parent",
+            "description": "Comment parent."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "title": "Comment status",
+            "description": "Comment status."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "title": "DeletedAt",
+            "description": "DeletedAt."
+          },
+          "postId": {
+            "$ref": "#/components/schemas/TId"
+          },
+          "commentSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICommentSnapshot"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "userId",
+          "parentId",
+          "status",
+          "createdAt",
+          "deletedAt",
+          "postId",
+          "commentSnapshots"
+        ]
+      },
+      "TId.Nullable": {
+        "type": "string",
+        "maxLength": 36,
+        "minLength": 36
+      },
+      "ICommentSnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "ULID",
+            "description": "ULID."
+          },
+          "commentId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Comment Id",
+            "description": "Comment Id."
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Comment body",
+            "description": "Comment body."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "commentId",
+          "body",
+          "createdAt"
+        ]
+      },
+      "CreateCommentReplyReqBody": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Comment body",
+            "description": "Comment body."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "body"
+        ]
+      },
+      "ResponseFormCreateCommentReplyRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateCommentReplyRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "CreateCommentReplyRes": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "$ref": "#/components/schemas/IComment"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "comment"
+        ]
+      },
+      "UpdateCommentReqBody": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Comment body",
+            "description": "Comment body."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "body"
+        ]
+      },
+      "ResponseFormUpdateCommentRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/UpdateCommentRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "UpdateCommentRes": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "$ref": "#/components/schemas/IComment"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "comment"
         ]
       }
     },

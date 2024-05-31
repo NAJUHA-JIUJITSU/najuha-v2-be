@@ -1,4 +1,3 @@
-import { tags } from 'typia';
 import { IPost } from './post.interface';
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
@@ -16,3 +15,5 @@ export interface IPostReport {
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
 }
+
+export interface IPostReportCreateDto extends Pick<IPostReport, 'postId' | 'userId'> {}

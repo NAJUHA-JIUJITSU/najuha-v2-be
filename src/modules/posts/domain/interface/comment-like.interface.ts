@@ -16,3 +16,5 @@ export interface ICommentLike {
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
 }
+
+export type ICommentLikeCreateDto = Pick<ICommentLike, 'commentId' | 'userId'>;

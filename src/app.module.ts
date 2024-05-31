@@ -14,6 +14,7 @@ import { RedisModule } from './infrastructure/redis/redis.module';
 import { ApplicationModule } from './modules/applications/application.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfigAsync } from './database/typeorm.config';
+import { PostsModule } from './modules/posts/posts.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { typeOrmConfigAsync } from './database/typeorm.config';
     PolicyModule,
     CompetitionsModule,
     ApplicationModule,
+    PostsModule,
   ],
   providers: [],
 })

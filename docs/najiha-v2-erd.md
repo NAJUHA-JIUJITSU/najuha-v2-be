@@ -583,7 +583,7 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz deletedAt "nullable"
-    uuid postId FK "nullable"
+    uuid postId FK
   }
   comment_like {
     uuid id PK
@@ -746,6 +746,7 @@ Comment.
     > 신고 회수가 10회 이상이면 자동으로 `INACTIVE` 처리됩니다. 관리자의 판단 하에 `ACTIVE`로 변경될 수 있습니다.
   - `createdAt`: 댓글 작성일자.
   - `deletedAt`: 댓글 삭제일자.
+  - `postId`: 게시글 Id.
 
 
 ### `comment_like`

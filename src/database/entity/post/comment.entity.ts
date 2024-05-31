@@ -62,6 +62,10 @@ export class CommentEntity {
   @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt!: IComment['deletedAt'];
 
+  /** 게시글 Id. */
+  @Column('uuid')
+  postId!: IComment['postId'];
+
   // ------------------------------------------------------------
   // Relations
   // ------------------------------------------------------------
@@ -71,6 +75,10 @@ export class CommentEntity {
    */
   @OneToMany(() => CommentSnapshotEntity, (snapshot) => snapshot.comment, { cascade: true })
   commentSnapshots!: CommentSnapshotEntity[];
+
+  /** 대댓글 목록. */
+  @OneToMany(() => CommentEntity, (comment) => comment.replies)
+  replies!: CommentEntity[];
 
   /**
    * 댓글 좋아요 목록.
@@ -86,10 +94,6 @@ export class CommentEntity {
   /** 댓글 신고 목록. */
   @OneToMany(() => CommentReportEntity, (report) => report.comment)
   reports!: CommentReportEntity[];
-
-  /** 대댓글 목록. */
-  @OneToMany(() => CommentEntity, (comment) => comment.replies)
-  replies!: CommentEntity[];
 
   /** 게시글. */
   @ManyToOne(() => PostEntity, (post) => post.comments)

@@ -16,3 +16,5 @@ export interface ICommentReport {
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
 }
+
+export interface ICommentReportCreateDto extends Pick<ICommentReport, 'commentId' | 'userId'> {}

@@ -5,18 +5,29 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { IPost } from '../domain/interface/post.interface';
 import { PostsAppService } from '../application/posts.app.service';
 import {
+  CreateCommentReplyReqBody,
+  CreateCommentReplyRes,
+  CreateCommentReqBody,
+  CreateCommentRes,
   CreatePostReqBody,
   CreatePostRes,
   FindPostsQuery,
   FindPostsRes,
   GetPostRes,
+  UpdateCommentReqBody,
+  UpdateCommentRes,
   UpdatePostReqBody,
   UpdatePostRes,
-} from './dtos';
+} from './posts.presentation.dto';
+import { IComment } from '../domain/interface/comment.interface';
+import { CommentsAppService } from '../application/comments.app.service';
 
 @Controller('user/posts')
 export class UserPostsController {
-  constructor(private readonly postsAppService: PostsAppService) {}
+  constructor(
+    private readonly postsAppService: PostsAppService,
+    private readonly commentsAppService: CommentsAppService,
+  ) {}
 
   /**
    * u-7-1 createPost.
@@ -29,7 +40,9 @@ export class UserPostsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
   async createPost(@Req() req: Request, @TypedBody() body: CreatePostReqBody): Promise<ResponseForm<CreatePostRes>> {
-    return createResponseForm(await this.postsAppService.createPost({ userId: req['userId'], ...body }));
+    return createResponseForm(
+      await this.postsAppService.createPost({ postCreateDto: { userId: req['userId'], ...body } }),
+    );
   }
 
   /**
@@ -48,7 +61,6 @@ export class UserPostsController {
       await this.postsAppService.findPosts({
         page: query.page ?? 0,
         limit: query.limit ?? 10,
-        userId: req['userId'],
       }),
     );
   }
@@ -63,8 +75,8 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:postId')
-  async getPost(@TypedParam('postId') postId: IPost['id'], @Req() req: Request): Promise<ResponseForm<GetPostRes>> {
-    return createResponseForm(await this.postsAppService.getPost({ userId: req['userId'], postId }));
+  async getPost(@TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<GetPostRes>> {
+    return createResponseForm(await this.postsAppService.getPost({ postId }));
   }
 
   /**
@@ -85,8 +97,10 @@ export class UserPostsController {
     return createResponseForm(
       await this.postsAppService.updatePost({
         userId: req['userId'],
-        postId,
-        ...body,
+        postUpdateDto: {
+          postId,
+          ...body,
+        },
       }),
     );
   }
@@ -101,8 +115,8 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:postId')
-  async deletePost(@TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.deletePost({ postId }));
+  async deletePost(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<void>> {
+    return createResponseForm(await this.postsAppService.deletePost({ userId: req['userId'], postId }));
   }
 
   /**
@@ -116,7 +130,9 @@ export class UserPostsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/:postId/like')
   async createPostLike(@TypedParam('postId') postId: IPost['id'], @Req() req: Request): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.createPostLike({ userId: req['userId'], postId }));
+    return createResponseForm(
+      await this.postsAppService.createPostLike({ postLikeCreateDto: { userId: req['userId'], postId } }),
+    );
   }
 
   /**
@@ -129,7 +145,7 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:postId/like')
-  async deletePostLike(@TypedParam('postId') postId: IPost['id'], @Req() req: Request): Promise<ResponseForm<void>> {
+  async deletePostLike(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<void>> {
     return createResponseForm(await this.postsAppService.deletePostLike({ userId: req['userId'], postId }));
   }
 
@@ -143,8 +159,10 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/:postId/report')
-  async createPostReport(@TypedParam('postId') postId: IPost['id'], @Req() req: Request): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.createPostReport({ userId: req['userId'], postId }));
+  async createPostReport(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<void>> {
+    return createResponseForm(
+      await this.postsAppService.createPostReport({ postReportCreateDto: { userId: req['userId'], postId } }),
+    );
   }
 
   /**
@@ -157,8 +175,13 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:postId/report')
-  async deletePostReport(@TypedParam('postId') postId: IPost['id'], @Req() req: Request): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.deletePostReport({ userId: req['userId'], postId }));
+  async deletePostReport(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<void>> {
+    return createResponseForm(
+      await this.postsAppService.deletePostReport({
+        userId: req['userId'],
+        postId,
+      }),
+    );
   }
 
   /**
@@ -174,9 +197,13 @@ export class UserPostsController {
   async createComment(
     @TypedParam('postId') postId: IPost['id'],
     @Req() req: Request,
-    @TypedBody() body: CreatePostReqBody,
-  ): Promise<ResponseForm<CreatePostRes>> {
-    return createResponseForm(await this.postsAppService.createComment({ userId: req['userId'], postId, ...body }));
+    @TypedBody() body: CreateCommentReqBody,
+  ): Promise<ResponseForm<CreateCommentRes>> {
+    return createResponseForm(
+      await this.commentsAppService.createComment({
+        commentCreateDto: { userId: req['userId'], postId, ...body },
+      }),
+    );
   }
 
   /**
@@ -188,14 +215,22 @@ export class UserPostsController {
    * @tag u-7 posts
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Post('/comment/:commentId/reply')
+  @TypedRoute.Post('/:postId/comment/:commentId/reply')
   async createPostCommentReply(
-    @TypedParam('commentId') commentId: IPost['id'],
+    @TypedParam('postId') postId: IPost['id'],
+    @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
-    @TypedBody() body: CreatePostReqBody,
-  ): Promise<ResponseForm<CreatePostRes>> {
+    @TypedBody() body: CreateCommentReplyReqBody,
+  ): Promise<ResponseForm<CreateCommentReplyRes>> {
     return createResponseForm(
-      await this.postsAppService.createCommentReply({ userId: req['userId'], commentId, ...body }),
+      await this.commentsAppService.createCommentReply({
+        commentReplyCreateDto: {
+          userId: req['userId'],
+          postId,
+          parentId: commentId,
+          ...body,
+        },
+      }),
     );
   }
 
@@ -210,11 +245,16 @@ export class UserPostsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/comment/:commentId')
   async updatePostComment(
-    @TypedParam('commentId') commentId: IPost['id'],
+    @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
-    @TypedBody() body: UpdatePostReqBody,
-  ): Promise<ResponseForm<UpdatePostRes>> {
-    return createResponseForm(await this.postsAppService.updateComment({ userId: req['userId'], commentId, ...body }));
+    @TypedBody() body: UpdateCommentReqBody,
+  ): Promise<ResponseForm<UpdateCommentRes>> {
+    return createResponseForm(
+      await this.commentsAppService.updateComment({
+        userId: req['userId'],
+        commentUpdateDto: { commentId, ...body },
+      }),
+    );
   }
 
   /**
@@ -227,8 +267,16 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/comment/:commentId')
-  async deletePostComment(@TypedParam('commentId') commentId: IPost['id']): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.deleteComment({ commentId }));
+  async deletePostComment(
+    @Req() req: Request,
+    @TypedParam('commentId') commentId: IPost['id'],
+  ): Promise<ResponseForm<void>> {
+    return createResponseForm(
+      await this.commentsAppService.deleteComment({
+        userId: req['userId'],
+        commentId,
+      }),
+    );
   }
 
   /**
@@ -243,10 +291,14 @@ export class UserPostsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/comment/:commentId/like')
   async createPostCommentLike(
-    @TypedParam('commentId') commentId: IPost['id'],
     @Req() req: Request,
+    @TypedParam('commentId') commentId: IComment['id'],
   ): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.createCommentLike({ userId: req['userId'], commentId }));
+    return createResponseForm(
+      await this.commentsAppService.createCommentLike({
+        commentLikeCreateDto: { userId: req['userId'], commentId },
+      }),
+    );
   }
 
   /**
@@ -261,10 +313,15 @@ export class UserPostsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/comment/:commentId/like')
   async deletePostCommentLike(
-    @TypedParam('commentId') commentId: IPost['id'],
+    @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
   ): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.deleteCommentLike({ userId: req['userId'], commentId }));
+    return createResponseForm(
+      await this.commentsAppService.deleteCommentLike({
+        userId: req['userId'],
+        commentId,
+      }),
+    );
   }
 
   /**
@@ -279,10 +336,14 @@ export class UserPostsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/comment/:commentId/report')
   async createPostCommentReport(
-    @TypedParam('commentId') commentId: IPost['id'],
+    @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
   ): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.createCommentReport({ userId: req['userId'], commentId }));
+    return createResponseForm(
+      await this.commentsAppService.createCommentReport({
+        commentReportCreateDto: { userId: req['userId'], commentId },
+      }),
+    );
   }
 
   /**
@@ -297,9 +358,14 @@ export class UserPostsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/comment/:commentId/report')
   async deletePostCommentReport(
-    @TypedParam('commentId') commentId: IPost['id'],
+    @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
   ): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.deleteCommentReport({ userId: req['userId'], commentId }));
+    return createResponseForm(
+      await this.commentsAppService.deleteCommentReport({
+        userId: req['userId'],
+        commentId,
+      }),
+    );
   }
 }

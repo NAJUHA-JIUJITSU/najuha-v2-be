@@ -1,6 +1,7 @@
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { tags } from 'typia';
+import { IPostSnapshot } from './post-snapshot.interface';
 
 export interface IPost {
   /** ULID. */
@@ -23,4 +24,10 @@ export interface IPost {
 
   /** DeletedAt. */
   deletedAt: TDateOrStringDate | null;
+
+  postSnapshots: IPostSnapshot[];
 }
+
+export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'>, Pick<IPostSnapshot, 'title' | 'body'> {}
+
+export interface IPostUpdateDto extends Pick<IPostSnapshot, 'postId' | 'title' | 'body'> {}

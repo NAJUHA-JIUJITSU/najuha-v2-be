@@ -17,9 +17,9 @@ export class BusinessException extends HttpException {
   }
 }
 
-/** ----------------------------------------------------------------------------
- * Internal Server Error 500
- */
+// -----------------------------------------------------------------------------
+// Internal Server Error 500
+// -----------------------------------------------------------------------------
 export type INTERNAL_SERVER_ERROR = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.INTERNAL_SERVER_ERROR;
@@ -28,9 +28,9 @@ export type INTERNAL_SERVER_ERROR = ErrorResponse & {
   result: 'Internal Server Error';
 };
 
-/** ----------------------------------------------------------------------------
- * - Entity Not Found Error 404
- */
+// -----------------------------------------------------------------------------
+// Entity Not Found Error 404
+// -----------------------------------------------------------------------------
 export type ENTITY_NOT_FOUND = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.NOT_FOUND;
@@ -44,9 +44,9 @@ export const CommonErrors = {
   ENTITY_NOT_FOUND: typia.random<ENTITY_NOT_FOUND>(),
 };
 
-/** ----------------------------------------------------------------------------
- * Auth 1000 ~ 1999
- */
+// -----------------------------------------------------------------------------
+//  Auth 1000 ~ 1999
+// -----------------------------------------------------------------------------
 export type AUTH_ACCESS_TOKEN_MISSING = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
@@ -95,9 +95,9 @@ export const AuthErrors = {
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS: typia.random<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(),
 };
 
-/** ----------------------------------------------------------------------------
- * SnsAuth 2000 ~ 2999
- */
+// -----------------------------------------------------------------------------
+// SnsAuth 2000 ~ 2999
+// -----------------------------------------------------------------------------
 export type SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
@@ -137,9 +137,9 @@ export const SnsAuthErrors = {
   SNS_AUTH_GOOGLE_LOGIN_FAIL: typia.random<SNS_AUTH_GOOGLE_LOGIN_FAIL>(),
 };
 
-/** ----------------------------------------------------------------------------
- * Register 3000 ~ 3999
- */
+// -----------------------------------------------------------------------------
+// Register 3000 ~ 3999
+// -----------------------------------------------------------------------------
 export type REGISTER_NICKNAME_DUPLICATED = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.CONFLICT;
@@ -179,9 +179,9 @@ export const RegisterErrors = {
   REGISTER_PHONE_NUMBER_REQUIRED: typia.random<REGISTER_PHONE_NUMBER_REQUIRED>(),
 };
 
-/** ----------------------------------------------------------------------------
- * Users 4000 ~ 4999
- */
+// -----------------------------------------------------------------------------
+// Users 4000 ~ 4999
+// -----------------------------------------------------------------------------
 // export type USERS_USER_NOT_FOUND = ErrorResponse & {
 //   isSuccess: false;
 //   status: HttpStatus.NOT_FOUND;
@@ -191,9 +191,9 @@ export const RegisterErrors = {
 
 export const UsersErrors = {};
 
-/** ----------------------------------------------------------------------------
- * Policy 5000 ~ 5999
- */
+// -----------------------------------------------------------------------------
+// Policy 5000 ~ 5999
+// -----------------------------------------------------------------------------
 // export type POLICY_POLICY_NOT_FOUND = ErrorResponse & {
 //   isSuccess: false;
 //   status: HttpStatus.NOT_FOUND;
@@ -203,9 +203,9 @@ export const UsersErrors = {};
 
 export const PolicyErrors = {};
 
-/** ----------------------------------------------------------------------------
- * Competitions 6000 ~ 6999
- */
+// -----------------------------------------------------------------------------
+// Competitions 6000 ~ 6999
+// -----------------------------------------------------------------------------
 export type COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.BAD_REQUEST;
@@ -236,10 +236,9 @@ export const CompetitionsErrors = {
   COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED: typia.random<COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED>(),
 };
 
-/** ----------------------------------------------------------------------------
- * Applications 7000 ~ 7999
- */
-
+// -----------------------------------------------------------------------------
+//  Applications 7000 ~ 7999
+// -----------------------------------------------------------------------------
 export type APPLICATIONS_DIVISION_NOT_FOUND = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.NOT_FOUND;
@@ -333,4 +332,46 @@ export const ApplicationsErrors = {
     typia.random<APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND>(),
   APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH: typia.random<APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH>(),
   APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND: typia.random<APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND>(),
+};
+
+// -----------------------------------------------------------------------------
+// Posts 8000 ~ 8999
+// -----------------------------------------------------------------------------
+export type POSTS_POST_LIKE_ALREADY_EXIST = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.CONFLICT;
+  code: 8000;
+  type: 'POSTS_POST_LIKE_ALREADY_EXIST';
+  result: '이미 좋아요를 누른 게시글입니다.';
+};
+
+export type POSTS_POST_REPORT_ALREADY_EXIST = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.CONFLICT;
+  code: 8001;
+  type: 'POSTS_POST_REPORT_ALREADY_EXIST';
+  result: '이미 신고한 게시글입니다.';
+};
+
+export type POSTS_COMMENT_LIKE_ALREADY_EXIST = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.CONFLICT;
+  code: 8002;
+  type: 'POSTS_COMMENT_LIKE_ALREADY_EXIST';
+  result: '이미 좋아요를 누른 댓글입니다.';
+};
+
+export type POSTS_COMMENT_REPORT_ALREADY_EXIST = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.CONFLICT;
+  code: 8003;
+  type: 'POSTS_COMMENT_REPORT_ALREADY_EXIST';
+  result: '이미 신고한 댓글입니다.';
+};
+
+export const PostsErrors = {
+  POSTS_POST_LIKE_ALREADY_EXIST: typia.random<POSTS_POST_LIKE_ALREADY_EXIST>(),
+  POSTS_POST_REPORT_ALREADY_EXIST: typia.random<POSTS_POST_REPORT_ALREADY_EXIST>(),
+  POSTS_COMMENT_LIKE_ALREADY_EXIST: typia.random<POSTS_COMMENT_LIKE_ALREADY_EXIST>(),
+  POSTS_COMMENT_REPORT_ALREADY_EXIST: typia.random<POSTS_COMMENT_REPORT_ALREADY_EXIST>(),
 };
