@@ -20,6 +20,18 @@ export class CommentReportEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: ICommentReport['id'];
 
+  /** 신고 타입. */
+  @Column('varchar', { length: 16 })
+  type!: ICommentReport['type'];
+
+  /** 신고 상태. */
+  @Column('varchar', { length: 16, default: 'PENDING' })
+  status!: ICommentReport['status'];
+
+  /** 신고 사유. */
+  @Column('varchar', { length: 100 })
+  reason!: ICommentReport['reason'];
+
   /** 신고자 UserId. */
   @Column('uuid')
   userId!: ICommentReport['userId'];

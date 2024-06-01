@@ -3,7 +3,7 @@ import { uuidv7 } from 'uuidv7';
 import { IComment, ICommentCreateDto, ICommentReplyCreateDto } from './interface/comment.interface';
 import { ICommentSnapshot } from './interface/comment-snapshot.interface';
 import { ICommentLike, ICommentLikeCreateDto } from './interface/comment-like.interface';
-import { ICommentReport } from './interface/comment-report.interface';
+import { ICommentReport, ICommentReportCreateDto } from './interface/comment-report.interface';
 
 @Injectable()
 export class CommentFactory {
@@ -55,9 +55,12 @@ export class CommentFactory {
     };
   }
 
-  createCommentReport({ commentId, userId }: ICommentLikeCreateDto): ICommentReport {
+  createCommentReport({ type, reason, commentId, userId }: ICommentReportCreateDto): ICommentReport {
     return {
       id: uuidv7(),
+      type,
+      status: 'PENDING',
+      reason,
       commentId,
       userId,
       createdAt: new Date(),

@@ -3,6 +3,7 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { tags } from 'typia';
 import { IPostSnapshot } from './post-snapshot.interface';
 import { IPostLike } from './post-like.interface';
+import { IPostReport } from './post-report.interface';
 
 export interface IPost {
   /** ULID. */
@@ -29,6 +30,8 @@ export interface IPost {
   postSnapshots: IPostSnapshot[];
 
   likes?: IPostLike[];
+
+  postReports?: IPostReport[];
 }
 
 export interface IPostRet

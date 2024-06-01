@@ -18,7 +18,7 @@
     "start:prod": "NODE_ENV=prod node dist/src/main",
     "start:debug": "nest start --debug --watch",
     "------------------------TESTS------------------------": "",
-    "test": "jest",
+    "test": "jest --config ./test/jest.json --detectOpenHandles",
     "test:docker": "make test && jest && make test-fclean",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

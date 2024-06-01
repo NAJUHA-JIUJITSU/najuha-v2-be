@@ -7,6 +7,7 @@ import { PostsAppService } from '../application/posts.app.service';
 import {
   CreateCommentReplyReqBody,
   CreateCommentReplyRes,
+  CreateCommentReportReqBody,
   CreateCommentReqBody,
   CreateCommentRes,
   CreatePostReportReqBody,
@@ -374,10 +375,11 @@ export class UserPostsController {
   async createPostCommentReport(
     @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
+    @TypedBody() body: CreateCommentReportReqBody,
   ): Promise<ResponseForm<void>> {
     return createResponseForm(
       await this.commentsAppService.createCommentReport({
-        commentReportCreateDto: { userId: req['userId'], commentId },
+        commentReportCreateDto: { userId: req['userId'], commentId, ...body },
       }),
     );
   }

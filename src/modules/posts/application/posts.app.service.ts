@@ -48,7 +48,7 @@ export class PostsAppService {
     const posts = assert<IPost[]>(
       await this.postRepository.find({
         where: { status: 'ACTIVE' },
-        relations: ['likes', 'postSnapshots'],
+        relations: ['postSnapshots', 'likes'],
         order: { createdAt: 'DESC' },
         skip: page * limit,
         take: limit,
@@ -67,7 +67,7 @@ export class PostsAppService {
         await this.postRepository
           .findOneOrFail({
             where: { id: postId },
-            relations: ['likes', 'postSnapshots'],
+            relations: ['postSnapshots', 'likes'],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
@@ -128,7 +128,7 @@ export class PostsAppService {
   }
 
   async createPostReport({ postReportCreateDto }: CreatePostReportParam): Promise<void> {
-    Promise.all([
+    const [_, postEntity] = await Promise.all([
       await this.userRepository.findOneOrFail({ where: { id: postReportCreateDto.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
@@ -136,6 +136,8 @@ export class PostsAppService {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
       }),
     ]);
+    const post = new PostModel(postEntity);
+
     const postReport = await this.portReportRepository.findOne({
       where: { userId: postReportCreateDto.userId, postId: postReportCreateDto.postId },
     });

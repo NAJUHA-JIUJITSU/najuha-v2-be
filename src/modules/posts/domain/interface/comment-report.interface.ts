@@ -7,6 +7,15 @@ export interface ICommentReport {
   /** ULID. */
   id: TId;
 
+  /** Report Type */
+  type: 'INAPPROPRIATE' | 'SPAM';
+
+  /** Report Status */
+  status: 'PENDING' | 'REJECTED' | 'ACCEPTED';
+
+  /** Report Reason */
+  reason: string & tags.MaxLength<100>;
+
   /** Comment Id. */
   commentId: IComment['id'];
 
@@ -17,4 +26,4 @@ export interface ICommentReport {
   createdAt: TDateOrStringDate;
 }
 
-export interface ICommentReportCreateDto extends Pick<ICommentReport, 'commentId' | 'userId'> {}
+export interface ICommentReportCreateDto extends Pick<ICommentReport, 'commentId' | 'userId' | 'type' | 'reason'> {}
