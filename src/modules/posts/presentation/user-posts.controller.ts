@@ -9,6 +9,7 @@ import {
   CreateCommentReplyRes,
   CreateCommentReqBody,
   CreateCommentRes,
+  CreatePostReportReqBody,
   CreatePostReqBody,
   CreatePostRes,
   FindPostsQuery,
@@ -36,6 +37,7 @@ export class UserPostsController {
    * 새로운 게시글을 작성합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
@@ -53,12 +55,14 @@ export class UserPostsController {
    * 필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/')
   async findPosts(@Req() req: Request, @TypedQuery() query: FindPostsQuery): Promise<ResponseForm<FindPostsRes>> {
     return createResponseForm(
       await this.postsAppService.findPosts({
+        userId: req['userId'],
         page: query.page ?? 0,
         limit: query.limit ?? 10,
       }),
@@ -72,11 +76,17 @@ export class UserPostsController {
    * 특정 게시글을 조회합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:postId')
-  async getPost(@TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<GetPostRes>> {
-    return createResponseForm(await this.postsAppService.getPost({ postId }));
+  async getPost(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<GetPostRes>> {
+    return createResponseForm(
+      await this.postsAppService.getPost({
+        userId: req['userId'],
+        postId,
+      }),
+    );
   }
 
   /**
@@ -86,6 +96,7 @@ export class UserPostsController {
    * 기존 게시글을 수정합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/:postId')
@@ -112,6 +123,7 @@ export class UserPostsController {
    * 특정 게시글을 삭제합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:postId')
@@ -126,12 +138,15 @@ export class UserPostsController {
    * 게시글에 좋아요를 추가합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/:postId/like')
   async createPostLike(@TypedParam('postId') postId: IPost['id'], @Req() req: Request): Promise<ResponseForm<void>> {
     return createResponseForm(
-      await this.postsAppService.createPostLike({ postLikeCreateDto: { userId: req['userId'], postId } }),
+      await this.postsAppService.createPostLike({
+        postLikeCreateDto: { userId: req['userId'], postId },
+      }),
     );
   }
 
@@ -142,11 +157,17 @@ export class UserPostsController {
    * 게시글에 대한 좋아요를 취소합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:postId/like')
   async deletePostLike(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.postsAppService.deletePostLike({ userId: req['userId'], postId }));
+    return createResponseForm(
+      await this.postsAppService.deletePostLike({
+        userId: req['userId'],
+        postId,
+      }),
+    );
   }
 
   /**
@@ -156,12 +177,19 @@ export class UserPostsController {
    * 게시글을 신고합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/:postId/report')
-  async createPostReport(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<void>> {
+  async createPostReport(
+    @Req() req: Request,
+    @TypedParam('postId') postId: IPost['id'],
+    @TypedBody() body: CreatePostReportReqBody,
+  ): Promise<ResponseForm<void>> {
     return createResponseForm(
-      await this.postsAppService.createPostReport({ postReportCreateDto: { userId: req['userId'], postId } }),
+      await this.postsAppService.createPostReport({
+        postReportCreateDto: { userId: req['userId'], postId, ...body },
+      }),
     );
   }
 
@@ -172,6 +200,7 @@ export class UserPostsController {
    * 게시글 신고를 취소합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:postId/report')
@@ -191,6 +220,7 @@ export class UserPostsController {
    * 게시글에 댓글을 추가합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/:postId/comment')
@@ -213,6 +243,7 @@ export class UserPostsController {
    * 댓글에 대한 답글을 추가합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/:postId/comment/:commentId/reply')
@@ -241,6 +272,7 @@ export class UserPostsController {
    * 기존 댓글을 수정합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/comment/:commentId')
@@ -264,6 +296,7 @@ export class UserPostsController {
    * 특정 댓글을 삭제합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/comment/:commentId')
@@ -286,6 +319,7 @@ export class UserPostsController {
    * 댓글에 좋아요를 추가합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    * @returns void
    */
   @RoleLevels(RoleLevel.USER)
@@ -308,6 +342,7 @@ export class UserPostsController {
    * 댓글에 대한 좋아요를 취소합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    * @returns void
    */
   @RoleLevels(RoleLevel.USER)
@@ -331,6 +366,7 @@ export class UserPostsController {
    * 댓글을 신고합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    * @returns void
    */
   @RoleLevels(RoleLevel.USER)
@@ -353,6 +389,7 @@ export class UserPostsController {
    * 댓글 신고를 취소합니다.
    *
    * @tag u-7 posts
+   * @security bearer
    * @returns void
    */
   @RoleLevels(RoleLevel.USER)

@@ -1,7 +1,7 @@
-import { IPost, IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interface';
+import { IPost, IPostCreateDto, IPostRet, IPostUpdateDto } from '../domain/interface/post.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPostLikeCreateDto } from '../domain/interface/post-like.interface';
-import { IPostReportCreateDto } from '../domain/interface/post-report.interface';
+import { IPostReport, IPostReportCreateDto } from '../domain/interface/post-report.interface';
 
 // ---------------------------------------------------------------------------
 // postAppService Param
@@ -11,11 +11,13 @@ export interface CreatePostParam {
 }
 
 export interface FindPostsParam {
+  userId?: IUser['id'];
   page: number;
   limit: number;
 }
 
 export interface GetPostParam {
+  userId: IUser['id'];
   postId: IPost['id'];
 }
 
@@ -51,18 +53,18 @@ export interface DeletePostReportParam {
 // postAppService Result
 // ---------------------------------------------------------------------------
 export interface CreatePostRet {
-  post: IPost;
+  post: IPostRet;
 }
 
 export interface GetPostRet {
-  post: IPost;
+  post: IPostRet;
 }
 
 export interface FindPostsRet {
-  posts: IPost[];
+  posts: IPostRet[];
   nextPage?: number;
 }
 
 export interface UpdatePostRet {
-  post: IPost;
+  post: IPostRet;
 }

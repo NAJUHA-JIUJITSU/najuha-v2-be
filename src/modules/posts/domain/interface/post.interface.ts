@@ -2,6 +2,7 @@ import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { tags } from 'typia';
 import { IPostSnapshot } from './post-snapshot.interface';
+import { IPostLike } from './post-like.interface';
 
 export interface IPost {
   /** ULID. */
@@ -26,6 +27,17 @@ export interface IPost {
   deletedAt: TDateOrStringDate | null;
 
   postSnapshots: IPostSnapshot[];
+
+  likes?: IPostLike[];
+}
+
+export interface IPostRet
+  extends Pick<
+    IPost,
+    'id' | 'userId' | 'viewCount' | 'status' | 'category' | 'createdAt' | 'deletedAt' | 'postSnapshots'
+  > {
+  likeCount: number;
+  userLiked: boolean;
 }
 
 export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'>, Pick<IPostSnapshot, 'title' | 'body'> {}

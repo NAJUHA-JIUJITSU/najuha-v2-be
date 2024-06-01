@@ -1,17 +1,22 @@
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPostSnapshot } from '../interface/post-snapshot.interface';
-import { IPost } from '../interface/post.interface';
+import { IPost, IPostRet } from '../interface/post.interface';
+import { IPostLike } from '../interface/post-like.interface';
 
 export class PostModel {
-  public readonly id: IPost['id'];
-  public readonly userId: IPost['userId'];
-  public readonly viewCount: IPost['viewCount'];
-  public readonly status: IPost['status'];
-  public readonly category: IPost['category'];
-  public readonly createdAt: IPost['createdAt'];
-  public deletedAt: IPost['deletedAt'];
-  public readonly postSnapshots: IPostSnapshot[];
+  private readonly id: IPost['id'];
+  private readonly userId: IPost['userId'];
+  private readonly viewCount: IPost['viewCount'];
+  private readonly status: IPost['status'];
+  private readonly category: IPost['category'];
+  private readonly createdAt: IPost['createdAt'];
+  private deletedAt: IPost['deletedAt'];
+  private readonly postSnapshots: IPostSnapshot[];
+  private readonly likes: IPostLike[];
+  private likeCount: number;
+  private userLiked: boolean;
 
-  constructor(entity: IPost) {
+  constructor(entity: IPost, userId?: IUser['id']) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.viewCount = entity.viewCount;
@@ -20,9 +25,12 @@ export class PostModel {
     this.createdAt = entity.createdAt;
     this.deletedAt = entity.deletedAt;
     this.postSnapshots = entity.postSnapshots;
+    this.likes = entity.likes || [];
+    this.likeCount = this.likes.length;
+    this.userLiked = this.likes.some((like) => like.userId === userId);
   }
 
-  toEntity(): IPost {
+  toEntity(): IPostRet {
     return {
       id: this.id,
       userId: this.userId,
@@ -32,6 +40,8 @@ export class PostModel {
       createdAt: this.createdAt,
       deletedAt: this.deletedAt,
       postSnapshots: this.postSnapshots,
+      likeCount: this.likeCount,
+      userLiked: this.userLiked,
     };
   }
 

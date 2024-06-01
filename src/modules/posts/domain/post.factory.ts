@@ -41,9 +41,12 @@ export class PostFactory {
     };
   }
 
-  createPostReport({ userId, postId }: IPostReportCreateDto): IPostReport {
+  createPostReport({ type, reason, userId, postId }: IPostReportCreateDto): IPostReport {
     return {
       id: uuidv7(),
+      type,
+      status: 'PENDING',
+      reason,
       userId,
       postId,
       createdAt: new Date(),

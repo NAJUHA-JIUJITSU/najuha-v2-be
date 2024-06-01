@@ -2596,6 +2596,11 @@
         },
         "summary": "u-7-1 createPost",
         "description": "u-7-1 createPost.\n- RoleLevel: USER.\n\n새로운 게시글을 작성합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.createPost",
         "x-nestia-jsDocTags": [
           {
@@ -2603,6 +2608,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2640,6 +2654,11 @@
         },
         "summary": "u-7-2 findPosts",
         "description": "u-7-2 findPosts.\n- RoleLevel: USER.\n\n여러 게시글을 조회합니다.\n필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.findPosts",
         "x-nestia-jsDocTags": [
           {
@@ -2647,6 +2666,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2688,6 +2716,11 @@
         },
         "summary": "u-7-3 getPost",
         "description": "u-7-3 getPost.\n- RoleLevel: USER.\n\n특정 게시글을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.getPost",
         "x-nestia-jsDocTags": [
           {
@@ -2695,6 +2728,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2745,6 +2787,11 @@
         },
         "summary": "u-7-4 updatePost",
         "description": "u-7-4 updatePost.\n- RoleLevel: USER.\n\n기존 게시글을 수정합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.updatePost",
         "x-nestia-jsDocTags": [
           {
@@ -2752,6 +2799,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2791,6 +2847,11 @@
         },
         "summary": "u-7-5 deletePost",
         "description": "u-7-5 deletePost.\n- RoleLevel: USER.\n\n특정 게시글을 삭제합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.deletePost",
         "x-nestia-jsDocTags": [
           {
@@ -2798,6 +2859,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2839,6 +2909,11 @@
         },
         "summary": "u-7-6 createPostLike",
         "description": "u-7-6 createPostLike.\n- RoleLevel: USER.\n\n게시글에 좋아요를 추가합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.like.createPostLike",
         "x-nestia-jsDocTags": [
           {
@@ -2846,6 +2921,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2885,6 +2969,11 @@
         },
         "summary": "u-7-7 deletePostLike",
         "description": "u-7-7 deletePostLike.\n- RoleLevel: USER.\n\n게시글에 대한 좋아요를 취소합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.like.deletePostLike",
         "x-nestia-jsDocTags": [
           {
@@ -2892,6 +2981,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2918,6 +3016,17 @@
             "required": true
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostReportReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
         "responses": {
           "201": {
             "description": "",
@@ -2933,6 +3042,11 @@
         },
         "summary": "u-7-8 createPostReport",
         "description": "u-7-8 createPostReport.\n- RoleLevel: USER.\n\n게시글을 신고합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.report.createPostReport",
         "x-nestia-jsDocTags": [
           {
@@ -2940,6 +3054,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2979,6 +3102,11 @@
         },
         "summary": "u-7-9 deletePostReport",
         "description": "u-7-9 deletePostReport.\n- RoleLevel: USER.\n\n게시글 신고를 취소합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.report.deletePostReport",
         "x-nestia-jsDocTags": [
           {
@@ -2986,6 +3114,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3038,6 +3175,11 @@
         },
         "summary": "u-7-10 createComment",
         "description": "u-7-10 createComment.\n- RoleLevel: USER.\n\n게시글에 댓글을 추가합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.createComment",
         "x-nestia-jsDocTags": [
           {
@@ -3045,6 +3187,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3108,6 +3259,11 @@
         },
         "summary": "u-7-11 createCommentReply",
         "description": "u-7-11 createCommentReply.\n- RoleLevel: USER.\n\n댓글에 대한 답글을 추가합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.reply.createPostCommentReply",
         "x-nestia-jsDocTags": [
           {
@@ -3115,6 +3271,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3167,6 +3332,11 @@
         },
         "summary": "u-7-12 updateComment",
         "description": "u-7-12 updateComment.\n- RoleLevel: USER.\n\n기존 댓글을 수정합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.updatePostComment",
         "x-nestia-jsDocTags": [
           {
@@ -3174,6 +3344,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3213,6 +3392,11 @@
         },
         "summary": "u-7-13 deleteComment",
         "description": "u-7-13 deleteComment.\n- RoleLevel: USER.\n\n특정 댓글을 삭제합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.deletePostComment",
         "x-nestia-jsDocTags": [
           {
@@ -3220,6 +3404,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3261,6 +3454,11 @@
         },
         "summary": "u-7-14 createCommentLike",
         "description": "u-7-14 createCommentLike.\n- RoleLevel: USER.\n\n댓글에 좋아요를 추가합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.like.createPostCommentLike",
         "x-nestia-jsDocTags": [
           {
@@ -3268,6 +3466,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3316,6 +3523,11 @@
         },
         "summary": "u-7-15 deleteCommentLike",
         "description": "u-7-15 deleteCommentLike.\n- RoleLevel: USER.\n\n댓글에 대한 좋아요를 취소합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.like.deletePostCommentLike",
         "x-nestia-jsDocTags": [
           {
@@ -3323,6 +3535,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3373,6 +3594,11 @@
         },
         "summary": "u-7-16 createCommentReport",
         "description": "u-7-16 createCommentReport.\n- RoleLevel: USER.\n\n댓글을 신고합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.report.createPostCommentReport",
         "x-nestia-jsDocTags": [
           {
@@ -3380,6 +3606,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -3428,6 +3663,11 @@
         },
         "summary": "u-7-17 deleteCommentReport",
         "description": "u-7-17 deleteCommentReport.\n- RoleLevel: USER.\n\n댓글 신고를 취소합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.posts.comment.report.deletePostCommentReport",
         "x-nestia-jsDocTags": [
           {
@@ -3435,6 +3675,15 @@
             "text": [
               {
                 "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -7538,10 +7787,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             }
@@ -7636,6 +7885,26 @@
           "masterName"
         ]
       },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
       "AddressInfo": {
         "type": "object",
         "properties": {
@@ -7649,26 +7918,6 @@
             "type": "string",
             "maxLength": 512,
             "minLength": 1
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "value"
-        ]
-      },
-      "SocialScurityNumberInfo": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "SOCIAL_SECURITY_NUMBER"
-            ]
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^[0-9]{6}-[0-9]{7}$"
           }
         },
         "nullable": false,
@@ -8136,10 +8385,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             }
@@ -8209,10 +8458,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             }
@@ -8496,7 +8745,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPost"
+            "$ref": "#/components/schemas/IPostRet"
           }
         },
         "nullable": false,
@@ -8504,23 +8753,19 @@
           "post"
         ]
       },
-      "IPost": {
+      "IPostRet": {
         "type": "object",
         "properties": {
+          "likeCount": {
+            "type": "number"
+          },
+          "userLiked": {
+            "type": "boolean"
+          },
           "id": {
             "$ref": "#/components/schemas/TId",
             "title": "ULID",
             "description": "ULID."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Post writer",
-            "description": "Post writer."
-          },
-          "viewCount": {
-            "type": "integer",
-            "title": "Post view count",
-            "description": "Post view count."
           },
           "status": {
             "type": "string",
@@ -8530,6 +8775,16 @@
             ],
             "title": "Post status",
             "description": "Post status."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "viewCount": {
+            "type": "integer",
+            "title": "Post view count",
+            "description": "Post view count."
           },
           "category": {
             "type": "string",
@@ -8542,10 +8797,10 @@
             "title": "Post category",
             "description": "Post category."
           },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Post writer",
+            "description": "Post writer."
           },
           "deletedAt": {
             "oneOf": [
@@ -8572,12 +8827,14 @@
         },
         "nullable": false,
         "required": [
+          "likeCount",
+          "userLiked",
           "id",
-          "userId",
-          "viewCount",
           "status",
-          "category",
           "createdAt",
+          "viewCount",
+          "category",
+          "userId",
           "deletedAt",
           "postSnapshots"
         ]
@@ -8667,7 +8924,7 @@
           "posts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IPost"
+              "$ref": "#/components/schemas/IPostRet"
             }
           },
           "nextPage": {
@@ -8708,7 +8965,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPost"
+            "$ref": "#/components/schemas/IPostRet"
           }
         },
         "nullable": false,
@@ -8769,12 +9026,35 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPost"
+            "$ref": "#/components/schemas/IPostRet"
           }
         },
         "nullable": false,
         "required": [
           "post"
+        ]
+      },
+      "CreatePostReportReqBody": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "INAPPROPRIATE",
+              "SPAM"
+            ],
+            "description": "Report Type"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Report Reason"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "reason"
         ]
       },
       "CreateCommentReqBody": {

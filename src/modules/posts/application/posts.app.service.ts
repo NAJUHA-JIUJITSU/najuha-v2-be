@@ -16,7 +16,6 @@ import {
   DeletePostReportParam,
 } from './posts.app.dto';
 import { assert } from 'typia';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { BusinessException, CommonErrors, PostsErrors } from 'src/common/response/errorResponse';
 import { IPost } from '../domain/interface/post.interface';
 import { UserRepository } from 'src/database/custom-repository/user.repository';
@@ -37,25 +36,24 @@ export class PostsAppService {
   ) {}
 
   async createPost({ postCreateDto }: CreatePostParam): Promise<CreatePostRet> {
-    assert<IUser>(
-      await this.userRepository.findOneOrFail({ where: { id: postCreateDto.userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
-    );
+    await this.userRepository.findOneOrFail({ where: { id: postCreateDto.userId } }).catch(() => {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+    });
     const newPost = new PostModel(this.postFactory.createPost(postCreateDto));
     return { post: await this.postRepository.save(newPost.toEntity()) };
   }
 
-  /** Find posts. todo!!! */
-  async findPosts({ page, limit }: FindPostsParam): Promise<FindPostsRet> {
+  // todo!!!: likecount, userLiked 속도 테스트 필요.
+  async findPosts({ userId, page, limit }: FindPostsParam): Promise<FindPostsRet> {
     const posts = assert<IPost[]>(
       await this.postRepository.find({
-        relations: ['likes', 'reports'],
+        where: { status: 'ACTIVE' },
+        relations: ['likes', 'postSnapshots'],
         order: { createdAt: 'DESC' },
         skip: page * limit,
         take: limit,
       }),
-    ).map((postEntity) => new PostModel(postEntity));
+    ).map((postEntity) => new PostModel(postEntity, userId));
     let ret: FindPostsRet = { posts: posts.map((post) => post.toEntity()) };
     if (posts.length === limit) {
       ret = { ...ret, nextPage: page + 1 };
@@ -63,17 +61,21 @@ export class PostsAppService {
     return ret;
   }
 
-  async getPost({ postId }: GetPostParam): Promise<GetPostRet> {
-    const postEntity = assert<IPost>(
-      await this.postRepository
-        .findOneOrFail({
-          where: { id: postId },
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
-        }),
+  async getPost({ userId, postId }: GetPostParam): Promise<GetPostRet> {
+    const post = new PostModel(
+      assert<IPost>(
+        await this.postRepository
+          .findOneOrFail({
+            where: { id: postId },
+            relations: ['likes', 'postSnapshots'],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
+          }),
+      ),
+      userId,
     );
-    return { post: postEntity };
+    return { post: post.toEntity() };
   }
 
   async updatePost({ userId, postUpdateDto }: UpdatePostParam): Promise<UpdatePostRet> {
@@ -95,15 +97,10 @@ export class PostsAppService {
   }
 
   async deletePost({ userId, postId }: DeletePostParam): Promise<void> {
-    const post = new PostModel(
-      assert<IPost>(
-        await this.postRepository.findOneOrFail({ where: { userId, id: postId } }).catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
-        }),
-      ),
-    );
-    post.delete();
-    await this.postRepository.save(post.toEntity());
+    const postEntity = await this.postRepository.findOneOrFail({ where: { userId, id: postId } }).catch(() => {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
+    });
+    await this.postRepository.softDelete(postEntity.id);
   }
 
   async createPostLike({ postLikeCreateDto }: CreatePostLikeParam): Promise<void> {
@@ -124,12 +121,10 @@ export class PostsAppService {
   }
 
   async deletePostLike({ userId, postId }: DeletePostLikeParam): Promise<void> {
-    const postLike = assert<IPostLike>(
-      await this.postLikeRepository.findOneOrFail({ where: { userId, postId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post like not found');
-      }),
-    );
-    await this.postLikeRepository.delete(postLike);
+    const postLikeEnitty = await this.postLikeRepository.findOneOrFail({ where: { userId, postId } }).catch(() => {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post like not found');
+    });
+    await this.postLikeRepository.delete(postLikeEnitty);
   }
 
   async createPostReport({ postReportCreateDto }: CreatePostReportParam): Promise<void> {
@@ -145,8 +140,8 @@ export class PostsAppService {
       where: { userId: postReportCreateDto.userId, postId: postReportCreateDto.postId },
     });
     if (postReport) throw new BusinessException(PostsErrors.POSTS_POST_REPORT_ALREADY_EXIST);
-    const ndwPostReport = this.postFactory.createPostReport(postReportCreateDto);
-    await this.portReportRepository.save(ndwPostReport);
+    const newPostReport = this.postFactory.createPostReport(postReportCreateDto);
+    await this.portReportRepository.save(newPostReport);
   }
 
   async deletePostReport({ userId, postId }: DeletePostReportParam): Promise<void> {

@@ -1,6 +1,7 @@
 import { CreateCommentReplyRet, CreateCommentRet, UpdateCommentRet } from '../application/comments.app.dto';
 import { CreatePostRet, FindPostsRet, GetPostRet, UpdatePostRet } from '../application/posts.app.dto';
 import { ICommentCreateDto, ICommentReplyCreateDto, ICommentUpdateDto } from '../domain/interface/comment.interface';
+import { IPostReportCreateDto } from '../domain/interface/post-report.interface';
 import { IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interface';
 
 // ---------------------------------------------------------------------------
@@ -14,6 +15,8 @@ export interface FindPostsQuery {
 }
 
 export interface UpdatePostReqBody extends Omit<IPostUpdateDto, 'postId'> {}
+
+export interface CreatePostReportReqBody extends Omit<IPostReportCreateDto, 'userId' | 'postId'> {}
 
 export interface CreateCommentReqBody extends Omit<ICommentCreateDto, 'userId' | 'postId'> {}
 

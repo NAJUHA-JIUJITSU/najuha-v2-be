@@ -20,6 +20,18 @@ export class PostReportEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IPostReport['id'];
 
+  /** 신고 타입. */
+  @Column('varchar', { length: 16 })
+  type!: IPostReport['type'];
+
+  /** 신고 상태. */
+  @Column('varchar', { length: 16, default: 'PENDING' })
+  status!: IPostReport['status'];
+
+  /** 신고 사유. */
+  @Column('varchar', { length: 100 })
+  reason!: IPostReport['reason'];
+
   /** 신고자 UserId. */
   @Column('uuid')
   userId!: IPostReport['userId'];
