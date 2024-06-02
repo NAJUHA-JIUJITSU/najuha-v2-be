@@ -369,9 +369,18 @@ export type POSTS_COMMENT_REPORT_ALREADY_EXIST = ErrorResponse & {
   result: '이미 신고한 댓글입니다.';
 };
 
+export type POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 8004;
+  type: 'POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED';
+  result: '대댓글의 대댓글은 생성할 수 없습니다.';
+};
+
 export const PostsErrors = {
   POSTS_POST_LIKE_ALREADY_EXIST: typia.random<POSTS_POST_LIKE_ALREADY_EXIST>(),
   POSTS_POST_REPORT_ALREADY_EXIST: typia.random<POSTS_POST_REPORT_ALREADY_EXIST>(),
   POSTS_COMMENT_LIKE_ALREADY_EXIST: typia.random<POSTS_COMMENT_LIKE_ALREADY_EXIST>(),
   POSTS_COMMENT_REPORT_ALREADY_EXIST: typia.random<POSTS_COMMENT_REPORT_ALREADY_EXIST>(),
+  POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED: typia.random<POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED>(),
 };

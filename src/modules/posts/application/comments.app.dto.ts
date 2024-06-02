@@ -1,12 +1,16 @@
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import {
+  IFindCommentsQueryOptions,
   IComment,
   ICommentCreateDto,
   ICommentReplyCreateDto,
+  ICommentRet,
   ICommentUpdateDto,
+  IFindCommentRepliesQueryOptions,
 } from '../domain/interface/comment.interface';
 import { ICommentLikeCreateDto } from '../domain/interface/comment-like.interface';
 import { ICommentReportCreateDto } from '../domain/interface/comment-report.interface';
+import { IPaginationParam, IPaginationRet } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // commentAppService Param
@@ -19,10 +23,9 @@ export interface CreateCommentReplyParam {
   commentReplyCreateDto: ICommentReplyCreateDto;
 }
 
-export interface FindCommentsParam {
-  page: number;
-  limit: number;
-}
+export interface FindCommentsParam extends IPaginationParam, IFindCommentsQueryOptions {}
+
+export interface FindCommentRepliesParam extends IPaginationParam, IFindCommentRepliesQueryOptions {}
 
 export interface UpdateCommentParam {
   userId: IUser['id'];
@@ -56,18 +59,17 @@ export interface DeleteCommentReportParam {
 // commentAppService Result
 // ---------------------------------------------------------------------------
 export interface CreateCommentRet {
-  comment: IComment;
+  comment: ICommentRet;
 }
 
 export interface CreateCommentReplyRet {
-  comment: IComment;
+  comment: ICommentRet;
 }
 
-export interface FindCommentsRet {
-  comments: IComment[];
-  nextPage?: number;
+export interface FindCommentsRet extends IPaginationRet {
+  comments: ICommentRet[];
 }
 
 export interface UpdateCommentRet {
-  comment: IComment;
+  comment: ICommentRet;
 }

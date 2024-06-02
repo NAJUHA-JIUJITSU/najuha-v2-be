@@ -2633,7 +2633,7 @@
             "name": "query",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/FindPostsQuery"
+              "$ref": "#/components/schemas/FindPostsReqQuery"
             },
             "description": "",
             "required": true
@@ -3202,6 +3202,75 @@
           }
         ],
         "x-nestia-method": "POST"
+      },
+      "get": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindCommentsReqQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindCommentsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-12 findComments",
+        "description": "u-7-12 findComments.\n- RoleLevel: USER.\n\n게시글의 댓글을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.posts.comment.findComments",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
       }
     },
     "/user/posts/{postId}/comment/{commentId}/reply": {
@@ -3264,7 +3333,7 @@
             "bearer": []
           }
         ],
-        "x-nestia-namespace": "user.posts.comment.reply.createPostCommentReply",
+        "x-nestia-namespace": "user.posts.comment.reply.createCommentReply",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -3286,6 +3355,77 @@
           }
         ],
         "x-nestia-method": "POST"
+      }
+    },
+    "/user/posts/comment/{commentId}/reply": {
+      "get": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindCommentRepliesReqQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindCommentsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-13 findCommentReplies",
+        "description": "u-7-13 findCommentReplies.\n- RoleLevel: USER.\n\n댓글의 대댓글을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.posts.comment.reply.findCommentReplies",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
       }
     },
     "/user/posts/comment/{commentId}": {
@@ -3330,8 +3470,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-7-12 updateComment",
-        "description": "u-7-12 updateComment.\n- RoleLevel: USER.\n\n기존 댓글을 수정합니다.",
+        "summary": "u-7-14 updateComment",
+        "description": "u-7-14 updateComment.\n- RoleLevel: USER.\n\n기존 댓글을 수정합니다.",
         "security": [
           {
             "bearer": []
@@ -3390,8 +3530,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-7-13 deleteComment",
-        "description": "u-7-13 deleteComment.\n- RoleLevel: USER.\n\n특정 댓글을 삭제합니다.",
+        "summary": "u-7-15 deleteComment",
+        "description": "u-7-15 deleteComment.\n- RoleLevel: USER.\n\n특정 댓글을 삭제합니다.",
         "security": [
           {
             "bearer": []
@@ -3452,8 +3592,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-7-14 createCommentLike",
-        "description": "u-7-14 createCommentLike.\n- RoleLevel: USER.\n\n댓글에 좋아요를 추가합니다.",
+        "summary": "u-7-16 createCommentLike",
+        "description": "u-7-16 createCommentLike.\n- RoleLevel: USER.\n\n댓글에 좋아요를 추가합니다.",
         "security": [
           {
             "bearer": []
@@ -3521,8 +3661,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-7-15 deleteCommentLike",
-        "description": "u-7-15 deleteCommentLike.\n- RoleLevel: USER.\n\n댓글에 대한 좋아요를 취소합니다.",
+        "summary": "u-7-17 deleteCommentLike",
+        "description": "u-7-17 deleteCommentLike.\n- RoleLevel: USER.\n\n댓글에 대한 좋아요를 취소합니다.",
         "security": [
           {
             "bearer": []
@@ -3603,8 +3743,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-7-16 createCommentReport",
-        "description": "u-7-16 createCommentReport.\n- RoleLevel: USER.\n\n댓글을 신고합니다.",
+        "summary": "u-7-18 createCommentReport",
+        "description": "u-7-18 createCommentReport.\n- RoleLevel: USER.\n\n댓글을 신고합니다.",
         "security": [
           {
             "bearer": []
@@ -3672,8 +3812,8 @@
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-7-17 deleteCommentReport",
-        "description": "u-7-17 deleteCommentReport.\n- RoleLevel: USER.\n\n댓글 신고를 취소합니다.",
+        "summary": "u-7-19 deleteCommentReport",
+        "description": "u-7-19 deleteCommentReport.\n- RoleLevel: USER.\n\n댓글 신고를 취소합니다.",
         "security": [
           {
             "bearer": []
@@ -8767,12 +8907,6 @@
       "IPostRet": {
         "type": "object",
         "properties": {
-          "likeCount": {
-            "type": "number"
-          },
-          "userLiked": {
-            "type": "boolean"
-          },
           "id": {
             "$ref": "#/components/schemas/TId",
             "title": "ULID",
@@ -8834,12 +8968,16 @@
             "items": {
               "$ref": "#/components/schemas/IPostSnapshot"
             }
+          },
+          "likeCount": {
+            "type": "number"
+          },
+          "userLiked": {
+            "type": "boolean"
           }
         },
         "nullable": false,
         "required": [
-          "likeCount",
-          "userLiked",
           "id",
           "status",
           "createdAt",
@@ -8847,7 +8985,9 @@
           "category",
           "userId",
           "deletedAt",
-          "postSnapshots"
+          "postSnapshots",
+          "likeCount",
+          "userLiked"
         ]
       },
       "IPostSnapshot": {
@@ -8892,17 +9032,23 @@
           "createdAt"
         ]
       },
-      "FindPostsQuery": {
+      "FindPostsReqQuery": {
         "type": "object",
         "properties": {
           "page": {
             "type": "integer",
-            "minimum": 0
+            "minimum": 0,
+            "default": 0,
+            "title": "Page number",
+            "description": "Page number."
           },
           "limit": {
             "type": "integer",
             "maximum": 30,
-            "minimum": 1
+            "minimum": 1,
+            "default": 10,
+            "title": "Number of items per page",
+            "description": "Number of items per page."
           }
         },
         "nullable": false
@@ -8942,7 +9088,9 @@
             }
           },
           "nextPage": {
-            "type": "number"
+            "type": "number",
+            "title": "Next page number",
+            "description": "Next page number.\n다음 페이지가 존재하지 않으면 undefined."
           }
         },
         "nullable": false,
@@ -9116,7 +9264,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/IComment"
+            "$ref": "#/components/schemas/ICommentRet"
           }
         },
         "nullable": false,
@@ -9124,23 +9272,13 @@
           "comment"
         ]
       },
-      "IComment": {
+      "ICommentRet": {
         "type": "object",
         "properties": {
           "id": {
             "$ref": "#/components/schemas/TId",
             "title": "ULID",
             "description": "ULID."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Comment writer",
-            "description": "Comment writer."
-          },
-          "parentId": {
-            "$ref": "#/components/schemas/TId.Nullable",
-            "title": "Comment parent",
-            "description": "Comment parent."
           },
           "status": {
             "type": "string",
@@ -9155,6 +9293,11 @@
             "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Comment writer",
+            "description": "Comment writer."
           },
           "deletedAt": {
             "oneOf": [
@@ -9172,8 +9315,21 @@
             "title": "DeletedAt",
             "description": "DeletedAt."
           },
+          "likeCount": {
+            "type": "number"
+          },
+          "userLiked": {
+            "type": "boolean"
+          },
           "postId": {
-            "$ref": "#/components/schemas/TId"
+            "$ref": "#/components/schemas/TId",
+            "title": "PostId",
+            "description": "PostId."
+          },
+          "parentId": {
+            "$ref": "#/components/schemas/TId.Nullable",
+            "title": "Comment parent",
+            "description": "Comment parent."
           },
           "commentSnapshots": {
             "type": "array",
@@ -9185,12 +9341,14 @@
         "nullable": false,
         "required": [
           "id",
-          "userId",
-          "parentId",
           "status",
           "createdAt",
+          "userId",
           "deletedAt",
+          "likeCount",
+          "userLiked",
           "postId",
+          "parentId",
           "commentSnapshots"
         ]
       },
@@ -9278,13 +9436,100 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/IComment"
+            "$ref": "#/components/schemas/ICommentRet"
           }
         },
         "nullable": false,
         "required": [
           "comment"
         ]
+      },
+      "FindCommentsReqQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "title": "Page number",
+            "description": "Page number."
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 30,
+            "minimum": 1,
+            "default": 10,
+            "title": "Number of items per page",
+            "description": "Number of items per page."
+          }
+        },
+        "nullable": false
+      },
+      "ResponseFormFindCommentsRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/FindCommentsRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
+      "FindCommentsRes": {
+        "type": "object",
+        "properties": {
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICommentRet"
+            }
+          },
+          "nextPage": {
+            "type": "number",
+            "title": "Next page number",
+            "description": "Next page number.\n다음 페이지가 존재하지 않으면 undefined."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "comments"
+        ]
+      },
+      "FindCommentRepliesReqQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "title": "Page number",
+            "description": "Page number."
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 30,
+            "minimum": 1,
+            "default": 10,
+            "title": "Number of items per page",
+            "description": "Number of items per page."
+          }
+        },
+        "nullable": false
       },
       "UpdateCommentReqBody": {
         "type": "object",
@@ -9331,7 +9576,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/IComment"
+            "$ref": "#/components/schemas/ICommentRet"
           }
         },
         "nullable": false,

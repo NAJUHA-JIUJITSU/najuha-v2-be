@@ -13,7 +13,10 @@ import {
   CreatePostReportReqBody,
   CreatePostReqBody,
   CreatePostRes,
-  FindPostsQuery,
+  FindCommentRepliesReqQuery,
+  FindCommentsReqQuery,
+  FindCommentsRes,
+  FindPostsReqQuery,
   FindPostsRes,
   GetPostRes,
   UpdateCommentReqBody,
@@ -31,6 +34,9 @@ export class UserPostsController {
     private readonly commentsAppService: CommentsAppService,
   ) {}
 
+  // ------------------------------------------------------------
+  // Post API
+  // ------------------------------------------------------------
   /**
    * u-7-1 createPost.
    * - RoleLevel: USER.
@@ -60,7 +66,7 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/')
-  async findPosts(@Req() req: Request, @TypedQuery() query: FindPostsQuery): Promise<ResponseForm<FindPostsRes>> {
+  async findPosts(@Req() req: Request, @TypedQuery() query: FindPostsReqQuery): Promise<ResponseForm<FindPostsRes>> {
     return createResponseForm(
       await this.postsAppService.findPosts({
         userId: req['userId'],
@@ -214,6 +220,9 @@ export class UserPostsController {
     );
   }
 
+  // ------------------------------------------------------------
+  // Comment API
+  // ------------------------------------------------------------
   /**
    * u-7-10 createComment.
    * - RoleLevel: USER.
@@ -248,7 +257,7 @@ export class UserPostsController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/:postId/comment/:commentId/reply')
-  async createPostCommentReply(
+  async createCommentReply(
     @TypedParam('postId') postId: IPost['id'],
     @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
@@ -267,7 +276,59 @@ export class UserPostsController {
   }
 
   /**
-   * u-7-12 updateComment.
+   * u-7-12 findComments.
+   * - RoleLevel: USER.
+   *
+   * 게시글의 댓글을 조회합니다.
+   *
+   * @tag u-7 posts
+   * @security bearer
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Get('/:postId/comment')
+  async findComments(
+    @Req() req: Request,
+    @TypedParam('postId') postId: IPost['id'],
+    @TypedQuery() query: FindCommentsReqQuery,
+  ): Promise<ResponseForm<FindCommentsRes>> {
+    return createResponseForm(
+      await this.commentsAppService.findComments({
+        postId,
+        userId: req['userId'],
+        page: query.page || 0,
+        limit: query.limit || 10,
+      }),
+    );
+  }
+
+  /**
+   * u-7-13 findCommentReplies.
+   * - RoleLevel: USER.
+   *
+   * 댓글의 대댓글을 조회합니다.
+   *
+   * @tag u-7 posts
+   * @security bearer
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Get('/comment/:commentId/reply')
+  async findCommentReplies(
+    @Req() req: Request,
+    @TypedParam('commentId') commentId: IComment['id'],
+    @TypedQuery() query: FindCommentRepliesReqQuery,
+  ): Promise<ResponseForm<FindCommentsRes>> {
+    return createResponseForm(
+      await this.commentsAppService.findCommentReplies({
+        userId: req['userId'],
+        parentId: commentId,
+        page: query.page || 0,
+        limit: query.limit || 10,
+      }),
+    );
+  }
+
+  /**
+   * u-7-14 updateComment.
    * - RoleLevel: USER.
    *
    * 기존 댓글을 수정합니다.
@@ -291,7 +352,7 @@ export class UserPostsController {
   }
 
   /**
-   * u-7-13 deleteComment.
+   * u-7-15 deleteComment.
    * - RoleLevel: USER.
    *
    * 특정 댓글을 삭제합니다.
@@ -314,7 +375,7 @@ export class UserPostsController {
   }
 
   /**
-   * u-7-14 createCommentLike.
+   * u-7-16 createCommentLike.
    * - RoleLevel: USER.
    *
    * 댓글에 좋아요를 추가합니다.
@@ -337,7 +398,7 @@ export class UserPostsController {
   }
 
   /**
-   * u-7-15 deleteCommentLike.
+   * u-7-17 deleteCommentLike.
    * - RoleLevel: USER.
    *
    * 댓글에 대한 좋아요를 취소합니다.
@@ -361,7 +422,7 @@ export class UserPostsController {
   }
 
   /**
-   * u-7-16 createCommentReport.
+   * u-7-18 createCommentReport.
    * - RoleLevel: USER.
    *
    * 댓글을 신고합니다.
@@ -385,7 +446,7 @@ export class UserPostsController {
   }
 
   /**
-   * u-7-17 deleteCommentReport.
+   * u-7-19 deleteCommentReport.
    * - RoleLevel: USER.
    *
    * 댓글 신고를 취소합니다.

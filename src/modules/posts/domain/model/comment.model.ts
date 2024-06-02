@@ -1,17 +1,25 @@
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ICommentLike } from '../interface/comment-like.interface';
+import { ICommentReport } from '../interface/comment-report.interface';
 import { ICommentSnapshot } from '../interface/comment-snapshot.interface';
 import { IComment } from '../interface/comment.interface';
+import { BusinessException, PostsErrors } from 'src/common/response/errorResponse';
 
 export class CommentModel {
-  public readonly id: IComment['id'];
-  public readonly userId: IComment['userId'];
-  public readonly parentId: IComment['parentId'];
-  public readonly status: IComment['status'];
-  public readonly createdAt: IComment['createdAt'];
-  public deletedAt: IComment['deletedAt'];
-  public readonly postId: IComment['postId'];
-  public readonly commentSnapshots: ICommentSnapshot[];
+  private readonly id: IComment['id'];
+  private readonly userId: IComment['userId'];
+  private readonly parentId: IComment['parentId'];
+  private readonly createdAt: IComment['createdAt'];
+  private readonly postId: IComment['postId'];
+  private readonly commentSnapshots: ICommentSnapshot[];
+  private readonly likes: ICommentLike[];
+  private readonly reports: ICommentReport[];
+  private deletedAt: IComment['deletedAt'];
+  private status: IComment['status'];
+  private likeCount: number;
+  private userLiked: boolean;
 
-  constructor(entity: IComment) {
+  constructor(entity: IComment, userId?: IUser['id']) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.parentId = entity.parentId;
@@ -20,9 +28,13 @@ export class CommentModel {
     this.deletedAt = entity.deletedAt;
     this.postId = entity.postId;
     this.commentSnapshots = entity.commentSnapshots;
+    this.likes = entity.likes || [];
+    this.reports = entity.reports || [];
+    this.likeCount = this.likes.length;
+    this.userLiked = this.likes.some((like) => like.userId === userId);
   }
 
-  toEntity(): IComment {
+  toEntity() {
     return {
       id: this.id,
       userId: this.userId,
@@ -32,6 +44,10 @@ export class CommentModel {
       deletedAt: this.deletedAt,
       postId: this.postId,
       commentSnapshots: this.commentSnapshots,
+      likes: this.likes,
+      reports: this.reports,
+      likeCount: this.likeCount,
+      userLiked: this.userLiked,
     };
   }
 
@@ -41,5 +57,19 @@ export class CommentModel {
 
   delete(): void {
     this.deletedAt = new Date();
+  }
+
+  addCommentReport(report: ICommentReport): void {
+    this.validateReportAlreadyExist(report.userId);
+    this.reports.push(report);
+    if (this.reports.filter((report) => report.status === 'PENDING').length >= 10) {
+      this.status = 'INACTIVE';
+    }
+  }
+
+  private validateReportAlreadyExist(userId: IUser['id']): void {
+    if (this.reports.some((report) => report.userId === userId)) {
+      throw new BusinessException(PostsErrors.POSTS_COMMENT_REPORT_ALREADY_EXIST);
+    }
   }
 }

@@ -27,12 +27,6 @@ erDiagram
     text content
     timestamptz createdAt
   }
-  policy_consent {
-    uuid id PK
-    timestamptz createdAt
-    uuid userId FK
-    uuid policyId FK
-  }
   user {
     uuid id PK
     varchar role
@@ -49,6 +43,12 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
+  }
+  policy_consent {
+    uuid id PK
+    timestamptz createdAt
+    uuid userId FK
+    uuid policyId FK
   }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
@@ -68,19 +68,6 @@ Policy Entity
   - `title`
   - `content`
   - `createdAt`
-
-
-### `policy_consent`
-
-PolicyConsent Entity   
-@namespace User
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `userId`
-  - `policyId`: - policyId.
 
 
 ### `user`
@@ -105,6 +92,19 @@ User Entity
   - `status`
   - `createdAt`
   - `updatedAt`
+
+
+### `policy_consent`
+
+PolicyConsent Entity   
+@namespace User
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `userId`
+  - `policyId`: - policyId.
 
 
 ## Application
@@ -551,6 +551,9 @@ erDiagram
   }
   post_report {
     uuid id PK
+    varchar type
+    varchar status
+    varchar reason
     uuid userId FK
     timestamptz createdAt
     uuid postId FK
@@ -566,6 +569,9 @@ erDiagram
   }
   comment_report {
     uuid id PK
+    varchar type
+    varchar status
+    varchar reason
     uuid userId FK
     timestamptz createdAt
     uuid commentId FK
@@ -649,6 +655,9 @@ PostReport.
 **Properties**
 
   - `id`: UUID v7.
+  - `type`: 신고 타입.
+  - `status`: 신고 상태.
+  - `reason`: 신고 사유.
   - `userId`: 신고자 UserId.
   - `createdAt`: 신고일자.
   - `postId`: 신고된 게시글의 Id.
@@ -696,6 +705,9 @@ CommentReport.
 **Properties**
 
   - `id`: UUID v7.
+  - `type`: 신고 타입.
+  - `status`: 신고 상태.
+  - `reason`: 신고 사유.
   - `userId`: 신고자 UserId.
   - `createdAt`: 신고일자.
   - `commentId`: 신고된 댓글의 Id.

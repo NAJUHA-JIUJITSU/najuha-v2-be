@@ -1,7 +1,14 @@
-import { IPost, IPostCreateDto, IPostRet, IPostUpdateDto } from '../domain/interface/post.interface';
+import {
+  IFindPostsQueryOptions,
+  IPost,
+  IPostCreateDto,
+  IPostRet,
+  IPostUpdateDto,
+} from '../domain/interface/post.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IPostLikeCreateDto } from '../domain/interface/post-like.interface';
 import { IPostReport, IPostReportCreateDto } from '../domain/interface/post-report.interface';
+import { IPaginationRet, IPaginationParam } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // postAppService Param
@@ -9,12 +16,7 @@ import { IPostReport, IPostReportCreateDto } from '../domain/interface/post-repo
 export interface CreatePostParam {
   postCreateDto: IPostCreateDto;
 }
-
-export interface FindPostsParam {
-  userId?: IUser['id'];
-  page: number;
-  limit: number;
-}
+export interface FindPostsParam extends IPaginationParam, IFindPostsQueryOptions {}
 
 export interface GetPostParam {
   userId: IUser['id'];
@@ -60,9 +62,8 @@ export interface GetPostRet {
   post: IPostRet;
 }
 
-export interface FindPostsRet {
+export interface FindPostsRet extends IPaginationRet {
   posts: IPostRet[];
-  nextPage?: number;
 }
 
 export interface UpdatePostRet {

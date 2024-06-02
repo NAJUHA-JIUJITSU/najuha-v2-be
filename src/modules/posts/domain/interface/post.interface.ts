@@ -58,3 +58,11 @@ export interface IPostRet
 export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'>, Pick<IPostSnapshot, 'title' | 'body'> {}
 
 export interface IPostUpdateDto extends Pick<IPostSnapshot, 'postId' | 'title' | 'body'> {}
+
+export interface IFindPostsQueryOptions {
+  /**
+   * User ID.
+   * 좋아요 여부를 판단하기 위해 사용됩니다.
+   */
+  userId?: IUser['id'];
+}

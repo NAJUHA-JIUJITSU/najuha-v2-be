@@ -77,7 +77,7 @@ export class CommentEntity {
   commentSnapshots!: CommentSnapshotEntity[];
 
   /** 대댓글 목록. */
-  @OneToMany(() => CommentEntity, (comment) => comment.replies)
+  @OneToMany(() => CommentEntity, (comment) => comment.parent)
   replies!: CommentEntity[];
 
   /**
@@ -92,7 +92,7 @@ export class CommentEntity {
   parent!: CommentEntity;
 
   /** 댓글 신고 목록. */
-  @OneToMany(() => CommentReportEntity, (report) => report.comment)
+  @OneToMany(() => CommentReportEntity, (report) => report.comment, { cascade: true })
   reports!: CommentReportEntity[];
 
   /** 게시글. */
