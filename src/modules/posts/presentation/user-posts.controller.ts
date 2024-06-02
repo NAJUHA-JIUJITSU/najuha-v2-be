@@ -64,8 +64,8 @@ export class UserPostsController {
     return createResponseForm(
       await this.postsAppService.findPosts({
         userId: req['userId'],
-        page: query.page ?? 0,
-        limit: query.limit ?? 10,
+        page: query.page || 0,
+        limit: query.limit || 10,
       }),
     );
   }

@@ -14,7 +14,7 @@ import { UserEntity } from '../user/user.entity';
  * @namespace Post
  */
 @Entity('post_report')
-@Unique('UQ_POST_REPORT', ['postId', 'userId'])
+// @Unique('UQ_POST_REPORT', ['postId', 'userId'])
 export class PostReportEntity {
   /** UUID v7. */
   @PrimaryColumn('uuid', { default: uuidv7() })

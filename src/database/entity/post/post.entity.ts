@@ -79,7 +79,7 @@ export class PostEntity {
   likes!: PostLikeEntity[];
 
   /** 게시글 신고 목록. */
-  @OneToMany(() => PostReportEntity, (report) => report.post)
+  @OneToMany(() => PostReportEntity, (report) => report.post, { cascade: true })
   reports!: PostReportEntity[];
 
   /** 게시글 댓글 목록. */

@@ -31,17 +31,29 @@ export interface IPost {
 
   likes?: IPostLike[];
 
-  postReports?: IPostReport[];
+  likeCount?: number;
+
+  userLiked?: boolean;
+
+  reports?: IPostReport[];
 }
 
 export interface IPostRet
-  extends Pick<
-    IPost,
-    'id' | 'userId' | 'viewCount' | 'status' | 'category' | 'createdAt' | 'deletedAt' | 'postSnapshots'
-  > {
-  likeCount: number;
-  userLiked: boolean;
-}
+  extends Required<
+    Pick<
+      IPost,
+      | 'id'
+      | 'userId'
+      | 'viewCount'
+      | 'status'
+      | 'category'
+      | 'createdAt'
+      | 'deletedAt'
+      | 'postSnapshots'
+      | 'likeCount'
+      | 'userLiked'
+    >
+  > {}
 
 export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'>, Pick<IPostSnapshot, 'title' | 'body'> {}
 

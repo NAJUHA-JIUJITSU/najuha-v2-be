@@ -3579,6 +3579,17 @@
             "required": true
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentReportReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
         "responses": {
           "201": {
             "description": "void",
@@ -7787,10 +7798,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             }
@@ -7885,26 +7896,6 @@
           "masterName"
         ]
       },
-      "SocialScurityNumberInfo": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "SOCIAL_SECURITY_NUMBER"
-            ]
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^[0-9]{6}-[0-9]{7}$"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "value"
-        ]
-      },
       "AddressInfo": {
         "type": "object",
         "properties": {
@@ -7918,6 +7909,26 @@
             "type": "string",
             "maxLength": 512,
             "minLength": 1
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
           }
         },
         "nullable": false,
@@ -8385,10 +8396,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             }
@@ -8458,10 +8469,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             }
@@ -8885,10 +8896,13 @@
         "type": "object",
         "properties": {
           "page": {
-            "type": "number"
+            "type": "integer",
+            "minimum": 0
           },
           "limit": {
-            "type": "number"
+            "type": "integer",
+            "maximum": 30,
+            "minimum": 1
           }
         },
         "nullable": false
@@ -9323,6 +9337,29 @@
         "nullable": false,
         "required": [
           "comment"
+        ]
+      },
+      "CreateCommentReportReqBody": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "INAPPROPRIATE",
+              "SPAM"
+            ],
+            "description": "Report Type"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Report Reason"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "reason"
         ]
       }
     },

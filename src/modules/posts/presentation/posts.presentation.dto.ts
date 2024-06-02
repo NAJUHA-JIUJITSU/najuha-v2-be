@@ -1,3 +1,4 @@
+import { tags } from 'typia';
 import { CreateCommentReplyRet, CreateCommentRet, UpdateCommentRet } from '../application/comments.app.dto';
 import { CreatePostRet, FindPostsRet, GetPostRet, UpdatePostRet } from '../application/posts.app.dto';
 import { ICommentReportCreateDto } from '../domain/interface/comment-report.interface';
@@ -11,8 +12,8 @@ import { IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interfa
 export interface CreatePostReqBody extends Omit<IPostCreateDto, 'userId'> {}
 
 export interface FindPostsQuery {
-  page?: number;
-  limit?: number;
+  page?: number & tags.Type<'uint32'> & tags.Minimum<0>;
+  limit?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<30>;
 }
 
 export interface UpdatePostReqBody extends Omit<IPostUpdateDto, 'postId'> {}

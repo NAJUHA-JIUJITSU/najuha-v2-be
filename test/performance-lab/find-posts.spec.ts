@@ -5,6 +5,7 @@ import { CreatePostReqBody } from 'src/modules/posts/presentation/posts.presenta
 const host = 'http://localhost:3001';
 const accessToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMThmN2QzNC1jZmMzLTc4MjEtOGJiNC1iNGI1NjE3OWVmY2QiLCJ1c2VyUm9sZSI6IkFETUlOIiwiaWF0IjoxNzE3MjU1MDY5LCJleHAiOjE3MzAyMTUwNjl9.Romr3tia2V55hxZTPrfgA41h-VKZCp4ZRgG9zBgNYsQ';
+
 const connection = {
   host,
   headers: {
