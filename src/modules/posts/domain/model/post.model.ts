@@ -60,7 +60,7 @@ export class PostModel {
   }
 
   addPostReport(report: IPostReport): void {
-    // this.validateReportAleadyExist(report.userId);
+    this.validateReportAleadyExist(report.userId);
     this.reports.push(report);
     if (this.reports.filter((report) => report.status === 'PENDING').length >= 10) {
       this.status = 'INACTIVE';
