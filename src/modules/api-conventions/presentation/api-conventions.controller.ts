@@ -1,16 +1,20 @@
 import { TypedException, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
+import appEnv from 'src/common/app-env';
 import {
   AUTH_ACCESS_TOKEN_MISSING,
   AUTH_ACCESS_TOKEN_UNAUTHORIZED,
   AUTH_LEVEL_FORBIDDEN,
 } from 'src/common/response/errorResponse';
+import { RoleLevel, RoleLevels } from 'src/infrastructure/guard/role.guard';
+import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
 
 /**
  * api conventions 에 대한 설명을 위한 코드입니다. (동작하지 않습니다)
  */
 @Controller('api-conventions')
 export class ApiConventionsController {
+  constructor(private readonly AuthTokenDomainService: AuthTokenDomainService) {}
   /**
    * 1 auth guard.
    * - Role Based Access Control (RBAC) 에 따라 권한이 없을 때 에러
@@ -70,5 +74,22 @@ export class ApiConventionsController {
   @TypedRoute.Get('update')
   update() {
     return;
+  }
+
+  /**
+   * 5 createAdminAccessToken.
+   * - 관리자용 accessToken 생성
+   *
+   * @tag api-conventions
+   */
+  @RoleLevels(RoleLevel.PUBLIC)
+  @TypedRoute.Get('create-admin-access-token')
+  async createAdminAccessToken() {
+    appEnv.adminCredentials.forEach(async (adminCredential) => {
+      console.log(
+        `${adminCredential.name} AuthTokens:`,
+        await this.AuthTokenDomainService.createAuthTokens({ userId: adminCredential.id, userRole: 'ADMIN' }),
+      );
+    });
   }
 }

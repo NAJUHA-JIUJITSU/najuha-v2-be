@@ -161,6 +161,35 @@
         "x-nestia-method": "GET"
       }
     },
+    "/api-conventions/create-admin-access-token": {
+      "get": {
+        "tags": [
+          "api-conventions"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "5 createAdminAccessToken",
+        "description": "5 createAdminAccessToken.\n- 관리자용 accessToken 생성",
+        "x-nestia-namespace": "api-conventions.create-admin-access-token.createAdminAccessToken",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "api-conventions",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
     "/user/auth/sns-login": {
       "post": {
         "tags": [
