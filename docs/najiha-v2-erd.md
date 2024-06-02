@@ -655,8 +655,15 @@ PostReport.
 **Properties**
 
   - `id`: UUID v7.
-  - `type`: 신고 타입.
-  - `status`: 신고 상태.
+  - `type`
+    > 신고 타입.
+    > - `INAPPROPRIATE`: 부적절한 내용.
+    > - `SPAM`: 스팸.
+  - `status`
+    > 신고 상태.
+    > `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
+    > - `ACCEPTED`: 신고 승인.
+    > - `REJECTED`: 신고 거부.
   - `reason`: 신고 사유.
   - `userId`: 신고자 UserId.
   - `createdAt`: 신고일자.
@@ -705,8 +712,15 @@ CommentReport.
 **Properties**
 
   - `id`: UUID v7.
-  - `type`: 신고 타입.
-  - `status`: 신고 상태.
+  - `type`
+    > 신고 타입.
+    > - `INAPPROPRIATE`: 부적절한 내용.
+    > - `SPAM`: 스팸.
+  - `status`
+    > 신고 상태.
+    > `ACCEPTED`상태의 신고가 10회 이상이면 해당 댓글이 `INACTIVE` 상태로 변경됩니다.
+    > - `ACCEPTED`: 신고 승인.
+    > - `REJECTED`: 신고 거부.
   - `reason`: 신고 사유.
   - `userId`: 신고자 UserId.
   - `createdAt`: 신고일자.
@@ -732,8 +746,8 @@ CommentSnapshot.
 
 ### `comment`
 
-Comment.   
-댓글을 식별하는 최상위 엔티티로서 개별 댓글의 메타데이터를 담고 있습니다.   
+Comment, CommentRpely.   
+댓글 or 대댓글을 식별하는 최상위 엔티티로서 개별 댓글의 메타데이터를 담고 있습니다.   
    
 댓글의 내용(body) `comment`에 존재하지 않고, `comment_snapshot`에 저장되어 있습니다.   
 `comment`와 `comment_snapshot`는 1:N 관계로 연결되어 있는데, 이는 댓글이 수정될때마다 새로운 스냅샷 레코드가 생성되기 때문입니다.   
@@ -749,7 +763,10 @@ Comment.
 
   - `id`: UUID v7.
   - `userId`: 댓글 작성자 UserId.
-  - `parentId`: 부모 댓글 Id.
+  - `parentId`
+    > 부모 댓글 Id.
+    > - 댓글의 경우 `null`을 저장합니다.
+    > - 대댓글의 경우 부모 댓글의 `id`를 저장합니다.
   - `status`
     > 댓글 상태. default: `ACTIVE`.
     > - `ACTIVE`: 유저에게 노출.
