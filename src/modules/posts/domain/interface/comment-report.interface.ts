@@ -11,7 +11,7 @@ export interface ICommentReport {
   type: 'INAPPROPRIATE' | 'SPAM';
 
   /** Report Status */
-  status: 'PENDING' | 'REJECTED' | 'ACCEPTED';
+  status: 'ACCEPTED' | 'REJECTED';
 
   /** Report Reason */
   reason: string & tags.MaxLength<100>;

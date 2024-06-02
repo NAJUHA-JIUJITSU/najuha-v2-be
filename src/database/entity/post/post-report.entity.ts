@@ -20,12 +20,21 @@ export class PostReportEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IPostReport['id'];
 
-  /** 신고 타입. */
+  /**
+   * 신고 타입.
+   * - `INAPPROPRIATE`: 부적절한 내용.
+   * - `SPAM`: 스팸.
+   */
   @Column('varchar', { length: 16 })
   type!: IPostReport['type'];
 
-  /** 신고 상태. */
-  @Column('varchar', { length: 16, default: 'PENDING' })
+  /**
+   * 신고 상태.
+   * `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
+   * - `ACCEPTED`: 신고 승인.
+   * - `REJECTED`: 신고 거부.
+   */
+  @Column('varchar', { length: 16, default: 'ACCEPTED' })
   status!: IPostReport['status'];
 
   /** 신고 사유. */

@@ -45,7 +45,7 @@ export class PostFactory {
     return {
       id: uuidv7(),
       type,
-      status: 'PENDING',
+      status: 'ACCEPTED',
       reason,
       userId,
       postId,

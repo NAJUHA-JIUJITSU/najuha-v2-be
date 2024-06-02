@@ -59,7 +59,7 @@ export class CommentFactory {
     return {
       id: uuidv7(),
       type,
-      status: 'PENDING',
+      status: 'ACCEPTED',
       reason,
       commentId,
       userId,

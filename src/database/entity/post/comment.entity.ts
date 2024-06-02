@@ -40,7 +40,11 @@ export class CommentEntity {
   @Column('uuid')
   userId!: IComment['userId'];
 
-  /** 부모 댓글 Id. */
+  /**
+   * 부모 댓글 Id.
+   * - 댓글의 경우 `null`을 저장합니다.
+   * - 대댓글의 경우 부모 댓글의 `id`를 저장합니다.
+   */
   @Column('uuid', { nullable: true })
   parentId!: IComment['parentId'] | null;
 
