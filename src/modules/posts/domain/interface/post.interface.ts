@@ -16,10 +16,10 @@ export interface IPost {
   viewCount: number & tags.Type<'uint32'>;
 
   /** Post status. */
-  status: 'ACTIVE' | 'INACTIVE';
+  status: TPostStatus;
 
   /** Post category. */
-  category: 'FREE' | 'COMPETITION' | 'SEMINAR' | 'OPEN_MAT';
+  category: TPostCategory;
 
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
@@ -32,6 +32,8 @@ export interface IPost {
   likes?: IPostLike[];
 
   likeCount?: number;
+
+  commentCount?: number;
 
   userLiked?: boolean;
 
@@ -51,6 +53,7 @@ export interface IPostRet
       | 'deletedAt'
       | 'postSnapshots'
       | 'likeCount'
+      | 'commentCount'
       | 'userLiked'
     >
   > {}
@@ -65,4 +68,25 @@ export interface IFindPostsQueryOptions {
    * 좋아요 여부를 판단하기 위해 사용됩니다.
    */
   userId?: IUser['id'];
+
+  /**
+   * 카테고리 옵션.
+   * - POPULAR: 인기 게시판, 좋아요 수가 10개 이상인 게시물만 조회.
+   * - FREE: 자유 게시판.
+   * - COMPETITION: 대회 게시판.
+   * - SEMINAR: 세미나 게시판.
+   * - OPEN_MAT: 오픈 매트 게시판.
+   */
+  categoryFilters?: (TPostCategory | 'POPULAR')[];
+
+  /**
+   *  정렬 옵션.
+   * - 최신순: 최신 게시물이 위로 올라오는 순서.
+   * - 조회순: 조회수가 높은 게시물이 위로 올라오는 순서.
+   */
+  sortOption: '최신순' | '조회순';
 }
+
+type TPostStatus = 'ACTIVE' | 'INACTIVE';
+
+type TPostCategory = 'FREE' | 'COMPETITION' | 'SEMINAR' | 'OPEN_MAT';

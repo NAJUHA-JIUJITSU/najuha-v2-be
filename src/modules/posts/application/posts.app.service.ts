@@ -43,38 +43,19 @@ export class PostsAppService {
     return { post: await this.postRepository.save(newPost.toEntity()) };
   }
 
-  // todo!!!: likecount, userLiked 속도 테스트 필요.
-  async findPosts({ userId, page, limit }: FindPostsParam): Promise<FindPostsRet> {
-    const posts = assert<IPost[]>(
-      await this.postRepository.find({
-        where: { status: 'ACTIVE' },
-        relations: ['postSnapshots', 'likes'],
-        order: { createdAt: 'DESC' },
-        skip: page * limit,
-        take: limit,
-      }),
-    ).map((postEntity) => new PostModel(postEntity, userId));
+  async findPosts(query: FindPostsParam): Promise<FindPostsRet> {
+    const posts = assert<IPost[]>(await this.postRepository.findPosts(query)).map(
+      (postEntity) => new PostModel(postEntity),
+    );
     let ret: FindPostsRet = { posts: posts.map((post) => post.toEntity()) };
-    if (posts.length === limit) {
-      ret = { ...ret, nextPage: page + 1 };
+    if (posts.length === query.limit) {
+      ret = { ...ret, nextPage: query.page + 1 };
     }
     return ret;
   }
 
   async getPost({ userId, postId }: GetPostParam): Promise<GetPostRet> {
-    const post = new PostModel(
-      assert<IPost>(
-        await this.postRepository
-          .findOneOrFail({
-            where: { id: postId, status: 'ACTIVE' },
-            relations: ['postSnapshots', 'likes'],
-          })
-          .catch(() => {
-            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
-          }),
-      ),
-      userId,
-    );
+    const post = new PostModel(assert<IPost>(await this.postRepository.getPostById(postId, userId)));
     return { post: post.toEntity() };
   }
 

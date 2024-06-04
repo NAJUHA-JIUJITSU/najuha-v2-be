@@ -1076,8 +1076,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "policy id",
             "required": true
@@ -1331,8 +1330,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1497,8 +1495,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1552,8 +1549,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1620,8 +1616,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1688,8 +1683,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1756,8 +1750,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1824,8 +1817,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1892,8 +1884,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1960,8 +1951,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -1971,8 +1961,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2037,8 +2026,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2048,8 +2036,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2160,8 +2147,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2326,8 +2312,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2381,8 +2366,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2438,8 +2422,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2506,8 +2489,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2574,8 +2556,7 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "description": "",
             "required": true
@@ -2627,6 +2608,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "CreatePostReqBody 게시글 작성 요청 본문",
           "content": {
             "application/json": {
               "schema": {
@@ -2639,7 +2621,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "CreatePostRes 게시글 작성 응답",
             "content": {
               "application/json": {
                 "schema": {
@@ -2651,7 +2633,7 @@
           }
         },
         "summary": "u-7-1 createPost",
-        "description": "u-7-1 createPost.\n- RoleLevel: USER.\n\n새로운 게시글을 작성합니다.",
+        "description": "u-7-1 createPost.\n- RoleLevel: USER.\n- 새로운 게시글을 작성합니다.",
         "security": [
           {
             "bearer": []
@@ -2676,6 +2658,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreatePostReqBody 게시글 작성 요청 본문",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CreatePostRes 게시글 작성 응답",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "POST"
@@ -2691,13 +2716,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindPostsReqQuery"
             },
-            "description": "",
+            "description": "FindPostsReqQuery 게시글 조회 쿼리",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "FindPostsRes 게시글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -2709,7 +2734,7 @@
           }
         },
         "summary": "u-7-2 findPosts",
-        "description": "u-7-2 findPosts.\n- RoleLevel: USER.\n\n여러 게시글을 조회합니다.\n필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-2 findPosts.\n- RoleLevel: USER.\n- 여러 게시글을 조회합니다.\n- ACTIVE 상태인 게시글들만 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -2734,6 +2759,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "FindPostsReqQuery 게시글 조회 쿼리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "FindPostsRes 게시글 조회 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "GET"
@@ -2750,16 +2818,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "GetPostRes 게시글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -2771,7 +2838,7 @@
           }
         },
         "summary": "u-7-3 getPost",
-        "description": "u-7-3 getPost.\n- RoleLevel: USER.\n\n특정 게시글을 조회합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-3 getPost.\n- RoleLevel: USER.\n- 특정 게시글을 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -2796,6 +2863,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "GetPostRes 게시글 조회 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "GET"
@@ -2810,14 +2920,14 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "UpdatePostReqBody 게시글 수정 요청 본문",
           "content": {
             "application/json": {
               "schema": {
@@ -2830,7 +2940,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "UpdatePostRes 게시글 수정 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -2842,7 +2952,7 @@
           }
         },
         "summary": "u-7-4 updatePost",
-        "description": "u-7-4 updatePost.\n- RoleLevel: USER.\n\n본인이 작성한 게시글을 수정합니다.",
+        "description": "u-7-4 updatePost.\n- RoleLevel: USER.\n- 본인이 작성한 게시글을 수정합니다.",
         "security": [
           {
             "bearer": []
@@ -2867,6 +2977,66 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdatePostReqBody 게시글 수정 요청 본문",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "UpdatePostRes 게시글 수정 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "PATCH"
@@ -2881,16 +3051,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "void 게시글 삭제 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -2902,7 +3071,7 @@
           }
         },
         "summary": "u-7-5 deletePost",
-        "description": "u-7-5 deletePost.\n- RoleLevel: USER.\n\n본인이 작성한 게시글을 삭제합니다.",
+        "description": "u-7-5 deletePost.\n- RoleLevel: USER.\n- 본인이 작성한 게시글을 삭제합니다.",
         "security": [
           {
             "bearer": []
@@ -2927,6 +3096,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void 게시글 삭제 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "DELETE"
@@ -2943,16 +3155,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "responses": {
           "201": {
-            "description": "",
+            "description": "void 좋아요 추가 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -2964,7 +3175,7 @@
           }
         },
         "summary": "u-7-6 createPostLike",
-        "description": "u-7-6 createPostLike.\n- RoleLevel: USER.\n\n게시글에 좋아요를 추가합니다.\n동일한 게시물에 중복으로 좋아요를 누를 수 없습니다.",
+        "description": "u-7-6 createPostLike.\n- RoleLevel: USER.\n- 게시글에 좋아요를 추가합니다.\n- 동일한 게시물에 중복으로 좋아요를 누를 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -2989,6 +3200,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void 좋아요 추가 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "POST"
@@ -3003,16 +3257,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "void 좋아요 취소 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3024,7 +3277,7 @@
           }
         },
         "summary": "u-7-7 deletePostLike",
-        "description": "u-7-7 deletePostLike.\n- RoleLevel: USER.\n\n게시글에 대한 좋아요를 취소합니다.",
+        "description": "u-7-7 deletePostLike.\n- RoleLevel: USER.\n- 게시글에 대한 좋아요를 취소합니다.",
         "security": [
           {
             "bearer": []
@@ -3049,6 +3302,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void 좋아요 취소 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "DELETE"
@@ -3065,14 +3361,14 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreatePostReportReqBody 게시글 신고 요청 본문",
           "content": {
             "application/json": {
               "schema": {
@@ -3085,7 +3381,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "void 게시글 신고 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3097,7 +3393,7 @@
           }
         },
         "summary": "u-7-8 createPostReport",
-        "description": "u-7-8 createPostReport.\n- RoleLevel: USER.\n\n게시글을 신고합니다.\n동일한 게시물에 중복으로 신고를 할 수 없습니다.",
+        "description": "u-7-8 createPostReport.\n- RoleLevel: USER.\n- 게시글을 신고합니다.\n- 동일한 게시물에 중복으로 신고를 할 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -3122,6 +3418,66 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreatePostReportReqBody 게시글 신고 요청 본문",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void 게시글 신고 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "POST"
@@ -3136,16 +3492,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "void 게시글 신고 취소 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3157,7 +3512,7 @@
           }
         },
         "summary": "u-7-9 deletePostReport",
-        "description": "u-7-9 deletePostReport.\n- RoleLevel: USER.\n\n게시글 신고를 취소합니다.",
+        "description": "u-7-9 deletePostReport.\n- RoleLevel: USER.\n- 게시글 신고를 취소합니다.",
         "security": [
           {
             "bearer": []
@@ -3182,6 +3537,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void 게시글 신고 취소 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "DELETE"
@@ -3198,14 +3596,14 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreateCommentReqBody 댓글 작성 요청 본문",
           "content": {
             "application/json": {
               "schema": {
@@ -3218,7 +3616,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "CreateCommentRes 댓글 작성 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3230,7 +3628,7 @@
           }
         },
         "summary": "u-7-10 createComment",
-        "description": "u-7-10 createComment.\n- RoleLevel: USER.\n\n게시글에 댓글을 추가합니다.",
+        "description": "u-7-10 createComment.\n- RoleLevel: USER.\n- 게시글에 댓글을 추가합니다.",
         "security": [
           {
             "bearer": []
@@ -3255,6 +3653,66 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateCommentReqBody 댓글 작성 요청 본문",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CreateCommentRes 댓글 작성 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "POST"
@@ -3269,10 +3727,9 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           },
           {
@@ -3281,13 +3738,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindCommentsReqQuery"
             },
-            "description": "",
+            "description": "FindCommentsReqQuery 댓글 조회 쿼리",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "FindCommentsRes 댓글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3299,7 +3756,7 @@
           }
         },
         "summary": "u-7-12 findComments",
-        "description": "u-7-12 findComments.\n- RoleLevel: USER.\n\n게시글의 댓글들을 조회합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-12 findComments.\n- RoleLevel: USER.\n- 게시글의 댓글들을 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -3324,6 +3781,66 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "FindCommentsReqQuery 댓글 조회 쿼리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "FindCommentsRes 댓글 조회 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "GET"
@@ -3340,10 +3857,9 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           },
           {
@@ -3351,14 +3867,14 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreateCommentReplyReqBody 대댓글 작성 요청 본문",
           "content": {
             "application/json": {
               "schema": {
@@ -3371,7 +3887,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "CreateCommentReplyRes 대댓글 작성 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3383,7 +3899,7 @@
           }
         },
         "summary": "u-7-11 createCommentReply",
-        "description": "u-7-11 createCommentReply.\n- RoleLevel: USER.\n\n댓글에 대한 대댓글을 추가합니다.",
+        "description": "u-7-11 createCommentReply.\n- RoleLevel: USER.\n- 댓글에 대한 대댓글을 추가합니다.",
         "security": [
           {
             "bearer": []
@@ -3408,6 +3924,83 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateCommentReplyReqBody 대댓글 작성 요청 본문",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CreateCommentReplyRes 대댓글 작성 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "POST"
@@ -3424,10 +4017,9 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           },
           {
@@ -3436,13 +4028,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindCommentRepliesReqQuery"
             },
-            "description": "",
+            "description": "FindCommentRepliesReqQuery 대댓글 조회 쿼리",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "FindCommentsRes 대댓글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3454,7 +4046,7 @@
           }
         },
         "summary": "u-7-13 findCommentReplies",
-        "description": "u-7-13 findCommentReplies.\n- RoleLevel: USER.\n\n댓글의 대댓글들을 조회합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-13 findCommentReplies.\n- RoleLevel: USER.\n- 댓글의 대댓글들을 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -3479,6 +4071,66 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "FindCommentRepliesReqQuery 대댓글 조회 쿼리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "FindCommentsRes 대댓글 조회 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "GET"
@@ -3495,14 +4147,14 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "UpdateCommentReqBody 댓글 수정 요청 본문",
           "content": {
             "application/json": {
               "schema": {
@@ -3515,7 +4167,7 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "UpdateCommentRes 댓글 수정 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3527,7 +4179,7 @@
           }
         },
         "summary": "u-7-14 updateComment",
-        "description": "u-7-14 updateComment.\n- RoleLevel: USER.\n\n본인이 작성한 댓글 or 대댓글을 수정합니다.",
+        "description": "u-7-14 updateComment.\n- RoleLevel: USER.\n- 본인이 작성한 댓글 or 대댓글을 수정합니다.",
         "security": [
           {
             "bearer": []
@@ -3552,6 +4204,66 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateCommentReqBody 댓글 수정 요청 본문",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "UpdateCommentRes 댓글 수정 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "PATCH"
@@ -3566,16 +4278,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "void 댓글 삭제 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3587,7 +4298,7 @@
           }
         },
         "summary": "u-7-15 deleteComment",
-        "description": "u-7-15 deleteComment.\n- RoleLevel: USER.\n\n본인이 작성한 댓글 or 대댓글을 삭제합니다.",
+        "description": "u-7-15 deleteComment.\n- RoleLevel: USER.\n- 본인이 작성한 댓글 or 대댓글을 삭제합니다.",
         "security": [
           {
             "bearer": []
@@ -3612,6 +4323,49 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void 댓글 삭제 결과",
+                "kind": "text"
+              }
+            ]
           }
         ],
         "x-nestia-method": "DELETE"
@@ -3628,16 +4382,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           }
         ],
         "responses": {
           "201": {
-            "description": "void",
+            "description": "void 좋아요 추가 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3649,7 +4402,7 @@
           }
         },
         "summary": "u-7-16 createCommentLike",
-        "description": "u-7-16 createCommentLike.\n- RoleLevel: USER.\n\n댓글에 좋아요를 추가합니다.\n동일한 댓글에 중복으로 좋아요를 누를 수 없습니다.",
+        "description": "u-7-16 createCommentLike.\n- RoleLevel: USER.\n- 댓글에 좋아요를 추가합니다.\n- 동일한 댓글에 중복으로 좋아요를 누를 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -3676,10 +4429,44 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "void",
+                "text": "void 좋아요 추가 결과",
                 "kind": "text"
               }
             ]
@@ -3697,16 +4484,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "void",
+            "description": "void 좋아요 취소 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3718,7 +4504,7 @@
           }
         },
         "summary": "u-7-17 deleteCommentLike",
-        "description": "u-7-17 deleteCommentLike.\n- RoleLevel: USER.\n\n댓글에 대한 좋아요를 취소합니다.",
+        "description": "u-7-17 deleteCommentLike.\n- RoleLevel: USER.\n- 댓글에 대한 좋아요를 취소합니다.",
         "security": [
           {
             "bearer": []
@@ -3745,10 +4531,44 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "void",
+                "text": "void 좋아요 취소 결과",
                 "kind": "text"
               }
             ]
@@ -3768,14 +4588,14 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreateCommentReportReqBody 댓글 신고 요청 본문",
           "content": {
             "application/json": {
               "schema": {
@@ -3788,7 +4608,7 @@
         },
         "responses": {
           "201": {
-            "description": "void",
+            "description": "void 댓글 신고 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3800,7 +4620,7 @@
           }
         },
         "summary": "u-7-18 createCommentReport",
-        "description": "u-7-18 createCommentReport.\n- RoleLevel: USER.\n\n댓글을 신고합니다.\n동일한 댓글에 중복으로 신고를 할 수 없습니다.",
+        "description": "u-7-18 createCommentReport.\n- RoleLevel: USER.\n- 댓글을 신고합니다.\n- 동일한 댓글에 중복으로 신고를 할 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -3827,10 +4647,61 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateCommentReportReqBody 댓글 신고 요청 본문",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "void",
+                "text": "void 댓글 신고 결과",
                 "kind": "text"
               }
             ]
@@ -3848,16 +4719,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "void",
+            "description": "void 댓글 신고 취소 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3869,7 +4739,7 @@
           }
         },
         "summary": "u-7-19 deleteCommentReport",
-        "description": "u-7-19 deleteCommentReport.\n- RoleLevel: USER.\n\n댓글 신고를 취소합니다.",
+        "description": "u-7-19 deleteCommentReport.\n- RoleLevel: USER.\n- 댓글 신고를 취소합니다.",
         "security": [
           {
             "bearer": []
@@ -3896,10 +4766,44 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "req",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "Request 객체",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "void",
+                "text": "void 댓글 신고 취소 결과",
                 "kind": "text"
               }
             ]
@@ -3920,13 +4824,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindPostsReqQuery"
             },
-            "description": "",
+            "description": "FindPostsReqQuery 게시글 조회 쿼리",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "FindPostsRes 게시글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3938,7 +4842,7 @@
           }
         },
         "summary": "p-7-1 findPosts",
-        "description": "p-7-1 findPosts.\n- RoleLevel: PUBLIC.\n\n여러 게시글을 조회합니다.\n필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "description": "p-7-1 findPosts.\n- RoleLevel: PUBLIC.\n- 여러 게시글을 조회합니다.\n- ACTIVE 상태인 게시글들만 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
         "x-nestia-namespace": "public.posts.findPosts",
         "x-nestia-jsDocTags": [
           {
@@ -3946,6 +4850,32 @@
             "text": [
               {
                 "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "FindPostsReqQuery 게시글 조회 쿼리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "FindPostsRes 게시글 조회 결과",
                 "kind": "text"
               }
             ]
@@ -3965,16 +4895,15 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "GetPostRes 게시글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -3986,7 +4915,7 @@
           }
         },
         "summary": "p-7-2 getPost",
-        "description": "p-7-2 getPost.\n- RoleLevel: PUBLIC.\n\n특정 게시글을 조회합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "description": "p-7-2 getPost.\n- RoleLevel: PUBLIC.\n- 특정 게시글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
         "x-nestia-namespace": "public.posts.getPost",
         "x-nestia-jsDocTags": [
           {
@@ -3994,6 +4923,32 @@
             "text": [
               {
                 "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "GetPostRes 게시글 조회 결과",
                 "kind": "text"
               }
             ]
@@ -4013,10 +4968,9 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "게시글 id",
             "required": true
           },
           {
@@ -4025,13 +4979,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindCommentsReqQuery"
             },
-            "description": "",
+            "description": "FindCommentsReqQuery 댓글 조회 쿼리",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "FindCommentsRes 댓글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -4043,7 +4997,7 @@
           }
         },
         "summary": "p-7-3- findComments",
-        "description": "p-7-3- findComments.\n- RoleLevel: PUBLIC.\n\n게시글의 댓글을 조회합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "description": "p-7-3- findComments.\n- RoleLevel: PUBLIC.\n- 게시글의 댓글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
         "x-nestia-namespace": "public.posts.comment.findComments",
         "x-nestia-jsDocTags": [
           {
@@ -4051,6 +5005,49 @@
             "text": [
               {
                 "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "FindCommentsReqQuery 댓글 조회 쿼리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "FindCommentsRes 댓글 조회 결과",
                 "kind": "text"
               }
             ]
@@ -4070,10 +5067,9 @@
             "in": "path",
             "schema": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
-            "description": "",
+            "description": "댓글 id",
             "required": true
           },
           {
@@ -4082,13 +5078,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindCommentRepliesReqQuery"
             },
-            "description": "",
+            "description": "FindCommentRepliesReqQuery 대댓글 조회 쿼리",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "FindCommentsRes 대댓글 조회 결과",
             "content": {
               "application/json": {
                 "schema": {
@@ -4100,7 +5096,7 @@
           }
         },
         "summary": "p-7-4 findCommentReplies",
-        "description": "p-7-4 findCommentReplies.\n- RoleLevel: PUBLIC.\n\n댓글의 대댓글을 조회합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "description": "p-7-4 findCommentReplies.\n- RoleLevel: PUBLIC.\n- 댓글의 대댓글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
         "x-nestia-namespace": "public.posts.comment.reply.findCommentReplies",
         "x-nestia-jsDocTags": [
           {
@@ -4108,6 +5104,49 @@
             "text": [
               {
                 "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "commentId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "댓글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "FindCommentRepliesReqQuery 대댓글 조회 쿼리",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "FindCommentsRes 대댓글 조회 결과",
                 "kind": "text"
               }
             ]
@@ -4918,8 +5957,7 @@
       },
       "TId": {
         "type": "string",
-        "maxLength": 36,
-        "minLength": 36
+        "format": "uuid"
       },
       "TDateOrStringDate": {
         "oneOf": [
@@ -8180,15 +9218,13 @@
           },
           "competitionId": {
             "type": "string",
-            "maxLength": 36,
-            "minLength": 36
+            "format": "uuid"
           },
           "participationDivisionIds": {
             "type": "array",
             "items": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "minItems": 1,
             "title": "- Division IDs to participate",
@@ -8785,8 +9821,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "maxLength": 36,
-              "minLength": 36
+              "format": "uuid"
             },
             "minItems": 1,
             "title": "- Division IDs to participate",
@@ -8889,15 +9924,13 @@
         "properties": {
           "participationDivisionInfoId": {
             "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "format": "uuid",
             "title": "수정하고자 하는 참가부문 정보 ID (식별자)",
             "description": "수정하고자 하는 참가부문 정보 ID (식별자)."
           },
           "newParticipationDivisionId": {
             "type": "string",
-            "maxLength": 36,
-            "minLength": 36,
+            "format": "uuid",
             "title": "새로 참가 하고자 하는 부문 ID",
             "description": "새로 참가 하고자 하는 부문 ID."
           }
@@ -9177,11 +10210,7 @@
             "description": "ULID."
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
+            "$ref": "#/components/schemas/TPostStatus",
             "title": "Post status",
             "description": "Post status."
           },
@@ -9196,13 +10225,7 @@
             "description": "Post view count."
           },
           "category": {
-            "type": "string",
-            "enum": [
-              "COMPETITION",
-              "FREE",
-              "OPEN_MAT",
-              "SEMINAR"
-            ],
+            "$ref": "#/components/schemas/TPostCategory",
             "title": "Post category",
             "description": "Post category."
           },
@@ -9236,6 +10259,9 @@
           "likeCount": {
             "type": "number"
           },
+          "commentCount": {
+            "type": "number"
+          },
           "userLiked": {
             "type": "boolean"
           }
@@ -9251,7 +10277,24 @@
           "deletedAt",
           "postSnapshots",
           "likeCount",
+          "commentCount",
           "userLiked"
+        ]
+      },
+      "TPostStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE"
+        ]
+      },
+      "TPostCategory": {
+        "type": "string",
+        "enum": [
+          "FREE",
+          "COMPETITION",
+          "SEMINAR",
+          "OPEN_MAT"
         ]
       },
       "IPostSnapshot": {
@@ -9313,6 +10356,30 @@
             "default": 10,
             "title": "Number of items per page",
             "description": "Number of items per page."
+          },
+          "sortOption": {
+            "type": "string",
+            "enum": [
+              "조회순",
+              "최신순"
+            ],
+            "title": "정렬 옵션",
+            "description": "정렬 옵션.\n- 최신순: 최신 게시물이 위로 올라오는 순서.\n- 조회순: 조회수가 높은 게시물이 위로 올라오는 순서."
+          },
+          "categoryFilters": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "COMPETITION",
+                "FREE",
+                "OPEN_MAT",
+                "POPULAR",
+                "SEMINAR"
+              ]
+            },
+            "title": "카테고리 옵션",
+            "description": "카테고리 옵션.\n- POPULAR: 인기 게시판, 좋아요 수가 10개 이상인 게시물만 조회.\n- FREE: 자유 게시판.\n- COMPETITION: 대회 게시판.\n- SEMINAR: 세미나 게시판.\n- OPEN_MAT: 오픈 매트 게시판."
           }
         },
         "nullable": false
@@ -9618,8 +10685,7 @@
       },
       "TId.Nullable": {
         "type": "string",
-        "maxLength": 36,
-        "minLength": 36
+        "format": "uuid"
       },
       "ICommentSnapshot": {
         "type": "object",

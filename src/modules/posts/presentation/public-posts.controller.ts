@@ -28,13 +28,13 @@ export class PublicPostsController {
   /**
    * p-7-1 findPosts.
    * - RoleLevel: PUBLIC.
-   *
-   * 여러 게시글을 조회합니다.
-   * 필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.
-   *
-   * public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
+   * - 여러 게시글을 조회합니다.
+   * - ACTIVE 상태인 게시글들만 조회합니다.
+   * - public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
    *
    * @tag p-7 posts
+   * @param query FindPostsReqQuery 게시글 조회 쿼리
+   * @returns FindPostsRes 게시글 조회 결과
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/')
@@ -43,6 +43,8 @@ export class PublicPostsController {
       await this.postsAppService.findPosts({
         page: query.page || 0,
         limit: query.limit || 10,
+        categoryFilters: query.categoryFilters,
+        sortOption: query.sortOption || '최신순',
       }),
     );
   }
@@ -50,12 +52,12 @@ export class PublicPostsController {
   /**
    * p-7-2 getPost.
    * - RoleLevel: PUBLIC.
-   *
-   * 특정 게시글을 조회합니다.
-   *
-   * public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
+   * - 특정 게시글을 조회합니다.
+   * - public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
    *
    * @tag p-7 posts
+   * @param postId 게시글 id
+   * @returns GetPostRes 게시글 조회 결과
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:postId')
@@ -73,12 +75,13 @@ export class PublicPostsController {
   /**
    * p-7-3- findComments.
    * - RoleLevel: PUBLIC.
-   *
-   * 게시글의 댓글을 조회합니다.
-   *
-   * public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
+   * - 게시글의 댓글을 조회합니다.
+   * - public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
    *
    * @tag p-7 posts
+   * @param postId 게시글 id
+   * @param query FindCommentsReqQuery 댓글 조회 쿼리
+   * @returns FindCommentsRes 댓글 조회 결과
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:postId/comment')
@@ -98,12 +101,13 @@ export class PublicPostsController {
   /**
    * p-7-4 findCommentReplies.
    * - RoleLevel: PUBLIC.
-   *
-   * 댓글의 대댓글을 조회합니다.
-   *
-   * public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
+   * - 댓글의 대댓글을 조회합니다.
+   * - public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.
    *
    * @tag p-7 posts
+   * @param commentId 댓글 id
+   * @param query FindCommentRepliesReqQuery 대댓글 조회 쿼리
+   * @returns FindCommentsRes 대댓글 조회 결과
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/comment/:commentId/reply')

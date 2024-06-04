@@ -9,7 +9,7 @@ import { CreatePostRet, FindPostsRet, GetPostRet, UpdatePostRet } from '../appli
 import { ICommentReportCreateDto } from '../domain/interface/comment-report.interface';
 import { ICommentCreateDto, ICommentReplyCreateDto, ICommentUpdateDto } from '../domain/interface/comment.interface';
 import { IPostReportCreateDto } from '../domain/interface/post-report.interface';
-import { IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interface';
+import { IFindPostsQueryOptions, IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interface';
 import { IPaginationParam } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
@@ -17,7 +17,7 @@ import { IPaginationParam } from 'src/common/common-types';
 // ---------------------------------------------------------------------------
 export interface CreatePostReqBody extends Omit<IPostCreateDto, 'userId'> {}
 
-export interface FindPostsReqQuery extends Partial<IPaginationParam> {}
+export interface FindPostsReqQuery extends Partial<IPaginationParam>, Partial<Omit<IFindPostsQueryOptions, 'userId'>> {}
 
 export interface UpdatePostReqBody extends Omit<IPostUpdateDto, 'postId'> {}
 

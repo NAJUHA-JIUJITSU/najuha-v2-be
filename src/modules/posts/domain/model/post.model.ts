@@ -17,9 +17,10 @@ export class PostModel {
   private status: IPost['status'];
   private deletedAt: IPost['deletedAt'];
   private likeCount: number;
+  private commentCount: number;
   private userLiked: boolean;
 
-  constructor(entity: IPost, userId?: IUser['id']) {
+  constructor(entity: IPost) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.viewCount = entity.viewCount;
@@ -30,8 +31,9 @@ export class PostModel {
     this.postSnapshots = entity.postSnapshots;
     this.likes = entity.likes || [];
     this.reports = entity.reports || [];
-    this.likeCount = this.likes.length;
-    this.userLiked = this.likes.some((like) => like.userId === userId);
+    this.likeCount = entity.likeCount || entity.likes?.length || 0;
+    this.commentCount = entity.commentCount || 0;
+    this.userLiked = this.likes.length > 0 ? true : false;
   }
 
   toEntity() {
@@ -47,6 +49,7 @@ export class PostModel {
       likes: this.likes,
       reports: this.reports,
       likeCount: this.likeCount,
+      commentCount: this.commentCount,
       userLiked: this.userLiked,
     };
   }
