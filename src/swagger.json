@@ -2709,7 +2709,7 @@
           }
         },
         "summary": "u-7-2 findPosts",
-        "description": "u-7-2 findPosts.\n- RoleLevel: USER.\n\n여러 게시글을 조회합니다.\n필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.",
+        "description": "u-7-2 findPosts.\n- RoleLevel: USER.\n\n여러 게시글을 조회합니다.\n필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -2771,7 +2771,7 @@
           }
         },
         "summary": "u-7-3 getPost",
-        "description": "u-7-3 getPost.\n- RoleLevel: USER.\n\n특정 게시글을 조회합니다.",
+        "description": "u-7-3 getPost.\n- RoleLevel: USER.\n\n특정 게시글을 조회합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -2842,7 +2842,7 @@
           }
         },
         "summary": "u-7-4 updatePost",
-        "description": "u-7-4 updatePost.\n- RoleLevel: USER.\n\n기존 게시글을 수정합니다.",
+        "description": "u-7-4 updatePost.\n- RoleLevel: USER.\n\n본인이 작성한 게시글을 수정합니다.",
         "security": [
           {
             "bearer": []
@@ -2902,7 +2902,7 @@
           }
         },
         "summary": "u-7-5 deletePost",
-        "description": "u-7-5 deletePost.\n- RoleLevel: USER.\n\n특정 게시글을 삭제합니다.",
+        "description": "u-7-5 deletePost.\n- RoleLevel: USER.\n\n본인이 작성한 게시글을 삭제합니다.",
         "security": [
           {
             "bearer": []
@@ -2964,7 +2964,7 @@
           }
         },
         "summary": "u-7-6 createPostLike",
-        "description": "u-7-6 createPostLike.\n- RoleLevel: USER.\n\n게시글에 좋아요를 추가합니다.",
+        "description": "u-7-6 createPostLike.\n- RoleLevel: USER.\n\n게시글에 좋아요를 추가합니다.\n동일한 게시물에 중복으로 좋아요를 누를 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -3097,7 +3097,7 @@
           }
         },
         "summary": "u-7-8 createPostReport",
-        "description": "u-7-8 createPostReport.\n- RoleLevel: USER.\n\n게시글을 신고합니다.",
+        "description": "u-7-8 createPostReport.\n- RoleLevel: USER.\n\n게시글을 신고합니다.\n동일한 게시물에 중복으로 신고를 할 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -3299,7 +3299,7 @@
           }
         },
         "summary": "u-7-12 findComments",
-        "description": "u-7-12 findComments.\n- RoleLevel: USER.\n\n게시글의 댓글을 조회합니다.",
+        "description": "u-7-12 findComments.\n- RoleLevel: USER.\n\n게시글의 댓글들을 조회합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -3383,7 +3383,7 @@
           }
         },
         "summary": "u-7-11 createCommentReply",
-        "description": "u-7-11 createCommentReply.\n- RoleLevel: USER.\n\n댓글에 대한 답글을 추가합니다.",
+        "description": "u-7-11 createCommentReply.\n- RoleLevel: USER.\n\n댓글에 대한 대댓글을 추가합니다.",
         "security": [
           {
             "bearer": []
@@ -3454,7 +3454,7 @@
           }
         },
         "summary": "u-7-13 findCommentReplies",
-        "description": "u-7-13 findCommentReplies.\n- RoleLevel: USER.\n\n댓글의 대댓글을 조회합니다.",
+        "description": "u-7-13 findCommentReplies.\n- RoleLevel: USER.\n\n댓글의 대댓글들을 조회합니다.\n\napi 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -3527,7 +3527,7 @@
           }
         },
         "summary": "u-7-14 updateComment",
-        "description": "u-7-14 updateComment.\n- RoleLevel: USER.\n\n기존 댓글을 수정합니다.",
+        "description": "u-7-14 updateComment.\n- RoleLevel: USER.\n\n본인이 작성한 댓글 or 대댓글을 수정합니다.",
         "security": [
           {
             "bearer": []
@@ -3587,7 +3587,7 @@
           }
         },
         "summary": "u-7-15 deleteComment",
-        "description": "u-7-15 deleteComment.\n- RoleLevel: USER.\n\n특정 댓글을 삭제합니다.",
+        "description": "u-7-15 deleteComment.\n- RoleLevel: USER.\n\n본인이 작성한 댓글 or 대댓글을 삭제합니다.",
         "security": [
           {
             "bearer": []
@@ -3649,7 +3649,7 @@
           }
         },
         "summary": "u-7-16 createCommentLike",
-        "description": "u-7-16 createCommentLike.\n- RoleLevel: USER.\n\n댓글에 좋아요를 추가합니다.",
+        "description": "u-7-16 createCommentLike.\n- RoleLevel: USER.\n\n댓글에 좋아요를 추가합니다.\n동일한 댓글에 중복으로 좋아요를 누를 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -3800,7 +3800,7 @@
           }
         },
         "summary": "u-7-18 createCommentReport",
-        "description": "u-7-18 createCommentReport.\n- RoleLevel: USER.\n\n댓글을 신고합니다.",
+        "description": "u-7-18 createCommentReport.\n- RoleLevel: USER.\n\n댓글을 신고합니다.\n동일한 댓글에 중복으로 신고를 할 수 없습니다.",
         "security": [
           {
             "bearer": []
@@ -3906,6 +3906,214 @@
           }
         ],
         "x-nestia-method": "DELETE"
+      }
+    },
+    "/public/posts": {
+      "get": {
+        "tags": [
+          "p-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindPostsReqQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindPostsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "p-7-1 findPosts",
+        "description": "p-7-1 findPosts.\n- RoleLevel: PUBLIC.\n\n여러 게시글을 조회합니다.\n필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "x-nestia-namespace": "public.posts.findPosts",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/public/posts/{postId}": {
+      "get": {
+        "tags": [
+          "p-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormGetPostRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "p-7-2 getPost",
+        "description": "p-7-2 getPost.\n- RoleLevel: PUBLIC.\n\n특정 게시글을 조회합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "x-nestia-namespace": "public.posts.getPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/public/posts/{postId}/comment": {
+      "get": {
+        "tags": [
+          "p-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindCommentsReqQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindCommentsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "p-7-3- findComments",
+        "description": "p-7-3- findComments.\n- RoleLevel: PUBLIC.\n\n게시글의 댓글을 조회합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "x-nestia-namespace": "public.posts.comment.findComments",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
+    "/public/posts/comment/{commentId}/reply": {
+      "get": {
+        "tags": [
+          "p-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "commentId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "maxLength": 36,
+              "minLength": 36
+            },
+            "description": "",
+            "required": true
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FindCommentRepliesReqQuery"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindCommentsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "p-7-4 findCommentReplies",
+        "description": "p-7-4 findCommentReplies.\n- RoleLevel: PUBLIC.\n\n댓글의 대댓글을 조회합니다.\n\npublic api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
+        "x-nestia-namespace": "public.posts.comment.reply.findCommentReplies",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "p-7 posts",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
       }
     }
   },

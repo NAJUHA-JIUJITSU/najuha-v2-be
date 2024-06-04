@@ -19,7 +19,7 @@ export interface CreatePostParam {
 export interface FindPostsParam extends IPaginationParam, IFindPostsQueryOptions {}
 
 export interface GetPostParam {
-  userId: IUser['id'];
+  userId?: IUser['id'];
   postId: IPost['id'];
 }
 

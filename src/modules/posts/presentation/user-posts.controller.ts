@@ -61,6 +61,8 @@ export class UserPostsController {
    * 여러 게시글을 조회합니다.
    * 필터링, 정렬, 페이지네이션 등의 기능을 제공합니다.
    *
+   * api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
+   *
    * @tag u-7 posts
    * @security bearer
    */
@@ -82,6 +84,8 @@ export class UserPostsController {
    *
    * 특정 게시글을 조회합니다.
    *
+   * api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
+   *
    * @tag u-7 posts
    * @security bearer
    */
@@ -100,7 +104,7 @@ export class UserPostsController {
    * u-7-4 updatePost.
    * - RoleLevel: USER.
    *
-   * 기존 게시글을 수정합니다.
+   * 본인이 작성한 게시글을 수정합니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -127,7 +131,7 @@ export class UserPostsController {
    * u-7-5 deletePost.
    * - RoleLevel: USER.
    *
-   * 특정 게시글을 삭제합니다.
+   * 본인이 작성한 게시글을 삭제합니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -143,6 +147,7 @@ export class UserPostsController {
    * - RoleLevel: USER.
    *
    * 게시글에 좋아요를 추가합니다.
+   * 동일한 게시물에 중복으로 좋아요를 누를 수 없습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -182,6 +187,7 @@ export class UserPostsController {
    * - RoleLevel: USER.
    *
    * 게시글을 신고합니다.
+   * 동일한 게시물에 중복으로 신고를 할 수 없습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -250,7 +256,7 @@ export class UserPostsController {
    * u-7-11 createCommentReply.
    * - RoleLevel: USER.
    *
-   * 댓글에 대한 답글을 추가합니다.
+   * 댓글에 대한 대댓글을 추가합니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -279,7 +285,9 @@ export class UserPostsController {
    * u-7-12 findComments.
    * - RoleLevel: USER.
    *
-   * 게시글의 댓글을 조회합니다.
+   * 게시글의 댓글들을 조회합니다.
+   *
+   * api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -305,7 +313,9 @@ export class UserPostsController {
    * u-7-13 findCommentReplies.
    * - RoleLevel: USER.
    *
-   * 댓글의 대댓글을 조회합니다.
+   * 댓글의 대댓글들을 조회합니다.
+   *
+   * api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -331,7 +341,7 @@ export class UserPostsController {
    * u-7-14 updateComment.
    * - RoleLevel: USER.
    *
-   * 기존 댓글을 수정합니다.
+   * 본인이 작성한 댓글 or 대댓글을 수정합니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -355,7 +365,7 @@ export class UserPostsController {
    * u-7-15 deleteComment.
    * - RoleLevel: USER.
    *
-   * 특정 댓글을 삭제합니다.
+   * 본인이 작성한 댓글 or 대댓글을 삭제합니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -379,6 +389,7 @@ export class UserPostsController {
    * - RoleLevel: USER.
    *
    * 댓글에 좋아요를 추가합니다.
+   * 동일한 댓글에 중복으로 좋아요를 누를 수 없습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -426,6 +437,7 @@ export class UserPostsController {
    * - RoleLevel: USER.
    *
    * 댓글을 신고합니다.
+   * 동일한 댓글에 중복으로 신고를 할 수 없습니다.
    *
    * @tag u-7 posts
    * @security bearer

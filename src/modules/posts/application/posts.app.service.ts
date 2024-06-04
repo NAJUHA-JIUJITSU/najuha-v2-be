@@ -54,7 +54,6 @@ export class PostsAppService {
         take: limit,
       }),
     ).map((postEntity) => new PostModel(postEntity, userId));
-    console.log(posts);
     let ret: FindPostsRet = { posts: posts.map((post) => post.toEntity()) };
     if (posts.length === limit) {
       ret = { ...ret, nextPage: page + 1 };
