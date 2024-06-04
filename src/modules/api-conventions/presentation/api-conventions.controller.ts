@@ -8,6 +8,7 @@ import {
 } from 'src/common/response/errorResponse';
 import { RoleLevel, RoleLevels } from 'src/infrastructure/guard/role.guard';
 import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
+import { IAuthTokens } from 'src/modules/auth/domain/interface/auth-tokens.interface';
 
 /**
  * api conventions 에 대한 설명을 위한 코드입니다. (동작하지 않습니다)
@@ -84,12 +85,25 @@ export class ApiConventionsController {
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('create-admin-access-token')
-  async createAdminAccessToken() {
-    appEnv.adminCredentials.forEach(async (adminCredential) => {
-      console.log(
-        `${adminCredential.name} AuthTokens:`,
-        await this.AuthTokenDomainService.createAuthTokens({ userId: adminCredential.id, userRole: 'ADMIN' }),
-      );
-    });
+  async createAdminAccessToken(): Promise<
+    {
+      name: string;
+      accessToken: string;
+      refreshToken: string;
+    }[]
+  > {
+    return await Promise.all(
+      appEnv.adminCredentials.map(async (adminCredential) => {
+        const authTokens = await this.AuthTokenDomainService.createAuthTokens({
+          userId: adminCredential.id,
+          userRole: 'ADMIN',
+        });
+        return {
+          name: adminCredential.name,
+          accessToken: authTokens.accessToken,
+          refreshToken: authTokens.refreshToken,
+        };
+      }),
+    );
   }
 }
