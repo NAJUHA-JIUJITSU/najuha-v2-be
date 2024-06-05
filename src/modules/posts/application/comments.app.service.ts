@@ -13,7 +13,8 @@ import {
   CreateCommentReportParam,
   DeleteCommentReportParam,
   CreateCommentReplyRet,
-  FindCommentRepliesParam,
+  FindRepliesParam,
+  FindCommentsAndRepliesParam,
 } from './comments.app.dto';
 import { assert } from 'typia';
 import { BusinessException, CommonErrors, PostsErrors } from 'src/common/response/errorResponse';
@@ -25,7 +26,6 @@ import { CommentModel } from '../domain/model/comment.model';
 import { CommentFactory } from '../domain/comment.factory';
 import { CommentLikeRepository } from 'src/database/custom-repository/comment-like.repository';
 import { CommentReportRepository } from 'src/database/custom-repository/comment-report.repository';
-import { IsNull } from 'typeorm';
 
 @Injectable()
 export class CommentsAppService {
@@ -67,34 +67,35 @@ export class CommentsAppService {
     return { comment: await this.commentRepository.save(commentReply.toEntity()) };
   }
 
-  async findComments({ userId, postId, page, limit }: FindCommentsParam): Promise<FindCommentsRet> {
-    const comments = assert<IComment[]>(
-      await this.commentRepository.find({
-        where: { postId, parentId: IsNull(), status: 'ACTIVE' },
-        relations: ['commentSnapshots', 'likes'],
-        skip: page * limit,
-        take: limit,
-      }),
-    ).map((commentEntity) => new CommentModel(commentEntity, userId));
+  async findComments(query: FindCommentsParam): Promise<FindCommentsRet> {
+    const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
+      (commentEntity) => new CommentModel(commentEntity, query.userId),
+    );
     let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
-    if (comments.length === limit) {
-      ret = { ...ret, nextPage: page + 1 };
+    if (comments.length === query.limit) {
+      ret = { ...ret, nextPage: query.page + 1 };
     }
     return ret;
   }
 
-  async findCommentReplies({ userId, parentId, page, limit }: FindCommentRepliesParam): Promise<FindCommentsRet> {
-    const comments = assert<IComment[]>(
-      await this.commentRepository.find({
-        where: { parentId, status: 'ACTIVE' },
-        relations: ['commentSnapshots', 'likes'],
-        skip: page * limit,
-        take: limit,
-      }),
-    ).map((commentEntity) => new CommentModel(commentEntity, userId));
+  async findReplies(query: FindRepliesParam): Promise<FindCommentsRet> {
+    const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
+      (commentEntity) => new CommentModel(commentEntity, query.userId),
+    );
     let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
-    if (comments.length === limit) {
-      ret = { ...ret, nextPage: page + 1 };
+    if (comments.length === query.limit) {
+      ret = { ...ret, nextPage: query.page + 1 };
+    }
+    return ret;
+  }
+
+  async findCommentsAndReplies(query: FindCommentsAndRepliesParam): Promise<FindCommentsRet> {
+    const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
+      (commentEntity) => new CommentModel(commentEntity, query.userId),
+    );
+    let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
+    if (comments.length === query.limit) {
+      ret = { ...ret, nextPage: query.page + 1 };
     }
     return ret;
   }

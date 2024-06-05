@@ -1,10 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CommentEntity } from '../entity/post/comment.entity';
+import {
+  IFindCommentsAndRepliesQueryOptions,
+  IFindCommentsQueryOptions,
+  IFindRepliesQueryOptions,
+} from 'src/modules/posts/domain/interface/comment.interface';
+import { TPaginationParam } from 'src/common/common-types';
 
 @Injectable()
 export class CommentRepository extends Repository<CommentEntity> {
   constructor(private dataSource: DataSource) {
     super(CommentEntity, dataSource.createEntityManager());
+  }
+
+  async findComments(
+    query: TPaginationParam<IFindCommentsQueryOptions | IFindRepliesQueryOptions | IFindCommentsAndRepliesQueryOptions>,
+  ) {
+    let qb = this.createQueryBuilder('comment')
+      .where('comment.postId = :postId', { postId: query.postId })
+      .leftJoinAndSelect('comment.commentSnapshots', 'commentSnapshots')
+      .loadRelationCountAndMap('comment.likeCount', 'comment.likes');
+
+    switch (query.type) {
+      case 'COMMENT':
+        qb = qb.andWhere('comment.parentId IS NULL');
+        break;
+      case 'REPLY':
+        qb = qb.andWhere('comment.parentId IS NOT NULL');
+        break;
+      default:
+        // do nothing for search both comments and replies
+        break;
+    }
+
+    if (query.status) {
+      qb = qb.andWhere('comment.status = :status', { status: query.status });
+    }
+
+    if (query.userId) {
+      qb = qb.leftJoinAndSelect('comment.likes', 'likes', 'likes.userId = :userId', { userId: query.userId });
+    }
+
+    qb = qb.orderBy('comment.createdAt', 'DESC');
+
+    return await qb
+      .skip(query.page * query.limit)
+      .take(query.limit)
+      .getMany();
   }
 }

@@ -13,11 +13,11 @@ import {
   CreatePostReportReqBody,
   CreatePostReqBody,
   CreatePostRes,
-  FindCommentRepliesReqQuery,
   FindCommentsReqQuery,
   FindCommentsRes,
   FindPostsReqQuery,
   FindPostsRes,
+  FindRepliesReqQuery,
   GetPostRes,
   UpdateCommentReqBody,
   UpdateCommentRes,
@@ -333,6 +333,8 @@ export class UserPostsController {
       await this.commentsAppService.findComments({
         postId,
         userId: req['userId'],
+        type: 'COMMENT',
+        status: 'ACTIVE',
         page: query.page || 0,
         limit: query.limit || 10,
       }),
@@ -353,16 +355,20 @@ export class UserPostsController {
    * @returns FindCommentsRes 대댓글 조회 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Get('/comment/:commentId/reply')
+  @TypedRoute.Get('/:postId/comment/:commentId/reply')
   async findCommentReplies(
     @Req() req: Request,
+    @TypedParam('postId') postId: IPost['id'],
     @TypedParam('commentId') commentId: IComment['id'],
-    @TypedQuery() query: FindCommentRepliesReqQuery,
+    @TypedQuery() query: FindRepliesReqQuery,
   ): Promise<ResponseForm<FindCommentsRes>> {
     return createResponseForm(
-      await this.commentsAppService.findCommentReplies({
+      await this.commentsAppService.findReplies({
         userId: req['userId'],
+        postId,
         parentId: commentId,
+        type: 'REPLY',
+        status: 'ACTIVE',
         page: query.page || 0,
         limit: query.limit || 10,
       }),

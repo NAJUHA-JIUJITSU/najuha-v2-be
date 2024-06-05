@@ -20,7 +20,7 @@ export class PostModel {
   private commentCount: number;
   private userLiked: boolean;
 
-  constructor(entity: IPost) {
+  constructor(entity: IPost, apiCallUserId?: IUser['id']) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.viewCount = entity.viewCount;
@@ -29,11 +29,11 @@ export class PostModel {
     this.createdAt = entity.createdAt;
     this.deletedAt = entity.deletedAt;
     this.postSnapshots = entity.postSnapshots;
-    this.likes = entity.likes || [];
-    this.reports = entity.reports || [];
-    this.likeCount = entity.likeCount || entity.likes?.length || 0;
+    this.likeCount = entity.likeCount || 0;
     this.commentCount = entity.commentCount || 0;
-    this.userLiked = this.likes.length > 0 ? true : false;
+    this.reports = entity.reports || [];
+    this.likes = entity.likes || [];
+    this.userLiked = this.likes.some((like) => like.userId === apiCallUserId);
   }
 
   toEntity() {

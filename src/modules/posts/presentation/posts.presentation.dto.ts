@@ -10,7 +10,7 @@ import { ICommentReportCreateDto } from '../domain/interface/comment-report.inte
 import { ICommentCreateDto, ICommentReplyCreateDto, ICommentUpdateDto } from '../domain/interface/comment.interface';
 import { IPostReportCreateDto } from '../domain/interface/post-report.interface';
 import { IFindPostsQueryOptions, IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interface';
-import { IPaginationParam } from 'src/common/common-types';
+import { TPaginationParam } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // postsController Request
@@ -18,8 +18,7 @@ import { IPaginationParam } from 'src/common/common-types';
 export interface CreatePostReqBody extends Omit<IPostCreateDto, 'userId'> {}
 
 export interface FindPostsReqQuery
-  extends Partial<IPaginationParam>,
-    Partial<Omit<IFindPostsQueryOptions, 'userId' | 'status'>> {}
+  extends Partial<TPaginationParam<Omit<IFindPostsQueryOptions, 'userId' | 'status'>>> {}
 
 export interface UpdatePostReqBody extends Omit<IPostUpdateDto, 'postId'> {}
 
@@ -29,9 +28,9 @@ export interface CreateCommentReqBody extends Omit<ICommentCreateDto, 'userId' |
 
 export interface CreateCommentReplyReqBody extends Omit<ICommentReplyCreateDto, 'userId' | 'postId' | 'parentId'> {}
 
-export interface FindCommentsReqQuery extends Partial<IPaginationParam> {}
+export interface FindCommentsReqQuery extends Partial<TPaginationParam<void>> {}
 
-export interface FindCommentRepliesReqQuery extends Partial<IPaginationParam> {}
+export interface FindRepliesReqQuery extends Partial<TPaginationParam<void>> {}
 
 export interface UpdateCommentReqBody extends Omit<ICommentUpdateDto, 'commentId'> {}
 

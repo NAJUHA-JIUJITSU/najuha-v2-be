@@ -5,7 +5,6 @@ import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { IPost } from '../domain/interface/post.interface';
 import { PostsAppService } from '../application/posts.app.service';
 import {
-  FindCommentRepliesReqQuery,
   FindCommentsReqQuery,
   FindCommentsRes,
   FindPostsReqQuery,
@@ -93,6 +92,8 @@ export class PublicPostsController {
     return createResponseForm(
       await this.commentsAppService.findComments({
         postId,
+        type: 'COMMENT',
+        status: 'ACTIVE',
         page: query.page || 0,
         limit: query.limit || 10,
       }),
@@ -111,14 +112,18 @@ export class PublicPostsController {
    * @returns FindCommentsRes 대댓글 조회 결과
    */
   @RoleLevels(RoleLevel.PUBLIC)
-  @TypedRoute.Get('/comment/:commentId/reply')
+  @TypedRoute.Get('/:postId/comment/:commentId/reply')
   async findCommentReplies(
+    @TypedParam('postId') postId: IPost['id'],
     @TypedParam('commentId') commentId: IComment['id'],
-    @TypedQuery() query: FindCommentRepliesReqQuery,
+    @TypedQuery() query: FindCommentsReqQuery,
   ): Promise<ResponseForm<FindCommentsRes>> {
     return createResponseForm(
-      await this.commentsAppService.findCommentReplies({
+      await this.commentsAppService.findReplies({
+        postId,
         parentId: commentId,
+        type: 'REPLY',
+        status: 'ACTIVE',
         page: query.page || 0,
         limit: query.limit || 10,
       }),

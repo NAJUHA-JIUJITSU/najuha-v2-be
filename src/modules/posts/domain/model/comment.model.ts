@@ -19,7 +19,7 @@ export class CommentModel {
   private likeCount: number;
   private userLiked: boolean;
 
-  constructor(entity: IComment, userId?: IUser['id']) {
+  constructor(entity: IComment, apiCallUserId?: IUser['id']) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.parentId = entity.parentId;
@@ -28,10 +28,10 @@ export class CommentModel {
     this.deletedAt = entity.deletedAt;
     this.postId = entity.postId;
     this.commentSnapshots = entity.commentSnapshots;
-    this.likes = entity.likes || [];
+    this.likeCount = entity.likeCount || 0;
     this.reports = entity.reports || [];
-    this.likeCount = this.likes.length;
-    this.userLiked = this.likes.some((like) => like.userId === userId);
+    this.likes = entity.likes || [];
+    this.userLiked = this.likes.some((like) => like.userId === apiCallUserId);
   }
 
   toEntity() {

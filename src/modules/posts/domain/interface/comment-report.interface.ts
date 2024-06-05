@@ -8,10 +8,10 @@ export interface ICommentReport {
   id: TId;
 
   /** Report Type */
-  type: 'INAPPROPRIATE' | 'SPAM';
+  type: TCommentReportType;
 
   /** Report Status */
-  status: 'ACCEPTED' | 'REJECTED';
+  status: TCommentReportStatus;
 
   /** Report Reason */
   reason: string & tags.MaxLength<100>;
@@ -27,3 +27,7 @@ export interface ICommentReport {
 }
 
 export interface ICommentReportCreateDto extends Pick<ICommentReport, 'commentId' | 'userId' | 'type' | 'reason'> {}
+
+type TCommentReportType = 'INAPPROPRIATE' | 'SPAM';
+
+type TCommentReportStatus = 'ACCEPTED' | 'REJECTED';

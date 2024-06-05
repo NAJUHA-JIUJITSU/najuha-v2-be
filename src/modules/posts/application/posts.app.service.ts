@@ -45,7 +45,7 @@ export class PostsAppService {
 
   async findPosts(query: FindPostsParam): Promise<FindPostsRet> {
     const posts = assert<IPost[]>(await this.postRepository.findPosts(query)).map(
-      (postEntity) => new PostModel(postEntity),
+      (postEntity) => new PostModel(postEntity, query.userId),
     );
     let ret: FindPostsRet = { posts: posts.map((post) => post.toEntity()) };
     if (posts.length === query.limit) {
@@ -55,7 +55,7 @@ export class PostsAppService {
   }
 
   async getPost({ userId, postId }: GetPostParam): Promise<GetPostRet> {
-    const post = new PostModel(assert<IPost>(await this.postRepository.getPostById(postId, userId)));
+    const post = new PostModel(assert<IPost>(await this.postRepository.getPostById(postId, userId)), userId);
     return { post: post.toEntity() };
   }
 

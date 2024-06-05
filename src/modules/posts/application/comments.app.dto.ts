@@ -1,16 +1,17 @@
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import {
-  IFindCommentsQueryOptions,
   IComment,
   ICommentCreateDto,
   ICommentReplyCreateDto,
   ICommentRet,
   ICommentUpdateDto,
-  IFindCommentRepliesQueryOptions,
+  IFindCommentsAndRepliesQueryOptions,
+  IFindCommentsQueryOptions,
+  IFindRepliesQueryOptions,
 } from '../domain/interface/comment.interface';
 import { ICommentLikeCreateDto } from '../domain/interface/comment-like.interface';
 import { ICommentReportCreateDto } from '../domain/interface/comment-report.interface';
-import { IPaginationParam, IPaginationRet } from 'src/common/common-types';
+import { TPaginationParam, TPaginationRet } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // commentAppService Param
@@ -23,9 +24,11 @@ export interface CreateCommentReplyParam {
   commentReplyCreateDto: ICommentReplyCreateDto;
 }
 
-export interface FindCommentsParam extends IPaginationParam, IFindCommentsQueryOptions {}
+export interface FindCommentsParam extends TPaginationParam<IFindCommentsQueryOptions> {}
 
-export interface FindCommentRepliesParam extends IPaginationParam, IFindCommentRepliesQueryOptions {}
+export interface FindRepliesParam extends TPaginationParam<IFindRepliesQueryOptions> {}
+
+export interface FindCommentsAndRepliesParam extends TPaginationParam<IFindCommentsAndRepliesQueryOptions> {}
 
 export interface UpdateCommentParam {
   userId: IUser['id'];
@@ -66,9 +69,10 @@ export interface CreateCommentReplyRet {
   comment: ICommentRet;
 }
 
-export interface FindCommentsRet extends IPaginationRet {
-  comments: ICommentRet[];
-}
+export interface FindCommentsRet
+  extends TPaginationRet<{
+    comments: ICommentRet[];
+  }> {}
 
 export interface UpdateCommentRet {
   comment: ICommentRet;
