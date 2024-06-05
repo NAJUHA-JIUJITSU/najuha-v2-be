@@ -69,7 +69,7 @@ export class CommentsAppService {
 
   async findComments(query: FindCommentsParam): Promise<FindCommentsRet> {
     const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
-      (commentEntity) => new CommentModel(commentEntity, query.userId),
+      (commentEntity) => new CommentModel(commentEntity),
     );
     let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
     if (comments.length === query.limit) {
@@ -80,7 +80,7 @@ export class CommentsAppService {
 
   async findReplies(query: FindRepliesParam): Promise<FindCommentsRet> {
     const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
-      (commentEntity) => new CommentModel(commentEntity, query.userId),
+      (commentEntity) => new CommentModel(commentEntity),
     );
     let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
     if (comments.length === query.limit) {
@@ -91,7 +91,7 @@ export class CommentsAppService {
 
   async findCommentsAndReplies(query: FindCommentsAndRepliesParam): Promise<FindCommentsRet> {
     const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
-      (commentEntity) => new CommentModel(commentEntity, query.userId),
+      (commentEntity) => new CommentModel(commentEntity),
     );
     let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
     if (comments.length === query.limit) {

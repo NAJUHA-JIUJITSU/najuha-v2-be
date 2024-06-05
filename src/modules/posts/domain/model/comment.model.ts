@@ -19,7 +19,7 @@ export class CommentModel {
   private likeCount: number;
   private userLiked: boolean;
 
-  constructor(entity: IComment, apiCallUserId?: IUser['id']) {
+  constructor(entity: IComment) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.parentId = entity.parentId;
@@ -31,7 +31,7 @@ export class CommentModel {
     this.likeCount = entity.likeCount || 0;
     this.reports = entity.reports || [];
     this.likes = entity.likes || [];
-    this.userLiked = this.likes.some((like) => like.userId === apiCallUserId);
+    this.userLiked = this.likes.length > 0 ? true : false;
   }
 
   toEntity() {
