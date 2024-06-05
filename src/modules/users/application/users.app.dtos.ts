@@ -1,6 +1,8 @@
 import { ITemporaryUser, ITemporaryUserCreateDto, IUser, IUserUpdateDto } from '../domain/interface/user.interface';
 
-// Application Layer Param DTOs ----------------------------------------------
+// ---------------------------------------------------------------------------
+// usersAppService Param
+// ---------------------------------------------------------------------------
 export interface CreateUserParam {
   userCreateDto: ITemporaryUserCreateDto;
 }
@@ -13,7 +15,9 @@ export interface GetMeParam {
   userId: IUser['id'];
 }
 
-// Application Layer Result DTOs ----------------------------------------------
+// ---------------------------------------------------------------------------
+// usersAppService Result
+// ---------------------------------------------------------------------------
 export interface CreateUserRet {
   user: ITemporaryUser;
 }

@@ -7,7 +7,9 @@ import { IPlayerSnapshotCreateDto } from '../domain/interface/player-snapshot.in
 import { IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from '../domain/interface/additional-info.interface';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 
-// Application Layer Param DTOs ---------------------------------------------------
+// ---------------------------------------------------------------------------
+// applicationsAppService Param
+// ---------------------------------------------------------------------------
 export interface CreateApplicationParam {
   userId: IUser['id'];
   competitionId: ICompetition['id'];
@@ -58,7 +60,9 @@ export interface FindApplicationsParam {
   limit: number;
 }
 
-// Application Layer Result DTOs -----------------------------------------------------
+// ---------------------------------------------------------------------------
+// applicationsAppService Result
+// ---------------------------------------------------------------------------
 export interface CreateApplicationRet {
   application: IApplication;
 }

@@ -1,7 +1,9 @@
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { IAuthTokens } from '../domain/interface/auth-tokens.interface';
 
-// Application Layer Param DTOs ----------------------------------------------
+// ---------------------------------------------------------------------------
+// authAppService Param
+// ---------------------------------------------------------------------------
 export interface SnsLoginParam {
   /** - snsProvider. */
   snsAuthProvider: IUser['snsAuthProvider'];
@@ -20,7 +22,9 @@ export interface AcquireAdminRoleParam {
   userId: IUser['id'];
 }
 
-// Application Layer Result DTOs ----------------------------------------------
+// ---------------------------------------------------------------------------
+// authAppService Result
+// ---------------------------------------------------------------------------
 export interface SnsLoginRet {
   /** - authTokens. */
   authTokens: IAuthTokens;

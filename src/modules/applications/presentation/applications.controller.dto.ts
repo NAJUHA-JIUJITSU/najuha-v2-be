@@ -12,7 +12,9 @@ import { IPlayerSnapshotCreateDto } from '../domain/interface/player-snapshot.in
 import { IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from '../domain/interface/additional-info.interface';
 import { IParticipationDivisionInfoUpdateDto } from '../domain/interface/participation-division-info.interface';
 
-// Presentation Layer Request Dto ---------------------------------------------------
+// ---------------------------------------------------------------------------
+// applicationsController Request
+// ---------------------------------------------------------------------------
 export interface CreateApplicationReqBody {
   applicationType: IApplication['type'];
   competitionId: ICompetition['id'];
@@ -48,8 +50,9 @@ export interface UpdateDoneApplicationReqBody {
 
 export interface FindApplicationsQuery extends Pick<IApplicationQueryOptions, 'page' | 'limit'> {}
 
-// Presentation Layer Response Dto ---------------------------------------------------
-
+// ---------------------------------------------------------------------------
+// applicationsController Response
+// ---------------------------------------------------------------------------
 export interface CreateApplicationRes extends CreateApplicationRet {}
 
 export interface GetApplicationRes extends GetApplicationRet {}

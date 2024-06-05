@@ -3,7 +3,9 @@ import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.
 import { IAuthTokens } from 'src/modules/auth/domain/interface/auth-tokens.interface';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
 
-// Application layer Param DTOs
+// ---------------------------------------------------------------------------
+// registerAppService Param
+// ---------------------------------------------------------------------------
 export interface GetTemporaryUserParam {
   userId: IUser['id'];
 }
@@ -28,7 +30,9 @@ export interface RegisterUserParam {
   consentPolicyTypes: IPolicy['type'][];
 }
 
-// Application layer Result DTOs
+// ---------------------------------------------------------------------------
+// registerAppService Result
+// ---------------------------------------------------------------------------
 export interface GetTemporaryUserRet {
   user: ITemporaryUser;
 }

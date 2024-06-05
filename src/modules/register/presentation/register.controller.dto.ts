@@ -9,7 +9,9 @@ import {
 } from '../application/register.app.dto';
 import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.type';
 
-// Presentation Layer Request DTOs
+// ---------------------------------------------------------------------------
+// registerController Request
+// ---------------------------------------------------------------------------
 export interface SendPhoneNumberAuthCodeReqBody {
   phoneNumber: IUser['phoneNumber'];
 }
@@ -23,7 +25,9 @@ export interface RegisterUserReqBody {
   consentPolicyTypes: IPolicy['type'][];
 }
 
-// Presentation Layer Response DTOs
+// ---------------------------------------------------------------------------
+// registerController Response
+// ---------------------------------------------------------------------------
 export interface GetTemporaryUserRes extends GetTemporaryUserRet {}
 
 export interface IsDuplicatedNicknameRes extends IsDuplicateNicknameRet {}

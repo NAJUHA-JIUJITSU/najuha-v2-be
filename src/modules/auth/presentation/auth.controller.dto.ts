@@ -1,7 +1,9 @@
 import { AcquireAdminRoleRet, RefreshTokenRet, SnsLoginRet } from '../application/auth.app.dto';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
-// Presentation Layer Request DTOs --------------------------------------------
+// ---------------------------------------------------------------------------
+// authController Request
+// ---------------------------------------------------------------------------
 export interface SnsLoginReqBody {
   /** - snsProvider. */
   snsAuthProvider: IUser['snsAuthProvider'];
@@ -15,7 +17,9 @@ export interface RefreshTokenReqBody {
   refreshToken: string;
 }
 
-// Presentation Layer Response DTOs -------------------------------------------
+// ---------------------------------------------------------------------------
+// authController Response
+// ---------------------------------------------------------------------------
 export interface SnsLoginRes extends SnsLoginRet {}
 
 export interface RefreshTokenRes extends RefreshTokenRet {}

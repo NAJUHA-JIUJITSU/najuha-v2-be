@@ -23,7 +23,9 @@ import {
   IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
 
-// Presentation Layer Request DTOs --------------------------------------------
+// ---------------------------------------------------------------------------
+// competitionsController Request
+// ---------------------------------------------------------------------------
 export interface CreateCompetitionReqBody extends ICompetitionCreateDto {}
 
 export interface UpdateCompetitionReqBody extends Omit<ICompetitionUpdateDto, 'id'> {}
@@ -57,7 +59,9 @@ export interface CreateCompetitionRequiredAdditionalInfoReqBody
 export interface UpdateRequiredAdditionalInfoReqBody
   extends Omit<IRequiredAdditionalInfoUpdateDto, 'competitionId' | 'id'> {}
 
-// Presentation Layer Response DTOs -------------------------------------------
+// ---------------------------------------------------------------------------
+// competitionsController Response
+// ---------------------------------------------------------------------------
 export interface CreateCompetitionRes extends CreateCompetitionRet {}
 
 export interface FindCompetitionsRes extends FindCompetitionsRet {}

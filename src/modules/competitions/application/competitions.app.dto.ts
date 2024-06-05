@@ -16,7 +16,9 @@ import {
   IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
 
-// Application Layer Param DTOs ----------------------------------------------
+// ---------------------------------------------------------------------------
+// competitionsAppService Param
+// ---------------------------------------------------------------------------
 export interface CreateCompetitionParam {
   competitionCreateDto: ICompetitionCreateDto;
 }
@@ -67,7 +69,9 @@ export interface DeleteRequiredAdditionalInfoParam {
   requiredAdditionalInfoId: IRequiredAdditionalInfo['id'];
 }
 
-// Application Layer Result DTOs ----------------------------------------------
+// ---------------------------------------------------------------------------
+// competitionsAppService Result
+// ---------------------------------------------------------------------------
 export interface CreateCompetitionRet {
   competition: ICompetitionWithoutRelations;
 }
