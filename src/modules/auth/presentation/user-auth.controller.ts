@@ -12,8 +12,8 @@ import {
 } from 'src/common/response/errorResponse';
 import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { RefreshTokenReqBody, SnsLoginReqBody, SnsLoginRes } from './dtos';
-import { AcquireAdminRoleRet, RefreshTokenRet } from '../application/dtos';
+import { RefreshTokenReqBody, SnsLoginReqBody, SnsLoginRes } from './auth.controller.dto';
+import { AcquireAdminRoleRet, RefreshTokenRet } from '../application/auth.app.dto';
 
 @Controller('user/auth')
 export class UserAuthController {

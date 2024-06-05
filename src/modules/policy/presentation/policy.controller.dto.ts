@@ -4,7 +4,7 @@ import {
   FindAllTypesOfLatestPoliciesRet,
   FindPoliciesRet,
   FindPolicyRet,
-} from '../application/dtos';
+} from '../application/policy.app.dto';
 import { IPolicy } from '../domain/interface/policy.interface';
 
 // Presentation Layer Request DTOs

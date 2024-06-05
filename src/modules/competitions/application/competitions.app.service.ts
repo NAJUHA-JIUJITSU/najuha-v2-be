@@ -23,7 +23,7 @@ import {
   UpdateCompetitionRequiredAdditionalInfoRet,
   DeleteCompetitionRequiredAdditionalInfoRet,
   FindHostingCompetitionsParam,
-} from './dtos';
+} from './competitions.app.dto';
 import { CompetitionModel } from '../domain/model/competition.model';
 import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
 import { CompetitionFactory } from '../domain/competition.factory';

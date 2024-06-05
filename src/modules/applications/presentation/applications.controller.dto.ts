@@ -4,7 +4,7 @@ import {
   GetApplicationRet,
   GetExpectedPaymentRet,
   UpdateReadyApplicationRet,
-} from 'src/modules/applications/application/dtos';
+} from 'src/modules/applications/application/applications.app.dto';
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IApplication, IApplicationQueryOptions } from '../domain/interface/application.interface';

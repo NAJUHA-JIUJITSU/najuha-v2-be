@@ -18,7 +18,7 @@ import {
   RegisterUserRes,
   SendPhoneNumberAuthCodeReqBody,
   SendPhoneNumberAuthCodeRes,
-} from './dtos';
+} from './register.controller.dto';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 @Controller('user/register')

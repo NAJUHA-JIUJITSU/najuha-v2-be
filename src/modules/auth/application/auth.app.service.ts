@@ -10,7 +10,7 @@ import {
   RefreshTokenRet,
   SnsLoginParam,
   SnsLoginRet,
-} from './dtos';
+} from './auth.app.dto';
 import { UserFactory } from 'src/modules/users/domain/user.factory';
 import { assert } from 'typia';
 import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';

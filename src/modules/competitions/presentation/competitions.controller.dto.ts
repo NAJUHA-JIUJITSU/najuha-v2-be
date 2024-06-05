@@ -8,7 +8,7 @@ import {
   GetCompetitionRet,
   UpdateCompetitionRet,
   CreateCompetitionRequiredAdditionalInfoRet,
-} from '../application/dtos';
+} from '../application/competitions.app.dto';
 import {
   ICompetition,
   ICompetitionCreateDto,

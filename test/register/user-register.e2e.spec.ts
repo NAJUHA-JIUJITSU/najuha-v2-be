@@ -20,7 +20,7 @@ import {
   IsDuplicatedNicknameRes,
   RegisterUserRes,
   SendPhoneNumberAuthCodeRes,
-} from 'src/modules/register/presentation/dtos';
+} from 'src/modules/register/presentation/register.controller.dto';
 import { UserEntity } from 'src//database/entity/user/user.entity';
 import { uuidv7 } from 'uuidv7';
 import { TemporaryUserDummyBuilder, UserDummyBuilder } from 'src/dummy/user-dummy';

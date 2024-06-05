@@ -6,7 +6,7 @@ import {
   IsDuplicateNicknameRet,
   RegisterUserRet,
   SendPhoneNumberAuthCodeRet,
-} from '../application/dtos';
+} from '../application/register.app.dto';
 import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.type';
 
 // Presentation Layer Request DTOs

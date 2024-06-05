@@ -23,7 +23,7 @@ import {
   DeleteCompetitionRequiredAdditionalInfoRes,
   UpdateCompetitionRequiredAdditionalInfoRes,
   GetCompetitionRes,
-} from './dtos';
+} from './competitions.controller.dto';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { IRequiredAdditionalInfo } from '../domain/interface/required-addtional-info.interface';
 

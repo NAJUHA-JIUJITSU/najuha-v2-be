@@ -9,7 +9,10 @@ import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UserEntity } from 'src//database/entity/user/user.entity';
-import { FindCompetitionsRes, GetCompetitionRes } from 'src/modules/competitions/presentation/dtos';
+import {
+  FindCompetitionsRes,
+  GetCompetitionRes,
+} from 'src/modules/competitions/presentation/competitions.controller.dto';
 import { CompetitionEntity } from 'src//database/entity/competition/competition.entity';
 import { UserDummyBuilder } from 'src/dummy/user-dummy';
 import { CompetitionDummyBuilder } from 'src/dummy/competition.dummy';

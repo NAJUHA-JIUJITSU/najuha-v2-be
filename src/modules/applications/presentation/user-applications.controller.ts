@@ -15,7 +15,7 @@ import {
   UpdateDoneApplicationRes,
   UpdateReadyApplicationReqBody,
   UpdateReadyApplicationRes,
-} from './dtos';
+} from './applications.controller.dto';
 
 @Controller('user/applications')
 export class UserApplicationsController {

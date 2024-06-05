@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
 import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
-import { FindPoliciesRes, FindPolicyRes } from 'src/modules/policy/presentation/dtos';
+import { FindPoliciesRes, FindPolicyRes } from 'src/modules/policy/presentation/policy.controller.dto';
 import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
 import { uuidv7 } from 'uuidv7';
 // import * as Apis from '../../src/api/functional';

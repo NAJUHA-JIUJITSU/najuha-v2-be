@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserFactory } from '../domain/user.factory';
-import { CreateUserParam, CreateUserRet, GetMeParam, GetMeRet, UpdateUserParam, UpdateUserRet } from './dtos';
+import { CreateUserParam, CreateUserRet, GetMeParam, GetMeRet, UpdateUserParam, UpdateUserRet } from './users.app.dtos';
 import { assert } from 'typia';
 import { IUser } from '../domain/interface/user.interface';
 import { UserRepository } from 'src//database/custom-repository/user.repository';

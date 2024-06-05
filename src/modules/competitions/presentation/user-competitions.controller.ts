@@ -4,7 +4,7 @@ import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
 import { ICompetition } from '../domain/interface/competition.interface';
-import { FindCompetitionsReqQuery, FindCompetitionsRes, GetCompetitionRes } from './dtos';
+import { FindCompetitionsReqQuery, FindCompetitionsRes, GetCompetitionRes } from './competitions.controller.dto';
 
 @Controller('user/competitions')
 export class UserCompetitionsController {

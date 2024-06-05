@@ -4,7 +4,7 @@ import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { ENTITY_NOT_FOUND } from 'src/common/response/errorResponse';
-import { CreateUserReqBody, CreateUserRes, GetMeRes, UpdateUserReqBody, UpdateUserRes } from './dtos';
+import { CreateUserReqBody, CreateUserRes, GetMeRes, UpdateUserReqBody, UpdateUserRes } from './users.controller.dto';
 
 @Controller('user/users')
 export class UserUsersController {

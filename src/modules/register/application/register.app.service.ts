@@ -13,7 +13,7 @@ import {
   RegisterUserRet,
   SendPhoneNumberAuthCodeParam,
   SendPhoneNumberAuthCodeRet,
-} from './dtos';
+} from './register.app.dto';
 import { RegisterUserModel } from '../domain/model/register-user.model';
 import { assert } from 'typia';
 import { IRegisterUser, ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';

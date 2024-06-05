@@ -1,4 +1,4 @@
-import { CreatePostReqBody } from 'src/modules/posts/presentation/posts.presentation.dto';
+import { CreatePostReqBody } from 'src/modules/posts/presentation/posts.controller.dto';
 import api from '../../src/api';
 import typia from 'typia';
 

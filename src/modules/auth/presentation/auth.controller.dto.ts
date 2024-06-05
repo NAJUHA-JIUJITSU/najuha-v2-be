@@ -1,4 +1,4 @@
-import { AcquireAdminRoleRet, RefreshTokenRet, SnsLoginRet } from '../application/dtos';
+import { AcquireAdminRoleRet, RefreshTokenRet, SnsLoginRet } from '../application/auth.app.dto';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 // Presentation Layer Request DTOs --------------------------------------------

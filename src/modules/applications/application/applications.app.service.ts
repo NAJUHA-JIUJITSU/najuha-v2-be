@@ -13,7 +13,7 @@ import {
   UpdateDoneApplicationRet,
   UpdateReadyApplicationParam,
   UpdateReadyApplicationRet,
-} from './dtos';
+} from './applications.app.dto';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
 import { assert } from 'typia';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';

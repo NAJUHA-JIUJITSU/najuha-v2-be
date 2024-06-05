@@ -10,7 +10,7 @@ import {
   FindPostsReqQuery,
   FindPostsRes,
   GetPostRes,
-} from './posts.presentation.dto';
+} from './posts.controller.dto';
 import { IComment } from '../domain/interface/comment.interface';
 import { CommentsAppService } from '../application/comments.app.service';
 

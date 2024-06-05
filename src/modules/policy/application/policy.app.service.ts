@@ -8,7 +8,7 @@ import {
   FindPoliciesRet,
   FindPolicyParam,
   FindPolicyRet,
-} from './dtos';
+} from './policy.app.dto';
 import { PolicyRepository } from 'src//database/custom-repository/policy.repository';
 
 @Injectable()

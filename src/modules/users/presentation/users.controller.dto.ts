@@ -1,4 +1,4 @@
-import { CreateUserRet, GetMeRet, UpdateUserRet } from '../application/dtos';
+import { CreateUserRet, GetMeRet, UpdateUserRet } from '../application/users.app.dtos';
 import { ITemporaryUserCreateDto, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // Presentation Layer Request DTOs ----------------------------------------------

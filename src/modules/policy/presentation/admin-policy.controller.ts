@@ -3,7 +3,7 @@ import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { PolicyAppService } from '../application/policy.app.service';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { CreatePolicyReqBody, CreatePolicyRes, FindPoliciesReqQuery, FindPoliciesRes } from './dtos';
+import { CreatePolicyReqBody, CreatePolicyRes, FindPoliciesReqQuery, FindPoliciesRes } from './policy.controller.dto';
 
 @Controller('admin/policy')
 export class AdminPolicyController {

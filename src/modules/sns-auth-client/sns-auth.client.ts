@@ -3,7 +3,7 @@ import { BusinessException, SnsAuthErrors } from 'src/common/response/errorRespo
 import { GoogleStrategy } from 'src/modules/sns-auth-client/google.strategy';
 import { KakaoStrategy } from 'src/modules/sns-auth-client/kakao.strategy';
 import { NaverStrategy } from 'src/modules/sns-auth-client/naver.strategy';
-import { SnsLoginParam } from '../auth/application/dtos';
+import { SnsLoginParam } from '../auth/application/auth.app.dto';
 import { ISnsAuthValidatedUserData } from './interface/validated-user-data.interface';
 
 @Injectable()
