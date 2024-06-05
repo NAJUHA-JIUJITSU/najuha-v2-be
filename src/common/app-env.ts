@@ -40,6 +40,7 @@ type appEnv = {
   // REDIS EXPIRATION TIME ---------------------------------------------------------
   redisPhoneNumberAuthCodeExpirationTime: number;
   redisRefreshTokenExpirationTime: number;
+  redisViewCountExpirationTime: number;
   // JWT ---------------------------------------------------------------------------
   jwtAccessTokenSecret: string;
   jwtAccessTokenExpirationTime: string;
@@ -80,6 +81,7 @@ const loadConfig = (): appEnv => {
     // REDIS EXPIRATION TIME ---------------------------------------------------------
     redisPhoneNumberAuthCodeExpirationTime: Number(process.env.REDIS_PHONE_NUMBER_AUTH_CODE_EXPIRATION_TIME),
     redisRefreshTokenExpirationTime: Number(process.env.REDIS_REFRESH_TOKEN_EXPIRATION_TIME),
+    redisViewCountExpirationTime: Number(process.env.REDIS_VIEW_COUNT_EXPIRATION_TIME),
     // JWT ---------------------------------------------------------------------------
     jwtAccessTokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET,
     jwtAccessTokenExpirationTime: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,

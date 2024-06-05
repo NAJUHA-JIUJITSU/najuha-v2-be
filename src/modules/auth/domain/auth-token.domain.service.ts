@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
 import { IAuthTokens } from './interface/auth-tokens.interface';
-import { IAuthTokenPayload } from './interface/auth-token-payload.interfac';
+import { IAuthTokenPayload } from './interface/auth-token-payload.interface';
 
 @Injectable()
 export class AuthTokenDomainService {

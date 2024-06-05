@@ -27,6 +27,12 @@ erDiagram
     text content
     timestamptz createdAt
   }
+  policy_consent {
+    uuid id PK
+    timestamptz createdAt
+    uuid userId FK
+    uuid policyId FK
+  }
   user {
     uuid id PK
     varchar role
@@ -43,12 +49,6 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
-  }
-  policy_consent {
-    uuid id PK
-    timestamptz createdAt
-    uuid userId FK
-    uuid policyId FK
   }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
@@ -68,6 +68,19 @@ Policy Entity
   - `title`
   - `content`
   - `createdAt`
+
+
+### `policy_consent`
+
+PolicyConsent Entity   
+@namespace User
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `userId`
+  - `policyId`: - policyId.
 
 
 ### `user`
@@ -92,19 +105,6 @@ User Entity
   - `status`
   - `createdAt`
   - `updatedAt`
-
-
-### `policy_consent`
-
-PolicyConsent Entity   
-@namespace User
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `userId`
-  - `policyId`: - policyId.
 
 
 ## Application

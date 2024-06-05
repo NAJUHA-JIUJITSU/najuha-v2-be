@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
 import appEnv from 'src/common/app-env';
-import { IAuthTokenPayload } from 'src/modules/auth/domain/interface/auth-token-payload.interfac';
+import { IAuthTokenPayload } from 'src/modules/auth/domain/interface/auth-token-payload.interface';
 
 const ROLE_LEVEL_KEY = Symbol('roleLevel');
 

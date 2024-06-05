@@ -162,37 +162,20 @@
       }
     },
     "/api-conventions/create-admin-access-token": {
-      "get": {
+      "post": {
         "tags": [
           "api-conventions"
         ],
         "parameters": [],
         "responses": {
-          "200": {
+          "201": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "accessToken": {
-                        "type": "string"
-                      },
-                      "refreshToken": {
-                        "type": "string"
-                      }
-                    },
-                    "nullable": false,
-                    "required": [
-                      "name",
-                      "accessToken",
-                      "refreshToken"
-                    ]
+                    "$ref": "#/components/schemas/ICreatedAdminAccessToken"
                   }
                 }
               }
@@ -214,7 +197,7 @@
             ]
           }
         ],
-        "x-nestia-method": "GET"
+        "x-nestia-method": "POST"
       }
     },
     "/user/auth/sns-login": {
@@ -4820,7 +4803,7 @@
         "x-nestia-method": "DELETE"
       }
     },
-    "/public/posts": {
+    "/public-api/posts": {
       "get": {
         "tags": [
           "p-7 posts"
@@ -4851,7 +4834,7 @@
         },
         "summary": "p-7-1 findPosts",
         "description": "p-7-1 findPosts.\n- RoleLevel: PUBLIC.\n- 여러 게시글을 조회합니다.\n- ACTIVE 상태인 게시글들만 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public.posts.findPosts",
+        "x-nestia-namespace": "public-api.posts.findPosts",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -4892,7 +4875,7 @@
         "x-nestia-method": "GET"
       }
     },
-    "/public/posts/{postId}": {
+    "/public-api/posts/{postId}": {
       "get": {
         "tags": [
           "p-7 posts"
@@ -4924,7 +4907,7 @@
         },
         "summary": "p-7-2 getPost",
         "description": "p-7-2 getPost.\n- RoleLevel: PUBLIC.\n- 특정 게시글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public.posts.getPost",
+        "x-nestia-namespace": "public-api.posts.getPost",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -4965,7 +4948,7 @@
         "x-nestia-method": "GET"
       }
     },
-    "/public/posts/{postId}/comment": {
+    "/public-api/posts/{postId}/comment": {
       "get": {
         "tags": [
           "p-7 posts"
@@ -5006,7 +4989,7 @@
         },
         "summary": "p-7-3- findComments",
         "description": "p-7-3- findComments.\n- RoleLevel: PUBLIC.\n- 게시글의 댓글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public.posts.comment.findComments",
+        "x-nestia-namespace": "public-api.posts.comment.findComments",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -5064,7 +5047,7 @@
         "x-nestia-method": "GET"
       }
     },
-    "/public/posts/{postId}/comment/{commentId}/reply": {
+    "/public-api/posts/{postId}/comment/{commentId}/reply": {
       "get": {
         "tags": [
           "p-7 posts"
@@ -5115,7 +5098,7 @@
         },
         "summary": "p-7-4 findCommentReplies",
         "description": "p-7-4 findCommentReplies.\n- RoleLevel: PUBLIC.\n- 댓글의 대댓글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public.posts.comment.reply.findCommentReplies",
+        "x-nestia-namespace": "public-api.posts.comment.reply.findCommentReplies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -5173,7 +5156,7 @@
         "x-nestia-method": "GET"
       }
     },
-    "/public/view-count/post/{postId}": {
+    "/public-api/view-count/post/{postId}": {
       "post": {
         "tags": [
           "p-8 view-count"
@@ -5193,12 +5176,19 @@
         "responses": {
           "201": {
             "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
             "x-nestia-encrypted": false
           }
         },
         "summary": "p-8-1 incrementPostViewCount",
-        "description": "p-8-1 incrementPostViewCount.",
-        "x-nestia-namespace": "public.view-count.post.incrementPostViewCount",
+        "description": "p-8-1 incrementPostViewCount.\n- RoleLevel: PUBLIC\n- 게시글 조회수를 증가시킵니다.\n- ip를 사용하여 사용자를 식별합니다.\n- 동일한 ip로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
+        "x-nestia-namespace": "public-api.view-count.post.incrementPostViewCount",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -5222,6 +5212,253 @@
               },
               {
                 "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/public-api/view-count/competition/{competitionId}": {
+      "post": {
+        "tags": [
+          "p-8 view-count"
+        ],
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "대회 id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "p-8-2 incrementCompetitionViewCount",
+        "description": "p-8-2 incrementCompetitionViewCount.\n- RoleLevel: PUBLIC\n- 대회 조회수를 증가시킵니다.\n- ip를 사용하여 사용자를 식별합니다.\n- 동일한 ip로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
+        "x-nestia-namespace": "public-api.view-count.competition.incrementCompetitionViewCount",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "p-8 view-count",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "대회 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/user-api/view-count/post/{postId}": {
+      "post": {
+        "tags": [
+          "u-8 view-count"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "게시글 id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-8-1 incrementPostViewCount",
+        "description": "u-8-1 incrementPostViewCount.\n- RoleLevel: USER\n- 게시글 조회수를 증가시킵니다.\n- accessToken에서 userId를 추출하여 사용자를 식별합니다.\n- 동일한 userId로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user-api.view-count.post.incrementPostViewCount",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-8 view-count",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
+    "/user-api/view-count/competition/{competitionId}": {
+      "post": {
+        "tags": [
+          "u-8 view-count"
+        ],
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "대회 id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-8-2 incrementCompetitionViewCount",
+        "description": "u-8-2 incrementCompetitionViewCount.\n- RoleLevel: USER\n- 대회 조회수를 증가시킵니다.\n- accessToken에서 userId를 추출하여 사용자를 식별합니다.\n- 동일한 userId로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user-api.view-count.competition.incrementCompetitionViewCount",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-8 view-count",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "대회 id",
                 "kind": "text"
               }
             ]
@@ -5372,6 +5609,26 @@
           "code",
           "type",
           "result"
+        ]
+      },
+      "ICreatedAdminAccessToken": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "accessToken",
+          "refreshToken"
         ]
       },
       "SnsLoginReqBody": {
