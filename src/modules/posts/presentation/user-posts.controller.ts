@@ -77,6 +77,7 @@ export class UserPostsController {
         page: query.page || 0,
         limit: query.limit || 10,
         userId: req['userId'],
+        status: 'ACTIVE',
         categoryFilters: query.categoryFilters,
         sortOption: query.sortOption || '최신순',
       }),

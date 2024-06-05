@@ -17,7 +17,9 @@ import { IPaginationParam } from 'src/common/common-types';
 // ---------------------------------------------------------------------------
 export interface CreatePostReqBody extends Omit<IPostCreateDto, 'userId'> {}
 
-export interface FindPostsReqQuery extends Partial<IPaginationParam>, Partial<Omit<IFindPostsQueryOptions, 'userId'>> {}
+export interface FindPostsReqQuery
+  extends Partial<IPaginationParam>,
+    Partial<Omit<IFindPostsQueryOptions, 'userId' | 'status'>> {}
 
 export interface UpdatePostReqBody extends Omit<IPostUpdateDto, 'postId'> {}
 

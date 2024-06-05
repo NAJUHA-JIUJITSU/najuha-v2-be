@@ -6,7 +6,7 @@ import { IPostLike } from './post-like.interface';
 import { IPostReport } from './post-report.interface';
 
 export interface IPost {
-  /** ULID. */
+  /** UUID v7. */
   id: TId;
 
   /** Post writer. */
@@ -18,7 +18,13 @@ export interface IPost {
   /** Post status. */
   status: TPostStatus;
 
-  /** Post category. */
+  /**
+   * Post category.
+   * - FREE: 자유 게시판.
+   * - COMPETITION: 대회 게시판.
+   * - SEMINAR: 세미나 게시판.
+   * - OPEN_MAT: 오픈 매트 게시판.
+   */
   category: TPostCategory;
 
   /** CreatedAt. */
@@ -64,18 +70,29 @@ export interface IPostUpdateDto extends Pick<IPostSnapshot, 'postId' | 'title' |
 
 export interface IFindPostsQueryOptions {
   /**
+   * 게시물 status 필터.
+   */
+  status?: TPostStatus;
+
+  /**
    * User ID.
    * 좋아요 여부를 판단하기 위해 사용됩니다.
    */
   userId?: IUser['id'];
 
   /**
-   * 카테고리 옵션.
+   * 카테고리 필터.
+   * - POPULAR 옵션을 선택하면 다른 카테고리 옵션은 무시됩니다.
+   * - FREE, COMPETITION, SEMINAR, OPEN_MAT 옵션들은 동시에 여러 개 선택 가능합니다.
+   * - categoryFilters를 요청하지 않으면 모든 카테고리에서 게시물을 조회합니다.
+   *
+   * categofyFilters:
    * - POPULAR: 인기 게시판, 좋아요 수가 10개 이상인 게시물만 조회.
    * - FREE: 자유 게시판.
    * - COMPETITION: 대회 게시판.
    * - SEMINAR: 세미나 게시판.
    * - OPEN_MAT: 오픈 매트 게시판.
+   *
    */
   categoryFilters?: (TPostCategory | 'POPULAR')[];
 

@@ -43,6 +43,7 @@ export class PublicPostsController {
       await this.postsAppService.findPosts({
         page: query.page || 0,
         limit: query.limit || 10,
+        status: 'ACTIVE',
         categoryFilters: query.categoryFilters,
         sortOption: query.sortOption || '최신순',
       }),

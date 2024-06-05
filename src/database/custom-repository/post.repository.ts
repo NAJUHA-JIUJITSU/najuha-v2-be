@@ -12,12 +12,15 @@ export class PostRepository extends Repository<PostEntity> {
     super(PostEntity, dataSource.createEntityManager());
   }
 
-  async findPosts({ page, limit, categoryFilters, sortOption, userId }: FindPostsParam) {
+  async findPosts({ page, limit, categoryFilters, sortOption, userId, status }: FindPostsParam) {
     let qb = this.createQueryBuilder('post')
-      .where('post.status = :status', { status: 'ACTIVE' })
       .leftJoinAndSelect('post.postSnapshots', 'postSnapshots')
       .loadRelationCountAndMap('post.commentCount', 'post.comments')
       .loadRelationCountAndMap('post.likeCount', 'post.likes');
+
+    if (status) {
+      qb = qb.andWhere('post.status = :status', { status });
+    }
 
     if (userId) {
       qb = qb.leftJoinAndSelect('post.likes', 'likes', 'likes.userId = :userId', { userId: userId });
