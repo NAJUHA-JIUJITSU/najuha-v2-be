@@ -14,7 +14,7 @@ import {
 import { IComment } from '../domain/interface/comment.interface';
 import { CommentsAppService } from '../application/comments.app.service';
 
-@Controller('public/posts')
+@Controller('public-api/posts')
 export class PublicPostsController {
   constructor(
     private readonly postsAppService: PostsAppService,

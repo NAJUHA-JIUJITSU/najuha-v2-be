@@ -15,6 +15,7 @@ import { ApplicationModule } from './modules/applications/application.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfigAsync } from './database/typeorm.config';
 import { PostsModule } from './modules/posts/posts.module';
+import { ViewCountModule } from './modules/view-count/view-count.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { PostsModule } from './modules/posts/posts.module';
     CompetitionsModule,
     ApplicationModule,
     PostsModule,
+    ViewCountModule,
   ],
   providers: [],
 })

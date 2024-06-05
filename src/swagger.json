@@ -5172,6 +5172,72 @@
         ],
         "x-nestia-method": "GET"
       }
+    },
+    "/public/view-count/post/{postId}": {
+      "post": {
+        "tags": [
+          "p-8 view-count"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "게시글 id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "void",
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "p-8-1 incrementPostViewCount",
+        "description": "p-8-1 incrementPostViewCount.",
+        "x-nestia-namespace": "public.view-count.post.incrementPostViewCount",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "p-8 view-count",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
     }
   },
   "components": {
@@ -5532,7 +5598,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "SnsLoginRes": {
@@ -5645,7 +5712,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "RefreshTokenRet": {
@@ -5772,7 +5840,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "AcquireAdminRoleRet": {
@@ -5811,7 +5880,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "GetTemporaryUserRes": {
@@ -6012,7 +6082,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "IsDuplicatedNicknameRes": {
@@ -6062,7 +6133,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "SendPhoneNumberAuthCodeRes": {
@@ -6117,7 +6189,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "ConfirmAuthCodeRes": {
@@ -6360,7 +6433,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "RegisterUserRes": {
@@ -6464,7 +6538,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateUserRes": {
@@ -6551,7 +6626,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "UpdateUserRes": {
@@ -6731,7 +6807,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "GetMeRes": {
@@ -6768,7 +6845,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "FindAllRecentPoliciesRes": {
@@ -6861,7 +6939,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "FindPolicyRes": {
@@ -7000,7 +7079,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreatePolicyRes": {
@@ -7113,7 +7193,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "FindPoliciesRes": {
@@ -7221,7 +7302,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "FindCompetitionsRes": {
@@ -7538,7 +7620,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "GetCompetitionRes": {
@@ -8326,7 +8409,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateCompetitionRes": {
@@ -8745,7 +8829,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "UpdateCompetitionRes": {
@@ -8921,7 +9006,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateCompetitionDivisionsRes": {
@@ -9003,7 +9089,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateEarlybirdDiscountSnapshotRes": {
@@ -9058,7 +9145,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateCombinationDiscountSnapshotRes": {
@@ -9120,7 +9208,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateCompetitionRequiredAdditionalInfoRes": {
@@ -9173,7 +9262,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "UpdateCompetitionRequiredAdditionalInfoRes": {
@@ -9210,7 +9300,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "DeleteCompetitionRequiredAdditionalInfoRes": {
@@ -9418,7 +9509,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateApplicationRes": {
@@ -9811,7 +9903,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "GetApplicationRes": {
@@ -9892,7 +9985,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "UpdateReadyApplicationRes": {
@@ -9982,7 +10076,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "UpdateDoneApplicationRes": {
@@ -10041,7 +10136,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "GetExpectedPaymentRes": {
@@ -10126,7 +10222,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "FindApplicationsRes": {
@@ -10205,7 +10302,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreatePostRes": {
@@ -10425,7 +10523,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "FindPostsRes": {
@@ -10470,7 +10569,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "GetPostRes": {
@@ -10531,7 +10631,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "UpdatePostRes": {
@@ -10607,7 +10708,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateCommentRes": {
@@ -10782,7 +10884,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "CreateCommentReplyRes": {
@@ -10840,7 +10943,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "FindCommentsRes": {
@@ -10922,7 +11026,8 @@
         "nullable": false,
         "required": [
           "isSuccess",
-          "code"
+          "code",
+          "result"
         ]
       },
       "UpdateCommentRes": {

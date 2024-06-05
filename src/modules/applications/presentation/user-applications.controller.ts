@@ -118,7 +118,7 @@ export class UserApplicationsController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/:applicationId')
   async deleteApplication(@TypedParam('applicationId') applicationId: IApplication['id']): Promise<ResponseForm<void>> {
-    return createResponseForm();
+    return createResponseForm(void 0);
   }
 
   /**
