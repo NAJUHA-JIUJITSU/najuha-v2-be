@@ -4,7 +4,7 @@ import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-
 import { tags } from 'typia';
 
 export interface IParticipationDivisionInfoPayment {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   createdAt: TDateOrStringDate;

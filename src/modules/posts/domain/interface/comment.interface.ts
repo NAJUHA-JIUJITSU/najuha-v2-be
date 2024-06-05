@@ -7,7 +7,7 @@ import { ICommentReport } from './comment-report.interface';
 import { NotNull } from 'src/common/utility-types';
 
 export interface IComment {
-  /** ULID. */
+  /** UUID v7. */
   id: TId;
 
   /** Comment writer. */

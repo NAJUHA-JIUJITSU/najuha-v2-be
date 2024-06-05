@@ -13,7 +13,7 @@ import { tags } from 'typia';
  * - apple  : snsId, email, name.
  */
 export interface IUser {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /**

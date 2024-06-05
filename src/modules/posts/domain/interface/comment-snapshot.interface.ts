@@ -3,7 +3,7 @@ import { IComment } from './comment.interface';
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 
 export interface ICommentSnapshot {
-  /** ULID. */
+  /** UUID v7. */
   id: TId;
 
   /** Comment Id. */

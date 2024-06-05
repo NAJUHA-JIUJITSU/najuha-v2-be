@@ -7,7 +7,7 @@ import { TId, TDateOrStringDate } from 'src/common/common-types';
  * - ex) 주민번호, 주소
  */
 export interface IRequiredAdditionalInfo {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** Type */

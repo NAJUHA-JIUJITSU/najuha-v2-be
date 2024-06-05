@@ -7,7 +7,7 @@ import { tags } from 'typia';
  * - 새로운 약관이 생성될 때마다 버전을 올립니다.
  */
 export interface IPolicy {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** 약관의 버전. */

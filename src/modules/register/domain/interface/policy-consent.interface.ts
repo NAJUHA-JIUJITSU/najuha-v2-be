@@ -4,7 +4,7 @@ import { tags } from 'typia';
 
 /** - 사용자가 동의한 약관 정보. */
 export interface IPolicyConsent {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** 약관 동의 날짜. */

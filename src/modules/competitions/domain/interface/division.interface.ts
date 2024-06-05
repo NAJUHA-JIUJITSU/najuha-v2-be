@@ -4,7 +4,7 @@ import { IPriceSnapshot } from './price-snapshot.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IDivision {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /**

@@ -4,7 +4,7 @@ import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interfa
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IAdditionalInfo {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /**  Created at. */

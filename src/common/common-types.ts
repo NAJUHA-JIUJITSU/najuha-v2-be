@@ -2,6 +2,7 @@ import { tags } from 'typia';
 
 export type TDateOrStringDate = Date | (string & tags.Format<'date-time'>);
 
+/** UUID v7. */
 export type TId = string & tags.Format<'uuid'>;
 
 export interface IPaginationParam {

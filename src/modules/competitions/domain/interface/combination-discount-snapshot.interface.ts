@@ -4,7 +4,7 @@ import { ICompetition } from './competition.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface ICombinationDiscountSnapshot {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** 조합 할인 규칙. */

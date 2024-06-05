@@ -4,7 +4,7 @@ import { ICompetition } from './competition.interface';
 
 /** 대회 주최자 정보 매핑 테이블. */
 export interface ICompetitionHostMap {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** 주최자 User ID. */

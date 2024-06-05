@@ -4,7 +4,7 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 
 export interface ICommentLike {
-  /** ULID. */
+  /** UUID v7. */
   id: TId;
 
   /** Comment Id. */

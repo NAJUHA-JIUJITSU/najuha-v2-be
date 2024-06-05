@@ -3,7 +3,7 @@ import { IDivision } from './division.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IPriceSnapshot {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** price, (원). */

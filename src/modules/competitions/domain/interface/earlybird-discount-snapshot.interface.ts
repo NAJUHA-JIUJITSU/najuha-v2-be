@@ -3,7 +3,7 @@ import { ICompetition } from './competition.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IEarlybirdDiscountSnapshot {
-  /**  UUIDv7. */
+  /**  UUID v7. */
   id: TId;
 
   /** 얼리버드 할인 시작일. */

@@ -3,7 +3,7 @@ import { IPost } from './post.interface';
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 
 export interface IPostSnapshot {
-  /** ULID. */
+  /** UUID v7. */
   id: TId;
 
   /** Post Id. */

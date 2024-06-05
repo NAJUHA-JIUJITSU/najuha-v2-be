@@ -3,7 +3,7 @@ import { IApplication } from 'src/modules/applications/domain/interface/applicat
 import { tags } from 'typia';
 
 export interface IPaymentSnapshot {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** CreatedAt */

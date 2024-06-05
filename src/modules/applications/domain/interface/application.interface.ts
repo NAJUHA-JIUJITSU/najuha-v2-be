@@ -8,7 +8,7 @@ import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { IExpectedPayment } from './expected-payment.interface';
 
 export interface IApplication {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /**  Created at. */

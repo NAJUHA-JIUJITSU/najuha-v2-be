@@ -4,7 +4,7 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { tags } from 'typia';
 
 export interface IPostReport {
-  /** ULID. */
+  /** UUID v7. */
   id: TId;
 
   /** Report Type */

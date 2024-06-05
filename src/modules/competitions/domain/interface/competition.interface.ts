@@ -8,7 +8,7 @@ import { ICompetitionHostMap } from './competition-host-map.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
 export interface ICompetition {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** 대회명. */

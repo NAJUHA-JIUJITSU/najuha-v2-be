@@ -5,7 +5,7 @@ import { tags } from 'typia';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 
 export interface IParticipationDivisionInfo {
-  /** UUIDv7. */
+  /** UUID v7. */
   id: TId;
 
   /** CreatedAt. */
