@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IApplication } from './interface/application.interface';
+import { IApplication, IApplicationCreateDto } from './interface/application.interface';
 import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
 import {
@@ -9,18 +9,20 @@ import {
 import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
 import { IParticipationDivisionInfoSnapshot } from './interface/participation-division-info-snapshot.interface';
 import { IAdditionalInfo, IAdditionalInfoCreateDto } from './interface/additional-info.interface';
-import { UserModel } from 'src/modules/users/domain/model/user.model';
 import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
 
 @Injectable()
 export class ApplicationFactory {
   createReadyApplication(
-    user: UserModel,
     competition: CompetitionModel,
-    applicationType: IApplication['type'],
-    participationDivisionIds: IDivision['id'][],
-    playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
-    additionalInfoCreateDtos?: IAdditionalInfoCreateDto[],
+    {
+      userId,
+      competitionId,
+      applicationType,
+      participationDivisionIds,
+      playerSnapshotCreateDto,
+      additionalInfoCreateDtos,
+    }: IApplicationCreateDto,
   ): IApplication {
     const applicationId = uuidv7();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
@@ -33,8 +35,8 @@ export class ApplicationFactory {
     return {
       id: applicationId,
       type: applicationType,
-      userId: user.getId(),
-      competitionId: competition.getId(),
+      userId,
+      competitionId,
       status: 'READY',
       createdAt: new Date(),
       updatedAt: new Date(),

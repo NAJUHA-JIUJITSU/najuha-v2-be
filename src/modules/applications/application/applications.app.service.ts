@@ -39,17 +39,10 @@ export class ApplicationsAppService {
   ) {}
 
   /** Create application. */
-  async createApplication({
-    userId,
-    competitionId,
-    participationDivisionIds,
-    applicationType,
-    playerSnapshotCreateDto,
-    additionalInfoCreateDtos,
-  }: CreateApplicationParam): Promise<CreateApplicationRet> {
+  async createApplication({ applicationCreateDto }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = new UserModel(
       assert<IUser>(
-        await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+        await this.userRepository.findOneOrFail({ where: { id: applicationCreateDto.userId } }).catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
         }),
       ),
@@ -58,7 +51,7 @@ export class ApplicationsAppService {
       assert<ICompetition>(
         await this.competitionRepository
           .findOneOrFail({
-            where: { id: competitionId, status: 'ACTIVE' },
+            where: { id: applicationCreateDto.competitionId, status: 'ACTIVE' },
             relations: [
               'divisions',
               'earlybirdDiscountSnapshots',
@@ -73,17 +66,10 @@ export class ApplicationsAppService {
       ),
     );
     const readyApplication = new ApplicationModel(
-      this.applicationFactory.createReadyApplication(
-        user,
-        competition,
-        applicationType,
-        participationDivisionIds,
-        playerSnapshotCreateDto,
-        additionalInfoCreateDtos,
-      ),
+      this.applicationFactory.createReadyApplication(competition, applicationCreateDto),
     );
     competition.validateApplicationPeriod();
-    competition.validateAdditionalInfo(additionalInfoCreateDtos);
+    competition.validateAdditionalInfo(applicationCreateDto.additionalInfoCreateDtos);
     readyApplication.validateApplicationType(user.toEntity());
     readyApplication.validateDivisionSuitability();
     readyApplication.setExpectedPayment(
@@ -143,16 +129,12 @@ export class ApplicationsAppService {
    * - 새로운 application을 생성하는 이유, 기존 applicaiton이 실제로는 결제 됐지만 실패처리 된 후, 업데이트시 기존 결제 정보가 남아있어야하기 때문.
    */
   async updateReadyApplication({
-    userId,
-    playerSnapshotUpdateDto,
     applicationId,
-    applicationType,
-    participationDivisionIds,
-    additionalInfoCreateDtos,
+    applicationCreateDto,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
     const user = new UserModel(
       assert<IUser>(
-        await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+        await this.userRepository.findOneOrFail({ where: { id: applicationCreateDto.userId } }).catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
         }),
       ),
@@ -161,7 +143,11 @@ export class ApplicationsAppService {
       assert<IApplication>(
         await this.applicationRepository
           .findOneOrFail({
-            where: { userId, id: applicationId, status: 'READY' },
+            where: {
+              id: applicationId,
+              userId: applicationCreateDto.userId,
+              status: 'READY',
+            },
             relations: [
               'additionalInfos',
               'playerSnapshots',
@@ -195,22 +181,20 @@ export class ApplicationsAppService {
       ),
     );
     const newApplication = new ApplicationModel(
-      await this.applicationFactory.createReadyApplication(
-        user,
-        competition,
-        applicationType,
-        participationDivisionIds,
-        playerSnapshotUpdateDto,
-        additionalInfoCreateDtos,
-      ),
+      this.applicationFactory.createReadyApplication(competition, {
+        ...applicationCreateDto,
+      }),
     );
     competition.validateApplicationPeriod();
-    competition.validateAdditionalInfo(additionalInfoCreateDtos);
+    competition.validateAdditionalInfo(applicationCreateDto.additionalInfoCreateDtos);
     newApplication.validateApplicationType(user.toEntity());
     newApplication.validateDivisionSuitability();
     oldApplication.delete();
     // todo!!: Transaction
     await this.applicationRepository.save(oldApplication.toEntity());
+    newApplication.setExpectedPayment(
+      competition.calculateExpectedPayment(newApplication.getParticipationDivisionIds()),
+    );
     return { application: await this.applicationRepository.save(newApplication.toEntity()) };
   }
 
@@ -218,12 +202,16 @@ export class ApplicationsAppService {
   async updateDoneApplication({
     userId,
     applicationId,
-    playerSnapshotUpdateDto,
-    participationDivisionInfoUpdateDtos,
-    additionalInfoUpdateDtos,
+    doneApplicationUpdateDto,
   }: UpdateDoneApplicationParam): Promise<UpdateDoneApplicationRet> {
-    if (!playerSnapshotUpdateDto && !participationDivisionInfoUpdateDtos && !additionalInfoUpdateDtos)
+    if (
+      !doneApplicationUpdateDto.participationDivisionInfoUpdateDtos &&
+      !doneApplicationUpdateDto.playerSnapshotCreateDto &&
+      !doneApplicationUpdateDto.additionalInfoUpdateDtos
+    ) {
       throw new BusinessException(ApplicationsErrors.APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED);
+    }
+
     const user = new UserModel(
       assert<IUser>(
         await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
@@ -268,21 +256,26 @@ export class ApplicationsAppService {
           }),
       ),
     );
-    if (playerSnapshotUpdateDto) {
+    if (doneApplicationUpdateDto.playerSnapshotCreateDto) {
       application.addPlayerSnapshot(
-        new PlayerSnapshotModel(this.applicationFactory.createPlayerSnapshot(applicationId, playerSnapshotUpdateDto)),
+        new PlayerSnapshotModel(
+          this.applicationFactory.createPlayerSnapshot(applicationId, doneApplicationUpdateDto.playerSnapshotCreateDto),
+        ),
       );
     }
-    if (participationDivisionInfoUpdateDtos) {
+    if (doneApplicationUpdateDto.participationDivisionInfoUpdateDtos) {
       application.addParticipationDivisionInfoSnapshots(
         this.applicationFactory
-          .createManyParticipationDivisionInfoSnapshots(competition, participationDivisionInfoUpdateDtos)
+          .createManyParticipationDivisionInfoSnapshots(
+            competition,
+            doneApplicationUpdateDto.participationDivisionInfoUpdateDtos,
+          )
           .map((snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot)),
       );
     }
-    if (additionalInfoUpdateDtos) {
-      competition.validateAdditionalInfo(additionalInfoUpdateDtos);
-      application.updateAdditionalInfos(additionalInfoUpdateDtos);
+    if (doneApplicationUpdateDto.additionalInfoUpdateDtos) {
+      competition.validateAdditionalInfo(doneApplicationUpdateDto.additionalInfoUpdateDtos);
+      application.updateAdditionalInfos(doneApplicationUpdateDto.additionalInfoUpdateDtos);
     }
     competition.validateApplicationPeriod();
     application.validateApplicationType(user.toEntity());

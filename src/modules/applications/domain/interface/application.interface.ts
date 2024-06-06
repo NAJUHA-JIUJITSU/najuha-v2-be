@@ -1,11 +1,15 @@
 import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { IPlayerSnapshot } from './player-snapshot.interface';
-import { IParticipationDivisionInfo } from './participation-division-info.interface';
+import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './player-snapshot.interface';
+import {
+  IParticipationDivisionInfo,
+  IParticipationDivisionInfoUpdateDto,
+} from './participation-division-info.interface';
 import { tags } from 'typia';
-import { IAdditionalInfo } from './additional-info.interface';
+import { IAdditionalInfo, IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from './additional-info.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { IExpectedPayment } from './expected-payment.interface';
+import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 
 export interface IApplication {
   /** UUID v7. */
@@ -25,7 +29,7 @@ export interface IApplication {
    * - SELF: 본인 신청
    * - PROXY: 대리 신청
    */
-  type: 'SELF' | 'PROXY';
+  type: TApplicationType;
 
   /**
    * Status.
@@ -33,7 +37,7 @@ export interface IApplication {
    * - DONE: 결제 완료
    * - CANCELED: 결제 취소
    */
-  status: 'READY' | 'DONE' | 'CANCELED';
+  status: TApplicationStatus;
 
   /** Competition id. */
   competitionId: ICompetition['id'];
@@ -57,6 +61,43 @@ export interface IApplication {
   expectedPayment?: IExpectedPayment | null;
 }
 
+export interface IApplicationCreateDto {
+  /** userId */
+  userId: IUser['id'];
+
+  /** 참가할 competitionId */
+  competitionId: ICompetition['id'];
+
+  /** application type */
+  applicationType: TApplicationType;
+
+  /**
+   * - Division IDs to participate.
+   * @minItems 1
+   */
+  participationDivisionIds: IDivision['id'][];
+
+  /** player snapshot create dto */
+  playerSnapshotCreateDto: IPlayerSnapshotCreateDto;
+
+  /** additional info create dto array */
+  additionalInfoCreateDtos?: IAdditionalInfoCreateDto[];
+}
+
+export interface IDoneApplicationUpdateDto {
+  /**
+   * - Division info update data array.
+   * @minItems 1
+   */
+  participationDivisionInfoUpdateDtos?: IParticipationDivisionInfoUpdateDto[];
+
+  /** player snapshot create dto */
+  playerSnapshotCreateDto?: IPlayerSnapshotCreateDto;
+
+  /** additional info update dto array */
+  additionalInfoUpdateDtos?: IAdditionalInfoUpdateDto[];
+}
+
 export interface IApplicationQueryOptions {
   /** 현제 페이지 번호입니다. default: 0 */
   page: number;
@@ -67,3 +108,7 @@ export interface IApplicationQueryOptions {
   /** application status */
   status?: IApplication['status'];
 }
+
+type TApplicationType = 'SELF' | 'PROXY';
+
+type TApplicationStatus = 'READY' | 'DONE' | 'CANCELED';

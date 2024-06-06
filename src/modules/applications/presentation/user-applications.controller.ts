@@ -34,7 +34,9 @@ export class UserApplicationsController {
     @Req() req: Request,
     @TypedBody() body: CreateApplicationReqBody,
   ): Promise<ResponseForm<CreateApplicationRes>> {
-    return createResponseForm(await this.applicationAppService.createApplication({ userId: req['userId'], ...body }));
+    return createResponseForm(
+      await this.applicationAppService.createApplication({ applicationCreateDto: { userId: req['userId'], ...body } }),
+    );
   }
 
   /**
@@ -73,9 +75,11 @@ export class UserApplicationsController {
   ): Promise<ResponseForm<UpdateReadyApplicationRes>> {
     return createResponseForm(
       await this.applicationAppService.updateReadyApplication({
-        userId: req['userId'],
         applicationId,
-        ...body,
+        applicationCreateDto: {
+          userId: req['userId'],
+          ...body,
+        },
       }),
     );
   }
@@ -103,7 +107,9 @@ export class UserApplicationsController {
       await this.applicationAppService.updateDoneApplication({
         userId: req['userId'],
         applicationId,
-        ...body,
+        doneApplicationUpdateDto: {
+          ...body,
+        },
       }),
     );
   }

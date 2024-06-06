@@ -9077,16 +9077,18 @@
       "CreateApplicationReqBody": {
         "type": "object",
         "properties": {
+          "competitionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "참가할 competitionId"
+          },
           "applicationType": {
             "type": "string",
             "enum": [
               "PROXY",
               "SELF"
-            ]
-          },
-          "competitionId": {
-            "type": "string",
-            "format": "uuid"
+            ],
+            "description": "application type"
           },
           "participationDivisionIds": {
             "type": "array",
@@ -9099,7 +9101,8 @@
             "description": "- Division IDs to participate."
           },
           "playerSnapshotCreateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
+            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto",
+            "description": "player snapshot create dto"
           },
           "additionalInfoCreateDtos": {
             "type": "array",
@@ -9112,13 +9115,14 @@
                   "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
-            }
+            },
+            "description": "additional info create dto array"
           }
         },
         "nullable": false,
         "required": [
-          "applicationType",
           "competitionId",
+          "applicationType",
           "participationDivisionIds",
           "playerSnapshotCreateDto"
         ]
@@ -9318,21 +9322,12 @@
             "description": "Deleted at."
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "PROXY",
-              "SELF"
-            ],
+            "$ref": "#/components/schemas/TApplicationType",
             "title": "본인신청과 대리신청을 구별하는 type",
             "description": "본인신청과 대리신청을 구별하는 type.\n- SELF: 본인 신청\n- PROXY: 대리 신청"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "CANCELED",
-              "DONE",
-              "READY"
-            ],
+            "$ref": "#/components/schemas/TApplicationStatus",
             "title": "Status",
             "description": "Status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소"
           },
@@ -9390,6 +9385,21 @@
           "playerSnapshots",
           "participationDivisionInfos",
           "additionalInfos"
+        ]
+      },
+      "TApplicationType": {
+        "type": "string",
+        "enum": [
+          "SELF",
+          "PROXY"
+        ]
+      },
+      "TApplicationStatus": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "DONE",
+          "CANCELED"
         ]
       },
       "IPlayerSnapshot": {
@@ -9680,12 +9690,18 @@
       "UpdateReadyApplicationReqBody": {
         "type": "object",
         "properties": {
+          "competitionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "참가할 competitionId"
+          },
           "applicationType": {
             "type": "string",
             "enum": [
               "PROXY",
               "SELF"
-            ]
+            ],
+            "description": "application type"
           },
           "participationDivisionIds": {
             "type": "array",
@@ -9697,8 +9713,9 @@
             "title": "- Division IDs to participate",
             "description": "- Division IDs to participate."
           },
-          "playerSnapshotUpdateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
+          "playerSnapshotCreateDto": {
+            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto",
+            "description": "player snapshot create dto"
           },
           "additionalInfoCreateDtos": {
             "type": "array",
@@ -9711,14 +9728,16 @@
                   "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
-            }
+            },
+            "description": "additional info create dto array"
           }
         },
         "nullable": false,
         "required": [
+          "competitionId",
           "applicationType",
           "participationDivisionIds",
-          "playerSnapshotUpdateDto"
+          "playerSnapshotCreateDto"
         ]
       },
       "ResponseFormUpdateReadyApplicationRes": {
@@ -9768,11 +9787,12 @@
               "$ref": "#/components/schemas/IParticipationDivisionInfoUpdateDto"
             },
             "minItems": 1,
-            "title": "- Division info update data list",
-            "description": "- Division info update data list."
+            "title": "- Division info update data array",
+            "description": "- Division info update data array."
           },
-          "playerSnapshotUpdateDto": {
-            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto"
+          "playerSnapshotCreateDto": {
+            "$ref": "#/components/schemas/IPlayerSnapshotCreateDto",
+            "description": "player snapshot create dto"
           },
           "additionalInfoUpdateDtos": {
             "type": "array",
@@ -9785,7 +9805,8 @@
                   "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
-            }
+            },
+            "description": "additional info update dto array"
           }
         },
         "nullable": false
