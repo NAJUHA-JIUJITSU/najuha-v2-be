@@ -44,8 +44,8 @@ export class PolicyAppService {
     return { policies };
   }
 
-  async getPolicy({ id }: FindPolicyParam): Promise<GetPolicyRet> {
-    const policy = await this.policyRepository.findOneOrFail({ where: { id } }).catch(() => {
+  async getPolicy({ policyId }: FindPolicyParam): Promise<GetPolicyRet> {
+    const policy = await this.policyRepository.findOneOrFail({ where: { id: policyId } }).catch(() => {
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Policy not found');
     });
     return { policy };

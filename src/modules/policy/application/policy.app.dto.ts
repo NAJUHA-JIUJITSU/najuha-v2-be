@@ -12,7 +12,7 @@ export interface FindPoliciesParam {
 }
 
 export interface FindPolicyParam {
-  id: IPolicy['id'];
+  policyId: IPolicy['id'];
 }
 
 // ---------------------------------------------------------------------------

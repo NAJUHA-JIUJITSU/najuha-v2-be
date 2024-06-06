@@ -12,14 +12,14 @@ export class UserPolicyController {
 
   /**
    * u-4-1 findAllTypesOfLatestPolicies.
-   * - RoleLevel: TEMPORARY_USER.
+   * - RoleLevel: PUBLIC.
    * - 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.
    *
    * @tag u-4 policy
    * @security bearer
    * @returns FindAllTypesOfLatestPoliciesRes
    */
-  @RoleLevels(RoleLevel.TEMPORARY_USER)
+  @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/latest')
   async findAllTypesOfLatestPolicies(): Promise<ResponseForm<FindAllTypesOfLatestPoliciesRes>> {
     return createResponseForm(await this.PolicyAppService.findAllTypesOfLatestPolicies());
@@ -27,7 +27,7 @@ export class UserPolicyController {
 
   /**
    * u-4-2 getPolicy.
-   * - RoleLevel: TEMPORARY_USER.
+   * - RoleLevel: PUBLIC.
    * - policyId에 해당하는 약관을 조회합니다.
    *
    * @tag u-4 policy
@@ -35,9 +35,9 @@ export class UserPolicyController {
    * @param policyId policyId
    * @returns GetPolicyRes
    */
-  @RoleLevels(RoleLevel.TEMPORARY_USER)
+  @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Get('/:policyId')
   async getPolicy(@TypedParam('policyId') policyId: IPolicy['id']): Promise<ResponseForm<GetPolicyRes>> {
-    return createResponseForm(await this.PolicyAppService.getPolicy({ id: policyId }));
+    return createResponseForm(await this.PolicyAppService.getPolicy({ policyId }));
   }
 }
