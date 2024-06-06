@@ -4,37 +4,40 @@ import { PolicyAppService } from '../application/policy.app.service';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { IPolicy } from '../domain/interface/policy.interface';
-import { FindAllRecentPoliciesRes, FindPolicyRes } from './policy.controller.dto';
+import { FindAllTypesOfLatestPoliciesRes, GetPolicyRes } from './policy.controller.dto';
 
-@Controller('user/policy')
+@Controller('user/policies')
 export class UserPolicyController {
   constructor(private readonly PolicyAppService: PolicyAppService) {}
 
   /**
-   * u-4-1 findAllRecentPolicies.
+   * u-4-1 findAllTypesOfLatestPolicies.
    * - RoleLevel: TEMPORARY_USER.
    * - 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.
    *
    * @tag u-4 policy
-   * @returns recent policies
+   * @security bearer
+   * @returns FindAllTypesOfLatestPoliciesRes
    */
-  @RoleLevels(RoleLevel.PUBLIC)
-  @TypedRoute.Get('/recent')
-  async findAllRecentPolicies(): Promise<ResponseForm<FindAllRecentPoliciesRes>> {
+  @RoleLevels(RoleLevel.TEMPORARY_USER)
+  @TypedRoute.Get('/latest')
+  async findAllTypesOfLatestPolicies(): Promise<ResponseForm<FindAllTypesOfLatestPoliciesRes>> {
     return createResponseForm(await this.PolicyAppService.findAllTypesOfLatestPolicies());
   }
 
   /**
-   * u-4-2 findPolicy.
+   * u-4-2 getPolicy.
    * - RoleLevel: TEMPORARY_USER.
+   * - policyId에 해당하는 약관을 조회합니다.
    *
    * @tag u-4 policy
-   * @param id policy id
-   * @returns policy
+   * @security bearer
+   * @param policyId policyId
+   * @returns GetPolicyRes
    */
-  @RoleLevels(RoleLevel.PUBLIC)
+  @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('/:policyId')
-  async findPolicy(@TypedParam('policyId') id: IPolicy['id']): Promise<ResponseForm<FindPolicyRes>> {
-    return createResponseForm(await this.PolicyAppService.findPolicy({ id }));
+  async getPolicy(@TypedParam('policyId') policyId: IPolicy['id']): Promise<ResponseForm<GetPolicyRes>> {
+    return createResponseForm(await this.PolicyAppService.getPolicy({ id: policyId }));
   }
 }

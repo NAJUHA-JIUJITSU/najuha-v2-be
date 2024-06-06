@@ -207,6 +207,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "SnsLoginReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -219,7 +220,7 @@
         },
         "responses": {
           "201": {
-            "description": "accessToken and refreshToken",
+            "description": "SnsLoginRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -284,10 +285,27 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "SnsLoginReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "return",
             "text": [
               {
-                "text": "accessToken and refreshToken",
+                "text": "SnsLoginRes",
                 "kind": "text"
               }
             ]
@@ -303,6 +321,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "RefreshTokenReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -315,7 +334,7 @@
         },
         "responses": {
           "201": {
-            "description": "accessToken and refreshToken",
+            "description": "RefreshTokenRet",
             "content": {
               "application/json": {
                 "schema": {
@@ -350,10 +369,27 @@
             ]
           },
           {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "RefreshTokenReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "return",
             "text": [
               {
-                "text": "accessToken and refreshToken",
+                "text": "RefreshTokenRet",
                 "kind": "text"
               }
             ]
@@ -370,7 +406,7 @@
         "parameters": [],
         "responses": {
           "201": {
-            "description": "accessToken and refreshToken",
+            "description": "AcquireAdminRoleRet",
             "content": {
               "application/json": {
                 "schema": {
@@ -403,6 +439,11 @@
         },
         "summary": "u-1-3 aqureAdminRole",
         "description": "u-1-3 aqureAdminRole.\n- RoleLevel: USER\n- 관리자로 등록되어있는 유저를 관리자 역할로 변경합니다.\n- ADMIN 역할을 가진 accessToken 과 refreshToken 을 발급합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.auth.acquire-admin-role.aqureAdminRole",
         "x-nestia-jsDocTags": [
           {
@@ -415,10 +456,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "return",
             "text": [
               {
-                "text": "accessToken and refreshToken",
+                "text": "AcquireAdminRoleRet",
                 "kind": "text"
               }
             ]
@@ -435,7 +485,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "user",
+            "description": "GetTemporaryUserRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -458,6 +508,11 @@
         },
         "summary": "u-2-1 getTemporaryUser",
         "description": "u-2-1 getTemporaryUser.\n- RoleLevel: TEMPORARY_USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.register.users.me.getTemporaryUser",
         "x-nestia-jsDocTags": [
           {
@@ -470,10 +525,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "user",
+                "text": "GetTemporaryUserRes",
                 "kind": "text"
               }
             ]
@@ -503,7 +567,7 @@
         ],
         "responses": {
           "200": {
-            "description": "user",
+            "description": "IsDuplicatedNicknameRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -516,6 +580,11 @@
         },
         "summary": "u-2-2 isDuplicateNickname",
         "description": "u-2-2 isDuplicateNickname.\n- RoleLevel: TEMPORARY_USER.\n- 닉네임이 중복되면 true, 중복되지 않으면 false를 반환.\n- 본인이 사용중인 닉네임이면 false를 반환.\n- 이미 사용중인 닉네임이면 true를 반환.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.register.users.is-duplicated.isDuplicateNickname",
         "x-nestia-jsDocTags": [
           {
@@ -523,6 +592,15 @@
             "text": [
               {
                 "text": "u-2 register",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -548,7 +626,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "user",
+                "text": "IsDuplicatedNicknameRes",
                 "kind": "text"
               }
             ]
@@ -564,6 +642,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "SendPhoneNumberAuthCodeReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -576,7 +655,7 @@
         },
         "responses": {
           "201": {
-            "description": "void",
+            "description": "SendPhoneNumberAuthCodeRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -589,6 +668,11 @@
         },
         "summary": "u-2-3 sendPhoneNumberAuthCode",
         "description": "u-2-3 sendPhoneNumberAuthCode.\n- RoleLevel: TEMPORARY_USER.\n- 전화번호로 인증코드를 전송한다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.register.phone-number.auth-code.sendPhoneNumberAuthCode",
         "x-nestia-jsDocTags": [
           {
@@ -601,10 +685,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "SendPhoneNumberAuthCodeReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "void",
+                "text": "SendPhoneNumberAuthCodeRes",
                 "kind": "text"
               }
             ]
@@ -620,7 +730,7 @@
         ],
         "parameters": [],
         "requestBody": {
-          "description": "confirmAuthCodeReqDto",
+          "description": "ConfirmAuthCodeReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -633,7 +743,7 @@
         },
         "responses": {
           "201": {
-            "description": "true or false",
+            "description": "ConfirmAuthCodeRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -656,6 +766,11 @@
         },
         "summary": "u-2-4 confirmAuthCode",
         "description": "u-2-4 confirmAuthCode.\n- RoleLevel: TEMPORARY_USER.\n- 전화번호로 전송된 인증코드를 확인한다.\n- 인증성공시 User의 phoneNumber를 업데이트한다.\n- 인증성공시 true, 실패시 false를 반환한다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.register.phone-number.auth-code.confirm.confirmAuthCode",
         "x-nestia-jsDocTags": [
           {
@@ -668,10 +783,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "param",
             "text": [
               {
-                "text": "dto",
+                "text": "body",
                 "kind": "parameterName"
               },
               {
@@ -679,7 +803,7 @@
                 "kind": "space"
               },
               {
-                "text": "confirmAuthCodeReqDto",
+                "text": "ConfirmAuthCodeReqBody",
                 "kind": "text"
               }
             ]
@@ -688,7 +812,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "true or false",
+                "text": "ConfirmAuthCodeRes",
                 "kind": "text"
               }
             ]
@@ -704,7 +828,7 @@
         ],
         "parameters": [],
         "requestBody": {
-          "description": "RegisterReqDto",
+          "description": "RegisterUserReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -717,7 +841,7 @@
         },
         "responses": {
           "201": {
-            "description": "accessToken & refreshToken",
+            "description": "RegisterUserRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -770,6 +894,11 @@
         },
         "summary": "u-2-5 registerUser",
         "description": "u-2-5 registerUser.\n- RoleLevel: TEMPORARY_USER.\n- 유저 정보를 업데이트하고, USER 레벨로 업데이트한다.\n- USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.register.registerUser",
         "x-nestia-jsDocTags": [
           {
@@ -782,10 +911,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "param",
             "text": [
               {
-                "text": "dto",
+                "text": "body",
                 "kind": "parameterName"
               },
               {
@@ -793,7 +931,7 @@
                 "kind": "space"
               },
               {
-                "text": "RegisterReqDto",
+                "text": "RegisterUserReqBody",
                 "kind": "text"
               }
             ]
@@ -802,7 +940,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "accessToken & refreshToken",
+                "text": "RegisterUserRes",
                 "kind": "text"
               }
             ]
@@ -818,6 +956,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "CreateUserReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -830,7 +969,7 @@
         },
         "responses": {
           "201": {
-            "description": "created user info",
+            "description": "CreateUserRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -843,6 +982,11 @@
         },
         "summary": "u-3-1 createUser",
         "description": "u-3-1 createUser. // todo!: api 삭제 예정(유저 생성은 내부적으로만 사용)).\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.users.createUser",
         "x-nestia-jsDocTags": [
           {
@@ -855,10 +999,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateUserReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "created user info",
+                "text": "CreateUserRes",
                 "kind": "text"
               }
             ]
@@ -872,6 +1042,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "UpdateUserReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -884,7 +1055,7 @@
         },
         "responses": {
           "201": {
-            "description": "updated user",
+            "description": "UpdateUserRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -907,6 +1078,11 @@
         },
         "summary": "u-3-2 updateUser",
         "description": "u-3-2 updateUser.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.users.updateUser",
         "x-nestia-jsDocTags": [
           {
@@ -919,10 +1095,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "param",
             "text": [
               {
-                "text": "dto",
+                "text": "body",
                 "kind": "parameterName"
               },
               {
@@ -930,7 +1115,7 @@
                 "kind": "space"
               },
               {
-                "text": "UpdateUserReqDto",
+                "text": "UpdateUserReqBody",
                 "kind": "text"
               }
             ]
@@ -939,7 +1124,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "updated user",
+                "text": "UpdateUserRes",
                 "kind": "text"
               }
             ]
@@ -956,7 +1141,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "user",
+            "description": "GetMeRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -979,6 +1164,11 @@
         },
         "summary": "u-3-3 getMe",
         "description": "u-3-3 getMe.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.users.me.getMe",
         "x-nestia-jsDocTags": [
           {
@@ -991,10 +1181,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "user",
+                "text": "GetMeRes",
                 "kind": "text"
               }
             ]
@@ -1003,7 +1202,7 @@
         "x-nestia-method": "GET"
       }
     },
-    "/user/policy/recent": {
+    "/user/policies/latest": {
       "get": {
         "tags": [
           "u-4 policy"
@@ -1011,20 +1210,25 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "recent policies",
+            "description": "FindAllTypesOfLatestPoliciesRes",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindAllRecentPoliciesRes"
+                  "$ref": "#/components/schemas/ResponseFormFindAllTypesOfLatestPoliciesRes"
                 }
               }
             },
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-1 findAllRecentPolicies",
-        "description": "u-4-1 findAllRecentPolicies.\n- RoleLevel: TEMPORARY_USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
-        "x-nestia-namespace": "user.policy.recent.findAllRecentPolicies",
+        "summary": "u-4-1 findAllTypesOfLatestPolicies",
+        "description": "u-4-1 findAllTypesOfLatestPolicies.\n- RoleLevel: TEMPORARY_USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.policies.latest.findAllTypesOfLatestPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1036,10 +1240,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "recent policies",
+                "text": "FindAllTypesOfLatestPoliciesRes",
                 "kind": "text"
               }
             ]
@@ -1048,7 +1261,7 @@
         "x-nestia-method": "GET"
       }
     },
-    "/user/policy/{policyId}": {
+    "/user/policies/{policyId}": {
       "get": {
         "tags": [
           "u-4 policy"
@@ -1061,26 +1274,31 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "policy id",
+            "description": "policyId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "policy",
+            "description": "GetPolicyRes",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindPolicyRes"
+                  "$ref": "#/components/schemas/ResponseFormGetPolicyRes"
                 }
               }
             },
             "x-nestia-encrypted": false
           }
         },
-        "summary": "u-4-2 findPolicy",
-        "description": "u-4-2 findPolicy.\n- RoleLevel: TEMPORARY_USER.",
-        "x-nestia-namespace": "user.policy.findPolicy",
+        "summary": "u-4-2 getPolicy",
+        "description": "u-4-2 getPolicy.\n- RoleLevel: TEMPORARY_USER.\n- policyId에 해당하는 약관을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.policies.getPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1092,10 +1310,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "param",
             "text": [
               {
-                "text": "id",
+                "text": "policyId",
                 "kind": "parameterName"
               },
               {
@@ -1103,7 +1330,7 @@
                 "kind": "space"
               },
               {
-                "text": "policy id",
+                "text": "policyId",
                 "kind": "text"
               }
             ]
@@ -1112,7 +1339,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "policy",
+                "text": "GetPolicyRes",
                 "kind": "text"
               }
             ]
@@ -1128,6 +1355,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "CreatePolicyReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1140,7 +1368,7 @@
         },
         "responses": {
           "201": {
-            "description": "created policy",
+            "description": "CreatePolicyRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1153,6 +1381,11 @@
         },
         "summary": "a-4-1 createPolicy",
         "description": "a-4-1 createPolicy.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.policy.createPolicy",
         "x-nestia-jsDocTags": [
           {
@@ -1165,10 +1398,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreatePolicyReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "created policy",
+                "text": "CreatePolicyRes",
                 "kind": "text"
               }
             ]
@@ -1187,13 +1446,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindPoliciesReqQuery"
             },
-            "description": "",
+            "description": "FindPoliciesReqQuery",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "policies",
+            "description": "FindPoliciesRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1206,6 +1465,11 @@
         },
         "summary": "a-4-1 findPolicies",
         "description": "a-4-1 findPolicies.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.policy.findPolicies",
         "x-nestia-jsDocTags": [
           {
@@ -1218,10 +1482,19 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "param",
             "text": [
               {
-                "text": "type",
+                "text": "query",
                 "kind": "parameterName"
               },
               {
@@ -1229,7 +1502,7 @@
                 "kind": "space"
               },
               {
-                "text": "policy type",
+                "text": "FindPoliciesReqQuery",
                 "kind": "text"
               }
             ]
@@ -1238,7 +1511,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "policies",
+                "text": "FindPoliciesRes",
                 "kind": "text"
               }
             ]
@@ -1265,7 +1538,7 @@
         ],
         "responses": {
           "200": {
-            "description": "competitions",
+            "description": "FindCompetitionsRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1277,7 +1550,12 @@
           }
         },
         "summary": "u-5-1 findCompetitions",
-        "description": "u-5-1 findCompetitions.\n- RoleLevel: PUBLIC.\n- ACTIVE 상태인 competition 들을 조회합니다.",
+        "description": "u-5-1 findCompetitions.\n- RoleLevel: PUBLIC_OR_USER.\n- ACTIVE 상태인 competition 들을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.competitions.findCompetitions",
         "x-nestia-jsDocTags": [
           {
@@ -1285,6 +1563,15 @@
             "text": [
               {
                 "text": "u-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -1310,7 +1597,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "competitions",
+                "text": "FindCompetitionsRes",
                 "kind": "text"
               }
             ]
@@ -1332,13 +1619,13 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "competition",
+            "description": "GetCompetitionRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1350,7 +1637,12 @@
           }
         },
         "summary": "u-5-2 getCompetition",
-        "description": "u-5-2 getCompetition.\n- RoleLevel: USER.\n- ACTIVE 상태인 competition 을 조회합니다.",
+        "description": "u-5-2 getCompetition.\n- RoleLevel: PUBLIC_OR_USER.\n- ACTIVE 상태인 competition 을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.competitions.getCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -1363,10 +1655,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "competition",
+                "text": "GetCompetitionRes",
                 "kind": "text"
               }
             ]
@@ -1382,6 +1700,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "CreateCompetitionReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1394,7 +1713,7 @@
         },
         "responses": {
           "201": {
-            "description": "created competition",
+            "description": "CreateCompetitionRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1407,6 +1726,11 @@
         },
         "summary": "a-5-1 createCompetition",
         "description": "a-5-1 createCompetition.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.createCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -1419,10 +1743,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateCompetitionReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "created competition",
+                "text": "CreateCompetitionRes",
                 "kind": "text"
               }
             ]
@@ -1447,7 +1797,7 @@
         ],
         "responses": {
           "200": {
-            "description": "competitions",
+            "description": "FindCompetitionsRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1460,6 +1810,11 @@
         },
         "summary": "a-5-2 findCompetitions",
         "description": "a-5-2 findCompetitions.\n- RoleLevel: ADMIN.\n- ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.findCompetitions",
         "x-nestia-jsDocTags": [
           {
@@ -1467,6 +1822,15 @@
             "text": [
               {
                 "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -1492,7 +1856,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "competitions",
+                "text": "FindCompetitionsRes",
                 "kind": "text"
               }
             ]
@@ -1514,13 +1878,13 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "competition",
+            "description": "GetCompetitionRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1533,6 +1897,11 @@
         },
         "summary": "a-5-3 getCompetition",
         "description": "a-5-3 getCompetition.\n- RoleLevel: ADMIN.\n- ACTIVE, INACTIVE 상태인 competition 을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.getCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -1545,10 +1914,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "competition",
+                "text": "GetCompetitionRes",
                 "kind": "text"
               }
             ]
@@ -1568,11 +1963,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "UpdateCompetitionReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1585,7 +1981,7 @@
         },
         "responses": {
           "201": {
-            "description": "updated competition",
+            "description": "UpdateCompetitionRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1598,6 +1994,11 @@
         },
         "summary": "a-5-4 updateCompetition",
         "description": "a-5-4 updateCompetition.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.updateCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -1610,10 +2011,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateCompetitionReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "updated competition",
+                "text": "UpdateCompetitionRes",
                 "kind": "text"
               }
             ]
@@ -1635,11 +2079,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "UpdateCompetitionStatusReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1652,7 +2097,7 @@
         },
         "responses": {
           "201": {
-            "description": "updated competition",
+            "description": "UpdateCompetitionRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1665,6 +2110,11 @@
         },
         "summary": "a-5-5 updateCompetitionStatus",
         "description": "a-5-5 updateCompetitionStatus.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.status.updateCompetitionStatus",
         "x-nestia-jsDocTags": [
           {
@@ -1677,10 +2127,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateCompetitionStatusReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "updated competition",
+                "text": "UpdateCompetitionRes",
                 "kind": "text"
               }
             ]
@@ -1702,11 +2195,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreateDivisionsReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1719,7 +2213,7 @@
         },
         "responses": {
           "201": {
-            "description": "created divisions",
+            "description": "CreateCompetitionDivisionsRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1732,6 +2226,11 @@
         },
         "summary": "a-5-6 createCompetitionDivisions",
         "description": "a-5-6 createCompetitionDivisions.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.divisions.createCompetitionDivisions",
         "x-nestia-jsDocTags": [
           {
@@ -1744,10 +2243,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateDivisionsReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "created divisions",
+                "text": "CreateCompetitionDivisionsRes",
                 "kind": "text"
               }
             ]
@@ -1769,11 +2311,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreateEarlybirdDiscountSnapshotReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1786,7 +2329,7 @@
         },
         "responses": {
           "201": {
-            "description": "created earlybird discount snapshot",
+            "description": "CreateEarlybirdDiscountSnapshotRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1799,6 +2342,11 @@
         },
         "summary": "a-5-7 createCompetitionEarlybirdDiscountSnapshot",
         "description": "a-5-7 createCompetitionEarlybirdDiscountSnapshot.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.earlybird-discount-snapshots.createCompetitionEarlybirdDiscountSnapshot",
         "x-nestia-jsDocTags": [
           {
@@ -1811,10 +2359,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateEarlybirdDiscountSnapshotReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "created earlybird discount snapshot",
+                "text": "CreateEarlybirdDiscountSnapshotRes",
                 "kind": "text"
               }
             ]
@@ -1836,11 +2427,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreateCombinationDiscountSnapshotReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1853,7 +2445,7 @@
         },
         "responses": {
           "201": {
-            "description": "created combination discount snapshot",
+            "description": "CreateCombinationDiscountSnapshotRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1866,6 +2458,11 @@
         },
         "summary": "a-5-8 createCombinationDiscountSnapshot",
         "description": "a-5-8 createCombinationDiscountSnapshot.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.combination-discount-snapshots.createCombinationDiscountSnapshot",
         "x-nestia-jsDocTags": [
           {
@@ -1878,10 +2475,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateCombinationDiscountSnapshotReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "created combination discount snapshot",
+                "text": "CreateCombinationDiscountSnapshotRes",
                 "kind": "text"
               }
             ]
@@ -1903,11 +2543,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "CreateCompetitionRequiredAdditionalInfoReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1920,7 +2561,7 @@
         },
         "responses": {
           "201": {
-            "description": "created required addtional info",
+            "description": "CreateCompetitionRequiredAdditionalInfoRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -1933,6 +2574,11 @@
         },
         "summary": "a-5-9 createCompetitionRequiredAdditionalInfo",
         "description": "a-5-9 createCompetitionRequiredAdditionalInfo.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.required-additional-infos.createCompetitionRequiredAdditionalInfo",
         "x-nestia-jsDocTags": [
           {
@@ -1945,10 +2591,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateCompetitionRequiredAdditionalInfoReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "created required addtional info",
+                "text": "CreateCompetitionRequiredAdditionalInfoRes",
                 "kind": "text"
               }
             ]
@@ -1970,7 +2659,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           },
           {
@@ -1980,11 +2669,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "requiredAdditionalInfoId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "UpdateRequiredAdditionalInfoReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -1997,7 +2687,7 @@
         },
         "responses": {
           "201": {
-            "description": "updated required addtional info",
+            "description": "UpdateCompetitionRequiredAdditionalInfoRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2010,6 +2700,11 @@
         },
         "summary": "a-5-10 updateRequiredAdditionalInfo",
         "description": "a-5-10 updateRequiredAdditionalInfo.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.required-additional-infos.updateRequiredAdditionalInfo",
         "x-nestia-jsDocTags": [
           {
@@ -2022,10 +2717,70 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "requiredAdditionalInfoId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "requiredAdditionalInfoId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateRequiredAdditionalInfoReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "updated required addtional info",
+                "text": "UpdateCompetitionRequiredAdditionalInfoRes",
                 "kind": "text"
               }
             ]
@@ -2045,7 +2800,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           },
           {
@@ -2055,13 +2810,13 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "requiredAdditionalInfoId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "void",
+            "description": "DeleteCompetitionRequiredAdditionalInfoRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2074,6 +2829,11 @@
         },
         "summary": "a-5-11 deleteRequiredAdditionalInfo",
         "description": "a-5-11 deleteRequiredAdditionalInfo.\n- RoleLevel: ADMIN.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "admin.competitions.required-additional-infos.deleteRequiredAdditionalInfo",
         "x-nestia-jsDocTags": [
           {
@@ -2086,10 +2846,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "requiredAdditionalInfoId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "requiredAdditionalInfoId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "void",
+                "text": "DeleteCompetitionRequiredAdditionalInfoRes",
                 "kind": "text"
               }
             ]
@@ -2116,7 +2919,7 @@
         ],
         "responses": {
           "200": {
-            "description": "hosting competitions",
+            "description": "FindCompetitionsRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2128,7 +2931,12 @@
           }
         },
         "summary": "h-5-1 findCompetitions",
-        "description": "h-5-1 findCompetitions.\n- RoleLevel: HOST.\n- 본인이 주최한 대회들을 조회합니다.\n- ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.",
+        "description": "h-5-1 findCompetitions.\n- RoleLevel: HOST.\n- api 호출자가 주최한 대회를 조회합니다.\n- ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "host.competitions.findCompetitions",
         "x-nestia-jsDocTags": [
           {
@@ -2136,6 +2944,15 @@
             "text": [
               {
                 "text": "h-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
                 "kind": "text"
               }
             ]
@@ -2161,7 +2978,7 @@
             "name": "returns",
             "text": [
               {
-                "text": "hosting competitions",
+                "text": "FindCompetitionsRes",
                 "kind": "text"
               }
             ]
@@ -2183,13 +3000,13 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "competitionId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "competition",
+            "description": "GetCompetitionRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2201,7 +3018,12 @@
           }
         },
         "summary": "h-5-2 getCompetition",
-        "description": "h-5-2 getCompetition.\n- RoleLevel: HOST.\n- 본인이 주최한 대회를 조회합니다.\n- ACTIVE, INACTIVE 상태인 competition을 조회합니다.",
+        "description": "h-5-2 getCompetition.\n- RoleLevel: HOST.\n- api 호출자가 주최한 대회를 조회합니다.\n- ACTIVE, INACTIVE 상태인 competition을 조회합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "host.competitions.getCompetition",
         "x-nestia-jsDocTags": [
           {
@@ -2214,10 +3036,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "competitionId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "competitionId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "competition",
+                "text": "GetCompetitionRes",
                 "kind": "text"
               }
             ]
@@ -2233,6 +3081,7 @@
         ],
         "parameters": [],
         "requestBody": {
+          "description": "CreateApplicationReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -2245,7 +3094,7 @@
         },
         "responses": {
           "201": {
-            "description": "application",
+            "description": "CreateApplicationRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2258,6 +3107,11 @@
         },
         "summary": "u-6-1 createApplication",
         "description": "u-6-1 createApplication.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.applications.createApplication",
         "x-nestia-jsDocTags": [
           {
@@ -2270,10 +3124,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateApplicationReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "application",
+                "text": "CreateApplicationRes",
                 "kind": "text"
               }
             ]
@@ -2292,13 +3172,13 @@
             "schema": {
               "$ref": "#/components/schemas/FindApplicationsQuery"
             },
-            "description": "",
+            "description": "FindApplicationsQuery",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "applications",
+            "description": "FindApplicationsRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2311,6 +3191,11 @@
         },
         "summary": "u-6-7 findApplications",
         "description": "u-6-7 findApplications.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.applications.findApplications",
         "x-nestia-jsDocTags": [
           {
@@ -2323,10 +3208,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "FindApplicationsQuery",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "applications",
+                "text": "FindApplicationsRes",
                 "kind": "text"
               }
             ]
@@ -2348,13 +3259,13 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "applicationId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "application",
+            "description": "GetApplicationRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2367,6 +3278,11 @@
         },
         "summary": "u-6-2 getApplication",
         "description": "u-6-2 getApplication.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.applications.getApplication",
         "x-nestia-jsDocTags": [
           {
@@ -2379,10 +3295,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "application",
+                "text": "GetApplicationRes",
                 "kind": "text"
               }
             ]
@@ -2402,7 +3344,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "applicationId",
             "required": true
           }
         ],
@@ -2421,6 +3363,11 @@
         },
         "summary": "u-6-5 deleteApplication (아직구현 안됨)",
         "description": "u-6-5 deleteApplication (아직구현 안됨).\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.applications.deleteApplication",
         "x-nestia-jsDocTags": [
           {
@@ -2428,6 +3375,32 @@
             "text": [
               {
                 "text": "u-6 applications",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
                 "kind": "text"
               }
             ]
@@ -2458,11 +3431,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "applicationId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "UpdateReadyApplicationReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -2475,7 +3449,7 @@
         },
         "responses": {
           "201": {
-            "description": "application",
+            "description": "UpdateReadyApplicationRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2487,7 +3461,12 @@
           }
         },
         "summary": "u-6-3 updateReadyApplication",
-        "description": "u-6-3 updateReadyApplication.\n- RoleLevel: USER.\n- READY(결제전) application 을 업데이트 합니다.\n- 기존 application을 DELETED 상태로 변경하고 새로운 application 을 생성합니다. (이유, 기존 applicaiton이 실제로는 결제 됐지만 서버 오류로 실패처리 된 경우, 기존 결제 정보가 남아있어야하기 때문).",
+        "description": "u-6-3 updateReadyApplication.\n- RoleLevel: USER.\n- READY(결제전) application 을 업데이트 합니다.\n- 기존 application을 DELETED 상태로 변경하고 새로운 application 을 생성합니다.\n(이유, 기존 application이 실제로는 결제 됐지만 서버 오류로 실패처리 된 경우, 기존 결제 정보가 남아있어야하기 때문).",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.applications.ready.updateReadyApplication",
         "x-nestia-jsDocTags": [
           {
@@ -2500,10 +3479,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateReadyApplicationReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "application",
+                "text": "UpdateReadyApplicationRes",
                 "kind": "text"
               }
             ]
@@ -2525,11 +3547,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "applicationId",
             "required": true
           }
         ],
         "requestBody": {
+          "description": "UpdateDoneApplicationReqBody",
           "content": {
             "application/json": {
               "schema": {
@@ -2542,7 +3565,7 @@
         },
         "responses": {
           "201": {
-            "description": "application",
+            "description": "UpdateDoneApplicationRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2555,6 +3578,11 @@
         },
         "summary": "u-6-4 updateDoneApplication",
         "description": "u-6-4 updateDoneApplication.\n- RoleLevel: USER.\n- DONE(결제완료) application 을 업데이트 합니다.\n- playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 중 하나는 필수로 전달해야 합니다.\n- playerSnapshotUpdateDto 를 전달하면 playerSnapshot을 새로 생성합니다.\n- participationDivisionInfoUpdateDtos 를 전달하면 participationDivisionInfoSnapshots을 새로 생성합니다.\n- playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 둘 다 전달하면 둘 다 새로 생성합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.applications.done.updateDoneApplication",
         "x-nestia-jsDocTags": [
           {
@@ -2567,10 +3595,53 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "UpdateDoneApplicationReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "application",
+                "text": "UpdateDoneApplicationRes",
                 "kind": "text"
               }
             ]
@@ -2592,13 +3663,13 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "",
+            "description": "applicationId",
             "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "expected payment",
+            "description": "GetExpectedPaymentRes",
             "content": {
               "application/json": {
                 "schema": {
@@ -2611,6 +3682,11 @@
         },
         "summary": "u-6-6 getExpectedPayment",
         "description": "u-6-6 getExpectedPayment.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "x-nestia-namespace": "user.applications.expected-payment.getExpectedPayment",
         "x-nestia-jsDocTags": [
           {
@@ -2623,10 +3699,36 @@
             ]
           },
           {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
             "name": "returns",
             "text": [
               {
-                "text": "expected payment",
+                "text": "GetExpectedPaymentRes",
                 "kind": "text"
               }
             ]
@@ -6632,7 +7734,7 @@
           "user"
         ]
       },
-      "ResponseFormFindAllRecentPoliciesRes": {
+      "ResponseFormFindAllTypesOfLatestPoliciesRes": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -6648,7 +7750,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/FindAllRecentPoliciesRes"
+            "$ref": "#/components/schemas/FindAllTypesOfLatestPoliciesRes"
           }
         },
         "nullable": false,
@@ -6658,7 +7760,7 @@
           "result"
         ]
       },
-      "FindAllRecentPoliciesRes": {
+      "FindAllTypesOfLatestPoliciesRes": {
         "type": "object",
         "properties": {
           "policies": {
@@ -6726,7 +7828,7 @@
           "title"
         ]
       },
-      "ResponseFormFindPolicyRes": {
+      "ResponseFormGetPolicyRes": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -6742,7 +7844,7 @@
             ]
           },
           "result": {
-            "$ref": "#/components/schemas/FindPolicyRes"
+            "$ref": "#/components/schemas/GetPolicyRes"
           }
         },
         "nullable": false,
@@ -6752,11 +7854,11 @@
           "result"
         ]
       },
-      "FindPolicyRes": {
+      "GetPolicyRes": {
         "type": "object",
         "properties": {
           "policy": {
-            "$ref": "#/components/schemas/IPolicy.Nullable"
+            "$ref": "#/components/schemas/IPolicy"
           }
         },
         "nullable": false,
@@ -6764,7 +7866,7 @@
           "policy"
         ]
       },
-      "IPolicy.Nullable": {
+      "IPolicy": {
         "type": "object",
         "properties": {
           "id": {
@@ -6813,7 +7915,7 @@
             "description": "CreatedAt."
           }
         },
-        "nullable": true,
+        "nullable": false,
         "required": [
           "id",
           "version",
@@ -6903,67 +8005,6 @@
         "required": [
           "policy"
         ]
-      },
-      "IPolicy": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "version": {
-            "type": "integer",
-            "minimum": 0,
-            "title": "약관의 버전",
-            "description": "약관의 버전."
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "ADVERTISEMENT",
-              "PRIVACY",
-              "REFUND",
-              "TERMS_OF_SERVICE"
-            ],
-            "title": "약관의 종류",
-            "description": "약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
-          },
-          "isMandatory": {
-            "type": "boolean",
-            "title": "약관동의 필수여수",
-            "description": "약관동의 필수여수.\n- true: 필수.\n- false: 선택."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "title": "약관의 제목",
-            "description": "약관의 제목.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1,
-            "title": "약관의 내용",
-            "description": "약관의 내용.\n- ex) 서비스 이용 약관, 개인정보 처리 방침, 환불 정책."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "version",
-          "type",
-          "isMandatory",
-          "title",
-          "content",
-          "createdAt"
-        ],
-        "description": "약관.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
       },
       "FindPoliciesReqQuery": {
         "type": "object",
@@ -7084,7 +8125,8 @@
                 "얼리버드"
               ]
             },
-            "description": "태그를 기준으로 필터링합니다. 중복 선택 가능합니다\n- 간편결제: 간편결제 가능한 대회 (협약 대회)\n- 얼리버드: 얼리버드 할인 기간 중인 대회\n- 신청가능: 참가 신청 가능한 대회\n- 단독출전조정: 단독 참가자의 부문 조정 기간 중인 대회"
+            "title": "태그를 기준으로 필터링합니다. 중복 선택 가능합니다",
+            "description": "태그를 기준으로 필터링합니다. 중복 선택 가능합니다.\n- 간편결제: 간편결제 가능한 대회 (협약 대회)\n- 얼리버드: 얼리버드 할인 기간 중인 대회\n- 신청가능: 참가 신청 가능한 대회\n- 단독출전조정: 단독 참가자의 부문 조정 기간 중인 대회"
           },
           "dateFilter": {
             "type": "string",

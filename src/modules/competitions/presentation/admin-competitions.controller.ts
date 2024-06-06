@@ -36,7 +36,9 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns created competition
+   * @security bearer
+   * @param body CreateCompetitionReqBody
+   * @returns CreateCompetitionRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
@@ -50,8 +52,9 @@ export class AdminCompetitionsController {
    * - ACTIVE, INACTIVE 상태인 competition 들을 조회합니다.
    *
    * @tag a-5 competitions
+   * @security bearer
    * @param query FindCompetitionsReqQuery
-   * @returns competitions
+   * @returns FindCompetitionsRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')
@@ -74,7 +77,10 @@ export class AdminCompetitionsController {
    * - ACTIVE, INACTIVE 상태인 competition 을 조회합니다.
    *
    * @tag a-5 competitions
-   * @returns competition
+   * @security bearer
+   * @param competitionId competitionId
+   * @returns GetCompetitionRes
+   *
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/:competitionId')
@@ -89,7 +95,10 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns updated competition
+   * @security bearer
+   * @param competitionId competitionId
+   * @param body UpdateCompetitionReqBody
+   * @returns UpdateCompetitionRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:competitionId')
@@ -107,7 +116,10 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns updated competition
+   * @security bearer
+   * @param competitionId competitionId
+   * @param body UpdateCompetitionStatusReqBody
+   * @returns UpdateCompetitionRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:competitionId/status')
@@ -128,7 +140,10 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns created divisions
+   * @security bearer
+   * @param competitionId competitionId
+   * @param body CreateDivisionsReqBody
+   * @returns CreateCompetitionDivisionsRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/divisions')
@@ -149,7 +164,10 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns created earlybird discount snapshot
+   * @security bearer
+   * @param competitionId competitionId
+   * @param body CreateEarlybirdDiscountSnapshotReqBody
+   * @returns CreateEarlybirdDiscountSnapshotRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/earlybird-discount-snapshots')
@@ -169,17 +187,20 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns created combination discount snapshot
+   * @security bearer
+   * @param competitionId competitionId
+   * @param body CreateCombinationDiscountSnapshotReqBody
+   * @returns CreateCombinationDiscountSnapshotRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/combination-discount-snapshots')
   async createCombinationDiscountSnapshot(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-    @TypedBody() dto: CreateCombinationDiscountSnapshotReqBody,
+    @TypedBody() body: CreateCombinationDiscountSnapshotReqBody,
   ): Promise<ResponseForm<CreateCombinationDiscountSnapshotRes>> {
     return createResponseForm(
       await this.competitionsAppService.createCompetitionCombinationDiscountSnapshot({
-        combinationDiscountSnapshotCreateDto: { competitionId, ...dto },
+        combinationDiscountSnapshotCreateDto: { competitionId, ...body },
       }),
     );
   }
@@ -189,17 +210,20 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns created required addtional info
+   * @security bearer
+   * @param competitionId competitionId
+   * @param body CreateCompetitionRequiredAdditionalInfoReqBody
+   * @returns CreateCompetitionRequiredAdditionalInfoRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/required-additional-infos')
   async createCompetitionRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
-    @TypedBody() dto: CreateCompetitionRequiredAdditionalInfoReqBody,
+    @TypedBody() body: CreateCompetitionRequiredAdditionalInfoReqBody,
   ): Promise<ResponseForm<CreateCompetitionRequiredAdditionalInfoRes>> {
     return createResponseForm(
       await this.competitionsAppService.createCompetitionRequiredAdditionalInfo({
-        requiredAdditionalInfoCreateDto: { competitionId, ...dto },
+        requiredAdditionalInfoCreateDto: { competitionId, ...body },
       }),
     );
   }
@@ -209,18 +233,22 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns updated required addtional info
+   * @security bearer
+   * @param competitionId competitionId
+   * @param requiredAdditionalInfoId requiredAdditionalInfoId
+   * @param body UpdateRequiredAdditionalInfoReqBody
+   * @returns UpdateCompetitionRequiredAdditionalInfoRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Patch('/:competitionId/required-additional-infos/:requiredAdditionalInfoId')
   async updateRequiredAdditionalInfo(
     @TypedParam('competitionId') competitionId: ICompetition['id'],
     @TypedParam('requiredAdditionalInfoId') requiredAdditionalInfoId: IRequiredAdditionalInfo['id'],
-    @TypedBody() dto: UpdateRequiredAdditionalInfoReqBody,
+    @TypedBody() body: UpdateRequiredAdditionalInfoReqBody,
   ): Promise<ResponseForm<UpdateCompetitionRequiredAdditionalInfoRes>> {
     return createResponseForm(
       await this.competitionsAppService.updateCompetitionRequiredAdditionalInfo({
-        requiredAdditionalInfoUpdateDto: { competitionId, id: requiredAdditionalInfoId, ...dto },
+        requiredAdditionalInfoUpdateDto: { competitionId, id: requiredAdditionalInfoId, ...body },
       }),
     );
   }
@@ -230,7 +258,10 @@ export class AdminCompetitionsController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-5 competitions
-   * @returns void
+   * @security bearer
+   * @param competitionId competitionId
+   * @param requiredAdditionalInfoId requiredAdditionalInfoId
+   * @returns DeleteCompetitionRequiredAdditionalInfoRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Delete('/:competitionId/required-additional-infos/:requiredAdditionalInfoId')

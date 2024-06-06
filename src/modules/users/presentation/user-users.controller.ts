@@ -15,7 +15,9 @@ export class UserUsersController {
    * - RoleLevel: USER.
    *
    * @tag u-3 users
-   * @returns created user info
+   * @security bearer
+   * @param body CreateUserReqBody
+   * @returns CreateUserRes
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
@@ -28,8 +30,9 @@ export class UserUsersController {
    * - RoleLevel: USER.
    *
    * @tag u-3 users
-   * @param dto UpdateUserReqDto
-   * @returns updated user
+   * @security bearer
+   * @param body UpdateUserReqBody
+   * @returns UpdateUserRes
    */
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)
@@ -43,7 +46,8 @@ export class UserUsersController {
    * - RoleLevel: USER.
    *
    * @tag u-3 users
-   * @returns user
+   * @security bearer
+   * @returns GetMeRes
    */
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.USER)

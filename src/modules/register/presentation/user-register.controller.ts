@@ -30,7 +30,8 @@ export class UserRegisterController {
    * - RoleLevel: TEMPORARY_USER.
    *
    * @tag u-2 register
-   * @returns user
+   * @security bearer
+   * @returns GetTemporaryUserRes
    */
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
@@ -47,8 +48,9 @@ export class UserRegisterController {
    * - 이미 사용중인 닉네임이면 true를 반환.
    *
    * @tag u-2 register
+   * @security bearer
    * @param nickname 닉네임
-   * @returns user
+   * @returns IsDuplicatedNicknameRes
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Get('users/:nickname/is-duplicated')
@@ -65,7 +67,9 @@ export class UserRegisterController {
    * - 전화번호로 인증코드를 전송한다.
    *
    * @tag u-2 register
-   * @returns void
+   * @security bearer
+   * @param body SendPhoneNumberAuthCodeReqBody
+   * @returns SendPhoneNumberAuthCodeRes
    */
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code')
@@ -90,20 +94,21 @@ export class UserRegisterController {
    * - 인증성공시 true, 실패시 false를 반환한다.
    *
    * @tag u-2 register
-   * @param dto confirmAuthCodeReqDto
-   * @returns true or false
+   * @security bearer
+   * @param body ConfirmAuthCodeReqBody
+   * @returns ConfirmAuthCodeRes
    */
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @RoleLevels(RoleLevel.TEMPORARY_USER)
   @TypedRoute.Post('phone-number/auth-code/confirm')
   async confirmAuthCode(
     @Req() req: Request,
-    @TypedBody() dto: ConfirmAuthCodeReqBody,
+    @TypedBody() body: ConfirmAuthCodeReqBody,
   ): Promise<ResponseForm<ConfirmAuthCodeRes>> {
     return createResponseForm(
       await this.RegisterAppService.confirmAuthCode({
         userId: req['userId'],
-        authCode: dto.authCode,
+        authCode: body.authCode,
       }),
     );
   }
@@ -115,8 +120,9 @@ export class UserRegisterController {
    * - USER 레벨로 업데이트된 accessToken, refreshToken을 반환한다.
    *
    * @tag u-2 register
-   * @param dto RegisterReqDto
-   * @returns accessToken & refreshToken
+   * @security bearer
+   * @param body RegisterUserReqBody
+   * @returns RegisterUserRes
    */
   @TypedException<ENTITY_NOT_FOUND>(404, 'ENTITY_NOT_FOUND')
   @TypedException<REGISTER_NICKNAME_DUPLICATED>(3000, 'REGISTER_NICKNAME_DUPLICATED')
@@ -126,12 +132,12 @@ export class UserRegisterController {
   @TypedRoute.Patch()
   async registerUser(
     @Req() req: Request,
-    @TypedBody() dto: RegisterUserReqBody,
+    @TypedBody() body: RegisterUserReqBody,
   ): Promise<ResponseForm<RegisterUserRes>> {
     return createResponseForm(
       await this.RegisterAppService.registerUser({
-        userRegisterDto: { id: req['userId'], ...dto.user },
-        consentPolicyTypes: dto.consentPolicyTypes,
+        userRegisterDto: { id: req['userId'], ...body.user },
+        consentPolicyTypes: body.consentPolicyTypes,
       }),
     );
   }

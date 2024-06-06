@@ -1,9 +1,8 @@
 import {
-  CreatePolicyParam,
   CreatePolicyRet,
   FindAllTypesOfLatestPoliciesRet,
   FindPoliciesRet,
-  FindPolicyRet,
+  GetPolicyRet,
 } from '../application/policy.app.dto';
 import { IPolicy } from '../domain/interface/policy.interface';
 
@@ -23,6 +22,6 @@ export interface CreatePolicyRes extends CreatePolicyRet {}
 
 export interface FindPoliciesRes extends FindPoliciesRet {}
 
-export interface FindPolicyRes extends FindPolicyRet {}
+export interface GetPolicyRes extends GetPolicyRet {}
 
-export interface FindAllRecentPoliciesRes extends FindAllTypesOfLatestPoliciesRet {}
+export interface FindAllTypesOfLatestPoliciesRes extends FindAllTypesOfLatestPoliciesRet {}

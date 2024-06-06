@@ -109,22 +109,11 @@ export class CompetitionsAppService {
     return ret;
   }
 
-  async getCompetition({ competitionId, status }: GetCompetitionParam): Promise<GetCompetitionRet> {
+  async getCompetition(query: GetCompetitionParam): Promise<GetCompetitionRet> {
     const competitionEntity = assert<ICompetition>(
-      await this.competitionRepository
-        .findOneOrFail({
-          where: { id: competitionId, status },
-          relations: [
-            'divisions',
-            'earlybirdDiscountSnapshots',
-            'combinationDiscountSnapshots',
-            'requiredAdditionalInfos',
-            'competitionHostMaps',
-          ],
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
-        }),
+      await this.competitionRepository.findOneWithQueryOptions({
+        ...query,
+      }),
     );
     return { competition: competitionEntity };
   }
@@ -140,6 +129,7 @@ export class CompetitionsAppService {
             where: { id: competitionId },
             relations: [
               'divisions',
+              'divisions.priceSnapthos',
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',

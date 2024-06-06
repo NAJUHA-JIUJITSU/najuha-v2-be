@@ -14,7 +14,9 @@ export class AdminPolicyController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-4 policy
-   * @returns created policy
+   * @security bearer
+   * @param body CreatePolicyReqBody
+   * @returns CreatePolicyRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
@@ -27,8 +29,9 @@ export class AdminPolicyController {
    * - RoleLevel: ADMIN.
    *
    * @tag a-4 policy
-   * @param type policy type
-   * @returns policies
+   * @security bearer
+   * @param query FindPoliciesReqQuery
+   * @returns FindPoliciesRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Get('/')

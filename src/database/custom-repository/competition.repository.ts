@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CompetitionEntity } from '../entity/competition/competition.entity';
-import { ICompetitionQueryOptions } from 'src/modules/competitions/domain/interface/competition.interface';
-import { TPaginationParam } from 'src/common/common-types';
+import { FindCompetitionsParam, GetCompetitionParam } from 'src/modules/competitions/application/competitions.app.dto';
 
 @Injectable()
 export class CompetitionRepository extends Repository<CompetitionEntity> {
@@ -19,7 +18,7 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
     selectFilter,
     sortOption,
     status,
-  }: TPaginationParam<ICompetitionQueryOptions>) {
+  }: FindCompetitionsParam) {
     const now = new Date();
 
     let qb = this.createQueryBuilder('competition');
@@ -89,5 +88,28 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
       .take(limit)
       .getMany();
     return competitions;
+  }
+
+  async findOneWithQueryOptions({ competitionId, hostId, status }: GetCompetitionParam) {
+    let qb = this.createQueryBuilder('competition');
+
+    qb = qb
+      .leftJoinAndSelect('competition.divisions', 'divisions')
+      .leftJoinAndSelect('divisions.priceSnapshots', 'priceSnapshots')
+      .leftJoinAndSelect('competition.earlybirdDiscountSnapshots', 'earlybirdDiscountSnapshots')
+      .leftJoinAndSelect('competition.combinationDiscountSnapshots', 'combinationDiscountSnapshots')
+      .leftJoinAndSelect('competition.requiredAdditionalInfos', 'requiredAdditionalInfos')
+      .leftJoinAndSelect('competition.competitionHostMaps', 'competitionHostMaps');
+
+    if (hostId) {
+      qb = qb.innerJoin('competition.competitionHostMaps', 'hostMaps', 'hostMaps.hostId = :hostId', { hostId });
+    }
+
+    if (status) {
+      qb = qb.andWhere('competition.status = :status', { status });
+    }
+
+    const competition = await qb.where('competition.id = :competitionId', { competitionId }).getOne();
+    return competition;
   }
 }

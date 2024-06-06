@@ -33,6 +33,7 @@ export interface FindCompetitionsParam extends TPaginationParam<ICompetitionQuer
 export interface GetCompetitionParam {
   competitionId: ICompetition['id'];
   status?: ICompetition['status'];
+  hostId?: IUser['id'];
 }
 
 export interface UpdateCompetitionStatusParam {

@@ -26,7 +26,9 @@ export class UserApplicationsController {
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
-   * @returns application
+   * @security bearer
+   * @param body CreateApplicationReqBody
+   * @returns CreateApplicationRes
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
@@ -44,7 +46,9 @@ export class UserApplicationsController {
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
-   * @returns application
+   * @security bearer
+   * @param applicationId applicationId
+   * @returns GetApplicationRes
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:applicationId')
@@ -61,10 +65,14 @@ export class UserApplicationsController {
    * u-6-3 updateReadyApplication.
    * - RoleLevel: USER.
    * - READY(결제전) application 을 업데이트 합니다.
-   * - 기존 application을 DELETED 상태로 변경하고 새로운 application 을 생성합니다. (이유, 기존 applicaiton이 실제로는 결제 됐지만 서버 오류로 실패처리 된 경우, 기존 결제 정보가 남아있어야하기 때문).
+   * - 기존 application을 DELETED 상태로 변경하고 새로운 application 을 생성합니다.
+   * (이유, 기존 application이 실제로는 결제 됐지만 서버 오류로 실패처리 된 경우, 기존 결제 정보가 남아있어야하기 때문).
    *
    * @tag u-6 applications
-   * @returns application
+   * @security bearer
+   * @param applicationId applicationId
+   * @param body UpdateReadyApplicationReqBody
+   * @returns UpdateReadyApplicationRes
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/:applicationId/ready')
@@ -94,7 +102,10 @@ export class UserApplicationsController {
    * - playerSnapshotUpdateDto, participationDivisionInfoUpdateDtos 둘 다 전달하면 둘 다 새로 생성합니다.
    *
    * @tag u-6 applications
-   * @returns application
+   * @security bearer
+   * @param applicationId applicationId
+   * @param body UpdateDoneApplicationReqBody
+   * @returns UpdateDoneApplicationRes
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/:applicationId/done')
@@ -119,6 +130,8 @@ export class UserApplicationsController {
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
+   * @security bearer
+   * @param applicationId applicationId
    * @returns void
    */
   @RoleLevels(RoleLevel.USER)
@@ -132,7 +145,9 @@ export class UserApplicationsController {
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
-   * @returns expected payment
+   * @security bearer
+   * @param applicationId applicationId
+   * @returns GetExpectedPaymentRes
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:applicationId/expected-payment')
@@ -150,7 +165,9 @@ export class UserApplicationsController {
    * - RoleLevel: USER.
    *
    * @tag u-6 applications
-   * @returns applications
+   * @security bearer
+   * @param query FindApplicationsQuery
+   * @returns FindApplicationsRes
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/')

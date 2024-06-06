@@ -47,7 +47,7 @@ describe('UserPostsController (e2e)', () => {
         .fill(0)
         .map(async () => {
           await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
-          return api.functional.public_api.view_count.post.incrementPostViewCount(
+          return api.functional.user.view_count.post.incrementPostViewCount(
             {
               host,
               headers: {

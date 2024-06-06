@@ -7,9 +7,10 @@ import {
   FindPoliciesParam,
   FindPoliciesRet,
   FindPolicyParam,
-  FindPolicyRet,
+  GetPolicyRet,
 } from './policy.app.dto';
 import { PolicyRepository } from 'src//database/custom-repository/policy.repository';
+import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
 
 @Injectable()
 export class PolicyAppService {
@@ -43,8 +44,10 @@ export class PolicyAppService {
     return { policies };
   }
 
-  async findPolicy({ id }: FindPolicyParam): Promise<FindPolicyRet> {
-    const policy = await this.policyRepository.findOne({ where: { id } });
+  async getPolicy({ id }: FindPolicyParam): Promise<GetPolicyRet> {
+    const policy = await this.policyRepository.findOneOrFail({ where: { id } }).catch(() => {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Policy not found');
+    });
     return { policy };
   }
 

@@ -26,8 +26,8 @@ export interface FindPoliciesRet {
   policies: IPolicyFindMany[];
 }
 
-export interface FindPolicyRet {
-  policy: IPolicy | null;
+export interface GetPolicyRet {
+  policy: IPolicy;
 }
 
 export interface FindAllTypesOfLatestPoliciesRet {
