@@ -22,7 +22,6 @@ import {
   CreateCompetitionDivisionsRet,
   UpdateCompetitionRequiredAdditionalInfoRet,
   DeleteCompetitionRequiredAdditionalInfoRet,
-  FindHostingCompetitionsParam,
 } from './competitions.app.dto';
 import { CompetitionModel } from '../domain/model/competition.model';
 import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
@@ -100,17 +99,6 @@ export class CompetitionsAppService {
   }
 
   async findCompetitions(query: FindCompetitionsParam): Promise<FindCompetitionsRet> {
-    const competitionEntites = assert<ICompetitionForFind[]>(
-      await this.competitionRepository.findManyWithQueryOptions({
-        ...query,
-      }),
-    );
-    let ret: FindCompetitionsRet = { competitions: competitionEntites };
-    if (competitionEntites.length === query.limit) ret = { ...ret, nextPage: query.page + 1 };
-    return ret;
-  }
-
-  async findHostingCompetitions(query: FindHostingCompetitionsParam): Promise<FindCompetitionsRet> {
     const competitionEntites = assert<ICompetitionForFind[]>(
       await this.competitionRepository.findManyWithQueryOptions({
         ...query,

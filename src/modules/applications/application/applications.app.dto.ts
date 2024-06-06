@@ -2,9 +2,11 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import {
   IApplication,
   IApplicationCreateDto,
+  IApplicationQueryOptions,
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
+import { TPaginationParam, TPaginationRet } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // applicationsAppService Param
@@ -12,6 +14,7 @@ import { IExpectedPayment } from '../domain/interface/expected-payment.interface
 export interface CreateApplicationParam {
   applicationCreateDto: IApplicationCreateDto;
 }
+export interface FindApplicationsParam extends TPaginationParam<IApplicationQueryOptions> {}
 
 export interface GetApplicationParam {
   userId: IUser['id'];
@@ -32,12 +35,6 @@ export interface UpdateDoneApplicationParam {
 export interface GetExpectedPaymentParam {
   userId: IUser['id'];
   applicationId: IApplication['id'];
-}
-
-export interface FindApplicationsParam {
-  userId: IUser['id'];
-  page: number;
-  limit: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -63,7 +60,7 @@ export interface GetExpectedPaymentRet {
   expectedPayment: IExpectedPayment;
 }
 
-export interface FindApplicationsRet {
-  applications: IApplication[];
-  nextPage?: number;
-}
+export interface FindApplicationsRet
+  extends TPaginationRet<{
+    applications: IApplication[];
+  }> {}

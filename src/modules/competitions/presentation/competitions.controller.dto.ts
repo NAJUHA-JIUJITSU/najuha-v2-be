@@ -22,6 +22,7 @@ import {
   IRequiredAdditionalInfoCreateDto,
   IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
+import { TPaginationParam } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // competitionsController Request
@@ -33,10 +34,14 @@ export interface UpdateCompetitionReqBody extends Omit<ICompetitionUpdateDto, 'i
 export interface UpdateCompetitionStatusReqBody extends Pick<ICompetition, 'status'> {}
 
 export interface FindCompetitionsReqQuery
-  extends Partial<Pick<ICompetitionQueryOptions, 'page' | 'limit' | 'sortOption' | 'locationFilter' | 'selectFilter'>> {
-  /** - 날짜 필터. YYYY-MM 형식입니다. */
-  dateFilter?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
-}
+  extends Partial<
+    TPaginationParam<
+      Pick<ICompetitionQueryOptions, 'sortOption' | 'locationFilter' | 'selectFilter'> & {
+        /** - 날짜 필터. YYYY-MM 형식입니다. */
+        dateFilter: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
+      }
+    >
+  > {}
 
 export interface CreateDivisionsReqBody {
   /**

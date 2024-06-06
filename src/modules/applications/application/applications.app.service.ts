@@ -328,10 +328,10 @@ export class ApplicationsAppService {
     return { expectedPayment: competition.calculateExpectedPayment(application.getParticipationDivisionIds()) };
   }
 
-  async findApplications({ userId, page, limit }: FindApplicationsParam): Promise<FindApplicationsRet> {
+  async findApplications({ userId, status, page, limit }: FindApplicationsParam): Promise<FindApplicationsRet> {
     const applications = assert<IApplication[]>(
       await this.applicationRepository.find({
-        where: { userId },
+        where: { userId, status },
         relations: [
           'additionalInfos',
           'playerSnapshots',

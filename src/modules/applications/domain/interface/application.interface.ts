@@ -99,13 +99,13 @@ export interface IDoneApplicationUpdateDto {
 }
 
 export interface IApplicationQueryOptions {
-  /** 현제 페이지 번호입니다. default: 0 */
-  page: number;
+  /** 신청계정의 userId */
+  userId: IUser['id'];
 
-  /** 한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 30 */
-  limit: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<30>;
-
-  /** application status */
+  /**
+   * application status filter option.
+   * undefined 라면 모든 상태의 application을 조회합니다.
+   */
   status?: IApplication['status'];
 }
 

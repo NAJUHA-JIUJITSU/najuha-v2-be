@@ -160,8 +160,9 @@ export class UserApplicationsController {
   ): Promise<ResponseForm<FindApplicationsRes>> {
     return createResponseForm(
       await this.applicationAppService.findApplications({
-        page: query.page ?? 0,
-        limit: query.limit ?? 10,
+        page: query.page || 0,
+        limit: query.limit || 10,
+        status: query.status,
         userId: req['userId'],
       }),
     );

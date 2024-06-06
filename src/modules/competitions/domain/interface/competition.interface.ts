@@ -148,31 +148,35 @@ export interface ICompetitionUpdateDto
   > {}
 
 export interface ICompetitionQueryOptions {
-  /** 대회 주최자 ID. */
+  /**
+   * 대회 주최자 ID.
+   * hostId 가 포함되어 있으면 본인이 주최한 대회들을 조회합니다.
+   */
   hostId?: IUser['id'];
 
-  /** 현제 페이지 번호입니다. default: 0 */
-  page: number;
-
-  /** 한 페이지에 보여줄 아이템의 수입니다. default: 10, max: 100 */
-  limit: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<100>;
-
-  /** YYYY-MM 형식의 날짜 필터를 Date로 파싱한 결과입니다. default: now */
+  /**
+   * YYYY-MM 형식의 날짜 필터를 Date로 파싱한 결과입니다.
+   * @default new Date()
+   */
   parsedDateFilter: Date;
 
   /**
-   * 대회를 정렬하는 옵션입니다. default: '일자순'
+   * 대회를 정렬하는 옵션입니다.
    * - 일자순: 대회 날짜 순으로 정렬
    * - 조회순: 조회수 순으로 정렬
    * - 마감임박순: 참가 신청 마감일이 가까운 순으로 정렬
+   * @default '일자순'
    */
   sortOption: TCompetitionSortOption;
 
-  /** - 대회가 열리는 위치로 필터링합니다. */
+  /**
+   * 대회가 열리는 위치로 필터링합니다.
+   * ex ) 서울, 부산, 인천, 대구, 대전, 광주, 울산, 세종, 경기, 충북, 충남, 전남, 경북, 경남, 강원, 전북, 제주
+   */
   locationFilter?: TCompetitionLocationFilter;
 
   /**
-   * 태그를 기준으로 필터링합니다. 중복 선택 가능합니다
+   * 태그를 기준으로 필터링합니다. 중복 선택 가능합니다.
    * - 간편결제: 간편결제 가능한 대회 (협약 대회)
    * - 얼리버드: 얼리버드 할인 기간 중인 대회
    * - 신청가능: 참가 신청 가능한 대회
@@ -180,7 +184,7 @@ export interface ICompetitionQueryOptions {
    */
   selectFilter?: TCompetitionSelectFilter[];
 
-  /** - 대회 상태. */
+  /** 대회 상태. */
   status?: TCompetitionStatus;
 }
 

@@ -15,6 +15,7 @@ import {
   IRequiredAdditionalInfoCreateDto,
   IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
+import { TPaginationParam, TPaginationRet } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // competitionsAppService Param
@@ -27,11 +28,7 @@ export interface UpdateCompetitionParam {
   competitionUpdateDto: ICompetitionUpdateDto;
 }
 
-export interface FindCompetitionsParam extends ICompetitionQueryOptions {}
-
-export interface FindHostingCompetitionsParam extends ICompetitionQueryOptions {
-  hostId: IUser['id'];
-}
+export interface FindCompetitionsParam extends TPaginationParam<ICompetitionQueryOptions> {}
 
 export interface GetCompetitionParam {
   competitionId: ICompetition['id'];
@@ -84,10 +81,7 @@ export interface UpdateCompetitionStatusRet {
   competition: ICompetition;
 }
 
-export interface FindCompetitionsRet {
-  competitions: ICompetitionForFind[];
-  nextPage?: number;
-}
+export interface FindCompetitionsRet extends TPaginationRet<{ competitions: ICompetitionForFind[] }> {}
 
 export interface GetCompetitionRet {
   competition: ICompetition;

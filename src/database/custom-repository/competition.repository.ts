@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CompetitionEntity } from '../entity/competition/competition.entity';
 import { ICompetitionQueryOptions } from 'src/modules/competitions/domain/interface/competition.interface';
+import { TPaginationParam } from 'src/common/common-types';
 
 @Injectable()
 export class CompetitionRepository extends Repository<CompetitionEntity> {
@@ -18,7 +19,7 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
     selectFilter,
     sortOption,
     status,
-  }: ICompetitionQueryOptions) {
+  }: TPaginationParam<ICompetitionQueryOptions>) {
     const now = new Date();
 
     let qb = this.createQueryBuilder('competition');

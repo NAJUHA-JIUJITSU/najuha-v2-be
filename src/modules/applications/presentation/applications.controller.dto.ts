@@ -5,17 +5,12 @@ import {
   GetExpectedPaymentRet,
   UpdateReadyApplicationRet,
 } from 'src/modules/applications/application/applications.app.dto';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import {
-  IApplication,
   IApplicationCreateDto,
   IApplicationQueryOptions,
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
-import { IPlayerSnapshotCreateDto } from '../domain/interface/player-snapshot.interface';
-import { IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from '../domain/interface/additional-info.interface';
-import { IParticipationDivisionInfoUpdateDto } from '../domain/interface/participation-division-info.interface';
+import { TPaginationParam } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // applicationsController Request
@@ -27,7 +22,7 @@ export interface UpdateReadyApplicationReqBody extends Omit<IApplicationCreateDt
 
 export interface UpdateDoneApplicationReqBody extends IDoneApplicationUpdateDto {}
 
-export interface FindApplicationsQuery extends Pick<IApplicationQueryOptions, 'page' | 'limit'> {}
+export interface FindApplicationsQuery extends Partial<TPaginationParam<Omit<IApplicationQueryOptions, 'userId'>>> {}
 
 // ---------------------------------------------------------------------------
 // applicationsController Response
