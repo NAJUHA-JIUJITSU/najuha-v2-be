@@ -129,7 +129,6 @@ export class CompetitionsAppService {
             where: { id: competitionId },
             relations: [
               'divisions',
-              'divisions.priceSnapthos',
               'earlybirdDiscountSnapshots',
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
