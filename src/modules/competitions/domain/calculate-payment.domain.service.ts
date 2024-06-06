@@ -1,8 +1,8 @@
+import { IExpectedPayment } from 'src/modules/applications/domain/interface/expected-payment.interface';
 import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import { Absolute, IDivision } from 'src/modules/competitions/domain/interface/division.interface';
 import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
-import { IExpectedPayment } from './interface/expected-payment.interface';
 import typia from 'typia';
 
 export class CalculatePaymentService {
