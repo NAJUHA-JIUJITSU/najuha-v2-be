@@ -3,7 +3,7 @@ import {
   IComment,
   ICommentCreateDto,
   ICommentReplyCreateDto,
-  ICommentRet,
+  ICommentDetail,
   ICommentUpdateDto,
   IFindCommentsAndRepliesQueryOptions,
   IFindCommentsQueryOptions,
@@ -62,18 +62,18 @@ export interface DeleteCommentReportParam {
 // commentAppService Result
 // ---------------------------------------------------------------------------
 export interface CreateCommentRet {
-  comment: ICommentRet;
+  comment: ICommentDetail;
 }
 
 export interface CreateCommentReplyRet {
-  comment: ICommentRet;
+  comment: ICommentDetail;
 }
 
 export interface FindCommentsRet
   extends TPaginationRet<{
-    comments: ICommentRet[];
+    comments: ICommentDetail[];
   }> {}
 
 export interface UpdateCommentRet {
-  comment: ICommentRet;
+  comment: ICommentDetail;
 }

@@ -1222,7 +1222,7 @@
           }
         },
         "summary": "u-4-1 findAllTypesOfLatestPolicies",
-        "description": "u-4-1 findAllTypesOfLatestPolicies.\n- RoleLevel: TEMPORARY_USER.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
+        "description": "u-4-1 findAllTypesOfLatestPolicies.\n- RoleLevel: PUBLIC.\n- 가장 최근에 등록된 모든 타입의 약관을 가져옵니다.",
         "security": [
           {
             "bearer": []
@@ -1292,7 +1292,7 @@
           }
         },
         "summary": "u-4-2 getPolicy",
-        "description": "u-4-2 getPolicy.\n- RoleLevel: TEMPORARY_USER.\n- policyId에 해당하는 약관을 조회합니다.",
+        "description": "u-4-2 getPolicy.\n- RoleLevel: PUBLIC.\n- policyId에 해당하는 약관을 조회합니다.",
         "security": [
           {
             "bearer": []
@@ -3799,23 +3799,6 @@
             "name": "param",
             "text": [
               {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
                 "text": "body",
                 "kind": "parameterName"
               },
@@ -3892,23 +3875,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -3996,23 +3962,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -4110,23 +4059,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -4237,23 +4169,6 @@
             "name": "param",
             "text": [
               {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
                 "text": "postId",
                 "kind": "parameterName"
               },
@@ -4355,23 +4270,6 @@
             ]
           },
           {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
             "name": "returns",
             "text": [
               {
@@ -4435,23 +4333,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -4559,23 +4440,6 @@
             "name": "param",
             "text": [
               {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
                 "text": "postId",
                 "kind": "parameterName"
               },
@@ -4670,23 +4534,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -4811,23 +4658,6 @@
             "name": "param",
             "text": [
               {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
                 "text": "body",
                 "kind": "parameterName"
               },
@@ -4914,23 +4744,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -5099,23 +4912,6 @@
             "name": "param",
             "text": [
               {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
                 "text": "body",
                 "kind": "parameterName"
               },
@@ -5212,23 +5008,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -5370,23 +5149,6 @@
             "name": "param",
             "text": [
               {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
                 "text": "body",
                 "kind": "parameterName"
               },
@@ -5464,23 +5226,6 @@
             "text": [
               {
                 "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -5590,23 +5335,6 @@
             ]
           },
           {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
             "name": "returns",
             "text": [
               {
@@ -5687,23 +5415,6 @@
               },
               {
                 "text": "댓글 id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -5811,23 +5522,6 @@
             "name": "param",
             "text": [
               {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
                 "text": "body",
                 "kind": "parameterName"
               },
@@ -5922,23 +5616,6 @@
               },
               {
                 "text": "댓글 id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "req",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "Request 객체",
                 "kind": "text"
               }
             ]
@@ -11203,7 +10880,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPostRet"
+            "$ref": "#/components/schemas/IPostDetail"
           }
         },
         "nullable": false,
@@ -11211,7 +10888,7 @@
           "post"
         ]
       },
-      "IPostRet": {
+      "IPostDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -11285,10 +10962,7 @@
           "category",
           "userId",
           "deletedAt",
-          "postSnapshots",
-          "likeCount",
-          "commentCount",
-          "userLiked"
+          "postSnapshots"
         ]
       },
       "TPostStatus": {
@@ -11431,7 +11105,7 @@
           "posts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IPostRet"
+              "$ref": "#/components/schemas/IPostDetail"
             }
           }
         },
@@ -11470,7 +11144,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPostRet"
+            "$ref": "#/components/schemas/IPostDetail"
           }
         },
         "nullable": false,
@@ -11532,7 +11206,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPostRet"
+            "$ref": "#/components/schemas/IPostDetail"
           }
         },
         "nullable": false,
@@ -11609,7 +11283,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/ICommentRet"
+            "$ref": "#/components/schemas/ICommentDetail"
           }
         },
         "nullable": false,
@@ -11617,7 +11291,7 @@
           "comment"
         ]
       },
-      "ICommentRet": {
+      "ICommentDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -11686,8 +11360,6 @@
           "createdAt",
           "userId",
           "deletedAt",
-          "likeCount",
-          "userLiked",
           "postId",
           "parentId",
           "commentSnapshots"
@@ -11785,7 +11457,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/ICommentRet"
+            "$ref": "#/components/schemas/ICommentDetail"
           }
         },
         "nullable": false,
@@ -11851,7 +11523,7 @@
           "comments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ICommentRet"
+              "$ref": "#/components/schemas/ICommentDetail"
             }
           }
         },
@@ -11927,7 +11599,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/ICommentRet"
+            "$ref": "#/components/schemas/ICommentDetail"
           }
         },
         "nullable": false,

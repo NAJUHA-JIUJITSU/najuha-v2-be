@@ -46,22 +46,20 @@ export interface IPost {
   reports?: IPostReport[];
 }
 
-export interface IPostRet
-  extends Required<
-    Pick<
-      IPost,
-      | 'id'
-      | 'userId'
-      | 'viewCount'
-      | 'status'
-      | 'category'
-      | 'createdAt'
-      | 'deletedAt'
-      | 'postSnapshots'
-      | 'likeCount'
-      | 'commentCount'
-      | 'userLiked'
-    >
+export interface IPostDetail
+  extends Pick<
+    IPost,
+    | 'id'
+    | 'userId'
+    | 'viewCount'
+    | 'status'
+    | 'category'
+    | 'createdAt'
+    | 'deletedAt'
+    | 'postSnapshots'
+    | 'likeCount'
+    | 'commentCount'
+    | 'userLiked'
   > {}
 
 export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'>, Pick<IPostSnapshot, 'title' | 'body'> {}

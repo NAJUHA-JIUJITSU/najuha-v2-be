@@ -44,7 +44,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param body CreatePostReqBody 게시글 작성 요청 본문
    * @returns CreatePostRes 게시글 작성 응답
    */
@@ -66,7 +65,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param query FindPostsReqQuery 게시글 조회 쿼리
    * @returns FindPostsRes 게시글 조회 결과
    */
@@ -94,7 +92,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param postId 게시글 id
    * @returns GetPostRes 게시글 조회 결과
    */
@@ -116,7 +113,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param postId 게시글 id
    * @param body UpdatePostReqBody 게시글 수정 요청 본문
    * @returns UpdatePostRes 게시글 수정 결과
@@ -146,7 +142,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param postId 게시글 id
    * @returns void 게시글 삭제 결과
    */
@@ -165,7 +160,6 @@ export class UserPostsController {
    * @tag u-7 posts
    * @security bearer
    * @param postId 게시글 id
-   * @param req Request 객체
    * @returns void 좋아요 추가 결과
    */
   @RoleLevels(RoleLevel.USER)
@@ -185,7 +179,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param postId 게시글 id
    * @returns void 좋아요 취소 결과
    */
@@ -208,7 +201,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param postId 게시글 id
    * @param body CreatePostReportReqBody 게시글 신고 요청 본문
    * @returns void 게시글 신고 결과
@@ -234,7 +226,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param postId 게시글 id
    * @returns void 게시글 신고 취소 결과
    */
@@ -260,7 +251,6 @@ export class UserPostsController {
    * @tag u-7 posts
    * @security bearer
    * @param postId 게시글 id
-   * @param req Request 객체
    * @param body CreateCommentReqBody 댓글 작성 요청 본문
    * @returns CreateCommentRes 댓글 작성 결과
    */
@@ -287,7 +277,6 @@ export class UserPostsController {
    * @security bearer
    * @param postId 게시글 id
    * @param commentId 댓글 id
-   * @param req Request 객체
    * @param body CreateCommentReplyReqBody 대댓글 작성 요청 본문
    * @returns CreateCommentReplyRes 대댓글 작성 결과
    */
@@ -320,7 +309,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param postId 게시글 id
    * @param query FindCommentsReqQuery 댓글 조회 쿼리
    * @returns FindCommentsRes 댓글 조회 결과
@@ -353,7 +341,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param commentId 댓글 id
    * @param query FindCommentRepliesReqQuery 대댓글 조회 쿼리
    * @returns FindCommentsRes 대댓글 조회 결과
@@ -387,7 +374,6 @@ export class UserPostsController {
    * @tag u-7 posts
    * @security bearer
    * @param commentId 댓글 id
-   * @param req Request 객체
    * @param body UpdateCommentReqBody 댓글 수정 요청 본문
    * @returns UpdateCommentRes 댓글 수정 결과
    */
@@ -413,7 +399,6 @@ export class UserPostsController {
    *
    * @tag u-7 posts
    * @security bearer
-   * @param req Request 객체
    * @param commentId 댓글 id
    * @returns void 댓글 삭제 결과
    */
@@ -440,7 +425,6 @@ export class UserPostsController {
    * @tag u-7 posts
    * @security bearer
    * @param commentId 댓글 id
-   * @param req Request 객체
    * @returns void 좋아요 추가 결과
    */
   @RoleLevels(RoleLevel.USER)
@@ -464,7 +448,6 @@ export class UserPostsController {
    * @tag u-7 posts
    * @security bearer
    * @param commentId 댓글 id
-   * @param req Request 객체
    * @returns void 좋아요 취소 결과
    */
   @RoleLevels(RoleLevel.USER)
@@ -490,7 +473,6 @@ export class UserPostsController {
    * @tag u-7 posts
    * @security bearer
    * @param commentId 댓글 id
-   * @param req Request 객체
    * @param body CreateCommentReportReqBody 댓글 신고 요청 본문
    * @returns void 댓글 신고 결과
    */
@@ -516,7 +498,6 @@ export class UserPostsController {
    * @tag u-7 posts
    * @security bearer
    * @param commentId 댓글 id
-   * @param req Request 객체
    * @returns void 댓글 신고 취소 결과
    */
   @RoleLevels(RoleLevel.USER)

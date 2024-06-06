@@ -16,9 +16,9 @@ export class PostModel {
   private readonly reports: IPostReport[];
   private status: IPost['status'];
   private deletedAt: IPost['deletedAt'];
-  private likeCount: number;
-  private commentCount: number;
-  private userLiked: boolean;
+  private likeCount: IPost['likeCount'];
+  private commentCount: IPost['commentCount'];
+  private userLiked: IPost['userLiked'];
 
   constructor(entity: IPost) {
     this.id = entity.id;

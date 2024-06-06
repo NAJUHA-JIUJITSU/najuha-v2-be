@@ -39,21 +39,19 @@ export interface IComment {
   userLiked?: boolean;
 }
 
-export interface ICommentRet
-  extends Required<
-    Pick<
-      IComment,
-      | 'id'
-      | 'userId'
-      | 'parentId'
-      | 'status'
-      | 'createdAt'
-      | 'deletedAt'
-      | 'postId'
-      | 'commentSnapshots'
-      | 'likeCount'
-      | 'userLiked'
-    >
+export interface ICommentDetail
+  extends Pick<
+    IComment,
+    | 'id'
+    | 'userId'
+    | 'parentId'
+    | 'status'
+    | 'createdAt'
+    | 'deletedAt'
+    | 'postId'
+    | 'commentSnapshots'
+    | 'likeCount'
+    | 'userLiked'
   > {}
 
 export interface ICommentCreateDto extends Pick<IComment, 'userId' | 'postId'>, Pick<ICommentSnapshot, 'body'> {}

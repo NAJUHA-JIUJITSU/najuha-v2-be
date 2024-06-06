@@ -9,12 +9,12 @@ import { CombinationDiscountSnapshotModel } from './combination-discount-snapsho
 import { DivisionModel } from './division.model';
 import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.entity';
 import { IDivision } from '../interface/division.interface';
-import { CalculatePaymentService } from 'src/modules/applications/domain/calculate-payment.service';
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 import { RequiredAdditionalInfoModel } from './required-addtional-info.model';
 import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interface/additional-info.interface';
 import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtional-info.interface';
 import { ICompetitionHostMap } from '../interface/competition-host-map.interface';
+import { CalculatePaymentService } from '../calculate-payment.domain.service';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];

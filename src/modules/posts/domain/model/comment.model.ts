@@ -16,8 +16,8 @@ export class CommentModel {
   private readonly reports: ICommentReport[];
   private deletedAt: IComment['deletedAt'];
   private status: IComment['status'];
-  private likeCount: number;
-  private userLiked: boolean;
+  private likeCount: IComment['likeCount'];
+  private userLiked: IComment['userLiked'];
 
   constructor(entity: IComment) {
     this.id = entity.id;
