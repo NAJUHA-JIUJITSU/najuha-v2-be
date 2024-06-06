@@ -58,10 +58,11 @@ export class UserPostsController {
 
   /**
    * u-7-2 findPosts.
-   * - RoleLevel: USER.
+   * - RoleLevel: PUBLIC_OR_USER.
    * - 여러 게시글을 조회합니다.
    * - ACTIVE 상태인 게시글들만 조회합니다.
-   * - api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
+   * - 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.
+   * - 로그인 유저의 경우 자신이 좋아요를 누른 게시글인지 확인할 수 있습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -69,7 +70,7 @@ export class UserPostsController {
    * @param query FindPostsReqQuery 게시글 조회 쿼리
    * @returns FindPostsRes 게시글 조회 결과
    */
-  @RoleLevels(RoleLevel.USER)
+  @RoleLevels(RoleLevel.PUBLIC_OR_USER)
   @TypedRoute.Get('/')
   async findPosts(@Req() req: Request, @TypedQuery() query: FindPostsReqQuery): Promise<ResponseForm<FindPostsRes>> {
     return createResponseForm(
@@ -86,9 +87,10 @@ export class UserPostsController {
 
   /**
    * u-7-3 getPost.
-   * - RoleLevel: USER.
+   * - RoleLevel: PUBLIC_OR_USER.
    * - 특정 게시글을 조회합니다.
-   * - api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
+   * - 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.
+   * - 로그인 유저의 경우 자신이 좋아요를 누른 게시글인지 확인할 수 있습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -96,7 +98,7 @@ export class UserPostsController {
    * @param postId 게시글 id
    * @returns GetPostRes 게시글 조회 결과
    */
-  @RoleLevels(RoleLevel.USER)
+  @RoleLevels(RoleLevel.PUBLIC_OR_USER)
   @TypedRoute.Get('/:postId')
   async getPost(@Req() req: Request, @TypedParam('postId') postId: IPost['id']): Promise<ResponseForm<GetPostRes>> {
     return createResponseForm(
@@ -311,9 +313,10 @@ export class UserPostsController {
 
   /**
    * u-7-12 findComments.
-   * - RoleLevel: USER.
+   * - RoleLevel: PUBLIC_OR_USER.
    * - 게시글의 댓글들을 조회합니다.
-   * - api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
+   * - 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.
+   * - 로그인 유저의 경우 자신이 좋아요를 누른 댓글인지 확인할 수 있습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -322,7 +325,7 @@ export class UserPostsController {
    * @param query FindCommentsReqQuery 댓글 조회 쿼리
    * @returns FindCommentsRes 댓글 조회 결과
    */
-  @RoleLevels(RoleLevel.USER)
+  @RoleLevels(RoleLevel.PUBLIC_OR_USER)
   @TypedRoute.Get('/:postId/comment')
   async findComments(
     @Req() req: Request,
@@ -343,9 +346,10 @@ export class UserPostsController {
 
   /**
    * u-7-13 findCommentReplies.
-   * - RoleLevel: USER.
+   * - RoleLevel: PUBLIC_OR_USER.
    * - 댓글의 대댓글들을 조회합니다.
-   * - api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.
+   * - 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.
+   * - 로그인 유저의 경우 자신이 좋아요를 누른 대댓글인지 확인할 수 있습니다.
    *
    * @tag u-7 posts
    * @security bearer
@@ -354,7 +358,7 @@ export class UserPostsController {
    * @param query FindCommentRepliesReqQuery 대댓글 조회 쿼리
    * @returns FindCommentsRes 대댓글 조회 결과
    */
-  @RoleLevels(RoleLevel.USER)
+  @RoleLevels(RoleLevel.PUBLIC_OR_USER)
   @TypedRoute.Get('/:postId/comment/:commentId/reply')
   async findCommentReplies(
     @Req() req: Request,

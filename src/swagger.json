@@ -2717,7 +2717,7 @@
           }
         },
         "summary": "u-7-2 findPosts",
-        "description": "u-7-2 findPosts.\n- RoleLevel: USER.\n- 여러 게시글을 조회합니다.\n- ACTIVE 상태인 게시글들만 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-2 findPosts.\n- RoleLevel: PUBLIC_OR_USER.\n- 여러 게시글을 조회합니다.\n- ACTIVE 상태인 게시글들만 조회합니다.\n- 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.\n- 로그인 유저의 경우 자신이 좋아요를 누른 게시글인지 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -2821,7 +2821,7 @@
           }
         },
         "summary": "u-7-3 getPost",
-        "description": "u-7-3 getPost.\n- RoleLevel: USER.\n- 특정 게시글을 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-3 getPost.\n- RoleLevel: PUBLIC_OR_USER.\n- 특정 게시글을 조회합니다.\n- 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.\n- 로그인 유저의 경우 자신이 좋아요를 누른 게시글인지 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -3739,7 +3739,7 @@
           }
         },
         "summary": "u-7-12 findComments",
-        "description": "u-7-12 findComments.\n- RoleLevel: USER.\n- 게시글의 댓글들을 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-12 findComments.\n- RoleLevel: PUBLIC_OR_USER.\n- 게시글의 댓글들을 조회합니다.\n- 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.\n- 로그인 유저의 경우 자신이 좋아요를 누른 댓글인지 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -4037,7 +4037,7 @@
           }
         },
         "summary": "u-7-13 findCommentReplies",
-        "description": "u-7-13 findCommentReplies.\n- RoleLevel: USER.\n- 댓글의 대댓글들을 조회합니다.\n- api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 있습니다.",
+        "description": "u-7-13 findCommentReplies.\n- RoleLevel: PUBLIC_OR_USER.\n- 댓글의 대댓글들을 조회합니다.\n- 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.\n- 로그인 유저의 경우 자신이 좋아요를 누른 대댓글인지 확인할 수 있습니다.",
         "security": [
           {
             "bearer": []
@@ -4803,506 +4803,7 @@
         "x-nestia-method": "DELETE"
       }
     },
-    "/public-api/posts": {
-      "get": {
-        "tags": [
-          "p-7 posts"
-        ],
-        "parameters": [
-          {
-            "name": "query",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/FindPostsReqQuery"
-            },
-            "description": "FindPostsReqQuery 게시글 조회 쿼리",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "FindPostsRes 게시글 조회 결과",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindPostsRes"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "p-7-1 findPosts",
-        "description": "p-7-1 findPosts.\n- RoleLevel: PUBLIC.\n- 여러 게시글을 조회합니다.\n- ACTIVE 상태인 게시글들만 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public-api.posts.findPosts",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "p-7 posts",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "query",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "FindPostsReqQuery 게시글 조회 쿼리",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "FindPostsRes 게시글 조회 결과",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
-    "/public-api/posts/{postId}": {
-      "get": {
-        "tags": [
-          "p-7 posts"
-        ],
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "게시글 id",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GetPostRes 게시글 조회 결과",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormGetPostRes"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "p-7-2 getPost",
-        "description": "p-7-2 getPost.\n- RoleLevel: PUBLIC.\n- 특정 게시글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public-api.posts.getPost",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "p-7 posts",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "postId",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "게시글 id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "GetPostRes 게시글 조회 결과",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
-    "/public-api/posts/{postId}/comment": {
-      "get": {
-        "tags": [
-          "p-7 posts"
-        ],
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "게시글 id",
-            "required": true
-          },
-          {
-            "name": "query",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/FindCommentsReqQuery"
-            },
-            "description": "FindCommentsReqQuery 댓글 조회 쿼리",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "FindCommentsRes 댓글 조회 결과",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindCommentsRes"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "p-7-3- findComments",
-        "description": "p-7-3- findComments.\n- RoleLevel: PUBLIC.\n- 게시글의 댓글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public-api.posts.comment.findComments",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "p-7 posts",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "postId",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "게시글 id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "query",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "FindCommentsReqQuery 댓글 조회 쿼리",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "FindCommentsRes 댓글 조회 결과",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
-    "/public-api/posts/{postId}/comment/{commentId}/reply": {
-      "get": {
-        "tags": [
-          "p-7 posts"
-        ],
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "",
-            "required": true
-          },
-          {
-            "name": "commentId",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "댓글 id",
-            "required": true
-          },
-          {
-            "name": "query",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/FindCommentsReqQuery"
-            },
-            "description": "FindCommentRepliesReqQuery 대댓글 조회 쿼리",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "FindCommentsRes 대댓글 조회 결과",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormFindCommentsRes"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "p-7-4 findCommentReplies",
-        "description": "p-7-4 findCommentReplies.\n- RoleLevel: PUBLIC.\n- 댓글의 대댓글을 조회합니다.\n- public api 호출 유저가 좋아요를 눌렀는지 여부를 확인할 수 없습니다.",
-        "x-nestia-namespace": "public-api.posts.comment.reply.findCommentReplies",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "p-7 posts",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "commentId",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "댓글 id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "query",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "FindCommentRepliesReqQuery 대댓글 조회 쿼리",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "FindCommentsRes 대댓글 조회 결과",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "GET"
-      }
-    },
-    "/public-api/view-count/post/{postId}": {
-      "post": {
-        "tags": [
-          "p-8 view-count"
-        ],
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "게시글 id",
-            "required": true
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "void",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormvoid"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "p-8-1 incrementPostViewCount",
-        "description": "p-8-1 incrementPostViewCount.\n- RoleLevel: PUBLIC\n- 게시글 조회수를 증가시킵니다.\n- ip를 사용하여 사용자를 식별합니다.\n- 동일한 ip로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
-        "x-nestia-namespace": "public-api.view-count.post.incrementPostViewCount",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "p-8 view-count",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "postId",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "게시글 id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "void",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      }
-    },
-    "/public-api/view-count/competition/{competitionId}": {
-      "post": {
-        "tags": [
-          "p-8 view-count"
-        ],
-        "parameters": [
-          {
-            "name": "competitionId",
-            "in": "path",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "description": "대회 id",
-            "required": true
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "void",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormvoid"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "p-8-2 incrementCompetitionViewCount",
-        "description": "p-8-2 incrementCompetitionViewCount.\n- RoleLevel: PUBLIC\n- 대회 조회수를 증가시킵니다.\n- ip를 사용하여 사용자를 식별합니다.\n- 동일한 ip로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
-        "x-nestia-namespace": "public-api.view-count.competition.incrementCompetitionViewCount",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "p-8 view-count",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "competitionId",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "대회 id",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "void",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      }
-    },
-    "/user-api/view-count/post/{postId}": {
+    "/user/view-count/post/{postId}": {
       "post": {
         "tags": [
           "u-8 view-count"
@@ -5333,13 +4834,13 @@
           }
         },
         "summary": "u-8-1 incrementPostViewCount",
-        "description": "u-8-1 incrementPostViewCount.\n- RoleLevel: USER\n- 게시글 조회수를 증가시킵니다.\n- accessToken에서 userId를 추출하여 사용자를 식별합니다.\n- 동일한 userId로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
+        "description": "u-8-1 incrementPostViewCount.\n- RoleLevel: PUBLIC_OR_USER.\n- 게시글 조회수를 증가시킵니다.\n- 로그인 한 유저의 경우 accessToken에서 userId를 추출하여 사용자를 식별합니다.\n- 로그인하지 않은 유저의 경우 ip를 사용하여 사용자를 식별합니다.\n- 동일한 userId로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
         "security": [
           {
             "bearer": []
           }
         ],
-        "x-nestia-namespace": "user-api.view-count.post.incrementPostViewCount",
+        "x-nestia-namespace": "user.view-count.post.incrementPostViewCount",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -5389,7 +4890,7 @@
         "x-nestia-method": "POST"
       }
     },
-    "/user-api/view-count/competition/{competitionId}": {
+    "/user/view-count/competition/{competitionId}": {
       "post": {
         "tags": [
           "u-8 view-count"
@@ -5420,13 +4921,13 @@
           }
         },
         "summary": "u-8-2 incrementCompetitionViewCount",
-        "description": "u-8-2 incrementCompetitionViewCount.\n- RoleLevel: USER\n- 대회 조회수를 증가시킵니다.\n- accessToken에서 userId를 추출하여 사용자를 식별합니다.\n- 동일한 userId로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
+        "description": "u-8-2 incrementCompetitionViewCount.\n- RoleLevel: PUBLIC_OR_USER.\n- 대회 조회수를 증가시킵니다.\n- 로그인 한 유저의 경우 accessToken에서 userId를 추출하여 사용자를 식별합니다.\n- 로그인하지 않은 유저의 경우 ip를 사용하여 사용자를 식별합니다.\n- 동일한 userId로 하루에 한 번만 조회수를 증가시킬 수 있습니다.",
         "security": [
           {
             "bearer": []
           }
         ],
-        "x-nestia-namespace": "user-api.view-count.competition.incrementCompetitionViewCount",
+        "x-nestia-namespace": "user.view-count.competition.incrementCompetitionViewCount",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -9605,10 +9106,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             }
@@ -9703,6 +9204,26 @@
           "masterName"
         ]
       },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
       "AddressInfo": {
         "type": "object",
         "properties": {
@@ -9716,26 +9237,6 @@
             "type": "string",
             "maxLength": 512,
             "minLength": 1
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "value"
-        ]
-      },
-      "SocialScurityNumberInfo": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "SOCIAL_SECURITY_NUMBER"
-            ]
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^[0-9]{6}-[0-9]{7}$"
           }
         },
         "nullable": false,
@@ -10204,10 +9705,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             }
@@ -10278,10 +9779,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             }

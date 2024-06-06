@@ -11,10 +11,11 @@ const ROLE_LEVEL_KEY = Symbol('roleLevel');
 
 export enum RoleLevel {
   PUBLIC = 1,
-  TEMPORARY_USER = 2,
-  USER = 3,
-  HOST = 4,
-  ADMIN = 5,
+  PUBLIC_OR_USER = 2,
+  TEMPORARY_USER = 3,
+  USER = 4,
+  HOST = 5,
+  ADMIN = 6,
 }
 
 export const RoleLevels = (roleLevel: RoleLevel) => SetMetadata(ROLE_LEVEL_KEY, roleLevel);
@@ -27,25 +28,34 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoleLevel = this.reflector.getAllAndOverride<RoleLevel>(ROLE_LEVEL_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoleLevel = this.getRequiredRoleLevel(context);
+    const request = context.switchToHttp().getRequest<Request>();
+
     if (requiredRoleLevel === RoleLevel.PUBLIC) return true;
 
-    const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromHeader(request);
-    if (!accessToken) throw new BusinessException(AuthErrors.AUTH_ACCESS_TOKEN_MISSING);
+
+    if (requiredRoleLevel === RoleLevel.PUBLIC_OR_USER && !accessToken) return true;
+
+    if (!accessToken) {
+      throw new BusinessException(AuthErrors.AUTH_ACCESS_TOKEN_MISSING);
+    }
 
     const payload = this.verifyToken(accessToken);
-
-    // 사용자의 인증 레벨 검증
     this.validateUserRoleLevel(payload.userRole, requiredRoleLevel);
 
-    request['userId'] = payload.userId;
-    request['userRole'] = payload.userRole;
+    this.attachUserDetailsToRequest(request, payload);
 
     return true;
+  }
+
+  private getRequiredRoleLevel(context: ExecutionContext): RoleLevel {
+    return this.reflector.getAllAndOverride<RoleLevel>(ROLE_LEVEL_KEY, [context.getHandler(), context.getClass()]);
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 
   private verifyToken(accessToken: string): IAuthTokenPayload {
@@ -58,14 +68,14 @@ export class RoleGuard implements CanActivate {
     }
   }
 
-  private validateUserRoleLevel(userRole: string, requiredRoleLevel: RoleLevel): any {
+  private validateUserRoleLevel(userRole: string, requiredRoleLevel: RoleLevel): void {
     if (requiredRoleLevel > RoleLevel[userRole]) {
       throw new BusinessException(AuthErrors.AUTH_LEVEL_FORBIDDEN);
     }
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+  private attachUserDetailsToRequest(request: Request, payload: IAuthTokenPayload): void {
+    request['userId'] = payload.userId;
+    request['userRole'] = payload.userRole;
   }
 }
