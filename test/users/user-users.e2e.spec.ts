@@ -10,8 +10,8 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UserEntity } from 'src//database/entity/user/user.entity';
-import { GetMeRes, UpdateUserReqBody, UpdateUserRes } from 'src/modules/users/presentation/user.presentation.dtos';
 import { UserDummyBuilder } from 'src/dummy/user-dummy';
+import { GetMeRes, UpdateUserReqBody, UpdateUserRes } from 'src/modules/users/presentation/users.controller.dto';
 
 describe('E2E u-3 user-users test', () => {
   let app: INestApplication;

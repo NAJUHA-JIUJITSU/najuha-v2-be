@@ -118,7 +118,6 @@ describe('E2E a-5 competitions TEST', () => {
         .post('/admin/competitions')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(CreateCompetitionReqDto);
-      console.log(res.body);
       expect(typia.is<ResponseForm<CreateCompetitionRes>>(res.body)).toBe(true);
     });
   });

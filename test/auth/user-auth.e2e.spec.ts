@@ -22,9 +22,14 @@ import { UsersAppService } from 'src/modules/users/application/users.app.service
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { ISnsAuthValidatedUserData } from 'src/modules/sns-auth-client/interface/validated-user-data.interface';
-import { AcquireAdminRoleRes, RefreshTokenRes, SnsLoginReqBody, SnsLoginRes } from 'src/modules/auth/presentation/dtos';
 import { UserEntity } from 'src//database/entity/user/user.entity';
 import { UserDummyBuilder } from 'src/dummy/user-dummy';
+import {
+  AcquireAdminRoleRes,
+  RefreshTokenRes,
+  SnsLoginReqBody,
+  SnsLoginRes,
+} from 'src/modules/auth/presentation/auth.controller.dto';
 
 describe('E2E u-1 user-auth test', () => {
   let app: INestApplication;
