@@ -61,6 +61,8 @@ export interface IApplication {
   expectedPayment?: IExpectedPayment | null;
 }
 
+export interface IApplicationDetail extends IApplication {}
+
 export interface IApplicationCreateDto {
   /** userId */
   userId: IUser['id'];

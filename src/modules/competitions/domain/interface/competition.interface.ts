@@ -96,17 +96,19 @@ export interface ICompetition {
   competitionHostMaps: ICompetitionHostMap[];
 }
 
-export interface ICompetitionWithoutRelations
+export interface ICompetitionBasicInfo
   extends Omit<
     ICompetition,
     'divisions' | 'earlybirdDiscountSnapshots' | 'combinationDiscountSnapshots' | 'requiredAdditionalInfos'
   > {}
 
-export interface ICompetitionForFind
+export interface ICompetitionSummary
   extends Omit<
     ICompetition,
     'divisions' | 'combinationDiscountSnapshots' | 'requiredAdditionalInfos' | 'competitionHostMaps'
   > {}
+
+export interface ICompetitionDetail extends ICompetition {}
 
 export interface ICompetitionCreateDto
   extends Partial<

@@ -2,6 +2,7 @@ import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import {
   IApplication,
   IApplicationCreateDto,
+  IApplicationDetail,
   IApplicationQueryOptions,
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
@@ -41,19 +42,19 @@ export interface GetExpectedPaymentParam {
 // applicationsAppService Result
 // ---------------------------------------------------------------------------
 export interface CreateApplicationRet {
-  application: IApplication;
+  application: IApplicationDetail;
 }
 
 export interface GetApplicationRet {
-  application: IApplication;
+  application: IApplicationDetail;
 }
 
 export interface UpdateReadyApplicationRet {
-  application: IApplication;
+  application: IApplicationDetail;
 }
 
 export interface UpdateDoneApplicationRet {
-  application: IApplication;
+  application: IApplicationDetail;
 }
 
 export interface GetExpectedPaymentRet {
@@ -62,5 +63,5 @@ export interface GetExpectedPaymentRet {
 
 export interface FindApplicationsRet
   extends TPaginationRet<{
-    applications: IApplication[];
+    applications: IApplicationDetail[];
   }> {}

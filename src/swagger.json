@@ -7851,7 +7851,7 @@
           "competitions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ICompetitionForFind"
+              "$ref": "#/components/schemas/ICompetitionSummary"
             }
           }
         },
@@ -7860,7 +7860,7 @@
           "competitions"
         ]
       },
-      "ICompetitionForFind": {
+      "ICompetitionSummary": {
         "type": "object",
         "properties": {
           "id": {
@@ -8164,7 +8164,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -8172,7 +8172,7 @@
           "competition"
         ]
       },
-      "ICompetition": {
+      "ICompetitionDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -8953,7 +8953,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetitionWithoutRelations"
+            "$ref": "#/components/schemas/ICompetitionBasicInfo"
           }
         },
         "nullable": false,
@@ -8961,7 +8961,7 @@
           "competition"
         ]
       },
-      "ICompetitionWithoutRelations": {
+      "ICompetitionBasicInfo": {
         "type": "object",
         "properties": {
           "id": {
@@ -9373,7 +9373,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -9550,7 +9550,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -9633,7 +9633,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -9689,7 +9689,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -9752,7 +9752,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -9806,7 +9806,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -9844,7 +9844,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -10057,7 +10057,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -10065,7 +10065,7 @@
           "application"
         ]
       },
-      "IApplication": {
+      "IApplicationDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -10457,7 +10457,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -10548,7 +10548,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -10641,7 +10641,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -10805,7 +10805,7 @@
           "applications": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IApplication"
+              "$ref": "#/components/schemas/IApplicationDetail"
             }
           }
         },

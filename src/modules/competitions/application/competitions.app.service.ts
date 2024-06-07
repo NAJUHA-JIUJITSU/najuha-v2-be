@@ -33,7 +33,7 @@ import { RequiredAdditionalInfoModel } from '../domain/model/required-addtional-
 import { EarlybirdDiscountSnapshotModel } from '../domain/model/earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshotModel } from '../domain/model/combination-discount-snapshot.model';
 import { assert } from 'typia';
-import { ICompetition, ICompetitionForFind } from '../domain/interface/competition.interface';
+import { ICompetition, ICompetitionSummary } from '../domain/interface/competition.interface';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -99,7 +99,7 @@ export class CompetitionsAppService {
   }
 
   async findCompetitions(query: FindCompetitionsParam): Promise<FindCompetitionsRet> {
-    const competitionEntites = assert<ICompetitionForFind[]>(
+    const competitionEntites = assert<ICompetitionSummary[]>(
       await this.competitionRepository.findManyWithQueryOptions({
         ...query,
       }),
