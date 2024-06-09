@@ -5806,6 +5806,94 @@
         ],
         "x-nestia-method": "POST"
       }
+    },
+    "/user/images": {
+      "post": {
+        "tags": [
+          "u-9 images"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "CreateImageReqBody",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateImageReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "CreateImageRes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateImageRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-9-1 createImage",
+        "description": "u-9-1 createImage.\n- RoleLevel: USER.\n- imageEntity를 생성하고, presignedPost를 반환합니다.\n- presignedPost는 이미지를 업로드할 때 사용됩니다.\n- presignedPost는 5분 후 만료되도록 설정되어 있습니다.\n- presignedPost는 5MB 이하의 이미지만 업로드할 수 있도록 설정되어 있습니다.\n- imageEntity는 10분 후에도 이미지 소유 Entity에게 FK로 연결되지 않으면 주기적으로 삭제될수 있습니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.images.createImage",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-9 images",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateImageReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CreateImageRes",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
     }
   },
   "components": {
@@ -11629,6 +11717,171 @@
           "type",
           "reason"
         ]
+      },
+      "CreateImageReqBody": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "jpeg",
+              "png",
+              "webp"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "enum": [
+              "competition",
+              "post",
+              "user-profile"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "format",
+          "path"
+        ]
+      },
+      "ResponseFormCreateImageRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateImageRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CreateImageRes": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "$ref": "#/components/schemas/IImage"
+          },
+          "presignedPost": {
+            "$ref": "#/components/schemas/TPresignedPost"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "image",
+          "presignedPost"
+        ]
+      },
+      "IImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7.\n- s3 bucket에 저장되는 이미지의 key로 사용됩니다."
+          },
+          "path": {
+            "$ref": "#/components/schemas/TImagePath",
+            "description": "s3 bucket에 저장되는 이미지의 경로\n- user 프로필 이미지를 생성하는 경우: `user-profile` 로 설로\n- competition 이미지를 생성하는 경우: `competition` 로 설정\n- post 이미지를 생성하는 경우: `post` 로 설정"
+          },
+          "format": {
+            "$ref": "#/components/schemas/TImageFormat",
+            "title": "image format",
+            "description": "image format."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "createdAt",
+            "description": "createdAt.\n- 이미지가 생성된 시간"
+          },
+          "linkedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "title": "linkedAt",
+            "description": "linkedAt.\n- 이미지를 소유한 entity에 FK로 연결된 시간.\n- null 이면 연결되지 않은 이미지.\n- createdAt + 10분 이후에도 연결되지 않은 이미지는 주기적으로 삭제됩니다."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "userId",
+            "description": "userId.\n- 이미지를 생성한 계정의 userId."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "path",
+          "format",
+          "createdAt",
+          "linkedAt",
+          "userId"
+        ],
+        "description": "Image Interface"
+      },
+      "TImagePath": {
+        "type": "string",
+        "enum": [
+          "user-profile",
+          "competition",
+          "post"
+        ]
+      },
+      "TImageFormat": {
+        "type": "string",
+        "enum": [
+          "jpeg",
+          "png",
+          "webp"
+        ]
+      },
+      "TPresignedPost": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/Recordstringstring"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "url",
+          "fields"
+        ],
+        "description": "Presigned Post\n\nurl: The URL to which the file should be uploaded.\n- 클라이언트는 이 URL로 파일을 업로드합니다. 이 URL은 S3 버킷이나 S3 호환 스토리지(MinIO 등)의 엔드포인트를 포함합니다.\n- 예를 들어, 클라이언트는 이 URL을 사용하여 `fetch`나 `axios` 등의 HTTP 클라이언트 라이브러리를 통해 파일을 업로드할 수 있습니다.\n\n\nfields: A set of fields that must be included in the form-data when uploading the file.\n- 클라이언트는 파일 업로드 요청 시 이 필드들을 포함해야 합니다. 이 필드들은 presigned POST 요청의 조건을 만족시키기 위해 필요합니다.\n- 클라이언트는 `FormData` 객체를 생성하고, 각 필드를 `FormData`에 추가한 후, 파일과 함께 서버로 전송합니다.\n- 예시:\n```javascript\nconst formData = new FormData();\nObject.entries(fields).forEach(([key, value]) => {\n  formData.append(key, value);\n});\nformData.append('file', file);\n\nconst response = await fetch(url, {\n  method: 'POST',\n  body: formData,\n});"
+      },
+      "Recordstringstring": {
+        "type": "object",
+        "properties": {},
+        "nullable": false,
+        "description": "Construct a type with a set of properties K of type T",
+        "additionalProperties": {
+          "type": "string"
+        }
       }
     },
     "securitySchemes": {

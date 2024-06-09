@@ -1,6 +1,7 @@
 import typia from 'typia';
 import * as dotenv from 'dotenv';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { min } from 'class-validator';
 
 const envPathMap = {
   dev: '.env.dev',
@@ -46,6 +47,15 @@ type appEnv = {
   jwtAccessTokenExpirationTime: string;
   jwtRefreshTokenSecret: string;
   jwtRefreshTokenExpirationTime: string;
+  // MINIO -------------------------------------------------------------------------
+  minioEndpoint: string;
+  minioAccessKey: string;
+  minioSecretKey: string;
+  minioBucket: string;
+  minioRegion: string;
+  // PRESIGNED IMAGE
+  presignedImageExpiresIn: number;
+  presignedImageMaxSize: number;
   // ADMIN CREDENTIALS -------------------------------------------------------------
   adminCredentials: { snsId: string; snsAuthProvider: IUser['snsAuthProvider']; id: string; name: string }[];
 };
@@ -87,6 +97,15 @@ const loadConfig = (): appEnv => {
     jwtAccessTokenExpirationTime: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
     jwtRefreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET,
     jwtRefreshTokenExpirationTime: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+    // MINIO -------------------------------------------------------------------------
+    minioEndpoint: process.env.MINIO_ENDPOINT,
+    minioAccessKey: process.env.MINIO_ACCESS_KEY,
+    minioSecretKey: process.env.MINIO_SECRET_KEY,
+    minioBucket: process.env.MINIO_BUCKET,
+    minioRegion: process.env.MINIO_REGION,
+    // PRESIGNED IMAGE ---------------------------------------------------------------
+    presignedImageExpiresIn: Number(process.env.PRESIGNED_IMAGE_EXPIRES_IN),
+    presignedImageMaxSize: Number(process.env.PRESIGNED_IMAGE_MAX_SIZE),
     // ADMIN CREDENTIALS -------------------------------------------------------------
     adminCredentials: JSON.parse(process.env.ADMIN_CREDENTIALS_JSON || '[]'),
   };

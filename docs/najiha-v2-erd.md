@@ -12,6 +12,7 @@
 - [Application](#application)
 - [Competition](#competition)
 - [Post](#post)
+- [Image](#image)
 
 
 ## User
@@ -86,7 +87,8 @@ PolicyConsent Entity
 ### `user`
 
 User Entity   
-@namespace User
+@namespace User   
+@erd Image
 
 **Properties**
 
@@ -793,4 +795,70 @@ CommentLike.
   - `userId`: 좋아요를 누른 UserId.
   - `createdAt`: 좋아요 누른 일자.
   - `commentId`: 좋아요를 누른 댓글의 Id.
+
+
+## Image
+
+```mermaid
+erDiagram
+  user_profile_image {
+    uuid id PK
+    uuid userId FK
+    uuid imageId FK
+    timestamptz createdAt
+  }
+  image {
+    uuid id PK
+    varchar path
+    varchar format
+    timestamptz createdAt
+    uuid userId FK
+  }
+  user {
+    uuid id PK
+    varchar role
+    varchar snsAuthProvider
+    varchar snsId
+    varchar email
+    varchar name
+    varchar phoneNumber "nullable"
+    varchar nickname "nullable"
+    varchar gender "nullable"
+    varchar birth "nullable"
+    varchar belt "nullable"
+    varchar profileImageUrlKey "nullable"
+    varchar status
+    timestamptz createdAt
+    timestamptz updatedAt
+  }
+  user_profile_image }o--|| user: user
+  user_profile_image }o--|| image: image
+  image }o--|| user: user
+```
+
+### `user_profile_image`
+
+UserProfileImage Entity   
+@namespace Image
+
+**Properties**
+
+  - `id`
+  - `userId`
+  - `imageId`
+  - `createdAt`
+
+
+### `image`
+
+Image Entity   
+@namespace Image
+
+**Properties**
+
+  - `id`
+  - `path`
+  - `format`
+  - `createdAt`
+  - `userId`
 

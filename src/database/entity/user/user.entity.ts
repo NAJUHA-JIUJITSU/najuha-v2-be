@@ -1,5 +1,5 @@
 import { PolicyConsentEntity } from 'src//database/entity/user/policy-consent.entity';
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, PrimaryColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, PrimaryColumn, OneToOne } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
@@ -10,10 +10,13 @@ import { CommentReportEntity } from '../post/comment-report.entity';
 import { PostLikeEntity } from '../post/post-like.entity';
 import { PostReportEntity } from '../post/post-report.entity';
 import { PostEntity } from '../post/post.entity';
+import { ImageEntity } from '../image/image.entity';
+import { UserProfileImageEntity } from './user-profile-image.entity';
 
 /**
  * User Entity
  * @namespace User
+ * @erd Image
  */
 @Entity('user')
 export class UserEntity {
@@ -92,4 +95,11 @@ export class UserEntity {
 
   @OneToMany(() => PostEntity, (post) => post.user)
   posts!: PostEntity[];
+
+  // Image -----------------------------------------------------------------
+  @OneToMany(() => ImageEntity, (image) => image.user)
+  images!: ImageEntity[];
+
+  @OneToMany(() => UserProfileImageEntity, (profileImage) => profileImage.user)
+  profileImage!: UserProfileImageEntity[];
 }

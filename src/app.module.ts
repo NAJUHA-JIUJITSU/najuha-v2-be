@@ -16,6 +16,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfigAsync } from './database/typeorm.config';
 import { PostsModule } from './modules/posts/posts.module';
 import { ViewCountModule } from './modules/view-count/view-count.module';
+import { BucketModule } from './infrastructure/bucket/bucket.module';
+import { ImagesModule } from './modules/images/images.module';
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { ViewCountModule } from './modules/view-count/view-count.module';
     LoggerModule,
     MiddlewareModule,
     RedisModule,
+    BucketModule,
     /**
      * Domain Modules: These modules arr used to provide the business logic to the application
      */
@@ -41,6 +44,7 @@ import { ViewCountModule } from './modules/view-count/view-count.module';
     ApplicationModule,
     PostsModule,
     ViewCountModule,
+    ImagesModule,
   ],
   providers: [],
 })

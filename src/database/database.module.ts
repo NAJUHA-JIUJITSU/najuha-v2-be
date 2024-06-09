@@ -15,6 +15,7 @@ import { PostLikeRepository } from './custom-repository/post-like.repository';
 import { PostReportRepository } from './custom-repository/post-report.repository';
 import { CommentLikeRepository } from './custom-repository/comment-like.repository';
 import { CommentReportRepository } from './custom-repository/comment-report.repository';
+import { ImageRepository } from './custom-repository/image.repository';
 
 const repositories = [
   PolicyRepository,
@@ -32,6 +33,7 @@ const repositories = [
   CommentRepository,
   CommentLikeRepository,
   CommentReportRepository,
+  ImageRepository,
 ];
 @Module({
   providers: [...repositories, DataSeederService],
