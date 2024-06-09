@@ -49,11 +49,16 @@ type appEnv = {
   jwtRefreshTokenExpirationTime: string;
   // MINIO -------------------------------------------------------------------------
   minioEndpoint: string;
-  minioAccessKey: string;
-  minioSecretKey: string;
+  minioAccessKeyId: string;
+  minioSecreAccesstKey: string;
   minioBucket: string;
   minioRegion: string;
-  // PRESIGNED IMAGE
+  // S3 ----------------------------------------------------------------------------
+  s3Region: string;
+  s3AccessKeyId: string;
+  s3SecretAccessKey: string;
+  s3Bucket: string;
+  // PRESIGNED IMAGE ---------------------------------------------------------------
   presignedImageExpiresIn: number;
   presignedImageMaxSize: number;
   // ADMIN CREDENTIALS -------------------------------------------------------------
@@ -99,10 +104,15 @@ const loadConfig = (): appEnv => {
     jwtRefreshTokenExpirationTime: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
     // MINIO -------------------------------------------------------------------------
     minioEndpoint: process.env.MINIO_ENDPOINT,
-    minioAccessKey: process.env.MINIO_ACCESS_KEY,
-    minioSecretKey: process.env.MINIO_SECRET_KEY,
+    minioAccessKeyId: process.env.MINIO_ACCESS_KEY_ID,
+    minioSecreAccesstKey: process.env.MINIO_SECRET_ACCESS_KEY,
     minioBucket: process.env.MINIO_BUCKET,
     minioRegion: process.env.MINIO_REGION,
+    // S3 ----------------------------------------------------------------------------
+    s3Region: process.env.S3_REGION,
+    s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
+    s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    s3Bucket: process.env.S3_BUCKET,
     // PRESIGNED IMAGE ---------------------------------------------------------------
     presignedImageExpiresIn: Number(process.env.PRESIGNED_IMAGE_EXPIRES_IN),
     presignedImageMaxSize: Number(process.env.PRESIGNED_IMAGE_MAX_SIZE),

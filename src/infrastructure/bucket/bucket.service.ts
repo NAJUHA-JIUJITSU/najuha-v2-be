@@ -8,7 +8,7 @@ import { IBucketService } from './bucket.interface';
 export class BucketService implements IBucketService, OnModuleInit {
   private readonly bucket: string = appEnv.minioBucket;
 
-  constructor(@Inject('MINIO_CLIENT') private readonly client: S3Client) {}
+  constructor(@Inject('BUCKET_CLIENT') private readonly client: S3Client) {}
 
   async onModuleInit() {
     await this.ensureBucket();
