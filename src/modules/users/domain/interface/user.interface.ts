@@ -3,7 +3,7 @@ import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
 import { Nullable } from 'src/common/utility-types';
 import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
 import { tags } from 'typia';
-import { IUserProfileImageSnapshot } from './user-profile-image.interface';
+import { IUserProfileImage } from './user-profile-image.interface';
 
 // Entity ---------------------------------------------------------------------
 /**
@@ -82,7 +82,7 @@ export interface IUser {
   /** UpdatedAt. */
   updatedAt: TDateOrStringDate;
 
-  profileImageSnapshots?: IUserProfileImageSnapshot[];
+  profileImages?: IUserProfileImage[];
 }
 
 export interface ITemporaryUser

@@ -2,7 +2,7 @@ import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IUser } from './user.interface';
 import { IImage } from 'src/modules/images/domain/interface/image.interface';
 
-export interface IUserProfileImageSnapshot {
+export interface IUserProfileImage {
   /** uuid */
   id: TId;
 
@@ -18,7 +18,10 @@ export interface IUserProfileImageSnapshot {
   /** createdAt */
   createdAt: TDateOrStringDate;
 
+  /** deletedAt */
+  deletedAt: TDateOrStringDate | null;
+
   image: IImage;
 }
 
-export interface IUserProfileImageSnapshotCreateDto extends Pick<IUserProfileImageSnapshot, 'userId' | 'imageId'> {}
+export interface IUserProfileImageCreateDto extends Pick<IUserProfileImage, 'userId' | 'imageId'> {}

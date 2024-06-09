@@ -801,11 +801,12 @@ CommentLike.
 
 ```mermaid
 erDiagram
-  user_profile_image_snapshot {
+  user_profile_image {
     uuid id PK
     uuid userId FK
     uuid imageId FK
     timestamptz createdAt
+    timestamptz deletedAt "nullable"
   }
   image {
     uuid id PK
@@ -832,12 +833,12 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
-  user_profile_image_snapshot }o--|| user: user
-  user_profile_image_snapshot }o--|| image: image
+  user_profile_image }o--|| user: user
+  user_profile_image }o--|| image: image
   image }o--|| user: user
 ```
 
-### `user_profile_image_snapshot`
+### `user_profile_image`
 
 UserProfileImage Entity   
 @namespace Image
@@ -848,6 +849,7 @@ UserProfileImage Entity
   - `userId`
   - `imageId`
   - `createdAt`
+  - `deletedAt`
 
 
 ### `image`

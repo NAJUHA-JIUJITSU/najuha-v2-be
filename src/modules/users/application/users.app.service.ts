@@ -41,9 +41,14 @@ export class UsersAppService {
 
   async getMe({ userId }: GetMeParam): Promise<GetMeRet> {
     const userEntity = assert<IUser>(
-      await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
+      await this.userRepository
+        .findOneOrFail({
+          where: { id: userId },
+          relations: ['profileImages', 'profileImages.image'],
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
     );
     return { user: userEntity };
   }
@@ -56,7 +61,7 @@ export class UsersAppService {
         await this.userRepository
           .findOneOrFail({
             where: { id: userProfileImageSnapshotCreateDto.userId },
-            relations: ['profileImageSnapshots', 'profileImageSnapshots.image'],
+            relations: ['profileImages', 'profileImages.image'],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
@@ -75,7 +80,7 @@ export class UsersAppService {
       imageEntity,
     );
     const user = new UserModel(userEntity);
-    user.addProfileImageSnapshot(userProfileImageSnapshotEntity);
+    user.updateProfileImageSnapshot(userProfileImageSnapshotEntity);
     return { user: await this.userRepository.save(user.toEntity()) };
   }
 }

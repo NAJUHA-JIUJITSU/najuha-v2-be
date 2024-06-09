@@ -1,4 +1,4 @@
-import { IUserProfileImageSnapshotCreateDto } from '../domain/interface/user-profile-image.interface';
+import { IUserProfileImageCreateDto } from '../domain/interface/user-profile-image.interface';
 import { ITemporaryUser, ITemporaryUserCreateDto, IUser, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // ---------------------------------------------------------------------------
@@ -17,7 +17,7 @@ export interface GetMeParam {
 }
 
 export interface CreateUserProfileImageParam {
-  userProfileImageSnapshotCreateDto: IUserProfileImageSnapshotCreateDto;
+  userProfileImageSnapshotCreateDto: IUserProfileImageCreateDto;
 }
 
 // ---------------------------------------------------------------------------

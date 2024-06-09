@@ -1,9 +1,6 @@
 import { uuidv7 } from 'uuidv7';
 import { ITemporaryUser, ITemporaryUserCreateDto, IUser } from './interface/user.interface';
-import {
-  IUserProfileImageSnapshot,
-  IUserProfileImageSnapshotCreateDto,
-} from './interface/user-profile-image.interface';
+import { IUserProfileImage, IUserProfileImageCreateDto } from './interface/user-profile-image.interface';
 import { IImage } from 'src/modules/images/domain/interface/image.interface';
 
 export class UserFactory {
@@ -28,14 +25,15 @@ export class UserFactory {
   }
 
   createUserProfileImage(
-    userProfileImageSnapshotCreateDto: IUserProfileImageSnapshotCreateDto,
+    userProfileImageSnapshotCreateDto: IUserProfileImageCreateDto,
     image: IImage,
-  ): IUserProfileImageSnapshot {
+  ): IUserProfileImage {
     return {
       id: uuidv7(),
       userId: userProfileImageSnapshotCreateDto.userId,
       imageId: userProfileImageSnapshotCreateDto.imageId,
       createdAt: new Date(),
+      deletedAt: null,
       image,
     };
   }

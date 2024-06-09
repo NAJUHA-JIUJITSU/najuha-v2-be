@@ -1,4 +1,4 @@
-import { IUserProfileImageSnapshot } from '../interface/user-profile-image.interface';
+import { IUserProfileImage } from '../interface/user-profile-image.interface';
 import { IUser } from '../interface/user.interface';
 
 export class UserModel {
@@ -15,7 +15,7 @@ export class UserModel {
   private belt: IUser['belt'];
   private profileImageUrlKey: IUser['profileImageUrlKey'];
   private status: IUser['status'];
-  private profileImageSnapshots: IUserProfileImageSnapshot[];
+  private profileImages: IUserProfileImage[];
   private readonly createdAt: IUser['createdAt'];
   private readonly updatedAt: IUser['updatedAt'];
 
@@ -35,7 +35,7 @@ export class UserModel {
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
-    this.profileImageSnapshots = entity.profileImageSnapshots || [];
+    this.profileImages = entity.profileImages || [];
   }
 
   toEntity(): IUser {
@@ -55,7 +55,7 @@ export class UserModel {
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      profileImageSnapshots: this.profileImageSnapshots,
+      profileImages: this.profileImages,
     };
   }
 
@@ -63,7 +63,10 @@ export class UserModel {
     return this.id;
   }
 
-  addProfileImageSnapshot(profileImageSnapshot: IUserProfileImageSnapshot) {
-    this.profileImageSnapshots.push(profileImageSnapshot);
+  updateProfileImageSnapshot(profileImage: IUserProfileImage) {
+    this.profileImages.forEach((profileImage) => {
+      profileImage.deletedAt = new Date();
+    });
+    this.profileImages.push(profileImage);
   }
 }

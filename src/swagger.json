@@ -7528,10 +7528,10 @@
             "title": "UpdatedAt",
             "description": "UpdatedAt."
           },
-          "profileImageSnapshots": {
+          "profileImages": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IUserProfileImageSnapshot"
+              "$ref": "#/components/schemas/IUserProfileImage"
             }
           }
         },
@@ -7555,7 +7555,7 @@
         ],
         "description": "각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
       },
-      "IUserProfileImageSnapshot": {
+      "IUserProfileImage": {
         "type": "object",
         "properties": {
           "id": {
@@ -7574,6 +7574,21 @@
             "$ref": "#/components/schemas/TDateOrStringDate",
             "description": "createdAt"
           },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "description": "deletedAt"
+          },
           "image": {
             "$ref": "#/components/schemas/IImage"
           }
@@ -7584,6 +7599,7 @@
           "userId",
           "imageId",
           "createdAt",
+          "deletedAt",
           "image"
         ]
       },
@@ -7653,9 +7669,9 @@
       "TImageFormat": {
         "type": "string",
         "enum": [
-          "jpeg",
-          "png",
-          "webp"
+          "image/jpeg",
+          "image/png",
+          "image/webp"
         ]
       },
       "ResponseFormGetMeRes": {
@@ -11973,9 +11989,9 @@
           "format": {
             "type": "string",
             "enum": [
-              "jpeg",
-              "png",
-              "webp"
+              "image/jpeg",
+              "image/png",
+              "image/webp"
             ]
           },
           "path": {
