@@ -67,6 +67,9 @@ export class UserUsersController {
   /**
    * u-3-4 createUserProfileImage.
    * - RoleLevel: USER.
+   * - 유저의 프로필 이미지를 생성합니다.
+   * - 업데이트 시에도 이 API를 사용합니다.
+   * - 기존에 프로필 이미지가 있을 경우, 기존 이미지는 soft delete 처리되고 새로운 이미지가 생성됩니다.
    *
    * @tag u-3 users
    * @security bearer
