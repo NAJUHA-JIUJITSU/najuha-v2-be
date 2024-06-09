@@ -50,7 +50,7 @@ type appEnv = {
   // MINIO -------------------------------------------------------------------------
   minioEndpoint: string;
   minioAccessKeyId: string;
-  minioSecreAccesstKey: string;
+  minioSecretAccesstKey: string;
   minioBucket: string;
   minioRegion: string;
   // S3 ----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ type appEnv = {
   s3SecretAccessKey: string;
   s3Bucket: string;
   // PRESIGNED IMAGE ---------------------------------------------------------------
-  presignedImageExpiresIn: number;
+  presignedImageUrlExpiresTime: number;
   presignedImageMaxSize: number;
   // ADMIN CREDENTIALS -------------------------------------------------------------
   adminCredentials: { snsId: string; snsAuthProvider: IUser['snsAuthProvider']; id: string; name: string }[];
@@ -105,7 +105,7 @@ const loadConfig = (): appEnv => {
     // MINIO -------------------------------------------------------------------------
     minioEndpoint: process.env.MINIO_ENDPOINT,
     minioAccessKeyId: process.env.MINIO_ACCESS_KEY_ID,
-    minioSecreAccesstKey: process.env.MINIO_SECRET_ACCESS_KEY,
+    minioSecretAccesstKey: process.env.MINIO_SECRET_ACCESS_KEY,
     minioBucket: process.env.MINIO_BUCKET,
     minioRegion: process.env.MINIO_REGION,
     // S3 ----------------------------------------------------------------------------
@@ -114,7 +114,7 @@ const loadConfig = (): appEnv => {
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     s3Bucket: process.env.S3_BUCKET,
     // PRESIGNED IMAGE ---------------------------------------------------------------
-    presignedImageExpiresIn: Number(process.env.PRESIGNED_IMAGE_EXPIRES_IN),
+    presignedImageUrlExpiresTime: Number(process.env.PRESIGNED_IMAGE_URL_EXPIRATION_TIME),
     presignedImageMaxSize: Number(process.env.PRESIGNED_IMAGE_MAX_SIZE),
     // ADMIN CREDENTIALS -------------------------------------------------------------
     adminCredentials: JSON.parse(process.env.ADMIN_CREDENTIALS_JSON || '[]'),

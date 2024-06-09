@@ -43,7 +43,7 @@ export interface IImage {
   userId: IUser['id'];
 }
 
-type TImageFormat = 'jpeg' | 'png' | 'webp';
+type TImageFormat = 'image/jpeg' | 'image/png' | 'image/webp';
 
 type TImagePath = 'user-profile' | 'competition' | 'post';
 

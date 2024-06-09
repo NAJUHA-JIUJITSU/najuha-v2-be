@@ -1,3 +1,4 @@
+import { IUserProfileImageSnapshotCreateDto } from '../domain/interface/user-profile-image.interface';
 import { ITemporaryUser, ITemporaryUserCreateDto, IUser, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // ---------------------------------------------------------------------------
@@ -15,6 +16,10 @@ export interface GetMeParam {
   userId: IUser['id'];
 }
 
+export interface CreateUserProfileImageParam {
+  userProfileImageSnapshotCreateDto: IUserProfileImageSnapshotCreateDto;
+}
+
 // ---------------------------------------------------------------------------
 // usersAppService Result
 // ---------------------------------------------------------------------------
@@ -27,5 +32,9 @@ export interface UpdateUserRet {
 }
 
 export interface GetMeRet {
+  user: IUser;
+}
+
+export interface CreateUserProfileImageRet {
   user: IUser;
 }

@@ -1,17 +1,7 @@
-// src/bucket/bucket.interface.ts
-export interface IBucketService {
-  /**
-   * Get a presigned URL for a file
-   *
-   * @param key
-   * @param expiresIn
-   */
-  getPresignedPostUrl(param: GetPresignedPostUrlParam): Promise<TPresignedPost>;
-}
-
 export interface GetPresignedPostUrlParam {
   path: string;
   key: string;
+  format: string;
   expiresIn: number;
   maxSize: number;
 }

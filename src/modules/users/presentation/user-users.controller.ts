@@ -4,7 +4,15 @@ import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from 'src/common/response/response';
 import { UsersAppService } from 'src/modules/users/application/users.app.service';
 import { ENTITY_NOT_FOUND } from 'src/common/response/errorResponse';
-import { CreateUserReqBody, CreateUserRes, GetMeRes, UpdateUserReqBody, UpdateUserRes } from './users.controller.dto';
+import {
+  CreateUserProfileImageReqBody,
+  CreateUserProfileImageRes,
+  CreateUserReqBody,
+  CreateUserRes,
+  GetMeRes,
+  UpdateUserReqBody,
+  UpdateUserRes,
+} from './users.controller.dto';
 
 @Controller('user/users')
 export class UserUsersController {
@@ -54,5 +62,30 @@ export class UserUsersController {
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<GetMeRes>> {
     return createResponseForm(await this.UsersAppService.getMe({ userId: req['userId'] }));
+  }
+
+  /**
+   * u-3-4 createUserProfileImage.
+   * - RoleLevel: USER.
+   *
+   * @tag u-3 users
+   * @security bearer
+   * @param body CreateUserProfileImageReqBody
+   * @returns CreateUserProfileImageRes
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Post('/profile-image')
+  async createUserProfileImage(
+    @Req() req: Request,
+    @TypedBody() body: CreateUserProfileImageReqBody,
+  ): Promise<ResponseForm<CreateUserProfileImageRes>> {
+    return createResponseForm(
+      await this.UsersAppService.createUserProfileImage({
+        userProfileImageSnapshotCreateDto: {
+          userId: req['userId'],
+          imageId: body.imageId,
+        },
+      }),
+    );
   }
 }

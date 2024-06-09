@@ -10,7 +10,7 @@ import { ImageEntity } from '../image/image.entity';
  * @namespace Image
  */
 @Entity('user_profile_image')
-export class UserProfileImageEntity {
+export class UserProfileImageSnapshotEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IImage['id'];
 
@@ -26,11 +26,11 @@ export class UserProfileImageEntity {
   // ------------------------------------------------------------
   // Relations
   // ------------------------------------------------------------
-  @ManyToOne(() => UserEntity, (user) => user.profileImage)
+  @OneToOne(() => UserEntity, (user) => user.profileImageSnapshots)
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
 
-  @ManyToOne(() => ImageEntity, (image) => image.userProfileImages)
+  @ManyToOne(() => ImageEntity, (image) => image.userProfileImageSnapshots)
   @JoinColumn({ name: 'imageId' })
   image!: ImageEntity;
 }

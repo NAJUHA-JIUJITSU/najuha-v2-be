@@ -4,6 +4,7 @@ import { ImageRepository } from 'src/database/custom-repository/image.repository
 import { uuidv7 } from 'uuidv7';
 import { CreateImageParam, CreateImageRet } from './image.app.dto';
 import appEnv from 'src/common/app-env';
+import { IImage } from '../domain/interface/image.interface';
 
 @Injectable()
 export class ImageAppService {
@@ -13,7 +14,7 @@ export class ImageAppService {
   ) {}
 
   async createImage({ imageCreateDto }: CreateImageParam): Promise<CreateImageRet> {
-    const imageEntity = {
+    const imageEntity: IImage = {
       id: uuidv7(),
       path: imageCreateDto.path,
       format: imageCreateDto.format,
@@ -25,7 +26,8 @@ export class ImageAppService {
     const presignedPost = await this.bucketService.getPresignedPostUrl({
       key: imageEntity.id,
       path: imageEntity.path,
-      expiresIn: appEnv.presignedImageExpiresIn,
+      format: imageEntity.format,
+      expiresIn: appEnv.presignedImageUrlExpiresTime,
       maxSize: appEnv.presignedImageMaxSize,
     });
 

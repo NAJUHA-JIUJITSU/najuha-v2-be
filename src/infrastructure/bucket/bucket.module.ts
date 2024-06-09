@@ -8,7 +8,7 @@ const MinioBucketConfig = {
   region: appEnv.minioRegion,
   credentials: {
     accessKeyId: appEnv.minioAccessKeyId,
-    secretAccessKey: appEnv.minioSecreAccesstKey,
+    secretAccessKey: appEnv.minioSecretAccesstKey,
   },
   forcePathStyle: true,
 };

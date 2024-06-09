@@ -1,7 +1,7 @@
 import { IImage } from 'src/modules/images/domain/interface/image.interface';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
-import { UserProfileImageEntity } from '../user/user-profile-image.entity';
+import { UserProfileImageSnapshotEntity } from '../user/user-profile-image.entity';
 import { uuidv7 } from 'uuidv7';
 
 /**
@@ -32,6 +32,6 @@ export class ImageEntity {
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
 
-  @OneToMany(() => UserProfileImageEntity, (userProfileImage) => userProfileImage.image)
-  userProfileImages!: UserProfileImageEntity[];
+  @OneToMany(() => UserProfileImageSnapshotEntity, (userProfileImageSnapshot) => userProfileImageSnapshot.image)
+  userProfileImageSnapshots!: UserProfileImageSnapshotEntity[];
 }

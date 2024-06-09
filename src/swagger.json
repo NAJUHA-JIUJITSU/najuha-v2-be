@@ -1202,6 +1202,94 @@
         "x-nestia-method": "GET"
       }
     },
+    "/user/users/profile-image": {
+      "post": {
+        "tags": [
+          "u-3 users"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "CreateUserProfileImageReqBody",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserProfileImageReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "CreateUserProfileImageRes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateUserProfileImageRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-3-4 createUserProfileImage",
+        "description": "u-3-4 createUserProfileImage.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.users.profile-image.createUserProfileImage",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-3 users",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CreateUserProfileImageReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CreateUserProfileImageRes",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
     "/user/policies/latest": {
       "get": {
         "tags": [
@@ -7439,6 +7527,12 @@
             "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
+          },
+          "profileImageSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IUserProfileImageSnapshot"
+            }
           }
         },
         "nullable": false,
@@ -7460,6 +7554,109 @@
           "updatedAt"
         ],
         "description": "각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
+      },
+      "IUserProfileImageSnapshot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "description": "uuid"
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "description": "userId"
+          },
+          "imageId": {
+            "$ref": "#/components/schemas/TId",
+            "description": "imageId\n- u-9-1 createImage 로 생성된 image의 id"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "description": "createdAt"
+          },
+          "image": {
+            "$ref": "#/components/schemas/IImage"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "userId",
+          "imageId",
+          "createdAt",
+          "image"
+        ]
+      },
+      "IImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7.\n- s3 bucket에 저장되는 이미지의 key로 사용됩니다."
+          },
+          "path": {
+            "$ref": "#/components/schemas/TImagePath",
+            "description": "s3 bucket에 저장되는 이미지의 경로\n- user 프로필 이미지를 생성하는 경우: `user-profile` 로 설로\n- competition 이미지를 생성하는 경우: `competition` 로 설정\n- post 이미지를 생성하는 경우: `post` 로 설정"
+          },
+          "format": {
+            "$ref": "#/components/schemas/TImageFormat",
+            "title": "image format",
+            "description": "image format."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "createdAt",
+            "description": "createdAt.\n- 이미지가 생성된 시간"
+          },
+          "linkedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "title": "linkedAt",
+            "description": "linkedAt.\n- 이미지를 소유한 entity에 FK로 연결된 시간.\n- null 이면 연결되지 않은 이미지.\n- createdAt + 10분 이후에도 연결되지 않은 이미지는 주기적으로 삭제됩니다."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "userId",
+            "description": "userId.\n- 이미지를 생성한 계정의 userId."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "path",
+          "format",
+          "createdAt",
+          "linkedAt",
+          "userId"
+        ],
+        "description": "Image Interface"
+      },
+      "TImagePath": {
+        "type": "string",
+        "enum": [
+          "user-profile",
+          "competition",
+          "post"
+        ]
+      },
+      "TImageFormat": {
+        "type": "string",
+        "enum": [
+          "jpeg",
+          "png",
+          "webp"
+        ]
       },
       "ResponseFormGetMeRes": {
         "type": "object",
@@ -7488,6 +7685,58 @@
         ]
       },
       "GetMeRes": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/IUser"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "user"
+        ]
+      },
+      "CreateUserProfileImageReqBody": {
+        "type": "object",
+        "properties": {
+          "imageId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "imageId\n- u-9-1 createImage 로 생성된 image의 id"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "imageId"
+        ]
+      },
+      "ResponseFormCreateUserProfileImageRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateUserProfileImageRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CreateUserProfileImageRes": {
         "type": "object",
         "properties": {
           "user": {
@@ -10994,6 +11243,11 @@
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Post writer",
+            "description": "Post writer."
+          },
           "viewCount": {
             "type": "integer",
             "title": "Post view count",
@@ -11003,11 +11257,6 @@
             "$ref": "#/components/schemas/TPostCategory",
             "title": "Post category",
             "description": "Post category.\n- FREE: 자유 게시판.\n- COMPETITION: 대회 게시판.\n- SEMINAR: 세미나 게시판.\n- OPEN_MAT: 오픈 매트 게시판."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Post writer",
-            "description": "Post writer."
           },
           "deletedAt": {
             "oneOf": [
@@ -11046,9 +11295,9 @@
           "id",
           "status",
           "createdAt",
+          "userId",
           "viewCount",
           "category",
-          "userId",
           "deletedAt",
           "postSnapshots"
         ]
@@ -11784,77 +12033,6 @@
         "required": [
           "image",
           "presignedPost"
-        ]
-      },
-      "IImage": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7.\n- s3 bucket에 저장되는 이미지의 key로 사용됩니다."
-          },
-          "path": {
-            "$ref": "#/components/schemas/TImagePath",
-            "description": "s3 bucket에 저장되는 이미지의 경로\n- user 프로필 이미지를 생성하는 경우: `user-profile` 로 설로\n- competition 이미지를 생성하는 경우: `competition` 로 설정\n- post 이미지를 생성하는 경우: `post` 로 설정"
-          },
-          "format": {
-            "$ref": "#/components/schemas/TImageFormat",
-            "title": "image format",
-            "description": "image format."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "createdAt",
-            "description": "createdAt.\n- 이미지가 생성된 시간"
-          },
-          "linkedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "linkedAt",
-            "description": "linkedAt.\n- 이미지를 소유한 entity에 FK로 연결된 시간.\n- null 이면 연결되지 않은 이미지.\n- createdAt + 10분 이후에도 연결되지 않은 이미지는 주기적으로 삭제됩니다."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "userId",
-            "description": "userId.\n- 이미지를 생성한 계정의 userId."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "path",
-          "format",
-          "createdAt",
-          "linkedAt",
-          "userId"
-        ],
-        "description": "Image Interface"
-      },
-      "TImagePath": {
-        "type": "string",
-        "enum": [
-          "user-profile",
-          "competition",
-          "post"
-        ]
-      },
-      "TImageFormat": {
-        "type": "string",
-        "enum": [
-          "jpeg",
-          "png",
-          "webp"
         ]
       },
       "TPresignedPost": {
