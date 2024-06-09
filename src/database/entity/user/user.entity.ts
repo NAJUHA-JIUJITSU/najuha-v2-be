@@ -100,6 +100,8 @@ export class UserEntity {
   @OneToMany(() => ImageEntity, (image) => image.user)
   images!: ImageEntity[];
 
-  @OneToMany(() => UserProfileImageSnapshotEntity, (profileImageSnapshot) => profileImageSnapshot.user)
+  @OneToMany(() => UserProfileImageSnapshotEntity, (profileImageSnapshot) => profileImageSnapshot.user, {
+    cascade: true,
+  })
   profileImageSnapshots!: UserProfileImageSnapshotEntity[];
 }

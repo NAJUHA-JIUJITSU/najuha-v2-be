@@ -42,7 +42,10 @@ export class BucketService implements OnModuleInit {
     return await createPresignedPost(this.client, {
       Bucket: this.bucket,
       Key: fullKey,
-      Conditions: [['content-length-range', 0, maxSize], { key: fullKey }, { 'Content-Type': format }],
+      Conditions: [['content-length-range', 0, maxSize], { key: fullKey }],
+      Fields: {
+        'Content-Type': format,
+      },
       Expires: expiresIn,
     });
   }

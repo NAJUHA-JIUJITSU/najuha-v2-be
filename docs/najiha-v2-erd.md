@@ -28,6 +28,12 @@ erDiagram
     text content
     timestamptz createdAt
   }
+  policy_consent {
+    uuid id PK
+    timestamptz createdAt
+    uuid userId FK
+    uuid policyId FK
+  }
   user {
     uuid id PK
     varchar role
@@ -44,12 +50,6 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
-  }
-  policy_consent {
-    uuid id PK
-    timestamptz createdAt
-    uuid userId FK
-    uuid policyId FK
   }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
@@ -69,6 +69,19 @@ Policy Entity
   - `title`
   - `content`
   - `createdAt`
+
+
+### `policy_consent`
+
+PolicyConsent Entity   
+@namespace User
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `userId`
+  - `policyId`: - policyId.
 
 
 ### `user`
@@ -94,19 +107,6 @@ User Entity
   - `status`
   - `createdAt`
   - `updatedAt`
-
-
-### `policy_consent`
-
-PolicyConsent Entity   
-@namespace User
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `userId`
-  - `policyId`: - policyId.
 
 
 ## Application
@@ -801,7 +801,7 @@ CommentLike.
 
 ```mermaid
 erDiagram
-  user_profile_image {
+  user_profile_image_snapshot {
     uuid id PK
     uuid userId FK
     uuid imageId FK
@@ -812,6 +812,7 @@ erDiagram
     varchar path
     varchar format
     timestamptz createdAt
+    timestamptz linkedAt "nullable"
     uuid userId FK
   }
   user {
@@ -831,12 +832,12 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
-  user_profile_image |o--|| user: user
-  user_profile_image }o--|| image: image
+  user_profile_image_snapshot }o--|| user: user
+  user_profile_image_snapshot }o--|| image: image
   image }o--|| user: user
 ```
 
-### `user_profile_image`
+### `user_profile_image_snapshot`
 
 UserProfileImage Entity   
 @namespace Image
@@ -860,5 +861,6 @@ Image Entity
   - `path`
   - `format`
   - `createdAt`
+  - `linkedAt`
   - `userId`
 

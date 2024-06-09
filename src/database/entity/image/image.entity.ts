@@ -22,6 +22,9 @@ export class ImageEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IImage['createdAt'];
 
+  @Column('timestamptz', { nullable: true })
+  linkedAt!: IImage['linkedAt'];
+
   @Column('uuid')
   userId!: IImage['userId'];
 

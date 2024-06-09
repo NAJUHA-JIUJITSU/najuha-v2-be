@@ -53,14 +53,21 @@ export class UsersAppService {
   }: CreateUserProfileImageParam): Promise<CreateUserProfileImageRet> {
     const [userEntity, imageEntity] = await Promise.all([
       assert<IUser>(
-        this.userRepository.findOneOrFail({ where: { id: userProfileImageSnapshotCreateDto.userId } }).catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
+        await this.userRepository
+          .findOneOrFail({
+            where: { id: userProfileImageSnapshotCreateDto.userId },
+            relations: ['profileImageSnapshots', 'profileImageSnapshots.image'],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+          }),
       ),
       assert<IImage>(
-        this.imageRepository.findOneOrFail({ where: { id: userProfileImageSnapshotCreateDto.imageId } }).catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
-        }),
+        await this.imageRepository
+          .findOneOrFail({ where: { id: userProfileImageSnapshotCreateDto.imageId } })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
+          }),
       ),
     ]);
     const userProfileImageSnapshotEntity = this.userFactory.createUserProfileImage(
