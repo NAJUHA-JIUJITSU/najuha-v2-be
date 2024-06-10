@@ -8,6 +8,8 @@ export interface IImage {
   /**
    * UUID v7.
    * - s3 bucket에 저장되는 이미지의 key로 사용됩니다.
+   * - `${bucketHost}/${bucketName}/${path}/${id}` 로 접근 가능합니다.
+   * - ex) http://localhost:9000/najuha-v2-bucket/competition/019000fb-11c3-7766-ad55-17c0c2b18cae
    */
   id: TId;
 

@@ -1,9 +1,10 @@
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { tags } from 'typia';
-import { IPostSnapshot } from './post-snapshot.interface';
+import { IPostSnapshot, IPostSnapshotCreateDto } from './post-snapshot.interface';
 import { IPostLike } from './post-like.interface';
 import { IPostReport } from './post-report.interface';
+import { IImage } from 'src/modules/images/domain/interface/image.interface';
 
 export interface IPost {
   /** UUID v7. */
@@ -62,9 +63,15 @@ export interface IPostDetail
     | 'userLiked'
   > {}
 
-export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'>, Pick<IPostSnapshot, 'title' | 'body'> {}
+export interface IPostCreateDto
+  extends Pick<IPost, 'userId' | 'category'>,
+    Pick<IPostSnapshotCreateDto, 'title' | 'body'> {
+  imageIds: IImage['id'][];
+}
 
-export interface IPostUpdateDto extends Pick<IPostSnapshot, 'postId' | 'title' | 'body'> {}
+export interface IPostUpdateDto extends IPostSnapshotCreateDto {
+  imageIds: IImage['id'][];
+}
 
 export interface IFindPostsQueryOptions {
   /**

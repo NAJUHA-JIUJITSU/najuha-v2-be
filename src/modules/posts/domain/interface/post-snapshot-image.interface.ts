@@ -1,13 +1,13 @@
 import { TDateOrStringDate, TId } from 'src/common/common-types';
 import { IImage } from 'src/modules/images/domain/interface/image.interface';
-import { ICompetition } from './competition.interface';
+import { IPostSnapshot } from './post-snapshot.interface';
 
-export interface ICompetitionPosterImage {
+export interface IPostSnapshotImage {
   /** UUID v7. */
   id: TId;
 
-  /** competitionId */
-  competitionId: ICompetition['id'];
+  /** postSnapshotId */
+  postSnapshotId: IPostSnapshot['id'];
 
   /**
    * imageId
@@ -18,10 +18,7 @@ export interface ICompetitionPosterImage {
   /** createdAt */
   createdAt: TDateOrStringDate;
 
-  /** deletedAt */
-  deletedAt: TDateOrStringDate | null;
-
   image: IImage;
 }
 
-export interface ICompetitionPosterImageCreateDto extends Pick<ICompetitionPosterImage, 'competitionId' | 'imageId'> {}
+export interface IPostSnapshotImageCreateDto extends Pick<IPostSnapshotImage, 'postSnapshotId' | 'imageId' | 'image'> {}

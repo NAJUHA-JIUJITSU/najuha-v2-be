@@ -1,7 +1,8 @@
 import { IPostSnapshot } from 'src/modules/posts/domain/interface/post-snapshot.interface';
-import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { PostEntity } from './post.entity';
+import { PostSnapshotImageEntity } from './post-snapshot-image.entity';
 
 /**
  * PostSnapshot.
@@ -39,4 +40,7 @@ export class PostSnapshotEntity {
   @ManyToOne(() => PostEntity, (post) => post.postSnapshots)
   @JoinColumn({ name: 'postId' })
   post!: PostEntity;
+
+  @OneToMany(() => PostSnapshotImageEntity, (postSnapshotImage) => postSnapshotImage.postSnapshot, { cascade: true })
+  postSnapshotImages!: PostSnapshotImageEntity[];
 }

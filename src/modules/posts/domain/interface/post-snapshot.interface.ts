@@ -1,6 +1,7 @@
 import { tags } from 'typia';
 import { IPost } from './post.interface';
 import { TDateOrStringDate, TId } from 'src/common/common-types';
+import { IPostSnapshotImage } from './post-snapshot-image.interface';
 
 export interface IPostSnapshot {
   /** UUID v7. */
@@ -17,4 +18,8 @@ export interface IPostSnapshot {
 
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
+
+  postSnapshotImages: IPostSnapshotImage[];
 }
+
+export interface IPostSnapshotCreateDto extends Pick<IPostSnapshot, 'postId' | 'title' | 'body'> {}

@@ -24,6 +24,8 @@ import { PostModel } from '../domain/model/post.model';
 import { IPostLike } from '../domain/interface/post-like.interface';
 import { PostLikeRepository } from 'src/database/custom-repository/post-like.repository';
 import { PostReportRepository } from 'src/database/custom-repository/post-report.repository';
+import { ImageRepository } from 'src/database/custom-repository/image.repository';
+import { In } from 'typeorm';
 
 @Injectable()
 export class PostsAppService {
@@ -33,13 +35,20 @@ export class PostsAppService {
     private readonly postRepository: PostRepository,
     private readonly postLikeRepository: PostLikeRepository,
     private readonly portReportRepository: PostReportRepository,
+    private readonly imageRepository: ImageRepository,
   ) {}
 
   async createPost({ postCreateDto }: CreatePostParam): Promise<CreatePostRet> {
-    await this.userRepository.findOneOrFail({ where: { id: postCreateDto.userId } }).catch(() => {
-      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-    });
-    const newPost = new PostModel(this.postFactory.createPost(postCreateDto));
+    const [_, imageEntities] = await Promise.all([
+      this.userRepository.findOneOrFail({ where: { id: postCreateDto.userId } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      }),
+      this.imageRepository.find({ where: { id: In(postCreateDto.imageIds) } }),
+    ]);
+    if (imageEntities.length !== postCreateDto.imageIds.length) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
+    }
+    const newPost = new PostModel(this.postFactory.createPost(postCreateDto, imageEntities));
     return { post: await this.postRepository.save(newPost.toEntity()) };
   }
 
@@ -60,19 +69,25 @@ export class PostsAppService {
   }
 
   async updatePost({ userId, postUpdateDto }: UpdatePostParam): Promise<UpdatePostRet> {
-    const post = new PostModel(
-      assert<IPost>(
-        await this.postRepository
-          .findOneOrFail({
-            where: { id: postUpdateDto.postId, userId, status: 'ACTIVE' },
-            relations: ['postSnapshots'],
-          })
-          .catch(() => {
-            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
-          }),
-      ),
-    );
-    const newPostSnapshot = this.postFactory.createPostSnapshot(postUpdateDto);
+    const [_, postEntity, imageEntities] = await Promise.all([
+      this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      }),
+      this.postRepository
+        .findOneOrFail({
+          where: { id: postUpdateDto.postId, userId, status: 'ACTIVE' },
+          relations: ['postSnapshots', 'postSnapshots.postSnapshotImages', 'postSnapshots.postSnapshotImages.image'],
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
+        }),
+      this.imageRepository.find({ where: { id: In(postUpdateDto.imageIds) } }),
+    ]);
+    if (imageEntities.length !== postUpdateDto.imageIds.length) {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
+    }
+    const post = new PostModel(postEntity);
+    const newPostSnapshot = this.postFactory.createPostSnapshot(postUpdateDto, imageEntities);
     post.addPostSnapshot(newPostSnapshot);
     return { post: await this.postRepository.save(post.toEntity()) };
   }

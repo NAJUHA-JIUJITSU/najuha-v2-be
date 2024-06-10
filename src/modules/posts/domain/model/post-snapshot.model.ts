@@ -6,6 +6,7 @@ export class PostSnapshotModel {
   public readonly title: IPostSnapshot['title'];
   public readonly body: IPostSnapshot['body'];
   public readonly createdAt: IPostSnapshot['createdAt'];
+  public postSnapshotImages: IPostSnapshot['postSnapshotImages'];
 
   constructor(entity: IPostSnapshot) {
     this.id = entity.id;
@@ -13,6 +14,7 @@ export class PostSnapshotModel {
     this.title = entity.title;
     this.body = entity.body;
     this.createdAt = entity.createdAt;
+    this.postSnapshotImages = entity.postSnapshotImages;
   }
 
   toEntity(): IPostSnapshot {
@@ -22,6 +24,7 @@ export class PostSnapshotModel {
       title: this.title,
       body: this.body,
       createdAt: this.createdAt,
+      postSnapshotImages: this.postSnapshotImages,
     };
   }
 }
