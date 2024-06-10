@@ -1,20 +1,20 @@
 import { TypedException, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
-import appEnv from 'src/common/app-env';
 import {
   AUTH_ACCESS_TOKEN_MISSING,
   AUTH_ACCESS_TOKEN_UNAUTHORIZED,
   AUTH_LEVEL_FORBIDDEN,
 } from 'src/common/response/errorResponse';
 import { RoleLevel, RoleLevels } from 'src/infrastructure/guard/role.guard';
-import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
+import { ApiConventionsAppService } from '../application/api-conventions.app.service';
+import { CreateAdminAccessTokenRes } from './api-conventions.controller.dto';
 
 /**
  * api conventions 에 대한 설명을 위한 코드입니다. (동작하지 않습니다)
  */
 @Controller('api-conventions')
 export class ApiConventionsController {
-  constructor(private readonly AuthTokenDomainService: AuthTokenDomainService) {}
+  constructor(private readonly apiConventionsAppService: ApiConventionsAppService) {}
   /**
    * 1 auth guard.
    * - Role Based Access Control (RBAC) 에 따라 권한이 없을 때 에러
@@ -84,25 +84,7 @@ export class ApiConventionsController {
    */
   @RoleLevels(RoleLevel.PUBLIC)
   @TypedRoute.Post('create-admin-access-token')
-  async createAdminAccessToken(): Promise<ICreatedAdminAccessToken[]> {
-    return await Promise.all(
-      appEnv.adminCredentials.map(async (adminCredential) => {
-        const authTokens = await this.AuthTokenDomainService.createAuthTokens({
-          userId: adminCredential.id,
-          userRole: 'ADMIN',
-        });
-        return {
-          name: adminCredential.name,
-          accessToken: authTokens.accessToken,
-          refreshToken: authTokens.refreshToken,
-        };
-      }),
-    );
+  async createAdminAccessToken(): Promise<CreateAdminAccessTokenRes> {
+    return this.apiConventionsAppService.createAdminAccessToken();
   }
-}
-
-export interface ICreatedAdminAccessToken {
-  name: string;
-  accessToken: string;
-  refreshToken: string;
 }
