@@ -91,7 +91,7 @@ export class ApiConventionsController {
   }
 
   /**
-   * 5 allErroryTypes.
+   * 6 allErroryTypes.
    *
    * @tag api-conventions
    */
