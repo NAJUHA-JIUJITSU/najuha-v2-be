@@ -4,7 +4,9 @@ import {
   AUTH_ACCESS_TOKEN_MISSING,
   AUTH_ACCESS_TOKEN_UNAUTHORIZED,
   AUTH_LEVEL_FORBIDDEN,
+  AllErrorTypes,
 } from 'src/common/response/errorResponse';
+import typia from 'typia';
 
 /**
  * api conventions 에 대한 설명을 위한 코드입니다. (동작하지 않습니다)
@@ -70,5 +72,15 @@ export class ApiConventionsController {
   @TypedRoute.Get('update')
   update() {
     return;
+  }
+
+  /**
+   * 5 allErroryTypes.
+   *
+   * @tag api-conventions
+   */
+  @TypedRoute.Get('all-error-types')
+  allErroryTypes(): AllErrorTypes {
+    return typia.random<AllErrorTypes>();
   }
 }
