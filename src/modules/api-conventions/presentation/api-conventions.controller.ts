@@ -4,10 +4,12 @@ import {
   AUTH_ACCESS_TOKEN_MISSING,
   AUTH_ACCESS_TOKEN_UNAUTHORIZED,
   AUTH_LEVEL_FORBIDDEN,
+  AllErrorTypes,
 } from 'src/common/response/errorResponse';
 import { RoleLevel, RoleLevels } from 'src/infrastructure/guard/role.guard';
 import { ApiConventionsAppService } from '../application/api-conventions.app.service';
 import { CreateAdminAccessTokenRes } from './api-conventions.controller.dto';
+import typia from 'typia';
 
 /**
  * api conventions 에 대한 설명을 위한 코드입니다. (동작하지 않습니다)
@@ -86,5 +88,15 @@ export class ApiConventionsController {
   @TypedRoute.Post('create-admin-access-token')
   async createAdminAccessToken(): Promise<CreateAdminAccessTokenRes> {
     return this.apiConventionsAppService.createAdminAccessToken();
+  }
+
+  /**
+   * 5 allErroryTypes.
+   *
+   * @tag api-conventions
+   */
+  @TypedRoute.Get('all-error-types')
+  allErroryTypes(): AllErrorTypes {
+    return typia.random<AllErrorTypes>();
   }
 }
