@@ -3,6 +3,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 import { UserEntity } from '../user/user.entity';
 import { UserProfileImageEntity } from '../user/user-profile-image.entity';
 import { uuidv7 } from 'uuidv7';
+import { CompetitionPosterImageEntity } from '../competition/competition-poster-image.entity';
 
 /**
  * Image Entity
@@ -35,6 +36,9 @@ export class ImageEntity {
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
 
-  @OneToMany(() => UserProfileImageEntity, (userProfileImageSnapshot) => userProfileImageSnapshot.image)
-  userProfileImageSnapshots!: UserProfileImageEntity[];
+  @OneToMany(() => UserProfileImageEntity, (userProfileImage) => userProfileImage.image)
+  userProfileImages!: UserProfileImageEntity[];
+
+  @OneToMany(() => CompetitionPosterImageEntity, (competitionPosterImage) => competitionPosterImage.image)
+  competitionProfileImages!: CompetitionPosterImageEntity[];
 }

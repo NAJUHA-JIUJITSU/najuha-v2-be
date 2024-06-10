@@ -17,6 +17,7 @@ import {
   IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
 import { TPaginationParam, TPaginationRet } from 'src/common/common-types';
+import { ICompetitionPosterImageCreateDto } from '../domain/interface/competition-poster-image.interface';
 
 // ---------------------------------------------------------------------------
 // competitionsAppService Param
@@ -68,6 +69,10 @@ export interface DeleteRequiredAdditionalInfoParam {
   requiredAdditionalInfoId: IRequiredAdditionalInfo['id'];
 }
 
+export interface CreateCompetitionPosterImageParam {
+  competitionPosterImageCreateDto: ICompetitionPosterImageCreateDto;
+}
+
 // ---------------------------------------------------------------------------
 // competitionsAppService Result
 // ---------------------------------------------------------------------------
@@ -110,5 +115,9 @@ export interface UpdateCompetitionRequiredAdditionalInfoRet {
 }
 
 export interface DeleteCompetitionRequiredAdditionalInfoRet {
+  competition: ICompetitionDetail;
+}
+
+export interface CreateCompetitionPosterImageRet {
   competition: ICompetitionDetail;
 }

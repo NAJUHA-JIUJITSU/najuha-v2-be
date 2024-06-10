@@ -17,7 +17,7 @@ export interface GetMeParam {
 }
 
 export interface CreateUserProfileImageParam {
-  userProfileImageSnapshotCreateDto: IUserProfileImageCreateDto;
+  userProfileImageCreateDto: IUserProfileImageCreateDto;
 }
 
 // ---------------------------------------------------------------------------

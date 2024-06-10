@@ -11,8 +11,8 @@
 - [User](#user)
 - [Application](#application)
 - [Competition](#competition)
-- [Post](#post)
 - [Image](#image)
+- [Post](#post)
 
 
 ## User
@@ -34,6 +34,13 @@ erDiagram
     uuid userId FK
     uuid policyId FK
   }
+  user_profile_image {
+    uuid id PK
+    uuid userId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
   user {
     uuid id PK
     varchar role
@@ -53,6 +60,7 @@ erDiagram
   }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
+  user_profile_image }o--|| user: user
 ```
 
 ### `policy`
@@ -84,11 +92,25 @@ PolicyConsent Entity
   - `policyId`: - policyId.
 
 
+### `user_profile_image`
+
+UserProfileImage Entity   
+@namespace User   
+@erd Image
+
+**Properties**
+
+  - `id`
+  - `userId`
+  - `imageId`
+  - `createdAt`
+  - `deletedAt`
+
+
 ### `user`
 
 User Entity   
-@namespace User   
-@erd Image
+@namespace User
 
 **Properties**
 
@@ -374,6 +396,13 @@ erDiagram
     uuid hostId FK
     uuid competitionId FK
   }
+  competition_poster_image {
+    uuid id PK
+    uuid competitionId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
   competition {
     uuid id PK
     varchar title
@@ -400,6 +429,7 @@ erDiagram
   combination_discount_snapshot }o--|| competition: competition
   required_additional_info }o--|| competition: competition
   competition_host_map }o--|| competition: competition
+  competition_poster_image }o--|| competition: competition
 ```
 
 ### Indexes
@@ -507,6 +537,21 @@ Competition Host Map Entity
   - `competitionId`
 
 
+### `competition_poster_image`
+
+CompetitionPosterImage Entity   
+@namespace Competition   
+@erd Image
+
+**Properties**
+
+  - `id`
+  - `competitionId`
+  - `imageId`
+  - `createdAt`
+  - `deletedAt`
+
+
 ### `competition`
 
 Competition Entity   
@@ -532,6 +577,51 @@ Competition Entity
   - `status`
   - `createdAt`
   - `updatedAt`
+
+
+## Image
+
+```mermaid
+erDiagram
+  user_profile_image {
+    uuid id PK
+    uuid userId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
+  image {
+    uuid id PK
+    varchar path
+    varchar format
+    timestamptz createdAt
+    timestamptz linkedAt "nullable"
+    uuid userId FK
+  }
+  competition_poster_image {
+    uuid id PK
+    uuid competitionId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
+  user_profile_image }o--|| image: image
+  competition_poster_image }o--|| image: image
+```
+
+### `image`
+
+Image Entity   
+@namespace Image
+
+**Properties**
+
+  - `id`
+  - `path`
+  - `format`
+  - `createdAt`
+  - `linkedAt`
+  - `userId`
 
 
 ## Post
@@ -795,74 +885,4 @@ CommentLike.
   - `userId`: 좋아요를 누른 UserId.
   - `createdAt`: 좋아요 누른 일자.
   - `commentId`: 좋아요를 누른 댓글의 Id.
-
-
-## Image
-
-```mermaid
-erDiagram
-  user_profile_image {
-    uuid id PK
-    uuid userId FK
-    uuid imageId FK
-    timestamptz createdAt
-    timestamptz deletedAt "nullable"
-  }
-  image {
-    uuid id PK
-    varchar path
-    varchar format
-    timestamptz createdAt
-    timestamptz linkedAt "nullable"
-    uuid userId FK
-  }
-  user {
-    uuid id PK
-    varchar role
-    varchar snsAuthProvider
-    varchar snsId
-    varchar email
-    varchar name
-    varchar phoneNumber "nullable"
-    varchar nickname "nullable"
-    varchar gender "nullable"
-    varchar birth "nullable"
-    varchar belt "nullable"
-    varchar profileImageUrlKey "nullable"
-    varchar status
-    timestamptz createdAt
-    timestamptz updatedAt
-  }
-  user_profile_image }o--|| user: user
-  user_profile_image }o--|| image: image
-  image }o--|| user: user
-```
-
-### `user_profile_image`
-
-UserProfileImage Entity   
-@namespace Image
-
-**Properties**
-
-  - `id`
-  - `userId`
-  - `imageId`
-  - `createdAt`
-  - `deletedAt`
-
-
-### `image`
-
-Image Entity   
-@namespace Image
-
-**Properties**
-
-  - `id`
-  - `path`
-  - `format`
-  - `createdAt`
-  - `linkedAt`
-  - `userId`
 

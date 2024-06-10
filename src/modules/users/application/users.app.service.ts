@@ -54,13 +54,13 @@ export class UsersAppService {
   }
 
   async createUserProfileImage({
-    userProfileImageSnapshotCreateDto,
+    userProfileImageCreateDto,
   }: CreateUserProfileImageParam): Promise<CreateUserProfileImageRet> {
     const [userEntity, imageEntity] = await Promise.all([
       assert<IUser>(
         await this.userRepository
           .findOneOrFail({
-            where: { id: userProfileImageSnapshotCreateDto.userId },
+            where: { id: userProfileImageCreateDto.userId },
             relations: ['profileImages', 'profileImages.image'],
           })
           .catch(() => {
@@ -69,18 +69,15 @@ export class UsersAppService {
       ),
       assert<IImage>(
         await this.imageRepository
-          .findOneOrFail({ where: { id: userProfileImageSnapshotCreateDto.imageId } })
+          .findOneOrFail({ where: { id: userProfileImageCreateDto.imageId, path: 'user-profile' } })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
           }),
       ),
     ]);
-    const userProfileImageSnapshotEntity = this.userFactory.createUserProfileImage(
-      userProfileImageSnapshotCreateDto,
-      imageEntity,
-    );
+    const userProfileImageEntity = this.userFactory.createUserProfileImage(userProfileImageCreateDto, imageEntity);
     const user = new UserModel(userEntity);
-    user.updateProfileImageSnapshot(userProfileImageSnapshotEntity);
+    user.updateProfileImageSnapshot(userProfileImageEntity);
     return { user: await this.userRepository.save(user.toEntity()) };
   }
 }

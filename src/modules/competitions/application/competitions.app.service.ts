@@ -22,6 +22,8 @@ import {
   CreateCompetitionDivisionsRet,
   UpdateCompetitionRequiredAdditionalInfoRet,
   DeleteCompetitionRequiredAdditionalInfoRet,
+  CreateCompetitionPosterImageParam,
+  CreateCompetitionPosterImageRet,
 } from './competitions.app.dto';
 import { CompetitionModel } from '../domain/model/competition.model';
 import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
@@ -34,6 +36,8 @@ import { EarlybirdDiscountSnapshotModel } from '../domain/model/earlybird-discou
 import { CombinationDiscountSnapshotModel } from '../domain/model/combination-discount-snapshot.model';
 import { assert } from 'typia';
 import { ICompetition, ICompetitionSummary } from '../domain/interface/competition.interface';
+import { ImageRepository } from 'src/database/custom-repository/image.repository';
+import { IImage } from 'src/modules/images/domain/interface/image.interface';
 
 @Injectable()
 export class CompetitionsAppService {
@@ -41,6 +45,7 @@ export class CompetitionsAppService {
     private readonly divisionFactory: DivisionFactory,
     private readonly competitionFactory: CompetitionFactory,
     private readonly competitionRepository: CompetitionRepository,
+    private readonly imageRepository: ImageRepository,
   ) {}
 
   async createCompetition({ competitionCreateDto }: CreateCompetitionParam): Promise<CreateCompetitionRet> {
@@ -61,6 +66,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -87,6 +94,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -133,6 +142,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -163,6 +174,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -192,6 +205,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -220,6 +235,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -249,6 +266,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -275,6 +294,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
+              'posterImages',
+              'posterImages.image',
             ],
           })
           .catch(() => {
@@ -284,5 +305,47 @@ export class CompetitionsAppService {
     );
     competitionModel.deleteRequiredAdditionalInfo(requiredAdditionalInfoId);
     return { competition: await this.competitionRepository.save(competitionModel.toEntity()) };
+  }
+
+  async createCompetitionPosterImage({
+    competitionPosterImageCreateDto,
+  }: CreateCompetitionPosterImageParam): Promise<CreateCompetitionPosterImageRet> {
+    const [competitionEntity, imageEntity] = await Promise.all([
+      assert<ICompetition>(
+        await this.competitionRepository
+          .findOneOrFail({
+            where: { id: competitionPosterImageCreateDto.competitionId },
+            relations: [
+              'divisions',
+              'earlybirdDiscountSnapshots',
+              'combinationDiscountSnapshots',
+              'requiredAdditionalInfos',
+              'competitionHostMaps',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
+            ],
+          })
+          .catch((e) => {
+            console.log(e);
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          }),
+      ),
+      assert<IImage>(
+        await this.imageRepository
+          .findOneOrFail({ where: { id: competitionPosterImageCreateDto.imageId, path: 'competition' } })
+          .catch((e) => {
+            console.log(e);
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
+          }),
+      ),
+    ]);
+
+    const competitionPosterImage = this.competitionFactory.createCompetitionPosterImage(
+      imageEntity,
+      competitionPosterImageCreateDto,
+    );
+    const competition = new CompetitionModel(competitionEntity);
+    competition.updatePosterImage(competitionPosterImage);
+    return { competition: await this.competitionRepository.save(competition.toEntity()) };
   }
 }

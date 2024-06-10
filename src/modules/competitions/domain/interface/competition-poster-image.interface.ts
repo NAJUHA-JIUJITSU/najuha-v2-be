@@ -1,13 +1,13 @@
 import { TDateOrStringDate, TId } from 'src/common/common-types';
-import { IUser } from './user.interface';
 import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { IUser } from 'src/modules/users/domain/interface/user.interface';
 
-export interface IUserProfileImage {
+export interface ICompetitionPosterImage {
   /** UUID v7. */
   id: TId;
 
-  /** userId */
-  userId: IUser['id'];
+  /** competitionId */
+  competitionId: IUser['id'];
 
   /**
    * imageId
@@ -24,4 +24,4 @@ export interface IUserProfileImage {
   image: IImage;
 }
 
-export interface IUserProfileImageCreateDto extends Pick<IUserProfileImage, 'userId' | 'imageId'> {}
+export interface ICompetitionPosterImageCreateDto extends Pick<ICompetitionPosterImage, 'competitionId' | 'imageId'> {}

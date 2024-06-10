@@ -23,6 +23,7 @@ import {
   IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
 import { TPaginationParam } from 'src/common/common-types';
+import { ICompetitionPosterImageCreateDto } from '../domain/interface/competition-poster-image.interface';
 
 // ---------------------------------------------------------------------------
 // competitionsController Request
@@ -64,6 +65,8 @@ export interface CreateCompetitionRequiredAdditionalInfoReqBody
 export interface UpdateRequiredAdditionalInfoReqBody
   extends Omit<IRequiredAdditionalInfoUpdateDto, 'competitionId' | 'id'> {}
 
+export interface CreateCompetitionPosterImageReqBody extends Omit<ICompetitionPosterImageCreateDto, 'competitionId'> {}
+
 // ---------------------------------------------------------------------------
 // competitionsController Response
 // ---------------------------------------------------------------------------
@@ -88,3 +91,5 @@ export interface CreateCompetitionRequiredAdditionalInfoRes extends CreateCompet
 export interface UpdateCompetitionRequiredAdditionalInfoRes extends CreateCompetitionRequiredAdditionalInfoRet {}
 
 export interface DeleteCompetitionRequiredAdditionalInfoRes extends CreateCompetitionRequiredAdditionalInfoRet {}
+
+export interface CreateCompetitionPosterImageRes extends CreateCompetitionRet {}

@@ -84,7 +84,7 @@ export class UserUsersController {
   ): Promise<ResponseForm<CreateUserProfileImageRes>> {
     return createResponseForm(
       await this.UsersAppService.createUserProfileImage({
-        userProfileImageSnapshotCreateDto: {
+        userProfileImageCreateDto: {
           userId: req['userId'],
           imageId: body.imageId,
         },

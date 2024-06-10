@@ -24,14 +24,11 @@ export class UserFactory {
     };
   }
 
-  createUserProfileImage(
-    userProfileImageSnapshotCreateDto: IUserProfileImageCreateDto,
-    image: IImage,
-  ): IUserProfileImage {
+  createUserProfileImage(userProfileImageCreateDto: IUserProfileImageCreateDto, image: IImage): IUserProfileImage {
     return {
       id: uuidv7(),
-      userId: userProfileImageSnapshotCreateDto.userId,
-      imageId: userProfileImageSnapshotCreateDto.imageId,
+      userId: userProfileImageCreateDto.userId,
+      imageId: userProfileImageCreateDto.imageId,
       createdAt: new Date(),
       deletedAt: null,
       image,

@@ -13,6 +13,11 @@ import {
   IRequiredAdditionalInfo,
   IRequiredAdditionalInfoCreateDto,
 } from './interface/required-addtional-info.interface';
+import {
+  ICompetitionPosterImage,
+  ICompetitionPosterImageCreateDto,
+} from './interface/competition-poster-image.interface';
+import { IImage } from 'src/modules/images/domain/interface/image.interface';
 
 @Injectable()
 export class CompetitionFactory {
@@ -41,6 +46,7 @@ export class CompetitionFactory {
       combinationDiscountSnapshots: [],
       requiredAdditionalInfos: [],
       competitionHostMaps: [],
+      competitionPosterImages: [],
     };
   }
 
@@ -78,6 +84,20 @@ export class CompetitionFactory {
       competitionId: requiredAdditionalInfoCreateDto.competitionId,
       createdAt: new Date(),
       deletedAt: null,
+    };
+  }
+
+  createCompetitionPosterImage(
+    image: IImage,
+    competitionPosterImageCreateDto: ICompetitionPosterImageCreateDto,
+  ): ICompetitionPosterImage {
+    return {
+      id: uuidv7(),
+      competitionId: competitionPosterImageCreateDto.competitionId,
+      imageId: competitionPosterImageCreateDto.imageId,
+      createdAt: new Date(),
+      deletedAt: null,
+      image,
     };
   }
 }

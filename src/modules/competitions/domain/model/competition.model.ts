@@ -15,6 +15,7 @@ import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interf
 import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtional-info.interface';
 import { ICompetitionHostMap } from '../interface/competition-host-map.interface';
 import { CalculatePaymentService } from '../calculate-payment.domain.service';
+import { ICompetitionPosterImage } from '../interface/competition-poster-image.interface';
 
 export class CompetitionModel {
   private readonly id: ICompetition['id'];
@@ -38,6 +39,7 @@ export class CompetitionModel {
   private earlybirdDiscountSnapshots: EarlybirdDiscountSnapshotModel[];
   private combinationDiscountSnapshots: CombinationDiscountSnapshotModel[];
   private competitionHostMaps: ICompetitionHostMap[];
+  private competitionPosterImages: ICompetitionPosterImage[];
   private readonly createdAt: ICompetition['createdAt'];
   private readonly updatedAt: ICompetition['updatedAt'];
 
@@ -69,6 +71,7 @@ export class CompetitionModel {
     );
     this.requiredAdditionalInfos = entity.requiredAdditionalInfos.map((info) => new RequiredAdditionalInfoModel(info));
     this.competitionHostMaps = entity.competitionHostMaps;
+    this.competitionPosterImages = entity.competitionPosterImages;
   }
 
   toEntity(): ICompetition {
@@ -96,6 +99,7 @@ export class CompetitionModel {
       combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
       requiredAdditionalInfos: this.requiredAdditionalInfos,
       competitionHostMaps: this.competitionHostMaps,
+      competitionPosterImages: this.competitionPosterImages,
     };
   }
 
@@ -266,5 +270,12 @@ export class CompetitionModel {
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, `Not found DivisionIds: ${divisionIds.join(', ')}`);
     }
     return divisions;
+  }
+
+  updatePosterImage(newPosterImage: ICompetitionPosterImage) {
+    this.competitionPosterImages.forEach((image) => {
+      image.deletedAt = new Date();
+    });
+    this.competitionPosterImages.push(newPosterImage);
   }
 }

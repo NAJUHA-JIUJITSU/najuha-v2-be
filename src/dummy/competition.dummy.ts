@@ -41,6 +41,7 @@ export class CompetitionDummyBuilder {
     combinationDiscountSnapshots: [],
     requiredAdditionalInfos: [],
     competitionHostMaps: [], // todo!!!: competitionHostMaps에 데이터 추가하기
+    competitionPosterImages: [],
   };
   private today: Date;
   private basicPeriodTitle = '';

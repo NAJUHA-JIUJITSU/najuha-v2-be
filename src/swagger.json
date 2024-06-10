@@ -1234,7 +1234,7 @@
           }
         },
         "summary": "u-3-4 createUserProfileImage",
-        "description": "u-3-4 createUserProfileImage.\n- RoleLevel: USER.",
+        "description": "u-3-4 createUserProfileImage.\n- RoleLevel: USER.\n- 유저의 프로필 이미지를 생성합니다.\n- 업데이트 시에도 이 API를 사용합니다.\n- 기존에 프로필 이미지가 있을 경우, 기존 이미지는 soft delete 처리되고 새로운 이미지가 생성됩니다.",
         "security": [
           {
             "bearer": []
@@ -2987,6 +2987,78 @@
           }
         ],
         "x-nestia-method": "DELETE"
+      }
+    },
+    "/admin/competitions/{competitionId}/poster-image": {
+      "post": {
+        "tags": [
+          "a-5 competitions"
+        ],
+        "parameters": [
+          {
+            "name": "competitionId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompetitionPosterImageReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateCompetitionPosterImageRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "a-5-12 createCompetitionPosterImage",
+        "description": "a-5-12 createCompetitionPosterImage.\n- RoleLevel: ADMIN.\n- 대회 포스터 이미지를 생성 및 업데이트합니다.\n- 이미지가 존재할 경우, 기존 이미지는 soft delete 처리되고 새로운 이미지가 생성됩니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "admin.competitions.poster-image.createCompetitionPosterImage",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "a-5 competitions",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
       }
     },
     "/host/competitions": {
@@ -7560,7 +7632,8 @@
         "properties": {
           "id": {
             "$ref": "#/components/schemas/TId",
-            "description": "uuid"
+            "title": "UUID v7",
+            "description": "UUID v7."
           },
           "userId": {
             "$ref": "#/components/schemas/TId",
@@ -8410,6 +8483,12 @@
             },
             "title": "얼리버드 할인 정보",
             "description": "얼리버드 할인 정보.\n- 배열의 길이가 0이면 얼리버드 할인이 없는 대회입니다.\n- 배열의 마지막 요소가 현재 적용중인 얼리버드 할인 정보입니다."
+          },
+          "competitionPosterImages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICompetitionPosterImage"
+            }
           }
         },
         "nullable": false,
@@ -8432,7 +8511,8 @@
           "isPartnership",
           "viewCount",
           "posterImgUrlKey",
-          "earlybirdDiscountSnapshots"
+          "earlybirdDiscountSnapshots",
+          "competitionPosterImages"
         ]
       },
       "TCompetitionStatus": {
@@ -8485,6 +8565,55 @@
           "discountAmount",
           "createdAt",
           "competitionId"
+        ]
+      },
+      "ICompetitionPosterImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "competitionId": {
+            "$ref": "#/components/schemas/TId",
+            "description": "competitionId"
+          },
+          "imageId": {
+            "$ref": "#/components/schemas/TId",
+            "description": "imageId\n- u-9-1 createImage 로 생성된 image의 id"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "description": "createdAt"
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "description": "deletedAt"
+          },
+          "image": {
+            "$ref": "#/components/schemas/IImage"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "competitionId",
+          "imageId",
+          "createdAt",
+          "deletedAt",
+          "image"
         ]
       },
       "ResponseFormGetCompetitionRes": {
@@ -8754,6 +8883,12 @@
             },
             "title": "대회 주최자 정보 매핑 테이블",
             "description": "대회 주최자 정보 매핑 테이블."
+          },
+          "competitionPosterImages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICompetitionPosterImage"
+            }
           }
         },
         "nullable": false,
@@ -8780,7 +8915,8 @@
           "earlybirdDiscountSnapshots",
           "combinationDiscountSnapshots",
           "requiredAdditionalInfos",
-          "competitionHostMaps"
+          "competitionHostMaps",
+          "competitionPosterImages"
         ]
       },
       "IDivision": {
@@ -9511,6 +9647,12 @@
             "nullable": true,
             "title": "대회 포스터 이미지 URL Key",
             "description": "대회 포스터 이미지 URL Key."
+          },
+          "competitionPosterImages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICompetitionPosterImage"
+            }
           }
         },
         "nullable": false,
@@ -9533,7 +9675,8 @@
           "description",
           "isPartnership",
           "viewCount",
-          "posterImgUrlKey"
+          "posterImgUrlKey",
+          "competitionPosterImages"
         ]
       },
       "UpdateCompetitionReqBody": {
@@ -10198,6 +10341,58 @@
         "properties": {
           "competition": {
             "$ref": "#/components/schemas/ICompetitionDetail"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "competition"
+        ]
+      },
+      "CreateCompetitionPosterImageReqBody": {
+        "type": "object",
+        "properties": {
+          "imageId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "imageId\n- u-9-1 createImage 로 생성된 image의 id"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "imageId"
+        ]
+      },
+      "ResponseFormCreateCompetitionPosterImageRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateCompetitionPosterImageRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CreateCompetitionPosterImageRes": {
+        "type": "object",
+        "properties": {
+          "competition": {
+            "$ref": "#/components/schemas/ICompetitionBasicInfo"
           }
         },
         "nullable": false,

@@ -6,7 +6,8 @@ import { IUserProfileImage } from 'src/modules/users/domain/interface/user-profi
 
 /**
  * UserProfileImage Entity
- * @namespace Image
+ * @namespace User
+ * @erd Image
  */
 @Entity('user_profile_image')
 export class UserProfileImageEntity {
@@ -14,10 +15,10 @@ export class UserProfileImageEntity {
   id!: IUserProfileImage['id'];
 
   @Column('uuid')
-  userId!: IUserProfileImage['id'];
+  userId!: IUserProfileImage['userId'];
 
   @Column('uuid')
-  imageId!: IUserProfileImage['id'];
+  imageId!: IUserProfileImage['imageId'];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IUserProfileImage['createdAt'];
@@ -32,7 +33,7 @@ export class UserProfileImageEntity {
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
 
-  @ManyToOne(() => ImageEntity, (image) => image.userProfileImageSnapshots)
+  @ManyToOne(() => ImageEntity, (image) => image.userProfileImages)
   @JoinColumn({ name: 'imageId' })
   image!: ImageEntity;
 }

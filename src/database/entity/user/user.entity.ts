@@ -1,5 +1,5 @@
 import { PolicyConsentEntity } from 'src//database/entity/user/policy-consent.entity';
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, PrimaryColumn, OneToOne } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
@@ -16,7 +16,6 @@ import { UserProfileImageEntity } from './user-profile-image.entity';
 /**
  * User Entity
  * @namespace User
- * @erd Image
  */
 @Entity('user')
 export class UserEntity {

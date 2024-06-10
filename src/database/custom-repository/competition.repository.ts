@@ -29,6 +29,10 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
       'earlybirdDiscountSnapshots.createdAt = (SELECT MAX(e."createdAt") FROM earlybird_discount_snapshot e WHERE e."competitionId" = competition.id)',
     );
 
+    qb = qb
+      .leftJoinAndSelect('competition.competitionPosterImages', 'competitionPosterImages')
+      .leftJoinAndSelect('competitionPosterImages.image', 'image');
+
     if (hostId) {
       qb = qb.innerJoin(
         'competition.competitionHostMaps',
@@ -99,7 +103,9 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
       .leftJoinAndSelect('competition.earlybirdDiscountSnapshots', 'earlybirdDiscountSnapshots')
       .leftJoinAndSelect('competition.combinationDiscountSnapshots', 'combinationDiscountSnapshots')
       .leftJoinAndSelect('competition.requiredAdditionalInfos', 'requiredAdditionalInfos')
-      .leftJoinAndSelect('competition.competitionHostMaps', 'competitionHostMaps');
+      .leftJoinAndSelect('competition.competitionHostMaps', 'competitionHostMaps')
+      .leftJoinAndSelect('competition.competitionPosterImages', 'competitionPosterImages')
+      .leftJoinAndSelect('competitionPosterImages.image', 'image');
 
     if (hostId) {
       qb = qb.innerJoin('competition.competitionHostMaps', 'hostMaps', 'hostMaps.hostId = :hostId', { hostId });

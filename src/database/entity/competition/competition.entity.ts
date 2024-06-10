@@ -7,6 +7,7 @@ import { ICompetition } from 'src/modules/competitions/domain/interface/competit
 import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from './required-additional-info.entity';
 import { CompetitionHostMapEntity } from './competition-host.entity';
+import { CompetitionPosterImageEntity } from './competition-poster-image.entity';
 
 /**
  * Competition Entity
@@ -70,6 +71,9 @@ export class CompetitionEntity {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: ICompetition['updatedAt'];
 
+  // ------------------------------------------------------------
+  // Relations
+  // ------------------------------------------------------------
   @OneToMany(() => DivisionEntity, (division) => division.competition, { cascade: true })
   divisions!: DivisionEntity[];
 
@@ -99,4 +103,9 @@ export class CompetitionEntity {
 
   @OneToMany(() => ApplicationEntity, (application) => application.competition)
   applications!: ApplicationEntity[];
+
+  @OneToMany(() => CompetitionPosterImageEntity, (competitionPosterImage) => competitionPosterImage.competition, {
+    cascade: true,
+  })
+  competitionPosterImages!: CompetitionPosterImageEntity[];
 }

@@ -6,6 +6,7 @@ import { IRequiredAdditionalInfo } from './required-addtional-info.interface';
 import { TId, TDateOrStringDate } from 'src/common/common-types';
 import { ICompetitionHostMap } from './competition-host-map.interface';
 import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ICompetitionPosterImage } from './competition-poster-image.interface';
 
 export interface ICompetition {
   /** UUID v7. */
@@ -94,6 +95,8 @@ export interface ICompetition {
 
   /** 대회 주최자 정보 매핑 테이블. */
   competitionHostMaps: ICompetitionHostMap[];
+
+  competitionPosterImages: ICompetitionPosterImage[];
 }
 
 export interface ICompetitionBasicInfo

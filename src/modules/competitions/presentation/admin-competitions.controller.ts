@@ -23,6 +23,8 @@ import {
   DeleteCompetitionRequiredAdditionalInfoRes,
   UpdateCompetitionRequiredAdditionalInfoRes,
   GetCompetitionRes,
+  CreateCompetitionPosterImageReqBody,
+  CreateCompetitionPosterImageRes,
 } from './competitions.controller.dto';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { IRequiredAdditionalInfo } from '../domain/interface/required-addtional-info.interface';
@@ -273,6 +275,31 @@ export class AdminCompetitionsController {
       await this.competitionsAppService.deleteCompetitionRequiredAdditionalInfo({
         competitionId,
         requiredAdditionalInfoId,
+      }),
+    );
+  }
+
+  /**
+   * a-5-12 createCompetitionPosterImage.
+   * - RoleLevel: ADMIN.
+   * - 대회 포스터 이미지를 생성 및 업데이트합니다.
+   * - 이미지가 존재할 경우, 기존 이미지는 soft delete 처리되고 새로운 이미지가 생성됩니다.
+   *
+   * @tag a-5 competitions
+   * @security bearer
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Post('/:competitionId/poster-image')
+  async createCompetitionPosterImage(
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
+    @TypedBody() body: CreateCompetitionPosterImageReqBody,
+  ): Promise<ResponseForm<CreateCompetitionPosterImageRes>> {
+    return createResponseForm(
+      await this.competitionsAppService.createCompetitionPosterImage({
+        competitionPosterImageCreateDto: {
+          competitionId,
+          imageId: body.imageId,
+        },
       }),
     );
   }
