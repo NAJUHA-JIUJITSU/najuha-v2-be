@@ -66,11 +66,19 @@ export interface IPostDetail
 export interface IPostCreateDto
   extends Pick<IPost, 'userId' | 'category'>,
     Pick<IPostSnapshotCreateDto, 'title' | 'body'> {
-  imageIds: IImage['id'][];
+  /**
+   * Image Ids.
+   * - 이미지는 최대 5개까지 등록 가능합니다.
+   */
+  imageIds: IImage['id'][] & tags.MaxItems<5>;
 }
 
 export interface IPostUpdateDto extends IPostSnapshotCreateDto {
-  imageIds: IImage['id'][];
+  /**
+   * Image Ids.
+   * - 이미지는 최대 5개까지 등록 가능합니다.
+   */
+  imageIds: IImage['id'][] & tags.MaxItems<5>;
 }
 
 export interface IFindPostsQueryOptions {

@@ -19,7 +19,8 @@ export interface IPostSnapshot {
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
 
-  postSnapshotImages: IPostSnapshotImage[];
+  /** PostSnapshotImages. */
+  postSnapshotImages: IPostSnapshotImage[] & tags.MaxItems<5>;
 }
 
 export interface IPostSnapshotCreateDto extends Pick<IPostSnapshot, 'postId' | 'title' | 'body'> {}
