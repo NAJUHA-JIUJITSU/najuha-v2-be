@@ -1,4 +1,4 @@
-import { IPostReport } from 'src/modules/posts/domain/interface/post-report.interface';
+import { IPostReport } from '../../../modules/posts/domain/interface/post-report.interface';
 import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { PostEntity } from './post.entity';

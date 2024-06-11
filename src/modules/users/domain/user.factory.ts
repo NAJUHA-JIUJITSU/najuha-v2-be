@@ -1,7 +1,7 @@
 import { uuidv7 } from 'uuidv7';
 import { ITemporaryUser, ITemporaryUserCreateDto, IUser } from './interface/user.interface';
 import { IUserProfileImage, IUserProfileImageCreateDto } from './interface/user-profile-image.interface';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { IImage } from '../../images/domain/interface/image.interface';
 
 export class UserFactory {
   creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {

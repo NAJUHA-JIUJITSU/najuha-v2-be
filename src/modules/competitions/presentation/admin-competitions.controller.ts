@@ -1,7 +1,7 @@
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
-import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard';
+import { ResponseForm, createResponseForm } from '../../../common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
 import {
   CreateCombinationDiscountSnapshotReqBody,

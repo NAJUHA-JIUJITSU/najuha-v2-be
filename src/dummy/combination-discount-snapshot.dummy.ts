@@ -1,4 +1,4 @@
-import { ICombinationDiscountRule } from 'src/modules/competitions/domain/interface/combination-discount-rule.interface';
+import { ICombinationDiscountRule } from '../modules/competitions/domain/interface/combination-discount-rule.interface';
 
 export const dummyCombinationDiscountRules: ICombinationDiscountRule[] = [
   // 2-item combinations

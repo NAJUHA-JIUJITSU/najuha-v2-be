@@ -9,9 +9,9 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { ICompetition } from '../../../modules/competitions/domain/interface/competition.interface';
 import { uuidv7 } from 'uuidv7';
-import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../../../modules/competitions/domain/interface/required-addtional-info.interface';
 
 /**
  * RequiredAdditionalInfo Entity

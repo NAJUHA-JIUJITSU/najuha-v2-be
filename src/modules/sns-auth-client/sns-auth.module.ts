@@ -1,8 +1,8 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { GoogleStrategy } from 'src/modules/sns-auth-client/google.strategy';
-import { KakaoStrategy } from 'src/modules/sns-auth-client/kakao.strategy';
-import { NaverStrategy } from 'src/modules/sns-auth-client/naver.strategy';
+import { GoogleStrategy } from './google.strategy';
+import { KakaoStrategy } from './kakao.strategy';
+import { NaverStrategy } from './naver.strategy';
 import { SnsAuthClient } from './sns-auth.client';
 
 @Module({

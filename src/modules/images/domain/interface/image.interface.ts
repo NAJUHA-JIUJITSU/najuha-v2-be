@@ -1,5 +1,5 @@
-import { TDateOrStringDate, TId } from 'src/common/common-types';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
+import { IUser } from '../../../users/domain/interface/user.interface';
 
 /**
  * Image Interface

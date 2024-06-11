@@ -1,14 +1,14 @@
-import { ApplicationFactory } from 'src/modules/applications/domain/application.factory';
-import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interface/additional-info.interface';
-import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
+import { ApplicationFactory } from '../modules/applications/domain/application.factory';
+import { IAdditionalInfoCreateDto } from '../modules/applications/domain/interface/additional-info.interface';
+import { IApplication } from '../modules/applications/domain/interface/application.interface';
 import {
   IPlayerSnapshot,
   IPlayerSnapshotCreateDto,
-} from 'src/modules/applications/domain/interface/player-snapshot.interface';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
-import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
-import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
+} from '../modules/applications/domain/interface/player-snapshot.interface';
+import { ICompetition } from '../modules/competitions/domain/interface/competition.interface';
+import { IDivision } from '../modules/competitions/domain/interface/division.interface';
+import { CompetitionModel } from '../modules/competitions/domain/model/competition.model';
+import { ITemporaryUser, IUser } from '../modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
 
 type IDummyParticipationDivisionUnit = [

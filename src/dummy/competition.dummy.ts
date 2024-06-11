@@ -1,20 +1,20 @@
-import { DateTime } from 'src/common/utils/date-time';
-import { DivisionFactory } from 'src/modules/competitions/domain/division.factory';
-import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
+import { DateTime } from '../common/utils/date-time';
+import { DivisionFactory } from '../modules/competitions/domain/division.factory';
+import { ICombinationDiscountSnapshot } from '../modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import {
   TCompetitionLocationFilter,
   TCompetitionStatus,
   ICompetition,
-} from 'src/modules/competitions/domain/interface/competition.interface';
-import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
-import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
+} from '../modules/competitions/domain/interface/competition.interface';
+import { IEarlybirdDiscountSnapshot } from '../modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
+import { IRequiredAdditionalInfo } from '../modules/competitions/domain/interface/required-addtional-info.interface';
 import typia, { tags } from 'typia';
 import { uuidv7 } from 'uuidv7';
 import { generateDummyDivisionPacks } from './division.dummy';
 import { dummyCombinationDiscountRules } from './combination-discount-snapshot.dummy';
-import { ICombinationDiscountRule } from 'src/modules/competitions/domain/interface/combination-discount-rule.interface';
-import { IDivisionPack } from 'src/modules/competitions/domain/interface/division-pack.interface';
-import appEnv from 'src/common/app-env';
+import { ICombinationDiscountRule } from '../modules/competitions/domain/interface/combination-discount-rule.interface';
+import { IDivisionPack } from '../modules/competitions/domain/interface/division-pack.interface';
+import appEnv from '../common/app-env';
 
 export class CompetitionDummyBuilder {
   private competition: ICompetition = {

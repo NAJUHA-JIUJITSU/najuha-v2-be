@@ -1,4 +1,4 @@
-import appEnv from 'src/common/app-env';
+import appEnv from '../../common/app-env';
 import { Injectable, Inject, OnModuleInit } from '@nestjs/common';
 import { S3Client, CreateBucketCommand, HeadBucketCommand, PutBucketPolicyCommand } from '@aws-sdk/client-s3';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';

@@ -1,4 +1,4 @@
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 import { ICombinationDiscountSnapshotCreateDto } from '../domain/interface/combination-discount-snapshot.interface';
 import {
   ICompetitionBasicInfo,
@@ -16,7 +16,7 @@ import {
   IRequiredAdditionalInfoCreateDto,
   IRequiredAdditionalInfoUpdateDto,
 } from '../domain/interface/required-addtional-info.interface';
-import { TPaginationParam, TPaginationRet } from 'src/common/common-types';
+import { TPaginationParam, TPaginationRet } from '../../../common/common-types';
 import { ICompetitionPosterImageCreateDto } from '../domain/interface/competition-poster-image.interface';
 
 // ---------------------------------------------------------------------------

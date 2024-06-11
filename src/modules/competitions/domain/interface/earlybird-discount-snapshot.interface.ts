@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
 export interface IEarlybirdDiscountSnapshot {
   /**  UUID v7. */

@@ -11,9 +11,9 @@ import {
 } from 'typeorm';
 import { ParticipationDivisionInfoSnapshotEntity } from './participation-division-info-snapshot.entity';
 import { ApplicationEntity } from './application.entity';
-import { IParticipationDivisionInfo } from 'src/modules/applications/domain/interface/participation-division-info.interface';
+import { IParticipationDivisionInfo } from '../../../modules/applications/domain/interface/participation-division-info.interface';
 import { ParticipationDivisionInfoPaymentEntity } from './participation-division-info-payment.entity';
-import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
+import { IApplication } from '../../../modules/applications/domain/interface/application.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

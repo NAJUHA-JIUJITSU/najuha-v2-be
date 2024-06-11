@@ -1,4 +1,4 @@
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 import {
   IComment,
   ICommentCreateDto,
@@ -11,7 +11,7 @@ import {
 } from '../domain/interface/comment.interface';
 import { ICommentLikeCreateDto } from '../domain/interface/comment-like.interface';
 import { ICommentReportCreateDto } from '../domain/interface/comment-report.interface';
-import { TPaginationParam, TPaginationRet } from 'src/common/common-types';
+import { TPaginationParam, TPaginationRet } from '../../../common/common-types';
 
 // ---------------------------------------------------------------------------
 // commentAppService Param

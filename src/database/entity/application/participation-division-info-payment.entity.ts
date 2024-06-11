@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
 import { DivisionEntity } from '../competition/division.entity';
-import { IParticipationDivisionInfoPayment } from 'src/modules/applications/domain/interface/participation-division-info-payment.interface';
+import { IParticipationDivisionInfoPayment } from '../../../modules/applications/domain/interface/participation-division-info-payment.interface';
 import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
-import { IParticipationDivisionInfo } from 'src/modules/applications/domain/interface/participation-division-info.interface';
+import { IParticipationDivisionInfo } from '../../../modules/applications/domain/interface/participation-division-info.interface';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { uuidv7 } from 'uuidv7';
 

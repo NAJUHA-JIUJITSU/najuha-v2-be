@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import appEnv from 'src/common/app-env';
-import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
+import appEnv from '../../../common/app-env';
+import { AuthTokenDomainService } from '../../auth/domain/auth-token.domain.service';
 import { IAdminAccessToken } from '../presentation/api-conventions.controller.dto';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 import { IComment } from './comment.interface';
-import { TDateOrStringDate, TId } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
 
 export interface ICommentSnapshot {
   /** UUID v7. */

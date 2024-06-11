@@ -1,7 +1,7 @@
-import { PolicyConsentEntity } from 'src//database/entity/user/policy-consent.entity';
+import { PolicyConsentEntity } from './policy-consent.entity';
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../../modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
 import { CompetitionHostMapEntity } from '../competition/competition-host.entity';
 import { CommentLikeEntity } from '../post/comment-like.entity';

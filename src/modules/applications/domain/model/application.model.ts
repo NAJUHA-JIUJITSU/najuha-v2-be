@@ -1,10 +1,10 @@
 import { IApplication } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { AdditionalInfoModel } from './additional-info.model';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
-import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
+import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 import { IExpectedPayment } from '../interface/expected-payment.interface';
 

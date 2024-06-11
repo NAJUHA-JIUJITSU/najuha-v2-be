@@ -4,13 +4,13 @@ import {
   GetApplicationRet,
   GetExpectedPaymentRet,
   UpdateReadyApplicationRet,
-} from 'src/modules/applications/application/applications.app.dto';
+} from '../application/applications.app.dto';
 import {
   IApplicationCreateDto,
   IApplicationQueryOptions,
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
-import { TPaginationParam } from 'src/common/common-types';
+import { TPaginationParam } from '../../../common/common-types';
 
 // ---------------------------------------------------------------------------
 // applicationsController Request

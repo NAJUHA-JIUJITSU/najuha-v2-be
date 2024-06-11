@@ -1,4 +1,4 @@
-import { ICommentLike } from 'src/modules/posts/domain/interface/comment-like.interface';
+import { ICommentLike } from '../../../modules/posts/domain/interface/comment-like.interface';
 import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { CommentEntity } from './comment.entity';

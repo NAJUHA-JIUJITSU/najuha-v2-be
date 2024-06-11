@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BusinessException, CommonErrors, RegisterErrors } from 'src/common/response/errorResponse';
-import { AuthTokenDomainService } from 'src/modules/auth/domain/auth-token.domain.service';
+import { BusinessException, CommonErrors, RegisterErrors } from '../../../common/response/errorResponse';
+import { AuthTokenDomainService } from '../../auth/domain/auth-token.domain.service';
 import { PhoneNumberAuthCodeDomainService } from '../domain/phone-number-auth-code.domain.service';
 import {
   ConfirmAuthCodeParam,
@@ -16,10 +16,10 @@ import {
 } from './register.app.dto';
 import { RegisterUserModel } from '../domain/model/register-user.model';
 import { assert } from 'typia';
-import { IRegisterUser, ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
-import { IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
-import { PolicyRepository } from 'src//database/custom-repository/policy.repository';
-import { UserRepository } from 'src//database/custom-repository/user.repository';
+import { IRegisterUser, ITemporaryUser, IUser } from '../../users/domain/interface/user.interface';
+import { IPolicyFindMany } from '../../policy/domain/interface/policy.interface';
+import { PolicyRepository } from '../../../database/custom-repository/policy.repository';
+import { UserRepository } from '../../../database/custom-repository/user.repository';
 import { PolicyConsentFactory } from '../domain/policy-conset.factory';
 
 @Injectable()

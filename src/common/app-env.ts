@@ -1,6 +1,6 @@
 import typia from 'typia';
 import * as dotenv from 'dotenv';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../modules/users/domain/interface/user.interface';
 import { min } from 'class-validator';
 
 const envPathMap = {

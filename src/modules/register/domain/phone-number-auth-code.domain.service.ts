@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { PhoneNumberAuthCode } from './interface/phone-number-auth-code.type';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 import typia from 'typia';
-import appEnv from 'src/common/app-env';
+import appEnv from '../../../common/app-env';
 
 @Injectable()
 export class PhoneNumberAuthCodeDomainService {

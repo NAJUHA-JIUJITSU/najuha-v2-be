@@ -3,9 +3,9 @@ import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
-import appEnv from 'src/common/app-env';
-import { IAuthTokenPayload } from 'src/modules/auth/domain/interface/auth-token-payload.interface';
+import { AuthErrors, BusinessException } from '../../common/response/errorResponse';
+import appEnv from '../../common/app-env';
+import { IAuthTokenPayload } from '../../modules/auth/domain/interface/auth-token-payload.interface';
 
 const ROLE_LEVEL_KEY = Symbol('roleLevel');
 

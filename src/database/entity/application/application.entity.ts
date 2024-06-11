@@ -15,7 +15,7 @@ import { PaymentSnapshotEntity } from './payment-snapshot.entity';
 import { CompetitionEntity } from '../competition/competition.entity';
 import { UserEntity } from '../user/user.entity';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
-import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
+import { IApplication } from '../../../modules/applications/domain/interface/application.interface';
 import { uuidv7 } from 'uuidv7';
 import { AdditionalInfoEntity } from './additional-info.entity';
 

@@ -1,6 +1,6 @@
-import { TDateOrStringDate, TId } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser } from './user.interface';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { IImage } from '../../../images/domain/interface/image.interface';
 
 export interface IUserProfileImage {
   /** UUID v7. */

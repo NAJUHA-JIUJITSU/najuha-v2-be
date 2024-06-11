@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMa
 import { DivisionEntity } from './division.entity';
 import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
 import { uuidv7 } from 'uuidv7';
-import { IPriceSnapshot } from 'src/modules/competitions/domain/interface/price-snapshot.interface';
+import { IPriceSnapshot } from '../../../modules/competitions/domain/interface/price-snapshot.interface';
 
 /**
  * PriceSnapshot Entity

@@ -1,7 +1,7 @@
 import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany, Index, PrimaryColumn } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
-import { ICombinationDiscountSnapshot } from 'src/modules/competitions/domain/interface/combination-discount-snapshot.interface';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { ICombinationDiscountSnapshot } from '../../../modules/competitions/domain/interface/combination-discount-snapshot.interface';
+import { ICompetition } from '../../../modules/competitions/domain/interface/competition.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

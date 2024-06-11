@@ -1,5 +1,5 @@
 import { AcquireAdminRoleRet, RefreshTokenRet, SnsLoginRet } from '../application/auth.app.dto';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 
 // ---------------------------------------------------------------------------
 // authController Request

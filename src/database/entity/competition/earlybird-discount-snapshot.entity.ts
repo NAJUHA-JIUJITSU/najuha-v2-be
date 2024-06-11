@@ -1,6 +1,6 @@
 import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany, Index, PrimaryColumn } from 'typeorm';
 import { CompetitionEntity } from './competition.entity';
-import { IEarlybirdDiscountSnapshot } from 'src/modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
+import { IEarlybirdDiscountSnapshot } from '../../../modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

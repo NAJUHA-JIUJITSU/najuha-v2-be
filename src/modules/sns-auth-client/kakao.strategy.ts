@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
-import { BusinessException, SnsAuthErrors } from 'src/common/response/errorResponse';
-import appEnv from 'src/common/app-env';
+import { BusinessException, SnsAuthErrors } from '../../common/response/errorResponse';
+import appEnv from '../../common/app-env';
 import { IKakaoUserData } from './interface/kakao-user-data.interface';
 import { ISnsAuthStrategy } from './interface/sns-auth.stratege.interface';
 import { ISnsAuthValidatedUserData } from './interface/validated-user-data.interface';

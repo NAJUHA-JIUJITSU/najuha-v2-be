@@ -10,7 +10,7 @@ import { ICommentReportCreateDto } from '../domain/interface/comment-report.inte
 import { ICommentCreateDto, ICommentReplyCreateDto, ICommentUpdateDto } from '../domain/interface/comment.interface';
 import { IPostReportCreateDto } from '../domain/interface/post-report.interface';
 import { IFindPostsQueryOptions, IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interface';
-import { TPaginationParam } from 'src/common/common-types';
+import { TPaginationParam } from '../../../common/common-types';
 
 // ---------------------------------------------------------------------------
 // postsController Request

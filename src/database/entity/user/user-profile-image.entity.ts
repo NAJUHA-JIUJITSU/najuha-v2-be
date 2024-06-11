@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToO
 import { uuidv7 } from 'uuidv7';
 import { UserEntity } from '../user/user.entity';
 import { ImageEntity } from '../image/image.entity';
-import { IUserProfileImage } from 'src/modules/users/domain/interface/user-profile-image.interface';
+import { IUserProfileImage } from '../../../modules/users/domain/interface/user-profile-image.interface';
 
 /**
  * UserProfileImage Entity

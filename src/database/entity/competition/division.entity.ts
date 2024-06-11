@@ -13,7 +13,7 @@ import {
 import { CompetitionEntity } from './competition.entity';
 import { PriceSnapshotEntity } from './price-snapshot.entity';
 import { ParticipationDivisionInfoSnapshotEntity } from '../application/participation-division-info-snapshot.entity';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { IDivision } from '../../../modules/competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

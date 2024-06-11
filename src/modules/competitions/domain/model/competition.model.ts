@@ -3,7 +3,7 @@ import {
   BusinessException,
   CommonErrors,
   CompetitionsErrors,
-} from 'src/common/response/errorResponse';
+} from '../../../../common/response/errorResponse';
 import { ICompetition, ICompetitionUpdateDto } from '../interface/competition.interface';
 import { CombinationDiscountSnapshotModel } from './combination-discount-snapshot.model';
 import { DivisionModel } from './division.model';
@@ -11,7 +11,7 @@ import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.en
 import { IDivision } from '../interface/division.interface';
 import { IPriceSnapshot } from '../interface/price-snapshot.interface';
 import { RequiredAdditionalInfoModel } from './required-addtional-info.model';
-import { IAdditionalInfoCreateDto } from 'src/modules/applications/domain/interface/additional-info.interface';
+import { IAdditionalInfoCreateDto } from '../../../applications/domain/interface/additional-info.interface';
 import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtional-info.interface';
 import { ICompetitionHostMap } from '../interface/competition-host-map.interface';
 import { CalculatePaymentService } from '../calculate-payment.domain.service';

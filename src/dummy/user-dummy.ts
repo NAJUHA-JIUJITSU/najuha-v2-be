@@ -1,4 +1,4 @@
-import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ITemporaryUser, IUser } from '../modules/users/domain/interface/user.interface';
 import { assert } from 'typia';
 import { uuidv7 } from 'uuidv7';
 

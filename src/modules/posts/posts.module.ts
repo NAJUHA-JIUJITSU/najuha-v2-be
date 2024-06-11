@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/database/database.module';
+import { DatabaseModule } from '../../database/database.module';
 import { UserPostsController } from './presentation/user-posts.controller';
 import { PostsAppService } from './application/posts.app.service';
 import { CommentsAppService } from './application/comments.app.service';

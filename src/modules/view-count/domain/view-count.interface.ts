@@ -1,4 +1,4 @@
-import { TId } from 'src/common/common-types';
+import { TId } from '../../../common/common-types';
 import { tags } from 'typia';
 
 export type TEntitytype = 'POST' | 'COMPETITION';

@@ -1,7 +1,7 @@
-import { TId, TDateOrStringDate } from 'src/common/common-types';
-import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
-import { Nullable } from 'src/common/utility-types';
-import { IPolicyConsent } from 'src/modules/register/domain/interface/policy-consent.interface';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
+import { BirthDate } from '../../../../common/typia-custom-tags/birth-date.tag';
+import { Nullable } from '../../../../common/utility-types';
+import { IPolicyConsent } from '../../../register/domain/interface/policy-consent.interface';
 import { tags } from 'typia';
 import { IUserProfileImage } from './user-profile-image.interface';
 

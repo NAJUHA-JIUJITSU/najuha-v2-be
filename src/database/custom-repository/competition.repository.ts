@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CompetitionEntity } from '../entity/competition/competition.entity';
-import { FindCompetitionsParam, GetCompetitionParam } from 'src/modules/competitions/application/competitions.app.dto';
+import { FindCompetitionsParam, GetCompetitionParam } from '../../modules/competitions/application/competitions.app.dto';
 
 @Injectable()
 export class CompetitionRepository extends Repository<CompetitionEntity> {

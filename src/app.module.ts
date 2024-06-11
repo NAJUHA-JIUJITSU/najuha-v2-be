@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from './infrastructure/jwt/jwt.module';
-import { LoggerModule } from 'src/infrastructure/logger/logger.module';
+import { LoggerModule } from './infrastructure/logger/logger.module';
 import { ApiConventionsModule } from './modules/api-conventions/api-conventions.module';
 import { FilterModule } from './infrastructure/filter/filter.module';
 import { GuardModule } from './infrastructure/guard/guard.module';
 import { MiddlewareModule } from './infrastructure/middleware/middleware.module';
-import { AuthModule } from 'src/modules/auth/auth.module';
-import { UsersModule } from 'src/modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 import { PolicyModule } from './modules/policy/policy.module';
 import { RegisterModule } from './modules/register/register.module';
 import { CompetitionsModule } from './modules/competitions/competitions.module';

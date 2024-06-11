@@ -5,10 +5,10 @@ import {
   IPostDetail,
   IPostUpdateDto,
 } from '../domain/interface/post.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 import { IPostLikeCreateDto } from '../domain/interface/post-like.interface';
 import { IPostReportCreateDto } from '../domain/interface/post-report.interface';
-import { TPaginationRet, TPaginationParam } from 'src/common/common-types';
+import { TPaginationRet, TPaginationParam } from '../../../common/common-types';
 
 // ---------------------------------------------------------------------------
 // postAppService Param

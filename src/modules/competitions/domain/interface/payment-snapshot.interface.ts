@@ -1,5 +1,5 @@
-import { TId, TDateOrStringDate } from 'src/common/common-types';
-import { IApplication } from 'src/modules/applications/domain/interface/application.interface';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
+import { IApplication } from '../../../applications/domain/interface/application.interface';
 import { tags } from 'typia';
 
 export interface IPaymentSnapshot {

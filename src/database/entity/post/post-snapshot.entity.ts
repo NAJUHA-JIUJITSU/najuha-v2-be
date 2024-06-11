@@ -1,4 +1,4 @@
-import { IPostSnapshot } from 'src/modules/posts/domain/interface/post-snapshot.interface';
+import { IPostSnapshot } from '../../../modules/posts/domain/interface/post-snapshot.interface';
 import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { PostEntity } from './post.entity';

@@ -14,16 +14,16 @@ import {
   UpdateReadyApplicationParam,
   UpdateReadyApplicationRet,
 } from './applications.app.dto';
-import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
+import { CompetitionModel } from '../../competitions/domain/model/competition.model';
 import { assert } from 'typia';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { ApplicationsErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
+import { ApplicationsErrors, BusinessException, CommonErrors } from '../../../common/response/errorResponse';
+import { ICompetition } from '../../competitions/domain/interface/competition.interface';
 import { IApplication } from '../domain/interface/application.interface';
-import { UserModel } from 'src/modules/users/domain/model/user.model';
-import { UserRepository } from 'src//database/custom-repository/user.repository';
-import { ApplicationRepository } from 'src//database/custom-repository/application.repository';
-import { CompetitionRepository } from 'src//database/custom-repository/competition.repository';
+import { UserModel } from '../../users/domain/model/user.model';
+import { UserRepository } from '../../../database/custom-repository/user.repository';
+import { ApplicationRepository } from '../../../database/custom-repository/application.repository';
+import { CompetitionRepository } from '../../../database/custom-repository/competition.repository';
 import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
 import { ApplicationModel } from '../domain/model/application.model';

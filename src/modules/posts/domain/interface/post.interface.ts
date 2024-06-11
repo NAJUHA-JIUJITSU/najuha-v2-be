@@ -1,10 +1,10 @@
-import { TDateOrStringDate, TId } from 'src/common/common-types';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
 import { IPostSnapshot, IPostSnapshotCreateDto } from './post-snapshot.interface';
 import { IPostLike } from './post-like.interface';
 import { IPostReport } from './post-report.interface';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { IImage } from '../../../images/domain/interface/image.interface';
 
 export interface IPost {
   /** UUID v7. */

@@ -1,4 +1,4 @@
-import { IPost } from 'src/modules/posts/domain/interface/post.interface';
+import { IPost } from '../../../modules/posts/domain/interface/post.interface';
 import {
   Entity,
   Column,

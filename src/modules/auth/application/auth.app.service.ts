@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { AuthErrors, BusinessException, CommonErrors } from 'src/common/response/errorResponse';
-import { SnsAuthClient } from 'src/modules/sns-auth-client/sns-auth.client';
+import { AuthErrors, BusinessException, CommonErrors } from '../../../common/response/errorResponse';
+import { SnsAuthClient } from '../../sns-auth-client/sns-auth.client';
 import { AuthTokenDomainService } from '../domain/auth-token.domain.service';
-import appEnv from 'src/common/app-env';
+import appEnv from '../../../common/app-env';
 import {
   AcquireAdminRoleParam,
   AcquireAdminRoleRet,
@@ -11,10 +11,10 @@ import {
   SnsLoginParam,
   SnsLoginRet,
 } from './auth.app.dto';
-import { UserFactory } from 'src/modules/users/domain/user.factory';
+import { UserFactory } from '../../users/domain/user.factory';
 import { assert } from 'typia';
-import { ITemporaryUser, IUser } from 'src/modules/users/domain/interface/user.interface';
-import { UserRepository } from 'src//database/custom-repository/user.repository';
+import { ITemporaryUser, IUser } from '../../users/domain/interface/user.interface';
+import { UserRepository } from '../../../database/custom-repository/user.repository';
 
 @Injectable()
 export class AuthAppService {

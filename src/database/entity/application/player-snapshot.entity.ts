@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
-import { IPlayerSnapshot } from 'src/modules/applications/domain/interface/player-snapshot.interface';
+import { IPlayerSnapshot } from '../../../modules/applications/domain/interface/player-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

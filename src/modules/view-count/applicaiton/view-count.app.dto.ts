@@ -1,4 +1,4 @@
-import { TId } from 'src/common/common-types';
+import { TId } from '../../../common/common-types';
 import { TEntitytype, TUserCredential } from '../domain/view-count.interface';
 
 // ---------------------------------------------------------------------------

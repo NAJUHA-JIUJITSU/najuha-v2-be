@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IRegisterUser } from 'src/modules/users/domain/interface/user.interface';
-import { IPolicy, IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
+import { IRegisterUser } from '../../users/domain/interface/user.interface';
+import { IPolicy, IPolicyFindMany } from '../../policy/domain/interface/policy.interface';
 import { uuidv7 } from 'uuidv7';
 import { IPolicyConsent } from './interface/policy-consent.interface';
 

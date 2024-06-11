@@ -1,10 +1,10 @@
-import { TDateOrStringDate, TId } from 'src/common/common-types';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { IPost } from './post.interface';
 import { ICommentSnapshot } from './comment-snapshot.interface';
 import { ICommentLike } from './comment-like.interface';
 import { ICommentReport } from './comment-report.interface';
-import { NotNull } from 'src/common/utility-types';
+import { NotNull } from '../../../../common/utility-types';
 
 export interface IComment {
   /** UUID v7. */

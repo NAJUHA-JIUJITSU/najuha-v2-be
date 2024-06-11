@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { PostEntity } from '../entity/post/post.entity';
-import { FindPostsParam } from 'src/modules/posts/application/posts.app.dto';
-import { IPost } from 'src/modules/posts/domain/interface/post.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
+import { FindPostsParam } from '../../modules/posts/application/posts.app.dto';
+import { IPost } from '../../modules/posts/domain/interface/post.interface';
+import { IUser } from '../../modules/users/domain/interface/user.interface';
+import { BusinessException, CommonErrors } from '../../common/response/errorResponse';
 
 @Injectable()
 export class PostRepository extends Repository<PostEntity> {

@@ -1,14 +1,14 @@
 import { TypedBody, TypedException, TypedParam, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard';
+import { ResponseForm, createResponseForm } from '../../../common/response/response';
 import { RegisterAppService } from '../application/register.app.service';
 import {
   ENTITY_NOT_FOUND,
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
-} from 'src/common/response/errorResponse';
+} from '../../../common/response/errorResponse';
 import {
   ConfirmAuthCodeReqBody,
   ConfirmAuthCodeRes,
@@ -19,7 +19,7 @@ import {
   SendPhoneNumberAuthCodeReqBody,
   SendPhoneNumberAuthCodeRes,
 } from './register.controller.dto';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 
 @Controller('user/register')
 export class UserRegisterController {

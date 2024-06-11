@@ -1,8 +1,8 @@
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { IDivision } from '../../../competitions/domain/interface/division.interface';
 import { IApplication } from './application.interface';
 import { IParticipationDivisionInfoSnapshot } from './participation-division-info-snapshot.interface';
 import { tags } from 'typia';
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
 export interface IParticipationDivisionInfo {
   /** UUID v7. */

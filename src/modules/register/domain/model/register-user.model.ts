@@ -1,6 +1,6 @@
-import { BusinessException, RegisterErrors } from 'src/common/response/errorResponse';
-import { IPolicyFindMany } from 'src/modules/policy/domain/interface/policy.interface';
-import { IRegisterUser, IUserRgistertDto } from 'src/modules/users/domain/interface/user.interface';
+import { BusinessException, RegisterErrors } from '../../../../common/response/errorResponse';
+import { IPolicyFindMany } from '../../../policy/domain/interface/policy.interface';
+import { IRegisterUser, IUserRgistertDto } from '../../../users/domain/interface/user.interface';
 import { IPolicyConsent } from '../interface/policy-consent.interface';
 
 export class RegisterUserModel {

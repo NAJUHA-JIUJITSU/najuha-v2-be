@@ -1,7 +1,7 @@
-import { BirthDate } from 'src/common/typia-custom-tags/birth-date.tag';
+import { BirthDate } from '../../../../common/typia-custom-tags/birth-date.tag';
 import { IApplication } from './application.interface';
 import { tags } from 'typia';
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
 export interface IPlayerSnapshot {
   /** UUID v7. */

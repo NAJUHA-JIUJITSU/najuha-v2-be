@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 import { IPost } from './post.interface';
-import { TDateOrStringDate, TId } from 'src/common/common-types';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IPostSnapshotImage } from './post-snapshot-image.interface';
 
 export interface IPostSnapshot {

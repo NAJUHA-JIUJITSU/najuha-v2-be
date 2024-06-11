@@ -17,15 +17,15 @@ import {
   FindCommentsAndRepliesParam,
 } from './comments.app.dto';
 import { assert } from 'typia';
-import { BusinessException, CommonErrors, PostsErrors } from 'src/common/response/errorResponse';
+import { BusinessException, CommonErrors, PostsErrors } from '../../../common/response/errorResponse';
 import { IComment } from '../domain/interface/comment.interface';
-import { UserRepository } from 'src/database/custom-repository/user.repository';
-import { PostRepository } from 'src/database/custom-repository/post.repository';
-import { CommentRepository } from 'src/database/custom-repository/comment.repository';
+import { UserRepository } from '../../../database/custom-repository/user.repository';
+import { PostRepository } from '../../../database/custom-repository/post.repository';
+import { CommentRepository } from '../../../database/custom-repository/comment.repository';
 import { CommentModel } from '../domain/model/comment.model';
 import { CommentFactory } from '../domain/comment.factory';
-import { CommentLikeRepository } from 'src/database/custom-repository/comment-like.repository';
-import { CommentReportRepository } from 'src/database/custom-repository/comment-report.repository';
+import { CommentLikeRepository } from '../../../database/custom-repository/comment-like.repository';
+import { CommentReportRepository } from '../../../database/custom-repository/comment-report.repository';
 
 @Injectable()
 export class CommentsAppService {

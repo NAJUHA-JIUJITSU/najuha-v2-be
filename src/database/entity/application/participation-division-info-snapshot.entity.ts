@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { DivisionEntity } from '../competition/division.entity';
-import { IParticipationDivisionInfoSnapshot } from 'src/modules/applications/domain/interface/participation-division-info-snapshot.interface';
+import { IParticipationDivisionInfoSnapshot } from '../../../modules/applications/domain/interface/participation-division-info-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

@@ -1,11 +1,11 @@
 import { TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard';
+import { ResponseForm, createResponseForm } from '../../../common/response/response';
 import { CompetitionsAppService } from '../application/competitions.app.service';
 import { ICompetition } from '../domain/interface/competition.interface';
 import { FindCompetitionsReqQuery, FindCompetitionsRes, GetCompetitionRes } from './competitions.controller.dto';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 
 @Controller('host/competitions')
 export class HostCompetitionsController {

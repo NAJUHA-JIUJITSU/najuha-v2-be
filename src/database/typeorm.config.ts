@@ -1,5 +1,5 @@
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import appEnv from 'src/common/app-env';
+import appEnv from '../common/app-env';
 
 export const typeOrmConfig = {
   type: appEnv.dbType,

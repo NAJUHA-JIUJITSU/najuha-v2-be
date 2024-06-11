@@ -1,4 +1,4 @@
-import { ICommentSnapshot } from 'src/modules/posts/domain/interface/comment-snapshot.interface';
+import { ICommentSnapshot } from '../../../modules/posts/domain/interface/comment-snapshot.interface';
 import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { CommentEntity } from './comment.entity';

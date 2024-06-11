@@ -1,4 +1,4 @@
-import { TPresignedPost } from 'src/infrastructure/bucket/bucket.interface';
+import { TPresignedPost } from '../../../infrastructure/bucket/bucket.interface';
 import { IImage, IImageCreateDto } from '../domain/interface/image.interface';
 
 // ---------------------------------------------------------------------------

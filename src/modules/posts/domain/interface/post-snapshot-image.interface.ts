@@ -1,5 +1,5 @@
-import { TDateOrStringDate, TId } from 'src/common/common-types';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
+import { IImage } from '../../../images/domain/interface/image.interface';
 import { IPostSnapshot } from './post-snapshot.interface';
 
 export interface IPostSnapshotImage {

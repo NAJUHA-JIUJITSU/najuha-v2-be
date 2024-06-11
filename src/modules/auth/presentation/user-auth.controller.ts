@@ -1,6 +1,6 @@
 import { TypedBody, TypedException, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { AuthAppService } from 'src/modules/auth/application/auth.app.service';
+import { AuthAppService } from '../application/auth.app.service';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -9,9 +9,9 @@ import {
   SNS_AUTH_KAKAO_LOGIN_FAIL,
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SNS_AUTH_NOT_SUPPORTED_SNS_PROVIDER,
-} from 'src/common/response/errorResponse';
+} from '../../../common/response/errorResponse';
 import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { ResponseForm, createResponseForm } from '../../../common/response/response';
 import { RefreshTokenReqBody, SnsLoginReqBody, SnsLoginRes } from './auth.controller.dto';
 import { AcquireAdminRoleRet, RefreshTokenRet } from '../application/auth.app.dto';
 

@@ -4,7 +4,7 @@ import { IPost, IPostCreateDto } from './interface/post.interface';
 import { IPostSnapshot, IPostSnapshotCreateDto } from './interface/post-snapshot.interface';
 import { IPostLike, IPostLikeCreateDto } from './interface/post-like.interface';
 import { IPostReport, IPostReportCreateDto } from './interface/post-report.interface';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { IImage } from '../../images/domain/interface/image.interface';
 import { IPostSnapshotImage, IPostSnapshotImageCreateDto } from './interface/post-snapshot-image.interface';
 
 @Injectable()

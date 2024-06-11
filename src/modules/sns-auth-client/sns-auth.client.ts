@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BusinessException, SnsAuthErrors } from 'src/common/response/errorResponse';
-import { GoogleStrategy } from 'src/modules/sns-auth-client/google.strategy';
-import { KakaoStrategy } from 'src/modules/sns-auth-client/kakao.strategy';
-import { NaverStrategy } from 'src/modules/sns-auth-client/naver.strategy';
+import { BusinessException, SnsAuthErrors } from '../../common/response/errorResponse';
+import { GoogleStrategy } from './google.strategy';
+import { KakaoStrategy } from './kakao.strategy';
+import { NaverStrategy } from './naver.strategy';
 import { SnsLoginParam } from '../auth/application/auth.app.dto';
 import { ISnsAuthValidatedUserData } from './interface/validated-user-data.interface';
 

@@ -1,6 +1,6 @@
 import { Entity, Column, CreateDateColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { PolicyConsentEntity } from '../user/policy-consent.entity';
-import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { IPolicy } from '../../../modules/policy/domain/interface/policy.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

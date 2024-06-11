@@ -28,12 +28,6 @@ erDiagram
     text content
     timestamptz createdAt
   }
-  policy_consent {
-    uuid id PK
-    timestamptz createdAt
-    uuid userId FK
-    uuid policyId FK
-  }
   user_profile_image {
     uuid id PK
     uuid userId FK
@@ -61,16 +55,21 @@ erDiagram
     varchar gender "nullable"
     varchar birth "nullable"
     varchar belt "nullable"
-    varchar profileImageUrlKey "nullable"
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
   }
-  policy_consent }o--|| user: user
-  policy_consent }o--|| policy: policy
+  policy_consent {
+    uuid id PK
+    timestamptz createdAt
+    uuid userId FK
+    uuid policyId FK
+  }
   user_profile_image }o--|| user: user
   user_profile_image }o--|| image: image
   image }o--|| user: user
+  policy_consent }o--|| user: user
+  policy_consent }o--|| policy: policy
 ```
 
 ### `policy`
@@ -87,19 +86,6 @@ Policy Entity
   - `title`
   - `content`
   - `createdAt`
-
-
-### `policy_consent`
-
-PolicyConsent Entity   
-@namespace User
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `userId`
-  - `policyId`: - policyId.
 
 
 ### `user_profile_image`
@@ -135,10 +121,22 @@ User Entity
   - `gender`
   - `birth`
   - `belt`
-  - `profileImageUrlKey`
   - `status`
   - `createdAt`
   - `updatedAt`
+
+
+### `policy_consent`
+
+PolicyConsent Entity   
+@namespace User
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `userId`
+  - `policyId`: - policyId.
 
 
 ## Application
@@ -436,7 +434,6 @@ erDiagram
     text description
     boolean isPartnership
     integer viewCount
-    varchar posterImgUrlKey "nullable"
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
@@ -592,7 +589,6 @@ Competition Entity
   - `description`
   - `isPartnership`
   - `viewCount`
-  - `posterImgUrlKey`
   - `status`
   - `createdAt`
   - `updatedAt`

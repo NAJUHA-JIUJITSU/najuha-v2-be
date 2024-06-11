@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { TypedParam, TypedRoute } from '@nestia/core';
 import { PolicyAppService } from '../application/policy.app.service';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
-import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
+import { ResponseForm, createResponseForm } from '../../../common/response/response';
+import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard';
 import { IPolicy } from '../domain/interface/policy.interface';
 import { FindAllTypesOfLatestPoliciesRes, GetPolicyRes } from './policy.controller.dto';
 

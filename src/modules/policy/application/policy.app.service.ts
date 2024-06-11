@@ -9,8 +9,8 @@ import {
   FindPolicyParam,
   GetPolicyRet,
 } from './policy.app.dto';
-import { PolicyRepository } from 'src//database/custom-repository/policy.repository';
-import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
+import { PolicyRepository } from '../../../database/custom-repository/policy.repository';
+import { BusinessException, CommonErrors } from '../../../common/response/errorResponse';
 
 @Injectable()
 export class PolicyAppService {

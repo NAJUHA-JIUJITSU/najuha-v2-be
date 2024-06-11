@@ -13,10 +13,10 @@ import {
 } from './users.app.dtos';
 import { assert } from 'typia';
 import { IUser } from '../domain/interface/user.interface';
-import { UserRepository } from 'src//database/custom-repository/user.repository';
-import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
-import { ImageRepository } from 'src/database/custom-repository/image.repository';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { UserRepository } from '../../../database/custom-repository/user.repository';
+import { BusinessException, CommonErrors } from '../../../common/response/errorResponse';
+import { ImageRepository } from '../../../database/custom-repository/image.repository';
+import { IImage } from '../../images/domain/interface/image.interface';
 import { UserModel } from '../domain/model/user.model';
 
 @Injectable()

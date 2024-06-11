@@ -1,7 +1,7 @@
 import { tags } from 'typia';
 import { IApplication } from './application.interface';
-import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { IRequiredAdditionalInfo } from '../../../competitions/domain/interface/required-addtional-info.interface';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
 export interface IAdditionalInfo {
   /** UUID v7. */

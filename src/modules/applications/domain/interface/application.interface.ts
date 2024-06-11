@@ -1,5 +1,5 @@
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { ICompetition } from '../../../competitions/domain/interface/competition.interface';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './player-snapshot.interface';
 import {
   IParticipationDivisionInfo,
@@ -7,9 +7,9 @@ import {
 } from './participation-division-info.interface';
 import { tags } from 'typia';
 import { IAdditionalInfo, IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from './additional-info.interface';
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { IExpectedPayment } from './expected-payment.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { IDivision } from '../../../competitions/domain/interface/division.interface';
 
 export interface IApplication {
   /** UUID v7. */

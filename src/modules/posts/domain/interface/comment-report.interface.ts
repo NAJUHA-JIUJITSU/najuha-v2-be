@@ -1,7 +1,7 @@
 import { tags } from 'typia';
 import { IComment } from './comment.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
-import { TDateOrStringDate, TId } from 'src/common/common-types';
+import { IUser } from '../../../users/domain/interface/user.interface';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
 
 export interface ICommentReport {
   /** UUID v7. */

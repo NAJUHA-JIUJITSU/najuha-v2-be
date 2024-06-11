@@ -3,9 +3,9 @@ import { ICombinationDiscountSnapshot } from './combination-discount-snapshot.in
 import { IDivision } from './division.interface';
 import { IEarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.interface';
 import { IRequiredAdditionalInfo } from './required-addtional-info.interface';
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { ICompetitionHostMap } from './competition-host-map.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { ICompetitionPosterImage } from './competition-poster-image.interface';
 
 export interface ICompetition {

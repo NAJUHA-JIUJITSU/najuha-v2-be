@@ -1,4 +1,4 @@
-import { IPostLike } from 'src/modules/posts/domain/interface/post-like.interface';
+import { IPostLike } from '../../../modules/posts/domain/interface/post-like.interface';
 import { Entity, Column, CreateDateColumn, PrimaryColumn, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { PostEntity } from './post.entity';

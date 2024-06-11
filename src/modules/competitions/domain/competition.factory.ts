@@ -17,7 +17,7 @@ import {
   ICompetitionPosterImage,
   ICompetitionPosterImageCreateDto,
 } from './interface/competition-poster-image.interface';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { IImage } from '../../images/domain/interface/image.interface';
 
 @Injectable()
 export class CompetitionFactory {

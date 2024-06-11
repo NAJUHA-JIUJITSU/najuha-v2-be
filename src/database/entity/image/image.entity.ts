@@ -1,4 +1,4 @@
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { IImage } from '../../../modules/images/domain/interface/image.interface';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { UserProfileImageEntity } from '../user/user-profile-image.entity';

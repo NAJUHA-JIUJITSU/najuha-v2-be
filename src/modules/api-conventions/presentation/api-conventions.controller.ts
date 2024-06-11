@@ -5,8 +5,8 @@ import {
   AUTH_ACCESS_TOKEN_UNAUTHORIZED,
   AUTH_LEVEL_FORBIDDEN,
   AllErrorTypes,
-} from 'src/common/response/errorResponse';
-import { RoleLevel, RoleLevels } from 'src/infrastructure/guard/role.guard';
+} from '../../../common/response/errorResponse';
+import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
 import { ApiConventionsAppService } from '../application/api-conventions.app.service';
 import { CreateAdminAccessTokenRes } from './api-conventions.controller.dto';
 import typia from 'typia';

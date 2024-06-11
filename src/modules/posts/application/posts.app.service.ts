@@ -16,15 +16,15 @@ import {
   DeletePostReportParam,
 } from './posts.app.dto';
 import { assert } from 'typia';
-import { BusinessException, CommonErrors, PostsErrors } from 'src/common/response/errorResponse';
+import { BusinessException, CommonErrors, PostsErrors } from '../../../common/response/errorResponse';
 import { IPost } from '../domain/interface/post.interface';
-import { UserRepository } from 'src/database/custom-repository/user.repository';
-import { PostRepository } from 'src/database/custom-repository/post.repository';
+import { UserRepository } from '../../../database/custom-repository/user.repository';
+import { PostRepository } from '../../../database/custom-repository/post.repository';
 import { PostModel } from '../domain/model/post.model';
 import { IPostLike } from '../domain/interface/post-like.interface';
-import { PostLikeRepository } from 'src/database/custom-repository/post-like.repository';
-import { PostReportRepository } from 'src/database/custom-repository/post-report.repository';
-import { ImageRepository } from 'src/database/custom-repository/image.repository';
+import { PostLikeRepository } from '../../../database/custom-repository/post-like.repository';
+import { PostReportRepository } from '../../../database/custom-repository/post-report.repository';
+import { ImageRepository } from '../../../database/custom-repository/image.repository';
 import { In } from 'typeorm';
 
 @Injectable()

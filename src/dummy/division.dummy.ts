@@ -1,5 +1,5 @@
-import { IDivisionPack } from 'src/modules/competitions/domain/interface/division-pack.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { IDivisionPack } from '../modules/competitions/domain/interface/division-pack.interface';
+import { IDivision } from '../modules/competitions/domain/interface/division.interface';
 import { assert } from 'typia';
 
 const CURRENT_YEAR = new Date().getFullYear();

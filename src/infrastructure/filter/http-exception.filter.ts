@@ -1,7 +1,7 @@
 import { ExceptionFilter, Catch, ArgumentsHost, Inject, HttpStatus, HttpException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { BusinessException, CommonErrors, INTERNAL_SERVER_ERROR } from 'src/common/response/errorResponse';
+import { BusinessException, CommonErrors, INTERNAL_SERVER_ERROR } from '../../common/response/errorResponse';
 import typia from 'typia';
 import { Logger } from 'winston';
 

@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
 /*
  * 대회신청시 추가 정보 입력 규칙.

@@ -1,7 +1,7 @@
 import { IParticipationDivisionInfoSnapshot } from '../interface/participation-division-info-snapshot.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { IDivision } from '../../../competitions/domain/interface/division.interface';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
-import { DivisionModel } from 'src/modules/competitions/domain/model/division.model';
+import { DivisionModel } from '../../../competitions/domain/model/division.model';
 
 export class ParticipationDivisionInfoSnapshotModel {
   public readonly id: IParticipationDivisionInfoSnapshot['id'];

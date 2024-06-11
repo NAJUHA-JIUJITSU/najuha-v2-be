@@ -1,9 +1,9 @@
 import * as cors from 'cors';
 import { NestFactory } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { AppModule } from 'src/app.module';
-import { SwaggerSetting } from 'src/swagger-setting';
-import appEnv from 'src/common/app-env';
+import { AppModule } from './app.module';
+import { SwaggerSetting } from './swagger-setting';
+import appEnv from './common/app-env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

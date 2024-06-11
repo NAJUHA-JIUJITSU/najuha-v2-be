@@ -1,4 +1,4 @@
-import { ICommentReport } from 'src/modules/posts/domain/interface/comment-report.interface';
+import { ICommentReport } from '../../../modules/posts/domain/interface/comment-report.interface';
 import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, Unique, PrimaryColumn } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { CommentEntity } from './comment.entity';

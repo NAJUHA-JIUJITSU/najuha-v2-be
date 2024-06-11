@@ -1,9 +1,9 @@
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { IDivision } from '../../../competitions/domain/interface/division.interface';
 import { IApplication } from '../interface/application.interface';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
-import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
+import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
 
 export class ParticipationDivisionInfoModel {
   public readonly id: IParticipationDivisionInfo['id'];

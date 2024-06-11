@@ -3,7 +3,7 @@ import { DivisionEntity } from './division.entity';
 import { EarlybirdDiscountSnapshotEntity } from './earlybird-discount-snapshot.entity';
 import { CombinationDiscountSnapshotEntity } from './combination-discount-snapshot.entity';
 import { ApplicationEntity } from '../application/application.entity';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
+import { ICompetition } from '../../../modules/competitions/domain/interface/competition.interface';
 import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from './required-additional-info.entity';
 import { CompetitionHostMapEntity } from './competition-host.entity';

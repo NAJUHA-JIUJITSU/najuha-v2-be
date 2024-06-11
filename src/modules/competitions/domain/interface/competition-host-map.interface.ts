@@ -1,5 +1,5 @@
-import { TId } from 'src/common/common-types';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { TId } from '../../../../common/common-types';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { ICompetition } from './competition.interface';
 
 /** 대회 주최자 정보 매핑 테이블. */

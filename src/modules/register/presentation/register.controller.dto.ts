@@ -1,5 +1,5 @@
-import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IPolicy } from '../../policy/domain/interface/policy.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 import {
   ConfirmAuthCodeRet,
   GetTemporaryUserRet,

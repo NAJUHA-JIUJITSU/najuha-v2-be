@@ -1,4 +1,5 @@
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { TPaginationParam, TPaginationRet } from '../../../common/common-types';
+import { IUser } from '../../users/domain/interface/user.interface';
 import {
   IApplication,
   IApplicationCreateDto,
@@ -7,7 +8,6 @@ import {
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
-import { TPaginationParam, TPaginationRet } from 'src/common/common-types';
 
 // ---------------------------------------------------------------------------
 // applicationsAppService Param

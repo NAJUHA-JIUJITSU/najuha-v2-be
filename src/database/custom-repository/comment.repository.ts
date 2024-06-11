@@ -5,8 +5,8 @@ import {
   IFindCommentsAndRepliesQueryOptions,
   IFindCommentsQueryOptions,
   IFindRepliesQueryOptions,
-} from 'src/modules/posts/domain/interface/comment.interface';
-import { TPaginationParam } from 'src/common/common-types';
+} from '../../modules/posts/domain/interface/comment.interface';
+import { TPaginationParam } from '../../common/common-types';
 
 @Injectable()
 export class CommentRepository extends Repository<CommentEntity> {

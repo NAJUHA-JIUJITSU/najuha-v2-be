@@ -1,6 +1,6 @@
 import { IPost } from './post.interface';
-import { TDateOrStringDate, TId } from 'src/common/common-types';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { TDateOrStringDate, TId } from '../../../../common/common-types';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
 
 export interface IPostReport {

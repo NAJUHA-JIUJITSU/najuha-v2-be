@@ -1,4 +1,4 @@
-import { TId, TDateOrStringDate } from 'src/common/common-types';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { tags } from 'typia';
 
 /**

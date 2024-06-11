@@ -1,4 +1,4 @@
-import { IAdditionalInfo } from 'src/modules/applications/domain/interface/additional-info.interface';
+import { IAdditionalInfo } from '../../../modules/applications/domain/interface/additional-info.interface';
 import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { uuidv7 } from 'uuidv7';

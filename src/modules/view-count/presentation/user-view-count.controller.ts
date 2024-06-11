@@ -1,9 +1,9 @@
 import { Controller, Ip, Req } from '@nestjs/common';
 import { ViewCountAppService } from '../applicaiton/view-count.app.service';
 import { TypedParam, TypedRoute } from '@nestia/core';
-import { RoleLevel, RoleLevels } from 'src/infrastructure/guard/role.guard';
-import { TId } from 'src/common/common-types';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
+import { TId } from '../../../common/common-types';
+import { ResponseForm, createResponseForm } from '../../../common/response/response';
 
 @Controller('user/view-count')
 export class UserViewCountController {

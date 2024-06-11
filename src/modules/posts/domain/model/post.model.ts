@@ -1,9 +1,9 @@
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { IPostSnapshot } from '../interface/post-snapshot.interface';
 import { IPost } from '../interface/post.interface';
 import { IPostLike } from '../interface/post-like.interface';
 import { IPostReport } from '../interface/post-report.interface';
-import { BusinessException, PostsErrors } from 'src/common/response/errorResponse';
+import { BusinessException, PostsErrors } from '../../../../common/response/errorResponse';
 
 export class PostModel {
   private readonly id: IPost['id'];

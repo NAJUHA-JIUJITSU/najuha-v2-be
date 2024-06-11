@@ -1,7 +1,7 @@
-import { ITemporaryUser, IUser, IUserRgistertDto } from 'src/modules/users/domain/interface/user.interface';
+import { ITemporaryUser, IUser, IUserRgistertDto } from '../../users/domain/interface/user.interface';
 import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.type';
-import { IAuthTokens } from 'src/modules/auth/domain/interface/auth-tokens.interface';
-import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { IAuthTokens } from '../../auth/domain/interface/auth-tokens.interface';
+import { IPolicy } from '../../policy/domain/interface/policy.interface';
 
 // ---------------------------------------------------------------------------
 // registerAppService Param

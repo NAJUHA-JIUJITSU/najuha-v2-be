@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { TEntitytype, TUserCredential } from './view-count.interface';
-import { TId } from 'src/common/common-types';
-import appEnv from 'src/common/app-env';
+import { TId } from '../../../common/common-types';
+import appEnv from '../../../common/app-env';
 
 @Injectable()
 export class ViewCountDomainService {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IApplication, IApplicationCreateDto } from './interface/application.interface';
-import { IDivision } from 'src/modules/competitions/domain/interface/division.interface';
+import { IDivision } from '../../competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
 import {
   IParticipationDivisionInfo,
@@ -9,7 +9,7 @@ import {
 import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
 import { IParticipationDivisionInfoSnapshot } from './interface/participation-division-info-snapshot.interface';
 import { IAdditionalInfo, IAdditionalInfoCreateDto } from './interface/additional-info.interface';
-import { CompetitionModel } from 'src/modules/competitions/domain/model/competition.model';
+import { CompetitionModel } from '../../competitions/domain/model/competition.model';
 
 @Injectable()
 export class ApplicationFactory {

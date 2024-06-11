@@ -2,7 +2,7 @@ import { Entity, Column, ManyToOne, JoinColumn, Index, PrimaryColumn } from 'typ
 import { CompetitionEntity } from './competition.entity';
 import { uuidv7 } from 'uuidv7';
 import { UserEntity } from '../user/user.entity';
-import { ICompetitionHostMap } from 'src/modules/competitions/domain/interface/competition-host-map.interface';
+import { ICompetitionHostMap } from '../../../modules/competitions/domain/interface/competition-host-map.interface';
 
 /**
  * Competition Host Map Entity

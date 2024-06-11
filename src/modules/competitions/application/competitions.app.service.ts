@@ -27,9 +27,9 @@ import {
   DeleteCompetitionPosterImageParam,
 } from './competitions.app.dto';
 import { CompetitionModel } from '../domain/model/competition.model';
-import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
+import { BusinessException, CommonErrors } from '../../../common/response/errorResponse';
 import { CompetitionFactory } from '../domain/competition.factory';
-import { CompetitionRepository } from 'src/database/custom-repository/competition.repository';
+import { CompetitionRepository } from '../../../database/custom-repository/competition.repository';
 import { DivisionModel } from '../domain/model/division.model';
 import { DivisionFactory } from '../domain/division.factory';
 import { RequiredAdditionalInfoModel } from '../domain/model/required-addtional-info.model';
@@ -37,8 +37,8 @@ import { EarlybirdDiscountSnapshotModel } from '../domain/model/earlybird-discou
 import { CombinationDiscountSnapshotModel } from '../domain/model/combination-discount-snapshot.model';
 import { assert } from 'typia';
 import { ICompetition, ICompetitionSummary } from '../domain/interface/competition.interface';
-import { ImageRepository } from 'src/database/custom-repository/image.repository';
-import { IImage } from 'src/modules/images/domain/interface/image.interface';
+import { ImageRepository } from '../../../database/custom-repository/image.repository';
+import { IImage } from '../../images/domain/interface/image.interface';
 
 @Injectable()
 export class CompetitionsAppService {

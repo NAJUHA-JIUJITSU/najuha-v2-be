@@ -1,4 +1,4 @@
-import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { IPolicy } from '../modules/policy/domain/interface/policy.interface';
 import { uuidv7 } from 'uuidv7';
 
 export const dummyPolicies: IPolicy[] = [

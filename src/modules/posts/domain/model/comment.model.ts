@@ -1,9 +1,9 @@
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { ICommentLike } from '../interface/comment-like.interface';
 import { ICommentReport } from '../interface/comment-report.interface';
 import { ICommentSnapshot } from '../interface/comment-snapshot.interface';
 import { IComment } from '../interface/comment.interface';
-import { BusinessException, PostsErrors } from 'src/common/response/errorResponse';
+import { BusinessException, PostsErrors } from '../../../../common/response/errorResponse';
 
 export class CommentModel {
   private readonly id: IComment['id'];

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import Redis from 'ioredis';
-import { AuthErrors, BusinessException } from 'src/common/response/errorResponse';
-import appEnv from 'src/common/app-env';
+import { AuthErrors, BusinessException } from '../../../common/response/errorResponse';
+import appEnv from '../../../common/app-env';
 import { IAuthTokens } from './interface/auth-tokens.interface';
 import { IAuthTokenPayload } from './interface/auth-token-payload.interface';
 

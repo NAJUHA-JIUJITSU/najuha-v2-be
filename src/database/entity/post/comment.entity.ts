@@ -1,4 +1,4 @@
-import { IComment } from 'src/modules/posts/domain/interface/comment.interface';
+import { IComment } from '../../../modules/posts/domain/interface/comment.interface';
 import {
   Entity,
   Column,

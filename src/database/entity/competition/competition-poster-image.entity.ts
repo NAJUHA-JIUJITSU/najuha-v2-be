@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToO
 import { uuidv7 } from 'uuidv7';
 import { CompetitionEntity } from '../competition/competition.entity';
 import { ImageEntity } from '../image/image.entity';
-import { ICompetitionPosterImage } from 'src/modules/competitions/domain/interface/competition-poster-image.interface';
+import { ICompetitionPosterImage } from '../../../modules/competitions/domain/interface/competition-poster-image.interface';
 
 /**
  * CompetitionPosterImage Entity

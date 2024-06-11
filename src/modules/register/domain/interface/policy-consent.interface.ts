@@ -1,5 +1,5 @@
-import { TId, TDateOrStringDate } from 'src/common/common-types';
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { TId, TDateOrStringDate } from '../../../../common/common-types';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
 
 /** - 사용자가 동의한 약관 정보. */

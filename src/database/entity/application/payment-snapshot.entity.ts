@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
-import { IPaymentSnapshot } from 'src/modules/competitions/domain/interface/payment-snapshot.interface';
+import { IPaymentSnapshot } from '../../../modules/competitions/domain/interface/payment-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
 
 /**

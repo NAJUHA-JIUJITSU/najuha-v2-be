@@ -1,6 +1,6 @@
-import { IUser } from 'src/modules/users/domain/interface/user.interface';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
-import { ApplicationsErrors, BusinessException } from 'src/common/response/errorResponse';
+import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
 
 export class PlayerSnapshotModel {
   public readonly id: IPlayerSnapshot['id'];

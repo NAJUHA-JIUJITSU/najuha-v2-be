@@ -1,7 +1,7 @@
 import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller, Req } from '@nestjs/common';
-import { RoleLevels, RoleLevel } from 'src/infrastructure/guard/role.guard';
-import { ResponseForm, createResponseForm } from 'src/common/response/response';
+import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard';
+import { ResponseForm, createResponseForm } from '../../../common/response/response';
 import { CreateImageReqBody, CreateImageRes } from './images.controller.dto';
 import { ImageAppService } from '../application/image.app.service';
 
