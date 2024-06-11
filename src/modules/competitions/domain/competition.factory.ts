@@ -96,7 +96,10 @@ export class CompetitionFactory {
       imageId: competitionPosterImageCreateDto.imageId,
       createdAt: new Date(),
       deletedAt: null,
-      image,
+      image: {
+        ...image,
+        linkedAt: new Date(),
+      },
     };
   }
 }

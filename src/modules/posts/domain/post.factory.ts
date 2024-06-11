@@ -44,7 +44,10 @@ export class PostFactory {
       postSnapshotId,
       imageId,
       createdAt: new Date(),
-      image,
+      image: {
+        ...image,
+        linkedAt: new Date(),
+      },
     };
   }
 

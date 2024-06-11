@@ -30,7 +30,10 @@ export class UserFactory {
       imageId: userProfileImageCreateDto.imageId,
       createdAt: new Date(),
       deletedAt: null,
-      image,
+      image: {
+        ...image,
+        linkedAt: new Date(),
+      },
     };
   }
 }
