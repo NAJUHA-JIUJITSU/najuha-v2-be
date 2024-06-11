@@ -61,7 +61,7 @@ export class PostEntity {
   createdAt!: IPost['createdAt'];
 
   /** 게시글 삭제일자. */
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt!: IPost['deletedAt'];
 
   // ------------------------------------------------------------

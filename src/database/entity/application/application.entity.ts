@@ -35,7 +35,7 @@ export class ApplicationEntity {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: IApplication['updatedAt'];
 
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt!: IApplication['deletedAt'];
 
   @Column('varchar', { length: 16, default: 'SELF' })

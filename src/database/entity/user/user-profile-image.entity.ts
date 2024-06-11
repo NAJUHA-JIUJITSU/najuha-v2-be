@@ -23,7 +23,7 @@ export class UserProfileImageEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IUserProfileImage['createdAt'];
 
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt!: IUserProfileImage['deletedAt'];
 
   // ------------------------------------------------------------

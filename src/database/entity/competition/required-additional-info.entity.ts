@@ -32,7 +32,7 @@ export class RequiredAdditionalInfoEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IRequiredAdditionalInfo['createdAt'];
 
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt!: IRequiredAdditionalInfo['deletedAt'];
 
   @Column('uuid')

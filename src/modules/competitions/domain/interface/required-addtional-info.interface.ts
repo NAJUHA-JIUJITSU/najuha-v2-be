@@ -20,7 +20,7 @@ export interface IRequiredAdditionalInfo {
   createdAt: TDateOrStringDate;
 
   /** DeletedAT */
-  deletedAt: null | TDateOrStringDate;
+  deletedAt: TDateOrStringDate | null;
 
   /** Competition Id  */
   competitionId: ICompetition['id'];

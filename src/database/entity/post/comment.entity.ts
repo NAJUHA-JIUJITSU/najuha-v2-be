@@ -63,7 +63,7 @@ export class CommentEntity {
   createdAt!: IComment['createdAt'];
 
   /** 댓글 삭제일자. */
-  @DeleteDateColumn({ type: 'timestamptz' })
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt!: IComment['deletedAt'];
 
   /** 게시글 Id. */
