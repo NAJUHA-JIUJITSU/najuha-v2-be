@@ -66,11 +66,12 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
-          .catch(() => {
+          .catch((e) => {
+            console.log(e);
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
           }),
       ),
@@ -94,8 +95,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
           .catch(() => {
@@ -142,8 +143,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
           .catch(() => {
@@ -174,8 +175,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
           .catch(() => {
@@ -205,8 +206,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
           .catch(() => {
@@ -235,8 +236,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
           .catch(() => {
@@ -266,8 +267,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
           .catch(() => {
@@ -294,8 +295,8 @@ export class CompetitionsAppService {
               'combinationDiscountSnapshots',
               'requiredAdditionalInfos',
               'competitionHostMaps',
-              'posterImages',
-              'posterImages.image',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
             ],
           })
           .catch(() => {
