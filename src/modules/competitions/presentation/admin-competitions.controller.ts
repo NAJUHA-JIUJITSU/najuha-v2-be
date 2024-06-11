@@ -318,7 +318,9 @@ export class AdminCompetitionsController {
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Delete('/:competitionId/poster-image')
-  async deleteCompetitionPosterImage(@TypedParam('competitionId') competitionId: ICompetition['id']): Promise<void> {
-    await this.competitionsAppService.deleteCompetitionPosterImage({ competitionId });
+  async deleteCompetitionPosterImage(
+    @TypedParam('competitionId') competitionId: ICompetition['id'],
+  ): Promise<ResponseForm<void>> {
+    return createResponseForm(await this.competitionsAppService.deleteCompetitionPosterImage({ competitionId }));
   }
 }

@@ -106,7 +106,7 @@ export class UserUsersController {
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Delete('/profile-image')
-  async deleteUserProfileImage(@Req() req: Request): Promise<void> {
-    return this.UsersAppService.deleteUserProfileImage({ userId: req['userId'] });
+  async deleteUserProfileImage(@Req() req: Request): Promise<ResponseForm<void>> {
+    return createResponseForm(await this.UsersAppService.deleteUserProfileImage({ userId: req['userId'] }));
   }
 }
