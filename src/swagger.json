@@ -1330,6 +1330,13 @@
         "responses": {
           "200": {
             "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
             "x-nestia-encrypted": false
           }
         },
@@ -3224,6 +3231,13 @@
         "responses": {
           "200": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
             "x-nestia-encrypted": false
           }
         },
@@ -9125,6 +9139,28 @@
           "user"
         ]
       },
+      "ResponseFormvoid": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
       "ResponseFormFindAllTypesOfLatestPoliciesRes": {
         "type": "object",
         "properties": {
@@ -12456,28 +12492,6 @@
         "nullable": false,
         "required": [
           "application"
-        ]
-      },
-      "ResponseFormvoid": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              200
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "isSuccess",
-          "code"
         ]
       },
       "ResponseFormGetExpectedPaymentRes": {
