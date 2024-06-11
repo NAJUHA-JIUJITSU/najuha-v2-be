@@ -5,6 +5,7 @@ import {
   CreateUserProfileImageParam,
   CreateUserProfileImageRet,
   CreateUserRet,
+  DeleteProfileImage,
   GetMeParam,
   GetMeRet,
   UpdateUserParam,
@@ -77,7 +78,23 @@ export class UsersAppService {
     ]);
     const userProfileImageEntity = this.userFactory.createUserProfileImage(userProfileImageCreateDto, imageEntity);
     const user = new UserModel(userEntity);
-    user.updateProfileImageSnapshot(userProfileImageEntity);
+    user.updateProfileImage(userProfileImageEntity);
     return { user: await this.userRepository.save(user.toEntity()) };
+  }
+
+  async deleteUserProfileImage({ userId }: DeleteProfileImage): Promise<void> {
+    const userEntity = assert<IUser>(
+      await this.userRepository
+        .findOneOrFail({
+          where: { id: userId },
+          relations: ['profileImages', 'profileImages.image'],
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
+    );
+    const user = new UserModel(userEntity);
+    user.deleteProfileImage();
+    await this.userRepository.save(user.toEntity());
   }
 }

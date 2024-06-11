@@ -91,4 +91,22 @@ export class UserUsersController {
       }),
     );
   }
+
+  /**
+   * u-3-5 deleteUserProfileImage.
+   * - RoleLevel: USER.
+   * - 유저의 프로필 이미지를 삭제합니다.
+   * - soft delete 처리됩니다.
+   *
+   * @tag u-3 users
+   * @security bearer
+   * @returns void
+   * @param userId
+   * @returns void
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Delete('/profile-image')
+  async deleteUserProfileImage(@Req() req: Request): Promise<void> {
+    return this.UsersAppService.deleteUserProfileImage({ userId: req['userId'] });
+  }
 }

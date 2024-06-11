@@ -60,10 +60,16 @@ export class UserModel {
     return this.id;
   }
 
-  updateProfileImageSnapshot(profileImage: IUserProfileImage) {
+  updateProfileImage(profileImage: IUserProfileImage) {
     this.profileImages.forEach((profileImage) => {
       profileImage.deletedAt = new Date();
     });
     this.profileImages.push(profileImage);
+  }
+
+  deleteProfileImage() {
+    this.profileImages.forEach((profileImage) => {
+      profileImage.deletedAt = new Date();
+    });
   }
 }

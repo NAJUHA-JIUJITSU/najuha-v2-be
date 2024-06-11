@@ -20,6 +20,10 @@ export interface CreateUserProfileImageParam {
   userProfileImageCreateDto: IUserProfileImageCreateDto;
 }
 
+export interface DeleteProfileImage {
+  userId: IUser['id'];
+}
+
 // ---------------------------------------------------------------------------
 // usersAppService Result
 // ---------------------------------------------------------------------------
