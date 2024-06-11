@@ -13,7 +13,6 @@ export class UserModel {
   private gender: IUser['gender'];
   private birth: IUser['birth'];
   private belt: IUser['belt'];
-  private profileImageUrlKey: IUser['profileImageUrlKey'];
   private status: IUser['status'];
   private profileImages: IUserProfileImage[];
   private readonly createdAt: IUser['createdAt'];
@@ -31,7 +30,6 @@ export class UserModel {
     this.gender = entity.gender;
     this.birth = entity.birth;
     this.belt = entity.belt;
-    this.profileImageUrlKey = entity.profileImageUrlKey;
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
@@ -51,7 +49,6 @@ export class UserModel {
       gender: this.gender,
       birth: this.birth,
       belt: this.belt,
-      profileImageUrlKey: this.profileImageUrlKey,
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

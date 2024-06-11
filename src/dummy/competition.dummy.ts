@@ -24,7 +24,6 @@ export class CompetitionDummyBuilder {
     description: 'Dummy Competition Description',
     isPartnership: true,
     viewCount: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<1000>>(),
-    posterImgUrlKey: null,
     status: 'ACTIVE',
     competitionDate: null,
     registrationStartDate: null,
@@ -121,11 +120,6 @@ export class CompetitionDummyBuilder {
 
   public setViewCount(viewCount: number): this {
     this.competition.viewCount = viewCount;
-    return this;
-  }
-
-  public setPosterImgUrlKey(url: string): this {
-    this.competition.posterImgUrlKey = url;
     return this;
   }
 

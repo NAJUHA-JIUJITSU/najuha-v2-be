@@ -59,9 +59,6 @@ export class CompetitionEntity {
   @Column('int', { default: 0 })
   viewCount!: ICompetition['viewCount'];
 
-  @Column('varchar', { length: 256, nullable: true })
-  posterImgUrlKey!: ICompetition['posterImgUrlKey'];
-
   @Column('varchar', { length: 16, default: 'INACTIVE' })
   status!: ICompetition['status'];
 

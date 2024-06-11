@@ -52,9 +52,6 @@ export class UserEntity {
   @Column('varchar', { length: 16, nullable: true })
   belt!: IUser['belt'] | null;
 
-  @Column('varchar', { length: 128, nullable: true })
-  profileImageUrlKey!: IUser['profileImageUrlKey'];
-
   @Column('varchar', { length: 16, default: 'ACTIVE' })
   status!: IUser['status'];
 

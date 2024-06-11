@@ -37,7 +37,6 @@ export class CompetitionFactory {
       description: createCompetitionDto.description ?? 'DEFAULT DESCRIPTION',
       isPartnership: createCompetitionDto.isPartnership ?? false,
       viewCount: 0,
-      posterImgUrlKey: null,
       status: 'INACTIVE',
       createdAt: new Date(),
       updatedAt: new Date(),

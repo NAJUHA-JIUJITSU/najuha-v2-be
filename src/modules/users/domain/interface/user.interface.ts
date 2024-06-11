@@ -63,11 +63,11 @@ export interface IUser {
   /** User 주짓수 벨트. */
   belt: '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
-  /**
-   * User 프로필 이미지 키 (이미지 파일 이름).
-   * - 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
-   */
-  profileImageUrlKey: null | (string & tags.MinLength<1> & tags.MaxLength<128>);
+  // /**
+  //  * User 프로필 이미지 키 (이미지 파일 이름).
+  //  * - 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
+  //  */
+  // profileImageUrlKey: null | (string & tags.MinLength<1> & tags.MaxLength<128>);
 
   /**
    * User 상태.
@@ -88,16 +88,7 @@ export interface IUser {
 export interface ITemporaryUser
   extends Pick<
       IUser,
-      | 'id'
-      | 'role'
-      | 'snsAuthProvider'
-      | 'snsId'
-      | 'email'
-      | 'name'
-      | 'profileImageUrlKey'
-      | 'status'
-      | 'createdAt'
-      | 'updatedAt'
+      'id' | 'role' | 'snsAuthProvider' | 'snsId' | 'email' | 'name' | 'status' | 'createdAt' | 'updatedAt'
     >,
     Nullable<Pick<IUser, 'phoneNumber' | 'nickname' | 'gender' | 'birth' | 'belt'>> {}
 

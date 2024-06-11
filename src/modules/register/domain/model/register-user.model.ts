@@ -15,7 +15,6 @@ export class RegisterUserModel {
   private readonly email: IRegisterUser['email'];
   private readonly name: IRegisterUser['name'];
   private readonly phoneNumber: IRegisterUser['phoneNumber'];
-  private readonly profileImageUrlKey: IRegisterUser['profileImageUrlKey'];
   private readonly status: IRegisterUser['status'];
   private readonly createdAt: IRegisterUser['createdAt'];
   private readonly updatedAt: IRegisterUser['updatedAt'];
@@ -33,7 +32,6 @@ export class RegisterUserModel {
     this.gender = entity.gender;
     this.birth = entity.birth;
     this.belt = entity.belt;
-    this.profileImageUrlKey = entity.profileImageUrlKey;
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
@@ -53,7 +51,6 @@ export class RegisterUserModel {
       gender: this.gender,
       birth: this.birth,
       belt: this.belt,
-      profileImageUrlKey: this.profileImageUrlKey,
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

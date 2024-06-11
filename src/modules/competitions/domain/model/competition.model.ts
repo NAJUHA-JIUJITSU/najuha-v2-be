@@ -32,7 +32,6 @@ export class CompetitionModel {
   private description: ICompetition['description'];
   private isPartnership: ICompetition['isPartnership'];
   private viewCount: ICompetition['viewCount'];
-  private posterImgUrlKey: ICompetition['posterImgUrlKey'];
   private status: ICompetition['status'];
   private divisions: DivisionModel[];
   private requiredAdditionalInfos: RequiredAdditionalInfoModel[];
@@ -58,7 +57,6 @@ export class CompetitionModel {
     this.description = entity.description;
     this.isPartnership = entity.isPartnership;
     this.viewCount = entity.viewCount;
-    this.posterImgUrlKey = entity.posterImgUrlKey;
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
@@ -90,7 +88,6 @@ export class CompetitionModel {
       description: this.description,
       isPartnership: this.isPartnership,
       viewCount: this.viewCount,
-      posterImgUrlKey: this.posterImgUrlKey,
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

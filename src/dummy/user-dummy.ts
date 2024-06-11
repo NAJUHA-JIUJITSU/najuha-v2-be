@@ -18,7 +18,6 @@ export class UserDummyBuilder {
     this.user.birth = '19980101';
     this.user.belt = '화이트';
     this.user.status = 'ACTIVE';
-    this.user.profileImageUrlKey = null;
     this.user.createdAt = new Date();
     this.user.updatedAt = new Date();
   }
@@ -78,11 +77,6 @@ export class UserDummyBuilder {
     return this;
   }
 
-  public setProfileImageUrlKey(url: string | null): this {
-    this.user.profileImageUrlKey = url;
-    return this;
-  }
-
   public setStatus(status: IUser['status']): this {
     this.user.status = status;
     return this;
@@ -119,7 +113,6 @@ export class TemporaryUserDummyBuilder {
     this.user.birth = null;
     this.user.belt = null;
     this.user.status = 'ACTIVE';
-    this.user.profileImageUrlKey = null;
     this.user.createdAt = new Date();
     this.user.updatedAt = new Date();
   }
@@ -176,11 +169,6 @@ export class TemporaryUserDummyBuilder {
 
   public setBelt(belt: IUser['belt'] | null): this {
     this.user.belt = belt;
-    return this;
-  }
-
-  public setProfileImageUrlKey(url: string | null): this {
-    this.user.profileImageUrlKey = url;
     return this;
   }
 

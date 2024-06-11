@@ -17,7 +17,6 @@ export class UserFactory {
       birth: dto.birth ?? null,
       nickname: null,
       belt: null,
-      profileImageUrlKey: null,
       status: 'ACTIVE',
       createdAt: new Date(),
       updatedAt: new Date(),

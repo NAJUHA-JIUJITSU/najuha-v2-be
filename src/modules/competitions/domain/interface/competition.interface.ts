@@ -54,9 +54,6 @@ export interface ICompetition {
   /** 조회수. */
   viewCount: number & tags.Type<'uint32'>;
 
-  /** 대회 포스터 이미지 URL Key. */
-  posterImgUrlKey: null | (string & tags.MinLength<1> & tags.MaxLength<128>);
-
   /**
    * 대회의 상태.
    * - ACTIVE: 활성화된 대회 유저에게 노출, 참가 신청 가능.
