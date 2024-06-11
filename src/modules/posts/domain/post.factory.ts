@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
-import { IPost, IPostCreateDto, IPostUpdateDto } from './interface/post.interface';
+import { IPost, IPostCreateDto } from './interface/post.interface';
 import { IPostSnapshot, IPostSnapshotCreateDto } from './interface/post-snapshot.interface';
 import { IPostLike, IPostLikeCreateDto } from './interface/post-like.interface';
 import { IPostReport, IPostReportCreateDto } from './interface/post-report.interface';

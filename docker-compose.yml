@@ -37,9 +37,9 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
-      - '9000:9000'
-      - '9001:9001'
-    command: server /data --console-address ":9001"
+      - '${MINIO_PORT}:9000'
+      - '${MINIO_CONSOLE_PORT}:9001'
+    command: server /data --console-address ":${MINIO_CONSOLE_PORT}"
     volumes:
       - miniodata:/data
 

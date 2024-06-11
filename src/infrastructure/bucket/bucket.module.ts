@@ -4,7 +4,7 @@ import appEnv from 'src/common/app-env';
 import { BucketService } from './bucket.service';
 
 const MinioBucketConfig = {
-  endpoint: appEnv.minioEndpoint,
+  endpoint: `${appEnv.minioHost}:${appEnv.minioPort}`,
   region: appEnv.minioRegion,
   credentials: {
     accessKeyId: appEnv.minioAccessKeyId,

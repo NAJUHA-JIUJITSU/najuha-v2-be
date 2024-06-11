@@ -48,7 +48,9 @@ type appEnv = {
   jwtRefreshTokenSecret: string;
   jwtRefreshTokenExpirationTime: string;
   // MINIO -------------------------------------------------------------------------
-  minioEndpoint: string;
+  minioHost: string;
+  minioPort: number;
+  minioConsolePort: number;
   minioAccessKeyId: string;
   minioSecretAccesstKey: string;
   minioBucket: string;
@@ -103,7 +105,9 @@ const loadConfig = (): appEnv => {
     jwtRefreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET,
     jwtRefreshTokenExpirationTime: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
     // MINIO -------------------------------------------------------------------------
-    minioEndpoint: process.env.MINIO_ENDPOINT,
+    minioHost: process.env.MINIO_HOST,
+    minioPort: Number(process.env.MINIO_PORT),
+    minioConsolePort: Number(process.env.MINIO_CONSOLE_PORT),
     minioAccessKeyId: process.env.MINIO_ACCESS_KEY_ID,
     minioSecretAccesstKey: process.env.MINIO_SECRET_ACCESS_KEY,
     minioBucket: process.env.MINIO_BUCKET,
