@@ -287,6 +287,9 @@ export class AdminCompetitionsController {
    *
    * @tag a-5 competitions
    * @security bearer
+   * @param competitionId competitionId
+   * @param body CreateCompetitionPosterImageReqBody
+   * @returns CreateCompetitionPosterImageRes
    */
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/:competitionId/poster-image')
@@ -302,5 +305,20 @@ export class AdminCompetitionsController {
         },
       }),
     );
+  }
+
+  /**
+   * a-5-13 deleteCompetitionPosterImage.
+   * - RoleLevel: ADMIN.
+   * - 대회 포스터 이미지를 삭제합니다.
+   *
+   * @tag a-5 competitions
+   * @param competitionId competitionId
+   * @security bearer
+   */
+  @RoleLevels(RoleLevel.ADMIN)
+  @TypedRoute.Delete('/:competitionId/poster-image')
+  async deleteCompetitionPosterImage(@TypedParam('competitionId') competitionId: ICompetition['id']): Promise<void> {
+    await this.competitionsAppService.deleteCompetitionPosterImage({ competitionId });
   }
 }

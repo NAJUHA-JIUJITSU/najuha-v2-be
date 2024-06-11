@@ -73,6 +73,10 @@ export interface CreateCompetitionPosterImageParam {
   competitionPosterImageCreateDto: ICompetitionPosterImageCreateDto;
 }
 
+export interface DeleteCompetitionPosterImageParam {
+  competitionId: ICompetition['id'];
+}
+
 // ---------------------------------------------------------------------------
 // competitionsAppService Result
 // ---------------------------------------------------------------------------

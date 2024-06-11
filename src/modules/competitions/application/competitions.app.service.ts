@@ -24,6 +24,7 @@ import {
   DeleteCompetitionRequiredAdditionalInfoRet,
   CreateCompetitionPosterImageParam,
   CreateCompetitionPosterImageRet,
+  DeleteCompetitionPosterImageParam,
 } from './competitions.app.dto';
 import { CompetitionModel } from '../domain/model/competition.model';
 import { BusinessException, CommonErrors } from 'src/common/response/errorResponse';
@@ -348,5 +349,30 @@ export class CompetitionsAppService {
     const competition = new CompetitionModel(competitionEntity);
     competition.updatePosterImage(competitionPosterImage);
     return { competition: await this.competitionRepository.save(competition.toEntity()) };
+  }
+
+  async deleteCompetitionPosterImage({ competitionId }: DeleteCompetitionPosterImageParam): Promise<void> {
+    const competition = new CompetitionModel(
+      assert<ICompetition>(
+        await this.competitionRepository
+          .findOneOrFail({
+            where: { id: competitionId },
+            relations: [
+              'divisions',
+              'earlybirdDiscountSnapshots',
+              'combinationDiscountSnapshots',
+              'requiredAdditionalInfos',
+              'competitionHostMaps',
+              'competitionPosterImages',
+              'competitionPosterImages.image',
+            ],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          }),
+      ),
+    );
+    competition.deletePosterImage();
+    await this.competitionRepository.save(competition.toEntity());
   }
 }

@@ -275,4 +275,10 @@ export class CompetitionModel {
     });
     this.competitionPosterImages.push(newPosterImage);
   }
+
+  deletePosterImage() {
+    this.competitionPosterImages.forEach((image) => {
+      image.deletedAt = new Date();
+    });
+  }
 }
