@@ -665,11 +665,9 @@ erDiagram
   }
   post_snapshot_image {
     uuid id PK
-    uuid postSnapshotId
+    uuid postSnapshotId FK
     uuid imageId FK
     timestamptz createdAt
-    timestamptz deletedAt "nullable"
-    uuid postId FK "nullable"
   }
   image {
     uuid id PK
@@ -891,7 +889,6 @@ PostSnapshotImage.
   - `postSnapshotId`
   - `imageId`
   - `createdAt`
-  - `deletedAt`
 
 
 ## Image

@@ -27,7 +27,7 @@ export class PostSnapshotImageEntity {
   // Relations
   // ------------------------------------------------------------
   @ManyToOne(() => PostSnapshotEntity, (postSnapshot) => postSnapshot.postSnapshotImages)
-  @JoinColumn({ name: 'postId' })
+  @JoinColumn({ name: 'postSnapshotId' })
   postSnapshot!: PostSnapshotEntity;
 
   @ManyToOne(() => ImageEntity, (image) => image.postSnapshotImages)
