@@ -27,8 +27,8 @@ export class ImageAppService {
       key: imageEntity.id,
       path: imageEntity.path,
       format: imageEntity.format,
-      expiresIn: appEnv.presignedImageUrlExpiresTime,
-      maxSize: appEnv.presignedImageMaxSize,
+      expiresIn: appEnv.bucketPresignedImageUrlExpirationTime,
+      maxSize: appEnv.bucketPresignedImageMaxSize,
     });
 
     return {

@@ -53,16 +53,16 @@ type appEnv = {
   minioConsolePort: number;
   minioAccessKeyId: string;
   minioSecretAccesstKey: string;
-  minioBucket: string;
   minioRegion: string;
   // S3 ----------------------------------------------------------------------------
   s3Region: string;
   s3AccessKeyId: string;
   s3SecretAccessKey: string;
   s3Bucket: string;
-  // PRESIGNED IMAGE ---------------------------------------------------------------
-  presignedImageUrlExpiresTime: number;
-  presignedImageMaxSize: number;
+  // BUCKET -----------------------------------------------------------------------
+  bucketName: string;
+  bucketPresignedImageMaxSize: number;
+  bucketPresignedImageUrlExpirationTime: number;
   // ADMIN CREDENTIALS -------------------------------------------------------------
   adminCredentials: { snsId: string; snsAuthProvider: IUser['snsAuthProvider']; id: string; name: string }[];
 };
@@ -110,16 +110,16 @@ const loadConfig = (): appEnv => {
     minioConsolePort: Number(process.env.MINIO_CONSOLE_PORT),
     minioAccessKeyId: process.env.MINIO_ACCESS_KEY_ID,
     minioSecretAccesstKey: process.env.MINIO_SECRET_ACCESS_KEY,
-    minioBucket: process.env.MINIO_BUCKET,
     minioRegion: process.env.MINIO_REGION,
     // S3 ----------------------------------------------------------------------------
     s3Region: process.env.S3_REGION,
     s3AccessKeyId: process.env.S3_ACCESS_KEY_ID,
     s3SecretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     s3Bucket: process.env.S3_BUCKET,
-    // PRESIGNED IMAGE ---------------------------------------------------------------
-    presignedImageUrlExpiresTime: Number(process.env.PRESIGNED_IMAGE_URL_EXPIRATION_TIME),
-    presignedImageMaxSize: Number(process.env.PRESIGNED_IMAGE_MAX_SIZE),
+    // BUCKET -----------------------------------------------------------------------
+    bucketName: process.env.BUCKET_NAME,
+    bucketPresignedImageMaxSize: Number(process.env.BUCKET_PRESIGNED_IMAGE_MAX_SIZE),
+    bucketPresignedImageUrlExpirationTime: Number(process.env.BUCKET_PRESIGNED_IMAGE_URL_EXPIRATION_TIME),
     // ADMIN CREDENTIALS -------------------------------------------------------------
     adminCredentials: JSON.parse(process.env.ADMIN_CREDENTIALS_JSON || '[]'),
   };

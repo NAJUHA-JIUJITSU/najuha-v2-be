@@ -6,7 +6,7 @@ import { GetPresignedPostUrlParam, TPresignedPost } from './bucket.interface';
 
 @Injectable()
 export class BucketService implements OnModuleInit {
-  private readonly bucket: string = appEnv.minioBucket;
+  private readonly bucket: string = appEnv.bucketName;
 
   constructor(@Inject('BUCKET_CLIENT') private readonly client: S3Client) {}
 
