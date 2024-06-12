@@ -4,20 +4,20 @@ import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
-import { ResponseForm } from 'src/common/response/response';
+import { ResponseForm } from '../../src/common/response/response';
 import { DataSource, EntityManager } from 'typeorm';
-import { UsersAppService } from 'src/modules/users/application/users.app.service';
+import { UsersAppService } from '../../src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { PolicyAppService } from 'src/modules/policy/application/policy.app.service';
-import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+import { PolicyAppService } from '../../src/modules/policy/application/policy.app.service';
+import { IPolicy } from '../../src/modules/policy/domain/interface/policy.interface';
 import {
   CreatePolicyReqBody,
   CreatePolicyRes,
   FindPoliciesRes,
-} from 'src/modules/policy/presentation/policy.controller.dto';
-import { UserDummyBuilder } from 'src/dummy/user-dummy';
-import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
+} from '../../src/modules/policy/presentation/policy.controller.dto';
+import { UserDummyBuilder } from '../../src/dummy/user-dummy';
+import { PolicyEntity } from '../../src/database/entity/policy/policy.entity';
 import { uuidv7 } from 'uuidv7';
 // import * as Apis from '../../src/api/functional';
 

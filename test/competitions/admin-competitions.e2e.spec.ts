@@ -4,12 +4,12 @@ import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
-import { ResponseForm } from 'src/common/response/response';
+import { ResponseForm } from '../../src/common/response/response';
 import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE } from 'src/common/response/errorResponse';
-import { UserEntity } from 'src//database/entity/user/user.entity';
+import { COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE } from '../../src/common/response/errorResponse';
+import { UserEntity } from '../../src/database/entity/user/user.entity';
 import {
   CreateCombinationDiscountSnapshotReqBody,
   CreateCombinationDiscountSnapshotRes,
@@ -23,18 +23,18 @@ import {
   GetCompetitionRes,
   UpdateCompetitionRes,
   UpdateRequiredAdditionalInfoReqBody,
-} from 'src/modules/competitions/presentation/competitions.controller.dto';
-import { CompetitionEntity } from 'src//database/entity/competition/competition.entity';
-import { UserDummyBuilder } from 'src/dummy/user-dummy';
-import { CompetitionDummyBuilder } from 'src/dummy/competition.dummy';
-import { generateDummyDivisionPacks } from 'src/dummy/division.dummy';
-import { dummyCombinationDiscountRules } from 'src/dummy/combination-discount-snapshot.dummy';
-import { CreateCompetitionRequiredAdditionalInfoRet } from 'src/modules/competitions/application/competitions.app.dto';
-import { IRequiredAdditionalInfo } from 'src/modules/competitions/domain/interface/required-addtional-info.interface';
+} from '../../src/modules/competitions/presentation/competitions.controller.dto';
+import { CompetitionEntity } from '../../src/database/entity/competition/competition.entity';
+import { UserDummyBuilder } from '../../src/dummy/user-dummy';
+import { CompetitionDummyBuilder } from '../../src/dummy/competition.dummy';
+import { generateDummyDivisionPacks } from '../../src/dummy/division.dummy';
+import { dummyCombinationDiscountRules } from '../../src/dummy/combination-discount-snapshot.dummy';
+import { CreateCompetitionRequiredAdditionalInfoRet } from '../../src/modules/competitions/application/competitions.app.dto';
+import { IRequiredAdditionalInfo } from '../../src/modules/competitions/domain/interface/required-addtional-info.interface';
 import { uuidv7 } from 'uuidv7';
-import { RequiredAdditionalInfoEntity } from 'src//database/entity/competition/required-additional-info.entity';
-import { ICompetition } from 'src/modules/competitions/domain/interface/competition.interface';
-import { DateTime } from 'src/common/utils/date-time';
+import { RequiredAdditionalInfoEntity } from '../../src/database/entity/competition/required-additional-info.entity';
+import { ICompetition } from '../../src/modules/competitions/domain/interface/competition.interface';
+import { DateTime } from '../../src/common/utils/date-time';
 
 export const generateTestDummyCompetitions = (): ICompetition[] => {
   const competitions: ICompetition[] = [];

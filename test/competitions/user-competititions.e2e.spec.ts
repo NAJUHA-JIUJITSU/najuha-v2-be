@@ -4,18 +4,18 @@ import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
-import { ResponseForm } from 'src/common/response/response';
+import { ResponseForm } from '../../src/common/response/response';
 import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from 'src//database/entity/user/user.entity';
+import { UserEntity } from '../../src/database/entity/user/user.entity';
 import {
   FindCompetitionsRes,
   GetCompetitionRes,
-} from 'src/modules/competitions/presentation/competitions.controller.dto';
-import { CompetitionEntity } from 'src//database/entity/competition/competition.entity';
-import { UserDummyBuilder } from 'src/dummy/user-dummy';
-import { CompetitionDummyBuilder } from 'src/dummy/competition.dummy';
+} from '../../src/modules/competitions/presentation/competitions.controller.dto';
+import { CompetitionEntity } from '../../src/database/entity/competition/competition.entity';
+import { UserDummyBuilder } from '../../src/dummy/user-dummy';
+import { CompetitionDummyBuilder } from '../../src/dummy/competition.dummy';
 import { generateTestDummyCompetitions } from './admin-competitions.e2e.spec';
 
 describe('E2E u-5 competitions TEST', () => {

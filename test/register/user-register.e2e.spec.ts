@@ -4,7 +4,7 @@ import typia from 'typia';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import appEnv from '../../src/common/app-env';
-import { ResponseForm } from 'src/common/response/response';
+import { ResponseForm } from '../../src/common/response/response';
 import { EntityManager } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
@@ -12,19 +12,19 @@ import {
   REGISTER_NICKNAME_DUPLICATED,
   REGISTER_PHONE_NUMBER_REQUIRED,
   REGISTER_POLICY_CONSENT_REQUIRED,
-} from 'src/common/response/errorResponse';
-import { IPolicy } from 'src/modules/policy/domain/interface/policy.interface';
+} from '../../src/common/response/errorResponse';
+import { IPolicy } from '../../src/modules/policy/domain/interface/policy.interface';
 import {
   ConfirmAuthCodeRes,
   GetTemporaryUserRes,
   IsDuplicatedNicknameRes,
   RegisterUserRes,
   SendPhoneNumberAuthCodeRes,
-} from 'src/modules/register/presentation/register.controller.dto';
-import { UserEntity } from 'src//database/entity/user/user.entity';
+} from '../../src/modules/register/presentation/register.controller.dto';
+import { UserEntity } from '../../src/database/entity/user/user.entity';
 import { uuidv7 } from 'uuidv7';
-import { TemporaryUserDummyBuilder, UserDummyBuilder } from 'src/dummy/user-dummy';
-import { PolicyEntity } from 'src/database/entity/policy/policy.entity';
+import { TemporaryUserDummyBuilder, UserDummyBuilder } from '../../src/dummy/user-dummy';
+import { PolicyEntity } from '../../src/database/entity/policy/policy.entity';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;

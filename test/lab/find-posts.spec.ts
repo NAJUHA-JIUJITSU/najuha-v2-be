@@ -1,6 +1,6 @@
 import typia, { tags } from 'typia';
 import api from '../../src/api';
-import { CreatePostReqBody } from 'src/modules/posts/presentation/posts.controller.dto';
+import { CreatePostReqBody } from '../../src/modules/posts/presentation/posts.controller.dto';
 
 const host = 'http://localhost:3001';
 const accessToken =
