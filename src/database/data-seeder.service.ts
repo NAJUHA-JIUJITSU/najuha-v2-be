@@ -65,7 +65,7 @@ export class DataSeederService {
   }
 
   async seed() {
-    if (appEnv.nodeEnv !== 'dev') {
+    if (appEnv.nodeEnv !== 'dev' && appEnv.nodeEnv !== 'performance') {
       console.log('Data seeding is only available in development environment. Skipping seeding.');
       return;
     }

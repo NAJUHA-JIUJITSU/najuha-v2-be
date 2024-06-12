@@ -25,6 +25,7 @@ const BucketConfigMap = {
   dev: MinioBucketConfig,
   test: MinioBucketConfig,
   prod: S3BucketConfig,
+  performance: MinioBucketConfig,
 };
 
 @Module({

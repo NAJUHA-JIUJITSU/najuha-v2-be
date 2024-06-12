@@ -2,16 +2,20 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
-import appEnv from '../../src/common/app-env';
-import { ResponseForm } from '../../src/common/response/response';
+import { AppModule } from '../../../src/app.module';
+import appEnv from '../../../src/common/app-env';
+import { ResponseForm } from '../../../src/common/response/response';
 import { DataSource, EntityManager } from 'typeorm';
-import { UsersAppService } from '../../src/modules/users/application/users.app.service';
+import { UsersAppService } from '../../../src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { UserEntity } from '../../src/database/entity/user/user.entity';
-import { UserDummyBuilder } from '../../src/dummy/user-dummy';
-import { GetMeRes, UpdateUserReqBody, UpdateUserRes } from '../../src/modules/users/presentation/users.controller.dto';
+import { UserEntity } from '../../../src/database/entity/user/user.entity';
+import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import {
+  GetMeRes,
+  UpdateUserReqBody,
+  UpdateUserRes,
+} from '../../../src/modules/users/presentation/users.controller.dto';
 
 describe('E2E u-3 user-users test', () => {
   let app: INestApplication;

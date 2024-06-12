@@ -1,19 +1,19 @@
 import typia from 'typia';
 import * as dotenv from 'dotenv';
 import { IUser } from '../modules/users/domain/interface/user.interface';
-import { min } from 'class-validator';
 
 const envPathMap = {
   dev: '.env.dev',
   test: '.env.test',
   prod: '.env.prod',
+  performance: '.env.performance',
 };
 
 dotenv.config({ path: envPathMap[`${process.env.NODE_ENV}`] });
 
 type appEnv = {
   // NODE_ENV ---------------------------------------------------------------------
-  nodeEnv: 'dev' | 'test' | 'prod';
+  nodeEnv: 'dev' | 'test' | 'prod' | 'performance';
   // APP --------------------------------------------------------------------------
   appPort: number;
   // KAKAO API --------------------------------------------------------------------
@@ -129,5 +129,7 @@ const loadConfig = (): appEnv => {
 };
 
 const appEnv = loadConfig();
+
+console.log('appEnv: ', appEnv);
 
 export default appEnv;

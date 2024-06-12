@@ -2,9 +2,9 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import typia from 'typia';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
-import appEnv from '../../src/common/app-env';
-import { ResponseForm } from '../../src/common/response/response';
+import { AppModule } from '../../../src/app.module';
+import appEnv from '../../../src/common/app-env';
+import { ResponseForm } from '../../../src/common/response/response';
 import {
   AUTH_REFRESH_TOKEN_UNAUTHORIZED,
   AUTH_UNREGISTERED_ADMIN_CREDENTIALS,
@@ -13,23 +13,23 @@ import {
   SNS_AUTH_KAKAO_LOGIN_FAIL,
   SNS_AUTH_NAVER_LOGIN_FAIL,
   SnsAuthErrors,
-} from '../../src/common/response/errorResponse';
-import { KakaoStrategy } from '../../src/modules/sns-auth-client/kakao.strategy';
-import { NaverStrategy } from '../../src/modules/sns-auth-client/naver.strategy';
-import { GoogleStrategy } from '../../src/modules/sns-auth-client/google.strategy';
+} from '../../../src/common/response/errorResponse';
+import { KakaoStrategy } from '../../../src/modules/sns-auth-client/kakao.strategy';
+import { NaverStrategy } from '../../../src/modules/sns-auth-client/naver.strategy';
+import { GoogleStrategy } from '../../../src/modules/sns-auth-client/google.strategy';
 import { DataSource, EntityManager } from 'typeorm';
-import { UsersAppService } from '../../src/modules/users/application/users.app.service';
+import { UsersAppService } from '../../../src/modules/users/application/users.app.service';
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
-import { ISnsAuthValidatedUserData } from '../../src/modules/sns-auth-client/interface/validated-user-data.interface';
-import { UserEntity } from '../../src/database/entity/user/user.entity';
-import { UserDummyBuilder } from '../../src/dummy/user-dummy';
+import { ISnsAuthValidatedUserData } from '../../../src/modules/sns-auth-client/interface/validated-user-data.interface';
+import { UserEntity } from '../../../src/database/entity/user/user.entity';
+import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
 import {
   AcquireAdminRoleRes,
   RefreshTokenRes,
   SnsLoginReqBody,
   SnsLoginRes,
-} from '../../src/modules/auth/presentation/auth.controller.dto';
+} from '../../../src/modules/auth/presentation/auth.controller.dto';
 
 describe('E2E u-1 user-auth test', () => {
   let app: INestApplication;

@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  app:
+    build: .
+    ports:
+      - '${APP_PORT}:${APP_PORT}'
+    environment:
+      NODE_ENV: performance
+      DB_PORT: ${DB_PORT}
+      REDIS_PORT: ${REDIS_PORT}
+      APP_PORT: ${APP_PORT}
+    depends_on:
+      - postgres
+      - redis
+
   postgres:
     image: postgres
     ports:
@@ -19,16 +32,6 @@ services:
     volumes:
       - redis_data:/data
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: user@example.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - '8080:80'
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-
   minio:
     image: quay.io/minio/minio
     environment:
@@ -44,7 +47,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  pgadmin_data:
   miniodata:
-# docker exec -it [container_id_or_name] /bin/bash
-# psql -h localhost -p 5432 -U my_user -d dev_database
