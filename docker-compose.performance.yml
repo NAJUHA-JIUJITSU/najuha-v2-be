@@ -10,9 +10,16 @@ services:
       DB_PORT: ${DB_PORT}
       REDIS_PORT: ${REDIS_PORT}
       APP_PORT: ${APP_PORT}
+    command: node --max-old-space-size=1024 dist/src/main.js # 힙 메모리 크기 증가 및 올바른 시작 파일 지정
+    deploy:
+      resources:
+        limits:
+          cpus: '1' # AWS Free Tier EC2 t2.micro 인스턴스 사양
+          memory: 1G # AWS Free Tier EC2 t2.micro 인스턴스 사양
     depends_on:
       - postgres
       - redis
+      - minio
 
   postgres:
     image: postgres
@@ -24,6 +31,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1' # AWS Free Tier RDS db.t2.micro 인스턴스 사양
+          memory: 1G # AWS Free Tier RDS db.t2.micro 인스턴스 사양
 
   redis:
     image: redis
@@ -31,6 +43,11 @@ services:
       - '${REDIS_PORT}:6379'
     volumes:
       - redis_data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1' # AWS Free Tier Elasticache t2.micro 인스턴스 사양
+          memory: 555M # AWS Free Tier Elasticache t2.micro 인스턴스 사양
 
   minio:
     image: quay.io/minio/minio

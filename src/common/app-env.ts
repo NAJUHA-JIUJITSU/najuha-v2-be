@@ -130,6 +130,4 @@ const loadConfig = (): appEnv => {
 
 const appEnv = loadConfig();
 
-console.log('appEnv: ', appEnv);
-
 export default appEnv;
