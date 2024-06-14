@@ -3,7 +3,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import appEnv from '../../common/app-env';
 import { BucketService } from './bucket.service';
 
-const MinioBucketConfig = {
+export const MinioBucketConfig = {
   endpoint: `${appEnv.minioHost}:${appEnv.minioPort}`,
   region: appEnv.minioRegion,
   credentials: {

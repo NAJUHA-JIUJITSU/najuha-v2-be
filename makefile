@@ -4,20 +4,20 @@
 # Dev
 # -----------------------------------------------------------------------------
 dev:
-	docker-compose --env-file .env.dev up
+	docker-compose --env-file .env.dev -f docker-compose.yml up
 
 dev-clean:
-	docker-compose --env-file .env.dev down
+	docker-compose --env-file .env.dev -f docker-compose.yml down
 
 dev-fclean:
-	docker-compose --env-file .env.dev down -v
+	docker-compose --env-file .env.dev -f docker-compose.yml down -v
 
 
 # -----------------------------------------------------------------------------
 # Test
 # -----------------------------------------------------------------------------
 test:
-	docker-compose --env-file .env.test -f docker-compose.test.yml up -d
+	docker-compose --env-file .env.test -f docker-compose.test.yml up
 
 test-clean:
 	docker-compose --env-file .env.test -f docker-compose.test.yml down

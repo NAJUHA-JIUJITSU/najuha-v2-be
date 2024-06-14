@@ -1,9 +1,10 @@
 import { TypedBody, TypedRoute } from '@nestia/core';
-import { Controller, Req } from '@nestjs/common';
+import { Controller, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard';
 import { ResponseForm, createResponseForm } from '../../../common/response/response';
 import { CreateImageReqBody, CreateImageRes } from './images.controller.dto';
 import { ImageAppService } from '../application/image.app.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user/images')
 export class ImagesController {
@@ -34,5 +35,17 @@ export class ImagesController {
         },
       }),
     );
+  }
+
+  /**
+   * @ignore
+   */
+  @TypedRoute.Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.MulterS3.File) {
+    return {
+      url: file.location,
+      key: file.key,
+    };
   }
 }

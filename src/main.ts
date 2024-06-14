@@ -11,5 +11,6 @@ async function bootstrap() {
   app.use(cors()); // todo!: cors 설정 옵션 확인하기
   SwaggerSetting(app);
   await app.listen(appEnv.appPort);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
