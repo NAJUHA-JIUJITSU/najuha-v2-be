@@ -7,7 +7,7 @@ import { ImageAppService } from '../application/image.app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user/images')
-export class ImagesController {
+export class UserImagesController {
   constructor(private readonly imageAppService: ImageAppService) {}
 
   /**
@@ -38,6 +38,9 @@ export class ImagesController {
   }
 
   /**
+   * test api.
+   * todo!: remove this api.
+   *
    * @ignore
    */
   @TypedRoute.Post('upload')

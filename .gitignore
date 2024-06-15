@@ -49,6 +49,3 @@ lerna-debug.log*
 
 # src/api (nesita sdk bulid 폴더)
 /src/api
-
-
-/test/resources

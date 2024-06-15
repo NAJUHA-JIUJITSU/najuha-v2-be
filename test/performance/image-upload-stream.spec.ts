@@ -1,7 +1,7 @@
 import axios from 'axios';
 import api from '../../src/api';
-import * as fs from 'fs';
 import * as FormData from 'form-data';
+import * as sharp from 'sharp';
 
 const host = 'http://localhost:3001';
 jest.setTimeout(300000); // Increase timeout for a large number of requests
@@ -16,9 +16,22 @@ describe('ImagesController (e2e)', () => {
     accessToken = ret.adminAccessTokens[0].accessToken;
   });
 
-  const sendUploadRequest = async (filePath: string): Promise<any[]> => {
+  const sendUploadRequest = async (): Promise<any[]> => {
+    // Create a dummy image using sharp 5MB
+    const buffer = await sharp({
+      create: {
+        width: 5000,
+        height: 5000,
+        channels: 3,
+        background: { r: 255, g: 0, b: 0 },
+      },
+    })
+      .jpeg()
+      .toBuffer();
+
+    // Create a FormData object and append the dummy image
     const formData = new FormData();
-    formData.append('file', fs.createReadStream(filePath));
+    formData.append('file', buffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
 
     const response = await axios.post(`${host}/user/images/upload`, formData, {
       headers: {
@@ -31,14 +44,13 @@ describe('ImagesController (e2e)', () => {
   };
 
   it('should handle multiple concurrent upload requests', async () => {
-    const filePath = 'test/resources/test.jpg';
     const numberOfRequests = 200;
 
     const promises: Promise<any>[] = [];
     const startTime = Date.now();
 
     for (let i = 0; i < numberOfRequests; i++) {
-      promises.push(sendUploadRequest(filePath));
+      promises.push(sendUploadRequest());
     }
 
     const results = await Promise.all(promises);

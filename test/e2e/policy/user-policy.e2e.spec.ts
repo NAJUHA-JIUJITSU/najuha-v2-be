@@ -15,7 +15,7 @@ import { FindPoliciesRes, GetPolicyRes } from '../../../src/modules/policy/prese
 import { PolicyEntity } from '../../../src/database/entity/policy/policy.entity';
 import { uuidv7 } from 'uuidv7';
 
-describe('E2E u-4 user-policy test', () => {
+describe('E2E u-4 user-policies test', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let dataSource: DataSource;

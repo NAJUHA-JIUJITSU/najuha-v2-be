@@ -1,7 +1,7 @@
 import axios from 'axios';
 import api from '../../src/api';
-import * as fs from 'fs';
 import * as FormData from 'form-data';
+import * as sharp from 'sharp';
 
 const host = 'http://localhost:3001';
 const minioHost = 'http://localhost:9000/najuha-v2-bucket';
@@ -19,7 +19,7 @@ describe('ImagesController (e2e)', () => {
     accessToken = ret.adminAccessTokens[0].accessToken;
   });
 
-  const createImageAndUpload = async (filePath: string): Promise<void> => {
+  const createImageAndUpload = async (): Promise<void> => {
     const response = await axios.post(
       `${host}/user/images`,
       {
@@ -40,15 +40,24 @@ describe('ImagesController (e2e)', () => {
       throw new Error('Fields are missing from the presigned URL response.');
     }
 
-    // Read the file to upload
-    const file = fs.createReadStream(filePath);
+    // Create a dummy image using sharp 5MB
+    const buffer = await sharp({
+      create: {
+        width: 5000,
+        height: 5000,
+        channels: 3,
+        background: { r: 255, g: 0, b: 0 },
+      },
+    })
+      .jpeg()
+      .toBuffer();
 
     // Create a FormData object and append fields and file
     const formData = new FormData();
     Object.entries(fields).forEach(([key, value]) => {
       formData.append(key, value as string);
     });
-    formData.append('file', file);
+    formData.append('file', buffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
 
     try {
       await axios.post(minioHost, formData, {
@@ -62,14 +71,13 @@ describe('ImagesController (e2e)', () => {
   };
 
   it('should handle multiple concurrent createImage and upload requests', async () => {
-    const filePath = 'test/resources/test.jpg';
     const numberOfRequests = 200;
 
     const promises: Promise<void>[] = [];
     const startTime = Date.now();
 
     for (let i = 0; i < numberOfRequests; i++) {
-      promises.push(createImageAndUpload(filePath));
+      promises.push(createImageAndUpload());
     }
 
     await Promise.all(promises)
