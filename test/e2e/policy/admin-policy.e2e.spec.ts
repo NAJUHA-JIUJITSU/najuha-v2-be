@@ -57,7 +57,7 @@ describe('E2E a-4 admin-policy test', () => {
     await app.close();
   });
 
-  describe('a-4-1 POST /admin/policy -----------------------------------------------------', () => {
+  describe('a-4-1 POST /admin/policies -----------------------------------------------------', () => {
     it('약관 생성하기 성공 시', async () => {
       /** pre condition. */
       const createPolicyReqDto = typia.random<CreatePolicyReqBody>();
@@ -68,14 +68,14 @@ describe('E2E a-4 admin-policy test', () => {
       );
       /** main test. */
       const res = await request(app.getHttpServer())
-        .post('/admin/policy')
+        .post('/admin/policies')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(createPolicyReqDto);
       expect(typia.is<ResponseForm<CreatePolicyRes>>(res.body)).toBe(true);
     });
   });
 
-  describe('a-4-2 GET /admin/policy ------------------------------------------------------', () => {
+  describe('a-4-2 GET /admin/policies ------------------------------------------------------', () => {
     it('모든 약관 가져오기 성공 시', async () => {
       /** pre condition. */
       const policyTypes: IPolicy['type'][] = ['TERMS_OF_SERVICE', 'PRIVACY', 'REFUND', 'ADVERTISEMENT'];
@@ -101,7 +101,9 @@ describe('E2E a-4 admin-policy test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer()).get('/admin/policy').set('Authorization', `Bearer ${accessToken}`);
+      const res = await request(app.getHttpServer())
+        .get('/admin/policies')
+        .set('Authorization', `Bearer ${accessToken}`);
       expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
       expect(res.body.result.policies.length).toEqual(policyTypes.length * maxVersion);
     });
@@ -133,7 +135,7 @@ describe('E2E a-4 admin-policy test', () => {
       );
       /** main test. */
       const res = await request(app.getHttpServer())
-        .get('/admin/policy')
+        .get('/admin/policies')
         .query(query)
         .set('Authorization', `Bearer ${accessToken}`);
       expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);

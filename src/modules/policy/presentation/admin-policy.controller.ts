@@ -5,7 +5,7 @@ import { ResponseForm, createResponseForm } from '../../../common/response/respo
 import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard';
 import { CreatePolicyReqBody, CreatePolicyRes, FindPoliciesReqQuery, FindPoliciesRes } from './policy.controller.dto';
 
-@Controller('admin/policy')
+@Controller('admin/policies')
 export class AdminPolicyController {
   constructor(private readonly PolicyAppService: PolicyAppService) {}
 
