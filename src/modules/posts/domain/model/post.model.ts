@@ -11,9 +11,9 @@ export class PostModel {
   private readonly viewCount: IPost['viewCount'];
   private readonly category: IPost['category'];
   private readonly createdAt: IPost['createdAt'];
-  private readonly postSnapshots: IPostSnapshot[];
   private readonly likes: IPostLike[];
-  private readonly reports: IPostReport[];
+  private postSnapshots: IPostSnapshot[];
+  private reports: IPostReport[];
   private status: IPost['status'];
   private deletedAt: IPost['deletedAt'];
   private likeCount: IPost['likeCount'];

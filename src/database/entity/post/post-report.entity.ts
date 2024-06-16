@@ -45,13 +45,13 @@ export class PostReportEntity {
   @Column('uuid')
   userId!: IPostReport['userId'];
 
-  /** 신고일자. */
-  @CreateDateColumn({ type: 'timestamptz' })
-  createdAt!: IPostReport['createdAt'];
-
   /** 신고된 게시글의 Id. */
   @Column('uuid')
   postId!: IPostReport['postId'];
+
+  /** 신고일자. */
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt!: IPostReport['createdAt'];
 
   // ------------------------------------------------------------
   // Relations

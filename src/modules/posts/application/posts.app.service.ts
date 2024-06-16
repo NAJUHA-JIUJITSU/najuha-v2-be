@@ -25,7 +25,10 @@ import { IPostLike } from '../domain/interface/post-like.interface';
 import { PostLikeRepository } from '../../../database/custom-repository/post-like.repository';
 import { PostReportRepository } from '../../../database/custom-repository/post-report.repository';
 import { ImageRepository } from '../../../database/custom-repository/image.repository';
-import { In } from 'typeorm';
+import { DataSource, In } from 'typeorm';
+import { UserEntity } from '../../../database/entity/user/user.entity';
+import { PostEntity } from '../../../database/entity/post/post.entity';
+import { PostReportEntity } from '../../../database/entity/post/post-report.entity';
 
 @Injectable()
 export class PostsAppService {
@@ -36,10 +39,11 @@ export class PostsAppService {
     private readonly postLikeRepository: PostLikeRepository,
     private readonly portReportRepository: PostReportRepository,
     private readonly imageRepository: ImageRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   async createPost({ postCreateDto }: CreatePostParam): Promise<CreatePostRet> {
-    const [_, imageEntities] = await Promise.all([
+    const [_user, imageEntities] = await Promise.all([
       this.userRepository.findOneOrFail({ where: { id: postCreateDto.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
@@ -70,7 +74,7 @@ export class PostsAppService {
   }
 
   async updatePost({ userId, postUpdateDto }: UpdatePostParam): Promise<UpdatePostRet> {
-    const [_, postEntity, imageEntities] = await Promise.all([
+    const [_user, postEntity, imageEntities] = await Promise.all([
       this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
@@ -116,7 +120,7 @@ export class PostsAppService {
     });
     if (postLike) throw new BusinessException(PostsErrors.POSTS_POST_LIKE_ALREADY_EXIST);
     const newPostLike = this.postFactory.createPostLike(postLikeCreateDto);
-    this.postLikeRepository.save(newPostLike);
+    await this.postLikeRepository.save(newPostLike);
   }
 
   async deletePostLike({ userId, postId }: DeletePostLikeParam): Promise<void> {
@@ -127,19 +131,40 @@ export class PostsAppService {
   }
 
   async createPostReport({ postReportCreateDto }: CreatePostReportParam): Promise<void> {
-    const [_, postEntity] = await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: postReportCreateDto.userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
-      this.postRepository
-        .findOneOrFail({ where: { id: postReportCreateDto.postId }, relations: ['postSnapshots', 'reports'] })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const [_user, postEntity, alreadyExistPostReport, postReportEntities] = await Promise.all([
+        queryRunner.manager.findOneOrFail(UserEntity, { where: { id: postReportCreateDto.userId } }).catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
         }),
-    ]);
-    const post = new PostModel(postEntity);
-    post.addPostReport(this.postFactory.createPostReport(postReportCreateDto));
-    await this.postRepository.save(post.toEntity());
+        queryRunner.manager
+          .findOneOrFail(PostEntity, {
+            where: { id: postReportCreateDto.postId },
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
+          }),
+        queryRunner.manager.findOne(PostReportEntity, {
+          where: { userId: postReportCreateDto.userId, postId: postReportCreateDto.postId },
+        }),
+        queryRunner.manager.find(PostReportEntity, {
+          where: { postId: postReportCreateDto.postId, status: 'ACCEPTED' },
+        }),
+      ]);
+      if (alreadyExistPostReport) throw new BusinessException(PostsErrors.POSTS_POST_REPORT_ALREADY_EXIST);
+      await queryRunner.manager.save(PostReportEntity, this.postFactory.createPostReport(postReportCreateDto));
+      if (postReportEntities.length >= 9) {
+        await queryRunner.manager.update(PostEntity, postEntity.id, { status: 'INACTIVE' });
+      }
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async deletePostReport({ userId, postId }: DeletePostReportParam): Promise<void> {
