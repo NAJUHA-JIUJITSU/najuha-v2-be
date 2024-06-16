@@ -43,11 +43,12 @@ export class PostsAppService {
       this.userRepository.findOneOrFail({ where: { id: postCreateDto.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
-      this.imageRepository.find({ where: { id: In(postCreateDto.imageIds) } }),
+      postCreateDto.imageIds ? this.imageRepository.find({ where: { id: In(postCreateDto.imageIds) } }) : [],
     ]);
-    if (imageEntities.length !== postCreateDto.imageIds.length) {
+    if (postCreateDto.imageIds && imageEntities.length !== postCreateDto.imageIds.length) {
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
     }
+
     const newPost = new PostModel(this.postFactory.createPost(postCreateDto, imageEntities));
     return { post: await this.postRepository.save(newPost.toEntity()) };
   }
@@ -81,9 +82,9 @@ export class PostsAppService {
         .catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
         }),
-      this.imageRepository.find({ where: { id: In(postUpdateDto.imageIds) } }),
+      postUpdateDto.imageIds ? this.imageRepository.find({ where: { id: In(postUpdateDto.imageIds) } }) : [],
     ]);
-    if (imageEntities.length !== postUpdateDto.imageIds.length) {
+    if (postUpdateDto.imageIds && imageEntities.length !== postUpdateDto.imageIds.length) {
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
     }
     const post = new PostModel(postEntity);

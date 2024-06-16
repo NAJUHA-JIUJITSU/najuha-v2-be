@@ -70,7 +70,7 @@ export interface IPostCreateDto
    * Image Ids.
    * - 이미지는 최대 5개까지 등록 가능합니다.
    */
-  imageIds: IImage['id'][] & tags.MaxItems<5>;
+  imageIds?: IImage['id'][] & tags.MaxItems<5>;
 }
 
 export interface IPostUpdateDto extends IPostSnapshotCreateDto {
@@ -78,7 +78,7 @@ export interface IPostUpdateDto extends IPostSnapshotCreateDto {
    * Image Ids.
    * - 이미지는 최대 5개까지 등록 가능합니다.
    */
-  imageIds: IImage['id'][] & tags.MaxItems<5>;
+  imageIds?: IImage['id'][] & tags.MaxItems<5>;
 }
 
 export interface IFindPostsQueryOptions {
