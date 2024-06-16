@@ -16,8 +16,8 @@ import {
 import { ResponseForm } from '../../../src/common/response/response';
 import typia from 'typia';
 import axios from 'axios';
-import * as sharp from 'sharp';
 import * as FormData from 'form-data';
+import * as fs from 'fs/promises';
 
 describe('E2E u-7 competitions TEST', () => {
   let app: INestApplication;
@@ -26,6 +26,7 @@ describe('E2E u-7 competitions TEST', () => {
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
+  let dummy5MbImageBuffer: Buffer;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -37,6 +38,7 @@ describe('E2E u-7 competitions TEST', () => {
     tableNames = entityEntityManager.connection.entityMetadatas.map((entity) => `"${entity.tableName}"`).join(', ');
     redisClient = testingModule.get<Redis>('REDIS_CLIENT');
     jwtService = testingModule.get<JwtService>(JwtService);
+    dummy5MbImageBuffer = await fs.readFile('test/resources/test-4.5mb.jpg');
     (await app.init()).listen(appEnv.appPort);
   });
 
@@ -86,21 +88,11 @@ describe('E2E u-7 competitions TEST', () => {
         .send({ format: 'image/jpeg', path: 'post' });
       const { image, presignedPost } = creatImageRes.body.result;
       const { url, fields } = presignedPost;
-      const buffer = await sharp({
-        create: {
-          width: 5000,
-          height: 5000,
-          channels: 3,
-          background: { r: 255, g: 0, b: 0 },
-        },
-      })
-        .jpeg()
-        .toBuffer();
       const formData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {
         formData.append(key, value as string);
       });
-      formData.append('file', buffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
       const uploadRes = await axios.post(url, formData, {
         headers: {
           ...formData.getHeaders(),

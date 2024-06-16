@@ -34,21 +34,6 @@ erDiagram
     uuid userId FK
     uuid policyId FK
   }
-  user_profile_image {
-    uuid id PK
-    uuid userId FK
-    uuid imageId FK
-    timestamptz createdAt
-    timestamptz deletedAt "nullable"
-  }
-  image {
-    uuid id PK
-    varchar path
-    varchar format
-    timestamptz createdAt
-    timestamptz linkedAt "nullable"
-    uuid userId FK
-  }
   user {
     uuid id PK
     varchar role
@@ -67,9 +52,6 @@ erDiagram
   }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
-  user_profile_image }o--|| user: user
-  user_profile_image }o--|| image: image
-  image }o--|| user: user
 ```
 
 ### `policy`
@@ -99,21 +81,6 @@ PolicyConsent Entity
   - `createdAt`
   - `userId`
   - `policyId`: - policyId.
-
-
-### `user_profile_image`
-
-UserProfileImage Entity   
-@namespace User   
-@erd Image
-
-**Properties**
-
-  - `id`
-  - `userId`
-  - `imageId`
-  - `createdAt`
-  - `deletedAt`
 
 
 ### `user`
@@ -891,13 +858,6 @@ PostSnapshotImage.
 
 ```mermaid
 erDiagram
-  user_profile_image {
-    uuid id PK
-    uuid userId FK
-    uuid imageId FK
-    timestamptz createdAt
-    timestamptz deletedAt "nullable"
-  }
   image {
     uuid id PK
     varchar path
@@ -913,7 +873,6 @@ erDiagram
     timestamptz createdAt
     timestamptz deletedAt "nullable"
   }
-  user_profile_image }o--|| image: image
   competition_poster_image }o--|| image: image
 ```
 
@@ -921,7 +880,6 @@ erDiagram
 
 Image Entity   
 @namespace Image   
-@erd User   
 @erd Competition   
 @erd Post
 

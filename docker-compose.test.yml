@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   postgres:
@@ -26,7 +26,7 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
       - '${MINIO_PORT}:9000'
-      - '${MINIO_CONSOLE_PORT}:9001'
+      - '${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}'
     command: server /data --console-address ":${MINIO_CONSOLE_PORT}"
     volumes:
       - miniodata:/data

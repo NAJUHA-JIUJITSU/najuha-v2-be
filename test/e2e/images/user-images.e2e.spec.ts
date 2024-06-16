@@ -10,12 +10,17 @@ import { UsersAppService } from '../../../src/modules/users/application/users.ap
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { ImageAppService } from '../../../src/modules/images/application/image.app.service';
-import { CreateImageReqBody, CreateImageRes } from '../../../src/modules/images/presentation/images.controller.dto';
+import {
+  CreateImageReqBody,
+  CreateImageRes,
+  CreateUserProfileImagePresignedPostReqBody,
+  CreateUserProfileImagePresignedPostRes,
+} from '../../../src/modules/images/presentation/images.controller.dto';
 import * as FormData from 'form-data';
 import axios from 'axios';
-import * as sharp from 'sharp';
 import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
+import * as fs from 'fs/promises';
 
 describe('E2E u-9 user-images test', () => {
   let app: INestApplication;
@@ -27,6 +32,8 @@ describe('E2E u-9 user-images test', () => {
   let jwtService: JwtService;
   let userService: UsersAppService;
   let imageAppService: ImageAppService;
+  let dummy5MbImageBuffer: Buffer;
+  let dummy6MbImageBuffer: Buffer;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -41,6 +48,8 @@ describe('E2E u-9 user-images test', () => {
     jwtService = testingModule.get<JwtService>(JwtService);
     userService = testingModule.get<UsersAppService>(UsersAppService);
     imageAppService = testingModule.get<ImageAppService>(ImageAppService);
+    dummy5MbImageBuffer = await fs.readFile('test/resources/test-4.5mb.jpg');
+    dummy6MbImageBuffer = await fs.readFile('test/resources/test-6.5mb.jpg');
 
     (await app.init()).listen(appEnv.appPort);
   });
@@ -65,15 +74,13 @@ describe('E2E u-9 user-images test', () => {
       );
       const body: CreateImageReqBody = {
         format: 'image/jpeg',
-        path: 'user-profile',
+        path: 'post',
       };
-
       /** main test. */
       const res = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(body);
-
       expect(typia.is<ResponseForm<CreateImageRes>>(res.body)).toBe(true);
     });
 
@@ -87,39 +94,22 @@ describe('E2E u-9 user-images test', () => {
       );
       const body: CreateImageReqBody = {
         format: 'image/jpeg',
-        path: 'user-profile',
+        path: 'post',
       };
-
       /** main test. */
       const res = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(body);
-
       expect(typia.is<ResponseForm<CreateImageRes>>(res.body)).toBe(true);
       const typedBody = res.body as ResponseForm<CreateImageRes>;
-
       const { image, presignedPost } = typedBody.result;
       const { url, fields } = presignedPost;
-
-      // Create dummy image using sharp 5Mb
-      const buffer = await sharp({
-        create: {
-          width: 5000,
-          height: 5000,
-          channels: 3,
-          background: { r: 255, g: 0, b: 0 },
-        },
-      })
-        .jpeg()
-        .toBuffer();
-
       const formData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {
         formData.append(key, value as string);
       });
-      formData.append('file', buffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
-
+      formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
       const uploadRes = await axios.post(url, formData, {
         headers: {
           ...formData.getHeaders(),
@@ -138,48 +128,123 @@ describe('E2E u-9 user-images test', () => {
       );
       const body: CreateImageReqBody = {
         format: 'image/jpeg',
-        path: 'user-profile',
+        path: 'post',
       };
-
       /** main test. */
       const res = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(body);
-
       expect(typia.is<ResponseForm<CreateImageRes>>(res.body)).toBe(true);
       const typedBody = res.body as ResponseForm<CreateImageRes>;
-
       const { image, presignedPost } = typedBody.result;
       const { url, fields } = presignedPost;
-
-      // Create dummy image larger than 6MB
-      const buffer = await sharp({
-        create: {
-          width: 6000,
-          height: 6000,
-          channels: 3,
-          background: { r: 255, g: 0, b: 0 },
-        },
-      })
-        .jpeg()
-        .toBuffer();
-
       const formData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {
         formData.append(key, value as string);
       });
-      formData.append('file', buffer, { filename: 'test-7mb.jpg', contentType: 'image/jpeg' });
-
+      formData.append('file', dummy6MbImageBuffer, { filename: 'test-7mb.jpg', contentType: 'image/jpeg' });
       try {
-        await axios.post(url, formData, {
+        const res = await axios.post(url, formData, {
           headers: {
             ...formData.getHeaders(),
           },
         });
+        expect(true).toBe(false); // 이 코드가 실행되면 테스트 실패
       } catch (error: any) {
         expect(error.response.status).toBe(400);
       }
+    });
+  });
+
+  describe('u-9-2 createUserProfileImagePresignedPost Post /user/images/user-profile --', () => {
+    it('userProfileImagePresignedPost 반환 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const body: CreateUserProfileImagePresignedPostReqBody = {
+        format: 'image/jpeg',
+      };
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .post('/user/images/user-profile')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(body);
+      expect(typia.is<ResponseForm<CreateUserProfileImagePresignedPostRes>>(res.body)).toBe(true);
+    });
+
+    it('userProfileImagePresignedPost 반환 성공 + bucket에 이미지 업로드 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const body: CreateUserProfileImagePresignedPostReqBody = {
+        format: 'image/jpeg',
+      };
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .post('/user/images/user-profile')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(body);
+      expect(typia.is<ResponseForm<CreateUserProfileImagePresignedPostRes>>(res.body)).toBe(true);
+      const typedBody = res.body as ResponseForm<CreateUserProfileImagePresignedPostRes>;
+      const { presignedPost } = typedBody.result;
+      const { url, fields } = presignedPost;
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+      formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      const uploadRes = await axios.post(url, formData, {
+        headers: {
+          ...formData.getHeaders(),
+        },
+      });
+      expect(uploadRes.status).toBe(204);
+    });
+
+    it('userProfileImagePresignedPost 반환 성공 + bucket에 이미지 업로드 성공 후 이미지 삭제 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const body: CreateUserProfileImagePresignedPostReqBody = {
+        format: 'image/jpeg',
+      };
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .post('/user/images/user-profile')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(body);
+      expect(typia.is<ResponseForm<CreateUserProfileImagePresignedPostRes>>(res.body)).toBe(true);
+      const typedBody = res.body as ResponseForm<CreateUserProfileImagePresignedPostRes>;
+      const { presignedPost } = typedBody.result;
+      const { url, fields } = presignedPost;
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+      formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      const uploadRes = await axios.post(url, formData, {
+        headers: {
+          ...formData.getHeaders(),
+        },
+      });
+      expect(uploadRes.status).toBe(204);
+      const deleteRes = await request(app.getHttpServer())
+        .delete('/user/images/user-profile')
+        .set('Authorization', `Bearer ${accessToken}`);
+      expect(typia.is<ResponseForm<void>>(deleteRes.body)).toBe(true);
     });
   });
 });

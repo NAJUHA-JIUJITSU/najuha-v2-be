@@ -11,7 +11,6 @@ import { PostLikeEntity } from '../post/post-like.entity';
 import { PostReportEntity } from '../post/post-report.entity';
 import { PostEntity } from '../post/post.entity';
 import { ImageEntity } from '../image/image.entity';
-import { UserProfileImageEntity } from './user-profile-image.entity';
 
 /**
  * User Entity
@@ -95,9 +94,4 @@ export class UserEntity {
   // Image -----------------------------------------------------------------
   @OneToMany(() => ImageEntity, (image) => image.user)
   images!: ImageEntity[];
-
-  @OneToMany(() => UserProfileImageEntity, (profileImage) => profileImage.user, {
-    cascade: true,
-  })
-  profileImages!: UserProfileImageEntity[];
 }

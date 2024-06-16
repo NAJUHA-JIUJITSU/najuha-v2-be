@@ -1,6 +1,6 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser } from './user.interface';
-import { IImage } from '../../../images/domain/interface/image.interface';
+import { TImageFormat } from '../../../images/domain/interface/image.interface';
 
 export interface IUserProfileImage {
   /** UUID v7. */
@@ -9,19 +9,17 @@ export interface IUserProfileImage {
   /** userId */
   userId: IUser['id'];
 
-  /**
-   * imageId
-   * - u-9-1 createImage 로 생성된 image의 id
-   */
-  imageId: IImage['id'];
+  format: TImageFormat;
+
+  path: 'user-profile';
+
+  linkedAt: TDateOrStringDate | null;
 
   /** createdAt */
   createdAt: TDateOrStringDate;
 
   /** deletedAt */
   deletedAt: TDateOrStringDate | null;
-
-  image: IImage;
 }
 
-export interface IUserProfileImageCreateDto extends Pick<IUserProfileImage, 'userId' | 'imageId'> {}
+export interface IUserProfileImageCreateDto extends Pick<IUserProfileImage, 'userId' | 'format' | 'path'> {}

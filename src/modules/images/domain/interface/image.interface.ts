@@ -45,9 +45,9 @@ export interface IImage {
   userId: IUser['id'];
 }
 
-type TImageFormat = 'image/jpeg' | 'image/png' | 'image/webp';
+export type TImageFormat = 'image/jpeg' | 'image/png' | 'image/webp';
 
-type TImagePath = 'user-profile' | 'competition' | 'post';
+export type TImagePath = 'user-profile' | 'competition' | 'post';
 
 export interface IImageCreateDto {
   userId: IUser['id'];

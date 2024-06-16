@@ -3,7 +3,6 @@ import { BirthDate } from '../../../../common/typia-custom-tags/birth-date.tag';
 import { Nullable } from '../../../../common/utility-types';
 import { IPolicyConsent } from '../../../register/domain/interface/policy-consent.interface';
 import { tags } from 'typia';
-import { IUserProfileImage } from './user-profile-image.interface';
 
 // Entity ---------------------------------------------------------------------
 /**
@@ -63,12 +62,6 @@ export interface IUser {
   /** User 주짓수 벨트. */
   belt: '선택없음' | '화이트' | '블루' | '퍼플' | '브라운' | '블랙';
 
-  // /**
-  //  * User 프로필 이미지 키 (이미지 파일 이름).
-  //  * - 참고 s3 image key 최대길이 1024(https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html).
-  //  */
-  // profileImageUrlKey: null | (string & tags.MinLength<1> & tags.MaxLength<128>);
-
   /**
    * User 상태.
    * - ACTIVE: 활성.
@@ -81,8 +74,6 @@ export interface IUser {
 
   /** UpdatedAt. */
   updatedAt: TDateOrStringDate;
-
-  profileImages?: IUserProfileImage[];
 }
 
 export interface ITemporaryUser

@@ -1,6 +1,12 @@
 import appEnv from '../../common/app-env';
 import { Injectable, Inject, OnModuleInit } from '@nestjs/common';
-import { S3Client, CreateBucketCommand, HeadBucketCommand, PutBucketPolicyCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  CreateBucketCommand,
+  HeadBucketCommand,
+  PutBucketPolicyCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { GetPresignedPostUrlParam, TPresignedPost } from './bucket.interface';
 
@@ -69,5 +75,13 @@ export class BucketService implements OnModuleInit {
       },
       Expires: expiresIn,
     });
+  }
+
+  async deleteObject(key: string): Promise<void> {
+    const deleteCommand = new DeleteObjectCommand({
+      Bucket: this.bucket,
+      Key: key,
+    });
+    await this.client.send(deleteCommand);
   }
 }

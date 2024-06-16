@@ -4,15 +4,7 @@ import { RoleLevels, RoleLevel } from '../../../infrastructure/guard/role.guard'
 import { ResponseForm, createResponseForm } from '../../../common/response/response';
 import { UsersAppService } from '../application/users.app.service';
 import { ENTITY_NOT_FOUND } from '../../../common/response/errorResponse';
-import {
-  CreateUserProfileImageReqBody,
-  CreateUserProfileImageRes,
-  CreateUserReqBody,
-  CreateUserRes,
-  GetMeRes,
-  UpdateUserReqBody,
-  UpdateUserRes,
-} from './users.controller.dto';
+import { CreateUserReqBody, CreateUserRes, GetMeRes, UpdateUserReqBody, UpdateUserRes } from './users.controller.dto';
 
 @Controller('user/users')
 export class UserUsersController {
@@ -62,51 +54,5 @@ export class UserUsersController {
   @TypedRoute.Get('/me')
   async getMe(@Req() req: Request): Promise<ResponseForm<GetMeRes>> {
     return createResponseForm(await this.UsersAppService.getMe({ userId: req['userId'] }));
-  }
-
-  /**
-   * u-3-4 createUserProfileImage.
-   * - RoleLevel: USER.
-   * - 유저의 프로필 이미지를 생성합니다.
-   * - 업데이트 시에도 이 API를 사용합니다.
-   * - 기존에 프로필 이미지가 있을 경우, 기존 이미지는 soft delete 처리되고 새로운 이미지가 생성됩니다.
-   *
-   * @tag u-3 users
-   * @security bearer
-   * @param body CreateUserProfileImageReqBody
-   * @returns CreateUserProfileImageRes
-   */
-  @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Post('/profile-image')
-  async createUserProfileImage(
-    @Req() req: Request,
-    @TypedBody() body: CreateUserProfileImageReqBody,
-  ): Promise<ResponseForm<CreateUserProfileImageRes>> {
-    return createResponseForm(
-      await this.UsersAppService.createUserProfileImage({
-        userProfileImageCreateDto: {
-          userId: req['userId'],
-          imageId: body.imageId,
-        },
-      }),
-    );
-  }
-
-  /**
-   * u-3-5 deleteUserProfileImage.
-   * - RoleLevel: USER.
-   * - 유저의 프로필 이미지를 삭제합니다.
-   * - soft delete 처리됩니다.
-   *
-   * @tag u-3 users
-   * @security bearer
-   * @returns void
-   * @param userId
-   * @returns void
-   */
-  @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Delete('/profile-image')
-  async deleteUserProfileImage(@Req() req: Request): Promise<ResponseForm<void>> {
-    return createResponseForm(await this.UsersAppService.deleteUserProfileImage({ userId: req['userId'] }));
   }
 }

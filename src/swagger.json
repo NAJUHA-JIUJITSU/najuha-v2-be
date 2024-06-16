@@ -1235,169 +1235,6 @@
         "x-nestia-method": "GET"
       }
     },
-    "/user/users/profile-image": {
-      "post": {
-        "tags": [
-          "u-3 users"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "description": "CreateUserProfileImageReqBody",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserProfileImageReqBody"
-              }
-            }
-          },
-          "required": true,
-          "x-nestia-encrypted": false
-        },
-        "responses": {
-          "201": {
-            "description": "CreateUserProfileImageRes",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormCreateUserProfileImageRes"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-3-4 createUserProfileImage",
-        "description": "u-3-4 createUserProfileImage.\n- RoleLevel: USER.\n- 유저의 프로필 이미지를 생성합니다.\n- 업데이트 시에도 이 API를 사용합니다.\n- 기존에 프로필 이미지가 있을 경우, 기존 이미지는 soft delete 처리되고 새로운 이미지가 생성됩니다.",
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "x-nestia-namespace": "user.users.profile-image.createUserProfileImage",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-3 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "security",
-            "text": [
-              {
-                "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "body",
-                "kind": "parameterName"
-              },
-              {
-                "text": " ",
-                "kind": "space"
-              },
-              {
-                "text": "CreateUserProfileImageReqBody",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "CreateUserProfileImageRes",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "POST"
-      },
-      "delete": {
-        "tags": [
-          "u-3 users"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "void",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseFormvoid"
-                }
-              }
-            },
-            "x-nestia-encrypted": false
-          }
-        },
-        "summary": "u-3-5 deleteUserProfileImage",
-        "description": "u-3-5 deleteUserProfileImage.\n- RoleLevel: USER.\n- 유저의 프로필 이미지를 삭제합니다.\n- soft delete 처리됩니다.",
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "x-nestia-namespace": "user.users.profile-image.deleteUserProfileImage",
-        "x-nestia-jsDocTags": [
-          {
-            "name": "tag",
-            "text": [
-              {
-                "text": "u-3 users",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "security",
-            "text": [
-              {
-                "text": "bearer",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "void",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "param",
-            "text": [
-              {
-                "text": "userId",
-                "kind": "text"
-              }
-            ]
-          },
-          {
-            "name": "returns",
-            "text": [
-              {
-                "text": "void",
-                "kind": "text"
-              }
-            ]
-          }
-        ],
-        "x-nestia-method": "DELETE"
-      }
-    },
     "/user/policies/latest": {
       "get": {
         "tags": [
@@ -1544,7 +1381,7 @@
         "x-nestia-method": "GET"
       }
     },
-    "/admin/policy": {
+    "/admin/policies": {
       "post": {
         "tags": [
           "a-4 policy"
@@ -1582,7 +1419,7 @@
             "bearer": []
           }
         ],
-        "x-nestia-namespace": "admin.policy.createPolicy",
+        "x-nestia-namespace": "admin.policies.createPolicy",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -1666,7 +1503,7 @@
             "bearer": []
           }
         ],
-        "x-nestia-namespace": "admin.policy.findPolicies",
+        "x-nestia-namespace": "admin.policies.findPolicies",
         "x-nestia-jsDocTags": [
           {
             "name": "tag",
@@ -6282,6 +6119,133 @@
         ],
         "x-nestia-method": "POST"
       }
+    },
+    "/user/images/user-profile": {
+      "post": {
+        "tags": [
+          "u-9 images"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserProfileImagePresignedPostReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "CreateImageRes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateUserProfileImagePresignedPostRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-9-2 createUserProfileImagePresignedPost",
+        "description": "u-9-2 createUserProfileImagePresignedPost.\n- RoleLevel: USER.\n- userId에 해당하는 user의 profile image를 업로드할 때 사용할 presignedPost를 반환합니다.\n- presignedPost는 이미지를 업로드할 때 사용됩니다.\n- presignedPost는 5분 후 만료되도록 설정되어 있습니다.\n- presignedPost는 5MB 이하의 이미지만 업로드할 수 있도록 설정되어 있습니다.\n\nQ. 왜 userProfileImage는 ImageEntity를 반환하지 않나요?\n- A. userProfileImage는 userId 를 key로 bucket에 저장됩니다. 따라서 이미지를 식별하기위한 ImageEntity가 필요하지 않습니다.\n\nQ. 왜 userProfileImage는 userId를 key로 bucket에 저장하나요?\n- A. 게시글이나 댓글을 볼 때, 작성자의 프로필 이미지를 함께 보여주어야 합니다. 게시글과 댓글에는 이미 작성자의 userId가 포함되어 있습니다. 그래서 userId를 키로 사용해 프로필 이미지를 버킷에 저장하면, 게시글이나 댓글을 조회할 때 userId를 이용해 쉽게 해당 작성자의 프로필 이미지를 찾을 수 있습니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.images.user-profile.createUserProfileImagePresignedPost",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-9 images",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CreateImageRes",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      },
+      "delete": {
+        "tags": [
+          "u-9 images"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-9-3 deleteUserProfileImage",
+        "description": "u-9-3 deleteUserProfileImage.\n- RoleLevel: USER.\n- userId를 key로 사용해 버킷에서 해당 이미지를 삭제합니다.\n\nQ. 왜 user domain에서 이미지를 삭제하지 않고 image domain에서 삭제하나요?\n- A. bucket에 저장된 이미지를 직접 삭제하는 것은 image domain의 역할이라고 판단했습니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.images.user-profile.deleteUserProfileImage",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-9 images",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "DELETE"
+      }
     }
   },
   "components": {
@@ -8902,12 +8866,6 @@
             "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "UpdatedAt",
             "description": "UpdatedAt."
-          },
-          "profileImages": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IUserProfileImage"
-            }
           }
         },
         "nullable": false,
@@ -8928,126 +8886,6 @@
           "updatedAt"
         ],
         "description": "각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
-      },
-      "IUserProfileImage": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "description": "userId"
-          },
-          "imageId": {
-            "$ref": "#/components/schemas/TId",
-            "description": "imageId\n- u-9-1 createImage 로 생성된 image의 id"
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "description": "createdAt"
-          },
-          "deletedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "description": "deletedAt"
-          },
-          "image": {
-            "$ref": "#/components/schemas/IImage"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "userId",
-          "imageId",
-          "createdAt",
-          "deletedAt",
-          "image"
-        ]
-      },
-      "IImage": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7.\n- s3 bucket에 저장되는 이미지의 key로 사용됩니다.\n- `${bucketHost}/${bucketName}/${path}/${id}` 로 접근 가능합니다.\n- ex) http://localhost:9000/najuha-v2-bucket/competition/019000fb-11c3-7766-ad55-17c0c2b18cae"
-          },
-          "path": {
-            "$ref": "#/components/schemas/TImagePath",
-            "description": "s3 bucket에 저장되는 이미지의 경로\n- user 프로필 이미지를 생성하는 경우: `user-profile` 로 설로\n- competition 이미지를 생성하는 경우: `competition` 로 설정\n- post 이미지를 생성하는 경우: `post` 로 설정"
-          },
-          "format": {
-            "$ref": "#/components/schemas/TImageFormat",
-            "title": "image format",
-            "description": "image format."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "createdAt",
-            "description": "createdAt.\n- 이미지가 생성된 시간"
-          },
-          "linkedAt": {
-            "oneOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              },
-              {
-                "type": "string",
-                "format": "date-time",
-                "nullable": true
-              }
-            ],
-            "title": "linkedAt",
-            "description": "linkedAt.\n- 이미지를 소유한 entity에 FK로 연결된 시간.\n- null 이면 연결되지 않은 이미지.\n- createdAt + 10분 이후에도 연결되지 않은 이미지는 주기적으로 삭제됩니다."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "userId",
-            "description": "userId.\n- 이미지를 생성한 계정의 userId."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "path",
-          "format",
-          "createdAt",
-          "linkedAt",
-          "userId"
-        ],
-        "description": "Image Interface"
-      },
-      "TImagePath": {
-        "type": "string",
-        "enum": [
-          "user-profile",
-          "competition",
-          "post"
-        ]
-      },
-      "TImageFormat": {
-        "type": "string",
-        "enum": [
-          "image/jpeg",
-          "image/png",
-          "image/webp"
-        ]
       },
       "ResponseFormGetMeRes": {
         "type": "object",
@@ -9085,80 +8923,6 @@
         "nullable": false,
         "required": [
           "user"
-        ]
-      },
-      "CreateUserProfileImageReqBody": {
-        "type": "object",
-        "properties": {
-          "imageId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "imageId\n- u-9-1 createImage 로 생성된 image의 id"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "imageId"
-        ]
-      },
-      "ResponseFormCreateUserProfileImageRes": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              200
-            ]
-          },
-          "result": {
-            "$ref": "#/components/schemas/CreateUserProfileImageRes"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "isSuccess",
-          "code",
-          "result"
-        ]
-      },
-      "CreateUserProfileImageRes": {
-        "type": "object",
-        "properties": {
-          "user": {
-            "$ref": "#/components/schemas/IUser"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "user"
-        ]
-      },
-      "ResponseFormvoid": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              200
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "isSuccess",
-          "code"
         ]
       },
       "ResponseFormFindAllTypesOfLatestPoliciesRes": {
@@ -9929,6 +9693,77 @@
           "createdAt",
           "deletedAt",
           "image"
+        ]
+      },
+      "IImage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7.\n- s3 bucket에 저장되는 이미지의 key로 사용됩니다.\n- `${bucketHost}/${bucketName}/${path}/${id}` 로 접근 가능합니다.\n- ex) http://localhost:9000/najuha-v2-bucket/competition/019000fb-11c3-7766-ad55-17c0c2b18cae"
+          },
+          "path": {
+            "$ref": "#/components/schemas/TImagePath",
+            "description": "s3 bucket에 저장되는 이미지의 경로\n- user 프로필 이미지를 생성하는 경우: `user-profile` 로 설로\n- competition 이미지를 생성하는 경우: `competition` 로 설정\n- post 이미지를 생성하는 경우: `post` 로 설정"
+          },
+          "format": {
+            "$ref": "#/components/schemas/TImageFormat",
+            "title": "image format",
+            "description": "image format."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "createdAt",
+            "description": "createdAt.\n- 이미지가 생성된 시간"
+          },
+          "linkedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "title": "linkedAt",
+            "description": "linkedAt.\n- 이미지를 소유한 entity에 FK로 연결된 시간.\n- null 이면 연결되지 않은 이미지.\n- createdAt + 10분 이후에도 연결되지 않은 이미지는 주기적으로 삭제됩니다."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "userId",
+            "description": "userId.\n- 이미지를 생성한 계정의 userId."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "path",
+          "format",
+          "createdAt",
+          "linkedAt",
+          "userId"
+        ],
+        "description": "Image Interface"
+      },
+      "TImagePath": {
+        "type": "string",
+        "enum": [
+          "user-profile",
+          "competition",
+          "post"
+        ]
+      },
+      "TImageFormat": {
+        "type": "string",
+        "enum": [
+          "image/jpeg",
+          "image/png",
+          "image/webp"
         ]
       },
       "ResponseFormGetCompetitionRes": {
@@ -11697,6 +11532,28 @@
           "competition"
         ]
       },
+      "ResponseFormvoid": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
       "CreateApplicationReqBody": {
         "type": "object",
         "properties": {
@@ -11732,10 +11589,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             },
@@ -11831,26 +11688,6 @@
           "masterName"
         ]
       },
-      "SocialScurityNumberInfo": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "SOCIAL_SECURITY_NUMBER"
-            ]
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^[0-9]{6}-[0-9]{7}$"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "value"
-        ]
-      },
       "AddressInfo": {
         "type": "object",
         "properties": {
@@ -11864,6 +11701,26 @@
             "type": "string",
             "maxLength": 512,
             "minLength": 1
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
           }
         },
         "nullable": false,
@@ -12345,10 +12202,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             },
@@ -12422,10 +12279,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             },
@@ -12680,8 +12537,7 @@
         "required": [
           "title",
           "category",
-          "body",
-          "imageIds"
+          "body"
         ]
       },
       "ResponseFormCreatePostRes": {
@@ -12740,11 +12596,6 @@
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Post writer",
-            "description": "Post writer."
-          },
           "viewCount": {
             "type": "integer",
             "title": "Post view count",
@@ -12754,6 +12605,11 @@
             "$ref": "#/components/schemas/TPostCategory",
             "title": "Post category",
             "description": "Post category.\n- FREE: 자유 게시판.\n- COMPETITION: 대회 게시판.\n- SEMINAR: 세미나 게시판.\n- OPEN_MAT: 오픈 매트 게시판."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Post writer",
+            "description": "Post writer."
           },
           "deletedAt": {
             "oneOf": [
@@ -12792,9 +12648,9 @@
           "id",
           "status",
           "createdAt",
-          "userId",
           "viewCount",
           "category",
+          "userId",
           "deletedAt",
           "postSnapshots"
         ]
@@ -13060,8 +12916,7 @@
         "nullable": false,
         "required": [
           "title",
-          "body",
-          "imageIds"
+          "body"
         ]
       },
       "ResponseFormUpdatePostRes": {
@@ -13611,6 +13466,61 @@
         "additionalProperties": {
           "type": "string"
         }
+      },
+      "CreateUserProfileImagePresignedPostReqBody": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp"
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "format"
+        ]
+      },
+      "ResponseFormCreateUserProfileImagePresignedPostRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CreateUserProfileImagePresignedPostRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CreateUserProfileImagePresignedPostRes": {
+        "type": "object",
+        "properties": {
+          "presignedPost": {
+            "$ref": "#/components/schemas/TPresignedPost"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "presignedPost"
+        ]
       }
     },
     "securitySchemes": {
