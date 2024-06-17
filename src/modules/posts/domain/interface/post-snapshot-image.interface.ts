@@ -1,3 +1,4 @@
+import { tags } from 'typia';
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IImage } from '../../../images/domain/interface/image.interface';
 import { IPostSnapshot } from './post-snapshot.interface';
@@ -17,9 +18,9 @@ export interface IPostSnapshotImage {
 
   /**
    * sequence.
-   * - 이미지의 순서
+   * - 이미지의 순서, 0부터 시작.
    */
-  sequence: number;
+  sequence: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
   /** createdAt. */
   createdAt: TDateOrStringDate;

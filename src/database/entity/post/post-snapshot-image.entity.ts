@@ -23,6 +23,7 @@ export class PostSnapshotImageEntity {
   /**
    * sequence.
    * - 게시물 이미지의 순서.
+   * - 0부터 시작.
    */
   @Column('int')
   sequence!: IPostSnapshotImage['sequence'];

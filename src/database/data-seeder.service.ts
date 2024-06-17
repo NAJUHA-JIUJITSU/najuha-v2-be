@@ -34,7 +34,25 @@ import { IParticipationDivisionInfoSnapshot } from '../modules/applications/doma
 import { IAdditionalInfo } from '../modules/applications/domain/interface/additional-info.interface';
 import { ICompetitionHostMap } from '../modules/competitions/domain/interface/competition-host-map.interface';
 import { CompetitionHostMapEntity } from './entity/competition/competition-host.entity';
+import { IPost } from '../modules/posts/domain/interface/post.interface';
+import { IPostSnapshot } from '../modules/posts/domain/interface/post-snapshot.interface';
+import { IPostSnapshotImage } from '../modules/posts/domain/interface/post-snapshot-image.interface';
+import { IImage } from '../modules/images/domain/interface/image.interface';
+import { PostEntity } from './entity/post/post.entity';
+import { ImageEntity } from './entity/image/image.entity';
+import { PostDummyBuilder } from '../dummy/post.dummy';
+import { PostSnapshotEntity } from './entity/post/post-snapshot.entity';
+import { PostSnapshotImageEntity } from './entity/post/post-snapshot-image.entity';
+import { BucketService } from '../infrastructure/bucket/bucket.service';
+import * as sharp from 'sharp';
+import typia, { tags } from 'typia';
 
+/**
+ * todo!!!:
+ * - data preparation, data batch insert 등의 메서드를 별도의 클래스로 분리하여 응집도를 높이세요.
+ * - config 값을 이용하여 데이터를 삽입할 때 생성할 더미데이터 종류 및 개수를 설정할 수 있도록 하세요.
+ * - 데이터 의존관계를 고려하여 적절한 에러 핸들링을 추가하세요.
+ */
 @Injectable()
 export class DataSeederService {
   private queryRunner: QueryRunner;
@@ -42,6 +60,7 @@ export class DataSeederService {
   private policies: IPolicy[] = [];
   private competitions: ICompetition[] = [];
   private applications: IApplication[] = [];
+  private posts: IPost[] = [];
   // User
   private usersToSave: (IUser | ITemporaryUser)[] = [];
   private policiesToSave: IPolicy[] = [];
@@ -59,8 +78,17 @@ export class DataSeederService {
   private participationDivisionInfosToSave: IParticipationDivisionInfo[] = [];
   private participationDivisionInfosSnapshotsToSave: IParticipationDivisionInfoSnapshot[] = [];
   private additionalInfosToSave: IAdditionalInfo[] = [];
+  // Post
+  private postToSave: IPost[] = [];
+  private postSnapshotsToSave: IPostSnapshot[] = [];
+  private postSnapshotImagesToSave: IPostSnapshotImage[] = [];
+  // Image
+  private imagesToSave: IImage[] = [];
 
-  constructor(private dataSource: DataSource) {
+  constructor(
+    private readonly dataSource: DataSource,
+    private readonly bucketService: BucketService,
+  ) {
     this.queryRunner = this.dataSource.createQueryRunner();
   }
 
@@ -86,13 +114,22 @@ export class DataSeederService {
   }
 
   private async checkIfDataExists(): Promise<boolean> {
-    const [userCount, policyCount, competitionCount, applicationCount] = await Promise.all([
+    const [userCount, policyCount, competitionCount, applicationCount, postCount, imageCount] = await Promise.all([
       this.queryRunner.manager.getRepository(UserEntity).count(),
       this.queryRunner.manager.getRepository(PolicyEntity).count(),
       this.queryRunner.manager.getRepository(CompetitionEntity).count(),
       this.queryRunner.manager.getRepository(ApplicationEntity).count(),
+      this.queryRunner.manager.getRepository(PostEntity).count(),
+      this.queryRunner.manager.getRepository(ImageEntity).count(),
     ]);
-    return userCount > 0 || policyCount > 0 || competitionCount > 0 || applicationCount > 0;
+    return (
+      userCount > 0 ||
+      policyCount > 0 ||
+      competitionCount > 0 ||
+      applicationCount > 0 ||
+      postCount > 0 ||
+      imageCount > 0
+    );
   }
 
   private prepareData() {
@@ -108,6 +145,7 @@ export class DataSeederService {
     this.preparePolicies();
     this.prepareCompetitions();
     this.prepareApplications(this.users, this.competitions);
+    this.preparePosts(this.users);
     console.timeEnd('Data preparation time');
   }
 
@@ -191,6 +229,22 @@ export class DataSeederService {
     console.timeEnd('Applications preparation time');
   }
 
+  private preparePosts(users: (IUser | ITemporaryUser)[]) {
+    console.time('Posts preparation time');
+    const posts = users.flatMap((user) => {
+      const postCount = 1000;
+      const posts: IPost[] = [];
+      for (let i = 0; i < postCount; i++) posts.push(new PostDummyBuilder(user.id).build());
+      return posts;
+    });
+    this.posts = posts;
+    this.postToSave = posts;
+    this.postSnapshotsToSave = posts.flatMap((post) => post.postSnapshots);
+    this.postSnapshotImagesToSave = this.postSnapshotsToSave.flatMap((postSnapshot) => postSnapshot.postSnapshotImages);
+    this.imagesToSave = this.postSnapshotImagesToSave.map((postSnapshotImage) => postSnapshotImage.image);
+    console.timeEnd('Posts preparation time');
+  }
+
   /**
    * 병렬로 데이터를 삽입합니다.
    * 병렬로 삽입하기 위해 FK 제약 조건을 무시하고 삽입합니다.
@@ -220,6 +274,13 @@ export class DataSeederService {
         this.batchInsert(ParticipationDivisionInfoEntity, this.participationDivisionInfosToSave),
         this.batchInsert(ParticipationDivisionInfoSnapshotEntity, this.participationDivisionInfosSnapshotsToSave),
         this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave),
+        // Post
+        this.batchInsert(PostEntity, this.postToSave),
+        this.batchInsert(PostSnapshotEntity, this.postSnapshotsToSave),
+        this.batchInsert(PostSnapshotImageEntity, this.postSnapshotImagesToSave),
+        // Image
+        this.batchInsert(ImageEntity, this.imagesToSave),
+        this.uploadImages(this.imagesToSave),
       ]);
       await this.queryRunner.query('SET session_replication_role = DEFAULT');
       await this.rebuildIndexes();
@@ -285,6 +346,13 @@ export class DataSeederService {
       await this.batchInsert(ParticipationDivisionInfoEntity, this.participationDivisionInfosToSave);
       await this.batchInsert(ParticipationDivisionInfoSnapshotEntity, this.participationDivisionInfosSnapshotsToSave);
       await this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave);
+      // Post
+      await this.batchInsert(PostEntity, this.postToSave);
+      await this.batchInsert(PostSnapshotEntity, this.postSnapshotsToSave);
+      await this.batchInsert(PostSnapshotImageEntity, this.postSnapshotImagesToSave);
+      // Image
+      await this.batchInsert(ImageEntity, this.imagesToSave);
+      await this.uploadImages(this.imagesToSave);
       await this.queryRunner.commitTransaction();
       console.log('Data seeding completed.');
       console.timeEnd('Data seeding time');
@@ -312,5 +380,57 @@ export class DataSeederService {
       progressBar.update(Math.min(i + batchSize, data.length));
     }
     progressBar.stop();
+  }
+
+  private async uploadImages(images: IImage[]) {
+    const batchSize = 1000;
+    const imageBuffers = await this.getRamdomImageBuffers();
+    const progressBar = new cliProgress.SingleBar(
+      {
+        format: `{bar} | Image Upload To Bucket | {percentage}% | {value}/{total} | {duration_formatted}`,
+      },
+      cliProgress.Presets.legacy,
+    );
+    progressBar.start(images.length, 0);
+    for (let i = 0; i < images.length; i += batchSize) {
+      const batch = images.slice(i, i + batchSize);
+      const uploadPromises = batch.map(async (image, index) => {
+        await this.bucketService.uploadObject(
+          `${image.path}/${image.id}`,
+          imageBuffers[index % imageBuffers.length],
+          image.format,
+        );
+        progressBar.update(Math.min(i + batchSize, images.length));
+      });
+      await Promise.all(uploadPromises);
+    }
+    progressBar.stop();
+  }
+
+  private async getRamdomImageBuffers(): Promise<Buffer[]> {
+    const dummyImageBuffers: Promise<Buffer>[] = [];
+    for (let i = 0; i < 100; i++) {
+      const randomColor = this.getRamdomColor();
+      const buffer = sharp({
+        create: {
+          width: 500,
+          height: 500,
+          channels: 3,
+          background: randomColor,
+        },
+      })
+        .jpeg()
+        .toBuffer();
+      dummyImageBuffers.push(buffer);
+    }
+    return Promise.all(dummyImageBuffers);
+  }
+
+  private getRamdomColor() {
+    return {
+      r: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
+      g: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
+      b: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
+    };
   }
 }

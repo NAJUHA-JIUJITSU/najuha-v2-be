@@ -6,6 +6,7 @@ import {
   HeadBucketCommand,
   PutBucketPolicyCommand,
   DeleteObjectCommand,
+  PutObjectCommand,
 } from '@aws-sdk/client-s3';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { GetPresignedPostUrlParam, TPresignedPost } from './bucket.interface';
@@ -83,5 +84,15 @@ export class BucketService implements OnModuleInit {
       Key: key,
     });
     await this.client.send(deleteCommand);
+  }
+
+  async uploadObject(key: string, body: Buffer, contentType: string): Promise<void> {
+    const uploadCommand = new PutObjectCommand({
+      Bucket: this.bucket,
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+    });
+    await this.client.send(uploadCommand);
   }
 }

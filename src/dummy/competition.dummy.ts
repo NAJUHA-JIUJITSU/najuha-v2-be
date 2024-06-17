@@ -39,7 +39,7 @@ export class CompetitionDummyBuilder {
     earlybirdDiscountSnapshots: [],
     combinationDiscountSnapshots: [],
     requiredAdditionalInfos: [],
-    competitionHostMaps: [], // todo!!!: competitionHostMaps에 데이터 추가하기
+    competitionHostMaps: [],
     competitionPosterImages: [],
   };
   private today: Date;

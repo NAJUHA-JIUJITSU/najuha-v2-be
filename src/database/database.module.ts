@@ -16,6 +16,7 @@ import { PostReportRepository } from './custom-repository/post-report.repository
 import { CommentLikeRepository } from './custom-repository/comment-like.repository';
 import { CommentReportRepository } from './custom-repository/comment-report.repository';
 import { ImageRepository } from './custom-repository/image.repository';
+import { BucketModule } from '../infrastructure/bucket/bucket.module';
 
 const repositories = [
   PolicyRepository,
@@ -36,6 +37,7 @@ const repositories = [
   ImageRepository,
 ];
 @Module({
+  imports: [BucketModule],
   providers: [...repositories, DataSeederService],
   exports: repositories,
 })
