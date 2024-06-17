@@ -20,6 +20,13 @@ export class PostSnapshotImageEntity {
   @Column('uuid')
   imageId!: IPostSnapshotImage['imageId'];
 
+  /**
+   * sequence.
+   * - 게시물 이미지의 순서.
+   */
+  @Column('int')
+  sequence!: IPostSnapshotImage['sequence'];
+
   @Column('timestamptz')
   createdAt!: IPostSnapshotImage['createdAt'];
 

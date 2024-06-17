@@ -26,8 +26,12 @@ export class PostFactory {
 
   createPostSnapshot({ postId, title, body }: IPostSnapshotCreateDto, images?: IImage[]): IPostSnapshot {
     const postSnapshotId = uuidv7();
+    // const postSnapshotImages =
+    //   images?.map((image) => this.createPostSnapshotImage({ postSnapshotId, imageId: image.id, image })) || [];
     const postSnapshotImages =
-      images?.map((image) => this.createPostSnapshotImage({ postSnapshotId, imageId: image.id, image })) || [];
+      images?.map((image, index) =>
+        this.createPostSnapshotImage({ postSnapshotId, imageId: image.id, image }, index),
+      ) || [];
     return {
       id: postSnapshotId,
       postId,
@@ -38,12 +42,16 @@ export class PostFactory {
     };
   }
 
-  createPostSnapshotImage({ postSnapshotId, imageId, image }: IPostSnapshotImageCreateDto): IPostSnapshotImage {
+  createPostSnapshotImage(
+    { postSnapshotId, imageId, image }: IPostSnapshotImageCreateDto,
+    sequence: number = 0,
+  ): IPostSnapshotImage {
     return {
       id: uuidv7(),
       postSnapshotId,
       imageId,
       createdAt: new Date(),
+      sequence,
       image: {
         ...image,
         linkedAt: new Date(),

@@ -6,16 +6,22 @@ export interface IPostSnapshotImage {
   /** UUID v7. */
   id: TId;
 
-  /** postSnapshotId */
+  /** postSnapshotId. */
   postSnapshotId: IPostSnapshot['id'];
 
   /**
-   * imageId
+   * imageId.
    * - u-9-1 createImage 로 생성된 image의 id
    */
   imageId: IImage['id'];
 
-  /** createdAt */
+  /**
+   * sequence.
+   * - 이미지의 순서
+   */
+  sequence: number;
+
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
   image: IImage;
