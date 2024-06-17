@@ -255,7 +255,7 @@ export class UserPostsController {
    * @returns CreateCommentRes 댓글 작성 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Post('/:postId/comment')
+  @TypedRoute.Post('/:postId/comments')
   async createComment(
     @TypedParam('postId') postId: IPost['id'],
     @Req() req: Request,
@@ -281,7 +281,7 @@ export class UserPostsController {
    * @returns CreateCommentReplyRes 대댓글 작성 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Post('/:postId/comment/:commentId/reply')
+  @TypedRoute.Post('/:postId/comments/:commentId/replies')
   async createCommentReply(
     @TypedParam('postId') postId: IPost['id'],
     @TypedParam('commentId') commentId: IComment['id'],
@@ -314,7 +314,7 @@ export class UserPostsController {
    * @returns FindCommentsRes 댓글 조회 결과
    */
   @RoleLevels(RoleLevel.PUBLIC_OR_USER)
-  @TypedRoute.Get('/:postId/comment')
+  @TypedRoute.Get('/:postId/comments')
   async findComments(
     @Req() req: Request,
     @TypedParam('postId') postId: IPost['id'],
@@ -346,7 +346,7 @@ export class UserPostsController {
    * @returns FindCommentsRes 대댓글 조회 결과
    */
   @RoleLevels(RoleLevel.PUBLIC_OR_USER)
-  @TypedRoute.Get('/:postId/comment/:commentId/reply')
+  @TypedRoute.Get('/:postId/comments/:commentId/replies')
   async findCommentReplies(
     @Req() req: Request,
     @TypedParam('postId') postId: IPost['id'],
@@ -378,7 +378,7 @@ export class UserPostsController {
    * @returns UpdateCommentRes 댓글 수정 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Patch('/comment/:commentId')
+  @TypedRoute.Patch('/comments/:commentId')
   async updatePostComment(
     @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
@@ -403,7 +403,7 @@ export class UserPostsController {
    * @returns void 댓글 삭제 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Delete('/comment/:commentId')
+  @TypedRoute.Delete('/comments/:commentId')
   async deletePostComment(
     @Req() req: Request,
     @TypedParam('commentId') commentId: IComment['id'],
@@ -428,7 +428,7 @@ export class UserPostsController {
    * @returns void 좋아요 추가 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Post('/comment/:commentId/like')
+  @TypedRoute.Post('/comments/:commentId/like')
   async createPostCommentLike(
     @Req() req: Request,
     @TypedParam('commentId') commentId: IComment['id'],
@@ -451,7 +451,7 @@ export class UserPostsController {
    * @returns void 좋아요 취소 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Delete('/comment/:commentId/like')
+  @TypedRoute.Delete('/comments/:commentId/like')
   async deletePostCommentLike(
     @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
@@ -477,7 +477,7 @@ export class UserPostsController {
    * @returns void 댓글 신고 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Post('/comment/:commentId/report')
+  @TypedRoute.Post('/comments/:commentId/report')
   async createPostCommentReport(
     @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
@@ -501,7 +501,7 @@ export class UserPostsController {
    * @returns void 댓글 신고 취소 결과
    */
   @RoleLevels(RoleLevel.USER)
-  @TypedRoute.Delete('/comment/:commentId/report')
+  @TypedRoute.Delete('/comments/:commentId/report')
   async deletePostCommentReport(
     @TypedParam('commentId') commentId: IComment['id'],
     @Req() req: Request,
