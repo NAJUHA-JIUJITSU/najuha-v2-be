@@ -1,5 +1,5 @@
 import { ITemporaryUser, IUser } from '../modules/users/domain/interface/user.interface';
-import { assert } from 'typia';
+import typia, { assert } from 'typia';
 import { uuidv7 } from 'uuidv7';
 
 export class UserDummyBuilder {
@@ -10,10 +10,10 @@ export class UserDummyBuilder {
     this.user.role = 'USER';
     this.user.snsAuthProvider = 'KAKAO';
     this.user.snsId = uuidv7();
-    this.user.name = 'dummyUser';
+    this.user.name = `${typia.random<IUser['name']>()}`;
     this.user.email = 'dummy@gmail.com';
     this.user.phoneNumber = '01012345678';
-    this.user.nickname = 'dummyUserNickName';
+    this.user.nickname = `${typia.random<IUser['nickname']>()}`;
     this.user.gender = 'MALE';
     this.user.birth = '19980101';
     this.user.belt = '화이트';

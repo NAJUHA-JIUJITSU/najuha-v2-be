@@ -9,11 +9,19 @@ import appEnv from '../../../src/common/app-env';
 import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
 import {
+  CreateCommentReplyReqBody,
+  CreateCommentReplyRes,
+  CreateCommentReportReqBody,
+  CreateCommentReqBody,
+  CreateCommentRes,
   CreatePostReportReqBody,
   CreatePostReqBody,
   CreatePostRes,
+  FindCommentsRes,
   FindPostsRes,
   GetPostRes,
+  UpdateCommentReqBody,
+  UpdateCommentRes,
   UpdatePostReqBody,
   UpdatePostRes,
 } from '../../../src/modules/posts/presentation/posts.controller.dto';
@@ -24,6 +32,8 @@ import * as FormData from 'form-data';
 import * as fs from 'fs/promises';
 import {
   ENTITY_NOT_FOUND,
+  POSTS_COMMENT_LIKE_ALREADY_EXIST,
+  POSTS_COMMENT_REPORT_ALREADY_EXIST,
   POSTS_POST_LIKE_ALREADY_EXIST,
   POSTS_POST_REPORT_ALREADY_EXIST,
 } from '../../../src/common/response/errorResponse';
@@ -450,6 +460,648 @@ describe('E2E u-7 competitions TEST', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send(postReport);
       expect(typia.is<ResponseForm<void>>(ret.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-10 Post /user/posts/:postId/comments', () => {
+    it('게시물 댓글 생성 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      /** main test. */
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const res = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      expect(typia.is<ResponseForm<CreateCommentRes>>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-11 Post /user/posts/:postId/comments/:commentId/replies', () => {
+    it('게시물 댓글 답글 생성 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      /** main test. */
+      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+        body: 'body',
+      };
+      const res = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments/${commentId}/replies`)
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .send(commentReplyCreateDto);
+      expect(typia.is<ResponseForm<CreateCommentReplyRes>>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-12 GET /user/posts/:postId/comments', () => {
+    it('게시물 댓글 조회 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const tmp = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      expect(typia.is<ResponseForm<FindCommentsRes>>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-13 GET /user/posts/:postId/comments/:commentId/replies', () => {
+    it('게시물 답글 조회 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+        body: 'body',
+      };
+      await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments/${commentId}/replies`)
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .send(commentReplyCreateDto);
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments/${commentId}/replies`)
+        .set('Authorization', `Bearer ${accessToken}`);
+      expect(typia.is<ResponseForm<FindCommentsRes>>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-14 PATCH /user/posts/comments/:commentId', () => {
+    it('게시물 댓글 수정 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      /** main test. */
+      const commentUpdateDto: UpdateCommentReqBody = {
+        body: 'body',
+      };
+      const res = await request(app.getHttpServer())
+        .patch(`/user/posts/comments/${commentId}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentUpdateDto);
+      expect(typia.is<ResponseForm<UpdateCommentRes>>(res.body)).toBe(true);
+    });
+
+    it('게시물 답글 수정 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+        body: 'body',
+      };
+      const createCommentReplyRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments/${commentId}/replies`)
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .send(commentReplyCreateDto);
+      const commentReplyId = createCommentReplyRes.body.result.comment.id;
+      /** main test. */
+      const commentUpdateDto: UpdateCommentReqBody = {
+        body: 'body',
+      };
+      const res = await request(app.getHttpServer())
+        .patch(`/user/posts/comments/${commentReplyId}`)
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .send(commentUpdateDto);
+      expect(typia.is<ResponseForm<UpdateCommentRes>>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-15 DELETE /user/posts/comments/:commentId', () => {
+    it('게시물 댓글 삭제 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      /** main test. */
+      await request(app.getHttpServer())
+        .delete(`/user/posts/comments/${commentId}`)
+        .set('Authorization', `Bearer ${accessToken}`);
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      expect(res.body.result.comments.length).toBe(0);
+    });
+    it('게시물 답글 삭제 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+        body: 'body',
+      };
+      const createCommentReplyRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments/${commentId}/replies`)
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .send(commentReplyCreateDto);
+      const commentReplyId = createCommentReplyRes.body.result.comment.id;
+      /** main test. */
+      await request(app.getHttpServer())
+        .delete(`/user/posts/comments/${commentReplyId}`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments/${commentId}/replies`)
+        .set('Authorization', `Bearer ${accessToken}`);
+      expect(res.body.result.comments.length).toBe(0);
+    });
+  });
+
+  describe('u-7-16 Post /user/posts/comments/:commentId/like', () => {
+    it('게시물 댓글 좋아요 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      /** main test. */
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/like`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      expect(res.body.result.comments[0].userLiked).toBe(true);
+    });
+
+    it('게시물 댓글 중복 좋아요 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/like`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/like`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      expect(typia.is<POSTS_COMMENT_LIKE_ALREADY_EXIST>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-17 DELETE /user/posts/comments/:commentId/like', () => {
+    it('게시물 댓글 좋아요 취소 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/like`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      /** main test. */
+      await request(app.getHttpServer())
+        .delete(`/user/posts/comments/${commentId}/like`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      expect(res.body.result.comments[0].userLiked).toBe(false);
+    });
+  });
+
+  describe('u-7-18 Post /user/posts/comments/:commentId/report', () => {
+    it('게시물 댓글 신고 성공 시 (10명 이상 신고시 게시물 INACTIVE 처리)', async () => {
+      /** pre condition. */
+      let users: IUser[] = [];
+      for (let i = 0; i < 10; i++) {
+        const user = new UserDummyBuilder().setNickname(`user${i}`).build();
+        await entityEntityManager.save(UserEntity, user);
+        users.push(user);
+      }
+      const accessTokens = users.map((user) =>
+        jwtService.sign(
+          { userId: user.id, userRole: user.role },
+          { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+        ),
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      /** main test. */
+      const commentReport: CreateCommentReportReqBody = {
+        type: 'SPAM',
+        reason: 'reason',
+      };
+      for (const accessToken of accessTokens) {
+        const res = await request(app.getHttpServer())
+          .post(`/user/posts/comments/${commentId}/report`)
+          .set('Authorization', `Bearer ${accessToken}`)
+          .send(commentReport);
+        expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
+      }
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessTokens[0]}`);
+      expect(res.body.result.comments.length).toBe(0);
+    });
+
+    it('게시물 댓글 중복 신고 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      const commentReport: CreateCommentReportReqBody = {
+        type: 'SPAM',
+        reason: 'reason',
+      };
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/report`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentReport);
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/report`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentReport);
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/report`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentReport);
+      expect(typia.is<POSTS_COMMENT_REPORT_ALREADY_EXIST>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-19 DELETE /user/posts/comments/:commentId/report', () => {
+    it('게시물 댓글 신고 취소 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      const commentReport: CreateCommentReportReqBody = {
+        type: 'SPAM',
+        reason: 'reason',
+      };
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/report`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentReport);
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/report`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentReport);
+      /** main test. */
+      // 신고 취소 후 다시 신고되는 테스트
+      await request(app.getHttpServer())
+        .delete(`/user/posts/comments/${commentId}/report`)
+        .set('Authorization', `Bearer ${accessToken}`);
+      const res = await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/report`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentReport);
+      expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
     });
   });
 });
