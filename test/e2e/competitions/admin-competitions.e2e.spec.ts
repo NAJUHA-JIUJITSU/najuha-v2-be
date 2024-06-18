@@ -14,6 +14,8 @@ import {
   CreateCombinationDiscountSnapshotReqBody,
   CreateCombinationDiscountSnapshotRes,
   CreateCompetitionDivisionsRes,
+  CreateCompetitionPosterImageReqBody,
+  CreateCompetitionPosterImageRes,
   CreateCompetitionReqBody,
   CreateCompetitionRequiredAdditionalInfoReqBody,
   CreateCompetitionRes,
@@ -35,6 +37,11 @@ import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from '../../../src/database/entity/competition/required-additional-info.entity';
 import { ICompetition } from '../../../src/modules/competitions/domain/interface/competition.interface';
 import { DateTime } from '../../../src/common/utils/date-time';
+import * as fs from 'fs';
+import * as FormData from 'form-data';
+import axios from 'axios';
+import { Expose } from 'class-transformer';
+import exp from 'constants';
 
 export const generateTestDummyCompetitions = (): ICompetition[] => {
   const competitions: ICompetition[] = [];
@@ -379,6 +386,104 @@ describe('E2E a-5 competitions TEST', () => {
         where: { id: requiredAdditionalInfo.id },
       });
       expect(deletedRequiredAdditionalInfo).toBe(null);
+    });
+  });
+
+  describe('a-5-12 POST /admin/competitions/:competitionId/poster-image --------------------------------------------', () => {
+    it('대회 포스터 이미지 업로드 성공 시', async () => {
+      /** pre condition. */
+      const admin = new UserDummyBuilder().setRole('ADMIN').build();
+      const adminAccessToken = jwtService.sign(
+        { userId: admin.id, userRole: admin.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      await entityEntityManager.save(UserEntity, admin);
+      const competition = new CompetitionDummyBuilder()
+        .setTitle('dummy competition')
+        .setIsPartnership(true)
+        .setCompetitionBasicDates(new Date())
+        .build();
+      await entityEntityManager.save(CompetitionEntity, competition);
+      /** main test. */
+      const creatImageRes = await request(app.getHttpServer())
+        .post('/user/images')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send({ format: 'image/jpeg', path: 'competition' });
+      const { image, presignedPost } = creatImageRes.body.result;
+      const { url, fields } = presignedPost;
+      const dummy5MbImageBuffer: Buffer = fs.readFileSync('test/resources/test-4.5mb.jpg');
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+      formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      const uploadRes = await axios.post(url, formData, {
+        headers: {
+          ...formData.getHeaders(),
+        },
+      });
+      expect(uploadRes.status).toBe(204);
+      const createCompetitionPosterImageReqBody: CreateCompetitionPosterImageReqBody = {
+        imageId: image.id,
+      };
+      const res = await request(app.getHttpServer())
+        .post(`/admin/competitions/${competition.id}/poster-image`)
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send(createCompetitionPosterImageReqBody);
+      expect(typia.is<ResponseForm<CreateCompetitionPosterImageRes>>(res.body)).toBe(true);
+    });
+  });
+
+  describe('a-5-13 DELETE /admin/competitions/:competitionId/poster-image -----------------------------------------', () => {
+    it('대회 포스터 이미지 삭제 성공 시', async () => {
+      /** pre condition. */
+      const admin = new UserDummyBuilder().setRole('ADMIN').build();
+      const adminAccessToken = jwtService.sign(
+        { userId: admin.id, userRole: admin.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      await entityEntityManager.save(UserEntity, admin);
+      const competition = new CompetitionDummyBuilder()
+        .setTitle('dummy competition')
+        .setIsPartnership(true)
+        .setCompetitionBasicDates(new Date())
+        .build();
+      await entityEntityManager.save(CompetitionEntity, competition);
+      const creatImageRes = await request(app.getHttpServer())
+        .post('/user/images')
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send({ format: 'image/jpeg', path: 'competition' });
+      const { image, presignedPost } = creatImageRes.body.result;
+      const { url, fields } = presignedPost;
+      const dummy5MbImageBuffer: Buffer = fs.readFileSync('test/resources/test-4.5mb.jpg');
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+      formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      const uploadRes = await axios.post(url, formData, {
+        headers: {
+          ...formData.getHeaders(),
+        },
+      });
+      expect(uploadRes.status).toBe(204);
+      const createCompetitionPosterImageReqBody: CreateCompetitionPosterImageReqBody = {
+        imageId: image.id,
+      };
+      await request(app.getHttpServer())
+        .post(`/admin/competitions/${competition.id}/poster-image`)
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .send(createCompetitionPosterImageReqBody);
+      /** main test. */
+      const res = await request(app.getHttpServer())
+        .delete(`/admin/competitions/${competition.id}/poster-image`)
+        .set('Authorization', `Bearer ${adminAccessToken}`);
+
+      expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
+      const competitionRes = await request(app.getHttpServer())
+        .get(`/admin/competitions/${competition.id}`)
+        .set('Authorization', `Bearer ${adminAccessToken}`);
+      expect(competitionRes.body.result.competition.competitionPosterImages.length).toBe(0);
     });
   });
 });
