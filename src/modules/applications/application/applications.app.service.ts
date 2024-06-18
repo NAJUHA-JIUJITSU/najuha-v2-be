@@ -42,9 +42,14 @@ export class ApplicationsAppService {
   async createApplication({ applicationCreateDto }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const user = new UserModel(
       assert<IUser>(
-        await this.userRepository.findOneOrFail({ where: { id: applicationCreateDto.userId } }).catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
+        await this.userRepository
+          .findOneOrFail({
+            where: { id: applicationCreateDto.userId },
+            relations: ['profileImages', 'profileImages.image'],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+          }),
       ),
     );
     const competition = new CompetitionModel(
@@ -134,9 +139,14 @@ export class ApplicationsAppService {
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
     const user = new UserModel(
       assert<IUser>(
-        await this.userRepository.findOneOrFail({ where: { id: applicationCreateDto.userId } }).catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
+        await this.userRepository
+          .findOneOrFail({
+            where: { id: applicationCreateDto.userId },
+            relations: ['profileImages', 'profileImages.image'],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+          }),
       ),
     );
     const oldApplication = new ApplicationModel(
@@ -214,9 +224,11 @@ export class ApplicationsAppService {
 
     const user = new UserModel(
       assert<IUser>(
-        await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
+        await this.userRepository
+          .findOneOrFail({ where: { id: userId }, relations: ['profileImages', 'profileImages.image'] })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+          }),
       ),
     );
     const application = new ApplicationModel(
