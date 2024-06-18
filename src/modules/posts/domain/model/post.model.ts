@@ -1,4 +1,4 @@
-import { IUser } from '../../../users/domain/interface/user.interface';
+import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
 import { IPostSnapshot } from '../interface/post-snapshot.interface';
 import { IPost } from '../interface/post.interface';
 import { IPostLike } from '../interface/post-like.interface';
@@ -19,6 +19,7 @@ export class PostModel {
   private likeCount: IPost['likeCount'];
   private commentCount: IPost['commentCount'];
   private userLiked: IPost['userLiked'];
+  private user: IPost['user'];
 
   constructor(entity: IPost) {
     this.id = entity.id;
@@ -34,6 +35,7 @@ export class PostModel {
     this.reports = entity.reports || [];
     this.likes = entity.likes || [];
     this.userLiked = this.likes.length > 0 ? true : false;
+    this.user = entity.user;
   }
 
   toEntity() {
@@ -51,6 +53,7 @@ export class PostModel {
       likeCount: this.likeCount,
       commentCount: this.commentCount,
       userLiked: this.userLiked,
+      user: this.user,
     };
   }
 

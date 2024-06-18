@@ -34,6 +34,13 @@ erDiagram
     uuid userId FK
     uuid policyId FK
   }
+  user_profile_image {
+    uuid id PK
+    uuid userId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
   user {
     uuid id PK
     varchar role
@@ -50,8 +57,19 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
+  image {
+    uuid id PK
+    varchar path
+    varchar format
+    timestamptz createdAt
+    timestamptz linkedAt "nullable"
+    uuid userId FK
+  }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
+  user_profile_image }o--|| user: user
+  user_profile_image }o--|| image: image
+  image }o--|| user: user
 ```
 
 ### `policy`
@@ -81,6 +99,21 @@ PolicyConsent Entity
   - `createdAt`
   - `userId`
   - `policyId`: - policyId.
+
+
+### `user_profile_image`
+
+UserProfileImage Entity   
+@namespace User   
+@erd Image
+
+**Properties**
+
+  - `id`
+  - `userId`
+  - `imageId`
+  - `createdAt`
+  - `deletedAt`
 
 
 ### `user`
@@ -371,14 +404,6 @@ erDiagram
     uuid hostId FK
     uuid competitionId FK
   }
-  image {
-    uuid id PK
-    varchar path
-    varchar format
-    timestamptz createdAt
-    timestamptz linkedAt "nullable"
-    uuid userId FK
-  }
   competition_poster_image {
     uuid id PK
     uuid competitionId FK
@@ -404,6 +429,14 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
+  }
+  image {
+    uuid id PK
+    varchar path
+    varchar format
+    timestamptz createdAt
+    timestamptz linkedAt "nullable"
+    uuid userId FK
   }
   price_snapshot }|--|| division: division
   division }o--|| competition: competition
@@ -565,32 +598,11 @@ Competition Entity
 
 ```mermaid
 erDiagram
-  post_like {
-    uuid id PK
-    uuid userId FK
-    timestamptz createdAt
-    uuid postId FK
-  }
-  post_report {
-    uuid id PK
-    varchar type
-    varchar status
-    varchar reason
-    uuid userId FK
-    timestamptz createdAt
-    uuid postId FK
-  }
   comment_report {
     uuid id PK
     varchar type
     varchar status
     varchar reason
-    uuid userId FK
-    timestamptz createdAt
-    uuid commentId FK
-  }
-  comment_like {
-    uuid id PK
     uuid userId FK
     timestamptz createdAt
     uuid commentId FK
@@ -610,26 +622,25 @@ erDiagram
     timestamptz deletedAt "nullable"
     uuid postId FK
   }
-  post {
+  comment_like {
     uuid id PK
     uuid userId FK
-    integer viewCount
-    varchar status
-    varchar category
     timestamptz createdAt
-    timestamptz deletedAt "nullable"
+    uuid commentId FK
   }
-  post_snapshot {
+  post_like {
     uuid id PK
-    varchar title
-    text body
+    uuid userId FK
     timestamptz createdAt
     uuid postId FK
   }
-  post_snapshot_image {
+  post_report {
     uuid id PK
-    uuid postSnapshotId FK
-    uuid imageId FK
+    varchar type
+    varchar status
+    varchar reason
+    uuid userId FK
+    uuid postId FK
     timestamptz createdAt
   }
   image {
@@ -640,62 +651,40 @@ erDiagram
     timestamptz linkedAt "nullable"
     uuid userId FK
   }
-  post_like }o--|| post: post
-  post_report }o--|| post: post
+  post_snapshot_image {
+    uuid id PK
+    uuid postSnapshotId FK
+    uuid imageId FK
+    integer sequence
+    timestamptz createdAt
+  }
+  post_snapshot {
+    uuid id PK
+    varchar title
+    text body
+    timestamptz createdAt
+    uuid postId FK
+  }
+  post {
+    uuid id PK
+    uuid userId FK
+    integer viewCount
+    varchar status
+    varchar category
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
   comment_report }o--|| comment: comment
-  comment_like }o--|| comment: comment
   comment_snapshot }|--|| comment: comment
   comment }o--|| comment: parent
   comment }o--|| post: post
-  post_snapshot }|--|| post: post
+  comment_like }o--|| comment: comment
+  post_like }o--|| post: post
+  post_report }o--|| post: post
   post_snapshot_image }o--|| post_snapshot: postSnapshot
   post_snapshot_image }o--|| image: image
+  post_snapshot }|--|| post: post
 ```
-
-### `post_like`
-
-PostLike.   
-   
-게시글 좋아요 정보를 담는 Entity입니다.   
-동일한 유저가 동일한 게시글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`: UUID v7.
-  - `userId`: 좋아요를 누른 UserId.
-  - `createdAt`: 좋아요 누른 일자.
-  - `postId`: 좋아요를 누른 게시글의 Id.
-
-
-### `post_report`
-
-PostReport.   
-   
-게시글의 신고정보를 담는 Entity입니다.   
-신고 횟수가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.   
-동일한 유저가 동일한 게시글을 여러 번 신고할 수 없습니다. (중복신고 불가능)   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`: UUID v7.
-  - `type`
-    > 신고 타입.
-    > - `INAPPROPRIATE`: 부적절한 내용.
-    > - `SPAM`: 스팸.
-  - `status`
-    > 신고 상태.
-    > `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
-    > - `ACCEPTED`: 신고 승인.
-    > - `REJECTED`: 신고 거부.
-  - `reason`: 신고 사유.
-  - `userId`: 신고자 UserId.
-  - `createdAt`: 신고일자.
-  - `postId`: 신고된 게시글의 Id.
-
 
 ### `comment_report`
 
@@ -723,23 +712,6 @@ CommentReport.
   - `userId`: 신고자 UserId.
   - `createdAt`: 신고일자.
   - `commentId`: 신고된 댓글의 Id.
-
-
-### `comment_like`
-
-CommentLike.   
-   
-댓글 좋아요 정보를 담는 Entity입니다.   
-동일한 유저가 동일한 댓글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`: UUID v7.
-  - `userId`: 좋아요를 누른 UserId.
-  - `createdAt`: 좋아요 누른 일자.
-  - `commentId`: 좋아요를 누른 댓글의 Id.
 
 
 ### `comment_snapshot`
@@ -793,6 +765,104 @@ Comment, CommentRpely.
   - `postId`: 게시글 Id.
 
 
+### `comment_like`
+
+CommentLike.   
+   
+댓글 좋아요 정보를 담는 Entity입니다.   
+동일한 유저가 동일한 댓글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 좋아요를 누른 UserId.
+  - `createdAt`: 좋아요 누른 일자.
+  - `commentId`: 좋아요를 누른 댓글의 Id.
+
+
+### `post_like`
+
+PostLike.   
+   
+게시글 좋아요 정보를 담는 Entity입니다.   
+동일한 유저가 동일한 게시글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 좋아요를 누른 UserId.
+  - `createdAt`: 좋아요 누른 일자.
+  - `postId`: 좋아요를 누른 게시글의 Id.
+
+
+### `post_report`
+
+PostReport.   
+   
+게시글의 신고정보를 담는 Entity입니다.   
+신고 횟수가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.   
+동일한 유저가 동일한 게시글을 여러 번 신고할 수 없습니다. (중복신고 불가능)   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `type`
+    > 신고 타입.
+    > - `INAPPROPRIATE`: 부적절한 내용.
+    > - `SPAM`: 스팸.
+  - `status`
+    > 신고 상태.
+    > `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
+    > - `ACCEPTED`: 신고 승인.
+    > - `REJECTED`: 신고 거부.
+  - `reason`: 신고 사유.
+  - `userId`: 신고자 UserId.
+  - `postId`: 신고된 게시글의 Id.
+  - `createdAt`: 신고일자.
+
+
+### `post_snapshot_image`
+
+PostSnapshotImage.   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`
+  - `postSnapshotId`
+  - `imageId`
+  - `sequence`
+    > sequence.
+    > - 게시물 이미지의 순서.
+    > - 0부터 시작.
+  - `createdAt`
+
+
+### `post_snapshot`
+
+PostSnapshot.   
+   
+게시글의 스냅샷 정보를 담는 Entity입니다.   
+`post`에서 언급한 것처럼 증거를 보관하고 사기를 방지하기 위해 게시글 레코드에서 게시글 내용을 분리하여 보관합니다.   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `title`: 게시글 제목.
+  - `body`: 게시글 내용.
+  - `createdAt`: 게시글 작성일자.
+  - `postId`: 게시글 Id.
+
+
 ### `post`
 
 Post.   
@@ -822,42 +892,24 @@ Post.
   - `deletedAt`: 게시글 삭제일자.
 
 
-### `post_snapshot`
-
-PostSnapshot.   
-   
-게시글의 스냅샷 정보를 담는 Entity입니다.   
-`post`에서 언급한 것처럼 증거를 보관하고 사기를 방지하기 위해 게시글 레코드에서 게시글 내용을 분리하여 보관합니다.   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`: UUID v7.
-  - `title`: 게시글 제목.
-  - `body`: 게시글 내용.
-  - `createdAt`: 게시글 작성일자.
-  - `postId`: 게시글 Id.
-
-
-### `post_snapshot_image`
-
-PostSnapshotImage.   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`
-  - `postSnapshotId`
-  - `imageId`
-  - `createdAt`
-
-
 ## Image
 
 ```mermaid
 erDiagram
+  competition_poster_image {
+    uuid id PK
+    uuid competitionId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
+  user_profile_image {
+    uuid id PK
+    uuid userId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
   image {
     uuid id PK
     varchar path
@@ -866,14 +918,8 @@ erDiagram
     timestamptz linkedAt "nullable"
     uuid userId FK
   }
-  competition_poster_image {
-    uuid id PK
-    uuid competitionId FK
-    uuid imageId FK
-    timestamptz createdAt
-    timestamptz deletedAt "nullable"
-  }
   competition_poster_image }o--|| image: image
+  user_profile_image }o--|| image: image
 ```
 
 ### `image`
@@ -881,7 +927,8 @@ erDiagram
 Image Entity   
 @namespace Image   
 @erd Competition   
-@erd Post
+@erd Post   
+@erd User
 
 **Properties**
 

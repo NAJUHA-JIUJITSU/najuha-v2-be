@@ -1,5 +1,5 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
-import { IUser } from '../../../users/domain/interface/user.interface';
+import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
 import { IPost } from './post.interface';
 import { ICommentSnapshot } from './comment-snapshot.interface';
 import { ICommentLike } from './comment-like.interface';
@@ -37,6 +37,8 @@ export interface IComment {
   likeCount?: number;
 
   userLiked?: boolean;
+
+  user?: IUserDisplayInfo;
 }
 
 export interface ICommentDetail
@@ -52,6 +54,7 @@ export interface ICommentDetail
     | 'commentSnapshots'
     | 'likeCount'
     | 'userLiked'
+    | 'user'
   > {}
 
 export interface ICommentCreateDto extends Pick<IComment, 'userId' | 'postId'>, Pick<ICommentSnapshot, 'body'> {}

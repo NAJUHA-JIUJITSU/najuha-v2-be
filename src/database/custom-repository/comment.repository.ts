@@ -20,7 +20,10 @@ export class CommentRepository extends Repository<CommentEntity> {
     let qb = this.createQueryBuilder('comment')
       .where('comment.postId = :postId', { postId: query.postId })
       .leftJoinAndSelect('comment.commentSnapshots', 'commentSnapshots')
-      .loadRelationCountAndMap('comment.likeCount', 'comment.likes');
+      .loadRelationCountAndMap('comment.likeCount', 'comment.likes')
+      .leftJoinAndSelect('comment.user', 'user')
+      .leftJoinAndSelect('user.profileImages', 'profileImages')
+      .leftJoinAndSelect('profileImages.image', 'profileImage');
 
     switch (query.type) {
       case 'COMMENT':

@@ -18,6 +18,7 @@ export class CommentModel {
   private status: IComment['status'];
   private likeCount: IComment['likeCount'];
   private userLiked: IComment['userLiked'];
+  private user: IComment['user'];
 
   constructor(entity: IComment) {
     this.id = entity.id;
@@ -32,6 +33,7 @@ export class CommentModel {
     this.reports = entity.reports || [];
     this.likes = entity.likes || [];
     this.userLiked = this.likes.length > 0 ? true : false;
+    this.user = entity.user;
   }
 
   toEntity() {
@@ -48,6 +50,7 @@ export class CommentModel {
       reports: this.reports,
       likeCount: this.likeCount,
       userLiked: this.userLiked,
+      user: this.user,
     };
   }
 

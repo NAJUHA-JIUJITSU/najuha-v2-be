@@ -53,10 +53,12 @@ export class AuthAppService {
   }
 
   async acquireAdminRole({ userId }: AcquireAdminRoleParam): Promise<AcquireAdminRoleRet> {
-    const userEntity = assert<IUser | IUser>(
-      await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
+    const userEntity = assert<IUser>(
+      await this.userRepository
+        .findOneOrFail({ where: { id: userId }, relations: ['profileImages', 'profileImages.image'] })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
     );
     const isCurrentAdmin = appEnv.adminCredentials.some(
       (adminCredential) =>

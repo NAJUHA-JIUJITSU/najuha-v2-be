@@ -1,5 +1,5 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
-import { IUser } from '../../../users/domain/interface/user.interface';
+import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
 import { IPostSnapshot, IPostSnapshotCreateDto } from './post-snapshot.interface';
 import { IPostLike } from './post-like.interface';
@@ -45,6 +45,8 @@ export interface IPost {
   userLiked?: boolean;
 
   reports?: IPostReport[];
+
+  user?: IUserDisplayInfo;
 }
 
 export interface IPostDetail
@@ -61,6 +63,7 @@ export interface IPostDetail
     | 'likeCount'
     | 'commentCount'
     | 'userLiked'
+    | 'user'
   > {}
 
 export interface IPostCreateDto

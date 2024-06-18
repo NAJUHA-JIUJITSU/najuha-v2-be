@@ -90,6 +90,8 @@ export interface IRegisterUser extends ITemporaryUser {
   policyConsents: IPolicyConsent[];
 }
 
+export interface IUserDisplayInfo extends Pick<IUser, 'id' | 'role' | 'nickname' | 'profileImages'> {}
+
 // DTO ------------------------------------------------------------------------
 export interface ITemporaryUserCreateDto
   extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,

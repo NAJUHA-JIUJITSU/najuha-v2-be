@@ -18,7 +18,10 @@ export class PostRepository extends Repository<PostEntity> {
       .loadRelationCountAndMap('post.commentCount', 'post.comments')
       .loadRelationCountAndMap('post.likeCount', 'post.likes')
       .leftJoinAndSelect('postSnapshots.postSnapshotImages', 'postSnapshotImages')
-      .leftJoinAndSelect('postSnapshotImages.image', 'image');
+      .leftJoinAndSelect('postSnapshotImages.image', 'image')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('user.profileImages', 'profileImages')
+      .leftJoinAndSelect('profileImages.image', 'profileImage');
 
     if (status) {
       qb = qb.andWhere('post.status = :status', { status });
@@ -62,7 +65,7 @@ export class PostRepository extends Repository<PostEntity> {
       .getMany();
   }
 
-  async getPostById(postId: IPost['id'], userId?: IUser['id']): Promise<IPost> {
+  async getPostById(postId: IPost['id'], userId?: IUser['id']) {
     const post = await this.createQueryBuilder('post')
       .where('post.id = :postId', { postId })
       .andWhere('post.status = :status', { status: 'ACTIVE' })
@@ -72,6 +75,9 @@ export class PostRepository extends Repository<PostEntity> {
       .loadRelationCountAndMap('post.likeCount', 'post.likes')
       .leftJoinAndSelect('postSnapshots.postSnapshotImages', 'postSnapshotImages')
       .leftJoinAndSelect('postSnapshotImages.image', 'image')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('user.profileImages', 'profileImages')
+      .leftJoinAndSelect('profileImages.image', 'profileImage')
       .getOne();
     if (!post) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
     return post;

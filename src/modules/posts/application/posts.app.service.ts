@@ -78,14 +78,16 @@ export class PostsAppService {
       this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
-      this.postRepository
-        .findOneOrFail({
-          where: { id: postUpdateDto.postId, userId, status: 'ACTIVE' },
-          relations: ['postSnapshots', 'postSnapshots.postSnapshotImages', 'postSnapshots.postSnapshotImages.image'],
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
-        }),
+      assert<IPost>(
+        await this.postRepository
+          .findOneOrFail({
+            where: { id: postUpdateDto.postId, userId, status: 'ACTIVE' },
+            relations: ['postSnapshots', 'postSnapshots.postSnapshotImages', 'postSnapshots.postSnapshotImages.image'],
+          })
+          .catch(() => {
+            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
+          }),
+      ),
       postUpdateDto.imageIds ? this.imageRepository.find({ where: { id: In(postUpdateDto.imageIds) } }) : [],
     ]);
     if (postUpdateDto.imageIds && imageEntities.length !== postUpdateDto.imageIds.length) {
