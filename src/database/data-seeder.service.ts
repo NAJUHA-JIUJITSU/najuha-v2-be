@@ -46,6 +46,8 @@ import { PostSnapshotImageEntity } from './entity/post/post-snapshot-image.entit
 import { BucketService } from '../infrastructure/bucket/bucket.service';
 import * as sharp from 'sharp';
 import typia, { tags } from 'typia';
+import { ICompetitionPosterImage } from '../modules/competitions/domain/interface/competition-poster-image.interface';
+import { CompetitionPosterImageEntity } from './entity/competition/competition-poster-image.entity';
 
 /**
  * todo!!!:
@@ -72,6 +74,7 @@ export class DataSeederService {
   private combinationDiscountSnapshotsToSave: ICombinationDiscountSnapshot[] = [];
   private requiredAdditionalInfosToSave: IRequiredAdditionalInfo[] = [];
   private competitionHostMapsToSave: ICompetitionHostMap[] = [];
+  private competitionPosterImagesToSave: ICompetitionPosterImage[] = [];
   // Application
   private applicationsToSave: IApplication[] = [];
   private playerSnapshotsToSave: IPlayerSnapshot[] = [];
@@ -143,7 +146,7 @@ export class DataSeederService {
     // this.prepareTemporaryUsers();
     this.prepareAdminUsers();
     this.preparePolicies();
-    this.prepareCompetitions();
+    this.prepareCompetitions(this.users);
     this.prepareApplications(this.users, this.competitions);
     this.preparePosts(this.users);
     console.timeEnd('Data preparation time');
@@ -190,9 +193,12 @@ export class DataSeederService {
     console.timeEnd('Policies preparation time');
   }
 
-  private prepareCompetitions() {
+  private prepareCompetitions(users: (IUser | ITemporaryUser)[]) {
     console.time('Competitions preparation time');
-    const competitions = generateDummyCompetitions();
+    const competitions = generateDummyCompetitions(
+      users[0].id,
+      users.map((user) => user.id),
+    );
     this.competitions = competitions;
     this.competitionsToSave = competitions;
     this.divisionsToSave = competitions.flatMap((competition) => competition.divisions);
@@ -205,6 +211,10 @@ export class DataSeederService {
     );
     this.requiredAdditionalInfosToSave = competitions.flatMap((competition) => competition.requiredAdditionalInfos);
     this.competitionHostMapsToSave = competitions.flatMap((competition) => competition.competitionHostMaps);
+    this.competitionPosterImagesToSave = competitions.flatMap((competition) => competition.competitionPosterImages);
+    this.imagesToSave.push(
+      ...this.competitionPosterImagesToSave.map((competitionPosterImage) => competitionPosterImage.image),
+    );
     console.timeEnd('Competitions preparation time');
   }
 
@@ -241,7 +251,7 @@ export class DataSeederService {
     this.postToSave = posts;
     this.postSnapshotsToSave = posts.flatMap((post) => post.postSnapshots);
     this.postSnapshotImagesToSave = this.postSnapshotsToSave.flatMap((postSnapshot) => postSnapshot.postSnapshotImages);
-    this.imagesToSave = this.postSnapshotImagesToSave.map((postSnapshotImage) => postSnapshotImage.image);
+    this.imagesToSave.push(...this.postSnapshotImagesToSave.map((postSnapshotImage) => postSnapshotImage.image));
     console.timeEnd('Posts preparation time');
   }
 
@@ -268,6 +278,7 @@ export class DataSeederService {
         this.batchInsert(CombinationDiscountSnapshotEntity, this.combinationDiscountSnapshotsToSave),
         this.batchInsert(RequiredAdditionalInfoEntity, this.requiredAdditionalInfosToSave),
         this.batchInsert(CompetitionHostMapEntity, this.competitionHostMapsToSave),
+        this.batchInsert(CompetitionPosterImageEntity, this.competitionPosterImagesToSave),
         // Application
         this.batchInsert(ApplicationEntity, this.applicationsToSave),
         this.batchInsert(PlayerSnapshotEntity, this.playerSnapshotsToSave),
@@ -295,6 +306,7 @@ export class DataSeederService {
     }
   }
 
+  //todo!!!: 테이블명 자동으로 가져오도록 수정
   private async rebuildIndexes() {
     console.time('Rebuilding indexes time');
     const tableNames = [
@@ -340,6 +352,7 @@ export class DataSeederService {
       await this.batchInsert(CombinationDiscountSnapshotEntity, this.combinationDiscountSnapshotsToSave);
       await this.batchInsert(RequiredAdditionalInfoEntity, this.requiredAdditionalInfosToSave);
       await this.batchInsert(CompetitionHostMapEntity, this.competitionHostMapsToSave);
+      await this.batchInsert(CompetitionPosterImageEntity, this.competitionPosterImagesToSave);
       // Application
       await this.batchInsert(ApplicationEntity, this.applicationsToSave);
       await this.batchInsert(PlayerSnapshotEntity, this.playerSnapshotsToSave);

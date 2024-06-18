@@ -341,7 +341,6 @@ export class CompetitionsAppService {
           }),
       ),
     ]);
-
     const competitionPosterImage = this.competitionFactory.createCompetitionPosterImage(
       imageEntity,
       competitionPosterImageCreateDto,

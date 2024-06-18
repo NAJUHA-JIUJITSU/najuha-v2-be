@@ -14,7 +14,8 @@ import { generateDummyDivisionPacks } from './division.dummy';
 import { dummyCombinationDiscountRules } from './combination-discount-snapshot.dummy';
 import { ICombinationDiscountRule } from '../modules/competitions/domain/interface/combination-discount-rule.interface';
 import { IDivisionPack } from '../modules/competitions/domain/interface/division-pack.interface';
-import appEnv from '../common/app-env';
+import { TId } from '../common/common-types';
+import { IImage } from '../modules/images/domain/interface/image.interface';
 
 export class CompetitionDummyBuilder {
   private competition: ICompetition = {
@@ -140,6 +141,28 @@ export class CompetitionDummyBuilder {
       hostId,
       competitionId: this.competition.id,
     }));
+    return this;
+  }
+
+  public setCompetitionPosterImages(userId: TId): this {
+    const image: IImage = {
+      id: uuidv7(),
+      userId,
+      path: 'competition',
+      format: 'image/jpeg',
+      createdAt: new Date(),
+      linkedAt: new Date(),
+    };
+    this.competition.competitionPosterImages = [
+      {
+        id: uuidv7(),
+        competitionId: this.competition.id,
+        imageId: image.id,
+        createdAt: new Date(),
+        deletedAt: null,
+        image,
+      },
+    ];
     return this;
   }
 
@@ -334,7 +357,7 @@ export class CompetitionDummyBuilder {
   }
 }
 
-export const generateDummyCompetitions = (): ICompetition[] => {
+export const generateDummyCompetitions = (userId: TId, hostIds: TId[]): ICompetition[] => {
   const competitions: ICompetition[] = [];
   const today = new Date();
   const start = DateTime.fromJSDate(today).minus({ days: 49 }).toJSDate();
@@ -351,6 +374,7 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setTitle(`${count++}`)
         .setIsPartnership(false)
         .setCompetitionBasicDates(competitionDate)
+        .setCompetitionPosterImages(userId)
         .build(),
       // 2. 협약, divisions
       new CompetitionDummyBuilder()
@@ -358,7 +382,8 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setTitle(`${count++}`)
         .setCompetitionBasicDates(competitionDate)
         .setDivisions(generateDummyDivisionPacks())
-        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
+        .setCompetitionHostMaps(hostIds)
+        .setCompetitionPosterImages(userId)
         .build(),
       // 3. 2 + 얼리버드 할인
       new CompetitionDummyBuilder()
@@ -367,7 +392,8 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setCompetitionBasicDates(competitionDate)
         .setDivisions(generateDummyDivisionPacks())
         .setEarlybirdDiscountSnapshots(10000)
-        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
+        .setCompetitionHostMaps(hostIds)
+        .setCompetitionPosterImages(userId)
         .build(),
       // 4. 3 + 조합 할인
       new CompetitionDummyBuilder()
@@ -377,7 +403,8 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setDivisions(generateDummyDivisionPacks())
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
-        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
+        .setCompetitionHostMaps(hostIds)
+        .setCompetitionPosterImages(userId)
         .build(),
       // 5. 4 + 추가정보
       new CompetitionDummyBuilder()
@@ -388,7 +415,8 @@ export const generateDummyCompetitions = (): ICompetition[] => {
         .setEarlybirdDiscountSnapshots(10000)
         .setCombinationDiscountSnapshots(dummyCombinationDiscountRules)
         .setRequiredAdditionalInfos()
-        .setCompetitionHostMaps(appEnv.adminCredentials.map((admin) => admin.id))
+        .setCompetitionHostMaps(hostIds)
+        .setCompetitionPosterImages(userId)
         .build(),
     );
   }
