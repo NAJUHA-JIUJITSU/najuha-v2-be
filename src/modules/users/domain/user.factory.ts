@@ -1,5 +1,7 @@
 import { uuidv7 } from 'uuidv7';
-import { ITemporaryUser, ITemporaryUserCreateDto } from './interface/user.interface';
+import { ITemporaryUser, ITemporaryUserCreateDto, IUser } from './interface/user.interface';
+import { IUserProfileImage, IUserProfileImageCreateDto } from './interface/user-profile-image.interface';
+import { IImage } from '../../images/domain/interface/image.interface';
 
 export class UserFactory {
   creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {
@@ -18,6 +20,20 @@ export class UserFactory {
       status: 'ACTIVE',
       createdAt: new Date(),
       updatedAt: new Date(),
+    };
+  }
+
+  createUserProfileImage(userProfileImageCreateDto: IUserProfileImageCreateDto, image: IImage): IUserProfileImage {
+    return {
+      id: uuidv7(),
+      userId: userProfileImageCreateDto.userId,
+      imageId: userProfileImageCreateDto.imageId,
+      createdAt: new Date(),
+      deletedAt: null,
+      image: {
+        ...image,
+        linkedAt: new Date(),
+      },
     };
   }
 }

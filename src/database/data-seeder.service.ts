@@ -48,6 +48,8 @@ import * as sharp from 'sharp';
 import typia, { tags } from 'typia';
 import { ICompetitionPosterImage } from '../modules/competitions/domain/interface/competition-poster-image.interface';
 import { CompetitionPosterImageEntity } from './entity/competition/competition-poster-image.entity';
+import { IUserProfileImage } from '../modules/users/domain/interface/user-profile-image.interface';
+import { UserProfileImageEntity } from './entity/user/user-profile-image.entity';
 
 /**
  * todo!!!:
@@ -66,6 +68,7 @@ export class DataSeederService {
   // User
   private usersToSave: (IUser | ITemporaryUser)[] = [];
   private policiesToSave: IPolicy[] = [];
+  private userProfileImagesToSave: IUserProfileImage[] = [];
   // Competition
   private competitionsToSave: ICompetition[] = [];
   private divisionsToSave: IDivision[] = [];
@@ -179,10 +182,13 @@ export class DataSeederService {
         .setName(name)
         .setNickname(`${name}Nickname`)
         .setSnsAuthProvider(snsAuthProvider)
+        .setProfileImage(id)
         .build();
     });
     this.users = users;
     this.usersToSave = users;
+    this.userProfileImagesToSave = users.flatMap((user) => user.profileImages);
+    this.imagesToSave.push(...this.userProfileImagesToSave.map((userProfileImage) => userProfileImage.image));
     console.timeEnd('Admin users preparation time');
   }
 
@@ -270,6 +276,7 @@ export class DataSeederService {
         // User
         this.batchInsert(UserEntity, this.usersToSave),
         this.batchInsert(PolicyEntity, this.policiesToSave),
+        this.batchInsert(UserProfileImageEntity, this.userProfileImagesToSave),
         // Competition
         this.batchInsert(CompetitionEntity, this.competitionsToSave),
         this.batchInsert(DivisionEntity, this.divisionsToSave),
@@ -344,6 +351,7 @@ export class DataSeederService {
       // User
       await this.batchInsert(UserEntity, this.usersToSave);
       await this.batchInsert(PolicyEntity, this.policiesToSave);
+      await this.batchInsert(UserProfileImageEntity, this.userProfileImagesToSave);
       // Competition
       await this.batchInsert(CompetitionEntity, this.competitionsToSave);
       await this.batchInsert(DivisionEntity, this.divisionsToSave);

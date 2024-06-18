@@ -33,7 +33,7 @@ export class CompetitionPosterImageEntity {
   @JoinColumn({ name: 'competitionId' })
   competition!: CompetitionEntity;
 
-  @ManyToOne(() => ImageEntity, (image) => image.competitionProfileImages)
+  @ManyToOne(() => ImageEntity, (image) => image.competitionPosterImages)
   @JoinColumn({ name: 'imageId' })
   image!: ImageEntity;
 }

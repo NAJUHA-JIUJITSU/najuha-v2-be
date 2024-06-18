@@ -1,6 +1,8 @@
 import { ITemporaryUser, IUser } from '../modules/users/domain/interface/user.interface';
 import typia, { assert } from 'typia';
 import { uuidv7 } from 'uuidv7';
+import { IImage } from '../modules/images/domain/interface/image.interface';
+import { TId } from '../common/common-types';
 
 export class UserDummyBuilder {
   private user: Partial<IUser> = {};
@@ -20,6 +22,7 @@ export class UserDummyBuilder {
     this.user.status = 'ACTIVE';
     this.user.createdAt = new Date();
     this.user.updatedAt = new Date();
+    this.user.profileImages = [];
   }
 
   public setId(id: string): this {
@@ -94,6 +97,28 @@ export class UserDummyBuilder {
 
   public build(): IUser {
     return assert<IUser>(this.user);
+  }
+
+  public setProfileImage(userId: TId): this {
+    const image: IImage = {
+      id: uuidv7(),
+      path: 'user-profile',
+      format: 'image/jpeg',
+      createdAt: new Date(),
+      linkedAt: new Date(),
+      userId: userId,
+    };
+    this.user.profileImages = [
+      {
+        id: uuidv7(),
+        userId: userId,
+        imageId: image.id,
+        createdAt: new Date(),
+        deletedAt: null,
+        image,
+      },
+    ];
+    return this;
   }
 }
 

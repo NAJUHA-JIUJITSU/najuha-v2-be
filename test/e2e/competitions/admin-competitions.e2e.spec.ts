@@ -40,8 +40,6 @@ import { DateTime } from '../../../src/common/utils/date-time';
 import * as fs from 'fs';
 import * as FormData from 'form-data';
 import axios from 'axios';
-import { Expose } from 'class-transformer';
-import exp from 'constants';
 
 export const generateTestDummyCompetitions = (): ICompetition[] => {
   const competitions: ICompetition[] = [];

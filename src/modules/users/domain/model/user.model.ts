@@ -1,3 +1,4 @@
+import { IUserProfileImage } from '../interface/user-profile-image.interface';
 import { IUser } from '../interface/user.interface';
 
 export class UserModel {
@@ -13,6 +14,7 @@ export class UserModel {
   private birth: IUser['birth'];
   private belt: IUser['belt'];
   private status: IUser['status'];
+  private profileImages: IUserProfileImage[];
   private readonly createdAt: IUser['createdAt'];
   private readonly updatedAt: IUser['updatedAt'];
 
@@ -31,6 +33,7 @@ export class UserModel {
     this.status = entity.status;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
+    this.profileImages = entity.profileImages || [];
   }
 
   toEntity(): IUser {
@@ -49,10 +52,24 @@ export class UserModel {
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      profileImages: this.profileImages,
     };
   }
 
   getId() {
     return this.id;
+  }
+
+  updateProfileImage(profileImage: IUserProfileImage) {
+    this.profileImages.forEach((profileImage) => {
+      profileImage.deletedAt = new Date();
+    });
+    this.profileImages.push(profileImage);
+  }
+
+  deleteProfileImage() {
+    this.profileImages.forEach((profileImage) => {
+      profileImage.deletedAt = new Date();
+    });
   }
 }

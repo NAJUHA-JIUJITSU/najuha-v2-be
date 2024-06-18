@@ -4,12 +4,14 @@ import { UserEntity } from '../user/user.entity';
 import { uuidv7 } from 'uuidv7';
 import { CompetitionPosterImageEntity } from '../competition/competition-poster-image.entity';
 import { PostSnapshotImageEntity } from '../post/post-snapshot-image.entity';
+import { UserProfileImageEntity } from '../user/user-profile-image.entity';
 
 /**
  * Image Entity
  * @namespace Image
  * @erd Competition
  * @erd Post
+ * @erd User
  */
 @Entity('image')
 export class ImageEntity {
@@ -39,8 +41,11 @@ export class ImageEntity {
   user!: UserEntity;
 
   @OneToMany(() => CompetitionPosterImageEntity, (competitionPosterImage) => competitionPosterImage.image)
-  competitionProfileImages!: CompetitionPosterImageEntity[];
+  competitionPosterImages!: CompetitionPosterImageEntity[];
 
   @OneToMany(() => PostSnapshotImageEntity, (postSnapshotImage) => postSnapshotImage.image)
   postSnapshotImages!: PostSnapshotImageEntity[];
+
+  @OneToMany(() => UserProfileImageEntity, (userProfileImage) => userProfileImage.image)
+  userProfileImages!: UserProfileImageEntity[];
 }
