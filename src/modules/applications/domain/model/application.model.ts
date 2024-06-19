@@ -8,6 +8,23 @@ import { ApplicationsErrors, BusinessException } from '../../../../common/respon
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 import { IExpectedPayment } from '../interface/expected-payment.interface';
 
+export interface IApplicationModel
+  extends Pick<
+    IApplication,
+    | 'id'
+    | 'type'
+    | 'competitionId'
+    | 'userId'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'deletedAt'
+    | 'status'
+    | 'expectedPayment'
+    | 'playerSnapshots'
+    | 'participationDivisionInfos'
+    | 'additionalInfos'
+  > {}
+
 export class ApplicationModel {
   private readonly id: IApplication['id'];
   private readonly type: IApplication['type'];
@@ -22,7 +39,7 @@ export class ApplicationModel {
   private deletedAt: IApplication['deletedAt'];
   private expectedPayment: IExpectedPayment | null;
 
-  constructor(entity: IApplication) {
+  constructor(entity: IApplicationModel) {
     this.id = entity.id;
     this.type = entity.type;
     this.userId = entity.userId;

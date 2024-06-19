@@ -58,7 +58,7 @@ export interface IApplication {
    * Expected payment.
    * READY 상태일 때만 조회결과에 포함됩니다.
    */
-  expectedPayment?: IExpectedPayment | null;
+  expectedPayment: IExpectedPayment | null;
 }
 
 export interface IApplicationDetail extends IApplication {}

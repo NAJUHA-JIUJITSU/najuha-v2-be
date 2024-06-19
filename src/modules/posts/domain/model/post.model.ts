@@ -1,27 +1,33 @@
-import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
+import { IUser } from '../../../users/domain/interface/user.interface';
 import { IPostSnapshot } from '../interface/post-snapshot.interface';
 import { IPost } from '../interface/post.interface';
-import { IPostLike } from '../interface/post-like.interface';
 import { IPostReport } from '../interface/post-report.interface';
 import { BusinessException, PostsErrors } from '../../../../common/response/errorResponse';
 
-export class PostModel {
-  private readonly id: IPost['id'];
-  private readonly userId: IPost['userId'];
-  private readonly viewCount: IPost['viewCount'];
-  private readonly category: IPost['category'];
-  private readonly createdAt: IPost['createdAt'];
-  private readonly likes: IPostLike[];
-  private postSnapshots: IPostSnapshot[];
-  private reports: IPostReport[];
-  private status: IPost['status'];
-  private deletedAt: IPost['deletedAt'];
-  private likeCount: IPost['likeCount'];
-  private commentCount: IPost['commentCount'];
-  private userLiked: IPost['userLiked'];
-  private user: IPost['user'];
+export interface IPostModelData
+  extends Pick<
+      IPost,
+      'id' | 'userId' | 'viewCount' | 'status' | 'category' | 'createdAt' | 'deletedAt' | 'postSnapshots'
+    >,
+    Partial<Pick<IPost, 'likes' | 'likeCount' | 'commentCount' | 'userLiked' | 'reports' | 'user'>> {}
 
-  constructor(entity: IPost) {
+export class PostModel {
+  private readonly id: IPostModelData['id'];
+  private readonly userId: IPostModelData['userId'];
+  private readonly viewCount: IPostModelData['viewCount'];
+  private readonly category: IPostModelData['category'];
+  private postSnapshots: IPostModelData['postSnapshots'];
+  private status: IPostModelData['status'];
+  private deletedAt: IPostModelData['deletedAt'];
+  private readonly createdAt: IPostModelData['createdAt'];
+  private readonly likes: IPostModelData['likes'];
+  private reports: IPostModelData['reports'];
+  private likeCount: IPostModelData['likeCount'];
+  private commentCount: IPostModelData['commentCount'];
+  private userLiked: IPostModelData['userLiked'];
+  private user: IPostModelData['user'];
+
+  constructor(entity: IPostModelData) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.viewCount = entity.viewCount;
@@ -66,6 +72,9 @@ export class PostModel {
   }
 
   addPostReport(report: IPostReport): void {
+    if (!this.reports) {
+      throw new Error('Post reports is not initialized');
+    }
     this.validateReportAleadyExist(report.userId);
     this.reports.push(report);
     if (this.reports.filter((report) => report.status === 'ACCEPTED').length >= 10) {
@@ -74,6 +83,9 @@ export class PostModel {
   }
 
   private validateReportAleadyExist(userId: IUser['id']): void {
+    if (!this.reports) {
+      throw new Error('Post reports is not initialized');
+    }
     if (this.reports.some((report) => report.userId === userId)) {
       throw new BusinessException(PostsErrors.POSTS_POST_REPORT_ALREADY_EXIST);
     }
