@@ -50,6 +50,12 @@ import { ICompetitionPosterImage } from '../modules/competitions/domain/interfac
 import { CompetitionPosterImageEntity } from './entity/competition/competition-poster-image.entity';
 import { IUserProfileImage } from '../modules/users/domain/interface/user-profile-image.interface';
 import { UserProfileImageEntity } from './entity/user/user-profile-image.entity';
+import { TId } from '../common/common-types';
+import { IComment } from '../modules/posts/domain/interface/comment.interface';
+import { CommentDummyBuilder } from '../dummy/comment.dummy';
+import { ICommentSnapshot } from '../modules/posts/domain/interface/comment-snapshot.interface';
+import { CommentEntity } from './entity/post/comment.entity';
+import { CommentSnapshotEntity } from './entity/post/comment-snapshot.entity';
 
 /**
  * todo!!!:
@@ -65,6 +71,7 @@ export class DataSeederService {
   private competitions: ICompetition[] = [];
   private applications: IApplication[] = [];
   private posts: IPost[] = [];
+  private comments: IComment[] = [];
   // User
   private usersToSave: (IUser | ITemporaryUser)[] = [];
   private policiesToSave: IPolicy[] = [];
@@ -85,9 +92,12 @@ export class DataSeederService {
   private participationDivisionInfosSnapshotsToSave: IParticipationDivisionInfoSnapshot[] = [];
   private additionalInfosToSave: IAdditionalInfo[] = [];
   // Post
-  private postToSave: IPost[] = [];
+  private postsToSave: IPost[] = [];
   private postSnapshotsToSave: IPostSnapshot[] = [];
   private postSnapshotImagesToSave: IPostSnapshotImage[] = [];
+  // Comment
+  private commentsToSave: IComment[] = [];
+  private commentSnapshotsToSave: ICommentSnapshot[] = [];
   // Image
   private imagesToSave: IImage[] = [];
 
@@ -120,20 +130,23 @@ export class DataSeederService {
   }
 
   private async checkIfDataExists(): Promise<boolean> {
-    const [userCount, policyCount, competitionCount, applicationCount, postCount, imageCount] = await Promise.all([
-      this.queryRunner.manager.getRepository(UserEntity).count(),
-      this.queryRunner.manager.getRepository(PolicyEntity).count(),
-      this.queryRunner.manager.getRepository(CompetitionEntity).count(),
-      this.queryRunner.manager.getRepository(ApplicationEntity).count(),
-      this.queryRunner.manager.getRepository(PostEntity).count(),
-      this.queryRunner.manager.getRepository(ImageEntity).count(),
-    ]);
+    const [userCount, policyCount, competitionCount, applicationCount, postCount, commentCount, imageCount] =
+      await Promise.all([
+        this.queryRunner.manager.getRepository(UserEntity).count(),
+        this.queryRunner.manager.getRepository(PolicyEntity).count(),
+        this.queryRunner.manager.getRepository(CompetitionEntity).count(),
+        this.queryRunner.manager.getRepository(ApplicationEntity).count(),
+        this.queryRunner.manager.getRepository(PostEntity).count(),
+        this.queryRunner.manager.getRepository(CommentEntity).count(),
+        this.queryRunner.manager.getRepository(ImageEntity).count(),
+      ]);
     return (
       userCount > 0 ||
       policyCount > 0 ||
       competitionCount > 0 ||
       applicationCount > 0 ||
       postCount > 0 ||
+      commentCount > 0 ||
       imageCount > 0
     );
   }
@@ -152,6 +165,7 @@ export class DataSeederService {
     this.prepareCompetitions(this.users);
     this.prepareApplications(this.users, this.competitions);
     this.preparePosts(this.users);
+    this.prepareComments(this.users, this.posts);
     console.timeEnd('Data preparation time');
   }
 
@@ -254,11 +268,36 @@ export class DataSeederService {
       return posts;
     });
     this.posts = posts;
-    this.postToSave = posts;
+    this.postsToSave = posts;
     this.postSnapshotsToSave = posts.flatMap((post) => post.postSnapshots);
     this.postSnapshotImagesToSave = this.postSnapshotsToSave.flatMap((postSnapshot) => postSnapshot.postSnapshotImages);
     this.imagesToSave.push(...this.postSnapshotImagesToSave.map((postSnapshotImage) => postSnapshotImage.image));
     console.timeEnd('Posts preparation time');
+  }
+
+  private prepareComments(users: (IUser | ITemporaryUser)[], posts: IPost[]) {
+    console.time('Comments preparation time');
+    const firstComments: IComment[] = [];
+    const comments: IComment[] = [];
+    posts.forEach((post) => {
+      const tmp: IComment[] = [];
+      users.forEach((user) => {
+        for (let i = 0; i < 10; i++) tmp.push(new CommentDummyBuilder(user.id, post.id).build());
+      });
+      comments.push(...tmp);
+      firstComments.push(tmp[0]);
+    });
+    const replies: IComment[] = [];
+    firstComments.forEach((firstComment) => {
+      users.forEach((user) => {
+        for (let i = 0; i < 10; i++)
+          replies.push(new CommentDummyBuilder(user.id, firstComment.postId, firstComment.id).build());
+      });
+    });
+    this.comments = [...comments, ...replies];
+    this.commentsToSave = this.comments;
+    this.commentSnapshotsToSave = this.comments.flatMap((comment) => comment.commentSnapshots);
+    console.timeEnd('Comments preparation time');
   }
 
   /**
@@ -293,9 +332,12 @@ export class DataSeederService {
         this.batchInsert(ParticipationDivisionInfoSnapshotEntity, this.participationDivisionInfosSnapshotsToSave),
         this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave),
         // Post
-        this.batchInsert(PostEntity, this.postToSave),
+        this.batchInsert(PostEntity, this.postsToSave),
         this.batchInsert(PostSnapshotEntity, this.postSnapshotsToSave),
         this.batchInsert(PostSnapshotImageEntity, this.postSnapshotImagesToSave),
+        //Comment
+        this.batchInsert(CommentEntity, this.commentsToSave),
+        this.batchInsert(CommentSnapshotEntity, this.commentSnapshotsToSave),
         // Image
         this.batchInsert(ImageEntity, this.imagesToSave),
         this.uploadImages(this.imagesToSave),
@@ -368,9 +410,12 @@ export class DataSeederService {
       await this.batchInsert(ParticipationDivisionInfoSnapshotEntity, this.participationDivisionInfosSnapshotsToSave);
       await this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave);
       // Post
-      await this.batchInsert(PostEntity, this.postToSave);
+      await this.batchInsert(PostEntity, this.postsToSave);
       await this.batchInsert(PostSnapshotEntity, this.postSnapshotsToSave);
       await this.batchInsert(PostSnapshotImageEntity, this.postSnapshotImagesToSave);
+      // Comment
+      await this.batchInsert(CommentEntity, this.commentsToSave);
+      await this.batchInsert(CommentSnapshotEntity, this.commentSnapshotsToSave);
       // Image
       await this.batchInsert(ImageEntity, this.imagesToSave);
       await this.uploadImages(this.imagesToSave);
@@ -432,10 +477,11 @@ export class DataSeederService {
     const dummyImageBuffers: Promise<Buffer>[] = [];
     for (let i = 0; i < 100; i++) {
       const randomColor = this.getRamdomColor();
+      const dummyImageSize = this.getRamdomSize();
       const buffer = sharp({
         create: {
-          width: 500,
-          height: 500,
+          width: dummyImageSize.width,
+          height: dummyImageSize.height,
           channels: 3,
           background: randomColor,
         },
@@ -449,9 +495,15 @@ export class DataSeederService {
 
   private getRamdomColor() {
     return {
-      r: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
-      g: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
-      b: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
+      r: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<255>>(),
+      g: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<255>>(),
+      b: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<255>>(),
+    };
+  }
+  private getRamdomSize() {
+    return {
+      width: typia.random<number & tags.Type<'uint32'> & tags.Minimum<100> & tags.Maximum<1000>>(),
+      height: typia.random<number & tags.Type<'uint32'> & tags.Minimum<100> & tags.Maximum<1000>>(),
     };
   }
 }
