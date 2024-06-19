@@ -432,10 +432,11 @@ export class DataSeederService {
     const dummyImageBuffers: Promise<Buffer>[] = [];
     for (let i = 0; i < 100; i++) {
       const randomColor = this.getRamdomColor();
+      const dummyImageSize = this.getRamdomSize();
       const buffer = sharp({
         create: {
-          width: 500,
-          height: 500,
+          width: dummyImageSize.width,
+          height: dummyImageSize.height,
           channels: 3,
           background: randomColor,
         },
@@ -449,9 +450,15 @@ export class DataSeederService {
 
   private getRamdomColor() {
     return {
-      r: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
-      g: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
-      b: typia.random<number & tags.Minimum<0> & tags.Maximum<255>>(),
+      r: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<255>>(),
+      g: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<255>>(),
+      b: typia.random<number & tags.Type<'uint32'> & tags.Minimum<0> & tags.Maximum<255>>(),
+    };
+  }
+  private getRamdomSize() {
+    return {
+      width: typia.random<number & tags.Type<'uint32'> & tags.Minimum<100> & tags.Maximum<1000>>(),
+      height: typia.random<number & tags.Type<'uint32'> & tags.Minimum<100> & tags.Maximum<1000>>(),
     };
   }
 }
