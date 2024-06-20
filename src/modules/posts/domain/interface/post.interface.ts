@@ -1,7 +1,7 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
-import { IPostSnapshot, IPostSnapshotCreateDto, IPostSnapshotModelData } from './post-snapshot.interface';
+import { IPostSnapshot, IPostSnapshotModelData } from './post-snapshot.interface';
 import { IPostLike, IPostLikeModelData } from './post-like.interface';
 import { IPostReport } from './post-report.interface';
 
@@ -36,15 +36,15 @@ export interface IPost {
   /** DeletedAt. */
   deletedAt: TDateOrStringDate | null;
 
-  postSnapshots: IPostSnapshot[];
-
-  likes: IPostLike[];
-
   likeCount: number;
 
   commentCount: number;
 
   userLiked: boolean;
+
+  postSnapshots: IPostSnapshot[];
+
+  likes: IPostLike[];
 
   reports: IPostReport[];
 
