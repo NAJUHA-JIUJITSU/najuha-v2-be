@@ -12008,7 +12008,8 @@
           "userId",
           "playerSnapshots",
           "participationDivisionInfos",
-          "additionalInfos"
+          "additionalInfos",
+          "expectedPayment"
         ]
       },
       "TApplicationType": {
@@ -12673,8 +12674,8 @@
               "format": "uuid"
             },
             "maxItems": 5,
-            "title": "Image Ids",
-            "description": "Image Ids.\n- 이미지는 최대 5개까지 등록 가능합니다."
+            "title": "게시글 이미지는 최대 5개까지 등록 가능합니다",
+            "description": "게시글 이미지는 최대 5개까지 등록 가능합니다."
           }
         },
         "nullable": false,
@@ -12799,7 +12800,11 @@
           "viewCount",
           "category",
           "deletedAt",
-          "postSnapshots"
+          "postSnapshots",
+          "likeCount",
+          "commentCount",
+          "userLiked",
+          "user"
         ]
       },
       "TPostStatus": {
@@ -13108,8 +13113,8 @@
               "format": "uuid"
             },
             "maxItems": 5,
-            "title": "Image Ids",
-            "description": "Image Ids.\n- 이미지는 최대 5개까지 등록 가능합니다."
+            "title": "게시글 이미지는 최대 5개까지 등록 가능합니다",
+            "description": "게시글 이미지는 최대 5개까지 등록 가능합니다."
           }
         },
         "nullable": false,

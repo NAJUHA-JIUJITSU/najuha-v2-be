@@ -10,7 +10,7 @@ export const typeOrmConfig = {
   database: appEnv.dbDatabase,
   synchronize: appEnv.dbSynchronize,
   entities: [__dirname + '/entity/**/*.entity{.ts,.js}'],
-  // logging: true,
+  logging: true,
 };
 
 export const typeOrmConfigAsync: TypeOrmModuleAsyncOptions = {

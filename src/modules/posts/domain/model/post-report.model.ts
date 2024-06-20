@@ -1,15 +1,28 @@
-import { IPostReport } from '../interface/post-report.interface';
+import { uuidv7 } from 'uuidv7';
+import { IPostReportCreateDto, IPostReportModelData } from '../interface/post-report.interface';
 
 export class PostReportModel {
-  public readonly id: IPostReport['id'];
-  public readonly type: IPostReport['type'];
-  public readonly status: IPostReport['status'];
-  public readonly reason: IPostReport['reason'];
-  public readonly postId: IPostReport['postId'];
-  public readonly userId: IPostReport['userId'];
-  public readonly createdAt: IPostReport['createdAt'];
+  public readonly id: IPostReportModelData['id'];
+  public readonly type: IPostReportModelData['type'];
+  public readonly status: IPostReportModelData['status'];
+  public readonly reason: IPostReportModelData['reason'];
+  public readonly postId: IPostReportModelData['postId'];
+  public readonly userId: IPostReportModelData['userId'];
+  public readonly createdAt: IPostReportModelData['createdAt'];
 
-  constructor(entity: IPostReport) {
+  static create(dto: IPostReportCreateDto): PostReportModel {
+    return new PostReportModel({
+      id: uuidv7(),
+      type: dto.type,
+      status: 'ACCEPTED',
+      reason: dto.reason,
+      postId: dto.postId,
+      userId: dto.userId,
+      createdAt: new Date(),
+    });
+  }
+
+  constructor(entity: IPostReportModelData) {
     this.id = entity.id;
     this.type = entity.type;
     this.status = entity.status;
@@ -19,7 +32,7 @@ export class PostReportModel {
     this.createdAt = entity.createdAt;
   }
 
-  toEntity(): IPostReport {
+  toEntity(): IPostReportModelData {
     return {
       id: this.id,
       type: this.type,

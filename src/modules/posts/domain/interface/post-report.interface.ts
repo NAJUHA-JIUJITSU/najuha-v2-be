@@ -26,4 +26,14 @@ export interface IPostReport {
   createdAt: TDateOrStringDate;
 }
 
+export interface IPostReportModelData {
+  id: IPostReport['id'];
+  type: IPostReport['type'];
+  status: IPostReport['status'];
+  reason: IPostReport['reason'];
+  postId: IPostReport['postId'];
+  userId: IPostReport['userId'];
+  createdAt: IPostReport['createdAt'];
+}
+
 export interface IPostReportCreateDto extends Pick<IPostReport, 'postId' | 'userId' | 'type' | 'reason'> {}

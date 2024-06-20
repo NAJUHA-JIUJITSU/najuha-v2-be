@@ -16,4 +16,11 @@ export interface IPostLike {
   createdAt: TDateOrStringDate;
 }
 
+export interface IPostLikeModelData {
+  id: IPostLike['id'];
+  postId: IPostLike['postId'];
+  userId: IPostLike['userId'];
+  createdAt: IPostLike['createdAt'];
+}
+
 export interface IPostLikeCreateDto extends Pick<IPostLike, 'postId' | 'userId'> {}

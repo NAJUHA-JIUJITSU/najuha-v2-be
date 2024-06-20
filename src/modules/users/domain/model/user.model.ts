@@ -1,24 +1,42 @@
 import { IUserProfileImage } from '../interface/user-profile-image.interface';
 import { IUser } from '../interface/user.interface';
 
-export class UserModel {
-  private readonly id: IUser['id'];
-  private readonly snsAuthProvider: IUser['snsAuthProvider'];
-  private readonly snsId: IUser['snsId'];
-  private role: IUser['role'];
-  private name: IUser['name'];
-  private email: IUser['email'];
-  private phoneNumber: IUser['phoneNumber'];
-  private nickname: IUser['nickname'];
-  private gender: IUser['gender'];
-  private birth: IUser['birth'];
-  private belt: IUser['belt'];
-  private status: IUser['status'];
-  private profileImages: IUserProfileImage[];
-  private readonly createdAt: IUser['createdAt'];
-  private readonly updatedAt: IUser['updatedAt'];
+export interface IUserModelData {
+  id: IUser['id'];
+  role: IUser['role'];
+  snsAuthProvider: IUser['snsAuthProvider'];
+  snsId: IUser['snsId'];
+  name: IUser['name'];
+  email: IUser['email'];
+  phoneNumber: IUser['phoneNumber'];
+  nickname: IUser['nickname'];
+  gender: IUser['gender'];
+  birth: IUser['birth'];
+  belt: IUser['belt'];
+  status: IUser['status'];
+  createdAt: IUser['createdAt'];
+  updatedAt: IUser['updatedAt'];
+  profileImages: IUser['profileImages'];
+}
 
-  constructor(entity: IUser) {
+export class UserModel {
+  private readonly id: IUserModelData['id'];
+  private readonly snsAuthProvider: IUserModelData['snsAuthProvider'];
+  private readonly snsId: IUserModelData['snsId'];
+  private role: IUserModelData['role'];
+  private name: IUserModelData['name'];
+  private email: IUserModelData['email'];
+  private phoneNumber: IUserModelData['phoneNumber'];
+  private nickname: IUserModelData['nickname'];
+  private gender: IUserModelData['gender'];
+  private birth: IUserModelData['birth'];
+  private belt: IUserModelData['belt'];
+  private status: IUserModelData['status'];
+  private profileImages: IUserModelData['profileImages'];
+  private readonly createdAt: IUserModelData['createdAt'];
+  private readonly updatedAt: IUserModelData['updatedAt'];
+
+  constructor(entity: IUserModelData) {
     this.id = entity.id;
     this.role = entity.role;
     this.snsAuthProvider = entity.snsAuthProvider;
@@ -36,7 +54,7 @@ export class UserModel {
     this.profileImages = entity.profileImages || [];
   }
 
-  toEntity(): IUser {
+  toEntity(): IUserModelData {
     return {
       id: this.id,
       role: this.role,

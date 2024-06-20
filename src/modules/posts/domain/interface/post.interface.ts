@@ -1,11 +1,13 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
-import { IPostSnapshot, IPostSnapshotCreateDto } from './post-snapshot.interface';
-import { IPostLike } from './post-like.interface';
+import { IPostSnapshot, IPostSnapshotCreateDto, IPostSnapshotModelData } from './post-snapshot.interface';
+import { IPostLike, IPostLikeModelData } from './post-like.interface';
 import { IPostReport } from './post-report.interface';
-import { IImage } from '../../../images/domain/interface/image.interface';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IPost {
   /** UUID v7. */
   id: TId;
@@ -36,19 +38,42 @@ export interface IPost {
 
   postSnapshots: IPostSnapshot[];
 
-  likes?: IPostLike[];
+  likes: IPostLike[];
 
-  likeCount?: number;
+  likeCount: number;
 
-  commentCount?: number;
+  commentCount: number;
 
-  userLiked?: boolean;
+  userLiked: boolean;
 
-  reports?: IPostReport[];
+  reports: IPostReport[];
 
-  user?: IUserDisplayInfo;
+  user: IUserDisplayInfo;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IPostModelData {
+  id: IPost['id'];
+  userId: IPost['userId'];
+  viewCount: IPost['viewCount'];
+  status: IPost['status'];
+  category: IPost['category'];
+  createdAt: IPost['createdAt'];
+  deletedAt: IPost['deletedAt'];
+  likeCount?: IPost['likeCount'];
+  commentCount?: IPost['commentCount'];
+  userLiked?: IPost['userLiked'];
+  postSnapshots: IPostSnapshotModelData[];
+  likes?: IPostLikeModelData[];
+  reports?: IPost['reports'];
+  user?: IPost['user'];
+}
+
+// ----------------------------------------------------------------------------
+// return interface
+// ----------------------------------------------------------------------------
 export interface IPostDetail
   extends Pick<
     IPost,
@@ -66,24 +91,14 @@ export interface IPostDetail
     | 'user'
   > {}
 
-export interface IPostCreateDto
-  extends Pick<IPost, 'userId' | 'category'>,
-    Pick<IPostSnapshotCreateDto, 'title' | 'body'> {
-  /**
-   * Image Ids.
-   * - 이미지는 최대 5개까지 등록 가능합니다.
-   */
-  imageIds?: IImage['id'][] & tags.MaxItems<5>;
-}
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
+export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'> {}
 
-export interface IPostUpdateDto extends IPostSnapshotCreateDto {
-  /**
-   * Image Ids.
-   * - 이미지는 최대 5개까지 등록 가능합니다.
-   */
-  imageIds?: IImage['id'][] & tags.MaxItems<5>;
-}
-
+// ----------------------------------------------------------------------------
+// Query Options
+// ----------------------------------------------------------------------------
 export interface IFindPostsQueryOptions {
   /**
    * 게시물 status 필터.
@@ -120,6 +135,9 @@ export interface IFindPostsQueryOptions {
   sortOption: '최신순' | '조회순';
 }
 
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
 type TPostStatus = 'ACTIVE' | 'INACTIVE';
 
 type TPostCategory = 'FREE' | 'COMPETITION' | 'SEMINAR' | 'OPEN_MAT';

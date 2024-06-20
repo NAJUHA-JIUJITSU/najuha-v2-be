@@ -1,7 +1,7 @@
 import { tags } from 'typia';
 import { IPost } from './post.interface';
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
-import { IPostSnapshotImage } from './post-snapshot-image.interface';
+import { IPostSnapshotImage, IPostSnapshotImageModleData } from './post-snapshot-image.interface';
 
 export interface IPostSnapshot {
   /** UUID v7. */
@@ -21,6 +21,15 @@ export interface IPostSnapshot {
 
   /** PostSnapshotImages. */
   postSnapshotImages: IPostSnapshotImage[] & tags.MaxItems<5>;
+}
+
+export interface IPostSnapshotModelData {
+  id: IPostSnapshot['id'];
+  postId: IPostSnapshot['postId'];
+  title: IPostSnapshot['title'];
+  body: IPostSnapshot['body'];
+  createdAt: IPostSnapshot['createdAt'];
+  postSnapshotImages: IPostSnapshotImageModleData[];
 }
 
 export interface IPostSnapshotCreateDto extends Pick<IPostSnapshot, 'postId' | 'title' | 'body'> {}

@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { PostEntity } from '../entity/post/post.entity';
 import { FindPostsParam } from '../../modules/posts/application/posts.app.dto';
-import { IPost } from '../../modules/posts/domain/interface/post.interface';
+import { IPost, IPostModelData } from '../../modules/posts/domain/interface/post.interface';
 import { IUser } from '../../modules/users/domain/interface/user.interface';
 import { BusinessException, CommonErrors } from '../../common/response/errorResponse';
+import { assert } from 'typia';
 
 @Injectable()
 export class PostRepository extends Repository<PostEntity> {
@@ -12,7 +13,14 @@ export class PostRepository extends Repository<PostEntity> {
     super(PostEntity, dataSource.createEntityManager());
   }
 
-  async findPosts({ page, limit, categoryFilters, sortOption, userId, status }: FindPostsParam) {
+  async findPosts({
+    page,
+    limit,
+    categoryFilters,
+    sortOption,
+    userId,
+    status,
+  }: FindPostsParam): Promise<IPostModelData[]> {
     let qb = this.createQueryBuilder('post')
       .leftJoinAndSelect('post.postSnapshots', 'postSnapshots')
       .loadRelationCountAndMap('post.commentCount', 'post.comments')
@@ -59,13 +67,14 @@ export class PostRepository extends Repository<PostEntity> {
         break;
     }
 
-    return await qb
+    const posts = await qb
       .skip(page * limit)
       .take(limit)
       .getMany();
+    return assert<IPostModelData[]>(posts);
   }
 
-  async getPostById(postId: IPost['id'], userId?: IUser['id']) {
+  async getPostById(postId: IPost['id'], userId?: IUser['id']): Promise<IPostModelData> {
     const post = await this.createQueryBuilder('post')
       .where('post.id = :postId', { postId })
       .andWhere('post.status = :status', { status: 'ACTIVE' })
@@ -80,6 +89,6 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoinAndSelect('profileImages.image', 'profileImage')
       .getOne();
     if (!post) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
-    return post;
+    return assert<IPostModelData>(post);
   }
 }

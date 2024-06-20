@@ -28,4 +28,14 @@ export interface IPostSnapshotImage {
   image: IImage;
 }
 
-export interface IPostSnapshotImageCreateDto extends Pick<IPostSnapshotImage, 'postSnapshotId' | 'imageId' | 'image'> {}
+export interface IPostSnapshotImageModleData {
+  id: IPostSnapshotImage['id'];
+  postSnapshotId: IPostSnapshotImage['postSnapshotId'];
+  imageId: IPostSnapshotImage['imageId'];
+  sequence: IPostSnapshotImage['sequence'];
+  createdAt: IPostSnapshotImage['createdAt'];
+  image?: IPostSnapshotImage['image'];
+}
+
+export interface IPostSnapshotImageCreateDto
+  extends Pick<IPostSnapshotImage, 'postSnapshotId' | 'imageId' | 'sequence'> {}

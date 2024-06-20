@@ -1,31 +1,39 @@
 import { IUser } from '../../../users/domain/interface/user.interface';
-import { IPostSnapshot } from '../interface/post-snapshot.interface';
-import { IPost } from '../interface/post.interface';
+import { IPostCreateDto, IPostModelData } from '../interface/post.interface';
 import { IPostReport } from '../interface/post-report.interface';
 import { BusinessException, PostsErrors } from '../../../../common/response/errorResponse';
-
-export interface IPostModelData
-  extends Pick<
-      IPost,
-      'id' | 'userId' | 'viewCount' | 'status' | 'category' | 'createdAt' | 'deletedAt' | 'postSnapshots'
-    >,
-    Partial<Pick<IPost, 'likes' | 'likeCount' | 'commentCount' | 'userLiked' | 'reports' | 'user'>> {}
+import { uuidv7 } from 'uuidv7';
+import { PostSnapshotModel } from './post-snapshot.model';
+import { PostLikeModel } from './post-like.model';
 
 export class PostModel {
-  private readonly id: IPostModelData['id'];
-  private readonly userId: IPostModelData['userId'];
+  public readonly id: IPostModelData['id'];
+  public readonly userId: IPostModelData['userId'];
   private readonly viewCount: IPostModelData['viewCount'];
   private readonly category: IPostModelData['category'];
-  private postSnapshots: IPostModelData['postSnapshots'];
-  private status: IPostModelData['status'];
-  private deletedAt: IPostModelData['deletedAt'];
+  private readonly likeCount: IPostModelData['likeCount'];
+  private readonly commentCount: IPostModelData['commentCount'];
+  private readonly userLiked: IPostModelData['userLiked'];
   private readonly createdAt: IPostModelData['createdAt'];
-  private readonly likes: IPostModelData['likes'];
-  private reports: IPostModelData['reports'];
-  private likeCount: IPostModelData['likeCount'];
-  private commentCount: IPostModelData['commentCount'];
-  private userLiked: IPostModelData['userLiked'];
-  private user: IPostModelData['user'];
+  private deletedAt: IPostModelData['deletedAt'];
+  private status: IPostModelData['status'];
+  private postSnapshots: PostSnapshotModel[];
+  private readonly likes?: PostLikeModel[];
+  private reports?: IPostModelData['reports'];
+  private user?: IPostModelData['user'];
+
+  static create(dto: IPostCreateDto) {
+    return new PostModel({
+      id: uuidv7(),
+      userId: dto.userId,
+      viewCount: 0,
+      status: 'ACTIVE',
+      category: dto.category,
+      createdAt: new Date(),
+      deletedAt: null,
+      postSnapshots: [],
+    });
+  }
 
   constructor(entity: IPostModelData) {
     this.id = entity.id;
@@ -35,16 +43,16 @@ export class PostModel {
     this.category = entity.category;
     this.createdAt = entity.createdAt;
     this.deletedAt = entity.deletedAt;
-    this.postSnapshots = entity.postSnapshots;
     this.likeCount = entity.likeCount || 0;
     this.commentCount = entity.commentCount || 0;
-    this.reports = entity.reports || [];
-    this.likes = entity.likes || [];
+    this.postSnapshots = entity.postSnapshots.map((snapshot) => new PostSnapshotModel(snapshot));
+    this.likes = entity.likes?.map((like) => new PostLikeModel(like)) || [];
     this.userLiked = this.likes.length > 0 ? true : false;
+    this.reports = entity.reports || [];
     this.user = entity.user;
   }
 
-  toEntity() {
+  toEntity(): IPostModelData {
     return {
       id: this.id,
       userId: this.userId,
@@ -53,17 +61,17 @@ export class PostModel {
       category: this.category,
       createdAt: this.createdAt,
       deletedAt: this.deletedAt,
-      postSnapshots: this.postSnapshots,
-      likes: this.likes,
       reports: this.reports,
       likeCount: this.likeCount,
       commentCount: this.commentCount,
       userLiked: this.userLiked,
+      postSnapshots: this.postSnapshots.map((snapshot) => snapshot.toEntity()),
+      likes: this.likes?.map((like) => like.toData()),
       user: this.user,
     };
   }
 
-  addPostSnapshot(snapshot: IPostSnapshot): void {
+  addPostSnapshot(snapshot: PostSnapshotModel): void {
     this.postSnapshots.push(snapshot);
   }
 
