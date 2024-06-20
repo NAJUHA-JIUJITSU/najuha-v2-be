@@ -26,6 +26,16 @@ export interface ICommentReport {
   createdAt: TDateOrStringDate;
 }
 
+export interface ICommentReportModelData {
+  id: ICommentReport['id'];
+  type: ICommentReport['type'];
+  status: ICommentReport['status'];
+  reason: ICommentReport['reason'];
+  commentId: ICommentReport['commentId'];
+  userId: ICommentReport['userId'];
+  createdAt: ICommentReport['createdAt'];
+}
+
 export interface ICommentReportCreateDto extends Pick<ICommentReport, 'commentId' | 'userId' | 'type' | 'reason'> {}
 
 type TCommentReportType = 'INAPPROPRIATE' | 'SPAM';

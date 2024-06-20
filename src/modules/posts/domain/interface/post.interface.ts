@@ -3,7 +3,7 @@ import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.in
 import { tags } from 'typia';
 import { IPostSnapshot, IPostSnapshotModelData } from './post-snapshot.interface';
 import { IPostLike, IPostLikeModelData } from './post-like.interface';
-import { IPostReport } from './post-report.interface';
+import { IPostReport, IPostReportModelData } from './post-report.interface';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -67,7 +67,7 @@ export interface IPostModelData {
   userLiked?: IPost['userLiked'];
   postSnapshots: IPostSnapshotModelData[];
   likes?: IPostLikeModelData[];
-  reports?: IPost['reports'];
+  reports?: IPostReportModelData[];
   user?: IPost['user'];
 }
 

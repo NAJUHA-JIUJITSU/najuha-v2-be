@@ -15,3 +15,12 @@ export interface ICommentSnapshot {
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
 }
+
+export interface ICommentSnapshotModelData {
+  id: ICommentSnapshot['id'];
+  commentId: ICommentSnapshot['commentId'];
+  body: ICommentSnapshot['body'];
+  createdAt: ICommentSnapshot['createdAt'];
+}
+
+export interface ICommentSnapshotCreateDto extends Pick<ICommentSnapshot, 'commentId' | 'body'> {}

@@ -1,15 +1,28 @@
-import { ICommentReport } from '../interface/comment-report.interface';
+import { uuidv7 } from 'uuidv7';
+import { ICommentReportCreateDto, ICommentReportModelData } from '../interface/comment-report.interface';
 
 export class CommentReportModel {
-  public readonly id: ICommentReport['id'];
-  public readonly type: ICommentReport['type'];
-  public readonly status: ICommentReport['status'];
-  public readonly reason: ICommentReport['reason'];
-  public readonly commentId: ICommentReport['commentId'];
-  public readonly userId: ICommentReport['userId'];
-  public readonly createdAt: ICommentReport['createdAt'];
+  public readonly id: ICommentReportModelData['id'];
+  public readonly type: ICommentReportModelData['type'];
+  public readonly status: ICommentReportModelData['status'];
+  public readonly reason: ICommentReportModelData['reason'];
+  public readonly commentId: ICommentReportModelData['commentId'];
+  public readonly userId: ICommentReportModelData['userId'];
+  public readonly createdAt: ICommentReportModelData['createdAt'];
 
-  constructor(entity: ICommentReport) {
+  static create(dto: ICommentReportCreateDto): CommentReportModel {
+    return new CommentReportModel({
+      id: uuidv7(),
+      type: dto.type,
+      status: 'ACCEPTED',
+      reason: dto.reason,
+      commentId: dto.commentId,
+      userId: dto.userId,
+      createdAt: new Date(),
+    });
+  }
+
+  constructor(entity: ICommentReportModelData) {
     this.id = entity.id;
     this.type = entity.type;
     this.status = entity.status;
@@ -19,7 +32,7 @@ export class CommentReportModel {
     this.createdAt = entity.createdAt;
   }
 
-  toEntity(): ICommentReport {
+  toEntity(): ICommentReportModelData {
     return {
       id: this.id,
       type: this.type,

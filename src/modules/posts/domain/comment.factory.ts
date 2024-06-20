@@ -1,69 +1,62 @@
 import { Injectable } from '@nestjs/common';
-import { uuidv7 } from 'uuidv7';
-import { IComment, ICommentCreateDto, ICommentReplyCreateDto } from './interface/comment.interface';
-import { ICommentSnapshot } from './interface/comment-snapshot.interface';
-import { ICommentLike, ICommentLikeCreateDto } from './interface/comment-like.interface';
-import { ICommentReport, ICommentReportCreateDto } from './interface/comment-report.interface';
+import { ICommentSnapshotCreateDto } from './interface/comment-snapshot.interface';
+import { ICommentLikeCreateDto } from './interface/comment-like.interface';
+import { ICommentReportCreateDto } from './interface/comment-report.interface';
+import { CommentModel } from './model/comment.model';
+import { CommentSnapshotModel } from './model/comment-snapshot.model';
+import { CommentLikeModel } from './model/comment-like.model';
+import { CommentReportModel } from './model/comment-report.model';
+import { CreateCommentParam, CreateCommentReplyParam } from '../application/comments.app.dto';
 
 @Injectable()
 export class CommentFactory {
-  createComment(commentCreateDto: ICommentCreateDto): IComment {
-    const commentId = uuidv7();
-    const commentSnapshot = this.createCommentSnapshot(commentId, commentCreateDto.body);
-    return {
-      id: commentId,
-      userId: commentCreateDto.userId,
-      parentId: null,
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      deletedAt: null,
-      postId: commentCreateDto.postId,
-      commentSnapshots: [commentSnapshot],
-    };
+  createComment(commentCreateParam: CreateCommentParam): CommentModel {
+    const commentModel = CommentModel.createComment({
+      userId: commentCreateParam.userId,
+      postId: commentCreateParam.postId,
+    });
+    const commentSnapshotModel = CommentSnapshotModel.create({
+      commentId: commentModel.id,
+      body: commentCreateParam.body,
+    });
+    commentModel.addCommentSnapshot(commentSnapshotModel);
+    return commentModel;
   }
 
-  createCommentReply(commentReplyCreateDto: ICommentReplyCreateDto): IComment {
-    const commentId = uuidv7();
-    const commentSnapshot = this.createCommentSnapshot(commentId, commentReplyCreateDto.body);
-    return {
-      id: commentId,
+  createCommentReply(commentReplyCreateDto: CreateCommentReplyParam): CommentModel {
+    const commentModel = CommentModel.createReply({
       userId: commentReplyCreateDto.userId,
-      parentId: commentReplyCreateDto.parentId,
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      deletedAt: null,
       postId: commentReplyCreateDto.postId,
-      commentSnapshots: [commentSnapshot],
-    };
+      parentId: commentReplyCreateDto.parentId,
+    });
+    const commentSnapshotModel = CommentSnapshotModel.create({
+      commentId: commentModel.id,
+      body: commentReplyCreateDto.body,
+    });
+    commentModel.addCommentSnapshot(commentSnapshotModel);
+    return commentModel;
   }
 
-  createCommentSnapshot(commentId: IComment['id'], body: ICommentSnapshot['body']): ICommentSnapshot {
-    return {
-      id: uuidv7(),
-      commentId,
-      body,
-      createdAt: new Date(),
-    };
+  createCommentSnapshot(commentSnapshotCreateDto: ICommentSnapshotCreateDto): CommentSnapshotModel {
+    return CommentSnapshotModel.create({
+      commentId: commentSnapshotCreateDto.commentId,
+      body: commentSnapshotCreateDto.body,
+    });
   }
 
-  createCommentLike({ commentId, userId }: ICommentLikeCreateDto): ICommentLike {
-    return {
-      id: uuidv7(),
+  createCommentLike({ commentId, userId }: ICommentLikeCreateDto): CommentLikeModel {
+    return CommentLikeModel.create({
       commentId,
       userId,
-      createdAt: new Date(),
-    };
+    });
   }
 
-  createCommentReport({ type, reason, commentId, userId }: ICommentReportCreateDto): ICommentReport {
-    return {
-      id: uuidv7(),
+  createCommentReport({ type, reason, commentId, userId }: ICommentReportCreateDto): CommentReportModel {
+    return CommentReportModel.create({
       type,
-      status: 'ACCEPTED',
       reason,
       commentId,
       userId,
-      createdAt: new Date(),
-    };
+    });
   }
 }

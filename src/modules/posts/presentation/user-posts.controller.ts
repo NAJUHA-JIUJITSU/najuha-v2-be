@@ -262,7 +262,9 @@ export class UserPostsController {
   ): Promise<ResponseForm<CreateCommentRes>> {
     return createResponseForm(
       await this.commentsAppService.createComment({
-        commentCreateDto: { userId: req['userId'], postId, ...body },
+        userId: req['userId'],
+        postId,
+        ...body,
       }),
     );
   }
@@ -289,12 +291,10 @@ export class UserPostsController {
   ): Promise<ResponseForm<CreateCommentReplyRes>> {
     return createResponseForm(
       await this.commentsAppService.createCommentReply({
-        commentReplyCreateDto: {
-          userId: req['userId'],
-          postId,
-          parentId: commentId,
-          ...body,
-        },
+        userId: req['userId'],
+        postId,
+        parentId: commentId,
+        ...body,
       }),
     );
   }
@@ -386,7 +386,8 @@ export class UserPostsController {
     return createResponseForm(
       await this.commentsAppService.updateComment({
         userId: req['userId'],
-        commentUpdateDto: { commentId, ...body },
+        commentId,
+        ...body,
       }),
     );
   }
@@ -434,7 +435,8 @@ export class UserPostsController {
   ): Promise<ResponseForm<void>> {
     return createResponseForm(
       await this.commentsAppService.createCommentLike({
-        commentLikeCreateDto: { userId: req['userId'], commentId },
+        userId: req['userId'],
+        commentId,
       }),
     );
   }
@@ -484,7 +486,9 @@ export class UserPostsController {
   ): Promise<ResponseForm<void>> {
     return createResponseForm(
       await this.commentsAppService.createCommentReport({
-        commentReportCreateDto: { userId: req['userId'], commentId, ...body },
+        userId: req['userId'],
+        commentId,
+        ...body,
       }),
     );
   }

@@ -1,26 +1,51 @@
-import { IUser } from '../../../users/domain/interface/user.interface';
-import { ICommentLike } from '../interface/comment-like.interface';
-import { ICommentReport } from '../interface/comment-report.interface';
-import { ICommentSnapshot } from '../interface/comment-snapshot.interface';
-import { IComment } from '../interface/comment.interface';
-import { BusinessException, PostsErrors } from '../../../../common/response/errorResponse';
+import { ICommentCreateDto, ICommentModelData, ICommentReplyCreateDto } from '../interface/comment.interface';
+import { CommentSnapshotModel } from './comment-snapshot.model';
+import { CommentLikeModel } from './comment-like.model';
+import { CommentReportModel } from './comment-report.model';
+import { uuidv7 } from 'uuidv7';
 
 export class CommentModel {
-  private readonly id: IComment['id'];
-  private readonly userId: IComment['userId'];
-  private readonly parentId: IComment['parentId'];
-  private readonly createdAt: IComment['createdAt'];
-  private readonly postId: IComment['postId'];
-  private readonly commentSnapshots: ICommentSnapshot[];
-  private readonly likes: ICommentLike[];
-  private readonly reports: ICommentReport[];
-  private deletedAt: IComment['deletedAt'];
-  private status: IComment['status'];
-  private likeCount: IComment['likeCount'];
-  private userLiked: IComment['userLiked'];
-  private user: IComment['user'];
+  public readonly id: ICommentModelData['id'];
+  public readonly userId: ICommentModelData['userId'];
+  private readonly parentId: ICommentModelData['parentId'];
+  private readonly createdAt: ICommentModelData['createdAt'];
+  private readonly postId: ICommentModelData['postId'];
+  private deletedAt: ICommentModelData['deletedAt'];
+  private status: ICommentModelData['status'];
+  private likeCount: ICommentModelData['likeCount'];
+  private userLiked: ICommentModelData['userLiked'];
+  private commentSnapshots: CommentSnapshotModel[];
+  private readonly likes?: CommentLikeModel[];
+  private readonly reports?: CommentReportModel[];
+  private user?: ICommentModelData['user'];
 
-  constructor(entity: IComment) {
+  static createComment(dto: ICommentCreateDto): CommentModel {
+    return new CommentModel({
+      id: uuidv7(),
+      userId: dto.userId,
+      parentId: null,
+      postId: dto.postId,
+      status: 'ACTIVE',
+      createdAt: new Date(),
+      deletedAt: null,
+      commentSnapshots: [],
+    });
+  }
+
+  static createReply(dto: ICommentReplyCreateDto): CommentModel {
+    return new CommentModel({
+      id: uuidv7(),
+      userId: dto.userId,
+      parentId: dto.parentId,
+      postId: dto.postId,
+      status: 'ACTIVE',
+      createdAt: new Date(),
+      deletedAt: null,
+      commentSnapshots: [],
+    });
+  }
+
+  constructor(entity: ICommentModelData) {
     this.id = entity.id;
     this.userId = entity.userId;
     this.parentId = entity.parentId;
@@ -28,10 +53,10 @@ export class CommentModel {
     this.createdAt = entity.createdAt;
     this.deletedAt = entity.deletedAt;
     this.postId = entity.postId;
-    this.commentSnapshots = entity.commentSnapshots;
     this.likeCount = entity.likeCount || 0;
-    this.reports = entity.reports || [];
-    this.likes = entity.likes || [];
+    this.commentSnapshots = entity.commentSnapshots.map((snapshot) => new CommentSnapshotModel(snapshot));
+    this.reports = entity.reports?.map((report) => new CommentReportModel(report)) || [];
+    this.likes = entity.likes?.map((like) => new CommentLikeModel(like)) || [];
     this.userLiked = this.likes.length > 0 ? true : false;
     this.user = entity.user;
   }
@@ -45,34 +70,20 @@ export class CommentModel {
       createdAt: this.createdAt,
       deletedAt: this.deletedAt,
       postId: this.postId,
-      commentSnapshots: this.commentSnapshots,
-      likes: this.likes,
-      reports: this.reports,
+      commentSnapshots: this.commentSnapshots.map((snapshot) => snapshot.toEntity()),
+      likes: this.likes?.map((like) => like.toEntity()) || [],
+      reports: this.reports?.map((report) => report.toEntity()) || [],
       likeCount: this.likeCount,
       userLiked: this.userLiked,
       user: this.user,
     };
   }
 
-  addCommentSnapshot(snapshot: ICommentSnapshot): void {
+  addCommentSnapshot(snapshot: CommentSnapshotModel): void {
     this.commentSnapshots.push(snapshot);
   }
 
   delete(): void {
     this.deletedAt = new Date();
-  }
-
-  addCommentReport(report: ICommentReport): void {
-    this.validateReportAlreadyExist(report.userId);
-    this.reports.push(report);
-    if (this.reports.filter((report) => report.status === 'ACCEPTED').length >= 10) {
-      this.status = 'INACTIVE';
-    }
-  }
-
-  private validateReportAlreadyExist(userId: IUser['id']): void {
-    if (this.reports.some((report) => report.userId === userId)) {
-      throw new BusinessException(PostsErrors.POSTS_COMMENT_REPORT_ALREADY_EXIST);
-    }
   }
 }

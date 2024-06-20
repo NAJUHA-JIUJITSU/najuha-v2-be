@@ -17,7 +17,6 @@ import {
 } from './posts.app.dto';
 import { assert } from 'typia';
 import { BusinessException, CommonErrors, PostsErrors } from '../../../common/response/errorResponse';
-import { IPostModelData } from '../domain/interface/post.interface';
 import { UserRepository } from '../../../database/custom-repository/user.repository';
 import { PostRepository } from '../../../database/custom-repository/post.repository';
 import { PostModel } from '../domain/model/post.model';

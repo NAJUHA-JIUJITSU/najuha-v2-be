@@ -18,7 +18,7 @@ import {
 } from './comments.app.dto';
 import { assert } from 'typia';
 import { BusinessException, CommonErrors, PostsErrors } from '../../../common/response/errorResponse';
-import { IComment } from '../domain/interface/comment.interface';
+import { ICommentModelData } from '../domain/interface/comment.interface';
 import { UserRepository } from '../../../database/custom-repository/user.repository';
 import { PostRepository } from '../../../database/custom-repository/post.repository';
 import { CommentRepository } from '../../../database/custom-repository/comment.repository';
@@ -43,87 +43,92 @@ export class CommentsAppService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async createComment({ commentCreateDto }: CreateCommentParam): Promise<CreateCommentRet> {
-    await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: commentCreateDto.userId } }).catch(() => {
+  async createComment(param: CreateCommentParam): Promise<CreateCommentRet> {
+    const [_userEntity, _postEntity] = await Promise.all([
+      this.userRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
-      this.postRepository.findOneOrFail({ where: { id: commentCreateDto.postId, status: 'ACTIVE' } }).catch(() => {
+      this.postRepository.findOneOrFail({ where: { id: param.postId, status: 'ACTIVE' } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
       }),
     ]);
-    const comment = new CommentModel(this.commentFactory.createComment(commentCreateDto));
-    return { comment: await this.commentRepository.save(comment.toEntity()) };
+    const newComment = this.commentFactory.createComment(param);
+    await this.commentRepository.save(newComment.toEntity());
+    return assert<CreateCommentRet>({
+      comment: new CommentModel(await this.commentRepository.getCommentById(newComment.id)),
+    });
   }
 
-  async createCommentReply({ commentReplyCreateDto }: CreateCommentReplyParam): Promise<CreateCommentReplyRet> {
-    const [_, parentComment] = await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: commentReplyCreateDto.userId } }).catch(() => {
+  async createCommentReply(param: CreateCommentReplyParam): Promise<CreateCommentReplyRet> {
+    const [_userEntity, parentCommentEntity] = await Promise.all([
+      this.userRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
-      this.commentRepository
-        .findOneOrFail({ where: { id: commentReplyCreateDto.parentId, status: 'ACTIVE' } })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Parent Comment not found');
-        }),
+      this.commentRepository.findOneOrFail({ where: { id: param.parentId, status: 'ACTIVE' } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Parent Comment not found');
+      }),
     ]);
-    if (parentComment.parentId) throw new BusinessException(PostsErrors.POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED);
-    const commentReply = new CommentModel(this.commentFactory.createCommentReply(commentReplyCreateDto));
-    return { comment: await this.commentRepository.save(commentReply.toEntity()) };
+    if (parentCommentEntity.parentId) throw new BusinessException(PostsErrors.POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED);
+    const newCommentReply = this.commentFactory.createCommentReply(param);
+    await this.commentRepository.save(newCommentReply.toEntity());
+    return assert<CreateCommentReplyRet>({
+      comment: new CommentModel(await this.commentRepository.getCommentById(newCommentReply.id)),
+    });
   }
 
   async findComments(query: FindCommentsParam): Promise<FindCommentsRet> {
-    const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
+    const comments = assert<ICommentModelData[]>(await this.commentRepository.findComments(query)).map(
       (commentEntity) => new CommentModel(commentEntity),
     );
-    let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
-    if (comments.length === query.limit) {
-      ret = { ...ret, nextPage: query.page + 1 };
-    }
+    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toEntity()) });
+    if (comments.length === query.limit) ret.nextPage = query.page + 1;
     return ret;
   }
 
   async findReplies(query: FindRepliesParam): Promise<FindCommentsRet> {
-    const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
+    const comments = assert<ICommentModelData[]>(await this.commentRepository.findComments(query)).map(
       (commentEntity) => new CommentModel(commentEntity),
     );
-    let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
-    if (comments.length === query.limit) {
-      ret = { ...ret, nextPage: query.page + 1 };
-    }
+    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toEntity()) });
+    if (comments.length === query.limit) ret.nextPage = query.page + 1;
     return ret;
   }
 
   async findCommentsAndReplies(query: FindCommentsAndRepliesParam): Promise<FindCommentsRet> {
-    const comments = assert<IComment[]>(await this.commentRepository.findComments(query)).map(
+    const comments = assert<ICommentModelData[]>(await this.commentRepository.findComments(query)).map(
       (commentEntity) => new CommentModel(commentEntity),
     );
-    let ret: FindCommentsRet = { comments: comments.map((comment) => comment.toEntity()) };
-    if (comments.length === query.limit) {
-      ret = { ...ret, nextPage: query.page + 1 };
-    }
+    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toEntity()) });
+    if (comments.length === query.limit) ret.nextPage = query.page + 1;
     return ret;
   }
 
-  async updateComment({ userId, commentUpdateDto }: UpdateCommentParam): Promise<UpdateCommentRet> {
-    const comment = new CommentModel(
-      assert<IComment>(
+  async updateComment(param: UpdateCommentParam): Promise<UpdateCommentRet> {
+    const [_userEntity, commentEntity] = await Promise.all([
+      this.userRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      }),
+      assert<ICommentModelData>(
         await this.commentRepository
           .findOneOrFail({
-            where: { id: commentUpdateDto.commentId, userId, status: 'ACTIVE' },
+            where: { id: param.commentId, status: 'ACTIVE', userId: param.userId },
             relations: ['commentSnapshots'],
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment not found');
           }),
       ),
-    );
-    const newCommentSnapshot = this.commentFactory.createCommentSnapshot(
-      commentUpdateDto.commentId,
-      commentUpdateDto.body,
-    );
+    ]);
+    const comment = new CommentModel(commentEntity);
+    const newCommentSnapshot = this.commentFactory.createCommentSnapshot({
+      commentId: param.commentId,
+      body: param.body,
+    });
     comment.addCommentSnapshot(newCommentSnapshot);
-    return { comment: await this.commentRepository.save(comment.toEntity()) };
+    await this.commentRepository.save(comment.toEntity());
+    return assert<UpdateCommentRet>({
+      comment: new CommentModel(await this.commentRepository.getCommentById(comment.id)).toEntity(),
+    });
   }
 
   async deleteComment({ userId, commentId }: DeleteCommentParam): Promise<void> {
@@ -135,22 +140,20 @@ export class CommentsAppService {
     this.commentRepository.softDelete(commentEntity.id);
   }
 
-  async createCommentLike({ commentLikeCreateDto }: CreateCommentLikeParam): Promise<void> {
+  async createCommentLike(param: CreateCommentLikeParam): Promise<void> {
     await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: commentLikeCreateDto.userId } }).catch(() => {
+      this.userRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
-      this.commentRepository
-        .findOneOrFail({ where: { id: commentLikeCreateDto.commentId, status: 'ACTIVE' } })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment not found');
-        }),
+      this.commentRepository.findOneOrFail({ where: { id: param.commentId, status: 'ACTIVE' } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment not found');
+      }),
     ]);
     const commentLike = await this.commentLikeRepository.findOne({
-      where: { userId: commentLikeCreateDto.userId, commentId: commentLikeCreateDto.commentId },
+      where: { userId: param.userId, commentId: param.commentId },
     });
     if (commentLike) throw new BusinessException(PostsErrors.POSTS_COMMENT_LIKE_ALREADY_EXIST);
-    const newCommentLike = this.commentFactory.createCommentLike(commentLikeCreateDto);
+    const newCommentLike = this.commentFactory.createCommentLike(param);
     await this.commentLikeRepository.save(newCommentLike);
   }
 
@@ -165,37 +168,33 @@ export class CommentsAppService {
     await this.commentLikeRepository.delete(commentLike);
   }
 
-  async createCommentReport({ commentReportCreateDto }: CreateCommentReportParam): Promise<void> {
+  async createCommentReport(param: CreateCommentReportParam): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const [_user, commentEntity, alreadyExistCommentReport, commentReportEntities] = await Promise.all([
-        queryRunner.manager.findOneOrFail(UserEntity, { where: { id: commentReportCreateDto.userId } }).catch(() => {
+      const [_user, commentEntity, commentReportEntities] = await Promise.all([
+        queryRunner.manager.findOneOrFail(UserEntity, { where: { id: param.userId } }).catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
         }),
         queryRunner.manager
           .findOneOrFail(CommentEntity, {
-            where: { id: commentReportCreateDto.commentId },
+            where: { id: param.commentId },
           })
           .catch(() => {
             throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment not found');
           }),
-        queryRunner.manager.findOne(CommentReportEntity, {
-          where: { userId: commentReportCreateDto.userId, commentId: commentReportCreateDto.commentId },
-        }),
         queryRunner.manager.find(CommentReportEntity, {
-          where: { commentId: commentReportCreateDto.commentId, status: 'ACCEPTED' },
+          where: { commentId: param.commentId },
         }),
       ]);
+
+      const alreadyExistCommentReport = commentReportEntities.find((report) => report.userId === param.userId);
       if (alreadyExistCommentReport) throw new BusinessException(PostsErrors.POSTS_COMMENT_REPORT_ALREADY_EXIST);
-      await queryRunner.manager.save(
-        CommentReportEntity,
-        this.commentFactory.createCommentReport(commentReportCreateDto),
-      );
-      if (commentReportEntities.length >= 9) {
+      await queryRunner.manager.save(CommentReportEntity, this.commentFactory.createCommentReport(param));
+      const acceptedReports = commentReportEntities.filter((report) => report.status === 'ACCEPTED');
+      if (acceptedReports.length >= 9)
         await queryRunner.manager.update(CommentEntity, commentEntity.id, { status: 'INACTIVE' });
-      }
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();

@@ -17,4 +17,11 @@ export interface ICommentLike {
   createdAt: TDateOrStringDate;
 }
 
+export interface ICommentLikeModelData {
+  id: ICommentLike['id'];
+  commentId: ICommentLike['commentId'];
+  userId: ICommentLike['userId'];
+  createdAt: ICommentLike['createdAt'];
+}
+
 export type ICommentLikeCreateDto = Pick<ICommentLike, 'commentId' | 'userId'>;

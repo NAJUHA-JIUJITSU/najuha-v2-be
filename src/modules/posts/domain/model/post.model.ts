@@ -1,10 +1,8 @@
-import { IUser } from '../../../users/domain/interface/user.interface';
 import { IPostCreateDto, IPostModelData } from '../interface/post.interface';
-import { IPostReport } from '../interface/post-report.interface';
-import { BusinessException, PostsErrors } from '../../../../common/response/errorResponse';
 import { uuidv7 } from 'uuidv7';
 import { PostSnapshotModel } from './post-snapshot.model';
 import { PostLikeModel } from './post-like.model';
+import { PostReportModel } from './post-report.model';
 
 export class PostModel {
   public readonly id: IPostModelData['id'];
@@ -19,7 +17,7 @@ export class PostModel {
   private status: IPostModelData['status'];
   private postSnapshots: PostSnapshotModel[];
   private readonly likes?: PostLikeModel[];
-  private reports?: IPostModelData['reports'];
+  private reports?: PostReportModel[];
   private user?: IPostModelData['user'];
 
   static create(dto: IPostCreateDto) {
@@ -47,8 +45,8 @@ export class PostModel {
     this.commentCount = entity.commentCount || 0;
     this.postSnapshots = entity.postSnapshots.map((snapshot) => new PostSnapshotModel(snapshot));
     this.likes = entity.likes?.map((like) => new PostLikeModel(like)) || [];
+    this.reports = entity.reports?.map((report) => new PostReportModel(report)) || [];
     this.userLiked = this.likes.length > 0 ? true : false;
-    this.reports = entity.reports || [];
     this.user = entity.user;
   }
 
@@ -61,12 +59,12 @@ export class PostModel {
       category: this.category,
       createdAt: this.createdAt,
       deletedAt: this.deletedAt,
-      reports: this.reports,
       likeCount: this.likeCount,
       commentCount: this.commentCount,
       userLiked: this.userLiked,
       postSnapshots: this.postSnapshots.map((snapshot) => snapshot.toEntity()),
       likes: this.likes?.map((like) => like.toData()),
+      reports: this.reports?.map((report) => report.toEntity()),
       user: this.user,
     };
   }
@@ -77,25 +75,5 @@ export class PostModel {
 
   delete() {
     this.deletedAt = new Date();
-  }
-
-  addPostReport(report: IPostReport): void {
-    if (!this.reports) {
-      throw new Error('Post reports is not initialized');
-    }
-    this.validateReportAleadyExist(report.userId);
-    this.reports.push(report);
-    if (this.reports.filter((report) => report.status === 'ACCEPTED').length >= 10) {
-      this.status = 'INACTIVE';
-    }
-  }
-
-  private validateReportAleadyExist(userId: IUser['id']): void {
-    if (!this.reports) {
-      throw new Error('Post reports is not initialized');
-    }
-    if (this.reports.some((report) => report.userId === userId)) {
-      throw new BusinessException(PostsErrors.POSTS_POST_REPORT_ALREADY_EXIST);
-    }
   }
 }

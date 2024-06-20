@@ -1,7 +1,11 @@
 import {
+  CreateCommentParam,
+  CreateCommentReplyParam,
   CreateCommentReplyRet,
+  CreateCommentReportParam,
   CreateCommentRet,
   FindCommentsRet,
+  UpdateCommentParam,
   UpdateCommentRet,
 } from '../application/comments.app.dto';
 import {
@@ -13,8 +17,6 @@ import {
   UpdatePostParam,
   UpdatePostRet,
 } from '../application/posts.app.dto';
-import { ICommentReportCreateDto } from '../domain/interface/comment-report.interface';
-import { ICommentCreateDto, ICommentReplyCreateDto, ICommentUpdateDto } from '../domain/interface/comment.interface';
 import { IFindPostsQueryOptions } from '../domain/interface/post.interface';
 import { TPaginationParam } from '../../../common/common-types';
 
@@ -32,17 +34,17 @@ export interface CreatePostReportReqBody extends Omit<CreatePostReportParam, 'us
 
 //
 
-export interface CreateCommentReqBody extends Omit<ICommentCreateDto, 'userId' | 'postId'> {}
+export interface CreateCommentReqBody extends Omit<CreateCommentParam, 'userId' | 'postId'> {}
 
-export interface CreateCommentReplyReqBody extends Omit<ICommentReplyCreateDto, 'userId' | 'postId' | 'parentId'> {}
+export interface CreateCommentReplyReqBody extends Omit<CreateCommentReplyParam, 'userId' | 'postId' | 'parentId'> {}
 
 export interface FindCommentsReqQuery extends Partial<TPaginationParam<void>> {}
 
 export interface FindRepliesReqQuery extends Partial<TPaginationParam<void>> {}
 
-export interface UpdateCommentReqBody extends Omit<ICommentUpdateDto, 'commentId'> {}
+export interface UpdateCommentReqBody extends Omit<UpdateCommentParam, 'userId' | 'commentId'> {}
 
-export interface CreateCommentReportReqBody extends Omit<ICommentReportCreateDto, 'userId' | 'commentId'> {}
+export interface CreateCommentReportReqBody extends Omit<CreateCommentReportParam, 'userId' | 'commentId'> {}
 
 // ---------------------------------------------------------------------------
 // postsController Response

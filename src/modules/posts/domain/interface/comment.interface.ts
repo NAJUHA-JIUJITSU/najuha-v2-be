@@ -1,11 +1,14 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
 import { IPost } from './post.interface';
-import { ICommentSnapshot } from './comment-snapshot.interface';
-import { ICommentLike } from './comment-like.interface';
-import { ICommentReport } from './comment-report.interface';
+import { ICommentSnapshot, ICommentSnapshotModelData } from './comment-snapshot.interface';
+import { ICommentLike, ICommentLikeModelData } from './comment-like.interface';
+import { ICommentReport, ICommentReportModelData } from './comment-report.interface';
 import { NotNull } from '../../../../common/utility-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IComment {
   /** UUID v7. */
   id: TId;
@@ -30,17 +33,39 @@ export interface IComment {
 
   commentSnapshots: ICommentSnapshot[];
 
-  likes?: ICommentLike[];
+  likes: ICommentLike[];
 
-  reports?: ICommentReport[];
+  reports: ICommentReport[];
 
-  likeCount?: number;
+  likeCount: number;
 
-  userLiked?: boolean;
+  userLiked: boolean;
 
-  user?: IUserDisplayInfo;
+  user: IUserDisplayInfo;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface ICommentModelData {
+  id: IComment['id'];
+  userId: IComment['userId'];
+  parentId: IComment['parentId'];
+  status: IComment['status'];
+  createdAt: IComment['createdAt'];
+  deletedAt: IComment['deletedAt'];
+  postId: IComment['postId'];
+  likeCount?: IComment['likeCount'];
+  userLiked?: IComment['userLiked'];
+  commentSnapshots: ICommentSnapshotModelData[];
+  likes?: ICommentLikeModelData[];
+  reports?: ICommentReportModelData[];
+  user?: IComment['user'];
+}
+
+// ----------------------------------------------------------------------------
+// return interface
+// ----------------------------------------------------------------------------
 export interface ICommentDetail
   extends Pick<
     IComment,
@@ -57,14 +82,16 @@ export interface ICommentDetail
     | 'user'
   > {}
 
-export interface ICommentCreateDto extends Pick<IComment, 'userId' | 'postId'>, Pick<ICommentSnapshot, 'body'> {}
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
+export interface ICommentCreateDto extends Pick<IComment, 'userId' | 'postId'> {}
 
-export interface ICommentReplyCreateDto
-  extends NotNull<Pick<IComment, 'userId' | 'postId' | 'parentId'>>,
-    Pick<ICommentSnapshot, 'body'> {}
+export interface ICommentReplyCreateDto extends NotNull<Pick<IComment, 'userId' | 'postId' | 'parentId'>> {}
 
-export interface ICommentUpdateDto extends Pick<ICommentSnapshot, 'commentId' | 'body'> {}
-
+// ----------------------------------------------------------------------------
+// Query Options
+// ----------------------------------------------------------------------------
 /** 댓글만 조회하는 쿼리 옵션. */
 export interface IFindCommentsQueryOptions {
   type: 'COMMENT';
@@ -94,4 +121,7 @@ export interface IFindCommentsAndRepliesQueryOptions {
   userId?: IUser['id'];
 }
 
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
 type TCommentStatus = 'ACTIVE' | 'INACTIVE';
