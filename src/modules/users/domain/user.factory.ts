@@ -1,9 +1,8 @@
 import { uuidv7 } from 'uuidv7';
-import { ITemporaryUserCreateDto } from './interface/user.interface';
 import { IUserProfileImage, IUserProfileImageCreateDto } from './interface/user-profile-image.interface';
 import { IImage } from '../../images/domain/interface/image.interface';
 import { TemporaryUserModel } from './model/temporary-user.model';
-import { ITemporaryUser } from './interface/temporary-user.interface';
+import { ITemporaryUser, ITemporaryUserCreateDto } from './interface/temporary-user.interface';
 
 export class UserFactory {
   creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {

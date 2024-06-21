@@ -12741,7 +12741,7 @@
             "type": "boolean"
           },
           "user": {
-            "$ref": "#/components/schemas/IUserDisplayInfo"
+            "$ref": "#/components/schemas/IUserPublicProfile"
           }
         },
         "nullable": false,
@@ -12871,7 +12871,7 @@
           "image"
         ]
       },
-      "IUserDisplayInfo": {
+      "IUserPublicProfile": {
         "type": "object",
         "properties": {
           "nickname": {
@@ -13242,7 +13242,7 @@
             "type": "boolean"
           },
           "user": {
-            "$ref": "#/components/schemas/IUserDisplayInfo"
+            "$ref": "#/components/schemas/IUserPublicProfile"
           },
           "parentId": {
             "$ref": "#/components/schemas/TId.Nullable",

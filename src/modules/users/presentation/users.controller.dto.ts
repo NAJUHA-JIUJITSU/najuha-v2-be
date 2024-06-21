@@ -1,6 +1,7 @@
 import { CreateUserProfileImageRet, CreateUserRet, GetMeRet, UpdateUserRet } from '../application/users.app.dtos';
+import { ITemporaryUserCreateDto } from '../domain/interface/temporary-user.interface';
 import { IUserProfileImageCreateDto } from '../domain/interface/user-profile-image.interface';
-import { ITemporaryUserCreateDto, IUserUpdateDto } from '../domain/interface/user.interface';
+import { IUserUpdateDto } from '../domain/interface/user.interface';
 
 // ---------------------------------------------------------------------------
 // usersController Request

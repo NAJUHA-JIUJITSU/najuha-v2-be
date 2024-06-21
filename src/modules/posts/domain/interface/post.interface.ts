@@ -1,5 +1,5 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
-import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
+import { IUser, IUserPublicProfile } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
 import { IPostSnapshot, IPostSnapshotModelData } from './post-snapshot.interface';
 import { IPostLike, IPostLikeModelData } from './post-like.interface';
@@ -48,7 +48,7 @@ export interface IPost {
 
   reports: IPostReport[];
 
-  user: IUserDisplayInfo;
+  user: IUserPublicProfile;
 }
 
 // ----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
-import { IUser, IUserDisplayInfo } from '../../../users/domain/interface/user.interface';
+import { IUser, IUserPublicProfile } from '../../../users/domain/interface/user.interface';
 import { IPost } from './post.interface';
 import { ICommentSnapshot, ICommentSnapshotModelData } from './comment-snapshot.interface';
 import { ICommentLike, ICommentLikeModelData } from './comment-like.interface';
@@ -41,7 +41,7 @@ export interface IComment {
 
   userLiked: boolean;
 
-  user: IUserDisplayInfo;
+  user: IUserPublicProfile;
 }
 
 // ----------------------------------------------------------------------------

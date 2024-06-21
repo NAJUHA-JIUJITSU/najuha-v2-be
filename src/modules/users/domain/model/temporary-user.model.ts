@@ -1,10 +1,10 @@
 import { uuidv7 } from 'uuidv7';
 import {
   IRegisteredUserModelData,
+  ITemporaryUserCreateDto,
   ITemporaryUserModelData,
   IUserRgistertDto,
 } from '../interface/temporary-user.interface';
-import { ITemporaryUserCreateDto } from '../interface/user.interface';
 import { IPolicyConsent } from '../../../register/domain/interface/policy-consent.interface';
 import { IPolicySummery } from '../../../policy/domain/interface/policy.interface';
 import { BusinessException, RegisterErrors } from '../../../../common/response/errorResponse';

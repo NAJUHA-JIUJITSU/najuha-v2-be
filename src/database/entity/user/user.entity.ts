@@ -61,6 +61,10 @@ export class UserEntity {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: IUser['updatedAt'];
 
+  // -----------------------------------------------------------------------
+  // Relations
+  // -----------------------------------------------------------------------
+
   // PolicyConsent ---------------------------------------------------------
   @OneToMany(() => PolicyConsentEntity, (policyConsent) => policyConsent.user, { cascade: true })
   policyConsents!: PolicyConsentEntity[];

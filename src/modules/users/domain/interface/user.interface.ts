@@ -1,7 +1,5 @@
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { BirthDate } from '../../../../common/typia-custom-tags/birth-date.tag';
-import { Nullable } from '../../../../common/utility-types';
-import { IPolicyConsent } from '../../../register/domain/interface/policy-consent.interface';
 import { tags } from 'typia';
 import { IUserProfileImage } from './user-profile-image.interface';
 
@@ -81,28 +79,16 @@ export interface IUser {
   profileImages: IUserProfileImage[];
 }
 
-// export interface ITemporaryUser
-//   extends Pick<
-//       IUser,
-//       'id' | 'role' | 'snsAuthProvider' | 'snsId' | 'email' | 'name' | 'status' | 'createdAt' | 'updatedAt'
-//     >,
-//     Nullable<Pick<IUser, 'phoneNumber' | 'nickname' | 'gender' | 'birth' | 'belt'>> {}
+// ----------------------------------------------------------------------------
+// Return Interface
+// ----------------------------------------------------------------------------
+export interface IUserDetail extends IUser {}
 
-// export interface IRegisterUser extends ITemporaryUser {
-//   policyConsents: IPolicyConsent[];
-// }
-
-export interface IUserDisplayInfo extends Pick<IUser, 'id' | 'role' | 'nickname' | 'profileImages'> {}
+export interface IUserPublicProfile extends Pick<IUser, 'id' | 'role' | 'nickname' | 'profileImages'> {}
 
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------
-export interface ITemporaryUserCreateDto
-  extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,
-    Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>> {}
-
 export interface IUserUpdateDto
   extends Pick<IUser, 'id'>,
     Partial<Pick<IUser, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>> {}
-
-// export interface IUserRgistertDto extends Pick<IUser, 'id' | 'nickname' | 'gender' | 'belt' | 'birth'> {}

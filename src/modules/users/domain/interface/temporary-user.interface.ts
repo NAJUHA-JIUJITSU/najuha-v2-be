@@ -38,14 +38,8 @@ export interface IRegisteredUserModelData extends Required<NotNull<ITemporaryUse
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------
-export interface ITemporaryUserCreateDto {
-  snsAuthProvider: ITemporaryUser['snsAuthProvider'];
-  snsId: ITemporaryUser['snsId'];
-  email: ITemporaryUser['email'];
-  name: ITemporaryUser['name'];
-  phoneNumber?: ITemporaryUser['phoneNumber'];
-  gender?: ITemporaryUser['gender'];
-  birth?: ITemporaryUser['birth'];
-}
+export interface ITemporaryUserCreateDto
+  extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,
+    Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>> {}
 
 export interface IUserRgistertDto extends Pick<IUser, 'nickname' | 'gender' | 'belt' | 'birth'> {}
