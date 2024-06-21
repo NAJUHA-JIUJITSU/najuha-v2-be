@@ -17,7 +17,6 @@ import { UserRepository } from '../../../database/custom-repository/user.reposit
 import { BusinessException, CommonErrors } from '../../../common/response/errorResponse';
 import { ImageRepository } from '../../../database/custom-repository/image.repository';
 import { UserModel } from '../domain/model/user.model';
-import { IImage } from '../../images/domain/interface/image.interface';
 import { TemporaryUserRepository } from '../../../database/custom-repository/temporary-user.repository';
 
 @Injectable()
@@ -65,43 +64,39 @@ export class UsersAppService {
     userProfileImageCreateDto,
   }: CreateUserProfileImageParam): Promise<CreateUserProfileImageRet> {
     const [userEntity, imageEntity] = await Promise.all([
-      assert<IUser>(
-        await this.userRepository
-          .findOneOrFail({
-            where: { id: userProfileImageCreateDto.userId },
-            relations: ['profileImages', 'profileImages.image'],
-          })
-          .catch(() => {
-            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-          }),
-      ),
-      assert<IImage>(
-        await this.imageRepository
-          .findOneOrFail({ where: { id: userProfileImageCreateDto.imageId, path: 'user-profile' } })
-          .catch(() => {
-            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
-          }),
-      ),
-    ]);
-    const userProfileImageEntity = this.userFactory.createUserProfileImage(userProfileImageCreateDto, imageEntity);
-    const user = new UserModel(userEntity);
-    user.updateProfileImage(userProfileImageEntity);
-    return { user: await this.userRepository.save(user.toEntity()) };
-  }
-
-  async deleteUserProfileImage({ userId }: DeleteProfileImage): Promise<void> {
-    const userEntity = assert<IUser>(
       await this.userRepository
         .findOneOrFail({
-          where: { id: userId },
+          where: { id: userProfileImageCreateDto.userId },
           relations: ['profileImages', 'profileImages.image'],
         })
         .catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
         }),
-    );
+      await this.imageRepository
+        .findOneOrFail({ where: { id: userProfileImageCreateDto.imageId, path: 'user-profile' } })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
+        }),
+    ]);
+    const userProfileImageEntity = this.userFactory.createUserProfileImage(userProfileImageCreateDto, imageEntity);
+    const userModel = new UserModel(userEntity);
+    userModel.updateProfileImage(userProfileImageEntity);
+    return assert<CreateUserProfileImageRet>({
+      user: await this.userRepository.save(userModel.toData()),
+    });
+  }
+
+  async deleteUserProfileImage({ userId }: DeleteProfileImage): Promise<void> {
+    const userEntity = await this.userRepository
+      .findOneOrFail({
+        where: { id: userId },
+        relations: ['profileImages', 'profileImages.image'],
+      })
+      .catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      });
     const user = new UserModel(userEntity);
     user.deleteProfileImage();
-    await this.userRepository.save(user.toEntity());
+    await this.userRepository.save(user.toData());
   }
 }

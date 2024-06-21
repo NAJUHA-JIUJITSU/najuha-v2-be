@@ -1,28 +1,12 @@
-import { IUserProfileImage } from '../interface/user-profile-image.interface';
-import { IUser } from '../interface/user.interface';
-
-export interface IUserModelData {
-  id: IUser['id'];
-  role: IUser['role'];
-  snsAuthProvider: IUser['snsAuthProvider'];
-  snsId: IUser['snsId'];
-  name: IUser['name'];
-  email: IUser['email'];
-  phoneNumber: IUser['phoneNumber'];
-  nickname: IUser['nickname'];
-  gender: IUser['gender'];
-  birth: IUser['birth'];
-  belt: IUser['belt'];
-  status: IUser['status'];
-  createdAt: IUser['createdAt'];
-  updatedAt: IUser['updatedAt'];
-  profileImages: IUser['profileImages'];
-}
+import { IUserModelData } from '../interface/user.interface';
+import { UserProfileImageModel } from './user-profile-image.model';
 
 export class UserModel {
   private readonly id: IUserModelData['id'];
   private readonly snsAuthProvider: IUserModelData['snsAuthProvider'];
   private readonly snsId: IUserModelData['snsId'];
+  private readonly createdAt: IUserModelData['createdAt'];
+  private readonly updatedAt: IUserModelData['updatedAt'];
   private role: IUserModelData['role'];
   private name: IUserModelData['name'];
   private email: IUserModelData['email'];
@@ -32,29 +16,27 @@ export class UserModel {
   private birth: IUserModelData['birth'];
   private belt: IUserModelData['belt'];
   private status: IUserModelData['status'];
-  private profileImages: IUserModelData['profileImages'];
-  private readonly createdAt: IUserModelData['createdAt'];
-  private readonly updatedAt: IUserModelData['updatedAt'];
+  private profileImages?: UserProfileImageModel[];
 
-  constructor(entity: IUserModelData) {
-    this.id = entity.id;
-    this.role = entity.role;
-    this.snsAuthProvider = entity.snsAuthProvider;
-    this.snsId = entity.snsId;
-    this.name = entity.name;
-    this.email = entity.email;
-    this.phoneNumber = entity.phoneNumber;
-    this.nickname = entity.nickname;
-    this.gender = entity.gender;
-    this.birth = entity.birth;
-    this.belt = entity.belt;
-    this.status = entity.status;
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
-    this.profileImages = entity.profileImages || [];
+  constructor(data: IUserModelData) {
+    this.id = data.id;
+    this.role = data.role;
+    this.snsAuthProvider = data.snsAuthProvider;
+    this.snsId = data.snsId;
+    this.name = data.name;
+    this.email = data.email;
+    this.phoneNumber = data.phoneNumber;
+    this.nickname = data.nickname;
+    this.gender = data.gender;
+    this.birth = data.birth;
+    this.belt = data.belt;
+    this.status = data.status;
+    this.createdAt = data.createdAt;
+    this.updatedAt = data.updatedAt;
+    this.profileImages = data.profileImages?.map((profileImage) => new UserProfileImageModel(profileImage));
   }
 
-  toEntity(): IUserModelData {
+  toData(): IUserModelData {
     return {
       id: this.id,
       role: this.role,
@@ -70,7 +52,7 @@ export class UserModel {
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      profileImages: this.profileImages,
+      profileImages: this.profileImages?.map((profileImage) => profileImage.toData()),
     };
   }
 
@@ -78,16 +60,18 @@ export class UserModel {
     return this.id;
   }
 
-  updateProfileImage(profileImage: IUserProfileImage) {
+  updateProfileImage(profileImage: UserProfileImageModel) {
+    if (!this.profileImages) throw new Error('ProfileImages is not initialized');
     this.profileImages.forEach((profileImage) => {
-      profileImage.deletedAt = new Date();
+      profileImage.delete();
     });
     this.profileImages.push(profileImage);
   }
 
   deleteProfileImage() {
+    if (!this.profileImages) throw new Error('ProfileImages is not initialized');
     this.profileImages.forEach((profileImage) => {
-      profileImage.deletedAt = new Date();
+      profileImage.delete();
     });
   }
 }

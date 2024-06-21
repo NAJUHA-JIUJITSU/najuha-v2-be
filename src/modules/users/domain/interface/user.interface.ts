@@ -1,18 +1,11 @@
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { BirthDate } from '../../../../common/typia-custom-tags/birth-date.tag';
 import { tags } from 'typia';
-import { IUserProfileImage } from './user-profile-image.interface';
+import { IUserProfileImage, IUserProfileImageModelData } from './user-profile-image.interface';
 
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
-/**
- * 각 snsAuthProvider 마다 제공되는 정보.
- * - kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
- * - naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
- * - google : snsId, email, name.
- * - apple  : snsId, email, name.
- */
 export interface IUser {
   /** UUID v7. */
   id: TId;
@@ -77,6 +70,27 @@ export interface IUser {
   updatedAt: TDateOrStringDate;
 
   profileImages: IUserProfileImage[];
+}
+
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IUserModelData {
+  id: IUser['id'];
+  role: IUser['role'];
+  snsAuthProvider: IUser['snsAuthProvider'];
+  snsId: IUser['snsId'];
+  name: IUser['name'];
+  email: IUser['email'];
+  phoneNumber: IUser['phoneNumber'];
+  nickname: IUser['nickname'];
+  gender: IUser['gender'];
+  birth: IUser['birth'];
+  belt: IUser['belt'];
+  status: IUser['status'];
+  createdAt: IUser['createdAt'];
+  updatedAt: IUser['updatedAt'];
+  profileImages?: IUserProfileImageModelData[];
 }
 
 // ----------------------------------------------------------------------------

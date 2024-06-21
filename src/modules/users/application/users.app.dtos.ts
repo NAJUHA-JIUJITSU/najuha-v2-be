@@ -1,6 +1,6 @@
 import { ITemporaryUser, ITemporaryUserCreateDto } from '../domain/interface/temporary-user.interface';
 import { IUserProfileImageCreateDto } from '../domain/interface/user-profile-image.interface';
-import { IUser, IUserUpdateDto } from '../domain/interface/user.interface';
+import { IUser, IUserDetail, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // ---------------------------------------------------------------------------
 // usersAppService Param
@@ -33,13 +33,13 @@ export interface CreateUserRet {
 }
 
 export interface UpdateUserRet {
-  user: IUser;
+  user: IUserDetail;
 }
 
 export interface GetMeRet {
-  user: IUser;
+  user: IUserDetail;
 }
 
 export interface CreateUserProfileImageRet {
-  user: IUser;
+  user: IUserDetail;
 }

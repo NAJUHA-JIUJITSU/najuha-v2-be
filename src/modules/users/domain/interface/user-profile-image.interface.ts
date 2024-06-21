@@ -1,7 +1,10 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser } from './user.interface';
-import { IImage } from '../../../images/domain/interface/image.interface';
+import { IImage, IImageModelData } from '../../../images/domain/interface/image.interface';
 
+// --------------------------------------------------------------
+// Base Interface
+// --------------------------------------------------------------
 export interface IUserProfileImage {
   /** UUID v7. */
   id: TId;
@@ -24,4 +27,19 @@ export interface IUserProfileImage {
   image: IImage;
 }
 
+// --------------------------------------------------------------
+// Model Data
+// --------------------------------------------------------------
+export interface IUserProfileImageModelData {
+  id: IUserProfileImage['id'];
+  userId: IUserProfileImage['userId'];
+  imageId: IUserProfileImage['imageId'];
+  createdAt: IUserProfileImage['createdAt'];
+  deletedAt: IUserProfileImage['deletedAt'];
+  image?: IImageModelData;
+}
+
+// --------------------------------------------------------------
+// DTO
+// --------------------------------------------------------------
 export interface IUserProfileImageCreateDto extends Pick<IUserProfileImage, 'userId' | 'imageId'> {}
