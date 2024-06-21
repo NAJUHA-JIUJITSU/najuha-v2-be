@@ -61,7 +61,8 @@ export class PostRepository extends Repository<PostEntity> {
       case '최신순':
         qb = qb.orderBy('post.createdAt', 'DESC');
         break;
-      case '조회순': //todo!!!: 조회수 기능 구현하기
+      case '조회순':
+        qb = qb.orderBy('post.viewCount', 'DESC');
         break;
       default:
         break;
