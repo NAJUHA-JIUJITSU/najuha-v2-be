@@ -14,13 +14,13 @@ import {
   SendPhoneNumberAuthCodeParam,
   SendPhoneNumberAuthCodeRet,
 } from './register.app.dto';
-import { RegisterUserModel } from '../domain/model/register-user.model';
 import { assert } from 'typia';
-import { IRegisterUser, ITemporaryUser, IUser } from '../../users/domain/interface/user.interface';
-import { IPolicyFindMany } from '../../policy/domain/interface/policy.interface';
 import { PolicyRepository } from '../../../database/custom-repository/policy.repository';
 import { UserRepository } from '../../../database/custom-repository/user.repository';
-import { PolicyConsentFactory } from '../domain/policy-conset.factory';
+import { PolicyConsentFactory } from '../domain/policy-consent.factory';
+import { TemporaryUserModel } from '../../users/domain/model/temporary-user.model';
+import { TemporaryUserRepository } from '../../../database/custom-repository/temporary-user.repository';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class RegisterAppService {
@@ -30,15 +30,14 @@ export class RegisterAppService {
     private readonly policyConsentFactory: PolicyConsentFactory,
     private readonly userRepository: UserRepository,
     private readonly policyRepository: PolicyRepository,
+    private readonly temporaryUserRepository: TemporaryUserRepository,
+    private readonly dataSource: DataSource,
   ) {}
 
   async getTemporaryUser({ userId }: GetTemporaryUserParam): Promise<GetTemporaryUserRet> {
-    const temporaryUserEntity = assert<ITemporaryUser>(
-      await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
-    );
-    return { user: temporaryUserEntity };
+    const temporaryUserEntity = await this.temporaryUserRepository.findOneOrFail({ where: { id: userId } });
+    if (!temporaryUserEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'TemporaryUser not found');
+    return assert<GetTemporaryUserRet>({ user: temporaryUserEntity });
   }
 
   /**
@@ -48,12 +47,14 @@ export class RegisterAppService {
    * - 존재하는 닉네임이면 true를 반환
    */
   async isDuplicateNickname({ userId, nickname }: IsDuplicateNicknameParam): Promise<IsDuplicateNicknameRet> {
-    // domain service로 분리 ?
-    const userEntity = assert<IUser | ITemporaryUser | null>(
-      await this.userRepository.findOne({ where: { nickname } }),
-    );
-    if (userEntity === null) return { isDuplicated: false };
-    if (userEntity.id === userId) return { isDuplicated: false };
+    const [user, temporaryUser] = await Promise.all([
+      this.userRepository.findOne({ where: { nickname } }),
+      this.temporaryUserRepository.findOne({ where: { nickname } }),
+    ]);
+
+    if (!user && !temporaryUser) return { isDuplicated: false };
+    if (user && user.id === userId) return { isDuplicated: false };
+    if (temporaryUser && temporaryUser.id === userId) return { isDuplicated: false };
     return { isDuplicated: true };
   }
 
@@ -69,46 +70,60 @@ export class RegisterAppService {
 
   async confirmAuthCode({ userId, authCode }: ConfirmAuthCodeParam): Promise<ConfirmAuthCodeRet> {
     const phoneNumber = await this.phoneAuthCodeProvider.validatePhoneNumberAuthCodeValid(userId, authCode);
-    if (phoneNumber) await this.userRepository.update(userId, { phoneNumber });
-    return { isConfirmed: !!phoneNumber };
+    if (!phoneNumber) return { isConfirmed: false };
+
+    const temporaryUserData = await this.temporaryUserRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'TemporaryUser not found');
+    });
+
+    const temporaryUserModel = new TemporaryUserModel(temporaryUserData);
+    temporaryUserModel.updataPhoneNumber(phoneNumber);
+    await this.temporaryUserRepository.save(temporaryUserModel.toData());
+    return { isConfirmed: true };
   }
 
-  async registerUser({ userRegisterDto, consentPolicyTypes }: RegisterUserParam): Promise<RegisterUserRet> {
+  async registerUser(param: RegisterUserParam): Promise<RegisterUserRet> {
     const { isDuplicated } = await this.isDuplicateNickname({
-      userId: userRegisterDto.id,
-      nickname: userRegisterDto.nickname,
+      userId: param.userId,
+      nickname: param.nickname,
     });
     if (isDuplicated) throw new BusinessException(RegisterErrors.REGISTER_NICKNAME_DUPLICATED);
-    const registerUserModel = new RegisterUserModel(
-      assert<IRegisterUser>(
-        await this.userRepository
-          .findOneOrFail({
-            where: { id: userRegisterDto.id },
-            relations: ['policyConsents'],
-          })
-          .catch(() => {
-            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-          }),
-      ),
-    );
 
-    const latestPolicies = assert<IPolicyFindMany[]>(await this.policyRepository.findAllTypesOfLatestPolicies());
+    const temporaryUserData = await this.temporaryUserRepository
+      .findOneOrFail({ where: { id: param.userId } })
+      .catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'TemporaryUser not found');
+      });
+    const temporaryUserModel = new TemporaryUserModel(temporaryUserData);
+
+    const latestPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
     const mandatoryPolicies = latestPolicies.filter((policy) => policy.isMandatory);
     const policyConsents = this.policyConsentFactory.createPolicyConsents(
-      userRegisterDto.id,
+      param.userId,
       latestPolicies,
-      consentPolicyTypes,
+      param.consentPolicyTypes,
     );
 
-    registerUserModel.addPolicyConsent(policyConsents);
-    registerUserModel.register(userRegisterDto, mandatoryPolicies);
+    temporaryUserModel.addPolicyConsents(policyConsents);
+    temporaryUserModel.register(param, mandatoryPolicies);
 
-    await this.userRepository.save(registerUserModel.toEntity());
-
-    const authTokens = await this.authTokenDomainService.createAuthTokens({
-      userId: registerUserModel.getId(),
-      userRole: registerUserModel.getRole(),
-    });
-    return { authTokens };
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await this.userRepository.save(temporaryUserModel.toRegisteredUserModelData());
+      await this.temporaryUserRepository.delete(temporaryUserData.id);
+      const authTokens = await this.authTokenDomainService.createAuthTokens({
+        userId: temporaryUserModel.getId(),
+        userRole: temporaryUserModel.getRole(),
+      });
+      await queryRunner.commitTransaction();
+      return { authTokens };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

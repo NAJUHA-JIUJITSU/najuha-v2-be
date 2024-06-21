@@ -1,7 +1,8 @@
-import { ITemporaryUser, IUser, IUserRgistertDto } from '../../users/domain/interface/user.interface';
+import { IUser } from '../../users/domain/interface/user.interface';
 import { PhoneNumberAuthCode } from '../domain/interface/phone-number-auth-code.type';
 import { IAuthTokens } from '../../auth/domain/interface/auth-tokens.interface';
 import { IPolicy } from '../../policy/domain/interface/policy.interface';
+import { ITemporaryUser, IUserRgistertDto } from '../../users/domain/interface/temporary-user.interface';
 
 // ---------------------------------------------------------------------------
 // registerAppService Param
@@ -25,8 +26,9 @@ export interface ConfirmAuthCodeParam {
   authCode: PhoneNumberAuthCode;
 }
 
-export interface RegisterUserParam {
-  userRegisterDto: IUserRgistertDto;
+export interface RegisterUserParam extends Pick<IUserRgistertDto, 'nickname' | 'gender' | 'belt' | 'birth'> {
+  userId: IUser['id'];
+  /** 유저가 동의한 정책 타입. */
   consentPolicyTypes: IPolicy['type'][];
 }
 

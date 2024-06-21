@@ -1,4 +1,3 @@
-import { ApplicationFactory } from '../modules/applications/domain/application.factory';
 import { IAdditionalInfoCreateDto } from '../modules/applications/domain/interface/additional-info.interface';
 import { IApplication } from '../modules/applications/domain/interface/application.interface';
 import {
@@ -8,7 +7,7 @@ import {
 import { ICompetition } from '../modules/competitions/domain/interface/competition.interface';
 import { IDivision } from '../modules/competitions/domain/interface/division.interface';
 import { CompetitionModel } from '../modules/competitions/domain/model/competition.model';
-import { ITemporaryUser, IUser } from '../modules/users/domain/interface/user.interface';
+import { IUser } from '../modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
 
 type IDummyParticipationDivisionUnit = [
@@ -514,10 +513,10 @@ export class ApplicationDummyBuilder {
 }
 
 export class ApplicationDummyFactory {
-  private user: IUser | ITemporaryUser;
+  private user: IUser;
   private competition: ICompetition;
 
-  constructor(user: IUser | ITemporaryUser, competition: ICompetition) {
+  constructor(user: IUser, competition: ICompetition) {
     this.user = user;
     this.competition = competition;
     if (this.competition.isPartnership === false) throw new Error('Competition is not partnership');
@@ -592,7 +591,7 @@ export class ApplicationDummyFactory {
   }
 }
 
-export const generateDummyApplications = (user: IUser | ITemporaryUser, competition: ICompetition): IApplication[] => {
+export const generateDummyApplications = (user: IUser, competition: ICompetition): IApplication[] => {
   const applicationDummyFactory = new ApplicationDummyFactory(user, competition);
   return APPLICATION_DUMMY_CASE.map((dummy) => {
     return applicationDummyFactory.createProxyApplication(

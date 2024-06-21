@@ -1,7 +1,7 @@
 import { PolicyConsentEntity } from './policy-consent.entity';
 import { Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from '../application/application.entity';
-import { ITemporaryUser, IUser } from '../../../modules/users/domain/interface/user.interface';
+import { IUser } from '../../../modules/users/domain/interface/user.interface';
 import { uuidv7 } from 'uuidv7';
 import { CompetitionHostMapEntity } from '../competition/competition-host.entity';
 import { CommentLikeEntity } from '../post/comment-like.entity';
@@ -37,20 +37,20 @@ export class UserEntity {
   @Column('varchar', { length: 256 })
   name!: IUser['name'];
 
-  @Column('varchar', { length: 16, nullable: true })
-  phoneNumber!: IUser['phoneNumber'] | ITemporaryUser['phoneNumber'];
+  @Column('varchar', { length: 16 })
+  phoneNumber!: IUser['phoneNumber'];
 
-  @Column('varchar', { length: 64, nullable: true, unique: true })
-  nickname!: IUser['nickname'] | ITemporaryUser['nickname'];
+  @Column('varchar', { length: 64, unique: true })
+  nickname!: IUser['nickname'];
 
-  @Column('varchar', { length: 16, nullable: true })
-  gender!: IUser['gender'] | ITemporaryUser['gender'];
+  @Column('varchar', { length: 16 })
+  gender!: IUser['gender'];
 
-  @Column('varchar', { length: 8, nullable: true })
-  birth!: IUser['birth'] | ITemporaryUser['birth'];
+  @Column('varchar', { length: 8 })
+  birth!: IUser['birth'];
 
-  @Column('varchar', { length: 16, nullable: true })
-  belt!: IUser['belt'] | ITemporaryUser['belt'];
+  @Column('varchar', { length: 16 })
+  belt!: IUser['belt'];
 
   @Column('varchar', { length: 16, default: 'ACTIVE' })
   status!: IUser['status'];

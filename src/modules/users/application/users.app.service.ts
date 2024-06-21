@@ -18,18 +18,20 @@ import { BusinessException, CommonErrors } from '../../../common/response/errorR
 import { ImageRepository } from '../../../database/custom-repository/image.repository';
 import { UserModel } from '../domain/model/user.model';
 import { IImage } from '../../images/domain/interface/image.interface';
+import { TemporaryUserRepository } from '../../../database/custom-repository/temporary-user.repository';
 
 @Injectable()
 export class UsersAppService {
   constructor(
     private readonly userFactory: UserFactory,
     private readonly userRepository: UserRepository,
+    private readonly temporaryUserRepository: TemporaryUserRepository,
     private readonly imageRepository: ImageRepository,
   ) {}
 
   async createUser({ userCreateDto }: CreateUserParam): Promise<CreateUserRet> {
     const temporaryUserEntity = this.userFactory.creatTemporaryUser(userCreateDto);
-    await this.userRepository.save(temporaryUserEntity);
+    await this.temporaryUserRepository.save(temporaryUserEntity);
     return { user: temporaryUserEntity };
   }
 

@@ -11,36 +11,54 @@ import {
   SnsLoginParam,
   SnsLoginRet,
 } from './auth.app.dto';
-import { UserFactory } from '../../users/domain/user.factory';
-import { assert } from 'typia';
-import { ITemporaryUser, IUser } from '../../users/domain/interface/user.interface';
 import { UserRepository } from '../../../database/custom-repository/user.repository';
+import { TemporaryUserModel } from '../../users/domain/model/temporary-user.model';
+import { TemporaryUserRepository } from '../../../database/custom-repository/temporary-user.repository';
 
 @Injectable()
 export class AuthAppService {
   constructor(
     private readonly snsAuthClient: SnsAuthClient,
     private readonly AuthTokenDomainService: AuthTokenDomainService,
-    private readonly UserFactory: UserFactory,
     private readonly userRepository: UserRepository,
+    private readonly temporaryUserRepository: TemporaryUserRepository,
   ) {}
 
   async snsLogin(snsLoginParam: SnsLoginParam): Promise<SnsLoginRet> {
     const validatedUserData = await this.snsAuthClient.validate(snsLoginParam);
-    let userEntity = assert<IUser | ITemporaryUser | null>(
-      await this.userRepository.findOne({
-        where: { snsId: validatedUserData.snsId, snsAuthProvider: validatedUserData.snsAuthProvider },
-      }),
-    );
-    if (!userEntity) {
-      userEntity = this.UserFactory.creatTemporaryUser(validatedUserData);
-      await this.userRepository.save(userEntity);
-    }
-    const authTokens = await this.AuthTokenDomainService.createAuthTokens({
-      userId: userEntity.id,
-      userRole: userEntity.role,
+    let user = await this.userRepository.findOne({
+      where: { snsId: validatedUserData.snsId, snsAuthProvider: validatedUserData.snsAuthProvider },
     });
-    return { authTokens };
+    if (user) {
+      // 이미 회원가입된 유저
+      return {
+        authTokens: await this.AuthTokenDomainService.createAuthTokens({
+          userId: user.id,
+          userRole: user.role,
+        }),
+      };
+    }
+    const temporaryUser = await this.temporaryUserRepository.findOne({
+      where: { snsId: validatedUserData.snsId, snsAuthProvider: validatedUserData.snsAuthProvider },
+    });
+    if (temporaryUser) {
+      // 이미 최초 로그인한 유저
+      return {
+        authTokens: await this.AuthTokenDomainService.createAuthTokens({
+          userId: temporaryUser.id,
+          userRole: temporaryUser.role,
+        }),
+      };
+    }
+    // 최초 로그인
+    const newTemporaryUser = TemporaryUserModel.create(validatedUserData);
+    await this.temporaryUserRepository.save(newTemporaryUser.toData());
+    return {
+      authTokens: await this.AuthTokenDomainService.createAuthTokens({
+        userId: newTemporaryUser.getId(),
+        userRole: newTemporaryUser.getRole(),
+      }),
+    };
   }
 
   async refreshToken({ refreshToken }: RefreshTokenParam): Promise<RefreshTokenRet> {
@@ -53,13 +71,9 @@ export class AuthAppService {
   }
 
   async acquireAdminRole({ userId }: AcquireAdminRoleParam): Promise<AcquireAdminRoleRet> {
-    const userEntity = assert<IUser>(
-      await this.userRepository
-        .findOneOrFail({ where: { id: userId }, relations: ['profileImages', 'profileImages.image'] })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
-    );
+    const userEntity = await this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+    });
     const isCurrentAdmin = appEnv.adminCredentials.some(
       (adminCredential) =>
         adminCredential.snsId === userEntity.snsId && adminCredential.snsAuthProvider === userEntity.snsAuthProvider,

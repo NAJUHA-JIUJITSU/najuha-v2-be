@@ -16,7 +16,7 @@ import {
   CreatePolicyRes,
   FindPoliciesRes,
 } from '../../../src/modules/policy/presentation/policy.controller.dto';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { PolicyEntity } from '../../../src/database/entity/policy/policy.entity';
 import { uuidv7 } from 'uuidv7';
 // import * as Apis from '../../../src/api/functional';

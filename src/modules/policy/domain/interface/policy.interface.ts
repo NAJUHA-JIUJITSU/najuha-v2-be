@@ -45,4 +45,4 @@ export interface IPolicy {
   createdAt: TDateOrStringDate;
 }
 
-export interface IPolicyFindMany extends Omit<IPolicy, 'content'> {}
+export interface IPolicySummery extends Omit<IPolicy, 'content'> {}

@@ -6044,7 +6044,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormvoid"
+                  "$ref": "#/components/schemas/ResponseFormIncrementEntityViewCountRes"
                 }
               }
             },
@@ -6131,7 +6131,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseFormvoid"
+                  "$ref": "#/components/schemas/ResponseFormIncrementEntityViewCountRes"
                 }
               }
             },
@@ -6556,9 +6556,6 @@
           },
           {
             "$ref": "#/components/schemas/VIEW_COUNT_IVALID_ENTITY_TYPE"
-          },
-          {
-            "$ref": "#/components/schemas/VIEW_COUNT_ALREADY_INCREMENTED"
           }
         ]
       },
@@ -7926,50 +7923,6 @@
           "result"
         ]
       },
-      "VIEW_COUNT_ALREADY_INCREMENTED": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [
-              false
-            ]
-          },
-          "status": {
-            "type": "number",
-            "enum": [
-              409
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              9001
-            ]
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "VIEW_COUNT_ALREADY_INCREMENTED"
-            ]
-          },
-          "result": {
-            "type": "string",
-            "enum": [
-              "이미 조회수가 증가된 entity 입니다, 하루에 한 번만 증가 가능합니다."
-            ]
-          },
-          "detail": {}
-        },
-        "nullable": false,
-        "required": [
-          "isSuccess",
-          "status",
-          "code",
-          "type",
-          "result"
-        ]
-      },
       "SnsLoginReqBody": {
         "type": "object",
         "properties": {
@@ -9194,7 +9147,7 @@
           "policies": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IPolicyFindMany"
+              "$ref": "#/components/schemas/IPolicySummery"
             }
           }
         },
@@ -9203,7 +9156,7 @@
           "policies"
         ]
       },
-      "IPolicyFindMany": {
+      "IPolicySummery": {
         "type": "object",
         "properties": {
           "id": {
@@ -9481,7 +9434,7 @@
           "policies": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IPolicyFindMany"
+              "$ref": "#/components/schemas/IPolicySummery"
             }
           }
         },
@@ -13311,6 +13264,9 @@
           "userId",
           "postId",
           "deletedAt",
+          "likeCount",
+          "userLiked",
+          "user",
           "parentId",
           "commentSnapshots"
         ]
@@ -13578,6 +13534,48 @@
         "required": [
           "type",
           "reason"
+        ]
+      },
+      "ResponseFormIncrementEntityViewCountRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/IncrementEntityViewCountRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "IncrementEntityViewCountRes": {
+        "type": "object",
+        "properties": {
+          "isIncremented": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isIncremented",
+          "message"
         ]
       },
       "CreateImageReqBody": {

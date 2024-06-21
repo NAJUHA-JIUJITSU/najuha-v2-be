@@ -14,7 +14,7 @@ import {
   GetCompetitionRes,
 } from '../../../src/modules/competitions/presentation/competitions.controller.dto';
 import { CompetitionEntity } from '../../../src/database/entity/competition/competition.entity';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { CompetitionDummyBuilder } from '../../../src/dummy/competition.dummy';
 import { generateTestDummyCompetitions } from './admin-competitions.e2e.spec';
 

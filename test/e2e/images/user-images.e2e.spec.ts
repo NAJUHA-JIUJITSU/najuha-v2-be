@@ -13,7 +13,7 @@ import { ImageAppService } from '../../../src/modules/images/application/image.a
 import { CreateImageReqBody, CreateImageRes } from '../../../src/modules/images/presentation/images.controller.dto';
 import * as FormData from 'form-data';
 import axios from 'axios';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
 import * as fs from 'fs/promises';
 

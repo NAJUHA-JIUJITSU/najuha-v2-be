@@ -23,7 +23,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { ISnsAuthValidatedUserData } from '../../../src/modules/sns-auth-client/interface/validated-user-data.interface';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import {
   AcquireAdminRoleRes,
   RefreshTokenRes,

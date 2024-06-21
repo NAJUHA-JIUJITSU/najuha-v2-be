@@ -1,4 +1,4 @@
-import { IPolicy, IPolicyFindMany } from '../domain/interface/policy.interface';
+import { IPolicy, IPolicySummery } from '../domain/interface/policy.interface';
 
 // ---------------------------------------------------------------------------
 // policyAppService Param
@@ -23,7 +23,7 @@ export interface CreatePolicyRet {
 }
 
 export interface FindPoliciesRet {
-  policies: IPolicyFindMany[];
+  policies: IPolicySummery[];
 }
 
 export interface GetPolicyRet {
@@ -31,5 +31,5 @@ export interface GetPolicyRet {
 }
 
 export interface FindAllTypesOfLatestPoliciesRet {
-  policies: IPolicyFindMany[];
+  policies: IPolicySummery[];
 }

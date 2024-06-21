@@ -4,10 +4,11 @@ import { RegisterAppService } from './application/register.app.service';
 import { PhoneNumberAuthCodeDomainService } from './domain/phone-number-auth-code.domain.service';
 import { AuthModule } from '../auth/auth.module';
 import { DatabaseModule } from '../../database/database.module';
-import { PolicyConsentFactory } from './domain/policy-conset.factory';
+import { PolicyConsentFactory } from './domain/policy-consent.factory';
+import { RedisModule } from '../../infrastructure/redis/redis.module';
 
 @Module({
-  imports: [AuthModule, DatabaseModule],
+  imports: [AuthModule, DatabaseModule, RedisModule],
   controllers: [UserRegisterController],
   providers: [RegisterAppService, PhoneNumberAuthCodeDomainService, PolicyConsentFactory],
   exports: [RegisterAppService],

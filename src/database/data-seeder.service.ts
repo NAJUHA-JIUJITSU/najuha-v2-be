@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, QueryRunner } from 'typeorm';
 import appEnv from '../common/app-env';
-import { ITemporaryUser, IUser } from '../modules/users/domain/interface/user.interface';
-import { TemporaryUserDummyBuilder, UserDummyBuilder } from '../dummy/user-dummy';
+import { IUser } from '../modules/users/domain/interface/user.interface';
+import { UserDummyBuilder } from '../dummy/user.dummy';
 import { IPolicy } from '../modules/policy/domain/interface/policy.interface';
 import { ICompetition } from '../modules/competitions/domain/interface/competition.interface';
 import { IApplication } from '../modules/applications/domain/interface/application.interface';
@@ -58,7 +58,7 @@ import { CommentEntity } from './entity/post/comment.entity';
 import { CommentSnapshotEntity } from './entity/post/comment-snapshot.entity';
 
 /**
- * todo!!!:
+ * todo!!:
  * - data preparation, data batch insert 등의 메서드를 별도의 클래스로 분리하여 응집도를 높이세요.
  * - config 값을 이용하여 데이터를 삽입할 때 생성할 더미데이터 종류 및 개수를 설정할 수 있도록 하세요.
  * - 데이터 의존관계를 고려하여 적절한 에러 핸들링을 추가하세요.
@@ -66,14 +66,14 @@ import { CommentSnapshotEntity } from './entity/post/comment-snapshot.entity';
 @Injectable()
 export class DataSeederService {
   private queryRunner: QueryRunner;
-  private users: (IUser | ITemporaryUser)[] = [];
+  private users: IUser[] = [];
   private policies: IPolicy[] = [];
   private competitions: ICompetition[] = [];
   private applications: IApplication[] = [];
   private posts: IPost[] = [];
   private comments: IComment[] = [];
   // User
-  private usersToSave: (IUser | ITemporaryUser)[] = [];
+  private usersToSave: IUser[] = [];
   private policiesToSave: IPolicy[] = [];
   private userProfileImagesToSave: IUserProfileImage[] = [];
   // Competition
@@ -169,22 +169,6 @@ export class DataSeederService {
     console.timeEnd('Data preparation time');
   }
 
-  private prepareTemporaryUsers() {
-    console.time('Temporary users preparation time');
-    const users = appEnv.adminCredentials.map((user) => {
-      const { id, snsId, snsAuthProvider, name } = user;
-      return new TemporaryUserDummyBuilder()
-        .setName(name)
-        .setId(id)
-        .setSnsId(snsId)
-        .setSnsAuthProvider(snsAuthProvider)
-        .build();
-    });
-    this.users = users;
-    this.usersToSave = users;
-    console.timeEnd('Temporary users preparation time');
-  }
-
   private prepareAdminUsers() {
     console.time('Admin users preparation time');
     const users = appEnv.adminCredentials.map((user) => {
@@ -213,7 +197,7 @@ export class DataSeederService {
     console.timeEnd('Policies preparation time');
   }
 
-  private prepareCompetitions(users: (IUser | ITemporaryUser)[]) {
+  private prepareCompetitions(users: IUser[]) {
     console.time('Competitions preparation time');
     const competitions = generateDummyCompetitions(
       users[0].id,
@@ -238,7 +222,7 @@ export class DataSeederService {
     console.timeEnd('Competitions preparation time');
   }
 
-  private prepareApplications(users: (IUser | ITemporaryUser)[], competitions: ICompetition[]) {
+  private prepareApplications(users: IUser[], competitions: ICompetition[]) {
     console.time('Applications preparation time');
     const applications = users.flatMap((user) =>
       competitions.flatMap((competition) => {
@@ -259,7 +243,7 @@ export class DataSeederService {
     console.timeEnd('Applications preparation time');
   }
 
-  private preparePosts(users: (IUser | ITemporaryUser)[]) {
+  private preparePosts(users: IUser[]) {
     console.time('Posts preparation time');
     const posts = users.flatMap((user) => {
       const postCount = 1000;
@@ -275,7 +259,7 @@ export class DataSeederService {
     console.timeEnd('Posts preparation time');
   }
 
-  private prepareComments(users: (IUser | ITemporaryUser)[], posts: IPost[]) {
+  private prepareComments(users: IUser[], posts: IPost[]) {
     console.time('Comments preparation time');
     const firstComments: IComment[] = [];
     const comments: IComment[] = [];
@@ -355,7 +339,7 @@ export class DataSeederService {
     }
   }
 
-  //todo!!!: 테이블명 자동으로 가져오도록 수정
+  //todo!!: 테이블명 자동으로 가져오도록 수정
   private async rebuildIndexes() {
     console.time('Rebuilding indexes time');
     const tableNames = [

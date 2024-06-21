@@ -136,7 +136,8 @@ export class UserRegisterController {
   ): Promise<ResponseForm<RegisterUserRes>> {
     return createResponseForm(
       await this.RegisterAppService.registerUser({
-        userRegisterDto: { id: req['userId'], ...body.user },
+        userId: req['userId'],
+        ...body.user,
         consentPolicyTypes: body.consentPolicyTypes,
       }),
     );

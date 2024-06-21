@@ -5,7 +5,9 @@ import { IPolicyConsent } from '../../../register/domain/interface/policy-consen
 import { tags } from 'typia';
 import { IUserProfileImage } from './user-profile-image.interface';
 
-// Entity ---------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 /**
  * 각 snsAuthProvider 마다 제공되는 정보.
  * - kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.
@@ -79,20 +81,22 @@ export interface IUser {
   profileImages: IUserProfileImage[];
 }
 
-export interface ITemporaryUser
-  extends Pick<
-      IUser,
-      'id' | 'role' | 'snsAuthProvider' | 'snsId' | 'email' | 'name' | 'status' | 'createdAt' | 'updatedAt'
-    >,
-    Nullable<Pick<IUser, 'phoneNumber' | 'nickname' | 'gender' | 'birth' | 'belt'>> {}
+// export interface ITemporaryUser
+//   extends Pick<
+//       IUser,
+//       'id' | 'role' | 'snsAuthProvider' | 'snsId' | 'email' | 'name' | 'status' | 'createdAt' | 'updatedAt'
+//     >,
+//     Nullable<Pick<IUser, 'phoneNumber' | 'nickname' | 'gender' | 'birth' | 'belt'>> {}
 
-export interface IRegisterUser extends ITemporaryUser {
-  policyConsents: IPolicyConsent[];
-}
+// export interface IRegisterUser extends ITemporaryUser {
+//   policyConsents: IPolicyConsent[];
+// }
 
 export interface IUserDisplayInfo extends Pick<IUser, 'id' | 'role' | 'nickname' | 'profileImages'> {}
 
-// DTO ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface ITemporaryUserCreateDto
   extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,
     Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>> {}
@@ -101,4 +105,4 @@ export interface IUserUpdateDto
   extends Pick<IUser, 'id'>,
     Partial<Pick<IUser, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>> {}
 
-export interface IUserRgistertDto extends Pick<IUser, 'id' | 'nickname' | 'gender' | 'belt' | 'birth'> {}
+// export interface IUserRgistertDto extends Pick<IUser, 'id' | 'nickname' | 'gender' | 'belt' | 'birth'> {}

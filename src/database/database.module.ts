@@ -17,10 +17,12 @@ import { CommentLikeRepository } from './custom-repository/comment-like.reposito
 import { CommentReportRepository } from './custom-repository/comment-report.repository';
 import { ImageRepository } from './custom-repository/image.repository';
 import { BucketModule } from '../infrastructure/bucket/bucket.module';
+import { TemporaryUserRepository } from './custom-repository/temporary-user.repository';
 
 const repositories = [
   PolicyRepository,
   UserRepository,
+  TemporaryUserRepository,
   PolicyConsentRepository,
   CompetitionRepository,
   DivisionRepository,

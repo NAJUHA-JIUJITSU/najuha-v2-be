@@ -6,7 +6,7 @@ import { EntityManager } from 'typeorm';
 import { AppModule } from '../../../src/app.module';
 import * as request from 'supertest';
 import appEnv from '../../../src/common/app-env';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
 import {
   CreateCommentReplyReqBody,

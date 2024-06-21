@@ -10,7 +10,7 @@ import { UsersAppService } from '../../../src/modules/users/application/users.ap
 import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import {
   GetMeRes,
   UpdateUserReqBody,

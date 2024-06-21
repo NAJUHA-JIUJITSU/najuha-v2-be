@@ -1,26 +1,14 @@
 import { uuidv7 } from 'uuidv7';
-import { ITemporaryUser, ITemporaryUserCreateDto, IUser } from './interface/user.interface';
+import { ITemporaryUserCreateDto } from './interface/user.interface';
 import { IUserProfileImage, IUserProfileImageCreateDto } from './interface/user-profile-image.interface';
 import { IImage } from '../../images/domain/interface/image.interface';
+import { TemporaryUserModel } from './model/temporary-user.model';
+import { ITemporaryUser } from './interface/temporary-user.interface';
 
 export class UserFactory {
   creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {
-    return {
-      id: uuidv7(),
-      role: 'TEMPORARY_USER',
-      snsAuthProvider: dto.snsAuthProvider,
-      snsId: dto.snsId,
-      email: dto.email,
-      name: dto.name,
-      phoneNumber: dto.phoneNumber ?? null,
-      gender: dto.gender ?? null,
-      birth: dto.birth ?? null,
-      nickname: null,
-      belt: null,
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const temporaryUser = TemporaryUserModel.create(dto);
+    return temporaryUser.toData();
   }
 
   createUserProfileImage(userProfileImageCreateDto: IUserProfileImageCreateDto, image: IImage): IUserProfileImage {

@@ -23,8 +23,9 @@ import {
 } from '../../../src/modules/register/presentation/register.controller.dto';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
 import { uuidv7 } from 'uuidv7';
-import { TemporaryUserDummyBuilder, UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { TemporaryUserDummyBuilder, UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { PolicyEntity } from '../../../src/database/entity/policy/policy.entity';
+import { TemporaryUserEntity } from '../../../src/database/entity/user/temporary-user.entity';
 
 describe('E2E u-2 register test', () => {
   let app: INestApplication;
@@ -60,7 +61,7 @@ describe('E2E u-2 register test', () => {
     it('TEMPORARY_USER 권한으로 내 정보 조회 성공 시', async () => {
       /** pre condition. */
       const tempraryUser = new TemporaryUserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, tempraryUser);
+      await entityEntityManager.save(TemporaryUserEntity, tempraryUser);
       const myAccessToken = jwtService.sign(
         { userId: tempraryUser.id, userRole: tempraryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -80,7 +81,7 @@ describe('E2E u-2 register test', () => {
       const otherUser = new UserDummyBuilder().setNickname('otherUserNickname').build();
       await entityEntityManager.save(UserEntity, otherUser);
       const temporaryUser = new TemporaryUserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, temporaryUser);
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -96,7 +97,7 @@ describe('E2E u-2 register test', () => {
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
       /** pre condition. */
       const tempraryUser = new TemporaryUserDummyBuilder().setNickname('myNickname').build();
-      await entityEntityManager.save(UserEntity, tempraryUser);
+      await entityEntityManager.save(TemporaryUserEntity, tempraryUser);
       const myAccessToken = jwtService.sign(
         { userId: tempraryUser.id, userRole: tempraryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -112,7 +113,7 @@ describe('E2E u-2 register test', () => {
     it('닉네임 중복검사 - 중복되지 않은 닉네임(사용가능)', async () => {
       /** pre condition. */
       const temporaryUser = new TemporaryUserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, temporaryUser);
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const accessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -131,7 +132,7 @@ describe('E2E u-2 register test', () => {
     it('전화번호로 인증코드 전송', async () => {
       /** pre condition. */
       const temporaryUser = new TemporaryUserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, temporaryUser);
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -148,7 +149,7 @@ describe('E2E u-2 register test', () => {
   describe('u-2-4 POST /user/register/phone-number/authcode/confirm --------', () => {
     it('전화번호로 인증코드 확인 성공 시', async () => {
       const temporaryUser = new TemporaryUserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, temporaryUser);
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -174,7 +175,7 @@ describe('E2E u-2 register test', () => {
     it('전화번호로 인증코드 확인 실패 시', async () => {
       /** pre condition. */
       const temporaryUser = new TemporaryUserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, temporaryUser);
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -217,7 +218,7 @@ describe('E2E u-2 register test', () => {
         }),
       );
       const temporaryUser = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
-      await entityEntityManager.save(UserEntity, temporaryUser);
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const temporaryUserAccessToken = jwtService.sign(
         { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
@@ -256,10 +257,10 @@ describe('E2E u-2 register test', () => {
       );
       const otherUser = new UserDummyBuilder().setNickname('otherUserNickname').build();
       await entityEntityManager.save(UserEntity, otherUser);
-      const user = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
-      await entityEntityManager.save(UserEntity, user);
+      const temporaryUser = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
@@ -294,10 +295,10 @@ describe('E2E u-2 register test', () => {
           });
         }),
       );
-      const user = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
-      await entityEntityManager.save(UserEntity, user);
+      const temporaryUser = new TemporaryUserDummyBuilder().setPhoneNumber('01012345678').build(); // 전화번호 인증을 완료 했다고 가정.
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
@@ -333,10 +334,10 @@ describe('E2E u-2 register test', () => {
           });
         }),
       );
-      const user = new TemporaryUserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, user);
+      const temporaryUser = new TemporaryUserDummyBuilder().build();
+      await entityEntityManager.save(TemporaryUserEntity, temporaryUser);
       const userAccessToken = jwtService.sign(
-        { userId: user.id, userRole: user.role },
+        { userId: temporaryUser.id, userRole: temporaryUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */

@@ -13,6 +13,7 @@
 - [Competition](#competition)
 - [Post](#post)
 - [Image](#image)
+- [TemporaryUser](#temporaryuser)
 
 
 ## User
@@ -56,11 +57,11 @@ erDiagram
     varchar snsId
     varchar email
     varchar name
-    varchar phoneNumber "nullable"
-    varchar nickname "nullable"
-    varchar gender "nullable"
-    varchar birth "nullable"
-    varchar belt "nullable"
+    varchar phoneNumber
+    varchar nickname
+    varchar gender
+    varchar birth
+    varchar belt
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
@@ -938,4 +939,50 @@ Image Entity
   - `createdAt`
   - `linkedAt`
   - `userId`
+
+
+## TemporaryUser
+
+```mermaid
+erDiagram
+  temporary_user {
+    uuid id PK
+    varchar role
+    varchar snsAuthProvider
+    varchar snsId
+    varchar email
+    varchar name
+    varchar phoneNumber "nullable"
+    varchar nickname "nullable"
+    varchar gender "nullable"
+    varchar birth "nullable"
+    varchar belt "nullable"
+    varchar status
+    timestamptz createdAt
+    timestamptz updatedAt
+  }
+  
+```
+
+### `temporary_user`
+
+TemporaryUser Entity   
+@namespace TemporaryUser
+
+**Properties**
+
+  - `id`
+  - `role`
+  - `snsAuthProvider`
+  - `snsId`
+  - `email`
+  - `name`
+  - `phoneNumber`
+  - `nickname`
+  - `gender`
+  - `birth`
+  - `belt`
+  - `status`
+  - `createdAt`
+  - `updatedAt`
 

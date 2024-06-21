@@ -27,7 +27,7 @@ import {
   UpdateRequiredAdditionalInfoReqBody,
 } from '../../../src/modules/competitions/presentation/competitions.controller.dto';
 import { CompetitionEntity } from '../../../src/database/entity/competition/competition.entity';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { CompetitionDummyBuilder } from '../../../src/dummy/competition.dummy';
 import { generateDummyDivisionPacks } from '../../../src/dummy/division.dummy';
 import { dummyCombinationDiscountRules } from '../../../src/dummy/combination-discount-snapshot.dummy';

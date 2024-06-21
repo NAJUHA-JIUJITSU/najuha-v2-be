@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Redis } from 'ioredis';
 import { UserEntity } from '../../../src/database/entity/user/user.entity';
 import { CompetitionEntity } from '../../../src/database/entity/competition/competition.entity';
-import { UserDummyBuilder } from '../../../src/dummy/user-dummy';
+import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { CompetitionDummyBuilder, generateDummyCompetitions } from '../../../src/dummy/competition.dummy';
 import { generateDummyDivisionPacks } from '../../../src/dummy/division.dummy';
 import { dummyCombinationDiscountRules } from '../../../src/dummy/combination-discount-snapshot.dummy';

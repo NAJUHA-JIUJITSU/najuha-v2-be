@@ -1,5 +1,6 @@
+import { ITemporaryUser } from '../domain/interface/temporary-user.interface';
 import { IUserProfileImageCreateDto } from '../domain/interface/user-profile-image.interface';
-import { ITemporaryUser, ITemporaryUserCreateDto, IUser, IUserUpdateDto } from '../domain/interface/user.interface';
+import { ITemporaryUserCreateDto, IUser, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // ---------------------------------------------------------------------------
 // usersAppService Param
