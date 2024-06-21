@@ -1,22 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Redis } from 'ioredis';
+import { Injectable } from '@nestjs/common';
 import { PhoneNumberAuthCode } from './interface/phone-number-auth-code.type';
 import { IUser } from '../../users/domain/interface/user.interface';
+import { PhoneNumberAuthCodeProvider } from '../../../infrastructure/redis/provider/phone-number-auth-code.provider';
 import typia from 'typia';
-import appEnv from '../../../common/app-env';
 
 @Injectable()
 export class PhoneNumberAuthCodeDomainService {
-  constructor(@Inject('REDIS_CLIENT') private readonly redisClient: Redis) {}
+  constructor(private readonly phoneNumberAuthCodeProvider: PhoneNumberAuthCodeProvider) {}
 
   async issuePhoneNumberAuthCode(userId: IUser['id'], phoneNumber: IUser['phoneNumber']): Promise<PhoneNumberAuthCode> {
     const authCode = typia.random<PhoneNumberAuthCode>();
-    this.redisClient.set(
-      `userId:${userId}-authCode:${authCode}`,
-      phoneNumber,
-      'EX',
-      appEnv.redisPhoneNumberAuthCodeExpirationTime,
-    );
+    await this.phoneNumberAuthCodeProvider.set(userId, authCode, phoneNumber);
     return authCode;
   }
 
@@ -24,6 +18,6 @@ export class PhoneNumberAuthCodeDomainService {
     userId: IUser['id'],
     authCode: PhoneNumberAuthCode,
   ): Promise<IUser['phoneNumber'] | null> {
-    return await this.redisClient.get(`userId:${userId}-authCode:${authCode}`);
+    return await this.phoneNumberAuthCodeProvider.get(userId, authCode);
   }
 }

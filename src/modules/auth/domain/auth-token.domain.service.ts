@@ -1,27 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import Redis from 'ioredis';
 import { AuthErrors, BusinessException } from '../../../common/response/errorResponse';
 import appEnv from '../../../common/app-env';
 import { IAuthTokens } from './interface/auth-tokens.interface';
 import { IAuthTokenPayload } from './interface/auth-token-payload.interface';
+import { RefreshTokenProvider } from '../../../infrastructure/redis/provider/refresh-token.provider';
 
 @Injectable()
 export class AuthTokenDomainService {
   constructor(
-    @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
+    private readonly refreshTokenProvider: RefreshTokenProvider,
     private readonly jwtService: JwtService,
   ) {}
 
   async createAuthTokens({ userId, userRole }: IAuthTokenPayload): Promise<IAuthTokens> {
     const accessToken = this.createAccessToken({ userId, userRole });
     const refreshToken = this.createRefreshToken({ userId, userRole });
-    await this.redisClient.set(
-      `userId:${userId}:refreshToken`,
-      refreshToken,
-      'EX',
-      appEnv.redisRefreshTokenExpirationTime,
-    );
+    await this.refreshTokenProvider.set(userId, refreshToken);
     return {
       accessToken,
       refreshToken,
@@ -57,33 +52,15 @@ export class AuthTokenDomainService {
       });
     } catch (e: any) {
       const decoded = this.jwtService.decode(refreshToken);
-      if (decoded?.userId) this.redisClient.del(`userId:${decoded.userId}:refreshToken`);
+      if (decoded?.userId) this.refreshTokenProvider.del(decoded.userId);
       throw new BusinessException(AuthErrors.AUTH_REFRESH_TOKEN_UNAUTHORIZED, e.message);
     }
 
-    const storedRefreshToken = await this.redisClient.get(`userId:${payload.userId}:refreshToken`);
+    const storedRefreshToken = await this.refreshTokenProvider.get(payload.userId);
     if (!storedRefreshToken || storedRefreshToken !== refreshToken) {
-      await this.redisClient.del(`userId:${payload.userId}:refreshToken`);
+      await this.refreshTokenProvider.del(payload.userId);
       throw new BusinessException(AuthErrors.AUTH_REFRESH_TOKEN_UNAUTHORIZED);
     }
     return payload;
-  }
-
-  // todo!: 지워야함
-  private async testPrintAllRedisData(message: string) {
-    console.log(`[TEST REDIS] ${message}--------------------------------`);
-
-    const keys = await this.redisClient.keys('*');
-
-    const keyValuePairs = await Promise.all(
-      keys.map(async (key) => {
-        const value = await this.redisClient.get(key);
-        return { key, value };
-      }),
-    );
-
-    keyValuePairs.forEach((pair) => {
-      console.log(`${pair.key}: ${pair.value}`);
-    });
   }
 }

@@ -1,6 +1,9 @@
 import { Module, OnModuleInit, OnModuleDestroy, Inject, Global } from '@nestjs/common';
 import Redis from 'ioredis';
 import appEnv from '../../common/app-env';
+import { RefreshTokenProvider } from './provider/refresh-token.provider';
+import { PhoneNumberAuthCodeProvider } from './provider/phone-number-auth-code.provider';
+import { ViewCountHistoryProvider } from './provider/view-count-history.provider';
 
 /**
  * nestjs provider 생명주기 메서드를 사용해서 Redis 클라이언트를 생성하고 종료하는 방법
@@ -10,7 +13,6 @@ import appEnv from '../../common/app-env';
  *
  * todo!: redis 보안 연결 설정하기
  */
-@Global()
 @Module({
   providers: [
     {
@@ -20,15 +22,16 @@ import appEnv from '../../common/app-env';
           host: appEnv.redisHost,
           port: appEnv.redisPort,
         });
-
         // client.on('connect', () => console.log('Connected to Redis'));
         // client.on('error', (err) => console.log('Redis Error', err));
-
         return client;
       },
     },
+    RefreshTokenProvider,
+    PhoneNumberAuthCodeProvider,
+    ViewCountHistoryProvider,
   ],
-  exports: ['REDIS_CLIENT'],
+  exports: [RefreshTokenProvider, PhoneNumberAuthCodeProvider, ViewCountHistoryProvider],
 })
 export class RedisModule implements OnModuleInit, OnModuleDestroy {
   constructor(@Inject('REDIS_CLIENT') private readonly redisClient: Redis) {}
