@@ -75,12 +75,12 @@ export class ApplicationsAppService {
     );
     competition.validateApplicationPeriod();
     competition.validateAdditionalInfo(applicationCreateDto.additionalInfoCreateDtos);
-    readyApplication.validateApplicationType(user.toEntity());
+    readyApplication.validateApplicationType(user.toData());
     readyApplication.validateDivisionSuitability();
     readyApplication.setExpectedPayment(
       competition.calculateExpectedPayment(readyApplication.getParticipationDivisionIds()),
     );
-    return { application: await this.applicationRepository.save(readyApplication.toEntity()) };
+    return { application: await this.applicationRepository.save(readyApplication.toData()) };
   }
 
   /** Get application. */
@@ -123,7 +123,7 @@ export class ApplicationsAppService {
       ),
     );
     application.setExpectedPayment(competition.calculateExpectedPayment(application.getParticipationDivisionIds()));
-    return { application: application.toEntity() };
+    return { application: application.toData() };
   }
 
   /**
@@ -197,15 +197,15 @@ export class ApplicationsAppService {
     );
     competition.validateApplicationPeriod();
     competition.validateAdditionalInfo(applicationCreateDto.additionalInfoCreateDtos);
-    newApplication.validateApplicationType(user.toEntity());
+    newApplication.validateApplicationType(user.toData());
     newApplication.validateDivisionSuitability();
     oldApplication.delete();
     // todo!!: Transaction
-    await this.applicationRepository.save(oldApplication.toEntity());
+    await this.applicationRepository.save(oldApplication.toData());
     newApplication.setExpectedPayment(
       competition.calculateExpectedPayment(newApplication.getParticipationDivisionIds()),
     );
-    return { application: await this.applicationRepository.save(newApplication.toEntity()) };
+    return { application: await this.applicationRepository.save(newApplication.toData()) };
   }
 
   /** Update done application. */
@@ -290,9 +290,9 @@ export class ApplicationsAppService {
       application.updateAdditionalInfos(doneApplicationUpdateDto.additionalInfoUpdateDtos);
     }
     competition.validateApplicationPeriod();
-    application.validateApplicationType(user.toEntity());
+    application.validateApplicationType(user.toData());
     application.validateDivisionSuitability();
-    return { application: await this.applicationRepository.save(application.toEntity()) };
+    return { application: await this.applicationRepository.save(application.toData()) };
   }
 
   /**
@@ -376,7 +376,7 @@ export class ApplicationsAppService {
       if (application.getStatus() === 'READY')
         application.setExpectedPayment(competition.calculateExpectedPayment(application.getParticipationDivisionIds()));
     });
-    let ret: FindApplicationsRet = { applications: applications.map((application) => application.toEntity()) };
+    let ret: FindApplicationsRet = { applications: applications.map((application) => application.toData()) };
     if (applications.length === limit) {
       ret = { ...ret, nextPage: page + 1 };
     }

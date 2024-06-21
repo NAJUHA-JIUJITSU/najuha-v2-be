@@ -78,7 +78,7 @@ export class CompetitionsAppService {
       ),
     );
     competition.update(competitionUpdateDto);
-    return { competition: await this.competitionRepository.save(competition.toEntity()) };
+    return { competition: await this.competitionRepository.save(competition.toData()) };
   }
 
   async updateCompetitionStatus({
@@ -106,7 +106,7 @@ export class CompetitionsAppService {
       ),
     );
     competition.updateStatus(status);
-    return { competition: await this.competitionRepository.save(competition.toEntity()) };
+    return { competition: await this.competitionRepository.save(competition.toData()) };
   }
 
   async findCompetitions(query: FindCompetitionsParam): Promise<FindCompetitionsRet> {
@@ -159,7 +159,7 @@ export class CompetitionsAppService {
         return new DivisionModel(division);
       });
     competition.addDivisions(divisionModels);
-    return { competition: await this.competitionRepository.save(competition.toEntity()) };
+    return { competition: await this.competitionRepository.save(competition.toData()) };
   }
 
   async createCompetitionEarlybirdDiscountSnapshot({
@@ -190,7 +190,7 @@ export class CompetitionsAppService {
         this.competitionFactory.createEarlybirdDiscountSnapshot(earlybirdDiscountSnapshotCreateDto),
       ),
     );
-    return { competition: await this.competitionRepository.save(competitionModel.toEntity()) };
+    return { competition: await this.competitionRepository.save(competitionModel.toData()) };
   }
 
   async createCompetitionCombinationDiscountSnapshot({
@@ -221,7 +221,7 @@ export class CompetitionsAppService {
         this.competitionFactory.createCombinationDiscountSnapshot(combinationDiscountSnapshotCreateDto),
       ),
     );
-    return { competition: await this.competitionRepository.save(competitionModel.toEntity()) };
+    return { competition: await this.competitionRepository.save(competitionModel.toData()) };
   }
   async createCompetitionRequiredAdditionalInfo({
     requiredAdditionalInfoCreateDto,
@@ -251,7 +251,7 @@ export class CompetitionsAppService {
         this.competitionFactory.createCompetitionRequiredAdditionalInfo(requiredAdditionalInfoCreateDto),
       ),
     );
-    return { competition: await this.competitionRepository.save(competitionModel.toEntity()) };
+    return { competition: await this.competitionRepository.save(competitionModel.toData()) };
   }
 
   async updateCompetitionRequiredAdditionalInfo({
@@ -278,7 +278,7 @@ export class CompetitionsAppService {
       ),
     );
     competitionModel.updateRequiredAdditionalInfo(requiredAdditionalInfoUpdateDto);
-    return { competition: await this.competitionRepository.save(competitionModel.toEntity()) };
+    return { competition: await this.competitionRepository.save(competitionModel.toData()) };
   }
 
   async deleteCompetitionRequiredAdditionalInfo({
@@ -306,7 +306,7 @@ export class CompetitionsAppService {
       ),
     );
     competitionModel.deleteRequiredAdditionalInfo(requiredAdditionalInfoId);
-    return { competition: await this.competitionRepository.save(competitionModel.toEntity()) };
+    return { competition: await this.competitionRepository.save(competitionModel.toData()) };
   }
 
   async createCompetitionPosterImage({
@@ -347,7 +347,7 @@ export class CompetitionsAppService {
     );
     const competition = new CompetitionModel(competitionEntity);
     competition.updatePosterImage(competitionPosterImage);
-    return { competition: await this.competitionRepository.save(competition.toEntity()) };
+    return { competition: await this.competitionRepository.save(competition.toData()) };
   }
 
   async deleteCompetitionPosterImage({ competitionId }: DeleteCompetitionPosterImageParam): Promise<void> {
@@ -372,6 +372,6 @@ export class CompetitionsAppService {
       ),
     );
     competition.deletePosterImage();
-    await this.competitionRepository.save(competition.toEntity());
+    await this.competitionRepository.save(competition.toData());
   }
 }

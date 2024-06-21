@@ -23,7 +23,7 @@ export class CommentLikeModel {
     this.createdAt = entity.createdAt;
   }
 
-  toEntity(): ICommentLikeModelData {
+  toData(): ICommentLikeModelData {
     return {
       id: this.id,
       commentId: this.commentId,

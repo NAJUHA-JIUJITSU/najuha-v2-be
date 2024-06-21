@@ -53,7 +53,7 @@ export class CommentsAppService {
       }),
     ]);
     const newComment = this.commentFactory.createComment(param);
-    await this.commentRepository.save(newComment.toEntity());
+    await this.commentRepository.save(newComment.toData());
     return assert<CreateCommentRet>({
       comment: new CommentModel(await this.commentRepository.getCommentById(newComment.id)),
     });
@@ -70,7 +70,7 @@ export class CommentsAppService {
     ]);
     if (parentCommentEntity.parentId) throw new BusinessException(PostsErrors.POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED);
     const newCommentReply = this.commentFactory.createCommentReply(param);
-    await this.commentRepository.save(newCommentReply.toEntity());
+    await this.commentRepository.save(newCommentReply.toData());
     return assert<CreateCommentReplyRet>({
       comment: new CommentModel(await this.commentRepository.getCommentById(newCommentReply.id)),
     });
@@ -80,7 +80,7 @@ export class CommentsAppService {
     const comments = assert<ICommentModelData[]>(await this.commentRepository.findComments(query)).map(
       (commentEntity) => new CommentModel(commentEntity),
     );
-    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toEntity()) });
+    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toData()) });
     if (comments.length === query.limit) ret.nextPage = query.page + 1;
     return ret;
   }
@@ -89,7 +89,7 @@ export class CommentsAppService {
     const comments = assert<ICommentModelData[]>(await this.commentRepository.findComments(query)).map(
       (commentEntity) => new CommentModel(commentEntity),
     );
-    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toEntity()) });
+    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toData()) });
     if (comments.length === query.limit) ret.nextPage = query.page + 1;
     return ret;
   }
@@ -98,7 +98,7 @@ export class CommentsAppService {
     const comments = assert<ICommentModelData[]>(await this.commentRepository.findComments(query)).map(
       (commentEntity) => new CommentModel(commentEntity),
     );
-    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toEntity()) });
+    let ret = assert<FindCommentsRet>({ comments: comments.map((comment) => comment.toData()) });
     if (comments.length === query.limit) ret.nextPage = query.page + 1;
     return ret;
   }
@@ -125,9 +125,9 @@ export class CommentsAppService {
       body: param.body,
     });
     comment.addCommentSnapshot(newCommentSnapshot);
-    await this.commentRepository.save(comment.toEntity());
+    await this.commentRepository.save(comment.toData());
     return assert<UpdateCommentRet>({
-      comment: new CommentModel(await this.commentRepository.getCommentById(comment.id)).toEntity(),
+      comment: new CommentModel(await this.commentRepository.getCommentById(comment.id)).toData(),
     });
   }
 

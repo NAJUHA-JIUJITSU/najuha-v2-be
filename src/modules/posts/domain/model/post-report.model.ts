@@ -32,7 +32,7 @@ export class PostReportModel {
     this.createdAt = entity.createdAt;
   }
 
-  toEntity(): IPostReportModelData {
+  toData(): IPostReportModelData {
     return {
       id: this.id,
       type: this.type,

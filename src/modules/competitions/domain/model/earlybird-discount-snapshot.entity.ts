@@ -17,7 +17,7 @@ export class EarlybirdDiscountSnapshotModel {
     this.competitionId = entity.competitionId;
   }
 
-  toEntity(): IEarlybirdDiscountSnapshot {
+  toData(): IEarlybirdDiscountSnapshot {
     return {
       id: this.id,
       earlybirdStartDate: this.earlybirdStartDate,

@@ -32,7 +32,7 @@ export class CommentReportModel {
     this.createdAt = entity.createdAt;
   }
 
-  toEntity(): ICommentReportModelData {
+  toData(): ICommentReportModelData {
     return {
       id: this.id,
       type: this.type,

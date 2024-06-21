@@ -18,7 +18,7 @@ export class ParticipationDivisionInfoSnapshotModel {
     this.division = new DivisionModel(entity.division);
   }
 
-  toEntity(): IParticipationDivisionInfoSnapshot {
+  toData(): IParticipationDivisionInfoSnapshot {
     return {
       id: this.id,
       createdAt: this.createdAt,

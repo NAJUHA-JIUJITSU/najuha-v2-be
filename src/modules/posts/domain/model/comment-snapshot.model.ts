@@ -23,7 +23,7 @@ export class CommentSnapshotModel {
     this.createdAt = entity.createdAt;
   }
 
-  toEntity(): ICommentSnapshotModelData {
+  toData(): ICommentSnapshotModelData {
     return {
       id: this.id,
       commentId: this.commentId,

@@ -13,7 +13,7 @@ export class PriceSnapshotModel {
     this.divisionId = entity.divisionId;
   }
 
-  toEntity(): IPriceSnapshot {
+  toData(): IPriceSnapshot {
     return {
       id: this.id,
       price: this.price,

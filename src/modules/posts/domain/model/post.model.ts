@@ -50,7 +50,7 @@ export class PostModel {
     this.user = entity.user;
   }
 
-  toEntity(): IPostModelData {
+  toData(): IPostModelData {
     return {
       id: this.id,
       userId: this.userId,
@@ -62,9 +62,9 @@ export class PostModel {
       likeCount: this.likeCount,
       commentCount: this.commentCount,
       userLiked: this.userLiked,
-      postSnapshots: this.postSnapshots.map((snapshot) => snapshot.toEntity()),
+      postSnapshots: this.postSnapshots.map((snapshot) => snapshot.toData()),
       likes: this.likes?.map((like) => like.toData()),
-      reports: this.reports?.map((report) => report.toEntity()),
+      reports: this.reports?.map((report) => report.toData()),
       user: this.user,
     };
   }

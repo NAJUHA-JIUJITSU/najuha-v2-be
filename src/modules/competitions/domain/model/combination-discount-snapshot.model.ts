@@ -13,7 +13,7 @@ export class CombinationDiscountSnapshotModel {
     this.competitionId = combinationDiscountSnapshot.competitionId;
   }
 
-  toEntity(): ICombinationDiscountSnapshot {
+  toData(): ICombinationDiscountSnapshot {
     return {
       id: this.id,
       combinationDiscountRules: this.combinationDiscountRules,

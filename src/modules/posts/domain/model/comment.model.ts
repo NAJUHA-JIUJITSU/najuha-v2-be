@@ -61,7 +61,7 @@ export class CommentModel {
     this.user = entity.user;
   }
 
-  toEntity() {
+  toData() {
     return {
       id: this.id,
       userId: this.userId,
@@ -70,9 +70,9 @@ export class CommentModel {
       createdAt: this.createdAt,
       deletedAt: this.deletedAt,
       postId: this.postId,
-      commentSnapshots: this.commentSnapshots.map((snapshot) => snapshot.toEntity()),
-      likes: this.likes?.map((like) => like.toEntity()) || [],
-      reports: this.reports?.map((report) => report.toEntity()) || [],
+      commentSnapshots: this.commentSnapshots.map((snapshot) => snapshot.toData()),
+      likes: this.likes?.map((like) => like.toData()) || [],
+      reports: this.reports?.map((report) => report.toData()) || [],
       likeCount: this.likeCount,
       userLiked: this.userLiked,
       user: this.user,

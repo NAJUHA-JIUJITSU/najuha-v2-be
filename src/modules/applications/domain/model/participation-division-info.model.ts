@@ -20,14 +20,12 @@ export class ParticipationDivisionInfoModel {
     );
   }
 
-  toEntity(): IParticipationDivisionInfo {
+  toData(): IParticipationDivisionInfo {
     return {
       id: this.id,
       createdAt: this.createdAt,
       applicationId: this.applicationId,
-      participationDivisionInfoSnapshots: this.participationDivisionInfoSnapshots.map((snapshot) =>
-        snapshot.toEntity(),
-      ),
+      participationDivisionInfoSnapshots: this.participationDivisionInfoSnapshots.map((snapshot) => snapshot.toData()),
     };
   }
 

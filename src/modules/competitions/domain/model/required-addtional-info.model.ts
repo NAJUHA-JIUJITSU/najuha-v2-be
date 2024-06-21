@@ -20,7 +20,7 @@ export class RequiredAdditionalInfoModel {
     this.competitionId = entity.competitionId;
   }
 
-  toEntity(): IRequiredAdditionalInfo {
+  toData(): IRequiredAdditionalInfo {
     return {
       id: this.id,
       type: this.type,

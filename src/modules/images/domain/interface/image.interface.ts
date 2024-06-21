@@ -1,9 +1,9 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser } from '../../../users/domain/interface/user.interface';
 
-/**
- * Image Interface
- */
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IImage {
   /**
    * UUID v7.
@@ -45,12 +45,30 @@ export interface IImage {
   userId: IUser['id'];
 }
 
-export type TImageFormat = 'image/jpeg' | 'image/png' | 'image/webp';
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IImageModelData {
+  id: IImage['id'];
+  path: IImage['path'];
+  format: IImage['format'];
+  createdAt: IImage['createdAt'];
+  linkedAt: IImage['linkedAt'];
+  userId: IImage['userId'];
+}
 
-export type TImagePath = 'user-profile' | 'competition' | 'post';
-
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IImageCreateDto {
   userId: IUser['id'];
   path: TImagePath;
   format: TImageFormat;
 }
+
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
+export type TImageFormat = 'image/jpeg' | 'image/png' | 'image/webp';
+
+export type TImagePath = 'user-profile' | 'competition' | 'post';

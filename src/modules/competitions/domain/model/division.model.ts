@@ -32,7 +32,7 @@ export class DivisionModel {
     this.priceSnapshots = entity.priceSnapshots.map((priceSnapshot) => new PriceSnapshotModel(priceSnapshot));
   }
 
-  toEntity(): IDivision {
+  toData(): IDivision {
     return {
       id: this.id,
       category: this.category,
@@ -46,7 +46,7 @@ export class DivisionModel {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       competitionId: this.competitionId,
-      priceSnapshots: this.priceSnapshots.map((priceSnapshot) => priceSnapshot.toEntity()),
+      priceSnapshots: this.priceSnapshots.map((priceSnapshot) => priceSnapshot.toData()),
     };
   }
 

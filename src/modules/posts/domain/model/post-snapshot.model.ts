@@ -30,7 +30,7 @@ export class PostSnapshotModel {
     this.postSnapshotImages = entity.postSnapshotImages.map((image) => new PostSnapshotImageModel(image));
   }
 
-  toEntity(): IPostSnapshotModelData {
+  toData(): IPostSnapshotModelData {
     return {
       id: this.id,
       postId: this.postId,

@@ -55,22 +55,22 @@ export class PostsAppService {
       })(),
     ]);
     const newPost = this.postFactory.createPost(creatPostParam);
-    await this.postRepository.save(newPost.toEntity());
+    await this.postRepository.save(newPost.toData());
     return assert<CreatePostRet>({
-      post: new PostModel(await this.postRepository.getPostById(newPost.id, newPost.userId)).toEntity(),
+      post: new PostModel(await this.postRepository.getPostById(newPost.id, newPost.userId)).toData(),
     });
   }
 
   async findPosts(query: FindPostsParam): Promise<FindPostsRet> {
     const postModels = (await this.postRepository.findPosts(query)).map((postEntity) => new PostModel(postEntity));
-    let ret = assert<FindPostsRet>({ posts: postModels.map((post) => post.toEntity()) });
+    let ret = assert<FindPostsRet>({ posts: postModels.map((post) => post.toData()) });
     if (ret.posts.length === query.limit) ret.nextPage = query.page + 1;
     return ret;
   }
 
   async getPost({ userId, postId }: GetPostParam): Promise<GetPostRet> {
     const post = new PostModel(await this.postRepository.getPostById(postId, userId));
-    return assert<GetPostRet>({ post: post.toEntity() });
+    return assert<GetPostRet>({ post: post.toData() });
   }
 
   async updatePost(updatePostParam: UpdatePostParam): Promise<UpdatePostRet> {
@@ -90,7 +90,7 @@ export class PostsAppService {
     const post = new PostModel(postEntity);
     const newPostSnapshot = this.postFactory.createPostSnapshot(updatePostParam);
     post.addPostSnapshot(newPostSnapshot);
-    return assert<UpdatePostRet>({ post: await this.postRepository.save(post.toEntity()) });
+    return assert<UpdatePostRet>({ post: await this.postRepository.save(post.toData()) });
   }
 
   async deletePost({ userId, postId }: DeletePostParam): Promise<void> {
@@ -152,7 +152,7 @@ export class PostsAppService {
       if (alreadyExistPostReport) throw new BusinessException(PostsErrors.POSTS_POST_REPORT_ALREADY_EXIST);
       await queryRunner.manager.save(
         PostReportEntity,
-        this.postFactory.createPostReport(createPostReportParam).toEntity(),
+        this.postFactory.createPostReport(createPostReportParam).toData(),
       );
       const acceptedReports = postReportEntities.filter((report) => report.status === 'ACCEPTED');
       if (acceptedReports.length >= 9)

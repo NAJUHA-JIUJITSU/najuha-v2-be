@@ -72,7 +72,7 @@ export class CompetitionModel {
     this.competitionPosterImages = entity.competitionPosterImages;
   }
 
-  toEntity(): ICompetition {
+  toData(): ICompetition {
     return {
       id: this.id,
       title: this.title,
@@ -91,9 +91,9 @@ export class CompetitionModel {
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      divisions: this.divisions.map((division) => division.toEntity()),
-      earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
-      combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toEntity()),
+      divisions: this.divisions.map((division) => division.toData()),
+      earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots.map((snapshot) => snapshot.toData()),
+      combinationDiscountSnapshots: this.combinationDiscountSnapshots.map((snapshot) => snapshot.toData()),
       requiredAdditionalInfos: this.requiredAdditionalInfos,
       competitionHostMaps: this.competitionHostMaps,
       competitionPosterImages: this.competitionPosterImages,

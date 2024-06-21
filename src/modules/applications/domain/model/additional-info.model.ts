@@ -17,7 +17,7 @@ export class AdditionalInfoModel {
     this.value = entity.value;
   }
 
-  toEntity() {
+  toData() {
     return {
       id: this.id,
       createdAt: this.createdAt,

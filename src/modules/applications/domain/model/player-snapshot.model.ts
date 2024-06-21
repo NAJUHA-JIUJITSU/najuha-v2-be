@@ -1,4 +1,4 @@
-import { IUser } from '../../../users/domain/interface/user.interface';
+import { IUser, IUserModelData } from '../../../users/domain/interface/user.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
 import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
 
@@ -29,7 +29,7 @@ export class PlayerSnapshotModel {
     this.applicationId = entity.applicationId;
   }
 
-  toEntity(): IPlayerSnapshot {
+  toData(): IPlayerSnapshot {
     return {
       id: this.id,
       name: this.name,
@@ -45,7 +45,7 @@ export class PlayerSnapshotModel {
     };
   }
 
-  validateSelfApplication(userEntity: IUser) {
+  validateSelfApplication(userEntity: IUserModelData) {
     const mismatchs: string[] = [];
     if (this.name !== userEntity.name) mismatchs.push('name');
     if (this.phoneNumber !== userEntity.phoneNumber) mismatchs.push('phoneNumber');

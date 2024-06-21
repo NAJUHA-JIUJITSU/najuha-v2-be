@@ -1,7 +1,7 @@
 import { IApplication } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
-import { IUser } from '../../../users/domain/interface/user.interface';
+import { IUser, IUserModelData } from '../../../users/domain/interface/user.interface';
 import { AdditionalInfoModel } from './additional-info.model';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
@@ -56,7 +56,7 @@ export class ApplicationModel {
     this.expectedPayment = null;
   }
 
-  toEntity(): IApplication {
+  toData(): IApplication {
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -66,9 +66,9 @@ export class ApplicationModel {
       status: this.status,
       competitionId: this.competitionId,
       userId: this.userId,
-      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toEntity()),
-      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toEntity()),
-      additionalInfos: this.additionaInfos.map((info) => info.toEntity()),
+      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toData()),
+      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toData()),
+      additionalInfos: this.additionaInfos.map((info) => info.toData()),
       expectedPayment: this.expectedPayment,
     };
   }
@@ -97,7 +97,7 @@ export class ApplicationModel {
     return this.participationDivisionInfos.map((info) => info.getLatestParticipationDivisionInfoSnapshot().division.id);
   }
 
-  validateApplicationType(userEntity: IUser) {
+  validateApplicationType(userEntity: IUserModelData) {
     if (this.type === 'PROXY') return;
     const player = this.getLatestPlayerSnapshot();
     player.validateSelfApplication(userEntity);
