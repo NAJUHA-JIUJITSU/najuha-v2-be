@@ -35,8 +35,7 @@ export type AllErrorTypes =
   | POSTS_COMMENT_LIKE_ALREADY_EXIST
   | POSTS_COMMENT_REPORT_ALREADY_EXIST
   | POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED
-  | VIEW_COUNT_IVALID_ENTITY_TYPE
-  | VIEW_COUNT_ALREADY_INCREMENTED;
+  | VIEW_COUNT_IVALID_ENTITY_TYPE;
 
 export type ErrorResponse = {
   isSuccess: false;
@@ -433,15 +432,6 @@ export type VIEW_COUNT_IVALID_ENTITY_TYPE = ErrorResponse & {
   result: '유효하지 않은 entity type 입니다.';
 };
 
-export type VIEW_COUNT_ALREADY_INCREMENTED = ErrorResponse & {
-  isSuccess: false;
-  status: HttpStatus.CONFLICT;
-  code: 9001;
-  type: 'VIEW_COUNT_ALREADY_INCREMENTED';
-  result: '이미 조회수가 증가된 entity 입니다, 하루에 한 번만 증가 가능합니다.';
-};
-
 export const ViewCountErrors = {
   VIEW_COUNT_IVALID_ENTITY_TYPE: typia.random<VIEW_COUNT_IVALID_ENTITY_TYPE>(),
-  VIEW_COUNT_ALREADY_INCREMENTED: typia.random<VIEW_COUNT_ALREADY_INCREMENTED>(),
 };

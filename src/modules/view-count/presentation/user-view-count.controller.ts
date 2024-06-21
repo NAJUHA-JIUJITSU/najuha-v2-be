@@ -4,6 +4,7 @@ import { TypedParam, TypedRoute } from '@nestia/core';
 import { RoleLevel, RoleLevels } from '../../../infrastructure/guard/role.guard';
 import { TId } from '../../../common/common-types';
 import { ResponseForm, createResponseForm } from '../../../common/response/response';
+import { IncrementEntityViewCountRes } from './view-count.controller.dto';
 
 @Controller('user/view-count')
 export class UserViewCountController {
@@ -28,7 +29,7 @@ export class UserViewCountController {
     @Req() req: Request,
     @Ip() ip: string,
     @TypedParam('postId') postId: TId,
-  ): Promise<ResponseForm<void>> {
+  ): Promise<ResponseForm<IncrementEntityViewCountRes>> {
     return createResponseForm(
       await this.viewCountAppService.incrementEntityViewCount({
         userCredential: req['userId'] || ip,
@@ -57,7 +58,7 @@ export class UserViewCountController {
     @Req() req: Request,
     @Ip() ip: string,
     @TypedParam('competitionId') competitionId: TId,
-  ): Promise<ResponseForm<void>> {
+  ): Promise<ResponseForm<IncrementEntityViewCountRes>> {
     return createResponseForm(
       await this.viewCountAppService.incrementEntityViewCount({
         userCredential: req['userId'] || ip,

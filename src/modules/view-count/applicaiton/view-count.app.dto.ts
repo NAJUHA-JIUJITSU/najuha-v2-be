@@ -9,3 +9,11 @@ export interface IncrementEntityViewCountParam {
   entityType: TEntitytype;
   entityId: TId;
 }
+
+// ---------------------------------------------------------------------------
+// viewCountAppService Result
+// ---------------------------------------------------------------------------
+export interface IncrementEntityViewCountRet {
+  isIncremented: boolean;
+  message: string;
+}
