@@ -5,21 +5,17 @@ import { IUser, IUserDetail, IUserUpdateDto } from '../domain/interface/user.int
 // ---------------------------------------------------------------------------
 // usersAppService Param
 // ---------------------------------------------------------------------------
-export interface CreateUserParam {
-  userCreateDto: ITemporaryUserCreateDto;
-}
+export interface CreateUserParam extends ITemporaryUserCreateDto {}
 
-export interface UpdateUserParam {
-  userUpdateDto: IUserUpdateDto;
+export interface UpdateUserParam extends IUserUpdateDto {
+  userId: IUser['id'];
 }
 
 export interface GetMeParam {
   userId: IUser['id'];
 }
 
-export interface CreateUserProfileImageParam {
-  userProfileImageCreateDto: IUserProfileImageCreateDto;
-}
+export interface CreateUserProfileImageParam extends IUserProfileImageCreateDto {}
 
 export interface DeleteProfileImage {
   userId: IUser['id'];

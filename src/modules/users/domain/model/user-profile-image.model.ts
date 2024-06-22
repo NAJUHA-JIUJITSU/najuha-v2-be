@@ -9,16 +9,15 @@ export class UserProfileImageModel {
   private readonly imageId: IUserProfileImageModelData['imageId'];
   private readonly createdAt: IUserProfileImageModelData['createdAt'];
   private deletedAt: IUserProfileImageModelData['deletedAt'];
-  private readonly image?: ImageModel;
+  private image?: ImageModel;
 
-  static create(dto: IUserProfileImageCreateDto, image?: IImageModelData) {
+  static create(dto: IUserProfileImageCreateDto) {
     return new UserProfileImageModel({
       id: uuidv7(),
       userId: dto.userId,
       imageId: dto.imageId,
       createdAt: new Date(),
       deletedAt: null,
-      image,
     });
   }
 
@@ -44,5 +43,9 @@ export class UserProfileImageModel {
 
   delete() {
     this.deletedAt = new Date();
+  }
+
+  setImage(image: ImageModel) {
+    this.image = image;
   }
 }

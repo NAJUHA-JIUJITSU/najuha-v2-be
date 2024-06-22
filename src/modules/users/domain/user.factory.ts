@@ -3,6 +3,7 @@ import { TemporaryUserModel } from './model/temporary-user.model';
 import { ITemporaryUser, ITemporaryUserCreateDto } from './interface/temporary-user.interface';
 import { UserProfileImageModel } from './model/user-profile-image.model';
 import { IImageModelData } from '../../images/domain/interface/image.interface';
+import { ImageModel } from '../../images/domain/model/image.model';
 
 export class UserFactory {
   creatTemporaryUser(dto: ITemporaryUserCreateDto): ITemporaryUser {
@@ -14,6 +15,8 @@ export class UserFactory {
     userProfileImageCreateDto: IUserProfileImageCreateDto,
     image?: IImageModelData,
   ): UserProfileImageModel {
-    return UserProfileImageModel.create(userProfileImageCreateDto, image);
+    const userProfileImageModel = UserProfileImageModel.create(userProfileImageCreateDto);
+    if (image) userProfileImageModel.setImage(new ImageModel(image));
+    return userProfileImageModel;
   }
 }

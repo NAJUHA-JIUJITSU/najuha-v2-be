@@ -1,4 +1,5 @@
 import {
+  CreatePolicyParam,
   CreatePolicyRet,
   FindAllTypesOfLatestPoliciesRet,
   FindPoliciesRet,
@@ -9,7 +10,7 @@ import { IPolicy } from '../domain/interface/policy.interface';
 // ---------------------------------------------------------------------------
 // policyController Request
 // ---------------------------------------------------------------------------
-export interface CreatePolicyReqBody extends Pick<IPolicy, 'type' | 'isMandatory' | 'title' | 'content'> {}
+export interface CreatePolicyReqBody extends CreatePolicyParam {}
 
 export interface FindPoliciesReqQuery {
   type?: IPolicy['type'];

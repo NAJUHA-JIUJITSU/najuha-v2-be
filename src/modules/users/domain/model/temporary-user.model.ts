@@ -5,10 +5,10 @@ import {
   ITemporaryUserModelData,
   IUserRgistertDto,
 } from '../interface/temporary-user.interface';
-import { IPolicyConsent } from '../../../register/domain/interface/policy-consent.interface';
-import { IPolicySummery } from '../../../policy/domain/interface/policy.interface';
 import { BusinessException, RegisterErrors } from '../../../../common/response/errorResponse';
 import { assert } from 'typia';
+import { PolicyConsentModel } from './PolicyConsent.model';
+import { PolicyModel } from '../../../policy/domain/model/policy.model';
 
 export class TemporaryUserModel {
   private readonly id: ITemporaryUserModelData['id'];
@@ -25,7 +25,7 @@ export class TemporaryUserModel {
   private belt: ITemporaryUserModelData['belt'];
   private status: ITemporaryUserModelData['status'];
   private phoneNumber: ITemporaryUserModelData['phoneNumber'];
-  private policyConsents?: IPolicyConsent[];
+  private policyConsents?: PolicyConsentModel[];
 
   static create(dto: ITemporaryUserCreateDto): TemporaryUserModel {
     return new TemporaryUserModel({
@@ -61,7 +61,7 @@ export class TemporaryUserModel {
     this.status = data.status;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
-    this.policyConsents = data.policyConsents;
+    this.policyConsents = data.policyConsents?.map((consent) => new PolicyConsentModel(consent));
   }
 
   toData(): ITemporaryUserModelData {
@@ -80,7 +80,7 @@ export class TemporaryUserModel {
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      policyConsents: this.policyConsents,
+      policyConsents: this.policyConsents?.map((consent) => consent.toData()),
     };
   }
 
@@ -112,17 +112,8 @@ export class TemporaryUserModel {
     return this.role;
   }
 
-  updataPhoneNumber(phoneNumber: ITemporaryUserModelData['phoneNumber']) {
-    this.phoneNumber = phoneNumber;
-  }
-
-  addPolicyConsents(policyConsents: IPolicyConsent[]) {
+  updateRegistrationData(policyConsents: PolicyConsentModel[], userRegisterDto: IUserRgistertDto) {
     this.policyConsents = policyConsents;
-  }
-
-  register(userRegisterDto: IUserRgistertDto, mandatoryPolicies: IPolicySummery[]) {
-    this.ensurePhoneNumberRegistered();
-    this.ensureMandatoryPoliciesConsented(mandatoryPolicies);
     this.nickname = userRegisterDto.nickname;
     this.gender = userRegisterDto.gender;
     this.belt = userRegisterDto.belt;
@@ -130,18 +121,22 @@ export class TemporaryUserModel {
     this.role = 'USER';
   }
 
-  private ensurePhoneNumberRegistered() {
+  updataPhoneNumber(phoneNumber: ITemporaryUserModelData['phoneNumber']) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public ensurePhoneNumberRegistered() {
     if (!this.phoneNumber) {
       throw new BusinessException(RegisterErrors.REGISTER_PHONE_NUMBER_REQUIRED);
     }
   }
 
-  private ensureMandatoryPoliciesConsented(mandatoryPolicies: IPolicySummery[]) {
+  public ensureMandatoryPoliciesConsented(mandatoryPolicies: PolicyModel[]) {
     const missingConsents = mandatoryPolicies.filter(
-      (policy) => !this.policyConsents?.some((consent) => consent.policyId === policy.id),
+      (policy) => !this.policyConsents?.some((consent) => consent.getPolicId() === policy.getId()),
     );
     if (missingConsents.length > 0) {
-      const missingPolicyTypes = missingConsents.map((policy) => policy.type).join(', ');
+      const missingPolicyTypes = missingConsents.map((policy) => policy.getType()).join(', ');
       throw new BusinessException(
         RegisterErrors.REGISTER_POLICY_CONSENT_REQUIRED,
         `다음 필수 약관에 동의하지 않았습니다: ${missingPolicyTypes}`,

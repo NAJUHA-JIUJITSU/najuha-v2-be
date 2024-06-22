@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { uuidv7 } from 'uuidv7';
 import {
   CreatePolicyParam,
   CreatePolicyRet,
@@ -11,29 +10,25 @@ import {
 } from './policy.app.dto';
 import { PolicyRepository } from '../../../database/custom-repository/policy.repository';
 import { BusinessException, CommonErrors } from '../../../common/response/errorResponse';
+import { PolicyModel } from '../domain/model/policy.model';
+import { assert } from 'typia';
 
 @Injectable()
 export class PolicyAppService {
   constructor(private readonly policyRepository: PolicyRepository) {}
 
-  async createPolicy({ policyCreateDto }: CreatePolicyParam): Promise<CreatePolicyRet> {
-    const existingPolicyEntity = await this.policyRepository.findOne({
-      where: { type: policyCreateDto.type },
-      order: { createdAt: 'DESC' },
+  async createPolicy(param: CreatePolicyParam): Promise<CreatePolicyRet> {
+    const existingPolicyCount = await this.policyRepository.count({ where: { type: param.type } });
+
+    const newPolicyModel = PolicyModel.create({
+      version: existingPolicyCount + 1,
+      type: param.type,
+      isMandatory: param.isMandatory,
+      title: param.title,
+      content: param.content,
     });
 
-    // 같은 타입의 약관이 존재하면 버전을 1 증가시킴
-    const newVersion = existingPolicyEntity ? existingPolicyEntity.version + 1 : 1;
-    const policyEntity = await this.policyRepository.save({
-      id: uuidv7(),
-      type: policyCreateDto.type,
-      isMandatory: policyCreateDto.isMandatory,
-      title: policyCreateDto.title,
-      content: policyCreateDto.content,
-      version: newVersion,
-      createdAt: new Date(),
-    });
-    return { policy: policyEntity };
+    return assert<CreatePolicyRet>({ policy: await this.policyRepository.save(newPolicyModel.toData()) });
   }
 
   async findPolicies({ type }: FindPoliciesParam): Promise<FindPoliciesRet> {
@@ -41,18 +36,18 @@ export class PolicyAppService {
       where: { type },
       select: ['id', 'version', 'type', 'isMandatory', 'title', 'createdAt'],
     });
-    return { policies };
+    return assert<FindPoliciesRet>({ policies });
   }
 
   async getPolicy({ policyId }: FindPolicyParam): Promise<GetPolicyRet> {
     const policy = await this.policyRepository.findOneOrFail({ where: { id: policyId } }).catch(() => {
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Policy not found');
     });
-    return { policy };
+    return assert<GetPolicyRet>({ policy });
   }
 
   async findAllTypesOfLatestPolicies(): Promise<FindAllTypesOfLatestPoliciesRet> {
     const policies = await this.policyRepository.findAllTypesOfLatestPolicies();
-    return { policies };
+    return assert<FindAllTypesOfLatestPoliciesRet>({ policies });
   }
 }

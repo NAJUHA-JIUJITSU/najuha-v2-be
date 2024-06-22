@@ -17,20 +17,22 @@ import {
 import { assert } from 'typia';
 import { PolicyRepository } from '../../../database/custom-repository/policy.repository';
 import { UserRepository } from '../../../database/custom-repository/user.repository';
-import { PolicyConsentFactory } from '../domain/policy-consent.factory';
 import { TemporaryUserModel } from '../../users/domain/model/temporary-user.model';
 import { TemporaryUserRepository } from '../../../database/custom-repository/temporary-user.repository';
 import { DataSource } from 'typeorm';
+import { PolicyConsentModel } from '../../users/domain/model/PolicyConsent.model';
+import { PolicyModel } from '../../policy/domain/model/policy.model';
+import { RegistrationValidatorDomainService } from '../domain/registration-validator.domain.service';
 
 @Injectable()
 export class RegisterAppService {
   constructor(
     private readonly authTokenDomainService: AuthTokenDomainService,
     private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeDomainService,
-    private readonly policyConsentFactory: PolicyConsentFactory,
     private readonly userRepository: UserRepository,
-    private readonly policyRepository: PolicyRepository,
     private readonly temporaryUserRepository: TemporaryUserRepository,
+    private readonly policyRepository: PolicyRepository,
+    private readonly registrationValidator: RegistrationValidatorDomainService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -47,15 +49,9 @@ export class RegisterAppService {
    * - 존재하는 닉네임이면 true를 반환
    */
   async isDuplicateNickname({ userId, nickname }: IsDuplicateNicknameParam): Promise<IsDuplicateNicknameRet> {
-    const [user, temporaryUser] = await Promise.all([
-      this.userRepository.findOne({ where: { nickname } }),
-      this.temporaryUserRepository.findOne({ where: { nickname } }),
-    ]);
-
-    if (!user && !temporaryUser) return { isDuplicated: false };
-    if (user && user.id === userId) return { isDuplicated: false };
-    if (temporaryUser && temporaryUser.id === userId) return { isDuplicated: false };
-    return { isDuplicated: true };
+    return assert<IsDuplicateNicknameRet>({
+      isDuplicated: await this.registrationValidator.isDuplicateNickname({ userId, nickname }),
+    });
   }
 
   // todo!: smsService 개발후 PhoneNumberAuthCode대신 null 반환으로 변환
@@ -65,54 +61,56 @@ export class RegisterAppService {
   }: SendPhoneNumberAuthCodeParam): Promise<SendPhoneNumberAuthCodeRet> {
     const phoneNumberAuthCode = await this.phoneAuthCodeProvider.issuePhoneNumberAuthCode(userId, phoneNumber);
     // todo!: 인증코드를 전송 await this.smsService.sendAuthCode(phoneNumber, authCode);
-    return { phoneNumberAuthCode };
+    return assert<SendPhoneNumberAuthCodeRet>({ phoneNumberAuthCode });
   }
 
   async confirmAuthCode({ userId, authCode }: ConfirmAuthCodeParam): Promise<ConfirmAuthCodeRet> {
     const phoneNumber = await this.phoneAuthCodeProvider.validatePhoneNumberAuthCodeValid(userId, authCode);
     if (!phoneNumber) return { isConfirmed: false };
-
-    const temporaryUserData = await this.temporaryUserRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
-      throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'TemporaryUser not found');
-    });
-
-    const temporaryUserModel = new TemporaryUserModel(temporaryUserData);
+    const temporaryUserModel = new TemporaryUserModel(
+      await this.temporaryUserRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'TemporaryUser not found');
+      }),
+    );
     temporaryUserModel.updataPhoneNumber(phoneNumber);
     await this.temporaryUserRepository.save(temporaryUserModel.toData());
     return { isConfirmed: true };
   }
 
   async registerUser(param: RegisterUserParam): Promise<RegisterUserRet> {
-    const { isDuplicated } = await this.isDuplicateNickname({
+    const isDuplicated = await this.registrationValidator.isDuplicateNickname({
       userId: param.userId,
       nickname: param.nickname,
     });
     if (isDuplicated) throw new BusinessException(RegisterErrors.REGISTER_NICKNAME_DUPLICATED);
 
-    const temporaryUserData = await this.temporaryUserRepository
-      .findOneOrFail({ where: { id: param.userId } })
-      .catch(() => {
+    const temporaryUserModel = new TemporaryUserModel(
+      await this.temporaryUserRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'TemporaryUser not found');
-      });
-    const temporaryUserModel = new TemporaryUserModel(temporaryUserData);
-
-    const latestPolicies = await this.policyRepository.findAllTypesOfLatestPolicies();
-    const mandatoryPolicies = latestPolicies.filter((policy) => policy.isMandatory);
-    const policyConsents = this.policyConsentFactory.createPolicyConsents(
-      param.userId,
-      latestPolicies,
-      param.consentPolicyTypes,
+      }),
     );
 
-    temporaryUserModel.addPolicyConsents(policyConsents);
-    temporaryUserModel.register(param, mandatoryPolicies);
+    const latestPolicyModels = (await this.policyRepository.findAllTypesOfLatestPolicies()).map(
+      (entity) => new PolicyModel(entity),
+    );
+    const policyConsentModels = latestPolicyModels
+      .filter((policy) => param.consentPolicyTypes.includes(policy.getType()))
+      .map((policy) =>
+        PolicyConsentModel.create({
+          userId: param.userId,
+          policyId: policy.getId(),
+        }),
+      );
+
+    temporaryUserModel.updateRegistrationData(policyConsentModels, param);
+    this.registrationValidator.validateRegistration(temporaryUserModel, latestPolicyModels);
 
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       await this.userRepository.save(temporaryUserModel.toRegisteredUserModelData());
-      await this.temporaryUserRepository.delete(temporaryUserData.id);
+      await this.temporaryUserRepository.delete(temporaryUserModel.getId());
       const authTokens = await this.authTokenDomainService.createAuthTokens({
         userId: temporaryUserModel.getId(),
         userRole: temporaryUserModel.getRole(),

@@ -1,5 +1,5 @@
 import { NotNull, Nullable } from '../../../../common/utility-types';
-import { IPolicyConsent } from '../../../register/domain/interface/policy-consent.interface';
+import { IPolicyConsent } from './policy-consent.interface';
 import { IUser } from './user.interface';
 
 // ----------------------------------------------------------------------------

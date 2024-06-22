@@ -21,7 +21,7 @@ export class AdminPolicyController {
   @RoleLevels(RoleLevel.ADMIN)
   @TypedRoute.Post('/')
   async createPolicy(@TypedBody() body: CreatePolicyReqBody): Promise<ResponseForm<CreatePolicyRes>> {
-    return createResponseForm(await this.PolicyAppService.createPolicy({ policyCreateDto: body }));
+    return createResponseForm(await this.PolicyAppService.createPolicy({ ...body }));
   }
 
   /**

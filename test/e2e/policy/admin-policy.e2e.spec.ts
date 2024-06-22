@@ -19,7 +19,6 @@ import {
 import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { PolicyEntity } from '../../../src/database/entity/policy/policy.entity';
 import { uuidv7 } from 'uuidv7';
-// import * as Apis from '../../../src/api/functional';
 
 describe('E2E a-4 admin-policy test', () => {
   let app: INestApplication;
@@ -72,6 +71,31 @@ describe('E2E a-4 admin-policy test', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send(createPolicyReqDto);
       expect(typia.is<ResponseForm<CreatePolicyRes>>(res.body)).toBe(true);
+    });
+
+    it('기존 존재하는 약관 타압의 약관을 새로 생성할 때, 버전이 올라가야 한다.', async () => {
+      /** pre condition. */
+      const createPolicyReqDto = typia.random<CreatePolicyReqBody>();
+      createPolicyReqDto.type = 'TERMS_OF_SERVICE';
+      const dummyUser = new UserDummyBuilder().setRole('ADMIN').build();
+      const accessToken = jwtService.sign(
+        { userId: dummyUser.id, userRole: dummyUser.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const res = await request(app.getHttpServer())
+        .post('/admin/policies')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(createPolicyReqDto);
+      expect(typia.is<ResponseForm<CreatePolicyRes>>(res.body)).toBe(true);
+      /** main test. */
+      const createPolicyReqDto2 = typia.random<CreatePolicyReqBody>();
+      createPolicyReqDto2.type = 'TERMS_OF_SERVICE';
+      const res2 = await request(app.getHttpServer())
+        .post('/admin/policies')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(createPolicyReqDto2);
+      expect(typia.is<ResponseForm<CreatePolicyRes>>(res2.body)).toBe(true);
+      expect(res2.body.result.policy.version).toEqual(res.body.result.policy.version + 1);
     });
   });
 

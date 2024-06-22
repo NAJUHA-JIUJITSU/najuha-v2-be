@@ -1,6 +1,9 @@
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { tags } from 'typia';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 /**
  * 약관.
  * - 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.
@@ -20,7 +23,7 @@ export interface IPolicy {
    * - REFUND: 환불 정책.
    * - ADVERTISEMENT: 광고정책.
    */
-  type: 'TERMS_OF_SERVICE' | 'PRIVACY' | 'REFUND' | 'ADVERTISEMENT';
+  type: TPolicyType;
 
   /**
    * 약관동의 필수여수.
@@ -45,4 +48,32 @@ export interface IPolicy {
   createdAt: TDateOrStringDate;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IPolicyModelData {
+  id: IPolicy['id'];
+  version: IPolicy['version'];
+  type: IPolicy['type'];
+  isMandatory: IPolicy['isMandatory'];
+  title: IPolicy['title'];
+  content?: IPolicy['content'];
+  createdAt: IPolicy['createdAt'];
+}
+
+// ----------------------------------------------------------------------------
+// return type
+// ----------------------------------------------------------------------------
 export interface IPolicySummery extends Omit<IPolicy, 'content'> {}
+
+export interface IPolicyDetail extends IPolicy {}
+
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
+export interface IPolicyCreateDto extends Pick<IPolicy, 'version' | 'type' | 'isMandatory' | 'title' | 'content'> {}
+
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
+type TPolicyType = 'TERMS_OF_SERVICE' | 'PRIVACY' | 'REFUND' | 'ADVERTISEMENT';

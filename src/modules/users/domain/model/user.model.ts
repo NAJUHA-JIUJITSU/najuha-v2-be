@@ -1,4 +1,4 @@
-import { IUserModelData } from '../interface/user.interface';
+import { IUserModelData, IUserUpdateDto } from '../interface/user.interface';
 import { UserProfileImageModel } from './user-profile-image.model';
 
 export class UserModel {
@@ -58,6 +58,14 @@ export class UserModel {
 
   getId() {
     return this.id;
+  }
+
+  updateProfile(dto: IUserUpdateDto) {
+    if (dto.name) this.name = dto.name;
+    if (dto.nickname) this.nickname = dto.nickname;
+    if (dto.gender) this.gender = dto.gender;
+    if (dto.birth) this.birth = dto.birth;
+    if (dto.belt) this.belt = dto.belt;
   }
 
   updateProfileImage(profileImage: UserProfileImageModel) {

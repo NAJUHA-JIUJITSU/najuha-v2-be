@@ -28,22 +28,25 @@ export class UsersAppService {
     private readonly imageRepository: ImageRepository,
   ) {}
 
-  async createUser({ userCreateDto }: CreateUserParam): Promise<CreateUserRet> {
-    const temporaryUserEntity = this.userFactory.creatTemporaryUser(userCreateDto);
+  async createUser(param: CreateUserParam): Promise<CreateUserRet> {
+    const temporaryUserEntity = this.userFactory.creatTemporaryUser(param);
     await this.temporaryUserRepository.save(temporaryUserEntity);
-    return { user: temporaryUserEntity };
+    return assert<CreateUserRet>({ user: temporaryUserEntity });
   }
 
-  async updateUser({ userUpdateDto }: UpdateUserParam): Promise<UpdateUserRet> {
-    const userEntity = assert<IUser>(
-      await this.userRepository.findOne({
-        where: { id: userUpdateDto.id },
-        relations: ['profileImages', 'profileImages.image'],
-      }),
+  async updateUser(param: UpdateUserParam): Promise<UpdateUserRet> {
+    const userModel = new UserModel(
+      await this.userRepository
+        .findOneOrFail({
+          where: { id: param.userId },
+          relations: ['profileImages', 'profileImages.image'],
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
     );
-    const updatedUserEntity = { ...userEntity, ...userUpdateDto };
-    await this.userRepository.save(updatedUserEntity);
-    return { user: updatedUserEntity };
+    userModel.updateProfile(param);
+    return assert<UpdateUserRet>({ user: await this.userRepository.save(userModel.toData()) });
   }
 
   async getMe({ userId }: GetMeParam): Promise<GetMeRet> {
@@ -57,29 +60,25 @@ export class UsersAppService {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
         }),
     );
-    return { user: userEntity };
+    return assert<GetMeRet>({ user: userEntity });
   }
 
-  async createUserProfileImage({
-    userProfileImageCreateDto,
-  }: CreateUserProfileImageParam): Promise<CreateUserProfileImageRet> {
+  async createUserProfileImage(param: CreateUserProfileImageParam): Promise<CreateUserProfileImageRet> {
     const [userEntity, imageEntity] = await Promise.all([
       await this.userRepository
         .findOneOrFail({
-          where: { id: userProfileImageCreateDto.userId },
+          where: { id: param.userId },
           relations: ['profileImages', 'profileImages.image'],
         })
         .catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
         }),
-      await this.imageRepository
-        .findOneOrFail({ where: { id: userProfileImageCreateDto.imageId, path: 'user-profile' } })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
-        }),
+      await this.imageRepository.findOneOrFail({ where: { id: param.imageId, path: 'user-profile' } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Image not found');
+      }),
     ]);
-    const userProfileImageEntity = this.userFactory.createUserProfileImage(userProfileImageCreateDto, imageEntity);
     const userModel = new UserModel(userEntity);
+    const userProfileImageEntity = this.userFactory.createUserProfileImage(param, imageEntity);
     userModel.updateProfileImage(userProfileImageEntity);
     return assert<CreateUserProfileImageRet>({
       user: await this.userRepository.save(userModel.toData()),

@@ -30,7 +30,7 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Post('/')
   async createUser(@TypedBody() body: CreateUserReqBody): Promise<ResponseForm<CreateUserRes>> {
-    return createResponseForm(await this.UsersAppService.createUser({ userCreateDto: body }));
+    return createResponseForm(await this.UsersAppService.createUser({ ...body }));
   }
 
   /**
@@ -46,7 +46,7 @@ export class UserUsersController {
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Patch('/')
   async updateUser(@Req() req: Request, @TypedBody() body: UpdateUserReqBody): Promise<ResponseForm<UpdateUserRes>> {
-    return createResponseForm(await this.UsersAppService.updateUser({ userUpdateDto: { ...body, id: req['userId'] } }));
+    return createResponseForm(await this.UsersAppService.updateUser({ ...body, userId: req['userId'] }));
   }
 
   /**
@@ -83,10 +83,8 @@ export class UserUsersController {
   ): Promise<ResponseForm<CreateUserProfileImageRes>> {
     return createResponseForm(
       await this.UsersAppService.createUserProfileImage({
-        userProfileImageCreateDto: {
-          userId: req['userId'],
-          imageId: body.imageId,
-        },
+        userId: req['userId'],
+        imageId: body.imageId,
       }),
     );
   }

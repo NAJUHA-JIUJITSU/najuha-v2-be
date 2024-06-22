@@ -1,11 +1,9 @@
-import { IPolicy, IPolicySummery } from '../domain/interface/policy.interface';
+import { IPolicy, IPolicyCreateDto, IPolicyDetail, IPolicySummery } from '../domain/interface/policy.interface';
 
 // ---------------------------------------------------------------------------
 // policyAppService Param
 // ---------------------------------------------------------------------------
-export interface CreatePolicyParam {
-  policyCreateDto: Pick<IPolicy, 'type' | 'isMandatory' | 'title' | 'content'>;
-}
+export interface CreatePolicyParam extends Pick<IPolicyCreateDto, 'type' | 'isMandatory' | 'title' | 'content'> {}
 
 export interface FindPoliciesParam {
   type?: IPolicy['type'];
@@ -19,7 +17,7 @@ export interface FindPolicyParam {
 // policyAppService Result
 // ---------------------------------------------------------------------------
 export interface CreatePolicyRet {
-  policy: IPolicy;
+  policy: IPolicyDetail;
 }
 
 export interface FindPoliciesRet {
@@ -27,7 +25,7 @@ export interface FindPoliciesRet {
 }
 
 export interface GetPolicyRet {
-  policy: IPolicy;
+  policy: IPolicyDetail;
 }
 
 export interface FindAllTypesOfLatestPoliciesRet {
