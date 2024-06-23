@@ -2,7 +2,9 @@ import { tags } from 'typia';
 import { IComment } from './comment.interface';
 import { IUser } from '../../../users/domain/interface/user.interface';
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
-
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface ICommentReport {
   /** UUID v7. */
   id: TId;
@@ -26,6 +28,9 @@ export interface ICommentReport {
   createdAt: TDateOrStringDate;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
 export interface ICommentReportModelData {
   id: ICommentReport['id'];
   type: ICommentReport['type'];
@@ -36,8 +41,14 @@ export interface ICommentReportModelData {
   createdAt: ICommentReport['createdAt'];
 }
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface ICommentReportCreateDto extends Pick<ICommentReport, 'commentId' | 'userId' | 'type' | 'reason'> {}
 
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
 type TCommentReportType = 'INAPPROPRIATE' | 'SPAM';
 
 type TCommentReportStatus = 'ACCEPTED' | 'REJECTED';

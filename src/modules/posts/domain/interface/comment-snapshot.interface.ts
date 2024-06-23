@@ -2,6 +2,9 @@ import { tags } from 'typia';
 import { IComment } from './comment.interface';
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface ICommentSnapshot {
   /** UUID v7. */
   id: TId;
@@ -16,6 +19,9 @@ export interface ICommentSnapshot {
   createdAt: TDateOrStringDate;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
 export interface ICommentSnapshotModelData {
   id: ICommentSnapshot['id'];
   commentId: ICommentSnapshot['commentId'];
@@ -23,4 +29,7 @@ export interface ICommentSnapshotModelData {
   createdAt: ICommentSnapshot['createdAt'];
 }
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface ICommentSnapshotCreateDto extends Pick<ICommentSnapshot, 'commentId' | 'body'> {}

@@ -46,20 +46,20 @@ export class CommentModel {
     });
   }
 
-  constructor(entity: ICommentModelData) {
-    this.id = entity.id;
-    this.userId = entity.userId;
-    this.parentId = entity.parentId;
-    this.status = entity.status;
-    this.createdAt = entity.createdAt;
-    this.deletedAt = entity.deletedAt;
-    this.postId = entity.postId;
-    this.likeCount = entity.likeCount || 0;
-    this.commentSnapshots = entity.commentSnapshots.map((snapshot) => new CommentSnapshotModel(snapshot));
-    this.reports = entity.reports?.map((report) => new CommentReportModel(report)) || [];
-    this.likes = entity.likes?.map((like) => new CommentLikeModel(like)) || [];
+  constructor(data: ICommentModelData) {
+    this.id = data.id;
+    this.userId = data.userId;
+    this.parentId = data.parentId;
+    this.status = data.status;
+    this.createdAt = data.createdAt;
+    this.deletedAt = data.deletedAt;
+    this.postId = data.postId;
+    this.likeCount = data.likeCount || 0;
+    this.commentSnapshots = data.commentSnapshots.map((snapshot) => new CommentSnapshotModel(snapshot));
+    this.reports = data.reports?.map((report) => new CommentReportModel(report)) || [];
+    this.likes = data.likes?.map((like) => new CommentLikeModel(like)) || [];
     this.userLiked = this.likes.length > 0 ? true : false;
-    this.user = entity.user && new UserModel(entity.user);
+    this.user = data.user && new UserModel(data.user);
   }
 
   toData(): ICommentModelData {

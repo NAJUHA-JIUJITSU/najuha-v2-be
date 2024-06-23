@@ -1,8 +1,10 @@
-import { tags } from 'typia';
 import { IComment } from './comment.interface';
 import { IUser } from '../../../users/domain/interface/user.interface';
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface ICommentLike {
   /** UUID v7. */
   id: TId;
@@ -17,6 +19,9 @@ export interface ICommentLike {
   createdAt: TDateOrStringDate;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
 export interface ICommentLikeModelData {
   id: ICommentLike['id'];
   commentId: ICommentLike['commentId'];
@@ -24,4 +29,7 @@ export interface ICommentLikeModelData {
   createdAt: ICommentLike['createdAt'];
 }
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export type ICommentLikeCreateDto = Pick<ICommentLike, 'commentId' | 'userId'>;

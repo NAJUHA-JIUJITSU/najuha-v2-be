@@ -2,6 +2,9 @@ import { IPost } from './post.interface';
 import { IUser } from '../../../users/domain/interface/user.interface';
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IPostLike {
   /** UUID v7. */
   id: TId;
@@ -16,6 +19,9 @@ export interface IPostLike {
   createdAt: TDateOrStringDate;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
 export interface IPostLikeModelData {
   id: IPostLike['id'];
   postId: IPostLike['postId'];
@@ -23,4 +29,7 @@ export interface IPostLikeModelData {
   createdAt: IPostLike['createdAt'];
 }
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IPostLikeCreateDto extends Pick<IPostLike, 'postId' | 'userId'> {}

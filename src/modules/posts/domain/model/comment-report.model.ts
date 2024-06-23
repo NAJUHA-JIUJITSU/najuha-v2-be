@@ -22,14 +22,14 @@ export class CommentReportModel {
     });
   }
 
-  constructor(entity: ICommentReportModelData) {
-    this.id = entity.id;
-    this.type = entity.type;
-    this.status = entity.status;
-    this.reason = entity.reason;
-    this.commentId = entity.commentId;
-    this.userId = entity.userId;
-    this.createdAt = entity.createdAt;
+  constructor(data: ICommentReportModelData) {
+    this.id = data.id;
+    this.type = data.type;
+    this.status = data.status;
+    this.reason = data.reason;
+    this.commentId = data.commentId;
+    this.userId = data.userId;
+    this.createdAt = data.createdAt;
   }
 
   toData(): ICommentReportModelData {

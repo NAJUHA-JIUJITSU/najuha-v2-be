@@ -22,14 +22,14 @@ export class PostReportModel {
     });
   }
 
-  constructor(entity: IPostReportModelData) {
-    this.id = entity.id;
-    this.type = entity.type;
-    this.status = entity.status;
-    this.reason = entity.reason;
-    this.postId = entity.postId;
-    this.userId = entity.userId;
-    this.createdAt = entity.createdAt;
+  constructor(data: IPostReportModelData) {
+    this.id = data.id;
+    this.type = data.type;
+    this.status = data.status;
+    this.reason = data.reason;
+    this.postId = data.postId;
+    this.userId = data.userId;
+    this.createdAt = data.createdAt;
   }
 
   toData(): IPostReportModelData {

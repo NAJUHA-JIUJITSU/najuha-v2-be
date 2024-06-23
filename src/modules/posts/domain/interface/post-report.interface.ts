@@ -3,6 +3,9 @@ import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IPostReport {
   /** UUID v7. */
   id: TId;
@@ -26,6 +29,9 @@ export interface IPostReport {
   createdAt: TDateOrStringDate;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
 export interface IPostReportModelData {
   id: IPostReport['id'];
   type: IPostReport['type'];
@@ -36,4 +42,7 @@ export interface IPostReportModelData {
   createdAt: IPostReport['createdAt'];
 }
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IPostReportCreateDto extends Pick<IPostReport, 'postId' | 'userId' | 'type' | 'reason'> {}

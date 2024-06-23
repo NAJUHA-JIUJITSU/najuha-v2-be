@@ -16,11 +16,11 @@ export class CommentSnapshotModel {
     });
   }
 
-  constructor(entity: ICommentSnapshotModelData) {
-    this.id = entity.id;
-    this.commentId = entity.commentId;
-    this.body = entity.body;
-    this.createdAt = entity.createdAt;
+  constructor(data: ICommentSnapshotModelData) {
+    this.id = data.id;
+    this.commentId = data.commentId;
+    this.body = data.body;
+    this.createdAt = data.createdAt;
   }
 
   toData(): ICommentSnapshotModelData {

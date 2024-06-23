@@ -16,11 +16,11 @@ export class CommentLikeModel {
     });
   }
 
-  constructor(entity: ICommentLikeModelData) {
-    this.id = entity.id;
-    this.commentId = entity.commentId;
-    this.userId = entity.userId;
-    this.createdAt = entity.createdAt;
+  constructor(data: ICommentLikeModelData) {
+    this.id = data.id;
+    this.commentId = data.commentId;
+    this.userId = data.userId;
+    this.createdAt = data.createdAt;
   }
 
   toData(): ICommentLikeModelData {

@@ -3,6 +3,9 @@ import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IImage, IImageModelData } from '../../../images/domain/interface/image.interface';
 import { IPostSnapshot } from './post-snapshot.interface';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IPostSnapshotImage {
   /** UUID v7. */
   id: TId;
@@ -28,6 +31,9 @@ export interface IPostSnapshotImage {
   image: IImage;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
 export interface IPostSnapshotImageModleData {
   id: IPostSnapshotImage['id'];
   postSnapshotId: IPostSnapshotImage['postSnapshotId'];
@@ -37,5 +43,8 @@ export interface IPostSnapshotImageModleData {
   image?: IImageModelData;
 }
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IPostSnapshotImageCreateDto
   extends Pick<IPostSnapshotImage, 'postSnapshotId' | 'imageId' | 'sequence'> {}

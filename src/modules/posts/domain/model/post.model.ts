@@ -34,21 +34,21 @@ export class PostModel {
     });
   }
 
-  constructor(entity: IPostModelData) {
-    this.id = entity.id;
-    this.userId = entity.userId;
-    this.viewCount = entity.viewCount;
-    this.status = entity.status;
-    this.category = entity.category;
-    this.createdAt = entity.createdAt;
-    this.deletedAt = entity.deletedAt;
-    this.likeCount = entity.likeCount || 0;
-    this.commentCount = entity.commentCount || 0;
-    this.postSnapshots = entity.postSnapshots.map((snapshot) => new PostSnapshotModel(snapshot));
-    this.likes = entity.likes?.map((like) => new PostLikeModel(like)) || [];
-    this.reports = entity.reports?.map((report) => new PostReportModel(report)) || [];
+  constructor(data: IPostModelData) {
+    this.id = data.id;
+    this.userId = data.userId;
+    this.viewCount = data.viewCount;
+    this.status = data.status;
+    this.category = data.category;
+    this.createdAt = data.createdAt;
+    this.deletedAt = data.deletedAt;
+    this.likeCount = data.likeCount || 0;
+    this.commentCount = data.commentCount || 0;
+    this.postSnapshots = data.postSnapshots.map((snapshot) => new PostSnapshotModel(snapshot));
+    this.likes = data.likes?.map((like) => new PostLikeModel(like)) || [];
+    this.reports = data.reports?.map((report) => new PostReportModel(report)) || [];
     this.userLiked = this.likes.length > 0 ? true : false;
-    this.user = entity.user && new UserModel(entity.user);
+    this.user = data.user && new UserModel(data.user);
   }
 
   toData(): IPostModelData {
