@@ -3,6 +3,7 @@ import { CommentSnapshotModel } from './comment-snapshot.model';
 import { CommentLikeModel } from './comment-like.model';
 import { CommentReportModel } from './comment-report.model';
 import { uuidv7 } from 'uuidv7';
+import { UserModel } from '../../../users/domain/model/user.model';
 
 export class CommentModel {
   public readonly id: ICommentModelData['id'];
@@ -15,9 +16,9 @@ export class CommentModel {
   private likeCount: ICommentModelData['likeCount'];
   private userLiked: ICommentModelData['userLiked'];
   private commentSnapshots: CommentSnapshotModel[];
-  private readonly likes?: CommentLikeModel[];
-  private readonly reports?: CommentReportModel[];
-  private user?: ICommentModelData['user'];
+  private likes?: CommentLikeModel[];
+  private reports?: CommentReportModel[];
+  private user?: UserModel;
 
   static createComment(dto: ICommentCreateDto): CommentModel {
     return new CommentModel({
@@ -58,10 +59,10 @@ export class CommentModel {
     this.reports = entity.reports?.map((report) => new CommentReportModel(report)) || [];
     this.likes = entity.likes?.map((like) => new CommentLikeModel(like)) || [];
     this.userLiked = this.likes.length > 0 ? true : false;
-    this.user = entity.user;
+    this.user = entity.user && new UserModel(entity.user);
   }
 
-  toData() {
+  toData(): ICommentModelData {
     return {
       id: this.id,
       userId: this.userId,
@@ -75,12 +76,16 @@ export class CommentModel {
       reports: this.reports?.map((report) => report.toData()) || [],
       likeCount: this.likeCount,
       userLiked: this.userLiked,
-      user: this.user,
+      user: this.user?.toData(),
     };
   }
 
   addCommentSnapshot(snapshot: CommentSnapshotModel): void {
     this.commentSnapshots.push(snapshot);
+  }
+
+  setUser(user: UserModel): void {
+    this.user = user;
   }
 
   delete(): void {

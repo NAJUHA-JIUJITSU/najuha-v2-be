@@ -7,10 +7,12 @@ import { CommentSnapshotModel } from './model/comment-snapshot.model';
 import { CommentLikeModel } from './model/comment-like.model';
 import { CommentReportModel } from './model/comment-report.model';
 import { CreateCommentParam, CreateCommentReplyParam } from '../application/comments.app.dto';
+import { IUserModelData } from '../../users/domain/interface/user.interface';
+import { UserModel } from '../../users/domain/model/user.model';
 
 @Injectable()
 export class CommentFactory {
-  createComment(commentCreateParam: CreateCommentParam): CommentModel {
+  createComment(commentCreateParam: CreateCommentParam, user: IUserModelData): CommentModel {
     const commentModel = CommentModel.createComment({
       userId: commentCreateParam.userId,
       postId: commentCreateParam.postId,
@@ -19,11 +21,13 @@ export class CommentFactory {
       commentId: commentModel.id,
       body: commentCreateParam.body,
     });
+    const userModel = new UserModel(user);
     commentModel.addCommentSnapshot(commentSnapshotModel);
+    commentModel.setUser(userModel);
     return commentModel;
   }
 
-  createCommentReply(commentReplyCreateDto: CreateCommentReplyParam): CommentModel {
+  createCommentReply(commentReplyCreateDto: CreateCommentReplyParam, user: IUserModelData): CommentModel {
     const commentModel = CommentModel.createReply({
       userId: commentReplyCreateDto.userId,
       postId: commentReplyCreateDto.postId,
@@ -33,7 +37,9 @@ export class CommentFactory {
       commentId: commentModel.id,
       body: commentReplyCreateDto.body,
     });
+    const userModel = new UserModel(user);
     commentModel.addCommentSnapshot(commentSnapshotModel);
+    commentModel.setUser(userModel);
     return commentModel;
   }
 

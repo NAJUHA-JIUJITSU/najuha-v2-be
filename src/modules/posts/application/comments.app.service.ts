@@ -44,35 +44,37 @@ export class CommentsAppService {
   ) {}
 
   async createComment(param: CreateCommentParam): Promise<CreateCommentRet> {
-    const [_userEntity, _postEntity] = await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
+    const [userEntity, _postEntity] = await Promise.all([
+      this.userRepository
+        .findOneOrFail({ where: { id: param.userId }, relations: ['profileImages', 'profileImages.image'] })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
       this.postRepository.findOneOrFail({ where: { id: param.postId, status: 'ACTIVE' } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Post not found');
       }),
     ]);
-    const newComment = this.commentFactory.createComment(param);
-    await this.commentRepository.save(newComment.toData());
+    const newComment = this.commentFactory.createComment(param, userEntity);
     return assert<CreateCommentRet>({
-      comment: new CommentModel(await this.commentRepository.getCommentById(newComment.id)),
+      comment: await this.commentRepository.save(newComment.toData()),
     });
   }
 
   async createCommentReply(param: CreateCommentReplyParam): Promise<CreateCommentReplyRet> {
-    const [_userEntity, parentCommentEntity] = await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
+    const [userEntity, parentCommentEntity] = await Promise.all([
+      this.userRepository
+        .findOneOrFail({ where: { id: param.userId }, relations: ['profileImages', 'profileImages.image'] })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
       this.commentRepository.findOneOrFail({ where: { id: param.parentId, status: 'ACTIVE' } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Parent Comment not found');
       }),
     ]);
     if (parentCommentEntity.parentId) throw new BusinessException(PostsErrors.POSTS_COMMENT_REPLY_TO_REPLY_NOT_ALLOWED);
-    const newCommentReply = this.commentFactory.createCommentReply(param);
-    await this.commentRepository.save(newCommentReply.toData());
+    const newCommentReply = this.commentFactory.createCommentReply(param, userEntity);
     return assert<CreateCommentReplyRet>({
-      comment: new CommentModel(await this.commentRepository.getCommentById(newCommentReply.id)),
+      comment: await this.commentRepository.save(newCommentReply.toData()),
     });
   }
 
@@ -108,16 +110,7 @@ export class CommentsAppService {
       this.userRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
-      assert<ICommentModelData>(
-        await this.commentRepository
-          .findOneOrFail({
-            where: { id: param.commentId, status: 'ACTIVE', userId: param.userId },
-            relations: ['commentSnapshots'],
-          })
-          .catch(() => {
-            throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment not found');
-          }),
-      ),
+      await this.commentRepository.getCommentById(param.commentId),
     ]);
     const comment = new CommentModel(commentEntity);
     const newCommentSnapshot = this.commentFactory.createCommentSnapshot({
@@ -125,9 +118,8 @@ export class CommentsAppService {
       body: param.body,
     });
     comment.addCommentSnapshot(newCommentSnapshot);
-    await this.commentRepository.save(comment.toData());
     return assert<UpdateCommentRet>({
-      comment: new CommentModel(await this.commentRepository.getCommentById(comment.id)).toData(),
+      comment: await this.commentRepository.save(comment.toData()),
     });
   }
 
