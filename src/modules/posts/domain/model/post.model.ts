@@ -3,6 +3,7 @@ import { uuidv7 } from 'uuidv7';
 import { PostSnapshotModel } from './post-snapshot.model';
 import { PostLikeModel } from './post-like.model';
 import { PostReportModel } from './post-report.model';
+import { UserModel } from '../../../users/domain/model/user.model';
 
 export class PostModel {
   public readonly id: IPostModelData['id'];
@@ -16,9 +17,9 @@ export class PostModel {
   private deletedAt: IPostModelData['deletedAt'];
   private status: IPostModelData['status'];
   private postSnapshots: PostSnapshotModel[];
-  private readonly likes?: PostLikeModel[];
+  private likes?: PostLikeModel[];
   private reports?: PostReportModel[];
-  private user?: IPostModelData['user'];
+  private user?: UserModel;
 
   static create(dto: IPostCreateDto) {
     return new PostModel({
@@ -47,7 +48,7 @@ export class PostModel {
     this.likes = entity.likes?.map((like) => new PostLikeModel(like)) || [];
     this.reports = entity.reports?.map((report) => new PostReportModel(report)) || [];
     this.userLiked = this.likes.length > 0 ? true : false;
-    this.user = entity.user;
+    this.user = entity.user && new UserModel(entity.user);
   }
 
   toData(): IPostModelData {
@@ -65,12 +66,16 @@ export class PostModel {
       postSnapshots: this.postSnapshots.map((snapshot) => snapshot.toData()),
       likes: this.likes?.map((like) => like.toData()),
       reports: this.reports?.map((report) => report.toData()),
-      user: this.user,
+      user: this.user?.toData(),
     };
   }
 
   addPostSnapshot(snapshot: PostSnapshotModel): void {
     this.postSnapshots.push(snapshot);
+  }
+
+  setUser(user: UserModel) {
+    this.user = user;
   }
 
   delete() {

@@ -42,10 +42,15 @@ export class PostsAppService {
   ) {}
 
   async createPost(creatPostParam: CreatePostParam): Promise<CreatePostRet> {
-    const [_userEntity, _imageEntities] = await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: creatPostParam.userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-      }),
+    const [userEntity, imageEntities] = await Promise.all([
+      this.userRepository
+        .findOneOrFail({
+          where: { id: creatPostParam.userId },
+          relations: ['profileImages', 'profileImages.image'],
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        }),
       (async () => {
         if (!creatPostParam.imageIds) return [];
         const imageEntities = await this.imageRepository.find({ where: { id: In(creatPostParam.imageIds) } });
@@ -54,10 +59,9 @@ export class PostsAppService {
         return imageEntities;
       })(),
     ]);
-    const newPost = this.postFactory.createPost(creatPostParam);
-    await this.postRepository.save(newPost.toData());
+    const newPost = this.postFactory.createPost(creatPostParam, userEntity, imageEntities);
     return assert<CreatePostRet>({
-      post: new PostModel(await this.postRepository.getPostById(newPost.id, newPost.userId)).toData(),
+      post: await this.postRepository.save(newPost.toData()),
     });
   }
 

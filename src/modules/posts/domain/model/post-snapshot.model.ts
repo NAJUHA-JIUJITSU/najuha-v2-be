@@ -8,7 +8,7 @@ export class PostSnapshotModel {
   private readonly title: IPostSnapshotModelData['title'];
   private readonly body: IPostSnapshotModelData['body'];
   private readonly createdAt: IPostSnapshotModelData['createdAt'];
-  private postSnapshotImages: PostSnapshotImageModel[];
+  private postSnapshotImages?: PostSnapshotImageModel[];
 
   static create(dto: IPostSnapshotCreateDto) {
     return new PostSnapshotModel({
@@ -21,13 +21,13 @@ export class PostSnapshotModel {
     });
   }
 
-  constructor(entity: IPostSnapshotModelData) {
-    this.id = entity.id;
-    this.postId = entity.postId;
-    this.title = entity.title;
-    this.body = entity.body;
-    this.createdAt = entity.createdAt;
-    this.postSnapshotImages = entity.postSnapshotImages.map((image) => new PostSnapshotImageModel(image));
+  constructor(data: IPostSnapshotModelData) {
+    this.id = data.id;
+    this.postId = data.postId;
+    this.title = data.title;
+    this.body = data.body;
+    this.createdAt = data.createdAt;
+    this.postSnapshotImages = data.postSnapshotImages?.map((image) => new PostSnapshotImageModel(image));
   }
 
   toData(): IPostSnapshotModelData {
@@ -37,11 +37,11 @@ export class PostSnapshotModel {
       title: this.title,
       body: this.body,
       createdAt: this.createdAt,
-      postSnapshotImages: this.postSnapshotImages.map((image) => image.toData()),
+      postSnapshotImages: this.postSnapshotImages?.map((postSnapshotImage) => postSnapshotImage.toData()),
     };
   }
 
   addPostSnapshotImages(postSnapshotImages: PostSnapshotImageModel[]) {
-    this.postSnapshotImages.push(...postSnapshotImages);
+    this.postSnapshotImages = postSnapshotImages;
   }
 }

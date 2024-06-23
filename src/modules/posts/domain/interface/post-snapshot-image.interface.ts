@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
-import { IImage } from '../../../images/domain/interface/image.interface';
+import { IImage, IImageModelData } from '../../../images/domain/interface/image.interface';
 import { IPostSnapshot } from './post-snapshot.interface';
 
 export interface IPostSnapshotImage {
@@ -34,7 +34,7 @@ export interface IPostSnapshotImageModleData {
   imageId: IPostSnapshotImage['imageId'];
   sequence: IPostSnapshotImage['sequence'];
   createdAt: IPostSnapshotImage['createdAt'];
-  image?: IPostSnapshotImage['image'];
+  image?: IImageModelData;
 }
 
 export interface IPostSnapshotImageCreateDto

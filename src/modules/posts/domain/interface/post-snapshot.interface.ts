@@ -29,7 +29,7 @@ export interface IPostSnapshotModelData {
   title: IPostSnapshot['title'];
   body: IPostSnapshot['body'];
   createdAt: IPostSnapshot['createdAt'];
-  postSnapshotImages: IPostSnapshotImageModleData[];
+  postSnapshotImages?: IPostSnapshotImageModleData[];
 }
 
 export interface IPostSnapshotCreateDto extends Pick<IPostSnapshot, 'postId' | 'title' | 'body'> {}

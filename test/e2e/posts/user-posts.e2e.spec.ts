@@ -39,7 +39,7 @@ import {
 } from '../../../src/common/response/errorResponse';
 import { IUser } from '../../../src/modules/users/domain/interface/user.interface';
 
-describe('E2E u-7 competitions TEST', () => {
+describe('E2E u-7 Post TEST', () => {
   let app: INestApplication;
   let testingModule: TestingModule;
   let entityEntityManager: EntityManager;
