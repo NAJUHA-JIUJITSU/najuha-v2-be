@@ -1,16 +1,25 @@
 import { ICompetition } from '../../../competitions/domain/interface/competition.interface';
 import { IUser } from '../../../users/domain/interface/user.interface';
-import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './player-snapshot.interface';
+import { IPlayerSnapshot, IPlayerSnapshotCreateDto, IPlayerSnapshotModelData } from './player-snapshot.interface';
 import {
   IParticipationDivisionInfo,
+  IParticipationDivisionInfoModelData,
   IParticipationDivisionInfoUpdateDto,
 } from './participation-division-info.interface';
 import { tags } from 'typia';
-import { IAdditionalInfo, IAdditionalInfoCreateDto, IAdditionalInfoUpdateDto } from './additional-info.interface';
+import {
+  IAdditionalInfo,
+  IAdditionalInfoCreateDto,
+  IAdditionalInfoModelData,
+  IAdditionalInfoUpdateDto,
+} from './additional-info.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { IExpectedPayment } from './expected-payment.interface';
 import { IDivision } from '../../../competitions/domain/interface/division.interface';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IApplication {
   /** UUID v7. */
   id: TId;
@@ -58,9 +67,30 @@ export interface IApplication {
    * Expected payment.
    * READY 상태일 때만 조회결과에 포함됩니다.
    */
-  expectedPayment: IExpectedPayment | null;
+  expectedPayment?: IExpectedPayment;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IApplicationModelData {
+  id: IApplication['id'];
+  createdAt: IApplication['createdAt'];
+  updatedAt: IApplication['updatedAt'];
+  deletedAt: IApplication['deletedAt'];
+  type: IApplication['type'];
+  status: IApplication['status'];
+  competitionId: IApplication['competitionId'];
+  userId: IApplication['userId'];
+  playerSnapshots: IPlayerSnapshotModelData[];
+  participationDivisionInfos: IParticipationDivisionInfoModelData[];
+  additionalInfos: IAdditionalInfoModelData[];
+  expectedPayment?: IExpectedPayment;
+}
+
+// ----------------------------------------------------------------------------
+// Return interface
+// ----------------------------------------------------------------------------
 export interface IApplicationDetail extends IApplication {}
 
 export interface IApplicationCreateDto {
@@ -86,6 +116,9 @@ export interface IApplicationCreateDto {
   additionalInfoCreateDtos?: IAdditionalInfoCreateDto[];
 }
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IDoneApplicationUpdateDto {
   /**
    * - Division info update data array.
@@ -100,6 +133,9 @@ export interface IDoneApplicationUpdateDto {
   additionalInfoUpdateDtos?: IAdditionalInfoUpdateDto[];
 }
 
+// ----------------------------------------------------------------------------
+// Query Options
+// ----------------------------------------------------------------------------
 export interface IApplicationQueryOptions {
   /** 신청계정의 userId */
   userId: IUser['id'];
@@ -111,6 +147,9 @@ export interface IApplicationQueryOptions {
   status?: IApplication['status'];
 }
 
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
 type TApplicationType = 'SELF' | 'PROXY';
 
 type TApplicationStatus = 'READY' | 'DONE' | 'CANCELED';

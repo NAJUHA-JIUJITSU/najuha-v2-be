@@ -1,24 +1,28 @@
-import { IPriceSnapshot } from '../interface/price-snapshot.interface';
+import { IPriceSnapshotModelData } from '../interface/price-snapshot.interface';
 
 export class PriceSnapshotModel {
-  public readonly id: IPriceSnapshot['id'];
-  public readonly price: IPriceSnapshot['price'];
-  public readonly createdAt: IPriceSnapshot['createdAt'];
-  public readonly divisionId: IPriceSnapshot['divisionId'];
+  private readonly id: IPriceSnapshotModelData['id'];
+  private readonly price: IPriceSnapshotModelData['price'];
+  private readonly createdAt: IPriceSnapshotModelData['createdAt'];
+  private readonly divisionId: IPriceSnapshotModelData['divisionId'];
 
-  constructor(entity: IPriceSnapshot) {
-    this.id = entity.id;
-    this.price = entity.price;
-    this.createdAt = entity.createdAt;
-    this.divisionId = entity.divisionId;
+  constructor(data: IPriceSnapshotModelData) {
+    this.id = data.id;
+    this.price = data.price;
+    this.createdAt = data.createdAt;
+    this.divisionId = data.divisionId;
   }
 
-  toData(): IPriceSnapshot {
+  toData(): IPriceSnapshotModelData {
     return {
       id: this.id,
       price: this.price,
       createdAt: this.createdAt,
       divisionId: this.divisionId,
     };
+  }
+
+  getPrice() {
+    return this.price;
   }
 }

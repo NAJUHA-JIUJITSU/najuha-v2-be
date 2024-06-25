@@ -60,7 +60,7 @@ export interface CreateCompetitionRequiredAdditionalInfoParam {
   requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto;
 }
 
-export interface UpdateRequiredAdditionalInfoParam {
+export interface UpdateCompetitionRequiredAdditionalInfoParam {
   requiredAdditionalInfoUpdateDto: IRequiredAdditionalInfoUpdateDto;
 }
 

@@ -5,6 +5,7 @@ import {
   TCompetitionLocationFilter,
   TCompetitionStatus,
   ICompetition,
+  ICompetitionModelData,
 } from '../modules/competitions/domain/interface/competition.interface';
 import { IEarlybirdDiscountSnapshot } from '../modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { IRequiredAdditionalInfo } from '../modules/competitions/domain/interface/required-addtional-info.interface';
@@ -18,7 +19,7 @@ import { TId } from '../common/common-types';
 import { IImage } from '../modules/images/domain/interface/image.interface';
 
 export class CompetitionDummyBuilder {
-  private competition: ICompetition = {
+  private competition: ICompetitionModelData = {
     id: uuidv7(),
     title: 'Dummy Competition',
     address: typia.random<TCompetitionLocationFilter>(),
@@ -131,7 +132,8 @@ export class CompetitionDummyBuilder {
 
   public setDivisions(divisionPacks: IDivisionPack[]): this {
     const divisionFactory = new DivisionFactory();
-    this.competition.divisions = divisionFactory.createDivisions(this.competition.id, divisionPacks);
+    const divisionModels = divisionFactory.createDivisions(this.competition.id, divisionPacks);
+    this.competition.divisions = divisionModels.map((division) => division);
     return this;
   }
 

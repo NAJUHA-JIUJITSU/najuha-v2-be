@@ -1,23 +1,23 @@
-import { IAdditionalInfo } from '../interface/additional-info.interface';
+import { IAdditionalInfoModelData } from '../interface/additional-info.interface';
 
 export class AdditionalInfoModel {
-  private readonly id: IAdditionalInfo['id'];
-  private readonly createdAt: IAdditionalInfo['createdAt'];
-  private readonly updatedAt: IAdditionalInfo['updatedAt'];
-  private readonly type: IAdditionalInfo['type'];
-  private readonly applicationId: IAdditionalInfo['applicationId'];
-  private value: IAdditionalInfo['value'];
+  private readonly id: IAdditionalInfoModelData['id'];
+  private readonly createdAt: IAdditionalInfoModelData['createdAt'];
+  private readonly updatedAt: IAdditionalInfoModelData['updatedAt'];
+  private readonly type: IAdditionalInfoModelData['type'];
+  private readonly applicationId: IAdditionalInfoModelData['applicationId'];
+  private value: IAdditionalInfoModelData['value'];
 
-  constructor(entity: IAdditionalInfo) {
-    this.id = entity.id;
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
-    this.type = entity.type;
-    this.applicationId = entity.applicationId;
-    this.value = entity.value;
+  constructor(data: IAdditionalInfoModelData) {
+    this.id = data.id;
+    this.createdAt = data.createdAt;
+    this.updatedAt = data.updatedAt;
+    this.type = data.type;
+    this.applicationId = data.applicationId;
+    this.value = data.value;
   }
 
-  toData() {
+  toData(): IAdditionalInfoModelData {
     return {
       id: this.id,
       createdAt: this.createdAt,

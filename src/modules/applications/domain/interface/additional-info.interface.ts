@@ -3,6 +3,9 @@ import { IApplication } from './application.interface';
 import { IRequiredAdditionalInfo } from '../../../competitions/domain/interface/required-addtional-info.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IAdditionalInfo {
   /** UUID v7. */
   id: TId;
@@ -23,9 +26,20 @@ export interface IAdditionalInfo {
   applicationId: IApplication['id'];
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IAdditionalInfoModelData extends IAdditionalInfo {}
+
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export type IAdditionalInfoCreateDto = SocialScurityNumberInfo | AddressInfo;
 export type IAdditionalInfoUpdateDto = SocialScurityNumberInfo | AddressInfo;
 
+// ----------------------------------------------------------------------------
+// Custom Types
+// ----------------------------------------------------------------------------
 export type SocialScurityNumberInfo = {
   type: 'SOCIAL_SECURITY_NUMBER';
   value: string & tags.Pattern<'^[0-9]{6}-[0-9]{7}$'>;

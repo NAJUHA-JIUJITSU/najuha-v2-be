@@ -1,17 +1,17 @@
-import { IDivision } from '../../../competitions/domain/interface/division.interface';
 import { IApplication } from '../interface/application.interface';
-import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
+import { IParticipationDivisionInfoModelData } from '../interface/participation-division-info.interface';
 import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
+import { DivisionModel } from '../../../competitions/domain/model/division.model';
 
 export class ParticipationDivisionInfoModel {
-  public readonly id: IParticipationDivisionInfo['id'];
-  public readonly createdAt: IParticipationDivisionInfo['createdAt'];
+  public readonly id: IParticipationDivisionInfoModelData['id'];
+  public readonly createdAt: IParticipationDivisionInfoModelData['createdAt'];
   public readonly applicationId: IApplication['id'];
   public readonly participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[];
 
-  constructor(entity: IParticipationDivisionInfo) {
+  constructor(entity: IParticipationDivisionInfoModelData) {
     this.id = entity.id;
     this.createdAt = entity.createdAt;
     this.applicationId = entity.applicationId;
@@ -20,7 +20,7 @@ export class ParticipationDivisionInfoModel {
     );
   }
 
-  toData(): IParticipationDivisionInfo {
+  toData(): IParticipationDivisionInfoModelData {
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -43,21 +43,21 @@ export class ParticipationDivisionInfoModel {
     this.validateDivisionGender(division, playerGender);
   }
 
-  private validateDivisionAgeRange(division: IDivision, playerBirth: IPlayerSnapshot['birth']) {
+  private validateDivisionAgeRange(division: DivisionModel, playerBirth: IPlayerSnapshot['birth']) {
     const parsedBirthYear = +playerBirth.slice(0, 4);
-    if (parsedBirthYear < +division.birthYearRangeStart || parsedBirthYear > +division.birthYearRangeEnd) {
+    if (parsedBirthYear < +division.getBirthYearRangeStart() || parsedBirthYear > +division.getBirthYearRangeEnd()) {
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_DIVISION_AGE_NOT_MATCH,
-        `divisionId: ${division.id}, division: ${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight} ${division.birthYearRangeStart}~${division.birthYearRangeEnd}, playerBirth: ${playerBirth}`,
+        `divisionId: ${division.getId()}, division: ${division.getCategory()} ${division.getUniform()} ${division.getGender()} ${division.getBelt()} ${division.getWeight()} ${division.getBirthYearRangeStart()}~${division.getBirthYearRangeEnd()}, playerBirth: ${playerBirth}`,
       );
     }
   }
 
-  private validateDivisionGender(division: IDivision, playerGender: IPlayerSnapshot['gender']) {
-    if (division.gender !== 'MIXED' && playerGender !== division.gender) {
+  private validateDivisionGender(division: DivisionModel, playerGender: IPlayerSnapshot['gender']) {
+    if (division.getGender() !== 'MIXED' && playerGender !== division.getGender()) {
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_DIVISION_GENDER_NOT_MATCH,
-        `divisionId: ${division.id}, division: ${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight} ${division.birthYearRangeStart}~${division.birthYearRangeEnd}, playerGender: ${playerGender}`,
+        `divisionId: ${division.getId()}, division: ${division.getCategory()} ${division.getUniform()} ${division.getGender()} ${division.getBelt()} ${division.getWeight()} ${division.getBirthYearRangeStart()}~${division.getBirthYearRangeEnd()}, playerGender: ${playerGender}`,
       );
     }
   }

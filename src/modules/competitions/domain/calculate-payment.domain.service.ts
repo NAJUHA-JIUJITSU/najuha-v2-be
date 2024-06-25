@@ -1,16 +1,17 @@
 import { IExpectedPayment } from '../../applications/domain/interface/expected-payment.interface';
-import { ICombinationDiscountSnapshot } from './interface/combination-discount-snapshot.interface';
-import { Absolute, IDivision } from './interface/division.interface';
-import { IEarlybirdDiscountSnapshot } from './interface/earlybird-discount-snapshot.interface';
-import { IPriceSnapshot } from './interface/price-snapshot.interface';
+import { Absolute } from './interface/division.interface';
 import typia from 'typia';
+import { DivisionModel } from './model/division.model';
+import { PriceSnapshotModel } from './model/price-snapshot.model';
+import { EarlybirdDiscountSnapshotModel } from './model/earlybird-discount-snapshot.model';
+import { CombinationDiscountSnapshotModel } from './model/combination-discount-snapshot.model';
 
 export class CalculatePaymentService {
   static calculate(
-    divisions: IDivision[],
-    priceSnapshots: IPriceSnapshot[],
-    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot | null,
-    combinationDiscountSnapshot: ICombinationDiscountSnapshot | null,
+    divisions: DivisionModel[],
+    priceSnapshots: PriceSnapshotModel[],
+    earlybirdDiscountSnapshot: EarlybirdDiscountSnapshotModel | null,
+    combinationDiscountSnapshot: CombinationDiscountSnapshotModel | null,
     now: Date = new Date(),
   ): IExpectedPayment {
     const normalAmount = this.calculateNormalAmount(priceSnapshots);
@@ -20,33 +21,34 @@ export class CalculatePaymentService {
     return { normalAmount, earlybirdDiscountAmount, combinationDiscountAmount, totalAmount };
   }
 
-  private static calculateNormalAmount(priceSnapshots: IPriceSnapshot[]): number {
+  private static calculateNormalAmount(priceSnapshots: PriceSnapshotModel[]): number {
     return priceSnapshots.reduce((acc, priceSnapshot) => {
-      acc += priceSnapshot.price || 0;
+      acc += priceSnapshot.getPrice();
       return acc;
     }, 0);
   }
 
   private static calculateEarlybirdDiscountAmount(
-    earlybirdDiscountSnapshot: IEarlybirdDiscountSnapshot | null,
+    earlybirdDiscountSnapshot: EarlybirdDiscountSnapshotModel | null,
     now: Date,
   ): number {
     if (earlybirdDiscountSnapshot === null) return 0;
-    if (now < earlybirdDiscountSnapshot.earlybirdStartDate) return 0;
-    if (now > earlybirdDiscountSnapshot.earlybirdEndDate) return 0;
-    return earlybirdDiscountSnapshot.discountAmount;
+    if (now < earlybirdDiscountSnapshot.getEarlybirdStartDate()) return 0;
+    if (now > earlybirdDiscountSnapshot.getEarlybirdEndDate()) return 0;
+    return earlybirdDiscountSnapshot.getDiscountAmount();
   }
 
   private static calculateCombinationDiscountAmount(
-    combinationDiscountSnapshot: ICombinationDiscountSnapshot | null,
-    divisions: IDivision[],
+    combinationDiscountSnapshot: CombinationDiscountSnapshotModel | null,
+    divisions: DivisionModel[],
   ): number {
-    // todo!!: 더 읽기 편하게 리팩토링
     if (combinationDiscountSnapshot === null) return 0;
+
     const divisionUnits = divisions.map((division) => ({
-      weightType: typia.is<Absolute>(division.weight) ? 'ABSOLUTE' : 'WEIGHT',
-      uniformType: division.uniform,
+      weightType: typia.is<Absolute>(division.getWeight()) ? 'ABSOLUTE' : 'WEIGHT',
+      uniformType: division.getUniform(),
     }));
+
     let maxDiscountAmount = 0;
     for (const rule of combinationDiscountSnapshot.combinationDiscountRules) {
       const matched = rule.combination.every((unit) =>

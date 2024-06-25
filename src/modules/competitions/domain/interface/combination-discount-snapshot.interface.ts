@@ -3,6 +3,9 @@ import { ICombinationDiscountRule } from './combination-discount-rule.interface'
 import { ICompetition } from './competition.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface ICombinationDiscountSnapshot {
   /** UUID v7. */
   id: TId;
@@ -17,5 +20,13 @@ export interface ICombinationDiscountSnapshot {
   competitionId: ICompetition['id'];
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface ICombinationDiscountSnapshotModelData extends ICombinationDiscountSnapshot {}
+
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface ICombinationDiscountSnapshotCreateDto
   extends Pick<ICombinationDiscountSnapshot, 'combinationDiscountRules' | 'competitionId'> {}

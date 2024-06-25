@@ -1,26 +1,26 @@
 import {
-  IRequiredAdditionalInfo,
+  IRequiredAdditionalInfoModelData,
   IRequiredAdditionalInfoUpdateDto,
 } from '../interface/required-addtional-info.interface';
 
 export class RequiredAdditionalInfoModel {
-  public readonly id: IRequiredAdditionalInfo['id'];
-  public readonly type: IRequiredAdditionalInfo['type'];
-  public description: IRequiredAdditionalInfo['description'];
-  public readonly createdAt: IRequiredAdditionalInfo['createdAt'];
-  public deletedAt: IRequiredAdditionalInfo['deletedAt'];
-  public readonly competitionId: IRequiredAdditionalInfo['competitionId'];
+  private readonly id: IRequiredAdditionalInfoModelData['id'];
+  private readonly type: IRequiredAdditionalInfoModelData['type'];
+  private description: IRequiredAdditionalInfoModelData['description'];
+  private deletedAt: IRequiredAdditionalInfoModelData['deletedAt'];
+  private readonly createdAt: IRequiredAdditionalInfoModelData['createdAt'];
+  private readonly competitionId: IRequiredAdditionalInfoModelData['competitionId'];
 
-  constructor(entity: IRequiredAdditionalInfo) {
-    this.id = entity.id;
-    this.type = entity.type;
-    this.description = entity.description;
-    this.createdAt = entity.createdAt;
-    this.deletedAt = entity.deletedAt;
-    this.competitionId = entity.competitionId;
+  constructor(data: IRequiredAdditionalInfoModelData) {
+    this.id = data.id;
+    this.type = data.type;
+    this.description = data.description;
+    this.createdAt = data.createdAt;
+    this.deletedAt = data.deletedAt;
+    this.competitionId = data.competitionId;
   }
 
-  toData(): IRequiredAdditionalInfo {
+  toData(): IRequiredAdditionalInfoModelData {
     return {
       id: this.id,
       type: this.type,
@@ -29,6 +29,14 @@ export class RequiredAdditionalInfoModel {
       deletedAt: this.deletedAt,
       competitionId: this.competitionId,
     };
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getType() {
+    return this.type;
   }
 
   update(requiredAdditionalInfoUpdateDto: IRequiredAdditionalInfoUpdateDto) {

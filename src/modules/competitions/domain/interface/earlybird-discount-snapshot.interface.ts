@@ -2,6 +2,9 @@ import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IEarlybirdDiscountSnapshot {
   /**  UUID v7. */
   id: TId;
@@ -27,6 +30,14 @@ export interface IEarlybirdDiscountSnapshot {
   competitionId: ICompetition['id'];
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IEarlybirdDiscountSnapshotModelData extends IEarlybirdDiscountSnapshot {}
+
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IEarlybirdDiscountSnapshotCreateDto
   extends Pick<
     IEarlybirdDiscountSnapshot,

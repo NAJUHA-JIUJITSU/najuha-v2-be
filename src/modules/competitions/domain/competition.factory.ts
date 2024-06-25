@@ -1,27 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { ICompetition, ICompetitionCreateDto } from './interface/competition.interface';
+import { ICompetitionCreateDto, ICompetitionModelData } from './interface/competition.interface';
 import { uuidv7 } from 'uuidv7';
 import {
-  IEarlybirdDiscountSnapshot,
   IEarlybirdDiscountSnapshotCreateDto,
+  IEarlybirdDiscountSnapshotModelData,
 } from './interface/earlybird-discount-snapshot.interface';
 import {
-  ICombinationDiscountSnapshot,
   ICombinationDiscountSnapshotCreateDto,
+  ICombinationDiscountSnapshotModelData,
 } from './interface/combination-discount-snapshot.interface';
 import {
-  IRequiredAdditionalInfo,
   IRequiredAdditionalInfoCreateDto,
+  IRequiredAdditionalInfoModelData,
 } from './interface/required-addtional-info.interface';
 import {
-  ICompetitionPosterImage,
   ICompetitionPosterImageCreateDto,
+  ICompetitionPosterImageModelData,
 } from './interface/competition-poster-image.interface';
 import { IImage } from '../../images/domain/interface/image.interface';
 
 @Injectable()
 export class CompetitionFactory {
-  createCompetition(createCompetitionDto: ICompetitionCreateDto): ICompetition {
+  createCompetition(createCompetitionDto: ICompetitionCreateDto): ICompetitionModelData {
     return {
       id: uuidv7(),
       title: createCompetitionDto.title ?? 'DEFAULT TITLE',
@@ -51,7 +51,7 @@ export class CompetitionFactory {
 
   createEarlybirdDiscountSnapshot(
     earlybirdDiscountSnapshotCreateDto: IEarlybirdDiscountSnapshotCreateDto,
-  ): IEarlybirdDiscountSnapshot {
+  ): IEarlybirdDiscountSnapshotModelData {
     return {
       id: uuidv7(),
       earlybirdStartDate: earlybirdDiscountSnapshotCreateDto.earlybirdStartDate,
@@ -64,7 +64,7 @@ export class CompetitionFactory {
 
   createCombinationDiscountSnapshot(
     combinationDiscountSnapshotCreateDto: ICombinationDiscountSnapshotCreateDto,
-  ): ICombinationDiscountSnapshot {
+  ): ICombinationDiscountSnapshotModelData {
     return {
       id: uuidv7(),
       combinationDiscountRules: combinationDiscountSnapshotCreateDto.combinationDiscountRules,
@@ -75,7 +75,7 @@ export class CompetitionFactory {
 
   createCompetitionRequiredAdditionalInfo(
     requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto,
-  ): IRequiredAdditionalInfo {
+  ): IRequiredAdditionalInfoModelData {
     return {
       id: uuidv7(),
       type: requiredAdditionalInfoCreateDto.type,
@@ -87,9 +87,9 @@ export class CompetitionFactory {
   }
 
   createCompetitionPosterImage(
-    image: IImage,
     competitionPosterImageCreateDto: ICompetitionPosterImageCreateDto,
-  ): ICompetitionPosterImage {
+    image: IImage,
+  ): ICompetitionPosterImageModelData {
     return {
       id: uuidv7(),
       competitionId: competitionPosterImageCreateDto.competitionId,
@@ -100,6 +100,19 @@ export class CompetitionFactory {
         ...image,
         linkedAt: new Date(),
       },
+    };
+  }
+
+  createRequiredAdditionalInfo(
+    requiredAdditionalInfoCreateDto: IRequiredAdditionalInfoCreateDto,
+  ): IRequiredAdditionalInfoModelData {
+    return {
+      id: uuidv7(),
+      type: requiredAdditionalInfoCreateDto.type,
+      description: requiredAdditionalInfoCreateDto.description,
+      competitionId: requiredAdditionalInfoCreateDto.competitionId,
+      createdAt: new Date(),
+      deletedAt: null,
     };
   }
 }

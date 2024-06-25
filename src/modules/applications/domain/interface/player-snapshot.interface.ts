@@ -3,6 +3,9 @@ import { IApplication } from './application.interface';
 import { tags } from 'typia';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IPlayerSnapshot {
   /** UUID v7. */
   id: TId;
@@ -40,6 +43,14 @@ export interface IPlayerSnapshot {
   applicationId: IApplication['id'];
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IPlayerSnapshotModelData extends IPlayerSnapshot {}
+
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IPlayerSnapshotCreateDto
   extends Pick<
     IPlayerSnapshot,

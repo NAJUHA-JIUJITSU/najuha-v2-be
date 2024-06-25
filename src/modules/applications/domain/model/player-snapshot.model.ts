@@ -1,21 +1,21 @@
-import { IUser, IUserModelData } from '../../../users/domain/interface/user.interface';
-import { IPlayerSnapshot } from '../interface/player-snapshot.interface';
+import { IPlayerSnapshotModelData } from '../interface/player-snapshot.interface';
 import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
+import { UserModel } from '../../../users/domain/model/user.model';
 
 export class PlayerSnapshotModel {
-  public readonly id: IPlayerSnapshot['id'];
-  public readonly name: IPlayerSnapshot['name'];
-  public readonly gender: IPlayerSnapshot['gender'];
-  public readonly birth: IPlayerSnapshot['birth'];
-  public readonly phoneNumber: IPlayerSnapshot['phoneNumber'];
-  public readonly belt: IPlayerSnapshot['belt'];
-  public readonly network: IPlayerSnapshot['network'];
-  public readonly team: IPlayerSnapshot['team'];
-  public readonly masterName: IPlayerSnapshot['masterName'];
-  public readonly createdAt: IPlayerSnapshot['createdAt'];
-  public readonly applicationId: IPlayerSnapshot['applicationId'];
+  public readonly id: IPlayerSnapshotModelData['id'];
+  public readonly name: IPlayerSnapshotModelData['name'];
+  public readonly gender: IPlayerSnapshotModelData['gender'];
+  public readonly birth: IPlayerSnapshotModelData['birth'];
+  public readonly phoneNumber: IPlayerSnapshotModelData['phoneNumber'];
+  public readonly belt: IPlayerSnapshotModelData['belt'];
+  public readonly network: IPlayerSnapshotModelData['network'];
+  public readonly team: IPlayerSnapshotModelData['team'];
+  public readonly masterName: IPlayerSnapshotModelData['masterName'];
+  public readonly createdAt: IPlayerSnapshotModelData['createdAt'];
+  public readonly applicationId: IPlayerSnapshotModelData['applicationId'];
 
-  constructor(entity: IPlayerSnapshot) {
+  constructor(entity: IPlayerSnapshotModelData) {
     this.id = entity.id;
     this.name = entity.name;
     this.gender = entity.gender;
@@ -29,7 +29,7 @@ export class PlayerSnapshotModel {
     this.applicationId = entity.applicationId;
   }
 
-  toData(): IPlayerSnapshot {
+  toData(): IPlayerSnapshotModelData {
     return {
       id: this.id,
       name: this.name,
@@ -45,12 +45,12 @@ export class PlayerSnapshotModel {
     };
   }
 
-  validateSelfApplication(userEntity: IUserModelData) {
+  validateSelfApplication(user: UserModel) {
     const mismatchs: string[] = [];
-    if (this.name !== userEntity.name) mismatchs.push('name');
-    if (this.phoneNumber !== userEntity.phoneNumber) mismatchs.push('phoneNumber');
-    if (this.birth !== userEntity.birth) mismatchs.push('birth');
-    if (this.gender !== userEntity.gender) mismatchs.push('gender');
+    if (this.name !== user.getName()) mismatchs.push('name');
+    if (this.phoneNumber !== user.getPhoneNumber()) mismatchs.push('phoneNumber');
+    if (this.birth !== user.getBirth()) mismatchs.push('birth');
+    if (this.gender !== user.getGender()) mismatchs.push('gender');
     if (mismatchs.length > 0)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_SELF_APPLICATION_NOT_ALLOWED,

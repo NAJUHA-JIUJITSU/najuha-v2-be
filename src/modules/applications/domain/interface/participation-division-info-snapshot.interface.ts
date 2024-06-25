@@ -1,8 +1,10 @@
-import { IDivision } from '../../../competitions/domain/interface/division.interface';
+import { IDivision, IDivisionModelData } from '../../../competitions/domain/interface/division.interface';
 import { IParticipationDivisionInfo } from './participation-division-info.interface';
-import { tags } from 'typia';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface IParticipationDivisionInfoSnapshot {
   /** UUID v7. */
   id: TId;
@@ -18,4 +20,15 @@ export interface IParticipationDivisionInfoSnapshot {
 
   /** - Division. (참가한 부문).*/
   division: IDivision;
+}
+
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IParticipationDivisionInfoSnapshotModelData {
+  id: IParticipationDivisionInfoSnapshot['id'];
+  createdAt: IParticipationDivisionInfoSnapshot['createdAt'];
+  participationDivisionInfoId: IParticipationDivisionInfo['id'];
+  participationDivisionId: IDivision['id'];
+  division: IDivisionModelData;
 }

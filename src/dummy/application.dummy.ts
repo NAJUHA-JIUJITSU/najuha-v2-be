@@ -430,7 +430,6 @@ export class ApplicationDummyBuilder {
       playerSnapshots: [],
       participationDivisionInfos: [],
       additionalInfos: [],
-      expectedPayment: null,
     };
   }
 
@@ -474,8 +473,8 @@ export class ApplicationDummyBuilder {
   }
 
   public setParticipationDivisionInfos(competition: CompetitionModel, participationDivisionIds: string[]): this {
-    const divisions = competition.getManyDivisions(participationDivisionIds);
-    this.application.participationDivisionInfos = divisions.map((division) => {
+    const divisionModels = competition.getManyDivisions(participationDivisionIds);
+    this.application.participationDivisionInfos = divisionModels.map((division) => {
       const participationDivisionInfoId = uuidv7();
       return {
         id: participationDivisionInfoId,
@@ -483,8 +482,8 @@ export class ApplicationDummyBuilder {
         participationDivisionInfoSnapshots: [
           {
             id: uuidv7(),
-            participationDivisionId: division.id,
-            division,
+            participationDivisionId: division.getId(),
+            division: division.toData(),
             participationDivisionInfoId,
             createdAt: new Date(),
           },

@@ -1,62 +1,44 @@
-import { IApplication } from '../interface/application.interface';
+import { IApplicationModelData } from '../interface/application.interface';
 import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
-import { IUser, IUserModelData } from '../../../users/domain/interface/user.interface';
 import { AdditionalInfoModel } from './additional-info.model';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
 import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 import { IExpectedPayment } from '../interface/expected-payment.interface';
-
-export interface IApplicationModel
-  extends Pick<
-    IApplication,
-    | 'id'
-    | 'type'
-    | 'competitionId'
-    | 'userId'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'deletedAt'
-    | 'status'
-    | 'expectedPayment'
-    | 'playerSnapshots'
-    | 'participationDivisionInfos'
-    | 'additionalInfos'
-  > {}
+import { UserModel } from '../../../users/domain/model/user.model';
 
 export class ApplicationModel {
-  private readonly id: IApplication['id'];
-  private readonly type: IApplication['type'];
-  private readonly competitionId: IApplication['competitionId'];
-  private readonly userId: IApplication['userId'];
-  private readonly createdAt: IApplication['createdAt'];
-  private readonly updatedAt: IApplication['updatedAt'];
+  private readonly id: IApplicationModelData['id'];
+  private readonly type: IApplicationModelData['type'];
+  private readonly competitionId: IApplicationModelData['competitionId'];
+  private readonly userId: IApplicationModelData['userId'];
+  private readonly createdAt: IApplicationModelData['createdAt'];
+  private readonly updatedAt: IApplicationModelData['updatedAt'];
+  private status: IApplicationModelData['status'];
+  private deletedAt: IApplicationModelData['deletedAt'];
   private readonly playerSnapshots: PlayerSnapshotModel[];
   private readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
   private readonly additionaInfos: AdditionalInfoModel[];
-  private status: IApplication['status'];
-  private deletedAt: IApplication['deletedAt'];
-  private expectedPayment: IExpectedPayment | null;
+  private expectedPayment?: IExpectedPayment;
 
-  constructor(entity: IApplicationModel) {
-    this.id = entity.id;
-    this.type = entity.type;
-    this.userId = entity.userId;
-    this.competitionId = entity.competitionId;
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
-    this.deletedAt = entity.deletedAt;
-    this.status = entity.status;
-    this.playerSnapshots = entity.playerSnapshots.map((snapshot) => new PlayerSnapshotModel(snapshot));
-    this.participationDivisionInfos = entity.participationDivisionInfos.map(
+  constructor(data: IApplicationModelData) {
+    this.id = data.id;
+    this.type = data.type;
+    this.userId = data.userId;
+    this.competitionId = data.competitionId;
+    this.createdAt = data.createdAt;
+    this.updatedAt = data.updatedAt;
+    this.deletedAt = data.deletedAt;
+    this.status = data.status;
+    this.playerSnapshots = data.playerSnapshots.map((snapshot) => new PlayerSnapshotModel(snapshot));
+    this.participationDivisionInfos = data.participationDivisionInfos.map(
       (info) => new ParticipationDivisionInfoModel(info),
     );
-    this.additionaInfos = entity.additionalInfos.map((info) => new AdditionalInfoModel(info));
-    this.expectedPayment = null;
+    this.additionaInfos = data.additionalInfos.map((info) => new AdditionalInfoModel(info));
   }
 
-  toData(): IApplication {
+  toData(): IApplicationModelData {
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -94,13 +76,15 @@ export class ApplicationModel {
   }
 
   getParticipationDivisionIds() {
-    return this.participationDivisionInfos.map((info) => info.getLatestParticipationDivisionInfoSnapshot().division.id);
+    return this.participationDivisionInfos.map((info) =>
+      info.getLatestParticipationDivisionInfoSnapshot().division.getId(),
+    );
   }
 
-  validateApplicationType(userEntity: IUserModelData) {
+  validateApplicationType(user: UserModel) {
     if (this.type === 'PROXY') return;
-    const player = this.getLatestPlayerSnapshot();
-    player.validateSelfApplication(userEntity);
+    const playerSnapshot = this.getLatestPlayerSnapshot();
+    playerSnapshot.validateSelfApplication(user);
   }
 
   validateDivisionSuitability() {

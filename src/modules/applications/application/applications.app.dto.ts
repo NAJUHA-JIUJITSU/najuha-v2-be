@@ -15,6 +15,7 @@ import { IExpectedPayment } from '../domain/interface/expected-payment.interface
 export interface CreateApplicationParam {
   applicationCreateDto: IApplicationCreateDto;
 }
+
 export interface FindApplicationsParam extends TPaginationParam<IApplicationQueryOptions> {}
 
 export interface GetApplicationParam {

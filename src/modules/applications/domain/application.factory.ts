@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { IApplication, IApplicationCreateDto } from './interface/application.interface';
-import { IDivision } from '../../competitions/domain/interface/division.interface';
+import { IApplication, IApplicationCreateDto, IApplicationModelData } from './interface/application.interface';
+import { IDivisionModelData } from '../../competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
 import {
   IParticipationDivisionInfo,
+  IParticipationDivisionInfoModelData,
   IParticipationDivisionInfoUpdateDto,
 } from './interface/participation-division-info.interface';
-import { IPlayerSnapshot, IPlayerSnapshotCreateDto } from './interface/player-snapshot.interface';
-import { IParticipationDivisionInfoSnapshot } from './interface/participation-division-info-snapshot.interface';
-import { IAdditionalInfo, IAdditionalInfoCreateDto } from './interface/additional-info.interface';
+import { IPlayerSnapshotCreateDto, IPlayerSnapshotModelData } from './interface/player-snapshot.interface';
+import { IParticipationDivisionInfoSnapshotModelData } from './interface/participation-division-info-snapshot.interface';
+import { IAdditionalInfoCreateDto, IAdditionalInfoModelData } from './interface/additional-info.interface';
 import { CompetitionModel } from '../../competitions/domain/model/competition.model';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class ApplicationFactory {
       playerSnapshotCreateDto,
       additionalInfoCreateDtos,
     }: IApplicationCreateDto,
-  ): IApplication {
+  ): IApplicationModelData {
     const applicationId = uuidv7();
     const playerSnapshot = this.createPlayerSnapshot(applicationId, playerSnapshotCreateDto);
     const participationDivisionInfos = this.createParticipationDivisionInfos(
@@ -44,14 +45,13 @@ export class ApplicationFactory {
       playerSnapshots: [playerSnapshot],
       participationDivisionInfos,
       additionalInfos,
-      expectedPayment: null,
     };
   }
 
   createPlayerSnapshot(
     applicationId: IApplication['id'],
     playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
-  ): IPlayerSnapshot {
+  ): IPlayerSnapshotModelData {
     return {
       id: uuidv7(),
       applicationId,
@@ -71,13 +71,13 @@ export class ApplicationFactory {
     applicationId: IApplication['id'],
     competition: CompetitionModel,
     participationDivisionIds: IParticipationDivisionInfo['id'][],
-  ): IParticipationDivisionInfo[] {
+  ): IParticipationDivisionInfoModelData[] {
     const divisions = competition.getManyDivisions(participationDivisionIds);
     return divisions.map((division) => {
       const participationDivisionInfoId = uuidv7();
       const participationDivisionInfosSnapshot = this.createParticipationDivisionInfoSnapshot(
         participationDivisionInfoId,
-        division,
+        division.toData(),
       );
       return {
         id: participationDivisionInfoId,
@@ -90,8 +90,8 @@ export class ApplicationFactory {
 
   createParticipationDivisionInfoSnapshot(
     participationDivisionInfoId: IParticipationDivisionInfo['id'],
-    division: IDivision,
-  ): IParticipationDivisionInfoSnapshot {
+    division: IDivisionModelData,
+  ): IParticipationDivisionInfoSnapshotModelData {
     return {
       id: uuidv7(),
       participationDivisionId: division.id,
@@ -104,12 +104,12 @@ export class ApplicationFactory {
   createManyParticipationDivisionInfoSnapshots(
     competition: CompetitionModel,
     participationDivisionInfoUpdateDtos: IParticipationDivisionInfoUpdateDto[],
-  ): IParticipationDivisionInfoSnapshot[] {
+  ): IParticipationDivisionInfoSnapshotModelData[] {
     return participationDivisionInfoUpdateDtos.map((updateParticipationDivisionInfoDto) => {
       const division = competition.getDivision(updateParticipationDivisionInfoDto.newParticipationDivisionId);
       return this.createParticipationDivisionInfoSnapshot(
         updateParticipationDivisionInfoDto.participationDivisionInfoId,
-        division,
+        division.toData(),
       );
     });
   }
@@ -117,7 +117,7 @@ export class ApplicationFactory {
   createAdditionalInfos(
     applicationId: IApplication['id'],
     additionalInfoCreateDtos: IAdditionalInfoCreateDto[],
-  ): IAdditionalInfo[] {
+  ): IAdditionalInfoModelData[] {
     return additionalInfoCreateDtos.map((additionalInfoCreateDto) => {
       return {
         id: uuidv7(),

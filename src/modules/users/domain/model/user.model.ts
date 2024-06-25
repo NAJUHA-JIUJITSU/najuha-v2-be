@@ -60,6 +60,22 @@ export class UserModel {
     return this.id;
   }
 
+  getName() {
+    return this.name;
+  }
+
+  getPhoneNumber() {
+    return this.phoneNumber;
+  }
+
+  getGender() {
+    return this.gender;
+  }
+
+  getBirth() {
+    return this.birth;
+  }
+
   updateProfile(dto: IUserUpdateDto) {
     if (dto.name) this.name = dto.name;
     if (dto.nickname) this.nickname = dto.nickname;

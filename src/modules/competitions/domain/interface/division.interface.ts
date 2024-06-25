@@ -1,8 +1,11 @@
 import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
-import { IPriceSnapshot } from './price-snapshot.interface';
+import { IPriceSnapshot, IPriceSnapshotModelData } from './price-snapshot.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
 export interface IDivision {
   /** UUID v7. */
   id: TId;
@@ -43,7 +46,7 @@ export interface IDivision {
    * - ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)
    * - INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)
    */
-  status: 'ACTIVE' | 'INACTIVE';
+  status: TDivisionStatus;
 
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
@@ -58,6 +61,44 @@ export interface IDivision {
   priceSnapshots: IPriceSnapshot[] & tags.MinItems<1>;
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface IDivisionModelData {
+  id: IDivision['id'];
+  category: IDivision['category'];
+  uniform: IDivision['uniform'];
+  gender: IDivision['gender'];
+  belt: IDivision['belt'];
+  weight: IDivision['weight'];
+  birthYearRangeStart: IDivision['birthYearRangeStart'];
+  birthYearRangeEnd: IDivision['birthYearRangeEnd'];
+  status: IDivision['status'];
+  createdAt: IDivision['createdAt'];
+  updatedAt: IDivision['updatedAt'];
+  competitionId: IDivision['competitionId'];
+  priceSnapshots: IPriceSnapshotModelData[];
+}
+
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
+export interface IDivisionCreateDto
+  extends Pick<
+    IDivision,
+    | 'category'
+    | 'uniform'
+    | 'gender'
+    | 'belt'
+    | 'weight'
+    | 'birthYearRangeStart'
+    | 'birthYearRangeEnd'
+    | 'competitionId'
+  > {}
+
+// ----------------------------------------------------------------------------
+// Custom Types
+// ----------------------------------------------------------------------------
 /**
  * 일반 체급 타입.
  * - ex) '-45', '+45', '-60.5', '+60.5'
@@ -69,3 +110,8 @@ export type Weight = string & tags.Pattern<'^[-+]\\d{1,3}(\\.\\d{1,2})?$'>;
  * - ex) '-45_ABSOLUTE', '+45_ABSOLUTE', '-60.5_ABSOLUTE', '+60.5_ABSOLUTE', 'ABSOLUTE'
  */
 export type Absolute = string & tags.Pattern<'^[-+]\\d{1,3}(\\.\\d{1,2})?_ABSOLUTE$|^ABSOLUTE$'>;
+
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
+export type TDivisionStatus = 'ACTIVE' | 'INACTIVE';

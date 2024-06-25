@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CompetitionEntity } from '../entity/competition/competition.entity';
-import { FindCompetitionsParam, GetCompetitionParam } from '../../modules/competitions/application/competitions.app.dto';
+import {
+  FindCompetitionsParam,
+  GetCompetitionParam,
+} from '../../modules/competitions/application/competitions.app.dto';
+import { BusinessException, CommonErrors } from '../../common/response/errorResponse';
 
 @Injectable()
 export class CompetitionRepository extends Repository<CompetitionEntity> {
@@ -116,6 +120,9 @@ export class CompetitionRepository extends Repository<CompetitionEntity> {
     }
 
     const competition = await qb.where('competition.id = :competitionId', { competitionId }).getOne();
+
+    if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+
     return competition;
   }
 }

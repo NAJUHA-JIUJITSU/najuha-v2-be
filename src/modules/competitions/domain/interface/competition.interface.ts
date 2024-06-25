@@ -1,13 +1,22 @@
 import { tags } from 'typia';
-import { ICombinationDiscountSnapshot } from './combination-discount-snapshot.interface';
-import { IDivision } from './division.interface';
-import { IEarlybirdDiscountSnapshot } from './earlybird-discount-snapshot.interface';
-import { IRequiredAdditionalInfo } from './required-addtional-info.interface';
+import {
+  ICombinationDiscountSnapshot,
+  ICombinationDiscountSnapshotModelData,
+} from './combination-discount-snapshot.interface';
+import { IDivision, IDivisionModelData } from './division.interface';
+import {
+  IEarlybirdDiscountSnapshot,
+  IEarlybirdDiscountSnapshotModelData,
+} from './earlybird-discount-snapshot.interface';
+import { IRequiredAdditionalInfo, IRequiredAdditionalInfoModelData } from './required-addtional-info.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
-import { ICompetitionHostMap } from './competition-host-map.interface';
+import { ICompetitionHostMap, ICompetitionHostMapModelData } from './competition-host-map.interface';
 import { IUser } from '../../../users/domain/interface/user.interface';
-import { ICompetitionPosterImage } from './competition-poster-image.interface';
+import { ICompetitionPosterImage, ICompetitionPosterImageModelData } from './competition-poster-image.interface';
 
+// ----------------------------------------------------------------------------
+// Base Interface
+// ----------------------------------------------------------------------------
 export interface ICompetition {
   /** UUID v7. */
   id: TId;
@@ -96,6 +105,38 @@ export interface ICompetition {
   competitionPosterImages: ICompetitionPosterImage[];
 }
 
+// ----------------------------------------------------------------------------
+// Model Data
+// ----------------------------------------------------------------------------
+export interface ICompetitionModelData {
+  id: ICompetition['id'];
+  title: ICompetition['title'];
+  address: ICompetition['address'];
+  competitionDate: ICompetition['competitionDate'];
+  registrationStartDate: ICompetition['registrationStartDate'];
+  registrationEndDate: ICompetition['registrationEndDate'];
+  refundDeadlineDate: ICompetition['refundDeadlineDate'];
+  soloRegistrationAdjustmentStartDate: ICompetition['soloRegistrationAdjustmentStartDate'];
+  soloRegistrationAdjustmentEndDate: ICompetition['soloRegistrationAdjustmentEndDate'];
+  registrationListOpenDate: ICompetition['registrationListOpenDate'];
+  bracketOpenDate: ICompetition['bracketOpenDate'];
+  description: ICompetition['description'];
+  isPartnership: ICompetition['isPartnership'];
+  viewCount: ICompetition['viewCount'];
+  status: ICompetition['status'];
+  createdAt: ICompetition['createdAt'];
+  updatedAt: ICompetition['updatedAt'];
+  divisions?: IDivisionModelData[];
+  earlybirdDiscountSnapshots?: IEarlybirdDiscountSnapshotModelData[];
+  combinationDiscountSnapshots?: ICombinationDiscountSnapshotModelData[];
+  requiredAdditionalInfos?: IRequiredAdditionalInfoModelData[];
+  competitionHostMaps?: ICompetitionHostMapModelData[];
+  competitionPosterImages?: ICompetitionPosterImageModelData[];
+}
+
+// ----------------------------------------------------------------------------
+// Return Interface
+// ----------------------------------------------------------------------------
 export interface ICompetitionBasicInfo
   extends Omit<
     ICompetition,
@@ -110,6 +151,9 @@ export interface ICompetitionSummary
 
 export interface ICompetitionDetail extends ICompetition {}
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface ICompetitionCreateDto
   extends Partial<
     Pick<
@@ -149,6 +193,9 @@ export interface ICompetitionUpdateDto
     >
   > {}
 
+// ----------------------------------------------------------------------------
+// Query Options
+// ----------------------------------------------------------------------------
 export interface ICompetitionQueryOptions {
   /**
    * 대회 주최자 ID.
@@ -190,6 +237,9 @@ export interface ICompetitionQueryOptions {
   status?: TCompetitionStatus;
 }
 
+// ----------------------------------------------------------------------------
+// Enum
+// ----------------------------------------------------------------------------
 export type TCompetitionSortOption = '일자순' | '조회순' | '마감임박순';
 
 export type TCompetitionLocationFilter =
