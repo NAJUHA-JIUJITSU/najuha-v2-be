@@ -1,5 +1,4 @@
-import { uuidv7 } from 'uuidv7';
-import { IPostSnapshotImageCreateDto, IPostSnapshotImageModleData } from '../interface/post-snapshot-image.interface';
+import { IPostSnapshotImageModleData } from '../interface/post-snapshot-image.interface';
 import { ImageModel } from '../../../images/domain/model/image.model';
 
 export class PostSnapshotImageModel {
@@ -8,17 +7,7 @@ export class PostSnapshotImageModel {
   private readonly imageId: IPostSnapshotImageModleData['imageId'];
   private readonly sequence: IPostSnapshotImageModleData['sequence'];
   private readonly createdAt: IPostSnapshotImageModleData['createdAt'];
-  private image?: ImageModel;
-
-  static create(dto: IPostSnapshotImageCreateDto) {
-    return new PostSnapshotImageModel({
-      id: uuidv7(),
-      postSnapshotId: dto.postSnapshotId,
-      imageId: dto.imageId,
-      sequence: dto.sequence,
-      createdAt: new Date(),
-    });
-  }
+  private image: ImageModel;
 
   constructor(data: IPostSnapshotImageModleData) {
     this.id = data.id;

@@ -1,5 +1,4 @@
-import { uuidv7 } from 'uuidv7';
-import { IPostReportCreateDto, IPostReportModelData } from '../interface/post-report.interface';
+import { IPostReportModelData } from '../interface/post-report.interface';
 
 export class PostReportModel {
   public readonly id: IPostReportModelData['id'];
@@ -9,18 +8,6 @@ export class PostReportModel {
   public readonly postId: IPostReportModelData['postId'];
   public readonly userId: IPostReportModelData['userId'];
   public readonly createdAt: IPostReportModelData['createdAt'];
-
-  static create(dto: IPostReportCreateDto): PostReportModel {
-    return new PostReportModel({
-      id: uuidv7(),
-      type: dto.type,
-      status: 'ACCEPTED',
-      reason: dto.reason,
-      postId: dto.postId,
-      userId: dto.userId,
-      createdAt: new Date(),
-    });
-  }
 
   constructor(data: IPostReportModelData) {
     this.id = data.id;

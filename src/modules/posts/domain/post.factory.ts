@@ -1,59 +1,89 @@
 import { Injectable } from '@nestjs/common';
-import { IPostLike, IPostLikeCreateDto } from './interface/post-like.interface';
-import { IPostReportCreateDto } from './interface/post-report.interface';
-import { PostModel } from './model/post.model';
-import { PostSnapshotModel } from './model/post-snapshot.model';
-import { PostSnapshotImageModel } from './model/post-snapshot-image.model';
-import { PostLikeModel } from './model/post-like.model';
-import { PostReportModel } from './model/post-report.model';
-import { CreatePostParam, UpdatePostParam } from '../application/posts.app.dto';
+import { uuidv7 } from 'uuidv7';
+import { IPostCreateDto, IPostModelData } from './interface/post.interface';
+import { IPostSnapshotCreateDto, IPostSnapshotModelData } from './interface/post-snapshot.interface';
+import { IPostLikeCreateDto, IPostLikeModelData } from './interface/post-like.interface';
+import { IPostReportCreateDto, IPostReportModelData } from './interface/post-report.interface';
 import { IImageModelData } from '../../images/domain/interface/image.interface';
-import { ImageModel } from '../../images/domain/model/image.model';
+import { IPostSnapshotImageCreateDto, IPostSnapshotImageModleData } from './interface/post-snapshot-image.interface';
 import { IUserModelData } from '../../users/domain/interface/user.interface';
-import { UserModel } from '../../users/domain/model/user.model';
 
 @Injectable()
 export class PostFactory {
   createPost(
-    { userId, category, title, body }: CreatePostParam,
+    { userId, category, title, body }: IPostCreateDto,
     user: IUserModelData,
     images?: IImageModelData[],
-  ): PostModel {
-    const postModel = PostModel.create({ userId, category });
-    const postSnapshotModel = PostSnapshotModel.create({ postId: postModel.id, title, body });
-    const postSnapshotImageModels =
-      images?.map((image, index) => {
-        const postSnapshotImage = PostSnapshotImageModel.create({
-          postSnapshotId: postSnapshotModel.id,
-          imageId: image.id,
-          sequence: index,
-        });
-        const imageModel = new ImageModel(image);
-        postSnapshotImage.setImage(imageModel);
-        return postSnapshotImage;
-      }) || [];
-    const userModels = new UserModel(user);
-    postSnapshotModel.addPostSnapshotImages(postSnapshotImageModels);
-    postModel.addPostSnapshot(postSnapshotModel);
-    postModel.setUser(userModels);
-    return postModel;
+  ): IPostModelData {
+    const postId = uuidv7();
+    const postSnapshot = this.createPostSnapshot({ postId, title, body }, images);
+    return {
+      id: postId,
+      userId,
+      viewCount: 0,
+      status: 'ACTIVE',
+      category,
+      createdAt: new Date(),
+      deletedAt: null,
+      postSnapshots: [postSnapshot],
+      user,
+    };
   }
 
-  createPostSnapshot({ postId, title, body, imageIds }: UpdatePostParam): PostSnapshotModel {
-    const postSnapshotModel = PostSnapshotModel.create({ postId, title, body });
-    const postSnapshotImageModels =
-      imageIds?.map((imageId, index) =>
-        PostSnapshotImageModel.create({ postSnapshotId: postSnapshotModel.id, imageId, sequence: index }),
+  createPostSnapshot(
+    { postId, title, body }: IPostSnapshotCreateDto,
+    images?: IImageModelData[],
+  ): IPostSnapshotModelData {
+    const postSnapshotId = uuidv7();
+    const postSnapshotImages =
+      images?.map((image, index) =>
+        this.createPostSnapshotImage({ postSnapshotId, imageId: image.id, sequence: index }, image),
       ) || [];
-    postSnapshotModel.addPostSnapshotImages(postSnapshotImageModels);
-    return postSnapshotModel;
+    return {
+      id: postSnapshotId,
+      postId,
+      title,
+      body,
+      createdAt: new Date(),
+      postSnapshotImages: postSnapshotImages,
+    };
   }
 
-  createPostLike({ userId, postId }: IPostLikeCreateDto): IPostLike {
-    return PostLikeModel.create({ userId, postId });
+  createPostSnapshotImage(
+    { postSnapshotId, imageId, sequence }: IPostSnapshotImageCreateDto,
+    image: IImageModelData,
+  ): IPostSnapshotImageModleData {
+    return {
+      id: uuidv7(),
+      postSnapshotId,
+      imageId,
+      sequence,
+      createdAt: new Date(),
+      image: {
+        ...image,
+        linkedAt: new Date(),
+      },
+    };
   }
 
-  createPostReport({ type, reason, userId, postId }: IPostReportCreateDto): PostReportModel {
-    return PostReportModel.create({ type, reason, userId, postId });
+  createPostLike({ userId, postId }: IPostLikeCreateDto): IPostLikeModelData {
+    return {
+      id: uuidv7(),
+      userId,
+      postId,
+      createdAt: new Date(),
+    };
+  }
+
+  createPostReport({ type, reason, userId, postId }: IPostReportCreateDto): IPostReportModelData {
+    return {
+      id: uuidv7(),
+      type,
+      status: 'ACCEPTED',
+      reason,
+      userId,
+      postId,
+      createdAt: new Date(),
+    };
   }
 }

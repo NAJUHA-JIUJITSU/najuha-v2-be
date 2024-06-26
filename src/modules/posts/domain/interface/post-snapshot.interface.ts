@@ -35,7 +35,7 @@ export interface IPostSnapshotModelData {
   title: IPostSnapshot['title'];
   body: IPostSnapshot['body'];
   createdAt: IPostSnapshot['createdAt'];
-  postSnapshotImages?: IPostSnapshotImageModleData[];
+  postSnapshotImages: IPostSnapshotImageModleData[];
 }
 
 // ----------------------------------------------------------------------------

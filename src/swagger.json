@@ -8880,8 +8880,7 @@
           "createdAt",
           "updatedAt",
           "profileImages"
-        ],
-        "description": "각 snsAuthProvider 마다 제공되는 정보.\n- kakao  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- naver  : snsId, email, name, phoneNumber, gender, birthday, birthyear.\n- google : snsId, email, name.\n- apple  : snsId, email, name."
+        ]
       },
       "IUserProfileImage": {
         "type": "object",
@@ -8984,8 +8983,7 @@
           "createdAt",
           "linkedAt",
           "userId"
-        ],
-        "description": "Image Interface"
+        ]
       },
       "TImagePath": {
         "type": "string",
@@ -9170,13 +9168,7 @@
             "description": "CreatedAt."
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "ADVERTISEMENT",
-              "PRIVACY",
-              "REFUND",
-              "TERMS_OF_SERVICE"
-            ],
+            "$ref": "#/components/schemas/TPolicyType",
             "title": "약관의 종류",
             "description": "약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
@@ -9209,6 +9201,15 @@
           "title"
         ]
       },
+      "TPolicyType": {
+        "type": "string",
+        "enum": [
+          "TERMS_OF_SERVICE",
+          "PRIVACY",
+          "REFUND",
+          "ADVERTISEMENT"
+        ]
+      },
       "ResponseFormGetPolicyRes": {
         "type": "object",
         "properties": {
@@ -9239,7 +9240,7 @@
         "type": "object",
         "properties": {
           "policy": {
-            "$ref": "#/components/schemas/IPolicy"
+            "$ref": "#/components/schemas/IPolicyDetail"
           }
         },
         "nullable": false,
@@ -9247,7 +9248,7 @@
           "policy"
         ]
       },
-      "IPolicy": {
+      "IPolicyDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -9262,13 +9263,7 @@
             "description": "약관의 버전."
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "ADVERTISEMENT",
-              "PRIVACY",
-              "REFUND",
-              "TERMS_OF_SERVICE"
-            ],
+            "$ref": "#/components/schemas/TPolicyType",
             "title": "약관의 종류",
             "description": "약관의 종류.\n- TERMS_OF_SERVICE: 서비스 이용 약관.\n- PRIVACY: 개인정보 처리 방침.\n- REFUND: 환불 정책.\n- ADVERTISEMENT: 광고정책."
           },
@@ -9305,8 +9300,7 @@
           "title",
           "content",
           "createdAt"
-        ],
-        "description": "약관.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
+        ]
       },
       "CreatePolicyReqBody": {
         "type": "object",
@@ -9379,7 +9373,7 @@
         "type": "object",
         "properties": {
           "policy": {
-            "$ref": "#/components/schemas/IPolicy"
+            "$ref": "#/components/schemas/IPolicyDetail"
           }
         },
         "nullable": false,
@@ -10247,11 +10241,7 @@
             "description": "출생년도 범위 끝. YYYY."
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
+            "$ref": "#/components/schemas/TDivisionStatus",
             "title": "활성 상태",
             "description": "활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
           },
@@ -10306,6 +10296,13 @@
         "type": "string",
         "pattern": "^[-+]\\d{1,3}(\\.\\d{1,2})?_ABSOLUTE$|^ABSOLUTE$",
         "description": "앱솔루트 체급 타입.\n- ex) '-45_ABSOLUTE', '+45_ABSOLUTE', '-60.5_ABSOLUTE', '+60.5_ABSOLUTE', 'ABSOLUTE'"
+      },
+      "TDivisionStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE"
+        ]
       },
       "IPriceSnapshot": {
         "type": "object",
@@ -11944,7 +11941,7 @@
             "description": "Addtional infos"
           },
           "expectedPayment": {
-            "$ref": "#/components/schemas/IExpectedPayment.Nullable",
+            "$ref": "#/components/schemas/IExpectedPayment",
             "title": "Expected payment",
             "description": "Expected payment.\nREADY 상태일 때만 조회결과에 포함됩니다."
           }
@@ -11961,8 +11958,7 @@
           "userId",
           "playerSnapshots",
           "participationDivisionInfos",
-          "additionalInfos",
-          "expectedPayment"
+          "additionalInfos"
         ]
       },
       "TApplicationType": {
@@ -12199,7 +12195,7 @@
           "applicationId"
         ]
       },
-      "IExpectedPayment.Nullable": {
+      "IExpectedPayment": {
         "type": "object",
         "properties": {
           "normalAmount": {
@@ -12219,7 +12215,7 @@
             "minimum": 0
           }
         },
-        "nullable": true,
+        "nullable": false,
         "required": [
           "normalAmount",
           "earlybirdDiscountAmount",
@@ -12485,34 +12481,6 @@
         "nullable": false,
         "required": [
           "expectedPayment"
-        ]
-      },
-      "IExpectedPayment": {
-        "type": "object",
-        "properties": {
-          "normalAmount": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "earlybirdDiscountAmount": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "combinationDiscountAmount": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "totalAmount": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        "nullable": false,
-        "required": [
-          "normalAmount",
-          "earlybirdDiscountAmount",
-          "combinationDiscountAmount",
-          "totalAmount"
         ]
       },
       "FindApplicationsQuery": {

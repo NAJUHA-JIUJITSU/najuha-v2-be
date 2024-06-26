@@ -21,19 +21,6 @@ export class PostModel {
   private reports?: PostReportModel[];
   private user?: UserModel;
 
-  static create(dto: IPostCreateDto) {
-    return new PostModel({
-      id: uuidv7(),
-      userId: dto.userId,
-      viewCount: 0,
-      status: 'ACTIVE',
-      category: dto.category,
-      createdAt: new Date(),
-      deletedAt: null,
-      postSnapshots: [],
-    });
-  }
-
   constructor(data: IPostModelData) {
     this.id = data.id;
     this.userId = data.userId;

@@ -1,23 +1,27 @@
 import { ITemporaryUser, ITemporaryUserCreateDto } from '../domain/interface/temporary-user.interface';
 import { IUserProfileImageCreateDto } from '../domain/interface/user-profile-image.interface';
-import { IUser, IUserDetail, IUserUpdateDto } from '../domain/interface/user.interface';
+import { IUser, IUserUpdateDto } from '../domain/interface/user.interface';
 
 // ---------------------------------------------------------------------------
 // usersAppService Param
 // ---------------------------------------------------------------------------
-export interface CreateUserParam extends ITemporaryUserCreateDto {}
+export interface CreateUserParam {
+  userCreateDto: ITemporaryUserCreateDto;
+}
 
-export interface UpdateUserParam extends IUserUpdateDto {
-  userId: IUser['id'];
+export interface UpdateUserParam {
+  userUpdateDto: IUserUpdateDto;
 }
 
 export interface GetMeParam {
   userId: IUser['id'];
 }
 
-export interface CreateUserProfileImageParam extends IUserProfileImageCreateDto {}
+export interface CreateUserProfileImageParam {
+  userProfileImageCreateDto: IUserProfileImageCreateDto;
+}
 
-export interface DeleteProfileImage {
+export interface DeleteProfileImageParam {
   userId: IUser['id'];
 }
 
@@ -29,13 +33,13 @@ export interface CreateUserRet {
 }
 
 export interface UpdateUserRet {
-  user: IUserDetail;
+  user: IUser;
 }
 
 export interface GetMeRet {
-  user: IUserDetail;
+  user: IUser;
 }
 
 export interface CreateUserProfileImageRet {
-  user: IUserDetail;
+  user: IUser;
 }

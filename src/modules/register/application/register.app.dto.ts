@@ -26,8 +26,8 @@ export interface ConfirmAuthCodeParam {
   authCode: PhoneNumberAuthCode;
 }
 
-export interface RegisterUserParam extends Pick<IUserRgistertDto, 'nickname' | 'gender' | 'belt' | 'birth'> {
-  userId: IUser['id'];
+export interface RegisterUserParam {
+  userRegisterDto: IUserRgistertDto;
   /** 유저가 동의한 정책 타입. */
   consentPolicyTypes: IPolicy['type'][];
 }

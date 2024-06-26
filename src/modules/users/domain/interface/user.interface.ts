@@ -103,4 +103,6 @@ export interface IUserPublicProfile extends Pick<IUser, 'id' | 'role' | 'nicknam
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------
-export interface IUserUpdateDto extends Partial<Pick<IUser, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>> {}
+export interface IUserUpdateDto
+  extends Pick<IUser, 'id'>,
+    Partial<Pick<IUser, 'name' | 'nickname' | 'gender' | 'belt' | 'birth'>> {}

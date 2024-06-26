@@ -1,5 +1,4 @@
-import { uuidv7 } from 'uuidv7';
-import { IPostSnapshotCreateDto, IPostSnapshotModelData } from '../interface/post-snapshot.interface';
+import { IPostSnapshotModelData } from '../interface/post-snapshot.interface';
 import { PostSnapshotImageModel } from './post-snapshot-image.model';
 
 export class PostSnapshotModel {
@@ -8,18 +7,7 @@ export class PostSnapshotModel {
   private readonly title: IPostSnapshotModelData['title'];
   private readonly body: IPostSnapshotModelData['body'];
   private readonly createdAt: IPostSnapshotModelData['createdAt'];
-  private postSnapshotImages?: PostSnapshotImageModel[];
-
-  static create(dto: IPostSnapshotCreateDto) {
-    return new PostSnapshotModel({
-      id: uuidv7(),
-      postId: dto.postId,
-      title: dto.title,
-      body: dto.body,
-      createdAt: new Date(),
-      postSnapshotImages: [],
-    });
-  }
+  private postSnapshotImages: PostSnapshotImageModel[];
 
   constructor(data: IPostSnapshotModelData) {
     this.id = data.id;
@@ -37,7 +25,7 @@ export class PostSnapshotModel {
       title: this.title,
       body: this.body,
       createdAt: this.createdAt,
-      postSnapshotImages: this.postSnapshotImages?.map((postSnapshotImage) => postSnapshotImage.toData()),
+      postSnapshotImages: this.postSnapshotImages.map((postSnapshotImage) => postSnapshotImage.toData()),
     };
   }
 

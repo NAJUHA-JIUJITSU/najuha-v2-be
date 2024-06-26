@@ -1,5 +1,4 @@
-import { uuidv7 } from 'uuidv7';
-import { ICommentReportCreateDto, ICommentReportModelData } from '../interface/comment-report.interface';
+import { ICommentReportModelData } from '../interface/comment-report.interface';
 
 export class CommentReportModel {
   public readonly id: ICommentReportModelData['id'];
@@ -9,18 +8,6 @@ export class CommentReportModel {
   public readonly commentId: ICommentReportModelData['commentId'];
   public readonly userId: ICommentReportModelData['userId'];
   public readonly createdAt: ICommentReportModelData['createdAt'];
-
-  static create(dto: ICommentReportCreateDto): CommentReportModel {
-    return new CommentReportModel({
-      id: uuidv7(),
-      type: dto.type,
-      status: 'ACCEPTED',
-      reason: dto.reason,
-      commentId: dto.commentId,
-      userId: dto.userId,
-      createdAt: new Date(),
-    });
-  }
 
   constructor(data: ICommentReportModelData) {
     this.id = data.id;

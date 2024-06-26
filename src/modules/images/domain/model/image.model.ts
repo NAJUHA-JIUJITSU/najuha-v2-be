@@ -1,5 +1,4 @@
-import { uuidv7 } from 'uuidv7';
-import { IImageCreateDto, IImageModelData } from '../interface/image.interface';
+import { IImageModelData } from '../interface/image.interface';
 
 export class ImageModel {
   private readonly id: IImageModelData['id'];
@@ -8,17 +7,6 @@ export class ImageModel {
   private readonly createdAt: IImageModelData['createdAt'];
   private readonly linkedAt: IImageModelData['linkedAt'];
   private readonly userId: IImageModelData['userId'];
-
-  static create(dto: IImageCreateDto) {
-    return new ImageModel({
-      id: uuidv7(),
-      path: dto.path,
-      format: dto.format,
-      userId: dto.userId,
-      createdAt: new Date(),
-      linkedAt: null,
-    });
-  }
 
   constructor(data: IImageModelData) {
     this.id = data.id;

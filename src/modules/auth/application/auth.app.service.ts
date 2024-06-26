@@ -12,8 +12,8 @@ import {
   SnsLoginRet,
 } from './auth.app.dto';
 import { UserRepository } from '../../../database/custom-repository/user.repository';
-import { TemporaryUserModel } from '../../users/domain/model/temporary-user.model';
 import { TemporaryUserRepository } from '../../../database/custom-repository/temporary-user.repository';
+import { UserFactory } from '../../users/domain/user.factory';
 
 @Injectable()
 export class AuthAppService {
@@ -22,6 +22,7 @@ export class AuthAppService {
     private readonly AuthTokenDomainService: AuthTokenDomainService,
     private readonly userRepository: UserRepository,
     private readonly temporaryUserRepository: TemporaryUserRepository,
+    private readonly userFactory: UserFactory,
   ) {}
 
   async snsLogin(snsLoginParam: SnsLoginParam): Promise<SnsLoginRet> {
@@ -51,12 +52,12 @@ export class AuthAppService {
       };
     }
     // 최초 로그인
-    const newTemporaryUser = TemporaryUserModel.create(validatedUserData);
-    await this.temporaryUserRepository.save(newTemporaryUser.toData());
+    const newTemporaryUserModelData = this.userFactory.createTemporaryUser(validatedUserData);
+    await this.temporaryUserRepository.save(newTemporaryUserModelData);
     return {
       authTokens: await this.AuthTokenDomainService.createAuthTokens({
-        userId: newTemporaryUser.getId(),
-        userRole: newTemporaryUser.getRole(),
+        userId: newTemporaryUserModelData.id,
+        userRole: newTemporaryUserModelData.role,
       }),
     };
   }

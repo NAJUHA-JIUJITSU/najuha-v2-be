@@ -40,7 +40,7 @@ export interface IPostSnapshotImageModleData {
   imageId: IPostSnapshotImage['imageId'];
   sequence: IPostSnapshotImage['sequence'];
   createdAt: IPostSnapshotImage['createdAt'];
-  image?: IImageModelData;
+  image: IImageModelData;
 }
 
 // ----------------------------------------------------------------------------

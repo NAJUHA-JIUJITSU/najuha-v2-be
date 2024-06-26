@@ -1,68 +1,72 @@
 import { Injectable } from '@nestjs/common';
-import { ICommentSnapshotCreateDto } from './interface/comment-snapshot.interface';
-import { ICommentLikeCreateDto } from './interface/comment-like.interface';
-import { ICommentReportCreateDto } from './interface/comment-report.interface';
-import { CommentModel } from './model/comment.model';
-import { CommentSnapshotModel } from './model/comment-snapshot.model';
-import { CommentLikeModel } from './model/comment-like.model';
-import { CommentReportModel } from './model/comment-report.model';
-import { CreateCommentParam, CreateCommentReplyParam } from '../application/comments.app.dto';
+import { uuidv7 } from 'uuidv7';
+import { ICommentCreateDto, ICommentModelData, ICommentReplyCreateDto } from './interface/comment.interface';
+import { ICommentSnapshotCreateDto, ICommentSnapshotModelData } from './interface/comment-snapshot.interface';
+import { ICommentLikeCreateDto, ICommentLikeModelData } from './interface/comment-like.interface';
+import { ICommentReportCreateDto, ICommentReportModelData } from './interface/comment-report.interface';
 import { IUserModelData } from '../../users/domain/interface/user.interface';
-import { UserModel } from '../../users/domain/model/user.model';
 
 @Injectable()
 export class CommentFactory {
-  createComment(commentCreateParam: CreateCommentParam, user: IUserModelData): CommentModel {
-    const commentModel = CommentModel.createComment({
-      userId: commentCreateParam.userId,
-      postId: commentCreateParam.postId,
-    });
-    const commentSnapshotModel = CommentSnapshotModel.create({
-      commentId: commentModel.id,
-      body: commentCreateParam.body,
-    });
-    const userModel = new UserModel(user);
-    commentModel.addCommentSnapshot(commentSnapshotModel);
-    commentModel.setUser(userModel);
-    return commentModel;
+  createComment(commentCreateDto: ICommentCreateDto, user: IUserModelData): ICommentModelData {
+    const commentId = uuidv7();
+    const commentSnapshot = this.createCommentSnapshot({ commentId, body: commentCreateDto.body });
+    return {
+      id: commentId,
+      userId: commentCreateDto.userId,
+      parentId: null,
+      status: 'ACTIVE',
+      createdAt: new Date(),
+      deletedAt: null,
+      postId: commentCreateDto.postId,
+      commentSnapshots: [commentSnapshot],
+      user,
+    };
   }
 
-  createCommentReply(commentReplyCreateDto: CreateCommentReplyParam, user: IUserModelData): CommentModel {
-    const commentModel = CommentModel.createReply({
+  createCommentReply(commentReplyCreateDto: ICommentReplyCreateDto, user: IUserModelData): ICommentModelData {
+    const commentId = uuidv7();
+    const commentSnapshot = this.createCommentSnapshot({ commentId, body: commentReplyCreateDto.body });
+    return {
+      id: commentId,
       userId: commentReplyCreateDto.userId,
-      postId: commentReplyCreateDto.postId,
       parentId: commentReplyCreateDto.parentId,
-    });
-    const commentSnapshotModel = CommentSnapshotModel.create({
-      commentId: commentModel.id,
-      body: commentReplyCreateDto.body,
-    });
-    const userModel = new UserModel(user);
-    commentModel.addCommentSnapshot(commentSnapshotModel);
-    commentModel.setUser(userModel);
-    return commentModel;
+      status: 'ACTIVE',
+      createdAt: new Date(),
+      deletedAt: null,
+      postId: commentReplyCreateDto.postId,
+      commentSnapshots: [commentSnapshot],
+      user,
+    };
   }
 
-  createCommentSnapshot(commentSnapshotCreateDto: ICommentSnapshotCreateDto): CommentSnapshotModel {
-    return CommentSnapshotModel.create({
-      commentId: commentSnapshotCreateDto.commentId,
-      body: commentSnapshotCreateDto.body,
-    });
+  createCommentSnapshot({ commentId, body }: ICommentSnapshotCreateDto): ICommentSnapshotModelData {
+    return {
+      id: uuidv7(),
+      commentId,
+      body,
+      createdAt: new Date(),
+    };
   }
 
-  createCommentLike({ commentId, userId }: ICommentLikeCreateDto): CommentLikeModel {
-    return CommentLikeModel.create({
+  createCommentLike({ commentId, userId }: ICommentLikeCreateDto): ICommentLikeModelData {
+    return {
+      id: uuidv7(),
       commentId,
       userId,
-    });
+      createdAt: new Date(),
+    };
   }
 
-  createCommentReport({ type, reason, commentId, userId }: ICommentReportCreateDto): CommentReportModel {
-    return CommentReportModel.create({
+  createCommentReport({ type, reason, commentId, userId }: ICommentReportCreateDto): ICommentReportModelData {
+    return {
+      id: uuidv7(),
       type,
+      status: 'ACCEPTED',
       reason,
       commentId,
       userId,
-    });
+      createdAt: new Date(),
+    };
   }
 }

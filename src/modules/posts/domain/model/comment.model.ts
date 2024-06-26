@@ -1,8 +1,7 @@
-import { ICommentCreateDto, ICommentModelData, ICommentReplyCreateDto } from '../interface/comment.interface';
+import { ICommentModelData } from '../interface/comment.interface';
 import { CommentSnapshotModel } from './comment-snapshot.model';
 import { CommentLikeModel } from './comment-like.model';
 import { CommentReportModel } from './comment-report.model';
-import { uuidv7 } from 'uuidv7';
 import { UserModel } from '../../../users/domain/model/user.model';
 
 export class CommentModel {
@@ -19,32 +18,6 @@ export class CommentModel {
   private likes?: CommentLikeModel[];
   private reports?: CommentReportModel[];
   private user?: UserModel;
-
-  static createComment(dto: ICommentCreateDto): CommentModel {
-    return new CommentModel({
-      id: uuidv7(),
-      userId: dto.userId,
-      parentId: null,
-      postId: dto.postId,
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      deletedAt: null,
-      commentSnapshots: [],
-    });
-  }
-
-  static createReply(dto: ICommentReplyCreateDto): CommentModel {
-    return new CommentModel({
-      id: uuidv7(),
-      userId: dto.userId,
-      parentId: dto.parentId,
-      postId: dto.postId,
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      deletedAt: null,
-      commentSnapshots: [],
-    });
-  }
 
   constructor(data: ICommentModelData) {
     this.id = data.id;

@@ -85,9 +85,13 @@ export interface ICommentDetail
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------
-export interface ICommentCreateDto extends Pick<IComment, 'userId' | 'postId'> {}
+export interface ICommentCreateDto extends Pick<IComment, 'userId' | 'postId'>, Pick<ICommentSnapshot, 'body'> {}
 
-export interface ICommentReplyCreateDto extends NotNull<Pick<IComment, 'userId' | 'postId' | 'parentId'>> {}
+export interface ICommentReplyCreateDto
+  extends NotNull<Pick<IComment, 'userId' | 'postId' | 'parentId'>>,
+    Pick<ICommentSnapshot, 'body'> {}
+
+export interface ICommentUpdateDto extends Pick<ICommentSnapshot, 'commentId' | 'body'> {}
 
 // ----------------------------------------------------------------------------
 // Query Options

@@ -3,7 +3,9 @@ import { IPolicy, IPolicyCreateDto, IPolicyDetail, IPolicySummery } from '../dom
 // ---------------------------------------------------------------------------
 // policyAppService Param
 // ---------------------------------------------------------------------------
-export interface CreatePolicyParam extends Pick<IPolicyCreateDto, 'type' | 'isMandatory' | 'title' | 'content'> {}
+export interface CreatePolicyParam {
+  policyCreateDto: IPolicyCreateDto;
+}
 
 export interface FindPoliciesParam {
   type?: IPolicy['type'];

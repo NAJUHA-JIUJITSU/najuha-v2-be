@@ -1,16 +1,15 @@
 import {
-  CreatePolicyParam,
   CreatePolicyRet,
   FindAllTypesOfLatestPoliciesRet,
   FindPoliciesRet,
   GetPolicyRet,
 } from '../application/policy.app.dto';
-import { IPolicy } from '../domain/interface/policy.interface';
+import { IPolicy, IPolicyCreateDto } from '../domain/interface/policy.interface';
 
 // ---------------------------------------------------------------------------
 // policyController Request
 // ---------------------------------------------------------------------------
-export interface CreatePolicyReqBody extends CreatePolicyParam {}
+export interface CreatePolicyReqBody extends IPolicyCreateDto {}
 
 export interface FindPoliciesReqQuery {
   type?: IPolicy['type'];

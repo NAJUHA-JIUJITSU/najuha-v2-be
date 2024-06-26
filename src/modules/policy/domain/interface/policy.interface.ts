@@ -71,7 +71,7 @@ export interface IPolicyDetail extends IPolicy {}
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------
-export interface IPolicyCreateDto extends Pick<IPolicy, 'version' | 'type' | 'isMandatory' | 'title' | 'content'> {}
+export interface IPolicyCreateDto extends Pick<IPolicy, 'type' | 'isMandatory' | 'title' | 'content'> {}
 
 // ----------------------------------------------------------------------------
 // ENUM

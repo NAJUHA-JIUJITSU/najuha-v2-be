@@ -20,15 +20,17 @@ import { UserRepository } from '../../../database/custom-repository/user.reposit
 import { TemporaryUserModel } from '../../users/domain/model/temporary-user.model';
 import { TemporaryUserRepository } from '../../../database/custom-repository/temporary-user.repository';
 import { DataSource } from 'typeorm';
-import { PolicyConsentModel } from '../../users/domain/model/PolicyConsent.model';
+import { PolicyConsentModel } from '../../users/domain/model/policy-consent.model';
 import { PolicyModel } from '../../policy/domain/model/policy.model';
 import { RegistrationValidatorDomainService } from '../domain/registration-validator.domain.service';
+import { UserFactory } from '../../users/domain/user.factory';
 
 @Injectable()
 export class RegisterAppService {
   constructor(
     private readonly authTokenDomainService: AuthTokenDomainService,
     private readonly phoneAuthCodeProvider: PhoneNumberAuthCodeDomainService,
+    private readonly userFactory: UserFactory,
     private readonly userRepository: UserRepository,
     private readonly temporaryUserRepository: TemporaryUserRepository,
     private readonly policyRepository: PolicyRepository,
@@ -77,15 +79,15 @@ export class RegisterAppService {
     return { isConfirmed: true };
   }
 
-  async registerUser(param: RegisterUserParam): Promise<RegisterUserRet> {
+  async registerUser({ userRegisterDto, consentPolicyTypes }: RegisterUserParam): Promise<RegisterUserRet> {
     const isDuplicated = await this.registrationValidator.isDuplicateNickname({
-      userId: param.userId,
-      nickname: param.nickname,
+      userId: userRegisterDto.id,
+      nickname: userRegisterDto.nickname,
     });
     if (isDuplicated) throw new BusinessException(RegisterErrors.REGISTER_NICKNAME_DUPLICATED);
 
     const temporaryUserModel = new TemporaryUserModel(
-      await this.temporaryUserRepository.findOneOrFail({ where: { id: param.userId } }).catch(() => {
+      await this.temporaryUserRepository.findOneOrFail({ where: { id: userRegisterDto.id } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'TemporaryUser not found');
       }),
     );
@@ -94,15 +96,18 @@ export class RegisterAppService {
       (entity) => new PolicyModel(entity),
     );
     const policyConsentModels = latestPolicyModels
-      .filter((policy) => param.consentPolicyTypes.includes(policy.getType()))
-      .map((policy) =>
-        PolicyConsentModel.create({
-          userId: param.userId,
-          policyId: policy.getId(),
-        }),
+      .filter((policy) => consentPolicyTypes.includes(policy.getType()))
+      .map(
+        (policy) =>
+          new PolicyConsentModel(
+            this.userFactory.createPolicyConsent({
+              userId: userRegisterDto.id,
+              policyId: policy.getId(),
+            }),
+          ),
       );
 
-    temporaryUserModel.updateRegistrationData(policyConsentModels, param);
+    temporaryUserModel.updateRegistrationData(policyConsentModels, userRegisterDto);
     this.registrationValidator.validateRegistration(temporaryUserModel, latestPolicyModels);
 
     const queryRunner = this.dataSource.createQueryRunner();

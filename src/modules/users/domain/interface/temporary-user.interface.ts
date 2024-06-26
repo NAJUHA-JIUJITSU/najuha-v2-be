@@ -42,4 +42,4 @@ export interface ITemporaryUserCreateDto
   extends Pick<IUser, 'snsAuthProvider' | 'snsId' | 'email' | 'name'>,
     Partial<Pick<IUser, 'phoneNumber' | 'gender' | 'birth'>> {}
 
-export interface IUserRgistertDto extends Pick<IUser, 'nickname' | 'gender' | 'belt' | 'birth'> {}
+export interface IUserRgistertDto extends Pick<IUser, 'id' | 'nickname' | 'gender' | 'belt' | 'birth'> {}

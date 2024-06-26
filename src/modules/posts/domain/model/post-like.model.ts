@@ -1,5 +1,4 @@
-import { uuidv7 } from 'uuidv7';
-import { IPostLikeCreateDto, IPostLikeModelData } from '../interface/post-like.interface';
+import { IPostLikeModelData } from '../interface/post-like.interface';
 
 export class PostLikeModel {
   public readonly id: IPostLikeModelData['id'];
@@ -12,15 +11,6 @@ export class PostLikeModel {
     this.postId = data.postId;
     this.userId = data.userId;
     this.createdAt = data.createdAt;
-  }
-
-  static create(dto: IPostLikeCreateDto): PostLikeModel {
-    return new PostLikeModel({
-      id: uuidv7(),
-      postId: dto.postId,
-      userId: dto.userId,
-      createdAt: new Date(),
-    });
   }
 
   toData(): IPostLikeModelData {

@@ -10,18 +10,6 @@ export class PolicyModel {
   private readonly content?: IPolicyModelData['content'];
   private readonly createdAt: IPolicyModelData['createdAt'];
 
-  static create(dto: IPolicyCreateDto) {
-    return new PolicyModel({
-      id: uuidv7(),
-      version: dto.version,
-      type: dto.type,
-      isMandatory: dto.isMandatory,
-      title: dto.title,
-      content: dto.content,
-      createdAt: new Date(),
-    });
-  }
-
   constructor(data: IPolicyModelData) {
     this.id = data.id;
     this.version = data.version;

@@ -10,25 +10,27 @@ import {
 } from './policy.app.dto';
 import { PolicyRepository } from '../../../database/custom-repository/policy.repository';
 import { BusinessException, CommonErrors } from '../../../common/response/errorResponse';
-import { PolicyModel } from '../domain/model/policy.model';
 import { assert } from 'typia';
+import { uuidv7 } from 'uuidv7';
 
 @Injectable()
 export class PolicyAppService {
   constructor(private readonly policyRepository: PolicyRepository) {}
 
-  async createPolicy(param: CreatePolicyParam): Promise<CreatePolicyRet> {
-    const existingPolicyCount = await this.policyRepository.count({ where: { type: param.type } });
+  async createPolicy({ policyCreateDto }: CreatePolicyParam): Promise<CreatePolicyRet> {
+    const existingPolicyCount = await this.policyRepository.count({ where: { type: policyCreateDto.type } });
 
-    const newPolicyModel = PolicyModel.create({
+    const newPolicyModelData = {
+      id: uuidv7(),
+      createdAt: new Date(),
       version: existingPolicyCount + 1,
-      type: param.type,
-      isMandatory: param.isMandatory,
-      title: param.title,
-      content: param.content,
-    });
+      type: policyCreateDto.type,
+      isMandatory: policyCreateDto.isMandatory,
+      title: policyCreateDto.title,
+      content: policyCreateDto.content,
+    };
 
-    return assert<CreatePolicyRet>({ policy: await this.policyRepository.save(newPolicyModel.toData()) });
+    return assert<CreatePolicyRet>({ policy: await this.policyRepository.save(newPolicyModelData) });
   }
 
   async findPolicies({ type }: FindPoliciesParam): Promise<FindPoliciesRet> {

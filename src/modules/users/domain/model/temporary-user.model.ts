@@ -1,13 +1,11 @@
-import { uuidv7 } from 'uuidv7';
 import {
   IRegisteredUserModelData,
-  ITemporaryUserCreateDto,
   ITemporaryUserModelData,
   IUserRgistertDto,
 } from '../interface/temporary-user.interface';
 import { BusinessException, RegisterErrors } from '../../../../common/response/errorResponse';
 import { assert } from 'typia';
-import { PolicyConsentModel } from './PolicyConsent.model';
+import { PolicyConsentModel } from './policy-consent.model';
 import { PolicyModel } from '../../../policy/domain/model/policy.model';
 
 export class TemporaryUserModel {
@@ -26,25 +24,6 @@ export class TemporaryUserModel {
   private status: ITemporaryUserModelData['status'];
   private phoneNumber: ITemporaryUserModelData['phoneNumber'];
   private policyConsents?: PolicyConsentModel[];
-
-  static create(dto: ITemporaryUserCreateDto): TemporaryUserModel {
-    return new TemporaryUserModel({
-      id: uuidv7(),
-      role: 'TEMPORARY_USER',
-      snsAuthProvider: dto.snsAuthProvider,
-      snsId: dto.snsId,
-      email: dto.email,
-      name: dto.name,
-      phoneNumber: dto.phoneNumber || null,
-      gender: dto.gender || null,
-      birth: dto.birth || null,
-      nickname: null,
-      belt: null,
-      status: 'ACTIVE',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-  }
 
   constructor(data: ITemporaryUserModelData) {
     this.id = data.id;

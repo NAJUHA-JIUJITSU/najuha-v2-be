@@ -1,9 +1,10 @@
 import { TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IUser, IUserModelData, IUserPublicProfile } from '../../../users/domain/interface/user.interface';
 import { tags } from 'typia';
-import { IPostSnapshot, IPostSnapshotModelData } from './post-snapshot.interface';
+import { IPostSnapshot, IPostSnapshotCreateDto, IPostSnapshotModelData } from './post-snapshot.interface';
 import { IPostLike, IPostLikeModelData } from './post-like.interface';
 import { IPostReport, IPostReportModelData } from './post-report.interface';
+import { IPostSnapshotImageCreateDto } from './post-snapshot-image.interface';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -94,7 +95,19 @@ export interface IPostDetail
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------
-export interface IPostCreateDto extends Pick<IPost, 'userId' | 'category'> {}
+export interface IPostCreateDto
+  extends Pick<IPost, 'userId' | 'category'>,
+    Pick<IPostSnapshotCreateDto, 'title' | 'body'> {
+  /** 게시글 이미지는 최대 5개까지 등록 가능합니다. */
+  imageIds?: IPostSnapshotImageCreateDto['imageId'][] & tags.MaxItems<5>;
+}
+
+export interface IPostUpdateDto
+  extends Pick<IPost, 'userId'>,
+    Pick<IPostSnapshotCreateDto, 'postId' | 'title' | 'body'> {
+  /** 게시글 이미지는 최대 5개까지 등록 가능합니다. */
+  imageIds?: IPostSnapshotImageCreateDto['imageId'][] & tags.MaxItems<5>;
+}
 
 // ----------------------------------------------------------------------------
 // Query Options
