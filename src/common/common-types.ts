@@ -5,6 +5,9 @@ export type TDateOrStringDate = Date | (string & tags.Format<'date-time'>);
 /** UUID v7. */
 export type TId = string & tags.Format<'uuid'>;
 
+/** Amount (원). */
+export type TMoney = number & tags.Type<'uint32'> & tags.Minimum<0>;
+
 export type TPaginationParam<T> = {
   /**
    * Page number.

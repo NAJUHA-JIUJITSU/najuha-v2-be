@@ -84,6 +84,10 @@ export class ApplicationFactory {
         applicationId,
         participationDivisionInfoSnapshots: [participationDivisionInfosSnapshot],
         createdAt: new Date(),
+        payedDivisionId: null,
+        payedPriceSnapshotId: null,
+        payedDivision: null,
+        payedPriceSnapshot: null,
       };
     });
   }

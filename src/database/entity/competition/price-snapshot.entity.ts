@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { DivisionEntity } from './division.entity';
-import { ParticipationDivisionInfoPaymentEntity } from '../application/participation-division-info-payment.entity';
 import { uuidv7 } from 'uuidv7';
 import { IPriceSnapshot } from '../../../modules/competitions/domain/interface/price-snapshot.interface';
+import { ParticipationDivisionInfoEntity } from '../application/participation-division-info.entity';
 
 /**
  * PriceSnapshot Entity
@@ -29,8 +29,8 @@ export class PriceSnapshotEntity {
   division!: DivisionEntity;
 
   @OneToMany(
-    () => ParticipationDivisionInfoPaymentEntity,
-    (participationDivisionInfoPayment) => participationDivisionInfoPayment.priceSnapshot,
+    () => ParticipationDivisionInfoEntity,
+    (participationDivisionInfo) => participationDivisionInfo.payedPriceSnapshot,
   )
-  participationDivisionInfoPayments!: ParticipationDivisionInfoPaymentEntity[];
+  participationDivisionInfos!: ParticipationDivisionInfoEntity[];
 }

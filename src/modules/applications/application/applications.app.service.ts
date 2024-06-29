@@ -41,7 +41,6 @@ export class ApplicationsAppService {
       this.userRepository
         .findOneOrFail({
           where: { id: applicationCreateDto.userId },
-          relations: ['profileImages', 'profileImages.image'],
         })
         .catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
@@ -135,7 +134,6 @@ export class ApplicationsAppService {
       this.userRepository
         .findOneOrFail({
           where: { id: applicationCreateDto.userId },
-          relations: ['profileImages', 'profileImages.image'],
         })
         .catch(() => {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
@@ -211,11 +209,9 @@ export class ApplicationsAppService {
       throw new BusinessException(ApplicationsErrors.APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED);
     }
     const [userEntity, applicationEntity] = await Promise.all([
-      this.userRepository
-        .findOneOrFail({ where: { id: userId }, relations: ['profileImages', 'profileImages.image'] })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
+      this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      }),
       this.applicationRepository
         .findOneOrFail({
           where: { userId, id: applicationId, status: 'DONE' },
@@ -359,5 +355,28 @@ export class ApplicationsAppService {
     });
     if (applicationModels.length === limit) ret.nextPage = page + 1;
     return ret;
+  }
+
+  async createApplicationPayment({ userId, applicationId }) {
+    const [userEntity, applicationEntity] = await Promise.all([
+      this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
+        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      }),
+      this.applicationRepository
+        .findOneOrFail({
+          where: { userId, id: applicationId },
+          relations: [
+            'additionalInfos',
+            'playerSnapshots',
+            'participationDivisionInfos',
+            'participationDivisionInfos.participationDivisionInfoSnapshots',
+            'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+            'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+          ],
+        })
+        .catch(() => {
+          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+        }),
+    ]);
   }
 }

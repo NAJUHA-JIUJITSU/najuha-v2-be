@@ -157,32 +157,44 @@ erDiagram
     timestamptz createdAt
     uuid applicationId FK
   }
-  payment_snapshot {
-    uuid id PK
-    timestamptz createdAt
-    integer normalAmount
-    integer earlybirdDiscountAmount
-    integer combinationDiscountAmount
-    integer totalAmount
-    uuid applicationId FK
-  }
   participation_division_info_snapshot {
     uuid id PK
     timestamptz createdAt
     uuid participationDivisionInfoId FK
     uuid participationDivisionId FK
   }
+  application_payment {
+    uuid id PK
+    timestamptz createdAt
+    varchar orderName
+    varchar customerName
+    varchar customerEmail
+    varchar status
+    uuid applicationId FK
+    uuid earlybirdDiscountSnapshotId FK
+    uuid combinationDiscountSnapshotId FK
+  }
+  application_payment_snapshot {
+    uuid id PK
+    timestamptz createdAt
+    integer normalAmount
+    integer earlybirdDiscountAmount
+    integer combinationDiscountAmount
+    integer totalAmount
+    uuid applicationPaymentId FK
+  }
+  participation_division_info_payment_map {
+    uuid id PK
+    timestamptz createdAt
+    uuid applicationPaymentSnapshotId FK
+    uuid participationDivisionInfoId FK
+  }
   participation_division_info {
     uuid id PK
     timestamptz createdAt
     uuid applicationId FK
-  }
-  participation_division_info_payment {
-    uuid id PK
-    timestamptz createdAt
-    uuid divisionId FK
-    uuid priceSnapshotId FK
-    uuid participationDivisionInfoId FK
+    uuid payedDivisionId FK "nullable"
+    uuid payedPriceSnapshotId FK "nullable"
   }
   price_snapshot {
     uuid id PK
@@ -222,16 +234,26 @@ erDiagram
     uuid competitionId FK
     uuid userId FK
   }
+  participation_division_info_payment_map {
+    uuid id PK
+    timestamptz createdAt
+    uuid applicationPaymentSnapshotId FK
+    uuid participationDivisionInfoId FK
+  }
   player_snapshot }|--|| application: application
-  payment_snapshot }o--|| application: application
   participation_division_info_snapshot }|--|| participation_division_info: participationDivisionInfo
   participation_division_info_snapshot }o--|| division: division
+  application_payment }o--|| application: application
+  application_payment_snapshot }o--|| application_payment: applicationPayment
+  participation_division_info_payment_map }o--|| application_payment_snapshot: applicationPaymentSnapshot
+  participation_division_info_payment_map }o--|| participation_division_info: participationDivisionInfo
   participation_division_info }|--|| application: application
-  participation_division_info_payment }o--|| division: division
-  participation_division_info_payment }o--|| price_snapshot: priceSnapshot
-  participation_division_info_payment |o--|| participation_division_info: participationDivisionInfo
+  participation_division_info }o--|| division: payedDivision
+  participation_division_info }o--|| price_snapshot: payedPriceSnapshot
   price_snapshot }|--|| division: division
   additional_info }o--|| application: application
+  participation_division_info_payment_map }o--|| application_payment_snapshot: applicationPaymentSnapshot
+  participation_division_info_payment_map }o--|| participation_division_info: participationDivisionInfo
 ```
 
 ### Indexes
@@ -267,22 +289,6 @@ PlayerSnapshot Entity
   - `applicationId`
 
 
-### `payment_snapshot`
-
-PaymentSnapshot Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `normalAmount`
-  - `earlybirdDiscountAmount`
-  - `combinationDiscountAmount`
-  - `totalAmount`
-  - `applicationId`
-
-
 ### `participation_division_info_snapshot`
 
 ParticipationDivisionInfoSnapshot Entity   
@@ -296,9 +302,56 @@ ParticipationDivisionInfoSnapshot Entity
   - `participationDivisionId`
 
 
+### `application_payment`
+
+Application Payment Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `orderName`
+  - `customerName`
+  - `customerEmail`
+  - `status`
+  - `applicationId`
+  - `earlybirdDiscountSnapshotId`
+  - `combinationDiscountSnapshotId`
+
+
+### `application_payment_snapshot`
+
+Application Payment Snapshot Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `normalAmount`
+  - `earlybirdDiscountAmount`
+  - `combinationDiscountAmount`
+  - `totalAmount`
+  - `applicationPaymentId`
+
+
+### `participation_division_info_payment_map`
+
+ParticipationDivisionInfoPaymentMap Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `applicationPaymentSnapshotId`
+  - `participationDivisionInfoId`
+
+
 ### `participation_division_info`
 
-ParticipationDivisionInfo Entity   
+ParticipationDivisionInfoEntity   
 @namespace Application
 
 **Properties**
@@ -306,20 +359,8 @@ ParticipationDivisionInfo Entity
   - `id`
   - `createdAt`
   - `applicationId`
-
-
-### `participation_division_info_payment`
-
-ParticipationDivisionInfoPayment Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `divisionId`
-  - `priceSnapshotId`
-  - `participationDivisionInfoId`
+  - `payedDivisionId`
+  - `payedPriceSnapshotId`
 
 
 ### `additional_info`
@@ -354,10 +395,37 @@ Application Entity
   - `userId`
 
 
+### `participation_division_info_payment_map`
+
+ParticipationDivisionInfoPaymentMap Entity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `applicationPaymentSnapshotId`
+  - `participationDivisionInfoId`
+
+
 ## Competition
 
 ```mermaid
 erDiagram
+  earlybird_discount_snapshot {
+    uuid id PK
+    timestamptz earlybirdStartDate
+    timestamptz earlybirdEndDate
+    integer discountAmount
+    timestamptz createdAt
+    uuid competitionId FK
+  }
+  combination_discount_snapshot {
+    uuid id PK
+    jsonb combinationDiscountRules
+    timestamptz createdAt
+    uuid competitionId FK
+  }
   price_snapshot {
     uuid id PK
     integer price
@@ -376,20 +444,6 @@ erDiagram
     varchar status
     timestamptz createdAt
     timestamptz updatedAt
-    uuid competitionId FK
-  }
-  earlybird_discount_snapshot {
-    uuid id PK
-    timestamptz earlybirdStartDate
-    timestamptz earlybirdEndDate
-    integer discountAmount
-    timestamptz createdAt
-    uuid competitionId FK
-  }
-  combination_discount_snapshot {
-    uuid id PK
-    jsonb combinationDiscountRules
-    timestamptz createdAt
     uuid competitionId FK
   }
   required_additional_info {
@@ -439,10 +493,10 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
-  price_snapshot }|--|| division: division
-  division }o--|| competition: competition
   earlybird_discount_snapshot }o--|| competition: competition
   combination_discount_snapshot }o--|| competition: competition
+  price_snapshot }|--|| division: division
+  division }o--|| competition: competition
   required_additional_info }o--|| competition: competition
   competition_host_map }o--|| competition: competition
   competition_poster_image }o--|| competition: competition
@@ -453,14 +507,42 @@ erDiagram
 
 | Table | Index Name | Columns | Unique | Spatial | Where |
 |-------|-------------|---------|--------|---------|-----------|
-| price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
-| division | IDX_Division_competitionId | competitionId | false | false |  |
 | earlybird_discount_snapshot | IDX_EarlybirdDiscountSnapshot_competitionId | competitionId | false | false |  |
 | combination_discount_snapshot | IDX_CombinationDiscountSnapshot_competitionId | competitionId | false | false |  |
+| price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
+| division | IDX_Division_competitionId | competitionId | false | false |  |
 | required_additional_info | IDX_RequiredAdditionalInfo_competitionId | competitionId | false | false |  |
 | competition_host_map | IDX_CompetitionHostMap_competitionId | competitionId | false | false |  |
 | competition | IDX_Competition_status | status | false | false |  |
 | competition | IDX_Competition_competitionDate | competitionDate | false | false |  |
+
+
+### `earlybird_discount_snapshot`
+
+EarlybirdDiscountSnapshot Entity   
+@namespace Competition
+
+**Properties**
+
+  - `id`
+  - `earlybirdStartDate`
+  - `earlybirdEndDate`
+  - `discountAmount`
+  - `createdAt`
+  - `competitionId`
+
+
+### `combination_discount_snapshot`
+
+CombinationDiscountSnapshot Entity   
+@namespace Competition
+
+**Properties**
+
+  - `id`
+  - `combinationDiscountRules`
+  - `createdAt`
+  - `competitionId`
 
 
 ### `price_snapshot`
@@ -496,34 +578,6 @@ Division Entity
   - `status`
   - `createdAt`
   - `updatedAt`
-  - `competitionId`
-
-
-### `earlybird_discount_snapshot`
-
-EarlybirdDiscountSnapshot Entity   
-@namespace Competition
-
-**Properties**
-
-  - `id`
-  - `earlybirdStartDate`
-  - `earlybirdEndDate`
-  - `discountAmount`
-  - `createdAt`
-  - `competitionId`
-
-
-### `combination_discount_snapshot`
-
-CombinationDiscountSnapshot Entity   
-@namespace Competition
-
-**Properties**
-
-  - `id`
-  - `combinationDiscountRules`
-  - `createdAt`
   - `competitionId`
 
 

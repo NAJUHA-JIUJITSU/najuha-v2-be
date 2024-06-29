@@ -1,13 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { IPlayerSnapshot } from '../../../modules/applications/domain/interface/player-snapshot.interface';
 import { uuidv7 } from 'uuidv7';

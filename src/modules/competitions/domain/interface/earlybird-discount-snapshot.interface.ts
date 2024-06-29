@@ -1,6 +1,5 @@
-import { tags } from 'typia';
 import { ICompetition } from './competition.interface';
-import { TId, TDateOrStringDate } from '../../../../common/common-types';
+import { TId, TDateOrStringDate, TMoney } from '../../../../common/common-types';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -21,7 +20,7 @@ export interface IEarlybirdDiscountSnapshot {
    * - 단위 : 원.
    * - 음수 값은 허용하지 않습니다.
    */
-  discountAmount: number & tags.Type<'uint32'> & tags.Minimum<0>;
+  discountAmount: TMoney;
 
   /** CreatedAt. */
   createdAt: TDateOrStringDate;

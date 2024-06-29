@@ -1,6 +1,5 @@
-import { tags } from 'typia';
 import { IDivision } from './division.interface';
-import { TId, TDateOrStringDate } from '../../../../common/common-types';
+import { TId, TDateOrStringDate, TMoney } from '../../../../common/common-types';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -10,7 +9,7 @@ export interface IPriceSnapshot {
   id: TId;
 
   /** price, (원). */
-  price: number & tags.Type<'uint32'> & tags.Minimum<0>;
+  price: TMoney;
 
   /** CreatedAt. */
   createdAt: TDateOrStringDate;

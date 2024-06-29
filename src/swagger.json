@@ -4040,6 +4040,7 @@
     },
     "/user/applications/{applicationId}/expected-payment": {
       "get": {
+        "deprecated": true,
         "tags": [
           "u-6 applications"
         ],
@@ -4120,6 +4121,9 @@
                 "kind": "text"
               }
             ]
+          },
+          {
+            "name": "deprecated"
           }
         ],
         "x-nestia-method": "GET"
@@ -9804,8 +9808,7 @@
             "description": "얼리버드 할인 마감일."
           },
           "discountAmount": {
-            "type": "integer",
-            "minimum": 0,
+            "$ref": "#/components/schemas/TMoney",
             "title": "얼리버드 할인 가격",
             "description": "얼리버드 할인 가격.\n- ex) 10000.\n- 단위 : 원.\n- 음수 값은 허용하지 않습니다."
           },
@@ -9829,6 +9832,11 @@
           "createdAt",
           "competitionId"
         ]
+      },
+      "TMoney": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Amount (원)."
       },
       "ICompetitionPosterImage": {
         "type": "object",
@@ -10313,8 +10321,7 @@
             "description": "UUID v7."
           },
           "price": {
-            "type": "integer",
-            "minimum": 0,
+            "$ref": "#/components/schemas/TMoney",
             "title": "price, (원)",
             "description": "price, (원)."
           },
@@ -12087,10 +12094,24 @@
             "title": "CreatedAt",
             "description": "CreatedAt."
           },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CANCELED",
+              "DONE",
+              "READY"
+            ]
+          },
           "applicationId": {
             "$ref": "#/components/schemas/TId",
             "title": "Application id",
             "description": "Application id."
+          },
+          "payedDivisionId": {
+            "$ref": "#/components/schemas/TId.Nullable"
+          },
+          "payedPriceSnapshotId": {
+            "$ref": "#/components/schemas/TId.Nullable"
           },
           "participationDivisionInfoSnapshots": {
             "type": "array",
@@ -12100,15 +12121,31 @@
             "minItems": 1,
             "title": "참가부문 정보 스냅샷",
             "description": "참가부문 정보 스냅샷."
+          },
+          "payedDivision": {
+            "$ref": "#/components/schemas/IDivision.Nullable"
+          },
+          "payedPriceSnapshot": {
+            "$ref": "#/components/schemas/IParticipationDivisionInfoSnapshot.Nullable"
           }
         },
         "nullable": false,
         "required": [
           "id",
           "createdAt",
+          "status",
           "applicationId",
-          "participationDivisionInfoSnapshots"
+          "payedDivisionId",
+          "payedPriceSnapshotId",
+          "participationDivisionInfoSnapshots",
+          "payedDivision",
+          "payedPriceSnapshot"
         ]
+      },
+      "TId.Nullable": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID v7."
       },
       "IParticipationDivisionInfoSnapshot": {
         "type": "object",
@@ -12139,6 +12176,157 @@
           }
         },
         "nullable": false,
+        "required": [
+          "id",
+          "createdAt",
+          "participationDivisionInfoId",
+          "participationDivisionId",
+          "division"
+        ]
+      },
+      "IDivision.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "부문 카테고리",
+            "description": "부문 카테고리.\n- ex) '초등부', '중등부', '어덜트'."
+          },
+          "uniform": {
+            "type": "string",
+            "enum": [
+              "GI",
+              "NOGI"
+            ],
+            "title": "유니폼",
+            "description": "유니폼."
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "FEMALE",
+              "MALE",
+              "MIXED"
+            ],
+            "title": "부문 성별",
+            "description": "부문 성별."
+          },
+          "belt": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "주짓수벨트",
+            "description": "주짓수벨트.\n- ex) '화이트', '블루', '퍼플', '브라운', '블랙'."
+          },
+          "weight": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Weight"
+              },
+              {
+                "$ref": "#/components/schemas/Absolute"
+              }
+            ],
+            "title": "체급",
+            "description": "체급.\n- weight type: '-45', '+45', '-60.5', '+60.5'\n- absolute type: '-45_ABSOLUTE', '+45_ABSOLUTE', '-60.5_ABSOLUTE', '+60.5_ABSOLUTE', 'ABSOLUTE'"
+          },
+          "birthYearRangeStart": {
+            "type": "string",
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "title": "출생년도 범위 시작. YYYY",
+            "description": "출생년도 범위 시작. YYYY."
+          },
+          "birthYearRangeEnd": {
+            "type": "string",
+            "minLength": 4,
+            "pattern": "^[0-9]{4}$",
+            "title": "출생년도 범위 끝. YYYY",
+            "description": "출생년도 범위 끝. YYYY."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TDivisionStatus",
+            "title": "활성 상태",
+            "description": "활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "UpdatedAt",
+            "description": "UpdatedAt."
+          },
+          "competitionId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "CompetitionId",
+            "description": "CompetitionId."
+          },
+          "priceSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IPriceSnapshot"
+            },
+            "minItems": 1,
+            "title": "가격 스냅샷",
+            "description": "가격 스냅샷."
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "category",
+          "uniform",
+          "gender",
+          "belt",
+          "weight",
+          "birthYearRangeStart",
+          "birthYearRangeEnd",
+          "status",
+          "createdAt",
+          "updatedAt",
+          "competitionId",
+          "priceSnapshots"
+        ]
+      },
+      "IParticipationDivisionInfoSnapshot.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "description": "CreatedAt"
+          },
+          "participationDivisionInfoId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "- Participation division Info id",
+            "description": "- Participation division Info id."
+          },
+          "participationDivisionId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "- Division id (참가한 부문 id)",
+            "description": "- Division id (참가한 부문 id)."
+          },
+          "division": {
+            "$ref": "#/components/schemas/IDivision",
+            "title": "- Division. (참가한 부문)",
+            "description": "- Division. (참가한 부문)."
+          }
+        },
+        "nullable": true,
         "required": [
           "id",
           "createdAt",
@@ -12199,20 +12387,16 @@
         "type": "object",
         "properties": {
           "normalAmount": {
-            "type": "integer",
-            "minimum": 0
+            "$ref": "#/components/schemas/TMoney"
           },
           "earlybirdDiscountAmount": {
-            "type": "integer",
-            "minimum": 0
+            "$ref": "#/components/schemas/TMoney"
           },
           "combinationDiscountAmount": {
-            "type": "integer",
-            "minimum": 0
+            "$ref": "#/components/schemas/TMoney"
           },
           "totalAmount": {
-            "type": "integer",
-            "minimum": 0
+            "$ref": "#/components/schemas/TMoney"
           }
         },
         "nullable": false,
@@ -13245,11 +13429,6 @@
           "ACTIVE",
           "INACTIVE"
         ]
-      },
-      "TId.Nullable": {
-        "type": "string",
-        "format": "uuid",
-        "description": "UUID v7."
       },
       "ICommentSnapshot": {
         "type": "object",

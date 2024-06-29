@@ -479,6 +479,12 @@ export class ApplicationDummyBuilder {
       return {
         id: participationDivisionInfoId,
         applicationId: this.application.id,
+        payedDivisionId: null,
+        payedPriceSnapshotId: null,
+        payedDivision: null,
+        payedPriceSnapshot: null,
+        status: 'READY',
+        createdAt: new Date(),
         participationDivisionInfoSnapshots: [
           {
             id: uuidv7(),
@@ -488,7 +494,6 @@ export class ApplicationDummyBuilder {
             createdAt: new Date(),
           },
         ],
-        createdAt: new Date(),
       };
     });
     return this;

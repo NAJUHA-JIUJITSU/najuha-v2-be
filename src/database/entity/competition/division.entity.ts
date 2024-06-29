@@ -15,6 +15,7 @@ import { PriceSnapshotEntity } from './price-snapshot.entity';
 import { ParticipationDivisionInfoSnapshotEntity } from '../application/participation-division-info-snapshot.entity';
 import { IDivision } from '../../../modules/competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
+import { ParticipationDivisionInfoEntity } from '../application/participation-division-info.entity';
 
 /**
  * Division Entity
@@ -76,4 +77,10 @@ export class DivisionEntity {
     (participationDivisionInfoSnapshot) => participationDivisionInfoSnapshot.division,
   )
   participationDivisionInfoSnapshots!: ParticipationDivisionInfoSnapshotEntity[];
+
+  @OneToMany(
+    () => ParticipationDivisionInfoEntity,
+    (participationDivisionInfo) => participationDivisionInfo.payedDivision,
+  )
+  participationDivisionInfos!: ParticipationDivisionInfoEntity[];
 }

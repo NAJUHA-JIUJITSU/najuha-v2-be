@@ -11,13 +11,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PlayerSnapshotEntity } from './player-snapshot.entity';
-import { PaymentSnapshotEntity } from './payment-snapshot.entity';
 import { CompetitionEntity } from '../competition/competition.entity';
 import { UserEntity } from '../user/user.entity';
 import { ParticipationDivisionInfoEntity } from './participation-division-info.entity';
 import { IApplication } from '../../../modules/applications/domain/interface/application.interface';
 import { uuidv7 } from 'uuidv7';
 import { AdditionalInfoEntity } from './additional-info.entity';
+import { ApplicationPaymentEntity } from './application-payment.entity';
 
 /**
  * Application Entity
@@ -56,8 +56,8 @@ export class ApplicationEntity {
   @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application, { cascade: true })
   playerSnapshots!: PlayerSnapshotEntity[];
 
-  @OneToMany(() => PaymentSnapshotEntity, (paymentSnapshot) => paymentSnapshot.application)
-  paymentSnapshots!: PaymentSnapshotEntity[];
+  @OneToMany(() => ApplicationPaymentEntity, (paymentSnapshot) => paymentSnapshot.application)
+  applicationPayments!: ApplicationPaymentEntity[];
 
   /**
    * @minitems 1

@@ -1,23 +1,15 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { ParticipationDivisionInfoSnapshotEntity } from './participation-division-info-snapshot.entity';
 import { ApplicationEntity } from './application.entity';
 import { IParticipationDivisionInfo } from '../../../modules/applications/domain/interface/participation-division-info.interface';
-import { ParticipationDivisionInfoPaymentEntity } from './participation-division-info-payment.entity';
+import { ParticipationDivisionInfoPaymentMapEntity } from './participation-division-info-payment-map.entity';
 import { IApplication } from '../../../modules/applications/domain/interface/application.interface';
 import { uuidv7 } from 'uuidv7';
+import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
+import { DivisionEntity } from '../competition/division.entity';
 
 /**
- * ParticipationDivisionInfo Entity
+ * ParticipationDivisionInfoEntity
  * @namespace Application
  */
 @Entity('participation_division_info')
@@ -32,6 +24,15 @@ export class ParticipationDivisionInfoEntity {
   @Column('uuid')
   applicationId!: IApplication['id'];
 
+  @Column('uuid', { nullable: true })
+  payedDivisionId!: IParticipationDivisionInfo['payedDivisionId'];
+
+  @Column('uuid', { nullable: true })
+  payedPriceSnapshotId!: IParticipationDivisionInfo['payedPriceSnapshotId'];
+
+  // -----------------------------------------------------------------------
+  // Relations
+  // -----------------------------------------------------------------------
   @ManyToOne(() => ApplicationEntity, (application) => application.participationDivisionInfos)
   @JoinColumn({ name: 'applicationId' })
   application!: ApplicationEntity;
@@ -46,9 +47,14 @@ export class ParticipationDivisionInfoEntity {
   )
   participationDivisionInfoSnapshots!: ParticipationDivisionInfoSnapshotEntity[];
 
-  @OneToOne(
-    () => ParticipationDivisionInfoPaymentEntity,
-    (participationDivisionInfoPayment) => participationDivisionInfoPayment.participationDivisionInfo,
-  )
-  participationDivisionInfoPayment!: ParticipationDivisionInfoPaymentEntity;
+  @ManyToOne(() => DivisionEntity, (division) => division.participationDivisionInfos, { nullable: true })
+  @JoinColumn({ name: 'payedDivisionId' })
+  payedDivision!: DivisionEntity | null;
+
+  @ManyToOne(() => PriceSnapshotEntity, (priceSnapshot) => priceSnapshot.participationDivisionInfos, { nullable: true })
+  @JoinColumn({ name: 'payedPriceSnapshotId' })
+  payedPriceSnapshot!: PriceSnapshotEntity | null;
+
+  @OneToMany(() => ParticipationDivisionInfoPaymentMapEntity, (map) => map.participationDivisionInfo)
+  participationDivisionInfoPaymentMaps!: ParticipationDivisionInfoPaymentMapEntity[];
 }

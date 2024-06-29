@@ -148,6 +148,7 @@ export class UserApplicationsController {
    * @security bearer
    * @param applicationId applicationId
    * @returns GetExpectedPaymentRes
+   * @deprecated
    */
   @RoleLevels(RoleLevel.USER)
   @TypedRoute.Get('/:applicationId/expected-payment')
