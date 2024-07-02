@@ -13217,6 +13217,9 @@
             "title": "Comment parent",
             "description": "Comment parent."
           },
+          "replyCount": {
+            "type": "number"
+          },
           "commentSnapshots": {
             "type": "array",
             "items": {
@@ -13236,6 +13239,7 @@
           "userLiked",
           "user",
           "parentId",
+          "replyCount",
           "commentSnapshots"
         ]
       },
