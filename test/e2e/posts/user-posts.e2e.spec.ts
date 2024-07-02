@@ -26,7 +26,7 @@ import {
   UpdatePostRes,
 } from '../../../src/modules/posts/presentation/posts.controller.dto';
 import { ResponseForm } from '../../../src/common/response/response';
-import typia from 'typia';
+import typia, { assert } from 'typia';
 import axios from 'axios';
 import * as FormData from 'form-data';
 import * as fs from 'fs/promises';
@@ -38,6 +38,8 @@ import {
   POSTS_POST_REPORT_ALREADY_EXIST,
 } from '../../../src/common/response/errorResponse';
 import { IUser } from '../../../src/modules/users/domain/interface/user.interface';
+import { CreateImageRes } from '../../../src/modules/images/presentation/images.controller.dto';
+import exp from 'constants';
 
 describe('E2E u-7 Post TEST', () => {
   let app: INestApplication;
@@ -214,6 +216,140 @@ describe('E2E u-7 Post TEST', () => {
         .send(postUpdateDto);
       expect(typia.is<ResponseForm<UpdatePostRes>>(res.body)).toBe(true);
     });
+
+    it('게시물 + 내용수정, 기존이미지 유지 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const creatImageRes = await request(app.getHttpServer())
+        .post('/user/images')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ format: 'image/jpeg', path: 'post' });
+      const { image, presignedPost } = creatImageRes.body.result;
+      const { url, fields } = presignedPost;
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+      formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      const uploadRes = await axios.post(url, formData, {
+        headers: {
+          ...formData.getHeaders(),
+        },
+      });
+      expect(uploadRes.status).toBe(204);
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+        imageIds: [image.id],
+      };
+      const res = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      expect(typia.is<ResponseForm<CreatePostRes>>(res.body)).toBe(true);
+      const post = res.body.result.post;
+      const latestPostSnapshot = post.postSnapshots[post.postSnapshots.length - 1];
+      const imageIds = latestPostSnapshot.postSnapshotImages.map((image) => image.image.id);
+
+      /** main test. */
+      const postUpdateDto: UpdatePostReqBody = {
+        title: 'updated title',
+        body: 'updated body',
+        imageIds: [...imageIds],
+      };
+      const res2 = await request(app.getHttpServer())
+        .patch(`/user/posts/${post.id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postUpdateDto);
+      expect(typia.is<ResponseForm<UpdatePostRes>>(res2.body)).toBe(true);
+      expect(res2.body.result.post.postSnapshots.length).toBe(2);
+      expect(res2.body.result.post.postSnapshots[1].title).toBe('updated title');
+      expect(res2.body.result.post.postSnapshots[1].body).toBe('updated body');
+      expect(res2.body.result.post.postSnapshots[1].postSnapshotImages[0].image.id).toBe(imageIds[0]);
+    });
+
+    it('게시물 + 새로운 이미지로 수정 성공 시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      // First image creation and upload
+      const createImageRes1 = await request(app.getHttpServer())
+        .post('/user/images')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ format: 'image/jpeg', path: 'post' })
+        .then((res) => {
+          return assert<ResponseForm<CreateImageRes>>(res.body);
+        });
+      const formData1 = new FormData();
+      const createImageRet1 = createImageRes1.result;
+      Object.entries(createImageRet1.presignedPost.fields).forEach(([key, value]) => {
+        formData1.append(key, value as string);
+      });
+      formData1.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      const uploadRes1 = await axios.post(createImageRet1.presignedPost.url, formData1, {
+        headers: {
+          ...formData1.getHeaders(),
+        },
+      });
+      expect(uploadRes1.status).toBe(204);
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+        imageIds: [createImageRet1.image.id],
+      };
+      const res1 = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      expect(typia.is<ResponseForm<CreatePostRes>>(res1.body)).toBe(true);
+      const postId = res1.body.result.post.id;
+
+      /** main test. */
+      // Second image creation and upload
+      const createImageRes2 = await request(app.getHttpServer())
+        .post('/user/images')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ format: 'image/jpeg', path: 'post' })
+        .then((res) => {
+          return assert<ResponseForm<CreateImageRes>>(res.body);
+        });
+      const formData2 = new FormData();
+      const createImageRet2 = createImageRes2.result;
+      Object.entries(createImageRet2.presignedPost.fields).forEach(([key, value]) => {
+        formData2.append(key, value as string);
+      });
+      formData2.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
+      const uploadRes2 = await axios.post(createImageRet2.presignedPost.url, formData2, {
+        headers: {
+          ...formData2.getHeaders(),
+        },
+      });
+      expect(uploadRes2.status).toBe(204);
+      const postUpdateDto: UpdatePostReqBody = {
+        title: 'title',
+        body: 'body',
+        imageIds: [createImageRet2.image.id],
+      };
+      const res2 = await request(app.getHttpServer())
+        .patch(`/user/posts/${postId}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postUpdateDto);
+      expect(typia.is<ResponseForm<UpdatePostRes>>(res2.body)).toBe(true);
+      expect(res2.body.result.post.postSnapshots.length).toBe(2);
+      expect(res2.body.result.post.postSnapshots[1].postSnapshotImages.length).toBe(1);
+      expect(res2.body.result.post.postSnapshots[1].postSnapshotImages[0].image.id).toBe(createImageRet2.image.id);
+    });
   });
 
   describe('u-7-5 DELETE /user/posts/:postId', () => {
@@ -364,8 +500,7 @@ describe('E2E u-7 Post TEST', () => {
       const postId = createPostRes.body.result.post.id;
       /** main test. */
       const postReport: CreatePostReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       for (const accessToken of accessTokens) {
         const res = await request(app.getHttpServer())
@@ -399,8 +534,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(postCreateDto);
       const postId = createPostRes.body.result.post.id;
       const postReport: CreatePostReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
@@ -439,8 +573,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(postCreateDto);
       const postId = createPostRes.body.result.post.id;
       const postReport: CreatePostReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
@@ -978,8 +1111,7 @@ describe('E2E u-7 Post TEST', () => {
       const commentId = createCommentRes.body.result.comment.id;
       /** main test. */
       const commentReport: CreateCommentReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       for (const accessToken of accessTokens) {
         const res = await request(app.getHttpServer())
@@ -1027,8 +1159,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(commentCreateDto);
       const commentId = createCommentRes.body.result.comment.id;
       const commentReport: CreateCommentReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)
@@ -1081,8 +1212,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(commentCreateDto);
       const commentId = createCommentRes.body.result.comment.id;
       const commentReport: CreateCommentReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)

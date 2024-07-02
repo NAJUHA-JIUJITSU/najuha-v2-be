@@ -15,6 +15,7 @@ export class CommentFactory {
       id: commentId,
       userId: commentCreateDto.userId,
       parentId: null,
+      replyCount: 0,
       status: 'ACTIVE',
       createdAt: new Date(),
       deletedAt: null,
@@ -31,6 +32,7 @@ export class CommentFactory {
       id: commentId,
       userId: commentReplyCreateDto.userId,
       parentId: commentReplyCreateDto.parentId,
+      replyCount: 0,
       status: 'ACTIVE',
       createdAt: new Date(),
       deletedAt: null,
@@ -58,12 +60,11 @@ export class CommentFactory {
     };
   }
 
-  createCommentReport({ type, reason, commentId, userId }: ICommentReportCreateDto): ICommentReportModelData {
+  createCommentReport({ type, commentId, userId }: ICommentReportCreateDto): ICommentReportModelData {
     return {
       id: uuidv7(),
       type,
       status: 'ACCEPTED',
-      reason,
       commentId,
       userId,
       createdAt: new Date(),

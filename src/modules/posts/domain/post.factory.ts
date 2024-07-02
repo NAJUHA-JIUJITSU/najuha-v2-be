@@ -75,12 +75,11 @@ export class PostFactory {
     };
   }
 
-  createPostReport({ type, reason, userId, postId }: IPostReportCreateDto): IPostReportModelData {
+  createPostReport({ type, userId, postId }: IPostReportCreateDto): IPostReportModelData {
     return {
       id: uuidv7(),
       type,
       status: 'ACCEPTED',
-      reason,
       userId,
       postId,
       createdAt: new Date(),

@@ -4,7 +4,6 @@ export class PostReportModel {
   public readonly id: IPostReportModelData['id'];
   public readonly type: IPostReportModelData['type'];
   public readonly status: IPostReportModelData['status'];
-  public readonly reason: IPostReportModelData['reason'];
   public readonly postId: IPostReportModelData['postId'];
   public readonly userId: IPostReportModelData['userId'];
   public readonly createdAt: IPostReportModelData['createdAt'];
@@ -13,7 +12,6 @@ export class PostReportModel {
     this.id = data.id;
     this.type = data.type;
     this.status = data.status;
-    this.reason = data.reason;
     this.postId = data.postId;
     this.userId = data.userId;
     this.createdAt = data.createdAt;
@@ -24,7 +22,6 @@ export class PostReportModel {
       id: this.id,
       type: this.type,
       status: this.status,
-      reason: this.reason,
       postId: this.postId,
       userId: this.userId,
       createdAt: this.createdAt,

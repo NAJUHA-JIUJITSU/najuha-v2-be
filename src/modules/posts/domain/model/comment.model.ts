@@ -8,6 +8,7 @@ export class CommentModel {
   public readonly id: ICommentModelData['id'];
   public readonly userId: ICommentModelData['userId'];
   private readonly parentId: ICommentModelData['parentId'];
+  private readonly replyCount: ICommentModelData['replyCount'];
   private readonly createdAt: ICommentModelData['createdAt'];
   private readonly postId: ICommentModelData['postId'];
   private deletedAt: ICommentModelData['deletedAt'];
@@ -23,6 +24,7 @@ export class CommentModel {
     this.id = data.id;
     this.userId = data.userId;
     this.parentId = data.parentId;
+    this.replyCount = data.replyCount;
     this.status = data.status;
     this.createdAt = data.createdAt;
     this.deletedAt = data.deletedAt;
@@ -40,6 +42,7 @@ export class CommentModel {
       id: this.id,
       userId: this.userId,
       parentId: this.parentId,
+      replyCount: this.replyCount,
       status: this.status,
       createdAt: this.createdAt,
       deletedAt: this.deletedAt,

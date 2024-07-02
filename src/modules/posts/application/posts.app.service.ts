@@ -79,7 +79,7 @@ export class PostsAppService {
   }
 
   async updatePost({ postUpdateDto }: UpdatePostParam): Promise<UpdatePostRet> {
-    const [_user, postEntity, _imageEntities] = await Promise.all([
+    const [_user, postEntity, imageEntities] = await Promise.all([
       this.userRepository.findOneOrFail({ where: { id: postUpdateDto.userId } }).catch(() => {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
       }),
@@ -93,7 +93,7 @@ export class PostsAppService {
       })(),
     ]);
     const post = new PostModel(postEntity);
-    const newPostSnapshot = new PostSnapshotModel(this.postFactory.createPostSnapshot(postUpdateDto));
+    const newPostSnapshot = new PostSnapshotModel(this.postFactory.createPostSnapshot(postUpdateDto, imageEntities));
     post.addPostSnapshot(newPostSnapshot);
     return assert<UpdatePostRet>({ post: await this.postRepository.save(post.toData()) });
   }

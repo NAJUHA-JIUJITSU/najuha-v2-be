@@ -13401,21 +13401,23 @@
           "type": {
             "type": "string",
             "enum": [
-              "INAPPROPRIATE",
-              "SPAM"
+              "ABUSE_HARASSMENT",
+              "COMMERCIAL_ADVERTISING",
+              "ILLEGAL_DISTRIBUTION",
+              "IMPERSONATION_FRAUD",
+              "INAPPROPRIATE_CONTENT",
+              "POLITICAL_DISPARAGEMENT",
+              "RELIGIOUS_PROSELYTIZING",
+              "SEXUAL_CONTENT",
+              "SPAM_CLICKBAIT"
             ],
-            "description": "Report Type"
-          },
-          "reason": {
-            "type": "string",
-            "maxLength": 100,
-            "description": "Report Reason"
+            "title": "신고 타입",
+            "description": "신고 타입.\n- SPAM_CLICKBAIT: 낚시 / 놀람 / 도배\n- COMMERCIAL_ADVERTISING: 상업적 광고 및 판매\n- SEXUAL_CONTENT: 음란성 / 선정적\n- ABUSE_HARASSMENT: 욕설/비하\n- POLITICAL_DISPARAGEMENT: 정당/정치인 비하 및 선거운동\n- IMPERSONATION_FRAUD: 유출/사칭/사기\n- ILLEGAL_DISTRIBUTION: 불법촬영물 등의 유통\n- RELIGIOUS_PROSELYTIZING: 종교 포교 시도\n- INAPPROPRIATE_CONTENT: 게시판 성격에 부적절함"
           }
         },
         "nullable": false,
         "required": [
-          "type",
-          "reason"
+          "type"
         ]
       },
       "CreateCommentReqBody": {
@@ -13530,6 +13532,9 @@
             "title": "Comment parent",
             "description": "Comment parent."
           },
+          "replyCount": {
+            "type": "number"
+          },
           "commentSnapshots": {
             "type": "array",
             "items": {
@@ -13549,6 +13554,7 @@
           "userLiked",
           "user",
           "parentId",
+          "replyCount",
           "commentSnapshots"
         ]
       },
@@ -13795,21 +13801,23 @@
           "type": {
             "type": "string",
             "enum": [
-              "INAPPROPRIATE",
-              "SPAM"
+              "ABUSE_HARASSMENT",
+              "COMMERCIAL_ADVERTISING",
+              "ILLEGAL_DISTRIBUTION",
+              "IMPERSONATION_FRAUD",
+              "INAPPROPRIATE_CONTENT",
+              "POLITICAL_DISPARAGEMENT",
+              "RELIGIOUS_PROSELYTIZING",
+              "SEXUAL_CONTENT",
+              "SPAM_CLICKBAIT"
             ],
-            "description": "Report Type"
-          },
-          "reason": {
-            "type": "string",
-            "maxLength": 100,
-            "description": "Report Reason"
+            "title": "신고 타입",
+            "description": "신고 타입.\n- SPAM_CLICKBAIT: 낚시 / 놀람 / 도배\n- COMMERCIAL_ADVERTISING: 상업적 광고 및 판매\n- SEXUAL_CONTENT: 음란성 / 선정적\n- ABUSE_HARASSMENT: 욕설/비하\n- POLITICAL_DISPARAGEMENT: 정당/정치인 비하 및 선거운동\n- IMPERSONATION_FRAUD: 유출/사칭/사기\n- ILLEGAL_DISTRIBUTION: 불법촬영물 등의 유통\n- RELIGIOUS_PROSELYTIZING: 종교 포교 시도\n- INAPPROPRIATE_CONTENT: 게시판 성격에 부적절함"
           }
         },
         "nullable": false,
         "required": [
-          "type",
-          "reason"
+          "type"
         ]
       },
       "ResponseFormIncrementEntityViewCountRes": {

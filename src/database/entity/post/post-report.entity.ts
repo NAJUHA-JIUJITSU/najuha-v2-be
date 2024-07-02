@@ -22,10 +22,17 @@ export class PostReportEntity {
 
   /**
    * 신고 타입.
-   * - `INAPPROPRIATE`: 부적절한 내용.
-   * - `SPAM`: 스팸.
+   * - SPAM_CLICKBAIT: 낚시 / 놀람 / 도배
+   * - COMMERCIAL_ADVERTISING: 상업적 광고 및 판매
+   * - SEXUAL_CONTENT: 음란성 / 선정적
+   * - ABUSE_HARASSMENT: 욕설/비하
+   * - POLITICAL_DISPARAGEMENT: 정당/정치인 비하 및 선거운동
+   * - IMPERSONATION_FRAUD: 유출/사칭/사기
+   * - ILLEGAL_DISTRIBUTION: 불법촬영물 등의 유통
+   * - RELIGIOUS_PROSELYTIZING: 종교 포교 시도
+   * - INAPPROPRIATE_CONTENT: 게시판 성격에 부적절함
    */
-  @Column('varchar', { length: 16 })
+  @Column('varchar', { length: 64 })
   type!: IPostReport['type'];
 
   /**
@@ -36,10 +43,6 @@ export class PostReportEntity {
    */
   @Column('varchar', { length: 16, default: 'ACCEPTED' })
   status!: IPostReport['status'];
-
-  /** 신고 사유. */
-  @Column('varchar', { length: 100 })
-  reason!: IPostReport['reason'];
 
   /** 신고자 UserId. */
   @Column('uuid')

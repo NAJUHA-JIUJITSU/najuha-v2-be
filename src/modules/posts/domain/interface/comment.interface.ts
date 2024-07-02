@@ -19,6 +19,8 @@ export interface IComment {
   /** Comment parent. */
   parentId: IComment['id'] | null;
 
+  replyCount: number;
+
   /** Comment status. */
   status: TCommentStatus;
 
@@ -51,6 +53,7 @@ export interface ICommentModelData {
   id: IComment['id'];
   userId: IComment['userId'];
   parentId: IComment['parentId'];
+  replyCount: IComment['replyCount'];
   status: IComment['status'];
   createdAt: IComment['createdAt'];
   deletedAt: IComment['deletedAt'];
@@ -72,6 +75,7 @@ export interface ICommentDetail
     | 'id'
     | 'userId'
     | 'parentId'
+    | 'replyCount'
     | 'status'
     | 'createdAt'
     | 'deletedAt'
