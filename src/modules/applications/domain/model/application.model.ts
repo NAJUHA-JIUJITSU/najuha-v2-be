@@ -7,6 +7,7 @@ import { ApplicationsErrors, BusinessException } from '../../../../common/respon
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 import { IExpectedPayment } from '../interface/expected-payment.interface';
 import { UserModel } from '../../../users/domain/model/user.model';
+import { ApplicationOrderModel } from './application-order.model';
 
 export class ApplicationModel {
   private readonly id: IApplicationModelData['id'];
@@ -21,6 +22,7 @@ export class ApplicationModel {
   private readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
   private readonly additionaInfos: AdditionalInfoModel[];
   private expectedPayment?: IExpectedPayment;
+  private applicationOrders?: ApplicationOrderModel[];
 
   constructor(data: IApplicationModelData) {
     this.id = data.id;
@@ -36,6 +38,7 @@ export class ApplicationModel {
       (info) => new ParticipationDivisionInfoModel(info),
     );
     this.additionaInfos = data.additionalInfos.map((info) => new AdditionalInfoModel(info));
+    this.applicationOrders = data.applicationOrders?.map((payment) => new ApplicationOrderModel(payment));
   }
 
   toData(): IApplicationModelData {
@@ -52,6 +55,7 @@ export class ApplicationModel {
       participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toData()),
       additionalInfos: this.additionaInfos.map((info) => info.toData()),
       expectedPayment: this.expectedPayment,
+      applicationOrders: this.applicationOrders?.map((payment) => payment.toData()),
     };
   }
 
@@ -81,6 +85,10 @@ export class ApplicationModel {
     );
   }
 
+  getParticipationDivisionInfos() {
+    return this.participationDivisionInfos;
+  }
+
   validateApplicationType(user: UserModel) {
     if (this.type === 'PROXY') return;
     const playerSnapshot = this.getLatestPlayerSnapshot();
@@ -104,6 +112,17 @@ export class ApplicationModel {
   setExpectedPayment(expectedPayment: IExpectedPayment) {
     if (this.status !== 'READY') throw new Error('Application status is not READY');
     this.expectedPayment = expectedPayment;
+  }
+
+  getExpectedPayment() {
+    if (this.status !== 'READY') throw new Error('Application status is not READY');
+    if (!this.expectedPayment) throw new Error('Expected payment is not set');
+    return this.expectedPayment;
+  }
+
+  addApplicationOrder(applicationOrder: ApplicationOrderModel) {
+    if (this.status !== 'READY') throw new Error('Application status is not READY');
+    this.applicationOrders = [...(this.applicationOrders ?? []), applicationOrder];
   }
 
   // DONE Status --------------------------------------------------------------

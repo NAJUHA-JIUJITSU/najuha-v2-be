@@ -76,6 +76,10 @@ export class UserModel {
     return this.birth;
   }
 
+  getEmail() {
+    return this.email;
+  }
+
   updateProfile(dto: IUserUpdateDto) {
     if (dto.name) this.name = dto.name;
     if (dto.nickname) this.nickname = dto.nickname;

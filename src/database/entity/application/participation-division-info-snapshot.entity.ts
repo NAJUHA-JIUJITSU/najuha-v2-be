@@ -21,7 +21,7 @@ export class ParticipationDivisionInfoSnapshotEntity {
   participationDivisionInfoId!: ParticipationDivisionInfoEntity['id'];
 
   @Column('uuid')
-  participationDivisionId!: DivisionEntity['id'];
+  divisionId!: DivisionEntity['id'];
 
   @ManyToOne(
     () => ParticipationDivisionInfoEntity,

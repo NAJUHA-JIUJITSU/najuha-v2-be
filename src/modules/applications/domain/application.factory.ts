@@ -11,6 +11,9 @@ import { IPlayerSnapshotCreateDto, IPlayerSnapshotModelData } from './interface/
 import { IParticipationDivisionInfoSnapshotModelData } from './interface/participation-division-info-snapshot.interface';
 import { IAdditionalInfoCreateDto, IAdditionalInfoModelData } from './interface/additional-info.interface';
 import { CompetitionModel } from '../../competitions/domain/model/competition.model';
+import { IApplicationOrderModelData } from './interface/application-order.interface';
+import { ApplicationModel } from './model/application.model';
+import { UserModel } from '../../users/domain/model/user.model';
 
 @Injectable()
 export class ApplicationFactory {
@@ -45,6 +48,7 @@ export class ApplicationFactory {
       playerSnapshots: [playerSnapshot],
       participationDivisionInfos,
       additionalInfos,
+      applicationOrders: [],
     };
   }
 
@@ -81,9 +85,10 @@ export class ApplicationFactory {
       );
       return {
         id: participationDivisionInfoId,
+        status: 'READY',
+        createdAt: new Date(),
         applicationId,
         participationDivisionInfoSnapshots: [participationDivisionInfosSnapshot],
-        createdAt: new Date(),
         payedDivisionId: null,
         payedPriceSnapshotId: null,
         payedDivision: null,
@@ -98,7 +103,7 @@ export class ApplicationFactory {
   ): IParticipationDivisionInfoSnapshotModelData {
     return {
       id: uuidv7(),
-      participationDivisionId: division.id,
+      divisionId: division.id,
       division,
       participationDivisionInfoId,
       createdAt: new Date(),
@@ -132,5 +137,64 @@ export class ApplicationFactory {
         updatedAt: new Date(),
       };
     });
+  }
+
+  createApplicationOrder(
+    application: ApplicationModel,
+    user: UserModel,
+    competition: CompetitionModel,
+  ): IApplicationOrderModelData {
+    const applicationOrderId = uuidv7();
+    const earlybirdDiscountSnapshot = competition.getLatestEarlybirdDiscountSnapshot();
+    const combinationDiscountSnapshot = competition.getLatestCombinationDiscountSnapshot();
+    const expectedPayment = application.getExpectedPayment();
+
+    const applicationOrderPaymentSnapshotId = uuidv7();
+    const participationDivisionInfos = application.getParticipationDivisionInfos();
+
+    return {
+      id: applicationOrderId,
+      createdAt: new Date(),
+      orderId: `${applicationOrderId}_${competition.getCompetitionPaymentId()}`,
+      orderName: competition.getTitle().slice(0, 100),
+      customerName: user.getName(),
+      customerEmail: user.getEmail().slice(0, 100),
+      status: 'READY',
+      applicationId: application.getId(),
+      earlybirdDiscountSnapshotId: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.getId() : null,
+      combinationDiscountSnapshotId: combinationDiscountSnapshot ? combinationDiscountSnapshot.getId() : null,
+      applicationOrderPaymentSnapshots: [
+        {
+          id: applicationOrderPaymentSnapshotId,
+          createdAt: new Date(),
+          normalAmount: expectedPayment.normalAmount,
+          earlybirdDiscountAmount: expectedPayment.earlybirdDiscountAmount,
+          combinationDiscountAmount: expectedPayment.combinationDiscountAmount,
+          totalAmount: expectedPayment.totalAmount,
+          applicationOrderId: applicationOrderId,
+          participationDivisionInfoPayments: participationDivisionInfos.map((participationDivisionInfo) => {
+            return {
+              id: uuidv7(),
+              createdAt: new Date(),
+              applicationOrderPaymentSnapshotId,
+              participationDivisionInfoId: participationDivisionInfo.getId(),
+              divisionId: participationDivisionInfo.getLatestParticipationDivisionInfoSnapshot().division.getId(),
+              priceSnapshotId: participationDivisionInfo
+                .getLatestParticipationDivisionInfoSnapshot()
+                .division.getLatestPriceSnapshot()
+                .getId(),
+              participationDivisionInfo: participationDivisionInfo.toData(),
+              division: participationDivisionInfo.getLatestParticipationDivisionInfoSnapshot().division.toData(),
+              priceSnapshot: participationDivisionInfo
+                .getLatestParticipationDivisionInfoSnapshot()
+                .division.getLatestPriceSnapshot()
+                .toData(),
+            };
+          }),
+        },
+      ],
+      earlybirdDiscountSnapshot: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.toData() : null,
+      combinationDiscountSnapshot: combinationDiscountSnapshot ? combinationDiscountSnapshot.toData() : null,
+    };
   }
 }

@@ -22,6 +22,10 @@ export class PriceSnapshotModel {
     };
   }
 
+  getId() {
+    return this.id;
+  }
+
   getPrice() {
     return this.price;
   }

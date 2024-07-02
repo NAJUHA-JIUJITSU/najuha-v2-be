@@ -185,4 +185,26 @@ export class UserApplicationsController {
       }),
     );
   }
+
+  /**
+   * u-6-8 createApplicationOrder.
+   * - RoleLevel: USER.
+   * - applicationId에 해당하는 application의 applicationOrder를 생성합니다.
+   * - applicationId에 해당하는 application의 status가 READY(결제전) 상태여야 합니다.
+   *
+   * @tag u-6 applications
+   * @security bearer
+   * @param applicationId applicationId
+   * @returns CreateApplicationOrderRes
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Post('/:applicationId/order')
+  async createApplicationOrder(
+    @Req() req: Request,
+    @TypedParam('applicationId') applicationId: IApplication['id'],
+  ): Promise<ResponseForm<CreateApplicationRes>> {
+    return createResponseForm(
+      await this.applicationAppService.createApplicationOrder({ userId: req['userId'], applicationId }),
+    );
+  }
 }

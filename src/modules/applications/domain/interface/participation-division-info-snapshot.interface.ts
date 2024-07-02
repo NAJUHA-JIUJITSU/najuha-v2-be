@@ -16,7 +16,7 @@ export interface IParticipationDivisionInfoSnapshot {
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
 
   /** - Division id (참가한 부문 id). */
-  participationDivisionId: IDivision['id'];
+  divisionId: IDivision['id'];
 
   /** - Division. (참가한 부문).*/
   division: IDivision;
@@ -29,6 +29,6 @@ export interface IParticipationDivisionInfoSnapshotModelData {
   id: IParticipationDivisionInfoSnapshot['id'];
   createdAt: IParticipationDivisionInfoSnapshot['createdAt'];
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
-  participationDivisionId: IDivision['id'];
+  divisionId: IDivision['id'];
   division: IDivisionModelData;
 }

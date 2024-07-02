@@ -18,12 +18,14 @@ import {
   ICompetitionPosterImageModelData,
 } from './interface/competition-poster-image.interface';
 import { IImage } from '../../images/domain/interface/image.interface';
+import { ulid } from 'ulid';
 
 @Injectable()
 export class CompetitionFactory {
   createCompetition(createCompetitionDto: ICompetitionCreateDto): ICompetitionModelData {
     return {
       id: uuidv7(),
+      competitionPaymentId: ulid(),
       title: createCompetitionDto.title ?? 'DEFAULT TITLE',
       address: createCompetitionDto.address ?? 'DEFAULT ADDRESS',
       competitionDate: createCompetitionDto.competitionDate ?? null,

@@ -2,7 +2,7 @@ import { Entity, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany, Ind
 import { CompetitionEntity } from './competition.entity';
 import { IEarlybirdDiscountSnapshot } from '../../../modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { uuidv7 } from 'uuidv7';
-import { ApplicationPaymentEntity } from '../application/application-payment.entity';
+import { ApplicationOrderEntity } from '../application/application-order.entity';
 
 /**
  * EarlybirdDiscountSnapshot Entity
@@ -36,6 +36,6 @@ export class EarlybirdDiscountSnapshotEntity {
   @JoinColumn({ name: 'competitionId' })
   competition!: CompetitionEntity;
 
-  @OneToMany(() => ApplicationPaymentEntity, (applicationPayment) => applicationPayment.earlybirdDiscountSnapshot)
-  applicationPayments!: ApplicationPaymentEntity[];
+  @OneToMany(() => ApplicationOrderEntity, (applicationOrder) => applicationOrder.earlybirdDiscountSnapshot)
+  applicationOrders!: ApplicationOrderEntity[];
 }

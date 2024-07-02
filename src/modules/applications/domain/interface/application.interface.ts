@@ -16,6 +16,7 @@ import {
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { IExpectedPayment } from './expected-payment.interface';
 import { IDivision } from '../../../competitions/domain/interface/division.interface';
+import { IApplicationOrder, IApplicationOrderDetail, IApplicationOrderModelData } from './application-order.interface';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -68,6 +69,8 @@ export interface IApplication {
    * READY 상태일 때만 조회결과에 포함됩니다.
    */
   expectedPayment?: IExpectedPayment;
+
+  applicationOrders?: IApplicationOrder[];
 }
 
 // ----------------------------------------------------------------------------
@@ -86,13 +89,34 @@ export interface IApplicationModelData {
   participationDivisionInfos: IParticipationDivisionInfoModelData[];
   additionalInfos: IAdditionalInfoModelData[];
   expectedPayment?: IExpectedPayment;
+  applicationOrders?: IApplicationOrderModelData[];
 }
 
 // ----------------------------------------------------------------------------
 // Return interface
 // ----------------------------------------------------------------------------
-export interface IApplicationDetail extends IApplication {}
+export interface IApplicationDetail
+  extends Pick<
+    IApplication,
+    | 'id'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'deletedAt'
+    | 'type'
+    | 'status'
+    | 'competitionId'
+    | 'userId'
+    | 'playerSnapshots'
+    | 'participationDivisionInfos'
+    | 'additionalInfos'
+    | 'expectedPayment'
+  > {
+  applicationOrders?: IApplicationOrderDetail[];
+}
 
+// ----------------------------------------------------------------------------
+// DTO
+// ----------------------------------------------------------------------------
 export interface IApplicationCreateDto {
   /** userId */
   userId: IUser['id'];
@@ -116,9 +140,6 @@ export interface IApplicationCreateDto {
   additionalInfoCreateDtos?: IAdditionalInfoCreateDto[];
 }
 
-// ----------------------------------------------------------------------------
-// DTO
-// ----------------------------------------------------------------------------
 export interface IDoneApplicationUpdateDto {
   /**
    * - Division info update data array.

@@ -39,6 +39,11 @@ export interface GetExpectedPaymentParam {
   applicationId: IApplication['id'];
 }
 
+export interface CreateApplicationOrderParam {
+  userId: IUser['id'];
+  applicationId: IApplication['id'];
+}
+
 // ---------------------------------------------------------------------------
 // applicationsAppService Result
 // ---------------------------------------------------------------------------
@@ -66,3 +71,7 @@ export interface FindApplicationsRet
   extends TPaginationRet<{
     applications: IApplicationDetail[];
   }> {}
+
+export interface CreateApplicationOrderRet {
+  application: IApplicationDetail;
+}

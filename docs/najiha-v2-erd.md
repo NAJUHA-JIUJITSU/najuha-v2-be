@@ -157,44 +157,46 @@ erDiagram
     timestamptz createdAt
     uuid applicationId FK
   }
-  participation_division_info_snapshot {
+  application_order {
     uuid id PK
     timestamptz createdAt
-    uuid participationDivisionInfoId FK
-    uuid participationDivisionId FK
-  }
-  application_payment {
-    uuid id PK
-    timestamptz createdAt
+    varchar orderId
     varchar orderName
     varchar customerName
     varchar customerEmail
     varchar status
     uuid applicationId FK
-    uuid earlybirdDiscountSnapshotId FK
-    uuid combinationDiscountSnapshotId FK
+    uuid earlybirdDiscountSnapshotId FK "nullable"
+    uuid combinationDiscountSnapshotId FK "nullable"
   }
-  application_payment_snapshot {
+  application_order_payment_snapshot {
     uuid id PK
     timestamptz createdAt
     integer normalAmount
     integer earlybirdDiscountAmount
     integer combinationDiscountAmount
     integer totalAmount
-    uuid applicationPaymentId FK
+    uuid applicationOrderId FK
   }
-  participation_division_info_payment_map {
+  participation_division_info_snapshot {
     uuid id PK
     timestamptz createdAt
-    uuid applicationPaymentSnapshotId FK
     uuid participationDivisionInfoId FK
+    uuid participationDivisionId FK
   }
   participation_division_info {
     uuid id PK
     timestamptz createdAt
+    varchar status
     uuid applicationId FK
-    uuid payedDivisionId FK "nullable"
-    uuid payedPriceSnapshotId FK "nullable"
+  }
+  participation_division_info_payment {
+    uuid id PK
+    timestamptz createdAt
+    uuid applicationOrderPaymentSnapshotId FK
+    uuid participationDivisionInfoId FK
+    uuid divisionId FK
+    uuid priceSnapshotId FK
   }
   price_snapshot {
     uuid id PK
@@ -234,26 +236,18 @@ erDiagram
     uuid competitionId FK
     uuid userId FK
   }
-  participation_division_info_payment_map {
-    uuid id PK
-    timestamptz createdAt
-    uuid applicationPaymentSnapshotId FK
-    uuid participationDivisionInfoId FK
-  }
   player_snapshot }|--|| application: application
+  application_order }o--|| application: application
+  application_order_payment_snapshot }o--|| application_order: applicationOrder
   participation_division_info_snapshot }|--|| participation_division_info: participationDivisionInfo
   participation_division_info_snapshot }o--|| division: division
-  application_payment }o--|| application: application
-  application_payment_snapshot }o--|| application_payment: applicationPayment
-  participation_division_info_payment_map }o--|| application_payment_snapshot: applicationPaymentSnapshot
-  participation_division_info_payment_map }o--|| participation_division_info: participationDivisionInfo
   participation_division_info }|--|| application: application
-  participation_division_info }o--|| division: payedDivision
-  participation_division_info }o--|| price_snapshot: payedPriceSnapshot
+  participation_division_info_payment }o--|| application_order_payment_snapshot: applicationOrderPaymentSnapshot
+  participation_division_info_payment }o--|| participation_division_info: participationDivisionInfo
+  participation_division_info_payment }o--|| division: division
+  participation_division_info_payment }o--|| price_snapshot: priceSnapshot
   price_snapshot }|--|| division: division
   additional_info }o--|| application: application
-  participation_division_info_payment_map }o--|| application_payment_snapshot: applicationPaymentSnapshot
-  participation_division_info_payment_map }o--|| participation_division_info: participationDivisionInfo
 ```
 
 ### Indexes
@@ -289,6 +283,41 @@ PlayerSnapshot Entity
   - `applicationId`
 
 
+### `application_order`
+
+ApplicationOrderEntity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `orderId`
+  - `orderName`
+  - `customerName`
+  - `customerEmail`
+  - `status`
+  - `applicationId`
+  - `earlybirdDiscountSnapshotId`
+  - `combinationDiscountSnapshotId`
+
+
+### `application_order_payment_snapshot`
+
+ApplicationOrderPaymentSnapshotEntity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `normalAmount`
+  - `earlybirdDiscountAmount`
+  - `combinationDiscountAmount`
+  - `totalAmount`
+  - `applicationOrderId`
+
+
 ### `participation_division_info_snapshot`
 
 ParticipationDivisionInfoSnapshot Entity   
@@ -302,53 +331,6 @@ ParticipationDivisionInfoSnapshot Entity
   - `participationDivisionId`
 
 
-### `application_payment`
-
-Application Payment Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `orderName`
-  - `customerName`
-  - `customerEmail`
-  - `status`
-  - `applicationId`
-  - `earlybirdDiscountSnapshotId`
-  - `combinationDiscountSnapshotId`
-
-
-### `application_payment_snapshot`
-
-Application Payment Snapshot Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `normalAmount`
-  - `earlybirdDiscountAmount`
-  - `combinationDiscountAmount`
-  - `totalAmount`
-  - `applicationPaymentId`
-
-
-### `participation_division_info_payment_map`
-
-ParticipationDivisionInfoPaymentMap Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `applicationPaymentSnapshotId`
-  - `participationDivisionInfoId`
-
-
 ### `participation_division_info`
 
 ParticipationDivisionInfoEntity   
@@ -358,14 +340,28 @@ ParticipationDivisionInfoEntity
 
   - `id`
   - `createdAt`
+  - `status`
   - `applicationId`
-  - `payedDivisionId`
-  - `payedPriceSnapshotId`
+
+
+### `participation_division_info_payment`
+
+ParticipationDivisionInfoPaymentEntity   
+@namespace Application
+
+**Properties**
+
+  - `id`
+  - `createdAt`
+  - `applicationOrderPaymentSnapshotId`
+  - `participationDivisionInfoId`
+  - `divisionId`
+  - `priceSnapshotId`
 
 
 ### `additional_info`
 
-AdditionalInfo Entity   
+AdditionalInfoEntity   
 @namespace Application
 
 **Properties**
@@ -393,19 +389,6 @@ Application Entity
   - `status`
   - `competitionId`
   - `userId`
-
-
-### `participation_division_info_payment_map`
-
-ParticipationDivisionInfoPaymentMap Entity   
-@namespace Application
-
-**Properties**
-
-  - `id`
-  - `createdAt`
-  - `applicationPaymentSnapshotId`
-  - `participationDivisionInfoId`
 
 
 ## Competition
@@ -653,32 +636,26 @@ Competition Entity
 
 ```mermaid
 erDiagram
-  post_like {
+  post_snapshot_image {
     uuid id PK
-    uuid userId FK
+    uuid postSnapshotId FK
+    uuid imageId FK
+    integer sequence
     timestamptz createdAt
-    uuid postId FK
   }
-  post_report {
+  image {
     uuid id PK
-    varchar type
-    varchar status
-    varchar reason
-    uuid userId FK
-    uuid postId FK
+    varchar path
+    varchar format
     timestamptz createdAt
+    timestamptz linkedAt "nullable"
+    uuid userId FK
   }
   comment_report {
     uuid id PK
     varchar type
     varchar status
     varchar reason
-    uuid userId FK
-    timestamptz createdAt
-    uuid commentId FK
-  }
-  comment_like {
-    uuid id PK
     uuid userId FK
     timestamptz createdAt
     uuid commentId FK
@@ -698,6 +675,27 @@ erDiagram
     timestamptz deletedAt "nullable"
     uuid postId FK
   }
+  comment_like {
+    uuid id PK
+    uuid userId FK
+    timestamptz createdAt
+    uuid commentId FK
+  }
+  post_report {
+    uuid id PK
+    varchar type
+    varchar status
+    varchar reason
+    uuid userId FK
+    uuid postId FK
+    timestamptz createdAt
+  }
+  post_like {
+    uuid id PK
+    uuid userId FK
+    timestamptz createdAt
+    uuid postId FK
+  }
   post {
     uuid id PK
     uuid userId FK
@@ -714,76 +712,34 @@ erDiagram
     timestamptz createdAt
     uuid postId FK
   }
-  post_snapshot_image {
-    uuid id PK
-    uuid postSnapshotId FK
-    uuid imageId FK
-    integer sequence
-    timestamptz createdAt
-  }
-  image {
-    uuid id PK
-    varchar path
-    varchar format
-    timestamptz createdAt
-    timestamptz linkedAt "nullable"
-    uuid userId FK
-  }
-  post_like }o--|| post: post
-  post_report }o--|| post: post
+  post_snapshot_image }o--|| post_snapshot: postSnapshot
+  post_snapshot_image }o--|| image: image
   comment_report }o--|| comment: comment
-  comment_like }o--|| comment: comment
   comment_snapshot }|--|| comment: comment
   comment }o--|| comment: parent
   comment }o--|| post: post
+  comment_like }o--|| comment: comment
+  post_report }o--|| post: post
+  post_like }o--|| post: post
   post_snapshot }|--|| post: post
-  post_snapshot_image }o--|| post_snapshot: postSnapshot
-  post_snapshot_image }o--|| image: image
 ```
 
-### `post_like`
+### `post_snapshot_image`
 
-PostLike.   
-   
-게시글 좋아요 정보를 담는 Entity입니다.   
-동일한 유저가 동일한 게시글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
+PostSnapshotImage.   
    
 @namespace Post
 
 **Properties**
 
-  - `id`: UUID v7.
-  - `userId`: 좋아요를 누른 UserId.
-  - `createdAt`: 좋아요 누른 일자.
-  - `postId`: 좋아요를 누른 게시글의 Id.
-
-
-### `post_report`
-
-PostReport.   
-   
-게시글의 신고정보를 담는 Entity입니다.   
-신고 횟수가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.   
-동일한 유저가 동일한 게시글을 여러 번 신고할 수 없습니다. (중복신고 불가능)   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`: UUID v7.
-  - `type`
-    > 신고 타입.
-    > - `INAPPROPRIATE`: 부적절한 내용.
-    > - `SPAM`: 스팸.
-  - `status`
-    > 신고 상태.
-    > `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
-    > - `ACCEPTED`: 신고 승인.
-    > - `REJECTED`: 신고 거부.
-  - `reason`: 신고 사유.
-  - `userId`: 신고자 UserId.
-  - `postId`: 신고된 게시글의 Id.
-  - `createdAt`: 신고일자.
+  - `id`
+  - `postSnapshotId`
+  - `imageId`
+  - `sequence`
+    > sequence.
+    > - 게시물 이미지의 순서.
+    > - 0부터 시작.
+  - `createdAt`
 
 
 ### `comment_report`
@@ -812,23 +768,6 @@ CommentReport.
   - `userId`: 신고자 UserId.
   - `createdAt`: 신고일자.
   - `commentId`: 신고된 댓글의 Id.
-
-
-### `comment_like`
-
-CommentLike.   
-   
-댓글 좋아요 정보를 담는 Entity입니다.   
-동일한 유저가 동일한 댓글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`: UUID v7.
-  - `userId`: 좋아요를 누른 UserId.
-  - `createdAt`: 좋아요 누른 일자.
-  - `commentId`: 좋아요를 누른 댓글의 Id.
 
 
 ### `comment_snapshot`
@@ -882,6 +821,68 @@ Comment, CommentRpely.
   - `postId`: 게시글 Id.
 
 
+### `comment_like`
+
+CommentLike.   
+   
+댓글 좋아요 정보를 담는 Entity입니다.   
+동일한 유저가 동일한 댓글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 좋아요를 누른 UserId.
+  - `createdAt`: 좋아요 누른 일자.
+  - `commentId`: 좋아요를 누른 댓글의 Id.
+
+
+### `post_report`
+
+PostReport.   
+   
+게시글의 신고정보를 담는 Entity입니다.   
+신고 횟수가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.   
+동일한 유저가 동일한 게시글을 여러 번 신고할 수 없습니다. (중복신고 불가능)   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `type`
+    > 신고 타입.
+    > - `INAPPROPRIATE`: 부적절한 내용.
+    > - `SPAM`: 스팸.
+  - `status`
+    > 신고 상태.
+    > `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
+    > - `ACCEPTED`: 신고 승인.
+    > - `REJECTED`: 신고 거부.
+  - `reason`: 신고 사유.
+  - `userId`: 신고자 UserId.
+  - `postId`: 신고된 게시글의 Id.
+  - `createdAt`: 신고일자.
+
+
+### `post_like`
+
+PostLike.   
+   
+게시글 좋아요 정보를 담는 Entity입니다.   
+동일한 유저가 동일한 게시글에 여러 번 좋아요를 누를 수 없습니다. (중복 좋아요 불가능)   
+   
+@namespace Post
+
+**Properties**
+
+  - `id`: UUID v7.
+  - `userId`: 좋아요를 누른 UserId.
+  - `createdAt`: 좋아요 누른 일자.
+  - `postId`: 좋아요를 누른 게시글의 Id.
+
+
 ### `post`
 
 Post.   
@@ -927,24 +928,6 @@ PostSnapshot.
   - `body`: 게시글 내용.
   - `createdAt`: 게시글 작성일자.
   - `postId`: 게시글 Id.
-
-
-### `post_snapshot_image`
-
-PostSnapshotImage.   
-   
-@namespace Post
-
-**Properties**
-
-  - `id`
-  - `postSnapshotId`
-  - `imageId`
-  - `sequence`
-    > sequence.
-    > - 게시물 이미지의 순서.
-    > - 0부터 시작.
-  - `createdAt`
 
 
 ## Image

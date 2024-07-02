@@ -1,4 +1,5 @@
 import {
+  CreateApplicationOrderRet,
   CreateApplicationRet,
   FindApplicationsRet,
   GetApplicationRet,
@@ -38,3 +39,5 @@ export interface UpdateReadyApplicationRes extends UpdateReadyApplicationRet {}
 export interface UpdateDoneApplicationRes extends UpdateReadyApplicationRet {}
 
 export interface FindApplicationsRes extends FindApplicationsRet {}
+
+export interface CreateApplicationOrderRes extends CreateApplicationOrderRet {}

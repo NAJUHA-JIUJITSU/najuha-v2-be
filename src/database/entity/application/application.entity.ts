@@ -17,7 +17,7 @@ import { ParticipationDivisionInfoEntity } from './participation-division-info.e
 import { IApplication } from '../../../modules/applications/domain/interface/application.interface';
 import { uuidv7 } from 'uuidv7';
 import { AdditionalInfoEntity } from './additional-info.entity';
-import { ApplicationPaymentEntity } from './application-payment.entity';
+import { ApplicationOrderEntity } from './application-order.entity';
 
 /**
  * Application Entity
@@ -56,8 +56,8 @@ export class ApplicationEntity {
   @OneToMany(() => PlayerSnapshotEntity, (playerSnapshot) => playerSnapshot.application, { cascade: true })
   playerSnapshots!: PlayerSnapshotEntity[];
 
-  @OneToMany(() => ApplicationPaymentEntity, (paymentSnapshot) => paymentSnapshot.application)
-  applicationPayments!: ApplicationPaymentEntity[];
+  @OneToMany(() => ApplicationOrderEntity, (applicationOrder) => applicationOrder.application, { cascade: true })
+  applicationOrders!: ApplicationOrderEntity[];
 
   /**
    * @minitems 1

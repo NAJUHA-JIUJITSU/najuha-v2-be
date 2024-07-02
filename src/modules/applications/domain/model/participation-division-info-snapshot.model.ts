@@ -7,15 +7,15 @@ export class ParticipationDivisionInfoSnapshotModel {
   public readonly id: IParticipationDivisionInfoSnapshotModelData['id'];
   public readonly createdAt: IParticipationDivisionInfoSnapshotModelData['createdAt'];
   public readonly participationDivisionInfoId: IParticipationDivisionInfo['id'];
-  public readonly participationDivisionId: IDivision['id'];
+  public readonly divisionId: IDivision['id'];
   public readonly division: DivisionModel;
 
-  constructor(entity: IParticipationDivisionInfoSnapshotModelData) {
-    this.id = entity.id;
-    this.createdAt = entity.createdAt;
-    this.participationDivisionInfoId = entity.participationDivisionInfoId;
-    this.participationDivisionId = entity.participationDivisionId;
-    this.division = new DivisionModel(entity.division);
+  constructor(data: IParticipationDivisionInfoSnapshotModelData) {
+    this.id = data.id;
+    this.createdAt = data.createdAt;
+    this.participationDivisionInfoId = data.participationDivisionInfoId;
+    this.divisionId = data.divisionId;
+    this.division = new DivisionModel(data.division);
   }
 
   toData(): IParticipationDivisionInfoSnapshotModelData {
@@ -23,7 +23,7 @@ export class ParticipationDivisionInfoSnapshotModel {
       id: this.id,
       createdAt: this.createdAt,
       participationDivisionInfoId: this.participationDivisionInfoId,
-      participationDivisionId: this.participationDivisionId,
+      divisionId: this.divisionId,
       division: this.division.toData(),
     };
   }

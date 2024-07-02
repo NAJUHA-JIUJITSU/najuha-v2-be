@@ -3,7 +3,7 @@ import { CompetitionEntity } from './competition.entity';
 import { ICombinationDiscountSnapshot } from '../../../modules/competitions/domain/interface/combination-discount-snapshot.interface';
 import { ICompetition } from '../../../modules/competitions/domain/interface/competition.interface';
 import { uuidv7 } from 'uuidv7';
-import { ApplicationPaymentEntity } from '../application/application-payment.entity';
+import { ApplicationOrderEntity } from '../application/application-order.entity';
 
 /**
  * CombinationDiscountSnapshot Entity
@@ -31,6 +31,6 @@ export class CombinationDiscountSnapshotEntity {
   @JoinColumn({ name: 'competitionId' })
   competition!: CompetitionEntity;
 
-  @OneToMany(() => ApplicationPaymentEntity, (applicationPayment) => applicationPayment.combinationDiscountSnapshot)
-  applicationPayments!: ApplicationPaymentEntity[];
+  @OneToMany(() => ApplicationOrderEntity, (applicationOrder) => applicationOrder.combinationDiscountSnapshot)
+  applicationOrders!: ApplicationOrderEntity[];
 }

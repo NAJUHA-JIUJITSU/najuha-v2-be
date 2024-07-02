@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ApplicationFactory } from '../domain/application.factory';
 import {
+  CreateApplicationOrderParam,
+  CreateApplicationOrderRet,
   CreateApplicationParam,
   CreateApplicationRet,
   FindApplicationsParam,
@@ -25,6 +27,7 @@ import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
 import { ApplicationModel } from '../domain/model/application.model';
 import { In } from 'typeorm';
+import { ApplicationOrderModel } from '../domain/model/application-order.model';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -82,7 +85,7 @@ export class ApplicationsAppService {
   async getApplication({ userId, applicationId }: GetApplicationParam): Promise<GetApplicationRet> {
     const applicationEntity = await this.applicationRepository
       .findOneOrFail({
-        where: { userId, id: applicationId },
+        where: { id: applicationId, userId },
         relations: [
           'additionalInfos',
           'playerSnapshots',
@@ -90,6 +93,9 @@ export class ApplicationsAppService {
           'participationDivisionInfos.participationDivisionInfoSnapshots',
           'participationDivisionInfos.participationDivisionInfoSnapshots.division',
           'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+          'applicationOrders',
+          'applicationOrders.applicationOrderPaymentSnapshots',
+          'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
         ],
       })
       .catch(() => {
@@ -97,7 +103,7 @@ export class ApplicationsAppService {
       });
     const competitionEntity = await this.competitionRepository
       .findOneOrFail({
-        where: { id: applicationId },
+        where: { id: applicationEntity.competitionId },
         relations: [
           'divisions',
           'earlybirdDiscountSnapshots',
@@ -222,6 +228,9 @@ export class ApplicationsAppService {
             'participationDivisionInfos.participationDivisionInfoSnapshots',
             'participationDivisionInfos.participationDivisionInfoSnapshots.division',
             'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+            'applicationOrders',
+            'applicationOrders.applicationOrderPaymentSnapshots',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
           ],
         })
         .catch(() => {
@@ -327,6 +336,9 @@ export class ApplicationsAppService {
         'participationDivisionInfos.participationDivisionInfoSnapshots',
         'participationDivisionInfos.participationDivisionInfoSnapshots.division',
         'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+        'applicationOrders',
+        'applicationOrders.applicationOrderPaymentSnapshots',
+        'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
       ],
       order: { createdAt: 'DESC' },
       skip: page * limit,
@@ -357,14 +369,15 @@ export class ApplicationsAppService {
     return ret;
   }
 
-  async createApplicationPayment({ userId, applicationId }) {
+  async createApplicationOrder({ userId, applicationId }: CreateApplicationOrderParam) {
     const [userEntity, applicationEntity] = await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      this.userRepository.findOne({ where: { id: userId } }).then((user) => {
+        if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        return user;
       }),
       this.applicationRepository
-        .findOneOrFail({
-          where: { userId, id: applicationId },
+        .findOne({
+          where: { id: applicationId, userId, status: 'READY' },
           relations: [
             'additionalInfos',
             'playerSnapshots',
@@ -372,11 +385,50 @@ export class ApplicationsAppService {
             'participationDivisionInfos.participationDivisionInfoSnapshots',
             'participationDivisionInfos.participationDivisionInfoSnapshots.division',
             'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+            'applicationOrders',
+            'applicationOrders.applicationOrderPaymentSnapshots',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo.participationDivisionInfoSnapshots.division.priceSnapshots',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.division',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.priceSnapshot',
           ],
         })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+        .then((application) => {
+          if (!application) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+          return application;
         }),
     ]);
+    const competitionEntity = await this.competitionRepository
+      .findOne({
+        where: { id: applicationEntity.competitionId },
+        relations: [
+          'divisions',
+          'earlybirdDiscountSnapshots',
+          'combinationDiscountSnapshots',
+          'requiredAdditionalInfos',
+          'competitionHostMaps',
+        ],
+      })
+      .then((competition) => {
+        if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+        return competition;
+      });
+    // console.log('userEntity', userEntity);
+    console.log('applicationEntity', applicationEntity);
+    const userModel = new UserModel(userEntity);
+    const applicationModel = new ApplicationModel(applicationEntity);
+    const competitionModel = new CompetitionModel(competitionEntity);
+    applicationModel.setExpectedPayment(
+      competitionModel.calculateExpectedPayment(applicationModel.getParticipationDivisionIds()),
+    );
+    const applicationOrder = new ApplicationOrderModel(
+      this.applicationFactory.createApplicationOrder(applicationModel, userModel, competitionModel),
+    );
+    console.log(JSON.stringify(applicationOrder.toData(), null, 2));
+    applicationModel.addApplicationOrder(applicationOrder);
+    return assert<CreateApplicationOrderRet>({
+      application: await this.applicationRepository.save(applicationModel.toData()),
+    });
   }
 }

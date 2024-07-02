@@ -4,7 +4,7 @@ import { ApplicationEntity } from './application.entity';
 import { uuidv7 } from 'uuidv7';
 
 /**
- * AdditionalInfo Entity
+ * AdditionalInfoEntity
  * @namespace Application
  */
 @Entity('additional_info')

@@ -18,6 +18,7 @@ import { CompetitionPosterImageModel } from './competition-poster-image.model';
 
 export class CompetitionModel {
   private readonly id: ICompetitionModelData['id'];
+  private readonly competitionPaymentId: ICompetitionModelData['competitionPaymentId'];
   private title: ICompetitionModelData['title'];
   private address: ICompetitionModelData['address'];
   private competitionDate: ICompetitionModelData['competitionDate'];
@@ -43,6 +44,7 @@ export class CompetitionModel {
 
   constructor(data: ICompetitionModelData) {
     this.id = data.id;
+    this.competitionPaymentId = data.competitionPaymentId;
     this.title = data.title;
     this.address = data.address;
     this.competitionDate = data.competitionDate;
@@ -76,6 +78,7 @@ export class CompetitionModel {
   toData(): ICompetitionModelData {
     return {
       id: this.id,
+      competitionPaymentId: this.competitionPaymentId,
       title: this.title,
       address: this.address,
       competitionDate: this.competitionDate,
@@ -103,6 +106,14 @@ export class CompetitionModel {
 
   getId() {
     return this.id;
+  }
+
+  getCompetitionPaymentId() {
+    return this.competitionPaymentId;
+  }
+
+  getTitle() {
+    return this.title;
   }
 
   getLatestEarlybirdDiscountSnapshot(): EarlybirdDiscountSnapshotModel | null {

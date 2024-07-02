@@ -18,7 +18,7 @@ type IDummyParticipationDivisionUnit = [
   weight: IDivision['weight'],
 ];
 
-type IParticipationDivisionCombination = IDummyParticipationDivisionUnit[];
+export type IParticipationDivisionCombination = IDummyParticipationDivisionUnit[];
 
 const APPLICATION_DUMMY_CASE: {
   playerGender: IPlayerSnapshot['gender'];
@@ -430,6 +430,7 @@ export class ApplicationDummyBuilder {
       playerSnapshots: [],
       participationDivisionInfos: [],
       additionalInfos: [],
+      applicationOrders: [],
     };
   }
 
@@ -488,7 +489,7 @@ export class ApplicationDummyBuilder {
         participationDivisionInfoSnapshots: [
           {
             id: uuidv7(),
-            participationDivisionId: division.getId(),
+            divisionId: division.getId(),
             division: division.toData(),
             participationDivisionInfoId,
             createdAt: new Date(),

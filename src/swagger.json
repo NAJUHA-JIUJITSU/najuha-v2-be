@@ -4129,6 +4129,93 @@
         "x-nestia-method": "GET"
       }
     },
+    "/user/applications/{applicationId}/order": {
+      "post": {
+        "tags": [
+          "u-6 applications"
+        ],
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "applicationId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "CreateApplicationOrderRes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCreateApplicationRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-6-8 createApplicationOrder",
+        "description": "u-6-8 createApplicationOrder.\n- RoleLevel: USER.\n- applicationId에 해당하는 application의 applicationOrder를 생성합니다.\n- applicationId에 해당하는 application의 status가 READY(결제전) 상태여야 합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.applications.order.createApplicationOrder",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-6 applications",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CreateApplicationOrderRes",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
     "/user/posts": {
       "post": {
         "tags": [
@@ -9592,6 +9679,13 @@
             "title": "대회명",
             "description": "대회명."
           },
+          "competitionPaymentId": {
+            "type": "string",
+            "maxLength": 26,
+            "minLength": 26,
+            "title": "대회 결제 ID",
+            "description": "대회 결제 ID.\n- 결제 ID는 26자리 ULID 형식입니다.\n- 각 대회마다 고유한 결제 ID를 가집니다.\n- 해당 대회신청을 결제할때 필요한 orderId에 포함됩니다. `${orderId}_${competitionPaymentId}`\n- tosspayments에서 해당 대회의 결제 정보를 조회할때 사용됩니다."
+          },
           "address": {
             "type": "string",
             "maxLength": 256,
@@ -9766,6 +9860,7 @@
           "createdAt",
           "updatedAt",
           "title",
+          "competitionPaymentId",
           "address",
           "competitionDate",
           "registrationStartDate",
@@ -9932,6 +10027,13 @@
             "$ref": "#/components/schemas/TId",
             "title": "UUID v7",
             "description": "UUID v7."
+          },
+          "competitionPaymentId": {
+            "type": "string",
+            "maxLength": 26,
+            "minLength": 26,
+            "title": "대회 결제 ID",
+            "description": "대회 결제 ID.\n- 결제 ID는 26자리 ULID 형식입니다.\n- 각 대회마다 고유한 결제 ID를 가집니다.\n- 해당 대회신청을 결제할때 필요한 orderId에 포함됩니다. `${orderId}_${competitionPaymentId}`\n- tosspayments에서 해당 대회의 결제 정보를 조회할때 사용됩니다."
           },
           "title": {
             "type": "string",
@@ -10157,6 +10259,7 @@
         "nullable": false,
         "required": [
           "id",
+          "competitionPaymentId",
           "title",
           "address",
           "competitionDate",
@@ -10752,6 +10855,13 @@
             "title": "대회 주최자 정보 매핑 테이블",
             "description": "대회 주최자 정보 매핑 테이블."
           },
+          "competitionPaymentId": {
+            "type": "string",
+            "maxLength": 26,
+            "minLength": 26,
+            "title": "대회 결제 ID",
+            "description": "대회 결제 ID.\n- 결제 ID는 26자리 ULID 형식입니다.\n- 각 대회마다 고유한 결제 ID를 가집니다.\n- 해당 대회신청을 결제할때 필요한 orderId에 포함됩니다. `${orderId}_${competitionPaymentId}`\n- tosspayments에서 해당 대회의 결제 정보를 조회할때 사용됩니다."
+          },
           "address": {
             "type": "string",
             "maxLength": 256,
@@ -10919,6 +11029,7 @@
           "updatedAt",
           "title",
           "competitionHostMaps",
+          "competitionPaymentId",
           "address",
           "competitionDate",
           "registrationStartDate",
@@ -11871,10 +11982,21 @@
       "IApplicationDetail": {
         "type": "object",
         "properties": {
+          "applicationOrders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IApplicationOrderDetail"
+            }
+          },
           "id": {
             "$ref": "#/components/schemas/TId",
             "title": "UUID v7",
             "description": "UUID v7."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TApplicationStatus",
+            "title": "Status",
+            "description": "Status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소"
           },
           "createdAt": {
             "$ref": "#/components/schemas/TDateOrStringDate",
@@ -11885,6 +12007,21 @@
             "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "Updated at",
             "description": "Updated at."
+          },
+          "type": {
+            "$ref": "#/components/schemas/TApplicationType",
+            "title": "본인신청과 대리신청을 구별하는 type",
+            "description": "본인신청과 대리신청을 구별하는 type.\n- SELF: 본인 신청\n- PROXY: 대리 신청"
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "User id",
+            "description": "User id."
+          },
+          "competitionId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Competition id",
+            "description": "Competition id."
           },
           "deletedAt": {
             "oneOf": [
@@ -11901,26 +12038,6 @@
             ],
             "title": "Deleted at",
             "description": "Deleted at."
-          },
-          "type": {
-            "$ref": "#/components/schemas/TApplicationType",
-            "title": "본인신청과 대리신청을 구별하는 type",
-            "description": "본인신청과 대리신청을 구별하는 type.\n- SELF: 본인 신청\n- PROXY: 대리 신청"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TApplicationStatus",
-            "title": "Status",
-            "description": "Status.\n- READY: 결제 대기중\n- DONE: 결제 완료\n- CANCELED: 결제 취소"
-          },
-          "competitionId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Competition id",
-            "description": "Competition id."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "User id",
-            "description": "User id."
           },
           "playerSnapshots": {
             "type": "array",
@@ -11956,24 +12073,198 @@
         "nullable": false,
         "required": [
           "id",
+          "status",
           "createdAt",
           "updatedAt",
-          "deletedAt",
           "type",
-          "status",
-          "competitionId",
           "userId",
+          "competitionId",
+          "deletedAt",
           "playerSnapshots",
           "participationDivisionInfos",
           "additionalInfos"
         ]
       },
-      "TApplicationType": {
+      "IApplicationOrderDetail": {
+        "type": "object",
+        "properties": {
+          "applicationOrderPaymentSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IApplicationOrderPaymentSnapshotDetail"
+            }
+          },
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TApplicationOrderStatus"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "description": "CreatedAt"
+          },
+          "orderId": {
+            "type": "string",
+            "maxLength": 63,
+            "minLength": 63,
+            "description": "- 주문번호(총 63자)\n- `${applicationOrder.id}_${competition.competitionPaymentId}` 형태로 생성.\n- 36자의 applicationOrder.id(uuidv7)와 26자의 competition.competitionPaymentId(ULID)를 조합하여 생성.\n- ex) 123e4567-e89b-12d3-a456-426614174000_01ARYZ6S41MK3W7DMT3RZR9K9Z\n\nQ. 왜 applicationOrder.id와 competition.competitionPaymentId를 조합하여 생성하나요?\nA. 정산과정에서 동일한 대회의 주문 번호를 식별하기 위함입니다.\n\nQ. 버전 1 에서는 대회이름으로 동일한 대회의 주분을 식별했는데, 왜 변경했나요?\nA. 대회이름은 변경될 수 있기 때문에 대회이름으로 주문을 식별하면 안됩니다."
+          },
+          "orderName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "customerName": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$"
+          },
+          "customerEmail": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "applicationId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "- application id",
+            "description": "- application id."
+          },
+          "earlybirdDiscountSnapshotId": {
+            "$ref": "#/components/schemas/TId.Nullable"
+          },
+          "combinationDiscountSnapshotId": {
+            "$ref": "#/components/schemas/TId.Nullable"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "applicationOrderPaymentSnapshots",
+          "id",
+          "status",
+          "createdAt",
+          "orderId",
+          "orderName",
+          "customerName",
+          "customerEmail",
+          "applicationId",
+          "earlybirdDiscountSnapshotId",
+          "combinationDiscountSnapshotId"
+        ]
+      },
+      "IApplicationOrderPaymentSnapshotDetail": {
+        "type": "object",
+        "properties": {
+          "participationDivisionInfoPayments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IParticipationDivisionInfoPaymentDetail"
+            }
+          },
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "description": "CreatedAt"
+          },
+          "normalAmount": {
+            "$ref": "#/components/schemas/TMoney",
+            "title": "할인이 적용되지 않은 총 금액 (원)",
+            "description": "할인이 적용되지 않은 총 금액 (원)."
+          },
+          "earlybirdDiscountAmount": {
+            "$ref": "#/components/schemas/TMoney",
+            "title": "Earlybird discount amount. (원)",
+            "description": "Earlybird discount amount. (원)."
+          },
+          "combinationDiscountAmount": {
+            "$ref": "#/components/schemas/TMoney",
+            "title": "Combination discount amount. (원)",
+            "description": "Combination discount amount. (원)."
+          },
+          "totalAmount": {
+            "$ref": "#/components/schemas/TMoney",
+            "title": "Total amount 할인이 적용된 최종금액. (원)",
+            "description": "Total amount 할인이 적용된 최종금액. (원).\n- 계산 방법 : normalAmount - earlybirdDiscountAmount - combinationDiscountAmount."
+          },
+          "applicationOrderId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "- application id",
+            "description": "- application id."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "participationDivisionInfoPayments",
+          "id",
+          "createdAt",
+          "normalAmount",
+          "earlybirdDiscountAmount",
+          "combinationDiscountAmount",
+          "totalAmount",
+          "applicationOrderId"
+        ]
+      },
+      "IParticipationDivisionInfoPaymentDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate"
+          },
+          "applicationOrderPaymentSnapshotId": {
+            "$ref": "#/components/schemas/TId"
+          },
+          "participationDivisionInfoId": {
+            "$ref": "#/components/schemas/TId"
+          },
+          "divisionId": {
+            "$ref": "#/components/schemas/TId"
+          },
+          "priceSnapshotId": {
+            "$ref": "#/components/schemas/TId"
+          },
+          "division": {
+            "$ref": "#/components/schemas/IDivision"
+          },
+          "priceSnapshot": {
+            "$ref": "#/components/schemas/IPriceSnapshot"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "createdAt",
+          "applicationOrderPaymentSnapshotId",
+          "participationDivisionInfoId",
+          "divisionId",
+          "priceSnapshotId",
+          "division",
+          "priceSnapshot"
+        ]
+      },
+      "TApplicationOrderStatus": {
         "type": "string",
         "enum": [
-          "SELF",
-          "PROXY"
+          "READY",
+          "DONE",
+          "FAIL",
+          "CANCELED"
         ]
+      },
+      "TId.Nullable": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID v7."
       },
       "TApplicationStatus": {
         "type": "string",
@@ -11981,6 +12272,13 @@
           "READY",
           "DONE",
           "CANCELED"
+        ]
+      },
+      "TApplicationType": {
+        "type": "string",
+        "enum": [
+          "SELF",
+          "PROXY"
         ]
       },
       "IPlayerSnapshot": {
@@ -12095,23 +12393,12 @@
             "description": "CreatedAt."
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "CANCELED",
-              "DONE",
-              "READY"
-            ]
+            "$ref": "#/components/schemas/TParticipationDivisionInfoStatus"
           },
           "applicationId": {
             "$ref": "#/components/schemas/TId",
             "title": "Application id",
             "description": "Application id."
-          },
-          "payedDivisionId": {
-            "$ref": "#/components/schemas/TId.Nullable"
-          },
-          "payedPriceSnapshotId": {
-            "$ref": "#/components/schemas/TId.Nullable"
           },
           "participationDivisionInfoSnapshots": {
             "type": "array",
@@ -12121,12 +12408,6 @@
             "minItems": 1,
             "title": "참가부문 정보 스냅샷",
             "description": "참가부문 정보 스냅샷."
-          },
-          "payedDivision": {
-            "$ref": "#/components/schemas/IDivision.Nullable"
-          },
-          "payedPriceSnapshot": {
-            "$ref": "#/components/schemas/IParticipationDivisionInfoSnapshot.Nullable"
           }
         },
         "nullable": false,
@@ -12135,17 +12416,16 @@
           "createdAt",
           "status",
           "applicationId",
-          "payedDivisionId",
-          "payedPriceSnapshotId",
-          "participationDivisionInfoSnapshots",
-          "payedDivision",
-          "payedPriceSnapshot"
+          "participationDivisionInfoSnapshots"
         ]
       },
-      "TId.Nullable": {
+      "TParticipationDivisionInfoStatus": {
         "type": "string",
-        "format": "uuid",
-        "description": "UUID v7."
+        "enum": [
+          "READY",
+          "DONE",
+          "CANCELED"
+        ]
       },
       "IParticipationDivisionInfoSnapshot": {
         "type": "object",
@@ -12164,7 +12444,7 @@
             "title": "- Participation division Info id",
             "description": "- Participation division Info id."
           },
-          "participationDivisionId": {
+          "divisionId": {
             "$ref": "#/components/schemas/TId",
             "title": "- Division id (참가한 부문 id)",
             "description": "- Division id (참가한 부문 id)."
@@ -12180,158 +12460,7 @@
           "id",
           "createdAt",
           "participationDivisionInfoId",
-          "participationDivisionId",
-          "division"
-        ]
-      },
-      "IDivision.Nullable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "category": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "title": "부문 카테고리",
-            "description": "부문 카테고리.\n- ex) '초등부', '중등부', '어덜트'."
-          },
-          "uniform": {
-            "type": "string",
-            "enum": [
-              "GI",
-              "NOGI"
-            ],
-            "title": "유니폼",
-            "description": "유니폼."
-          },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "FEMALE",
-              "MALE",
-              "MIXED"
-            ],
-            "title": "부문 성별",
-            "description": "부문 성별."
-          },
-          "belt": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "title": "주짓수벨트",
-            "description": "주짓수벨트.\n- ex) '화이트', '블루', '퍼플', '브라운', '블랙'."
-          },
-          "weight": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Weight"
-              },
-              {
-                "$ref": "#/components/schemas/Absolute"
-              }
-            ],
-            "title": "체급",
-            "description": "체급.\n- weight type: '-45', '+45', '-60.5', '+60.5'\n- absolute type: '-45_ABSOLUTE', '+45_ABSOLUTE', '-60.5_ABSOLUTE', '+60.5_ABSOLUTE', 'ABSOLUTE'"
-          },
-          "birthYearRangeStart": {
-            "type": "string",
-            "minLength": 4,
-            "pattern": "^[0-9]{4}$",
-            "title": "출생년도 범위 시작. YYYY",
-            "description": "출생년도 범위 시작. YYYY."
-          },
-          "birthYearRangeEnd": {
-            "type": "string",
-            "minLength": 4,
-            "pattern": "^[0-9]{4}$",
-            "title": "출생년도 범위 끝. YYYY",
-            "description": "출생년도 범위 끝. YYYY."
-          },
-          "status": {
-            "$ref": "#/components/schemas/TDivisionStatus",
-            "title": "활성 상태",
-            "description": "활성 상태.\n- ACTIVE: 해당 부문에 신청 가능. (USER 에게 노출됨.)\n- INACTIVE: 해당 부문에 신청 불가능. (USER 에게 노출되지 않음.)"
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          },
-          "updatedAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "UpdatedAt",
-            "description": "UpdatedAt."
-          },
-          "competitionId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "CompetitionId",
-            "description": "CompetitionId."
-          },
-          "priceSnapshots": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IPriceSnapshot"
-            },
-            "minItems": 1,
-            "title": "가격 스냅샷",
-            "description": "가격 스냅샷."
-          }
-        },
-        "nullable": true,
-        "required": [
-          "id",
-          "category",
-          "uniform",
-          "gender",
-          "belt",
-          "weight",
-          "birthYearRangeStart",
-          "birthYearRangeEnd",
-          "status",
-          "createdAt",
-          "updatedAt",
-          "competitionId",
-          "priceSnapshots"
-        ]
-      },
-      "IParticipationDivisionInfoSnapshot.Nullable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "description": "CreatedAt"
-          },
-          "participationDivisionInfoId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "- Participation division Info id",
-            "description": "- Participation division Info id."
-          },
-          "participationDivisionId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "- Division id (참가한 부문 id)",
-            "description": "- Division id (참가한 부문 id)."
-          },
-          "division": {
-            "$ref": "#/components/schemas/IDivision",
-            "title": "- Division. (참가한 부문)",
-            "description": "- Division. (참가한 부문)."
-          }
-        },
-        "nullable": true,
-        "required": [
-          "id",
-          "createdAt",
-          "participationDivisionInfoId",
-          "participationDivisionId",
+          "divisionId",
           "division"
         ]
       },
@@ -13366,11 +13495,6 @@
             "title": "Comment writer",
             "description": "Comment writer."
           },
-          "postId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "PostId",
-            "description": "PostId."
-          },
           "deletedAt": {
             "oneOf": [
               {
@@ -13386,6 +13510,11 @@
             ],
             "title": "DeletedAt",
             "description": "DeletedAt."
+          },
+          "postId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "PostId",
+            "description": "PostId."
           },
           "likeCount": {
             "type": "number"
@@ -13414,8 +13543,8 @@
           "status",
           "createdAt",
           "userId",
-          "postId",
           "deletedAt",
+          "postId",
           "likeCount",
           "userLiked",
           "user",

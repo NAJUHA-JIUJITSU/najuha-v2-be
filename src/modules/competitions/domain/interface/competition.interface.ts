@@ -21,6 +21,15 @@ export interface ICompetition {
   /** UUID v7. */
   id: TId;
 
+  /**
+   * 대회 결제 ID.
+   * - 결제 ID는 26자리 ULID 형식입니다.
+   * - 각 대회마다 고유한 결제 ID를 가집니다.
+   * - 해당 대회신청을 결제할때 필요한 orderId에 포함됩니다. `${orderId}_${competitionPaymentId}`
+   * - tosspayments에서 해당 대회의 결제 정보를 조회할때 사용됩니다.
+   */
+  competitionPaymentId: string & tags.MinLength<26> & tags.MaxLength<26>;
+
   /** 대회명. */
   title: string & tags.MinLength<1> & tags.MaxLength<256>;
 
@@ -110,6 +119,7 @@ export interface ICompetition {
 // ----------------------------------------------------------------------------
 export interface ICompetitionModelData {
   id: ICompetition['id'];
+  competitionPaymentId: ICompetition['competitionPaymentId'];
   title: ICompetition['title'];
   address: ICompetition['address'];
   competitionDate: ICompetition['competitionDate'];

@@ -6,10 +6,6 @@ import {
 } from './participation-division-info-snapshot.interface';
 import { tags } from 'typia';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
-import {
-  IPriceSnapshot,
-  IPriceSnapshotModelData,
-} from '../../../competitions/domain/interface/price-snapshot.interface';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -21,21 +17,13 @@ export interface IParticipationDivisionInfo {
   /** CreatedAt. */
   createdAt: TDateOrStringDate;
 
-  status: 'READY' | 'DONE' | 'CANCELED';
+  status: TParticipationDivisionInfoStatus;
 
   /** Application id. */
   applicationId: IApplication['id'];
 
-  payedDivisionId: IDivision['id'] | null;
-
-  payedPriceSnapshotId: IPriceSnapshot['id'] | null;
-
   /** 참가부문 정보 스냅샷. */
   participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshot[] & tags.MinItems<1>;
-
-  payedDivision: IDivision | null;
-
-  payedPriceSnapshot: IParticipationDivisionInfoSnapshot | null;
 }
 
 // ----------------------------------------------------------------------------
@@ -44,12 +32,9 @@ export interface IParticipationDivisionInfo {
 export interface IParticipationDivisionInfoModelData {
   id: IParticipationDivisionInfo['id'];
   createdAt: IParticipationDivisionInfo['createdAt'];
+  status: IParticipationDivisionInfo['status'];
   applicationId: IParticipationDivisionInfo['id'];
   participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshotModelData[];
-  payedDivisionId: IParticipationDivisionInfo['payedDivisionId'];
-  payedPriceSnapshotId: IParticipationDivisionInfo['payedPriceSnapshotId'];
-  payedDivision: IDivisionModelData | null;
-  payedPriceSnapshot: IPriceSnapshotModelData | null;
 }
 
 // ----------------------------------------------------------------------------
@@ -62,3 +47,8 @@ export interface IParticipationDivisionInfoUpdateDto {
   /** 새로 참가 하고자 하는 부문 ID. */
   newParticipationDivisionId: IDivision['id'];
 }
+
+// ----------------------------------------------------------------------------
+// ENUM
+// ----------------------------------------------------------------------------
+export type TParticipationDivisionInfoStatus = 'READY' | 'DONE' | 'CANCELED';

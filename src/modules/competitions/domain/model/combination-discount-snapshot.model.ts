@@ -21,4 +21,8 @@ export class CombinationDiscountSnapshotModel {
       competitionId: this.competitionId,
     };
   }
+
+  getId() {
+    return this.id;
+  }
 }

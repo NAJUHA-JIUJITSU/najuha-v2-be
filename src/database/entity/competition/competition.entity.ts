@@ -20,6 +20,9 @@ export class CompetitionEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: ICompetition['id'];
 
+  @Column('varchar', { length: 26, unique: true })
+  competitionPaymentId!: ICompetition['competitionPaymentId'];
+
   @Column('varchar', { length: 256, default: 'DEFAULT TITLE' })
   title!: ICompetition['title'];
 

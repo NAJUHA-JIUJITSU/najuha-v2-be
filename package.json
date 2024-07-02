@@ -63,6 +63,7 @@
     "toss-payments-server-api": "^8.0.1",
     "typeorm": "^0.3.17",
     "typia": "^6.0.3",
+    "ulid": "^2.3.0",
     "uuidv7": "^1.0.0",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"

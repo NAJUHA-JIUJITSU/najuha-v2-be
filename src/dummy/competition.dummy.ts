@@ -17,10 +17,41 @@ import { ICombinationDiscountRule } from '../modules/competitions/domain/interfa
 import { IDivisionPack } from '../modules/competitions/domain/interface/division-pack.interface';
 import { TId } from '../common/common-types';
 import { IImage } from '../modules/images/domain/interface/image.interface';
+import { ulid } from 'ulid';
+
+const today = new Date();
+export const CompetitionDateByStatus = {
+  '신청기간 전, 환불기간 전, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전': DateTime.fromJSDate(today)
+    .plus({
+      days: 51,
+    })
+    .toJSDate(),
+  '신청기간 중, 환불기간 중, 단독출전조정기간 전, 출전명단공개 후, 대진표공개 전': DateTime.fromJSDate(today)
+    .plus({
+      days: 15,
+    })
+    .toJSDate(),
+  '신청기간 중, 환불기간 중, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전': DateTime.fromJSDate(today)
+    .plus({
+      days: 17,
+    })
+    .toJSDate(),
+  '신청기간 중, 환불기간 중, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전 / 얼리버드할인기간 중':
+    DateTime.fromJSDate(today).plus({ days: 35 }).toJSDate(),
+  '신청기간 후, 환불기간 후, 단독출전조정기간 후, 출전명단공개 후, 대진표공개 후':
+    DateTime.fromJSDate(today).toJSDate(),
+  '신청기간 후, 환불기간 후, 단독출전조정기간 후, 출전명단공개 후, 대진표공개 후 / 얼리버드할인기간 후':
+    DateTime.fromJSDate(today).toJSDate(),
+  '신청기간 후, 환불기간 후, 단독출전조정기간 중 (단독출전 선수는 환불가능), 출전명단공개 후, 대진표공개 전':
+    DateTime.fromJSDate(today).plus({ days: 10 }).toJSDate(),
+  '신청기간 후, 환불기간 후, 단독출전조정기간 중 (단독출전 선수는 환불가능), 출전명단공개 후, 대진표공개 후':
+    DateTime.fromJSDate(today).plus({ days: 16 }).toJSDate(),
+};
 
 export class CompetitionDummyBuilder {
   private competition: ICompetitionModelData = {
     id: uuidv7(),
+    competitionPaymentId: ulid(),
     title: 'Dummy Competition',
     address: typia.random<TCompetitionLocationFilter>(),
     description: 'Dummy Competition Description',

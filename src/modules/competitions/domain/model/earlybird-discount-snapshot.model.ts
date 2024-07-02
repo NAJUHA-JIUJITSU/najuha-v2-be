@@ -28,6 +28,10 @@ export class EarlybirdDiscountSnapshotModel {
     };
   }
 
+  getId() {
+    return this.id;
+  }
+
   getEarlybirdStartDate(): Date {
     return new Date(this.earlybirdStartDate);
   }
