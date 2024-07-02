@@ -50,8 +50,6 @@ export class CommentRepository extends Repository<CommentEntity> {
       qb = qb.leftJoinAndSelect('comment.likes', 'likes', 'likes.userId = :userId', { userId: query.userId });
     }
 
-    qb = qb.orderBy('comment.createdAt', 'DESC');
-
     return await qb
       .skip(query.page * query.limit)
       .take(query.limit)

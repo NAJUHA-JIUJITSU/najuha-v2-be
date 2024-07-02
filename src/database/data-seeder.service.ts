@@ -56,6 +56,7 @@ import { CommentDummyBuilder } from '../dummy/comment.dummy';
 import { ICommentSnapshot } from '../modules/posts/domain/interface/comment-snapshot.interface';
 import { CommentEntity } from './entity/post/comment.entity';
 import { CommentSnapshotEntity } from './entity/post/comment-snapshot.entity';
+import { DateTime } from '../common/utils/date-time';
 
 /**
  * todo!!:
@@ -245,10 +246,13 @@ export class DataSeederService {
 
   private preparePosts(users: IUser[]) {
     console.time('Posts preparation time');
+    const now = new Date();
+    let sequence = 0;
     const posts = users.flatMap((user) => {
       const postCount = 1000;
       const posts: IPost[] = [];
-      for (let i = 0; i < postCount; i++) posts.push(new PostDummyBuilder(user.id).build());
+      for (let i = 0; i < postCount; i++)
+        posts.push(new PostDummyBuilder(user.id).setCreatedAt(new Date(now.getTime() + sequence++ * 1000)).build());
       return posts;
     });
     this.posts = posts;
@@ -263,10 +267,15 @@ export class DataSeederService {
     console.time('Comments preparation time');
     const firstComments: IComment[] = [];
     const comments: IComment[] = [];
+    const now = new Date();
+    let sequence = 0;
     posts.forEach((post) => {
       const tmp: IComment[] = [];
       users.forEach((user) => {
-        for (let i = 0; i < 10; i++) tmp.push(new CommentDummyBuilder(user.id, post.id).build());
+        for (let i = 0; i < 10; i++)
+          tmp.push(
+            new CommentDummyBuilder(user.id, post.id).setCreatedAt(new Date(now.getTime() + sequence++ * 1000)).build(),
+          );
       });
       comments.push(...tmp);
       firstComments.push(tmp[0]);
@@ -275,7 +284,11 @@ export class DataSeederService {
     firstComments.forEach((firstComment) => {
       users.forEach((user) => {
         for (let i = 0; i < 10; i++)
-          replies.push(new CommentDummyBuilder(user.id, firstComment.postId, firstComment.id).build());
+          replies.push(
+            new CommentDummyBuilder(user.id, firstComment.postId, firstComment.id)
+              .setCreatedAt(new Date(now.getTime() + sequence++ * 1000))
+              .build(),
+          );
       });
     });
     this.comments = [...comments, ...replies];
