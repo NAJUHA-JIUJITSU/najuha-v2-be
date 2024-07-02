@@ -609,7 +609,6 @@ erDiagram
     uuid id PK
     varchar type
     varchar status
-    varchar reason
     uuid userId FK
     uuid postId FK
     timestamptz createdAt
@@ -618,7 +617,6 @@ erDiagram
     uuid id PK
     varchar type
     varchar status
-    varchar reason
     uuid userId FK
     timestamptz createdAt
     uuid commentId FK
@@ -719,14 +717,20 @@ PostReport.
   - `id`: UUID v7.
   - `type`
     > 신고 타입.
-    > - `INAPPROPRIATE`: 부적절한 내용.
-    > - `SPAM`: 스팸.
+    > - SPAM_CLICKBAIT: 낚시 / 놀람 / 도배
+    > - COMMERCIAL_ADVERTISING: 상업적 광고 및 판매
+    > - SEXUAL_CONTENT: 음란성 / 선정적
+    > - ABUSE_HARASSMENT: 욕설/비하
+    > - POLITICAL_DISPARAGEMENT: 정당/정치인 비하 및 선거운동
+    > - IMPERSONATION_FRAUD: 유출/사칭/사기
+    > - ILLEGAL_DISTRIBUTION: 불법촬영물 등의 유통
+    > - RELIGIOUS_PROSELYTIZING: 종교 포교 시도
+    > - INAPPROPRIATE_CONTENT: 게시판 성격에 부적절함
   - `status`
     > 신고 상태.
     > `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
     > - `ACCEPTED`: 신고 승인.
     > - `REJECTED`: 신고 거부.
-  - `reason`: 신고 사유.
   - `userId`: 신고자 UserId.
   - `postId`: 신고된 게시글의 Id.
   - `createdAt`: 신고일자.
@@ -747,14 +751,20 @@ CommentReport.
   - `id`: UUID v7.
   - `type`
     > 신고 타입.
-    > - `INAPPROPRIATE`: 부적절한 내용.
-    > - `SPAM`: 스팸.
+    > - SPAM_CLICKBAIT: 낚시 / 놀람 / 도배
+    > - COMMERCIAL_ADVERTISING: 상업적 광고 및 판매
+    > - SEXUAL_CONTENT: 음란성 / 선정적
+    > - ABUSE_HARASSMENT: 욕설/비하
+    > - POLITICAL_DISPARAGEMENT: 정당/정치인 비하 및 선거운동
+    > - IMPERSONATION_FRAUD: 유출/사칭/사기
+    > - ILLEGAL_DISTRIBUTION: 불법촬영물 등의 유통
+    > - RELIGIOUS_PROSELYTIZING: 종교 포교 시도
+    > - INAPPROPRIATE_CONTENT: 게시판 성격에 부적절함
   - `status`
     > 신고 상태.
     > `ACCEPTED`상태의 신고가 10회 이상이면 해당 댓글이 `INACTIVE` 상태로 변경됩니다.
     > - `ACCEPTED`: 신고 승인.
     > - `REJECTED`: 신고 거부.
-  - `reason`: 신고 사유.
   - `userId`: 신고자 UserId.
   - `createdAt`: 신고일자.
   - `commentId`: 신고된 댓글의 Id.

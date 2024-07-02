@@ -60,12 +60,11 @@ export class CommentFactory {
     };
   }
 
-  createCommentReport({ type, reason, commentId, userId }: ICommentReportCreateDto): ICommentReportModelData {
+  createCommentReport({ type, commentId, userId }: ICommentReportCreateDto): ICommentReportModelData {
     return {
       id: uuidv7(),
       type,
       status: 'ACCEPTED',
-      reason,
       commentId,
       userId,
       createdAt: new Date(),

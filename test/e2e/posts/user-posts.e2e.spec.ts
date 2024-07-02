@@ -500,8 +500,7 @@ describe('E2E u-7 Post TEST', () => {
       const postId = createPostRes.body.result.post.id;
       /** main test. */
       const postReport: CreatePostReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       for (const accessToken of accessTokens) {
         const res = await request(app.getHttpServer())
@@ -535,8 +534,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(postCreateDto);
       const postId = createPostRes.body.result.post.id;
       const postReport: CreatePostReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
@@ -575,8 +573,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(postCreateDto);
       const postId = createPostRes.body.result.post.id;
       const postReport: CreatePostReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
@@ -1114,8 +1111,7 @@ describe('E2E u-7 Post TEST', () => {
       const commentId = createCommentRes.body.result.comment.id;
       /** main test. */
       const commentReport: CreateCommentReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       for (const accessToken of accessTokens) {
         const res = await request(app.getHttpServer())
@@ -1163,8 +1159,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(commentCreateDto);
       const commentId = createCommentRes.body.result.comment.id;
       const commentReport: CreateCommentReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)
@@ -1217,8 +1212,7 @@ describe('E2E u-7 Post TEST', () => {
         .send(commentCreateDto);
       const commentId = createCommentRes.body.result.comment.id;
       const commentReport: CreateCommentReportReqBody = {
-        type: 'SPAM',
-        reason: 'reason',
+        type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)

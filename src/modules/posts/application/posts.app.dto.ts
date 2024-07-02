@@ -43,7 +43,7 @@ export interface DeletePostLikeParam {
 }
 
 export interface CreatePostReportParam {
-  postReportCreateDto: Pick<IPostReportCreateDto, 'userId' | 'postId' | 'type' | 'reason'>;
+  postReportCreateDto: Pick<IPostReportCreateDto, 'userId' | 'postId' | 'type'>;
 }
 
 export interface DeletePostReportParam {

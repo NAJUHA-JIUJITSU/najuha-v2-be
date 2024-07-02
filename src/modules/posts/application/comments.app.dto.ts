@@ -50,7 +50,7 @@ export interface DeleteCommentLikeParam {
 }
 
 export interface CreateCommentReportParam {
-  commentReportCreateDto: Pick<ICommentReportCreateDto, 'commentId' | 'userId' | 'type' | 'reason'>;
+  commentReportCreateDto: Pick<ICommentReportCreateDto, 'commentId' | 'userId' | 'type'>;
 }
 
 export interface DeleteCommentReportParam {
