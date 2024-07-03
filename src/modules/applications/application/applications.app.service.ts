@@ -70,7 +70,7 @@ export class ApplicationsAppService {
     const readyApplication = new ApplicationModel(
       this.applicationFactory.createReadyApplication(competitionModel, applicationCreateDto),
     );
-    this.applicationValidationService.validateCreateApplication(userModel, competitionModel, readyApplication);
+    await this.applicationValidationService.validateCreateApplication(userModel, competitionModel, readyApplication);
     readyApplication.setExpectedPayment(
       competitionModel.calculateExpectedPayment(readyApplication.getParticipationDivisionIds()),
     );
@@ -184,7 +184,7 @@ export class ApplicationsAppService {
         ...applicationCreateDto,
       }),
     );
-    this.applicationValidationService.validateCreateApplication(userModel, competitionModel, newApplication);
+    await this.applicationValidationService.validateCreateApplication(userModel, competitionModel, newApplication);
     oldApplicationModel.delete();
     // todo!!: Transaction
     await this.applicationRepository.save(oldApplicationModel.toData());
@@ -270,7 +270,7 @@ export class ApplicationsAppService {
     if (doneApplicationUpdateDto.additionalInfoUpdateDtos) {
       applicationModel.updateAdditionalInfos(doneApplicationUpdateDto.additionalInfoUpdateDtos);
     }
-    this.applicationValidationService.validateCreateApplication(userModel, competitionModel, applicationModel);
+    await this.applicationValidationService.validateCreateApplication(userModel, competitionModel, applicationModel);
     return assert<UpdateDoneApplicationRet>({
       application: await this.applicationRepository.save(applicationModel.toData()),
     });

@@ -20,7 +20,18 @@ import { IImage } from '../modules/images/domain/interface/image.interface';
 import { ulid } from 'ulid';
 
 const today = new Date();
-export const CompetitionDateByStatus = {
+
+type TCompetitionDateByStatus =
+  | '신청기간 전, 환불기간 전, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전'
+  | '신청기간 중, 환불기간 중, 단독출전조정기간 전, 출전명단공개 후, 대진표공개 전'
+  | '신청기간 중, 환불기간 중, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전'
+  | '신청기간 중, 환불기간 중, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전 / 얼리버드할인기간 중'
+  | '신청기간 후, 환불기간 후, 단독출전조정기간 후, 출전명단공개 후, 대진표공개 후'
+  | '신청기간 후, 환불기간 후, 단독출전조정기간 후, 출전명단공개 후, 대진표공개 후 / 얼리버드할인기간 후'
+  | '신청기간 후, 환불기간 후, 단독출전조정기간 중 (단독출전 선수는 환불가능), 출전명단공개 후, 대진표공개 전'
+  | '신청기간 후, 환불기간 후, 단독출전조정기간 중 (단독출전 선수는 환불가능), 출전명단공개 후, 대진표공개 후';
+
+const CompetitionDateByStatus: Record<TCompetitionDateByStatus, Date> = {
   '신청기간 전, 환불기간 전, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전': DateTime.fromJSDate(today)
     .plus({
       days: 51,
@@ -46,6 +57,10 @@ export const CompetitionDateByStatus = {
     DateTime.fromJSDate(today).plus({ days: 10 }).toJSDate(),
   '신청기간 후, 환불기간 후, 단독출전조정기간 중 (단독출전 선수는 환불가능), 출전명단공개 후, 대진표공개 후':
     DateTime.fromJSDate(today).plus({ days: 16 }).toJSDate(),
+};
+
+export const getCompetitionDateByStatus = (status: TCompetitionDateByStatus): Date => {
+  return CompetitionDateByStatus[status];
 };
 
 export class CompetitionDummyBuilder {
