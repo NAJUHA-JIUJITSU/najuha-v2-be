@@ -28,6 +28,7 @@ import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/particip
 import { ApplicationModel } from '../domain/model/application.model';
 import { In } from 'typeorm';
 import { ApplicationOrderModel } from '../domain/model/application-order.model';
+import { ApplicationValidationService } from '../domain/application-validation.service';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -36,6 +37,7 @@ export class ApplicationsAppService {
     private readonly userRepository: UserRepository,
     private readonly applicationRepository: ApplicationRepository,
     private readonly competitionRepository: CompetitionRepository,
+    private readonly applicationValidationService: ApplicationValidationService,
   ) {}
 
   /** Create application. */
@@ -65,14 +67,10 @@ export class ApplicationsAppService {
     ]);
     const userModel = new UserModel(userEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
-
     const readyApplication = new ApplicationModel(
       this.applicationFactory.createReadyApplication(competitionModel, applicationCreateDto),
     );
-    competitionModel.validateApplicationPeriod();
-    competitionModel.validateAdditionalInfo(applicationCreateDto.additionalInfoCreateDtos);
-    readyApplication.validateApplicationType(userModel);
-    readyApplication.validateDivisionSuitability();
+    this.applicationValidationService.validateCreateApplication(userModel, competitionModel, readyApplication);
     readyApplication.setExpectedPayment(
       competitionModel.calculateExpectedPayment(readyApplication.getParticipationDivisionIds()),
     );
@@ -186,10 +184,7 @@ export class ApplicationsAppService {
         ...applicationCreateDto,
       }),
     );
-    competitionModel.validateApplicationPeriod();
-    competitionModel.validateAdditionalInfo(applicationCreateDto.additionalInfoCreateDtos);
-    newApplication.validateApplicationType(userModel);
-    newApplication.validateDivisionSuitability();
+    this.applicationValidationService.validateCreateApplication(userModel, competitionModel, newApplication);
     oldApplicationModel.delete();
     // todo!!: Transaction
     await this.applicationRepository.save(oldApplicationModel.toData());
@@ -273,12 +268,9 @@ export class ApplicationsAppService {
       );
     }
     if (doneApplicationUpdateDto.additionalInfoUpdateDtos) {
-      competitionModel.validateAdditionalInfo(doneApplicationUpdateDto.additionalInfoUpdateDtos);
       applicationModel.updateAdditionalInfos(doneApplicationUpdateDto.additionalInfoUpdateDtos);
     }
-    competitionModel.validateApplicationPeriod();
-    applicationModel.validateApplicationType(userModel);
-    applicationModel.validateDivisionSuitability();
+    this.applicationValidationService.validateCreateApplication(userModel, competitionModel, applicationModel);
     return assert<UpdateDoneApplicationRet>({
       application: await this.applicationRepository.save(applicationModel.toData()),
     });

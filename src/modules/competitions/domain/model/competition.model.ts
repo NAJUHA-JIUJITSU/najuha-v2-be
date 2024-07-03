@@ -15,6 +15,7 @@ import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtiona
 import { CalculatePaymentService } from '../calculate-payment.domain.service';
 import { CompetitionHostMapModel } from './competition-host-map.model';
 import { CompetitionPosterImageModel } from './competition-poster-image.model';
+import { AdditionalInfoModel } from '../../../applications/domain/model/additional-info.model';
 
 export class CompetitionModel {
   private readonly id: ICompetitionModelData['id'];
@@ -240,6 +241,12 @@ export class CompetitionModel {
       );
   }
 
+  isSoloRegistrationAdjustmentPeriod(now = new Date()) {
+    return this.soloRegistrationAdjustmentStartDate && this.soloRegistrationAdjustmentEndDate
+      ? now >= this.soloRegistrationAdjustmentStartDate && now <= this.soloRegistrationAdjustmentEndDate
+      : false;
+  }
+
   calculateExpectedPayment(participationDivisionIds: IDivision['id'][]) {
     if (!this.divisions) throw new Error('divisions is not initialized in CompetitionModel');
     const divisions = this.divisions.filter((division) => participationDivisionIds.includes(division.getId()));
@@ -268,11 +275,11 @@ export class CompetitionModel {
     this.requiredAdditionalInfos.push(newRequiredAdditionalInfo);
   }
 
-  validateAdditionalInfo(additionalInfoCreateDtos?: IAdditionalInfoCreateDto[]) {
+  validateAdditionalInfo(addtionalInfos: AdditionalInfoModel[]) {
     if (!this.requiredAdditionalInfos)
       throw new Error('requiredAdditionalInfos is not initialized in CompetitionModel');
     const requiredAdditionalInfoTypes = this.requiredAdditionalInfos.map((info) => info.getType());
-    const additionalInfoTypes = additionalInfoCreateDtos?.map((info) => info.type) || [];
+    const additionalInfoTypes = addtionalInfos.map((info) => info.getType()) || [];
     const missingTypes = requiredAdditionalInfoTypes.filter((type) => !additionalInfoTypes.includes(type));
     if (missingTypes.length > 0) {
       throw new BusinessException(

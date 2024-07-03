@@ -89,6 +89,10 @@ export class ApplicationModel {
     return this.participationDivisionInfos;
   }
 
+  getAdditionalInfos() {
+    return this.additionaInfos;
+  }
+
   validateApplicationType(user: UserModel) {
     if (this.type === 'PROXY') return;
     const playerSnapshot = this.getLatestPlayerSnapshot();

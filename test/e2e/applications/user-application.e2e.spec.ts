@@ -250,6 +250,8 @@ describe('E2E u-6 applications TEST', () => {
       expect(typia.is<APPLICATIONS_REGISTRATION_ENDED>(response.body)).toBe(true);
     });
 
+    it('신청 실패 - 단독 출전 조정 기간중 출전 인원 0명 부문에 신청', async () => {});
+
     it('신청 실패 - 선수 정보와 맞지 않는 부문 성별', async () => {});
 
     it('신청 실패 - 선수 정보와 맞지 않는 부문 나이', async () => {});
@@ -266,6 +268,8 @@ describe('E2E u-6 applications TEST', () => {
 
     it('READY(결제전) 신청 수정 실패 - 대회 신청 기간 종료', async () => {});
 
+    it('READY(결제전) 신청 수정 실패 - 단독 출전 조정 기간중 출전 인원 0명 부문으로 수정', async () => {});
+
     it('READY(결제전) 신청 수정 실패 - 선수 정보와 맞지 않는 부문 성별', async () => {});
 
     it('READY(결제전) 신청 수정 실패 - 선수 정보와 맞지 않는 부문 나이', async () => {});
@@ -276,6 +280,8 @@ describe('E2E u-6 applications TEST', () => {
 
     it('DONE(결제완료) 신청 수정 실패 - 대회 신청 기간 종료', async () => {});
 
+    it('DONE(결제완료) 신청 수정 실패 - 단독 출전 조정 기간중 출전 인원 0명 부문으로 수정', async () => {});
+
     it('DONE(결제완료) 신청 수정 실패 - 선수 정보와 맞지 않는 부문 성별', async () => {});
 
     it('DONE(결제완료) 신청 수정 실패 - 선수 정보와 맞지 않는 부문 나이', async () => {});
@@ -283,9 +289,9 @@ describe('E2E u-6 applications TEST', () => {
 
   describe('u-6-5 deleteApplication', () => {
     it('신청 삭제 성공', async () => {});
-  });
 
-  describe('u-6-6 getExpectedPayment @Deprecated', () => {});
+    it('신청 삭제 실패 - 이미 결제 완료된 신청', async () => {});
+  });
 
   describe('u-6-7 findApplications', () => {
     it('신청 목록 조회 성공', async () => {});
@@ -294,6 +300,10 @@ describe('E2E u-6 applications TEST', () => {
   describe('u-6-8 createApplicationOrder', () => {
     it('결제 주문 생성 성공', async () => {});
 
+    it('결제 주문 생성 실패 - 이미 결제 완료된 신청', async () => {});
+
     it('결제 주문 생성 실패 - 대회 신청 기간 종료', async () => {});
+
+    it('결제 주문 생성 실패 - 단독 출전 조정 기간중 출전 인원 0명 부문으로 신청', async () => {});
   });
 });
