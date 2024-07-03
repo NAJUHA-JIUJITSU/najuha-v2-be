@@ -17,7 +17,7 @@ import { UserEntity } from '../user/user.entity';
 import { uuidv7 } from 'uuidv7';
 
 /**
- * Comment, CommentRpely.
+ * Comment, CommentReply.
  * 댓글 or 대댓글을 식별하는 최상위 엔티티로서 개별 댓글의 메타데이터를 담고 있습니다.
  *
  * 댓글의 내용(body) `comment`에 존재하지 않고, `comment_snapshot`에 저장되어 있습니다.

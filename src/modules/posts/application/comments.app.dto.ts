@@ -58,6 +58,11 @@ export interface DeleteCommentReportParam {
   commentId: IComment['id'];
 }
 
+export interface FindBestCommentsParam {
+  postId: IComment['postId'];
+  userId?: IUser['id'];
+}
+
 // ---------------------------------------------------------------------------
 // commentAppService Result
 // ---------------------------------------------------------------------------
@@ -76,4 +81,9 @@ export interface FindCommentsRet
 
 export interface UpdateCommentRet {
   comment: ICommentDetail;
+}
+
+export interface FindBestCommentsRet {
+  bestComment: ICommentDetail | null;
+  bestReply: ICommentDetail | null;
 }

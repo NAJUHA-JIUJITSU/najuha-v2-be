@@ -13,6 +13,7 @@ import {
   CreatePostReportReqBody,
   CreatePostReqBody,
   CreatePostRes,
+  FindBestCommentsRes,
   FindCommentsReqQuery,
   FindCommentsRes,
   FindPostsReqQuery,
@@ -531,6 +532,33 @@ export class UserPostsController {
       await this.commentsAppService.deleteCommentReport({
         userId: req['userId'],
         commentId,
+      }),
+    );
+  }
+
+  /**
+   * u-7-20 findBestComments.
+   * - RoleLevel: PUBLIC_OR_USER.
+   * - 게시글의 베스트 댓글, 베스트 대댓글을 조회 합니다.
+   * - 해당 게시글에 댓글이 없거나, 댓글, 대댓글에 좋아요가 없는경우 null 값이 반환 됩니다.
+   * - 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.
+   * - 로그인 유저의 경우 자신이 좋아요를 누른 댓글인지 확인할 수 있습니다.
+   *
+   * @tag u-7 posts
+   * @security bearer
+   * @param postId 게시글 id
+   * @returns FindCommentsRes 베스트 댓글 조회 결과
+   * */
+  @RoleLevels(RoleLevel.PUBLIC_OR_USER)
+  @TypedRoute.Get('/:postId/best-comments')
+  async findBestComments(
+    @Req() req: Request,
+    @TypedParam('postId') postId: IPost['id'],
+  ): Promise<ResponseForm<FindBestCommentsRes>> {
+    return createResponseForm(
+      await this.commentsAppService.findBestComments({
+        postId,
+        userId: req['userId'],
       }),
     );
   }

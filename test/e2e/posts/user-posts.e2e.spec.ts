@@ -17,6 +17,7 @@ import {
   CreatePostReportReqBody,
   CreatePostReqBody,
   CreatePostRes,
+  FindBestCommentsRes,
   FindCommentsRes,
   FindPostsRes,
   GetPostRes,
@@ -1232,6 +1233,57 @@ describe('E2E u-7 Post TEST', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .send(commentReport);
       expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
+    });
+  });
+
+  describe('u-7-20 Get findBestComments /user/posts/best-comments', () => {
+    it('게시물 베스트 댓글 및 베스트 대댓글 조회 성공시', async () => {
+      /** pre condition. */
+      const user = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user);
+      const user2 = new UserDummyBuilder().build();
+      await entityEntityManager.save(UserEntity, user2);
+      const accessToken = jwtService.sign(
+        { userId: user.id, userRole: user.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const accessToken2 = jwtService.sign(
+        { userId: user2.id, userRole: user2.role },
+        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+      );
+      const postCreateDto: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostRes = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(postCreateDto);
+      const postId = createPostRes.body.result.post.id;
+      const commentCreateDto: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentRes = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(commentCreateDto);
+      const commentId = createCommentRes.body.result.comment.id;
+      await request(app.getHttpServer())
+        .post(`/user/posts/comments/${commentId}/like`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      const res = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      expect(res.body.result.comments[0].userLiked).toBe(true);
+
+      /** main test. */
+      const findBestCommentsRes = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/best-comments`)
+        .set('Authorization', `Bearer ${accessToken2}`);
+      expect(typia.is<ResponseForm<FindBestCommentsRes>>(findBestCommentsRes.body)).toBe(true);
+      expect(!!findBestCommentsRes.body.result.bestComment).toBe(true);
+      expect(findBestCommentsRes.body.result.bestReply).toBe(null);
     });
   });
 });
