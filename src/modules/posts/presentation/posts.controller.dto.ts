@@ -1,6 +1,7 @@
 import {
   CreateCommentReplyRet,
   CreateCommentRet,
+  FindBestCommentsRet,
   FindCommentsRet,
   UpdateCommentRet,
 } from '../application/comments.app.dto';
@@ -55,3 +56,5 @@ export interface CreateCommentReplyRes extends CreateCommentReplyRet {}
 export interface FindCommentsRes extends FindCommentsRet {}
 
 export interface UpdateCommentRes extends UpdateCommentRet {}
+
+export interface FindBestCommentsRes extends FindBestCommentsRet {}

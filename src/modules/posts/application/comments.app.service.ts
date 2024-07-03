@@ -15,6 +15,8 @@ import {
   CreateCommentReplyRet,
   FindRepliesParam,
   FindCommentsAndRepliesParam,
+  FindBestCommentsParam,
+  FindBestCommentsRet,
 } from './comments.app.dto';
 import { assert } from 'typia';
 import { BusinessException, CommonErrors, PostsErrors } from '../../../common/response/errorResponse';
@@ -220,5 +222,16 @@ export class CommentsAppService {
         throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment Report not found');
       });
     await this.commentReportRepository.delete(commentReport);
+  }
+
+  async findBestComments({ postId, userId }: FindBestCommentsParam): Promise<FindBestCommentsRet> {
+    const [bestComment, bestReply] = await Promise.all([
+      this.commentRepository.findBestComment(postId, userId),
+      this.commentRepository.findBestReply(postId, userId),
+    ]);
+    return assert<FindBestCommentsRet>({
+      bestComment: bestComment ? new CommentModel(bestComment).toData() : null,
+      bestReply: bestReply ? new CommentModel(bestReply).toData() : null,
+    });
   }
 }

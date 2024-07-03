@@ -35,13 +35,6 @@ erDiagram
     uuid userId FK
     uuid policyId FK
   }
-  user_profile_image {
-    uuid id PK
-    uuid userId FK
-    uuid imageId FK
-    timestamptz createdAt
-    timestamptz deletedAt "nullable"
-  }
   image {
     uuid id PK
     varchar path
@@ -66,11 +59,18 @@ erDiagram
     timestamptz createdAt
     timestamptz updatedAt
   }
+  user_profile_image {
+    uuid id PK
+    uuid userId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
   policy_consent }o--|| user: user
   policy_consent }o--|| policy: policy
+  image }o--|| user: user
   user_profile_image }o--|| user: user
   user_profile_image }o--|| image: image
-  image }o--|| user: user
 ```
 
 ### `policy`
@@ -102,21 +102,6 @@ PolicyConsent Entity
   - `policyId`: - policyId.
 
 
-### `user_profile_image`
-
-UserProfileImage Entity   
-@namespace User   
-@erd Image
-
-**Properties**
-
-  - `id`
-  - `userId`
-  - `imageId`
-  - `createdAt`
-  - `deletedAt`
-
-
 ### `user`
 
 User Entity   
@@ -138,6 +123,21 @@ User Entity
   - `status`
   - `createdAt`
   - `updatedAt`
+
+
+### `user_profile_image`
+
+UserProfileImage Entity   
+@namespace User   
+@erd Image
+
+**Properties**
+
+  - `id`
+  - `userId`
+  - `imageId`
+  - `createdAt`
+  - `deletedAt`
 
 
 ## Application
@@ -806,7 +806,7 @@ CommentSnapshot.
 
 ### `comment`
 
-Comment, CommentRpely.   
+Comment, CommentReply.   
 댓글 or 대댓글을 식별하는 최상위 엔티티로서 개별 댓글의 메타데이터를 담고 있습니다.   
    
 댓글의 내용(body) `comment`에 존재하지 않고, `comment_snapshot`에 저장되어 있습니다.   
@@ -907,13 +907,6 @@ PostSnapshotImage.
 
 ```mermaid
 erDiagram
-  user_profile_image {
-    uuid id PK
-    uuid userId FK
-    uuid imageId FK
-    timestamptz createdAt
-    timestamptz deletedAt "nullable"
-  }
   image {
     uuid id PK
     varchar path
@@ -929,8 +922,15 @@ erDiagram
     timestamptz createdAt
     timestamptz deletedAt "nullable"
   }
-  user_profile_image }o--|| image: image
+  user_profile_image {
+    uuid id PK
+    uuid userId FK
+    uuid imageId FK
+    timestamptz createdAt
+    timestamptz deletedAt "nullable"
+  }
   competition_poster_image }o--|| image: image
+  user_profile_image }o--|| image: image
 ```
 
 ### `image`

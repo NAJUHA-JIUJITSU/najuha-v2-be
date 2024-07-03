@@ -6021,6 +6021,93 @@
         "x-nestia-method": "DELETE"
       }
     },
+    "/user/posts/{postId}/best-comments": {
+      "get": {
+        "tags": [
+          "u-7 posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "게시글 id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FindCommentsRes 베스트 댓글 조회 결과",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormFindBestCommentsRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-7-20 findBestComments",
+        "description": "u-7-20 findBestComments.\n- RoleLevel: PUBLIC_OR_USER.\n- 게시글의 베스트 댓글, 베스트 대댓글을 조회 합니다.\n- 해당 게시글에 댓글이 없거나, 댓글, 대댓글에 좋아요가 없는경우 null 값이 반환 됩니다.\n- 비로그인 유저의 경우 좋아요 여부를 확인할 수 없습니다.\n- 로그인 유저의 경우 자신이 좋아요를 누른 댓글인지 확인할 수 있습니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.posts.best-comments.findBestComments",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-7 posts",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "postId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "게시글 id",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "FindCommentsRes 베스트 댓글 조회 결과",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "GET"
+      }
+    },
     "/user/view-count/post/{postId}": {
       "post": {
         "tags": [
@@ -13510,6 +13597,132 @@
         "nullable": false,
         "required": [
           "type"
+        ]
+      },
+      "ResponseFormFindBestCommentsRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/FindBestCommentsRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "FindBestCommentsRes": {
+        "type": "object",
+        "properties": {
+          "bestComment": {
+            "$ref": "#/components/schemas/ICommentDetail.Nullable"
+          },
+          "bestReply": {
+            "$ref": "#/components/schemas/ICommentDetail.Nullable"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "bestComment",
+          "bestReply"
+        ]
+      },
+      "ICommentDetail.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TCommentStatus",
+            "title": "Comment status",
+            "description": "Comment status."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Comment writer",
+            "description": "Comment writer."
+          },
+          "postId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "PostId",
+            "description": "PostId."
+          },
+          "deletedAt": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            ],
+            "title": "DeletedAt",
+            "description": "DeletedAt."
+          },
+          "likeCount": {
+            "type": "number"
+          },
+          "userLiked": {
+            "type": "boolean"
+          },
+          "user": {
+            "$ref": "#/components/schemas/IUserPublicProfile"
+          },
+          "parentId": {
+            "$ref": "#/components/schemas/TId.Nullable",
+            "title": "Comment parent",
+            "description": "Comment parent."
+          },
+          "replyCount": {
+            "type": "number"
+          },
+          "commentSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICommentSnapshot"
+            }
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "status",
+          "createdAt",
+          "userId",
+          "postId",
+          "deletedAt",
+          "likeCount",
+          "userLiked",
+          "user",
+          "parentId",
+          "replyCount",
+          "commentSnapshots"
         ]
       },
       "ResponseFormIncrementEntityViewCountRes": {
