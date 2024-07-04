@@ -1,5 +1,6 @@
-import { TPaginationParam, TPaginationRet } from '../../../common/common-types';
+import { TMoneyValue, TPaginationParam, TPaginationRet } from '../../../common/common-types';
 import { IUser } from '../../users/domain/interface/user.interface';
+import { IApplicationOrder } from '../domain/interface/application-order.interface';
 import {
   IApplication,
   IApplicationCreateDto,
@@ -44,6 +45,14 @@ export interface CreateApplicationOrderParam {
   applicationId: IApplication['id'];
 }
 
+export interface ApproveApplicationOrderParam {
+  userId: IUser['id'];
+  applicationId: IApplication['id'];
+  paymentKey: string;
+  orderId: IApplicationOrder['orderId'];
+  amount: TMoneyValue;
+}
+
 // ---------------------------------------------------------------------------
 // applicationsAppService Result
 // ---------------------------------------------------------------------------
@@ -73,5 +82,9 @@ export interface FindApplicationsRet
   }> {}
 
 export interface CreateApplicationOrderRet {
+  application: IApplicationDetail;
+}
+
+export interface ApproveApplicationOrderRet {
   application: IApplicationDetail;
 }

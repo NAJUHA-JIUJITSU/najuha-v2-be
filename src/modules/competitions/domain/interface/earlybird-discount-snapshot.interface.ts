@@ -1,5 +1,5 @@
 import { ICompetition } from './competition.interface';
-import { TId, TDateOrStringDate, TMoney } from '../../../../common/common-types';
+import { TId, TDateOrStringDate, TMoneyValue } from '../../../../common/common-types';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -20,7 +20,7 @@ export interface IEarlybirdDiscountSnapshot {
    * - 단위 : 원.
    * - 음수 값은 허용하지 않습니다.
    */
-  discountAmount: TMoney;
+  discountAmount: TMoneyValue;
 
   /** CreatedAt. */
   createdAt: TDateOrStringDate;

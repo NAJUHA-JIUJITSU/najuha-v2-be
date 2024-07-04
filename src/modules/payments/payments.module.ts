@@ -5,5 +5,6 @@ import { PaymentsAppService } from './application/payments.app.service';
 @Module({
   imports: [DatabaseModule],
   providers: [PaymentsAppService],
+  exports: [PaymentsAppService],
 })
 export class PaymentsModule {}

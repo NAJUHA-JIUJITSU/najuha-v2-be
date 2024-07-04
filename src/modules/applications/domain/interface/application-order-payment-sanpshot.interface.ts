@@ -1,5 +1,5 @@
 import { tags } from 'typia';
-import { TMoney, TDateOrStringDate, TId } from '../../../../common/common-types';
+import { TMoneyValue, TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IApplicationOrder } from './application-order.interface';
 import {
   IParticipationDivisionInfoPayment,
@@ -18,19 +18,19 @@ export interface IApplicationOrderPaymentSnapshot {
   createdAt: TDateOrStringDate;
 
   /** 할인이 적용되지 않은 총 금액 (원). */
-  normalAmount: TMoney;
+  normalAmount: TMoneyValue;
 
   /** Earlybird discount amount. (원). */
-  earlybirdDiscountAmount: TMoney;
+  earlybirdDiscountAmount: TMoneyValue;
 
   /** Combination discount amount. (원). */
-  combinationDiscountAmount: TMoney;
+  combinationDiscountAmount: TMoneyValue;
 
   /**
    * Total amount 할인이 적용된 최종금액. (원).
    * - 계산 방법 : normalAmount - earlybirdDiscountAmount - combinationDiscountAmount.
    */
-  totalAmount: TMoney;
+  totalAmount: TMoneyValue;
 
   /** - application id. */
   applicationOrderId: IApplicationOrder['id'];

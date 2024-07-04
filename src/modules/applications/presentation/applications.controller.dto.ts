@@ -1,4 +1,5 @@
 import {
+  ApproveApplicationOrderRet,
   CreateApplicationOrderRet,
   CreateApplicationRet,
   FindApplicationsRet,
@@ -25,6 +26,12 @@ export interface UpdateDoneApplicationReqBody extends IDoneApplicationUpdateDto 
 
 export interface FindApplicationsQuery extends Partial<TPaginationParam<Omit<IApplicationQueryOptions, 'userId'>>> {}
 
+export interface ApproveApplicationOrderReqBody {
+  paymentKey: string;
+  orderId: string;
+  amount: number;
+}
+
 // ---------------------------------------------------------------------------
 // applicationsController Response
 // ---------------------------------------------------------------------------
@@ -41,3 +48,5 @@ export interface UpdateDoneApplicationRes extends UpdateReadyApplicationRet {}
 export interface FindApplicationsRes extends FindApplicationsRet {}
 
 export interface CreateApplicationOrderRes extends CreateApplicationOrderRet {}
+
+export interface ApproveApplicationOrderRes extends ApproveApplicationOrderRet {}

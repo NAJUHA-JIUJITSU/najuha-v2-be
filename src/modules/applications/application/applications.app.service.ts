@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ApplicationFactory } from '../domain/application.factory';
 import {
+  ApproveApplicationOrderParam,
+  ApproveApplicationOrderRet,
   CreateApplicationOrderParam,
   CreateApplicationOrderRet,
   CreateApplicationParam,
@@ -26,9 +28,12 @@ import { CompetitionRepository } from '../../../database/custom-repository/compe
 import { PlayerSnapshotModel } from '../domain/model/player-snapshot.model';
 import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/participation-division-info-snapshot.model';
 import { ApplicationModel } from '../domain/model/application.model';
-import { In } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 import { ApplicationOrderModel } from '../domain/model/application-order.model';
 import { ApplicationValidationService } from '../domain/application-validation.service';
+import { PaymentsAppService } from '../../payments/application/payments.app.service';
+import { UserEntity } from '../../../database/entity/user/user.entity';
+import { ApplicationEntity } from '../../../database/entity/application/application.entity';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -38,6 +43,8 @@ export class ApplicationsAppService {
     private readonly applicationRepository: ApplicationRepository,
     private readonly competitionRepository: CompetitionRepository,
     private readonly applicationValidationService: ApplicationValidationService,
+    private readonly paymentsAppService: PaymentsAppService,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** Create application. */
@@ -406,8 +413,6 @@ export class ApplicationsAppService {
         if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
         return competition;
       });
-    // console.log('userEntity', userEntity);
-    console.log('applicationEntity', applicationEntity);
     const userModel = new UserModel(userEntity);
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
@@ -417,10 +422,71 @@ export class ApplicationsAppService {
     const applicationOrder = new ApplicationOrderModel(
       this.applicationFactory.createApplicationOrder(applicationModel, userModel, competitionModel),
     );
-    console.log(JSON.stringify(applicationOrder.toData(), null, 2));
     applicationModel.addApplicationOrder(applicationOrder);
+    await this.applicationValidationService.validateCreateApplicationOrder(
+      userModel,
+      competitionModel,
+      applicationModel,
+    );
     return assert<CreateApplicationOrderRet>({
       application: await this.applicationRepository.save(applicationModel.toData()),
     });
+  }
+
+  async approveApplicationOrder({
+    userId,
+    applicationId,
+    paymentKey,
+    orderId,
+    amount,
+  }: ApproveApplicationOrderParam): Promise<ApproveApplicationOrderRet> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const userRepository = queryRunner.manager.getRepository(UserEntity);
+      const applicationRepository = queryRunner.manager.getRepository(ApplicationEntity);
+      const [_userEntity, applicationEntity] = await Promise.all([
+        userRepository.findOne({ where: { id: userId } }).then((user) => {
+          if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+          return user;
+        }),
+        applicationRepository
+          .findOne({
+            where: { id: applicationId, userId, status: 'READY' },
+            relations: [
+              'additionalInfos',
+              'playerSnapshots',
+              'participationDivisionInfos',
+              'participationDivisionInfos.participationDivisionInfoSnapshots',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+              'applicationOrders',
+              'applicationOrders.applicationOrderPaymentSnapshots',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo.participationDivisionInfoSnapshots.division.priceSnapshots',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.division',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.priceSnapshot',
+            ],
+          })
+          .then((application) => {
+            if (!application) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+            return application;
+          }),
+      ]);
+      const applicationModel = new ApplicationModel(applicationEntity);
+      applicationModel.approve(orderId);
+      const application = await applicationRepository.save(applicationModel.toData());
+      await this.paymentsAppService.approvePayment({ paymentKey, orderId, amount });
+      return assert<ApproveApplicationOrderRet>({
+        application,
+      });
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

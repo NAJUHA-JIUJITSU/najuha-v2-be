@@ -8,6 +8,7 @@ import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface
 import { IExpectedPayment } from '../interface/expected-payment.interface';
 import { UserModel } from '../../../users/domain/model/user.model';
 import { ApplicationOrderModel } from './application-order.model';
+import { IApplicationOrder } from '../interface/application-order.interface';
 
 export class ApplicationModel {
   private readonly id: IApplicationModelData['id'];
@@ -127,6 +128,16 @@ export class ApplicationModel {
   addApplicationOrder(applicationOrder: ApplicationOrderModel) {
     if (this.status !== 'READY') throw new Error('Application status is not READY');
     this.applicationOrders = [...(this.applicationOrders ?? []), applicationOrder];
+  }
+
+  approve(orderId: IApplicationOrder['orderId']) {
+    if (this.status !== 'READY') throw new Error('Application status is not READY');
+    if (!this.applicationOrders) throw new Error('applicationOrders is not initaliazed');
+    const order = this.applicationOrders.find((order) => order.getOrderId() === orderId);
+    if (!order) throw new Error('Order not found');
+    order.approve();
+    this.participationDivisionInfos.forEach((info) => info.approve());
+    this.status = 'DONE';
   }
 
   // DONE Status --------------------------------------------------------------

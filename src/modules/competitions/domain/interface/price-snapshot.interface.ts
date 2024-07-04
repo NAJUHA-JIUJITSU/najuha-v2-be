@@ -1,5 +1,5 @@
 import { IDivision } from './division.interface';
-import { TId, TDateOrStringDate, TMoney } from '../../../../common/common-types';
+import { TId, TDateOrStringDate, TMoneyValue } from '../../../../common/common-types';
 
 // ----------------------------------------------------------------------------
 // Base Interface
@@ -9,7 +9,7 @@ export interface IPriceSnapshot {
   id: TId;
 
   /** price, (원). */
-  price: TMoney;
+  price: TMoneyValue;
 
   /** CreatedAt. */
   createdAt: TDateOrStringDate;

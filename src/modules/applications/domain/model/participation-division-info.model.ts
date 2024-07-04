@@ -68,4 +68,9 @@ export class ParticipationDivisionInfoModel {
   addParticipationDivisionInfoSnapshot(snapshot: ParticipationDivisionInfoSnapshotModel) {
     this.participationDivisionInfoSnapshots.push(snapshot);
   }
+
+  approve() {
+    if (this.status !== 'READY') throw new Error('Only READY status can be approved');
+    this.status = 'DONE';
+  }
 }

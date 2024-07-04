@@ -1,8 +1,8 @@
-import { TMoney } from '../../../../common/common-types';
+import { TMoneyValue } from '../../../../common/common-types';
 
 export interface IExpectedPayment {
-  normalAmount: TMoney;
-  earlybirdDiscountAmount: TMoney;
-  combinationDiscountAmount: TMoney;
-  totalAmount: TMoney;
+  normalAmount: TMoneyValue;
+  earlybirdDiscountAmount: TMoneyValue;
+  combinationDiscountAmount: TMoneyValue;
+  totalAmount: TMoneyValue;
 }

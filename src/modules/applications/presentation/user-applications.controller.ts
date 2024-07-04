@@ -5,6 +5,8 @@ import { ResponseForm, createResponseForm } from '../../../common/response/respo
 import { ApplicationsAppService } from '../application/applications.app.service';
 import { IApplication } from '../domain/interface/application.interface';
 import {
+  ApproveApplicationOrderReqBody,
+  ApproveApplicationOrderRes,
   CreateApplicationReqBody,
   CreateApplicationRes,
   FindApplicationsQuery,
@@ -205,6 +207,36 @@ export class UserApplicationsController {
   ): Promise<ResponseForm<CreateApplicationRes>> {
     return createResponseForm(
       await this.applicationAppService.createApplicationOrder({ userId: req['userId'], applicationId }),
+    );
+  }
+
+  /**
+   * u-6-9 approveApplicationOrder.
+   * - RoleLevel: USER.
+   * - applicationId에 해당하는 application의 applicationOrder를 승인합니다.
+   * - applicationId에 해당하는 application의 status가 READY(결제전) 상태여야 합니다.
+   *
+   * @tag u-6 applications
+   * @security bearer
+   * @param applicationId applicationId
+   * @param body ApproveApplicationOrderReqBody
+   * @returns ApproveApplicationOrderRes
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Post('/:applicationId/order/approve')
+  async approveApplicationOrder(
+    @Req() req: Request,
+    @TypedParam('applicationId') applicationId: IApplication['id'],
+    @TypedBody() body: ApproveApplicationOrderReqBody,
+  ): Promise<ResponseForm<ApproveApplicationOrderRes>> {
+    return createResponseForm(
+      await this.applicationAppService.approveApplicationOrder({
+        userId: req['userId'],
+        applicationId,
+        paymentKey: body.paymentKey,
+        orderId: body.orderId,
+        amount: body.amount,
+      }),
     );
   }
 }

@@ -59,4 +59,13 @@ export class ApplicationOrderModel {
       combinationDiscountSnapshot: this.combinationDiscountSnapshot ? this.combinationDiscountSnapshot.toData() : null,
     };
   }
+
+  getOrderId() {
+    return this.orderId;
+  }
+
+  approve() {
+    if (this.status !== 'READY') throw new Error('Only READY status can be approved');
+    this.status = 'DONE';
+  }
 }

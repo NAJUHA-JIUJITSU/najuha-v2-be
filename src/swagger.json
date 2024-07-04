@@ -15,6 +15,92 @@
     }
   },
   "paths": {
+    "/test/fake-toss-webhook/success": {
+      "post": {
+        "tags": [
+          "t-1 fake-toss-webhook"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ProcessTossPaymentSuccessReqQuery"
+            },
+            "description": "ProcessTossPaymentSuccessReqQuery",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "void",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormvoid"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "t-1-1 processTossPaymentSuccess",
+        "description": "t-1-1 processTossPaymentSuccess.\n- RoleLevel: PUBLIC.\n- 프론트엔드 구현 없이 결제요청을 테스트하기위한 webhook 입니다. 프론트엔드에서 해당 api를 호출할일은 없습니다.\n- tosspayment sdk 위젯에서 결제 요청 성공 여부를 수신하는 webhook.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "test.fake-toss-webhook.success.processTossPaymentSuccess",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "t-1 fake-toss-webhook",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "query",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "ProcessTossPaymentSuccessReqQuery",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "void",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
     "/api-conventions/auth-guard": {
       "get": {
         "tags": [
@@ -4216,6 +4302,122 @@
         "x-nestia-method": "POST"
       }
     },
+    "/user/applications/{applicationId}/order/approve": {
+      "post": {
+        "tags": [
+          "u-6 applications"
+        ],
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "applicationId",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "ApproveApplicationOrderReqBody",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveApplicationOrderReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "ApproveApplicationOrderRes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormApproveApplicationOrderRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-6-9 approveApplicationOrder",
+        "description": "u-6-9 approveApplicationOrder.\n- RoleLevel: USER.\n- applicationId에 해당하는 application의 applicationOrder를 승인합니다.\n- applicationId에 해당하는 application의 status가 READY(결제전) 상태여야 합니다.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.applications.order.approve.approveApplicationOrder",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-6 applications",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "ApproveApplicationOrderReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "ApproveApplicationOrderRes",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
     "/user/posts": {
       "post": {
         "tags": [
@@ -6464,6 +6666,60 @@
   },
   "components": {
     "schemas": {
+      "ProcessTossPaymentSuccessReqQuery": {
+        "type": "object",
+        "properties": {
+          "paymentType": {
+            "type": "string",
+            "title": "결제 유형입니다. NORMAL, BRANDPAY, KEYIN 중 하나입니다",
+            "description": "결제 유형입니다. NORMAL, BRANDPAY, KEYIN 중 하나입니다.\n- NORMAL: 일반 결제입니다. 코어 결제 승인 API를 호출해서 결제를 완료하세요.\n- BRANDPAY: 브랜드페이 결제입니다. 브랜드페이 결제 승인 API를 호출해서 결제를 완료하세요.\n- KEYIN: 키인 결제입니다. 코어 결제 승인 API를 호출해서 결제를 완료하세요."
+          },
+          "orderId": {
+            "type": "string",
+            "title": "주문번호입니다",
+            "description": "주문번호입니다.\n- 최소 길이는 6자, 최대 길이는 64자입니다.\n- 주문한 결제를 식별하는 역할로, 결제를 요청할 때 가맹점에서 만들어서 사용한 값입니다.\n- 결제 데이터 관리를 위해 반드시 저장해야 합니다. 중복되지 않는 고유한 값을 발급해야 합니다. 결제 상태가 변해도 값이 유지됩니다."
+          },
+          "paymentKey": {
+            "type": "string",
+            "title": "결제의 키 값입니다",
+            "description": "결제의 키 값입니다.\n- 최대 길이는 200자입니다.\n- 결제를 식별하는 역할로, 중복되지 않는 고유한 값입니다."
+          },
+          "amount": {
+            "type": "number",
+            "title": "결제 금액입니다",
+            "description": "결제 금액입니다.\n- 결제 금액을 백엔드 서버로 요청을 보내 검증할 때 사용합니다."
+          }
+        },
+        "nullable": false,
+        "required": [
+          "paymentType",
+          "orderId",
+          "paymentKey",
+          "amount"
+        ]
+      },
+      "ResponseFormvoid": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code"
+        ]
+      },
       "AUTH_ACCESS_TOKEN_MISSING": {
         "type": "object",
         "properties": {
@@ -9269,28 +9525,6 @@
           "user"
         ]
       },
-      "ResponseFormvoid": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          },
-          "code": {
-            "type": "number",
-            "enum": [
-              200
-            ]
-          }
-        },
-        "nullable": false,
-        "required": [
-          "isSuccess",
-          "code"
-        ]
-      },
       "ResponseFormFindAllTypesOfLatestPoliciesRes": {
         "type": "object",
         "properties": {
@@ -9990,7 +10224,7 @@
             "description": "얼리버드 할인 마감일."
           },
           "discountAmount": {
-            "$ref": "#/components/schemas/TMoney",
+            "$ref": "#/components/schemas/TMoneyValue",
             "title": "얼리버드 할인 가격",
             "description": "얼리버드 할인 가격.\n- ex) 10000.\n- 단위 : 원.\n- 음수 값은 허용하지 않습니다."
           },
@@ -10015,7 +10249,7 @@
           "competitionId"
         ]
       },
-      "TMoney": {
+      "TMoneyValue": {
         "type": "integer",
         "minimum": 0,
         "description": "Amount (원)."
@@ -10511,7 +10745,7 @@
             "description": "UUID v7."
           },
           "price": {
-            "$ref": "#/components/schemas/TMoney",
+            "$ref": "#/components/schemas/TMoneyValue",
             "title": "price, (원)",
             "description": "price, (원)."
           },
@@ -11888,10 +12122,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             },
@@ -11987,26 +12221,6 @@
           "masterName"
         ]
       },
-      "SocialScurityNumberInfo": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "SOCIAL_SECURITY_NUMBER"
-            ]
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^[0-9]{6}-[0-9]{7}$"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "value"
-        ]
-      },
       "AddressInfo": {
         "type": "object",
         "properties": {
@@ -12020,6 +12234,26 @@
             "type": "string",
             "maxLength": 512,
             "minLength": 1
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
           }
         },
         "nullable": false,
@@ -12262,22 +12496,22 @@
             "description": "CreatedAt"
           },
           "normalAmount": {
-            "$ref": "#/components/schemas/TMoney",
+            "$ref": "#/components/schemas/TMoneyValue",
             "title": "할인이 적용되지 않은 총 금액 (원)",
             "description": "할인이 적용되지 않은 총 금액 (원)."
           },
           "earlybirdDiscountAmount": {
-            "$ref": "#/components/schemas/TMoney",
+            "$ref": "#/components/schemas/TMoneyValue",
             "title": "Earlybird discount amount. (원)",
             "description": "Earlybird discount amount. (원)."
           },
           "combinationDiscountAmount": {
-            "$ref": "#/components/schemas/TMoney",
+            "$ref": "#/components/schemas/TMoneyValue",
             "title": "Combination discount amount. (원)",
             "description": "Combination discount amount. (원)."
           },
           "totalAmount": {
-            "$ref": "#/components/schemas/TMoney",
+            "$ref": "#/components/schemas/TMoneyValue",
             "title": "Total amount 할인이 적용된 최종금액. (원)",
             "description": "Total amount 할인이 적용된 최종금액. (원).\n- 계산 방법 : normalAmount - earlybirdDiscountAmount - combinationDiscountAmount."
           },
@@ -12603,16 +12837,16 @@
         "type": "object",
         "properties": {
           "normalAmount": {
-            "$ref": "#/components/schemas/TMoney"
+            "$ref": "#/components/schemas/TMoneyValue"
           },
           "earlybirdDiscountAmount": {
-            "$ref": "#/components/schemas/TMoney"
+            "$ref": "#/components/schemas/TMoneyValue"
           },
           "combinationDiscountAmount": {
-            "$ref": "#/components/schemas/TMoney"
+            "$ref": "#/components/schemas/TMoneyValue"
           },
           "totalAmount": {
-            "$ref": "#/components/schemas/TMoney"
+            "$ref": "#/components/schemas/TMoneyValue"
           }
         },
         "nullable": false,
@@ -12696,10 +12930,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             },
@@ -12773,10 +13007,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 }
               ]
             },
@@ -12958,6 +13192,64 @@
         "nullable": false,
         "required": [
           "applications"
+        ]
+      },
+      "ApproveApplicationOrderReqBody": {
+        "type": "object",
+        "properties": {
+          "paymentKey": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "paymentKey",
+          "orderId",
+          "amount"
+        ]
+      },
+      "ResponseFormApproveApplicationOrderRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/ApproveApplicationOrderRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "ApproveApplicationOrderRes": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/IApplicationDetail"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "application"
         ]
       },
       "CreatePostReqBody": {
@@ -13972,11 +14264,6 @@
             "title": "Comment writer",
             "description": "Comment writer."
           },
-          "postId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "PostId",
-            "description": "PostId."
-          },
           "deletedAt": {
             "oneOf": [
               {
@@ -13992,6 +14279,11 @@
             ],
             "title": "DeletedAt",
             "description": "DeletedAt."
+          },
+          "postId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "PostId",
+            "description": "PostId."
           },
           "likeCount": {
             "type": "number"
@@ -14023,8 +14315,8 @@
           "status",
           "createdAt",
           "userId",
-          "postId",
           "deletedAt",
+          "postId",
           "likeCount",
           "userLiked",
           "user",

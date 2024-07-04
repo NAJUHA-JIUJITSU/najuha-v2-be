@@ -19,6 +19,14 @@ export class ApplicationValidationService {
     }
   }
 
+  async validateCreateApplicationOrder(user: UserModel, competition: CompetitionModel, application: ApplicationModel) {
+    competition.validateApplicationPeriod();
+
+    if (competition.isSoloRegistrationAdjustmentPeriod()) {
+      await this.validateSoloRegistrationAdjustment(application);
+    }
+  }
+
   private async validateSoloRegistrationAdjustment(application: ApplicationModel) {
     const participationDivisionIds = application.getParticipationDivisionIds();
     const existApplications = await this.applicationRepository.findByParticipationDivisionIds(
