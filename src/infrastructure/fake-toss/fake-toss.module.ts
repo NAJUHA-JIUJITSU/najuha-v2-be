@@ -1,13 +1,8 @@
 import { Module, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import FakeToss from 'fake-toss-payments-server';
-import { FakeTossWebhookController } from './presentation/fake-toss-webhook.controller';
-import { FakeTossWebhookAppService } from './application/fake-toss-webhook.app.service';
 import appEnv from '../../common/app-env';
 
-@Module({
-  controllers: [FakeTossWebhookController],
-  providers: [FakeTossWebhookAppService],
-})
+@Module({})
 export class FakeTossModule implements OnModuleInit, OnModuleDestroy {
   private fakeTossBackend: FakeToss.FakeTossBackend;
 
