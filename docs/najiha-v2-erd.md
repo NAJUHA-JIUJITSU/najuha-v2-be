@@ -182,8 +182,7 @@ erDiagram
     uuid id PK
     timestamptz createdAt
     uuid participationDivisionInfoId FK
-    uuid divisionId
-    uuid participationDivisionId FK "nullable"
+    uuid divisionId FK
   }
   participation_division_info {
     uuid id PK
@@ -194,6 +193,7 @@ erDiagram
   participation_division_info_payment {
     uuid id PK
     timestamptz createdAt
+    varchar status
     uuid applicationOrderPaymentSnapshotId FK
     uuid participationDivisionInfoId FK
     uuid divisionId FK
@@ -256,8 +256,11 @@ erDiagram
 | Table | Index Name | Columns | Unique | Spatial | Where |
 |-------|-------------|---------|--------|---------|-----------|
 | player_snapshot | IDX_PlayerSnapshot_applicationId | applicationId | false | false |  |
+| application_order | IDX_ApplicationOrder_applicationId | applicationId | false | false |  |
+| application_order_payment_snapshot | IDX_ApplicationOrderPaymentSnapshot_applicationOrderId | applicationOrderId | false | false |  |
 | participation_division_info_snapshot | IDX_ParticipationDivisionInfoSnapshot_participationDivisionInfoId | participationDivisionInfoId | false | false |  |
 | participation_division_info | IDX_ParticipationDivisionInfo_applicationId | applicationId | false | false |  |
+| participation_division_info_payment | IDX_ParticipationDivisionInfoPayment_applicationOrderPaymentSnapshotId | applicationOrderPaymentSnapshotId | false | false |  |
 | price_snapshot | IDX_PriceSnapshot_divisionId | divisionId | false | false |  |
 | division | IDX_Division_competitionId | competitionId | false | false |  |
 | additional_info | IDX_AddtionalInfo_applicationId | applicationId | false | false |  |
@@ -354,6 +357,7 @@ ParticipationDivisionInfoPaymentEntity
 
   - `id`
   - `createdAt`
+  - `status`
   - `applicationOrderPaymentSnapshotId`
   - `participationDivisionInfoId`
   - `divisionId`

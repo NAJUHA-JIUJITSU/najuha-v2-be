@@ -173,4 +173,4 @@ export interface IApplicationQueryOptions {
 // ----------------------------------------------------------------------------
 type TApplicationType = 'SELF' | 'PROXY';
 
-type TApplicationStatus = 'READY' | 'DONE' | 'CANCELED';
+type TApplicationStatus = 'READY' | 'DONE' | 'PARTIAL_CANCELED' | 'CANCELED';

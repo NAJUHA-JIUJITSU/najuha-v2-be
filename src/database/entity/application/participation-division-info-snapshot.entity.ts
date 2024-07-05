@@ -31,6 +31,6 @@ export class ParticipationDivisionInfoSnapshotEntity {
   participationDivisionInfo!: ParticipationDivisionInfoEntity;
 
   @ManyToOne(() => DivisionEntity, (division) => division.participationDivisionInfoSnapshots)
-  @JoinColumn({ name: 'participationDivisionId' })
+  @JoinColumn({ name: 'divisionId' })
   division!: DivisionEntity;
 }

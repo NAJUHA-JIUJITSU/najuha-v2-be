@@ -14,6 +14,8 @@ import { CompetitionModel } from '../../competitions/domain/model/competition.mo
 import { IApplicationOrderModelData } from './interface/application-order.interface';
 import { ApplicationModel } from './model/application.model';
 import { UserModel } from '../../users/domain/model/user.model';
+import { IApplicationOrderPaymentSnapshotModelData } from './interface/application-order-payment-sanpshot.interface';
+import { CalculatePaymentService } from '../../competitions/domain/calculate-payment.domain.service';
 
 @Injectable()
 export class ApplicationFactory {
@@ -145,6 +147,7 @@ export class ApplicationFactory {
     competition: CompetitionModel,
   ): IApplicationOrderModelData {
     const applicationOrderId = uuidv7();
+
     const earlybirdDiscountSnapshot = competition.getLatestEarlybirdDiscountSnapshot();
     const combinationDiscountSnapshot = competition.getLatestCombinationDiscountSnapshot();
     const expectedPayment = application.getExpectedPayment();
@@ -156,13 +159,17 @@ export class ApplicationFactory {
       id: applicationOrderId,
       createdAt: new Date(),
       orderId: `${applicationOrderId}_${competition.getCompetitionPaymentId()}`,
+      paymentKey: null,
       orderName: competition.getTitle().slice(0, 100),
       customerName: user.getName(),
       customerEmail: user.getEmail().slice(0, 100),
       status: 'READY',
+      isPayed: false,
       applicationId: application.getId(),
       earlybirdDiscountSnapshotId: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.getId() : null,
       combinationDiscountSnapshotId: combinationDiscountSnapshot ? combinationDiscountSnapshot.getId() : null,
+      earlybirdDiscountSnapshot: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.toData() : null,
+      combinationDiscountSnapshot: combinationDiscountSnapshot ? combinationDiscountSnapshot.toData() : null,
       applicationOrderPaymentSnapshots: [
         {
           id: applicationOrderPaymentSnapshotId,
@@ -176,6 +183,7 @@ export class ApplicationFactory {
             return {
               id: uuidv7(),
               createdAt: new Date(),
+              status: 'READY',
               applicationOrderPaymentSnapshotId,
               participationDivisionInfoId: participationDivisionInfo.getId(),
               divisionId: participationDivisionInfo.getLatestParticipationDivisionInfoSnapshot().division.getId(),
@@ -193,8 +201,73 @@ export class ApplicationFactory {
           }),
         },
       ],
-      earlybirdDiscountSnapshot: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.toData() : null,
-      combinationDiscountSnapshot: combinationDiscountSnapshot ? combinationDiscountSnapshot.toData() : null,
+    };
+  }
+
+  createApplicationOrderPaymentSnapshot(application: ApplicationModel): IApplicationOrderPaymentSnapshotModelData {
+    const doneStatusOrder = application.getPayedApplicationOrder();
+    const earlybirdDiscountSnapshot = doneStatusOrder.getEarlybirdDiscountSnapshot();
+    const combinationDiscountSnapshot = doneStatusOrder.getCombinationDiscountSnapshot();
+
+    const divistion = doneStatusOrder
+      .getLatestApplicationOrderPaymentSnapshot()
+      .getParticipationDivisionInfoPayments()
+      .filter((participationDivisionInfoPayment) => {
+        return participationDivisionInfoPayment.getStatus() === 'DONE';
+      })
+      .map((participationDivisionInfoPayment) => {
+        return participationDivisionInfoPayment.getDivision();
+      });
+
+    const priceSnapshot = doneStatusOrder
+      .getLatestApplicationOrderPaymentSnapshot()
+      .getParticipationDivisionInfoPayments()
+      .filter((participationDivisionInfoPayment) => {
+        return participationDivisionInfoPayment.getStatus() === 'DONE';
+      })
+      .map((participationDivisionInfoPayment) => {
+        return participationDivisionInfoPayment.getPriceSnapshot();
+      });
+
+    const reCalculatedPayment = CalculatePaymentService.calculate(
+      divistion,
+      priceSnapshot,
+      earlybirdDiscountSnapshot,
+      combinationDiscountSnapshot,
+    );
+
+    const doneStatusParticipationDivisionInfoPayments = doneStatusOrder
+      .getLatestApplicationOrderPaymentSnapshot()
+      .getParticipationDivisionInfoPayments()
+      .filter((participationDivisionInfoPayment) => {
+        return participationDivisionInfoPayment.getStatus() === 'DONE';
+      });
+
+    const newApplicationOrderPaymentSnapshotId = uuidv7();
+    return {
+      id: newApplicationOrderPaymentSnapshotId,
+      createdAt: new Date(),
+      normalAmount: reCalculatedPayment.normalAmount,
+      earlybirdDiscountAmount: reCalculatedPayment.earlybirdDiscountAmount,
+      combinationDiscountAmount: reCalculatedPayment.combinationDiscountAmount,
+      totalAmount: reCalculatedPayment.totalAmount,
+      applicationOrderId: application.getId(),
+      participationDivisionInfoPayments: doneStatusParticipationDivisionInfoPayments.map(
+        (participationDivisionInfoPayment) => {
+          return {
+            id: uuidv7(),
+            createdAt: new Date(),
+            status: 'DONE',
+            applicationOrderPaymentSnapshotId: newApplicationOrderPaymentSnapshotId,
+            participationDivisionInfoId: participationDivisionInfoPayment.getParticipationDivisionInfoId(),
+            divisionId: participationDivisionInfoPayment.getDivisionId(),
+            priceSnapshotId: participationDivisionInfoPayment.getPriceSnapshotId(),
+            participationDivisionInfo: participationDivisionInfoPayment.getParticipationDivisionInfo().toData(),
+            division: participationDivisionInfoPayment.getDivision().toData(),
+            priceSnapshot: participationDivisionInfoPayment.getPriceSnapshot().toData(),
+          };
+        },
+      ),
     };
   }
 }

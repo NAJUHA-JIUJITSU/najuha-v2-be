@@ -4332,6 +4332,122 @@
         "x-nestia-method": "POST"
       }
     },
+    "/user/applications/{applicationId}/order/cancel": {
+      "post": {
+        "tags": [
+          "u-6 applications"
+        ],
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "applicationId",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "CancelApplicationOrderReqBody",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelApplicationOrderReqBody"
+              }
+            }
+          },
+          "required": true,
+          "x-nestia-encrypted": false
+        },
+        "responses": {
+          "201": {
+            "description": "CancelApplicationOrderRes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFormCancelApplicationOrderRes"
+                }
+              }
+            },
+            "x-nestia-encrypted": false
+          }
+        },
+        "summary": "u-6-10 cancelApplicationOrder",
+        "description": "u-6-10 cancelApplicationOrder.\n- RoleLevel: USER.",
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "x-nestia-namespace": "user.applications.order.cancel.cancelApplicationOrder",
+        "x-nestia-jsDocTags": [
+          {
+            "name": "tag",
+            "text": [
+              {
+                "text": "u-6 applications",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "security",
+            "text": [
+              {
+                "text": "bearer",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "applicationId",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "applicationId",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "param",
+            "text": [
+              {
+                "text": "body",
+                "kind": "parameterName"
+              },
+              {
+                "text": " ",
+                "kind": "space"
+              },
+              {
+                "text": "CancelApplicationOrderReqBody",
+                "kind": "text"
+              }
+            ]
+          },
+          {
+            "name": "returns",
+            "text": [
+              {
+                "text": "CancelApplicationOrderRes",
+                "kind": "text"
+              }
+            ]
+          }
+        ],
+        "x-nestia-method": "POST"
+      }
+    },
     "/user/posts": {
       "post": {
         "tags": [
@@ -12004,10 +12120,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             },
@@ -12103,6 +12219,26 @@
           "masterName"
         ]
       },
+      "SocialScurityNumberInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SOCIAL_SECURITY_NUMBER"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "pattern": "^[0-9]{6}-[0-9]{7}$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "type",
+          "value"
+        ]
+      },
       "AddressInfo": {
         "type": "object",
         "properties": {
@@ -12116,26 +12252,6 @@
             "type": "string",
             "maxLength": 512,
             "minLength": 1
-          }
-        },
-        "nullable": false,
-        "required": [
-          "type",
-          "value"
-        ]
-      },
-      "SocialScurityNumberInfo": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "SOCIAL_SECURITY_NUMBER"
-            ]
-          },
-          "value": {
-            "type": "string",
-            "pattern": "^[0-9]{6}-[0-9]{7}$"
           }
         },
         "nullable": false,
@@ -12421,6 +12537,9 @@
           "id": {
             "$ref": "#/components/schemas/TId"
           },
+          "status": {
+            "$ref": "#/components/schemas/TParticipationDivisionInfoPaymentStatus"
+          },
           "createdAt": {
             "$ref": "#/components/schemas/TDateOrStringDate"
           },
@@ -12446,6 +12565,7 @@
         "nullable": false,
         "required": [
           "id",
+          "status",
           "createdAt",
           "applicationOrderPaymentSnapshotId",
           "participationDivisionInfoId",
@@ -12455,13 +12575,22 @@
           "priceSnapshot"
         ]
       },
+      "TParticipationDivisionInfoPaymentStatus": {
+        "type": "string",
+        "enum": [
+          "READY",
+          "DONE",
+          "CANCELED"
+        ]
+      },
       "TApplicationOrderStatus": {
         "type": "string",
         "enum": [
           "READY",
           "DONE",
+          "CANCELED",
           "FAIL",
-          "CANCELED"
+          "PARTIAL_CANCELED"
         ]
       },
       "TId.Nullable": {
@@ -12474,7 +12603,8 @@
         "enum": [
           "READY",
           "DONE",
-          "CANCELED"
+          "CANCELED",
+          "PARTIAL_CANCELED"
         ]
       },
       "TApplicationType": {
@@ -12812,10 +12942,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             },
@@ -12889,10 +13019,10 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/AddressInfo"
+                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
                 },
                 {
-                  "$ref": "#/components/schemas/SocialScurityNumberInfo"
+                  "$ref": "#/components/schemas/AddressInfo"
                 }
               ]
             },
@@ -13022,6 +13152,7 @@
             "enum": [
               "CANCELED",
               "DONE",
+              "PARTIAL_CANCELED",
               "READY"
             ],
             "title": "application status filter option",
@@ -13123,6 +13254,60 @@
         ]
       },
       "ApproveApplicationOrderRes": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/IApplicationDetail"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "application"
+        ]
+      },
+      "CancelApplicationOrderReqBody": {
+        "type": "object",
+        "properties": {
+          "participationDivisionInfoIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "nullable": false,
+        "required": [
+          "participationDivisionInfoIds"
+        ]
+      },
+      "ResponseFormCancelApplicationOrderRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "code": {
+            "type": "number",
+            "enum": [
+              200
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/CancelApplicationOrderRes"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "isSuccess",
+          "code",
+          "result"
+        ]
+      },
+      "CancelApplicationOrderRes": {
         "type": "object",
         "properties": {
           "application": {

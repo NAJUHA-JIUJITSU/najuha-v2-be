@@ -1,5 +1,6 @@
 import {
   ApproveApplicationOrderRet,
+  CancelApplicationOrderRet,
   CreateApplicationOrderRet,
   CreateApplicationRet,
   FindApplicationsRet,
@@ -13,6 +14,7 @@ import {
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
 import { TPaginationParam } from '../../../common/common-types';
+import { IParticipationDivisionInfo } from '../domain/interface/participation-division-info.interface';
 
 // ---------------------------------------------------------------------------
 // applicationsController Request
@@ -30,6 +32,10 @@ export interface ApproveApplicationOrderReqBody {
   paymentKey: string;
   orderId: string;
   amount: number;
+}
+
+export interface CancelApplicationOrderReqBody {
+  participationDivisionInfoIds: IParticipationDivisionInfo['id'][];
 }
 
 // ---------------------------------------------------------------------------
@@ -50,3 +56,5 @@ export interface FindApplicationsRes extends FindApplicationsRet {}
 export interface CreateApplicationOrderRes extends CreateApplicationOrderRet {}
 
 export interface ApproveApplicationOrderRes extends ApproveApplicationOrderRet {}
+
+export interface CancelApplicationOrderRes extends CancelApplicationOrderRet {}

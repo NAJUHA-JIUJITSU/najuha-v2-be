@@ -3,12 +3,15 @@ import { PlayerSnapshotModel } from './player-snapshot.model';
 import { ParticipationDivisionInfoModel } from './participation-division-info.model';
 import { AdditionalInfoModel } from './additional-info.model';
 import { ParticipationDivisionInfoSnapshotModel } from './participation-division-info-snapshot.model';
-import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
+import { ApplicationsErrors, BusinessException, CommonErrors } from '../../../../common/response/errorResponse';
 import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface';
 import { IExpectedPayment } from '../interface/expected-payment.interface';
 import { UserModel } from '../../../users/domain/model/user.model';
 import { ApplicationOrderModel } from './application-order.model';
 import { IApplicationOrder } from '../interface/application-order.interface';
+import { TMoneyValue } from '../../../../common/common-types';
+import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
+import { ApplicationOrderPaymentSnapshotModel } from './application-order-payment-snapshot.model';
 
 export class ApplicationModel {
   private readonly id: IApplicationModelData['id'];
@@ -56,7 +59,7 @@ export class ApplicationModel {
       participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toData()),
       additionalInfos: this.additionaInfos.map((info) => info.toData()),
       expectedPayment: this.expectedPayment,
-      applicationOrders: this.applicationOrders?.map((payment) => payment.toData()),
+      applicationOrders: this.applicationOrders?.map((order) => order.toData()),
     };
   }
 
@@ -76,6 +79,10 @@ export class ApplicationModel {
     return this.competitionId;
   }
 
+  getPaymentKey() {
+    return this.getPayedApplicationOrder().getPaymentKey();
+  }
+
   getLatestPlayerSnapshot() {
     return this.playerSnapshots[this.playerSnapshots.length - 1];
   }
@@ -90,8 +97,22 @@ export class ApplicationModel {
     return this.participationDivisionInfos;
   }
 
+  getDoneStatusParticipationDivisionInfos() {
+    if (!this.participationDivisionInfos || this.participationDivisionInfos.length === 0)
+      throw new Error('participationDivisionInfos is not initialized');
+    return this.participationDivisionInfos.filter((info) => info.getStatus() === 'DONE');
+  }
+
   getAdditionalInfos() {
     return this.additionaInfos;
+  }
+
+  getPayedApplicationOrder() {
+    if (!this.applicationOrders || this.applicationOrders.length === 0)
+      throw new Error('applicationOrders is not initialized');
+    const order = this.applicationOrders.find((order) => order.getIsPayed());
+    if (!order) throw new Error('Payed application order is not found');
+    return order;
   }
 
   validateApplicationType(user: UserModel) {
@@ -130,12 +151,15 @@ export class ApplicationModel {
     this.applicationOrders = [...(this.applicationOrders ?? []), applicationOrder];
   }
 
-  approve(orderId: IApplicationOrder['orderId']) {
+  approve(paymentKey: IApplicationOrder['paymentKey'], orderId: IApplicationOrder['orderId'], amount: TMoneyValue) {
+    if (!this.applicationOrders || this.applicationOrders.length === 0)
+      throw new Error('applicationOrders is not initaliazed');
     if (this.status !== 'READY') throw new Error('Application status is not READY');
-    if (!this.applicationOrders) throw new Error('applicationOrders is not initaliazed');
+
     const order = this.applicationOrders.find((order) => order.getOrderId() === orderId);
-    if (!order) throw new Error('Order not found');
-    order.approve();
+    if (!order) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'ApplicationOrder not found');
+
+    order.approve(amount, paymentKey);
     this.participationDivisionInfos.forEach((info) => info.approve());
     this.status = 'DONE';
   }
@@ -143,7 +167,8 @@ export class ApplicationModel {
   // DONE Status --------------------------------------------------------------
   addPlayerSnapshot(newPlayerSnapshot: PlayerSnapshotModel) {
     // todo!!: 에러 표준화
-    if (this.status !== 'DONE') throw new Error('Application status is not DONE');
+    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+      throw new Error('Application status is not DONE or PARTIAL_CANCEL1');
     this.playerSnapshots.push(newPlayerSnapshot);
   }
 
@@ -151,7 +176,8 @@ export class ApplicationModel {
     newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[],
   ) {
     // todo!!: 에러 표준화
-    if (this.status !== 'DONE') throw new Error('Application status is not DONE');
+    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+      throw new Error('Application status is not DONE or PARTIAL_CANCEL2');
     newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
       const participationDivisionInfo = this.participationDivisionInfos.find(
         (info) => info.getId() === snapshot.participationDivisionInfoId,
@@ -164,11 +190,57 @@ export class ApplicationModel {
 
   updateAdditionalInfos(additionalInfoUpdateDtos: IAdditionalInfoUpdateDto[]) {
     // todo!!: 에러 표준화
-    if (this.status !== 'DONE') throw new Error('Application status is not DONE');
+    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+      throw new Error('Application status is not DONE or PARTIAL_CANCEL3');
     additionalInfoUpdateDtos.forEach((updateDto) => {
       const additionalInfo = this.additionaInfos.find((info) => info.getType() === updateDto.type);
       if (!additionalInfo) throw new BusinessException(ApplicationsErrors.APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND);
       additionalInfo.updateValue(updateDto.value);
     });
+  }
+
+  addApplicationOrderPaymentSnapshot(applicationOrderPaymentSnapshot: ApplicationOrderPaymentSnapshotModel) {
+    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+      throw new Error('Application status is not DONE or PARTIAL_CANCEL4');
+    this.getPayedApplicationOrder().addApplicationOrderPaymentSnapshot(applicationOrderPaymentSnapshot);
+  }
+
+  cancel(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
+    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+      throw new Error('Application status is not DONE or PARTIAL_CANCEL5');
+    if (this.participationDivisionInfos.length === 0) throw new Error('participationDivisionInfos is not initialized');
+    this.cancelParticipationDivisionInfos(participationDivisionInfoIds);
+    this.cancelParticipationDivisionInfoPayment(participationDivisionInfoIds);
+    if (this.participationDivisionInfos.length === participationDivisionInfoIds.length) {
+      this.status = 'CANCELED';
+    } else {
+      this.status = 'PARTIAL_CANCELED';
+    }
+  }
+
+  private cancelParticipationDivisionInfos(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
+    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+      throw new Error('Application status is not DONE or PARTIAL_CANCEL6');
+    if (participationDivisionInfoIds.length === 0) throw new Error('participationDivisionInfoIds is not initialized');
+
+    participationDivisionInfoIds.forEach((participationDivisionInfoId) => {
+      const participationDivisionInfo = this.participationDivisionInfos.find(
+        (info) => info.getId() === participationDivisionInfoId,
+      );
+      if (!participationDivisionInfo)
+        throw new BusinessException(ApplicationsErrors.APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND);
+      participationDivisionInfo.cancel();
+    });
+  }
+
+  private cancelParticipationDivisionInfoPayment(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
+    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+      throw new Error('Application status is not DONE or PARTIAL_CANCEL7');
+    const order = this.getPayedApplicationOrder();
+    order.cancelParticipationDivisionInfoPayments(participationDivisionInfoIds);
+  }
+
+  getCancelAmount() {
+    return this.getPayedApplicationOrder().getCancelAmount();
   }
 }

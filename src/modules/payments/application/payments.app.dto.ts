@@ -55,6 +55,14 @@ export interface KeyInParam {
   customerEmail?: string & tags.Format<'email'>;
 }
 
+export interface CancelPaymentParam {
+  paymentKey: string;
+
+  cancelReason: string;
+
+  cancelAmount?: number;
+}
+
 // ---------------------------------------------------------------------------
 // AppService Result
 // ---------------------------------------------------------------------------
@@ -67,5 +75,9 @@ export interface GetPaymentRet {
 }
 
 export interface KeyInRet {
+  payment: ITossPayment;
+}
+
+export interface CancelPaymentRet {
   payment: ITossPayment;
 }

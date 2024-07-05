@@ -275,6 +275,7 @@ export const CompetitionsErrors = {
 // -----------------------------------------------------------------------------
 //  Applications 7000 ~ 7999
 // -----------------------------------------------------------------------------
+// todo!!! entity not found 로 처리할수 있는 에러 제거하기
 export type APPLICATIONS_DIVISION_NOT_FOUND = ErrorResponse & {
   isSuccess: false;
   status: HttpStatus.NOT_FOUND;
@@ -355,6 +356,14 @@ export type APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND = ErrorResponse & {
   result: '수정하고자 하는 additionalInfo가 존재하지 않습니다.';
 };
 
+export type APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7011;
+  type: 'APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH';
+  result: '결제 금액이 일치하지 않습니다.';
+};
+
 export const ApplicationsErrors = {
   APPLICATIONS_DIVISION_NOT_FOUND: typia.random<APPLICATIONS_DIVISION_NOT_FOUND>(),
   APPLICATIONS_DIVISION_AGE_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_AGE_NOT_MATCH>(),
@@ -368,6 +377,7 @@ export const ApplicationsErrors = {
     typia.random<APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND>(),
   APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH: typia.random<APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH>(),
   APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND: typia.random<APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND>(),
+  APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH: typia.random<APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH>(),
 };
 
 // -----------------------------------------------------------------------------

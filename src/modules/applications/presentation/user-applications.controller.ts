@@ -7,6 +7,8 @@ import { IApplication } from '../domain/interface/application.interface';
 import {
   ApproveApplicationOrderReqBody,
   ApproveApplicationOrderRes,
+  CancelApplicationOrderReqBody,
+  CancelApplicationOrderRes,
   CreateApplicationReqBody,
   CreateApplicationRes,
   FindApplicationsQuery,
@@ -236,6 +238,32 @@ export class UserApplicationsController {
         paymentKey: body.paymentKey,
         orderId: body.orderId,
         amount: body.amount,
+      }),
+    );
+  }
+
+  /**
+   * u-6-10 cancelApplicationOrder.
+   * - RoleLevel: USER.
+   *
+   * @tag u-6 applications
+   * @security bearer
+   * @param applicationId applicationId
+   * @param body CancelApplicationOrderReqBody
+   * @returns CancelApplicationOrderRes
+   */
+  @RoleLevels(RoleLevel.USER)
+  @TypedRoute.Post('/:applicationId/order/cancel')
+  async cancelApplicationOrder(
+    @Req() req: Request,
+    @TypedParam('applicationId') applicationId: IApplication['id'],
+    @TypedBody() body: CancelApplicationOrderReqBody,
+  ): Promise<ResponseForm<CancelApplicationOrderRes>> {
+    return createResponseForm(
+      await this.applicationAppService.cancelApplicationOrder({
+        userId: req['userId'],
+        applicationId,
+        participationDivisionInfoIds: body.participationDivisionInfoIds,
       }),
     );
   }

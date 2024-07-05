@@ -3,6 +3,8 @@ import { ApplicationFactory } from '../domain/application.factory';
 import {
   ApproveApplicationOrderParam,
   ApproveApplicationOrderRet,
+  CancelApplicationOrderParam,
+  CancelApplicationOrderRet,
   CreateApplicationOrderParam,
   CreateApplicationOrderRet,
   CreateApplicationParam,
@@ -34,6 +36,9 @@ import { ApplicationValidationService } from '../domain/application-validation.s
 import { PaymentsAppService } from '../../payments/application/payments.app.service';
 import { UserEntity } from '../../../database/entity/user/user.entity';
 import { ApplicationEntity } from '../../../database/entity/application/application.entity';
+import { CompetitionEntity } from '../../../database/entity/competition/competition.entity';
+import { ApplicationOrderPaymentSnapshotModel } from '../domain/model/application-order-payment-snapshot.model';
+import { pay } from 'toss-payments-server-api/lib/functional/v1/billing';
 
 @Injectable()
 export class ApplicationsAppService {
@@ -446,6 +451,7 @@ export class ApplicationsAppService {
     try {
       const userRepository = queryRunner.manager.getRepository(UserEntity);
       const applicationRepository = queryRunner.manager.getRepository(ApplicationEntity);
+      const competitionRepository = queryRunner.manager.getRepository(CompetitionEntity);
       const [_userEntity, applicationEntity] = await Promise.all([
         userRepository.findOne({ where: { id: userId } }).then((user) => {
           if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
@@ -468,6 +474,8 @@ export class ApplicationsAppService {
               'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo.participationDivisionInfoSnapshots.division.priceSnapshots',
               'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.division',
               'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.priceSnapshot',
+              'applicationOrders.earlybirdDiscountSnapshot',
+              'applicationOrders.combinationDiscountSnapshot',
             ],
           })
           .then((application) => {
@@ -475,14 +483,123 @@ export class ApplicationsAppService {
             return application;
           }),
       ]);
+      const competitionEntity = await competitionRepository
+        .findOne({
+          where: { id: applicationEntity.competitionId },
+          relations: [
+            'divisions',
+            'earlybirdDiscountSnapshots',
+            'combinationDiscountSnapshots',
+            'requiredAdditionalInfos',
+            'competitionHostMaps',
+          ],
+        })
+        .then((competition) => {
+          if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          return competition;
+        });
       const applicationModel = new ApplicationModel(applicationEntity);
-      applicationModel.approve(orderId);
+      const competitionModel = new CompetitionModel(competitionEntity);
+
+      // todo!!!: validation 로직 service로 분로
+      competitionModel.validateApplicationPeriod();
+      applicationModel.approve(paymentKey, orderId, amount);
       const application = await applicationRepository.save(applicationModel.toData());
       await this.paymentsAppService.approvePayment({ paymentKey, orderId, amount });
       return assert<ApproveApplicationOrderRet>({
         application,
       });
     } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async cancelApplicationOrder({
+    userId,
+    applicationId,
+    participationDivisionInfoIds,
+  }: CancelApplicationOrderParam): Promise<CancelApplicationOrderRet> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const userRepository = queryRunner.manager.getRepository(UserEntity);
+      const applicationRepository = queryRunner.manager.getRepository(ApplicationEntity);
+      const competitionRepository = queryRunner.manager.getRepository(CompetitionEntity);
+      const [_userEntity, applicationEntity] = await Promise.all([
+        userRepository.findOne({ where: { id: userId } }).then((user) => {
+          if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+          return user;
+        }),
+        applicationRepository
+          .findOne({
+            where: { id: applicationId, userId, status: 'DONE' },
+            relations: [
+              'additionalInfos',
+              'playerSnapshots',
+              'participationDivisionInfos',
+              'participationDivisionInfos.participationDivisionInfoSnapshots',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+              'applicationOrders',
+              'applicationOrders.applicationOrderPaymentSnapshots',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo.participationDivisionInfoSnapshots.division.priceSnapshots',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.division',
+              'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.priceSnapshot',
+              'applicationOrders.earlybirdDiscountSnapshot',
+              'applicationOrders.combinationDiscountSnapshot',
+            ],
+          })
+          .then((application) => {
+            if (!application) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+            return application;
+          }),
+      ]);
+      const competitionEntity = await competitionRepository
+        .findOne({
+          where: { id: applicationEntity.competitionId },
+          relations: [
+            'divisions',
+            'earlybirdDiscountSnapshots',
+            'combinationDiscountSnapshots',
+            'requiredAdditionalInfos',
+            'competitionHostMaps',
+          ],
+        })
+        .then((competition) => {
+          if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          return competition;
+        });
+      const applicationModel = new ApplicationModel(applicationEntity);
+      const competitionModel = new CompetitionModel(competitionEntity);
+
+      // todo!!!: validation 로직 service로 분로
+      competitionModel.validateApplicationPeriod();
+      applicationModel.cancel(participationDivisionInfoIds);
+
+      if (applicationModel.getStatus() === 'PARTIAL_CANCELED') {
+        const newApplicationOrderPaymentSnapshotModel = new ApplicationOrderPaymentSnapshotModel(
+          this.applicationFactory.createApplicationOrderPaymentSnapshot(applicationModel),
+        );
+        applicationModel.addApplicationOrderPaymentSnapshot(newApplicationOrderPaymentSnapshotModel);
+      }
+
+      await this.paymentsAppService.cancelPayment({
+        paymentKey: applicationModel.getPaymentKey(),
+        cancelAmount: applicationModel.getCancelAmount(),
+        cancelReason: '고객이 취소를 원함',
+      });
+
+      return assert<CancelApplicationOrderRet>({
+        application: await applicationRepository.save(applicationModel.toData()),
+      });
+    } catch (error) {
+      console.log(error);
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {

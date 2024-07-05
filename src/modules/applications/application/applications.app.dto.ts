@@ -9,6 +9,7 @@ import {
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
 import { IExpectedPayment } from '../domain/interface/expected-payment.interface';
+import { IParticipationDivisionInfo } from '../domain/interface/participation-division-info.interface';
 
 // ---------------------------------------------------------------------------
 // applicationsAppService Param
@@ -53,6 +54,12 @@ export interface ApproveApplicationOrderParam {
   amount: TMoneyValue;
 }
 
+export interface CancelApplicationOrderParam {
+  userId: IUser['id'];
+  applicationId: IApplication['id'];
+  participationDivisionInfoIds: IParticipationDivisionInfo['id'][];
+}
+
 // ---------------------------------------------------------------------------
 // applicationsAppService Result
 // ---------------------------------------------------------------------------
@@ -86,5 +93,9 @@ export interface CreateApplicationOrderRet {
 }
 
 export interface ApproveApplicationOrderRet {
+  application: IApplicationDetail;
+}
+
+export interface CancelApplicationOrderRet {
   application: IApplicationDetail;
 }

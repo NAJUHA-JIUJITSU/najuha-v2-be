@@ -39,6 +39,8 @@ export interface IApplicationOrder {
    */
   orderId: string & tags.MinLength<63> & tags.MaxLength<63>;
 
+  paymentKey: (string & tags.MinLength<1> & tags.MaxLength<200>) | null;
+
   orderName: string & tags.MinLength<1> & tags.MaxLength<100>;
 
   customerName: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$'>;
@@ -46,6 +48,8 @@ export interface IApplicationOrder {
   customerEmail: string & tags.MinLength<1> & tags.MaxLength<100> & tags.Format<'email'>;
 
   status: TApplicationOrderStatus;
+
+  isPayed: boolean;
 
   /** - application id. */
   applicationId: IApplication['id'];
@@ -65,10 +69,12 @@ export interface IApplicationOrderModelData {
   id: IApplicationOrder['id'];
   createdAt: IApplicationOrder['createdAt'];
   orderId: IApplicationOrder['orderId'];
+  paymentKey: IApplicationOrder['paymentKey'];
   orderName: IApplicationOrder['orderName'];
   customerName: IApplicationOrder['customerName'];
   customerEmail: IApplicationOrder['customerEmail'];
   status: IApplicationOrder['status'];
+  isPayed: IApplicationOrder['isPayed'];
   applicationId: IApplicationOrder['applicationId'];
   earlybirdDiscountSnapshotId: IApplicationOrder['earlybirdDiscountSnapshotId'];
   combinationDiscountSnapshotId: IApplicationOrder['combinationDiscountSnapshotId'];
@@ -80,7 +86,7 @@ export interface IApplicationOrderModelData {
 // --------------------------------------------------------------
 // ENUM
 // --------------------------------------------------------------
-type TApplicationOrderStatus = 'READY' | 'DONE' | 'FAIL' | 'CANCELED';
+type TApplicationOrderStatus = 'READY' | 'DONE' | 'FAIL' | 'PARTIAL_CANCELED' | 'CANCELED';
 
 // --------------------------------------------------------------
 // Return Interface
@@ -91,10 +97,12 @@ export interface IApplicationOrderDetail
     | 'id'
     | 'createdAt'
     | 'orderId'
+    | 'paymentKey'
     | 'orderName'
     | 'customerName'
     | 'customerEmail'
     | 'status'
+    | 'isPayed'
     | 'applicationId'
     | 'earlybirdDiscountSnapshotId'
     | 'combinationDiscountSnapshotId'

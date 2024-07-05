@@ -1,15 +1,16 @@
+import { IParticipationDivisionInfo } from '../../../../../packages/api/lib/modules/applications/domain/interface/participation-division-info.interface';
 import { IApplicationOrderPaymentSnapshotModelData } from '../interface/application-order-payment-sanpshot.interface';
 import { ParticipationDivisionInfoPaymentModel } from './participation-division-info-pament.model';
 
 export class ApplicationOrderPaymentSnapshotModel {
-  id: IApplicationOrderPaymentSnapshotModelData['id'];
-  createdAt: IApplicationOrderPaymentSnapshotModelData['createdAt'];
-  normalAmount: IApplicationOrderPaymentSnapshotModelData['normalAmount'];
-  earlybirdDiscountAmount: IApplicationOrderPaymentSnapshotModelData['earlybirdDiscountAmount'];
-  combinationDiscountAmount: IApplicationOrderPaymentSnapshotModelData['combinationDiscountAmount'];
-  totalAmount: IApplicationOrderPaymentSnapshotModelData['totalAmount'];
-  applicationOrderId: IApplicationOrderPaymentSnapshotModelData['applicationOrderId'];
-  participationDivisionInfoPayments: ParticipationDivisionInfoPaymentModel[];
+  private id: IApplicationOrderPaymentSnapshotModelData['id'];
+  private createdAt: IApplicationOrderPaymentSnapshotModelData['createdAt'];
+  private normalAmount: IApplicationOrderPaymentSnapshotModelData['normalAmount'];
+  private earlybirdDiscountAmount: IApplicationOrderPaymentSnapshotModelData['earlybirdDiscountAmount'];
+  private combinationDiscountAmount: IApplicationOrderPaymentSnapshotModelData['combinationDiscountAmount'];
+  private totalAmount: IApplicationOrderPaymentSnapshotModelData['totalAmount'];
+  private applicationOrderId: IApplicationOrderPaymentSnapshotModelData['applicationOrderId'];
+  private participationDivisionInfoPayments: ParticipationDivisionInfoPaymentModel[];
 
   constructor(data: IApplicationOrderPaymentSnapshotModelData) {
     this.id = data.id;
@@ -37,5 +38,27 @@ export class ApplicationOrderPaymentSnapshotModel {
         (participationDivisionInfoPayment) => participationDivisionInfoPayment.toData(),
       ),
     };
+  }
+
+  approve() {
+    this.participationDivisionInfoPayments.forEach((participationDivisionInfoPayment) =>
+      participationDivisionInfoPayment.approve(),
+    );
+  }
+
+  getTotalAmount() {
+    return this.totalAmount;
+  }
+
+  getParticipationDivisionInfoPayments() {
+    return this.participationDivisionInfoPayments;
+  }
+
+  cancelParticipationDivisionInfoPayments(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
+    this.participationDivisionInfoPayments
+      .filter((participationDivisionInfoPayment) =>
+        participationDivisionInfoIds.includes(participationDivisionInfoPayment.getParticipationDivisionInfoId()),
+      )
+      .forEach((participationDivisionInfoPayment) => participationDivisionInfoPayment.cancel());
   }
 }

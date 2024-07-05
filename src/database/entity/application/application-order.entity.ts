@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import { IApplicationOrder } from '../../../modules/applications/domain/interface/application-order.interface';
 import { uuidv7 } from 'uuidv7';
@@ -11,6 +11,7 @@ import { ApplicationOrderPaymentSnapshotEntity } from './application-order-payme
  * @namespace Application
  */
 @Entity('application_order')
+@Index('IDX_ApplicationOrder_applicationId', ['applicationId'])
 export class ApplicationOrderEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IApplicationOrder['id'];
@@ -20,6 +21,9 @@ export class ApplicationOrderEntity {
 
   @Column('varchar', { length: 64 })
   orderId!: IApplicationOrder['orderId'];
+
+  @Column('varchar', { length: 200, nullable: true })
+  paymentKey!: IApplicationOrder['paymentKey'] | null;
 
   @Column('varchar', { length: 256 })
   orderName!: IApplicationOrder['orderName'];
@@ -32,6 +36,9 @@ export class ApplicationOrderEntity {
 
   @Column('varchar', { length: 16, default: 'READY' })
   status!: IApplicationOrder['status'];
+
+  @Column('boolean', { default: false })
+  isPayed!: IApplicationOrder['isPayed'];
 
   @Column('uuid')
   applicationId!: IApplicationOrder['applicationId'];

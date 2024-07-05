@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { IApplicationOrderPaymentSnapshot } from '../../../modules/applications/domain/interface/application-order-payment-sanpshot.interface';
 import { ApplicationOrderEntity } from './application-order.entity';
@@ -9,6 +9,7 @@ import { ParticipationDivisionInfoPaymentEntity } from './participation-division
  * @namespace Application
  */
 @Entity('application_order_payment_snapshot')
+@Index('IDX_ApplicationOrderPaymentSnapshot_applicationOrderId', ['applicationOrderId'])
 export class ApplicationOrderPaymentSnapshotEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IApplicationOrderPaymentSnapshot['id'];

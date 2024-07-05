@@ -6,6 +6,7 @@ import { ParticipationDivisionInfoModel } from './participation-division-info.mo
 export class ParticipationDivisionInfoPaymentModel {
   private readonly id: IParticipationDivisionInfoPaymentModelData['id'];
   private readonly createdAt: IParticipationDivisionInfoPaymentModelData['createdAt'];
+  private status: IParticipationDivisionInfoPaymentModelData['status'];
   private readonly applicationOrderPaymentSnapshotId: IParticipationDivisionInfoPaymentModelData['applicationOrderPaymentSnapshotId'];
   private readonly participationDivisionInfoId: IParticipationDivisionInfoPaymentModelData['participationDivisionInfoId'];
   private readonly divisionId: IParticipationDivisionInfoPaymentModelData['divisionId'];
@@ -17,6 +18,7 @@ export class ParticipationDivisionInfoPaymentModel {
   constructor(data: IParticipationDivisionInfoPaymentModelData) {
     this.id = data.id;
     this.createdAt = data.createdAt;
+    this.status = data.status;
     this.applicationOrderPaymentSnapshotId = data.applicationOrderPaymentSnapshotId;
     this.participationDivisionInfoId = data.participationDivisionInfoId;
     this.divisionId = data.divisionId;
@@ -30,6 +32,7 @@ export class ParticipationDivisionInfoPaymentModel {
     return {
       id: this.id,
       createdAt: this.createdAt,
+      status: this.status,
       applicationOrderPaymentSnapshotId: this.applicationOrderPaymentSnapshotId,
       participationDivisionInfoId: this.participationDivisionInfoId,
       divisionId: this.divisionId,
@@ -38,5 +41,41 @@ export class ParticipationDivisionInfoPaymentModel {
       division: this.division.toData(),
       priceSnapshot: this.priceSnapshot.toData(),
     };
+  }
+
+  getDivisionId() {
+    return this.divisionId;
+  }
+
+  getPriceSnapshotId() {
+    return this.priceSnapshotId;
+  }
+
+  getParticipationDivisionInfoId() {
+    return this.participationDivisionInfoId;
+  }
+
+  getDivision() {
+    return this.division;
+  }
+
+  getPriceSnapshot() {
+    return this.priceSnapshot;
+  }
+
+  getParticipationDivisionInfo() {
+    return this.participationDivisionInfo;
+  }
+
+  getStatus() {
+    return this.status;
+  }
+
+  cancel() {
+    this.status = 'CANCELED';
+  }
+
+  approve() {
+    this.status = 'DONE';
   }
 }

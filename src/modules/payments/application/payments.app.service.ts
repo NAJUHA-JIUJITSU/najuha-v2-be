@@ -6,11 +6,14 @@ import typia from 'typia';
 import {
   ApprovePaymentParam,
   ApprovePaymentRet,
+  CancelPaymentParam,
+  CancelPaymentRet,
   GetPaymentParam,
   GetPaymentRet,
   KeyInParam,
   KeyInRet,
 } from './payments.app.dto';
+import { Cancel } from 'axios';
 
 @Injectable()
 export class PaymentsAppService {
@@ -41,6 +44,17 @@ export class PaymentsAppService {
   async getPayment({ paymentKey }: GetPaymentParam): Promise<GetPaymentRet> {
     const payment: ITossPayment = await toss.functional.v1.payments.at(this.connection, paymentKey);
     return typia.assert<GetPaymentRet>({
+      payment,
+    });
+  }
+
+  async cancelPayment({ paymentKey, cancelReason, cancelAmount }: CancelPaymentParam): Promise<CancelPaymentRet> {
+    const payment = await toss.functional.v1.payments.cancel(this.connection, paymentKey, {
+      paymentKey,
+      cancelReason,
+      cancelAmount,
+    });
+    return typia.assert<CancelPaymentRet>({
       payment,
     });
   }

@@ -36,6 +36,10 @@ export class ParticipationDivisionInfoModel {
     return this.id;
   }
 
+  getStatus() {
+    return this.status;
+  }
+
   getLatestParticipationDivisionInfoSnapshot() {
     return this.participationDivisionInfoSnapshots[this.participationDivisionInfoSnapshots.length - 1];
   }
@@ -72,5 +76,10 @@ export class ParticipationDivisionInfoModel {
   approve() {
     if (this.status !== 'READY') throw new Error('Only READY status can be approved');
     this.status = 'DONE';
+  }
+
+  cancel() {
+    if (this.status !== 'DONE') throw new Error('Only DONE status can be canceled');
+    this.status = 'CANCELED';
   }
 }

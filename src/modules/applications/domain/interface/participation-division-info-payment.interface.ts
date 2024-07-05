@@ -18,6 +18,8 @@ export interface IParticipationDivisionInfoPayment {
 
   createdAt: TDateOrStringDate;
 
+  status: TParticipationDivisionInfoPaymentStatus;
+
   applicationOrderPaymentSnapshotId: IApplicationOrderPaymentSnapshot['id'];
 
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
@@ -39,6 +41,7 @@ export interface IParticipationDivisionInfoPayment {
 export interface IParticipationDivisionInfoPaymentModelData {
   id: IParticipationDivisionInfoPayment['id'];
   createdAt: IParticipationDivisionInfoPayment['createdAt'];
+  status: IParticipationDivisionInfoPayment['status'];
   applicationOrderPaymentSnapshotId: IParticipationDivisionInfoPayment['applicationOrderPaymentSnapshotId'];
   participationDivisionInfoId: IParticipationDivisionInfo['id'];
   divisionId: IDivision['id'];
@@ -56,6 +59,7 @@ export interface IParticipationDivisionInfoPaymentDetail
     IParticipationDivisionInfoPayment,
     | 'id'
     | 'createdAt'
+    | 'status'
     | 'applicationOrderPaymentSnapshotId'
     | 'participationDivisionInfoId'
     | 'divisionId'
@@ -63,3 +67,8 @@ export interface IParticipationDivisionInfoPaymentDetail
     | 'division'
     | 'priceSnapshot'
   > {}
+
+// --------------------------------------------------------------
+// ENUM
+// --------------------------------------------------------------
+type TParticipationDivisionInfoPaymentStatus = 'READY' | 'DONE' | 'CANCELED';

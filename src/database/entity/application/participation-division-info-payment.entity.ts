@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 import { IParticipationDivisionInfoPayment } from '../../../modules/applications/domain/interface/participation-division-info-payment.interface';
 import { ApplicationOrderPaymentSnapshotEntity } from './application-order-payment-snapshot.entity';
@@ -11,12 +11,16 @@ import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
  * @namespace Application
  */
 @Entity('participation_division_info_payment')
+@Index('IDX_ParticipationDivisionInfoPayment_applicationOrderPaymentSnapshotId', ['applicationOrderPaymentSnapshotId'])
 export class ParticipationDivisionInfoPaymentEntity {
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IParticipationDivisionInfoPayment['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IParticipationDivisionInfoPayment['createdAt'];
+
+  @Column('varchar', { length: 16 })
+  status!: IParticipationDivisionInfoPayment['status'];
 
   @Column('uuid')
   applicationOrderPaymentSnapshotId!: IParticipationDivisionInfoPayment['applicationOrderPaymentSnapshotId'];
