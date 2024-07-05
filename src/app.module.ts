@@ -19,7 +19,7 @@ import { ViewCountModule } from './modules/view-count/view-count.module';
 import { BucketModule } from './infrastructure/bucket/bucket.module';
 import { ImagesModule } from './modules/images/images.module';
 import { PaymentsModule } from './modules/payments/payments.module';
-import { FakeTossModule } from './infrastructure/fake-toss/fake-toss.module';
+import { FakeTossModule } from './modules/fake-toss/fake-toss.module';
 
 @Module({
   imports: [
