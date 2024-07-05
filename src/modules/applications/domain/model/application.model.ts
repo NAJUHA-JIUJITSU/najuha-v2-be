@@ -12,6 +12,7 @@ import { IApplicationOrder } from '../interface/application-order.interface';
 import { TMoneyValue } from '../../../../common/common-types';
 import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { ApplicationOrderPaymentSnapshotModel } from './application-order-payment-snapshot.model';
+import { assert } from 'typia';
 
 export class ApplicationModel {
   private readonly id: IApplicationModelData['id'];
@@ -211,11 +212,7 @@ export class ApplicationModel {
     if (this.participationDivisionInfos.length === 0) throw new Error('participationDivisionInfos is not initialized');
     this.cancelParticipationDivisionInfos(participationDivisionInfoIds);
     this.cancelParticipationDivisionInfoPayment(participationDivisionInfoIds);
-    if (this.participationDivisionInfos.length === participationDivisionInfoIds.length) {
-      this.status = 'CANCELED';
-    } else {
-      this.status = 'PARTIAL_CANCELED';
-    }
+    this.status = assert<IApplicationModelData['status']>(this.getPayedApplicationOrder().getStatus());
   }
 
   private cancelParticipationDivisionInfos(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {

@@ -13,7 +13,6 @@ import {
   KeyInParam,
   KeyInRet,
 } from './payments.app.dto';
-import { Cancel } from 'axios';
 
 @Injectable()
 export class PaymentsAppService {
@@ -21,6 +20,7 @@ export class PaymentsAppService {
 
   constructor() {
     this.connection = {
+      // todo!!!: env 설정으로 변경
       host: 'http://127.0.0.1:30771', // FAKE-SERVER
       // host: 'https://api.tosspayments.com', // REAL-SERVER
       headers: {
@@ -29,7 +29,6 @@ export class PaymentsAppService {
     };
   }
 
-  // 결제 승인
   async approvePayment({ paymentKey, orderId, amount }: ApprovePaymentParam): Promise<ApprovePaymentRet> {
     const payment: ITossPayment = await toss.functional.v1.payments.approve(this.connection, paymentKey, {
       orderId,
@@ -40,7 +39,6 @@ export class PaymentsAppService {
     });
   }
 
-  // 결제 정보 조회
   async getPayment({ paymentKey }: GetPaymentParam): Promise<GetPaymentRet> {
     const payment: ITossPayment = await toss.functional.v1.payments.at(this.connection, paymentKey);
     return typia.assert<GetPaymentRet>({
@@ -65,10 +63,6 @@ export class PaymentsAppService {
    * NAJUHA에서는 프론트엔드에서 tosspayments-sdk 위젯을 사용하여 결제를 요청하고, 결제 요청 성공 여부를 수신하는 webhook에서 결제 승인요청을 NAJUHA 서버로 전달하기 때문에, 해당 함수는 사용되지 않는다.
    * 하지만 테스트 자동화를 위하여 이 함수가 필요하다.
    * `__approved: false` 로 설정하여 프론엔드에서 tosspayments-sdk 위젯을 사용하여 결제 요청성공 및 결제 승인 이전 상테를 시뮬레이션할 수 있다.
-   *
-   * @param param KeyInParam
-   * @returns ITossPayment
-   * @throws Error
    */
   async keyIn(param: KeyInParam): Promise<KeyInRet> {
     const payment = await toss.functional.v1.payments.key_in(this.connection, {

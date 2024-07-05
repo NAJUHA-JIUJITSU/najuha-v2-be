@@ -17,7 +17,8 @@ export class CalculatePaymentService {
     const normalAmount = this.calculateNormalAmount(priceSnapshots);
     const earlybirdDiscountAmount = this.calculateEarlybirdDiscountAmount(earlybirdDiscountSnapshot, now);
     const combinationDiscountAmount = this.calculateCombinationDiscountAmount(combinationDiscountSnapshot, divisions);
-    const totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
+    let totalAmount = normalAmount - earlybirdDiscountAmount - combinationDiscountAmount;
+    if (totalAmount < 0) totalAmount = 0;
     return { normalAmount, earlybirdDiscountAmount, combinationDiscountAmount, totalAmount };
   }
 

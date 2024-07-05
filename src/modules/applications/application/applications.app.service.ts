@@ -536,7 +536,7 @@ export class ApplicationsAppService {
         }),
         applicationRepository
           .findOne({
-            where: { id: applicationId, userId, status: 'DONE' },
+            where: { id: applicationId, userId, status: In(['DONE', 'PARTIAL_CANCELED']) },
             relations: [
               'additionalInfos',
               'playerSnapshots',
@@ -599,7 +599,6 @@ export class ApplicationsAppService {
         application: await applicationRepository.save(applicationModel.toData()),
       });
     } catch (error) {
-      console.log(error);
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
