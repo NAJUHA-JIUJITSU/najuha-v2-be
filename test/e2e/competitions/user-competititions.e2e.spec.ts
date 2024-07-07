@@ -25,7 +25,7 @@ describe('E2E u-5 competitions TEST', () => {
   let tableNames: string;
   let redisClient: Redis;
   let jwtService: JwtService;
-  let adminAccessToken: string;
+  let userAccessToken: string;
 
   beforeAll(async () => {
     testingModule = await Test.createTestingModule({
@@ -40,7 +40,7 @@ describe('E2E u-5 competitions TEST', () => {
     (await app.init()).listen(appEnv.appPort);
     const user = new UserDummyBuilder().setRole('USER').build();
     await entityEntityManager.save(UserEntity, user);
-    adminAccessToken = jwtService.sign(
+    userAccessToken = jwtService.sign(
       { userId: user.id, userRole: user.role },
       { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
     );
@@ -61,10 +61,12 @@ describe('E2E u-5 competitions TEST', () => {
       const competitions = generateTestDummyCompetitions();
       await entityEntityManager.save(CompetitionEntity, competitions);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const findCompetitionsRes = await request(app.getHttpServer())
         .get('/user/competitions')
-        .set('Authorization', `Bearer ${adminAccessToken}`);
-      expect(typia.is<ResponseForm<FindCompetitionsRes>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${userAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCompetitionsRes>>(res.body);
+        });
     });
   });
 
@@ -78,10 +80,12 @@ describe('E2E u-5 competitions TEST', () => {
         .build();
       await entityEntityManager.save(CompetitionEntity, competition);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const getCompetitionRes = await request(app.getHttpServer())
         .get(`/user/competitions/${competition.id}`)
-        .set('Authorization', `Bearer ${adminAccessToken}`);
-      expect(typia.is<ResponseForm<GetCompetitionRes>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${userAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetCompetitionRes>>(res.body);
+        });
     });
   });
 });

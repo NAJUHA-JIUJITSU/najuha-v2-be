@@ -68,11 +68,13 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const getUserResBody = await request(app.getHttpServer())
         .get('/user/register/users/me')
-        .set('Authorization', `Bearer ${myAccessToken}`);
-      expect(typia.is<ResponseForm<GetTemporaryUserRes>>(res.body)).toBe(true);
-      expect(res.body.result.user.id).toEqual(tempraryUser.id);
+        .set('Authorization', `Bearer ${myAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetTemporaryUserRes>>(res.body);
+        });
+      expect(getUserResBody.result.user.id).toEqual(tempraryUser.id);
     });
   });
 
@@ -88,11 +90,13 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const isDuplicatedResBody = await request(app.getHttpServer())
         .get(`/user/register/users/${otherUser.nickname}/is-duplicated`)
-        .set('Authorization', `Bearer ${userAccessToken}`);
-      expect(typia.is<ResponseForm<IsDuplicatedNicknameRes>>(res.body)).toBe(true);
-      expect(res.body.result.isDuplicated).toEqual(true);
+        .set('Authorization', `Bearer ${userAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<IsDuplicatedNicknameRes>>(res.body);
+        });
+      expect(isDuplicatedResBody.result.isDuplicated).toEqual(true);
     });
 
     it('닉네임 중복검사 - 중복된 닉네임이지만 내가 사용중인 닉네임(사용가능)', async () => {
@@ -104,11 +108,13 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const isDuplicatedResBody = await request(app.getHttpServer())
         .get(`/user/register/users/${tempraryUser.nickname}/is-duplicated`)
-        .set('Authorization', `Bearer ${myAccessToken}`);
-      expect(typia.is<ResponseForm<IsDuplicatedNicknameRes>>(res.body)).toBe(true);
-      expect(res.body.result.isDuplicated).toEqual(false);
+        .set('Authorization', `Bearer ${myAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<IsDuplicatedNicknameRes>>(res.body);
+        });
+      expect(isDuplicatedResBody.result.isDuplicated).toEqual(false);
     });
 
     it('닉네임 중복검사 - 중복되지 않은 닉네임(사용가능)', async () => {
@@ -121,11 +127,13 @@ describe('E2E u-2 register test', () => {
       );
       const unusedNickname = 'unusedNickname';
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const isDuplicatedResBody = await request(app.getHttpServer())
         .get(`/user/register/users/${unusedNickname}/is-duplicated`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<IsDuplicatedNicknameRes>>(res.body)).toBe(true);
-      expect(res.body.result.isDuplicated).toEqual(false);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<IsDuplicatedNicknameRes>>(res.body);
+        });
+      expect(isDuplicatedResBody.result.isDuplicated).toEqual(false);
     });
   });
 
@@ -139,11 +147,13 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const sendAuthCodeResBody = await request(app.getHttpServer())
         .post('/user/register/phone-number/auth-code')
         .set('Authorization', `Bearer ${userAccessToken}`)
-        .send({ phoneNumber: '01012345678' });
-      expect(typia.is<ResponseForm<SendPhoneNumberAuthCodeRes>>(res.body)).toBe(true);
+        .send({ phoneNumber: '01012345678' })
+        .then((res) => {
+          return typia.assert<ResponseForm<SendPhoneNumberAuthCodeRes>>(res.body);
+        });
     });
   });
 
@@ -165,12 +175,14 @@ describe('E2E u-2 register test', () => {
         appEnv.redisPhoneNumberAuthCodeExpirationTime,
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const confirmAuthCodeResBody = await request(app.getHttpServer())
         .post(`/user/register/phone-number/auth-code/confirm`)
         .set('Authorization', `Bearer ${userAccessToken}`)
-        .send({ authCode });
-      expect(typia.is<ResponseForm<ConfirmAuthCodeRes>>(res.body)).toBe(true);
-      expect(res.body.result.isConfirmed).toEqual(true);
+        .send({ authCode })
+        .then((res) => {
+          return typia.assert<ResponseForm<ConfirmAuthCodeRes>>(res.body);
+        });
+      expect(confirmAuthCodeResBody.result.isConfirmed).toEqual(true);
     });
 
     it('전화번호로 인증코드 확인 실패 시', async () => {
@@ -192,12 +204,14 @@ describe('E2E u-2 register test', () => {
       );
       /** main test. */
       const wrongCode = '999999';
-      const res = await request(app.getHttpServer())
+      const confirmAuthCodeResBody = await request(app.getHttpServer())
         .post(`/user/register/phone-number/auth-code/confirm`)
         .set('Authorization', `Bearer ${userAccessToken}`)
-        .send({ authCode: wrongCode });
-      expect(typia.is<ResponseForm<ConfirmAuthCodeRes>>(res.body)).toBe(true);
-      expect(res.body.result.isConfirmed).toEqual(false);
+        .send({ authCode: wrongCode })
+        .then((res) => {
+          return typia.assert<ResponseForm<ConfirmAuthCodeRes>>(res.body);
+        });
+      expect(confirmAuthCodeResBody.result.isConfirmed).toEqual(false);
     });
   });
 
@@ -225,7 +239,7 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const registerUserResBody = await request(app.getHttpServer())
         .patch('/user/register')
         .set('Authorization', `Bearer ${temporaryUserAccessToken}`)
         .send({
@@ -236,9 +250,10 @@ describe('E2E u-2 register test', () => {
             gender: 'MALE',
           },
           consentPolicyTypes: policyTypes,
+        })
+        .then((res) => {
+          return typia.assert<ResponseForm<RegisterUserRes>>(res.body);
         });
-      console.log(res.body);
-      expect(typia.is<ResponseForm<RegisterUserRes>>(res.body)).toBe(true);
     });
 
     it('유저 등록 실패 시 - 닉네임 중복', async () => {
@@ -266,7 +281,7 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const registerUserResBody = await request(app.getHttpServer())
         .patch('/user/register')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send({
@@ -277,8 +292,10 @@ describe('E2E u-2 register test', () => {
             gender: 'MALE',
           },
           consentPolicyTypes: policyTypes,
+        })
+        .then((res) => {
+          return typia.assert<REGISTER_NICKNAME_DUPLICATED>(res.body);
         });
-      expect(typia.is<REGISTER_NICKNAME_DUPLICATED>(res.body)).toBe(true);
     });
 
     it('유저 등록 실패 시 - 필수 약관 미동의', async () => {
@@ -304,7 +321,7 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const registerUserResBody = await request(app.getHttpServer())
         .patch('/user/register')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send({
@@ -315,8 +332,10 @@ describe('E2E u-2 register test', () => {
             gender: 'MALE',
           },
           consentPolicyTypes: ['TERMS_OF_SERVICE', 'PRIVACY'],
+        })
+        .then((res) => {
+          return typia.assert<REGISTER_POLICY_CONSENT_REQUIRED>(res.body);
         });
-      expect(typia.is<REGISTER_POLICY_CONSENT_REQUIRED>(res.body)).toBe(true);
     });
 
     it('유저 등록 실패 시 - 전화번호 미등록', async () => {
@@ -342,7 +361,7 @@ describe('E2E u-2 register test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const registerUserResBody = await request(app.getHttpServer())
         .patch('/user/register')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send({
@@ -353,8 +372,10 @@ describe('E2E u-2 register test', () => {
             gender: 'MALE',
           },
           consentPolicyTypes: policyTypes,
+        })
+        .then((res) => {
+          return typia.assert<REGISTER_PHONE_NUMBER_REQUIRED>(res.body);
         });
-      expect(typia.is<REGISTER_PHONE_NUMBER_REQUIRED>(res.body)).toBe(true);
     });
   });
 });

@@ -59,43 +59,52 @@ describe('E2E a-4 admin-policy test', () => {
   describe('a-4-1 POST /admin/policies -----------------------------------------------------', () => {
     it('약관 생성하기 성공 시', async () => {
       /** pre condition. */
-      const createPolicyReqDto = typia.random<CreatePolicyReqBody>();
+      const createPolicyReqBody = typia.random<CreatePolicyReqBody>();
       const dummyUser = new UserDummyBuilder().setRole('ADMIN').build();
       const accessToken = jwtService.sign(
         { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const createPolicyResponse = await request(app.getHttpServer())
         .post('/admin/policies')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(createPolicyReqDto);
-      expect(typia.is<ResponseForm<CreatePolicyRes>>(res.body)).toBe(true);
+        .send(createPolicyReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePolicyRes>>(res.body);
+        });
     });
 
     it('기존 존재하는 약관 타압의 약관을 새로 생성할 때, 버전이 올라가야 한다.', async () => {
       /** pre condition. */
-      const createPolicyReqDto = typia.random<CreatePolicyReqBody>();
-      createPolicyReqDto.type = 'TERMS_OF_SERVICE';
+      const createPolicyReqBody = typia.random<CreatePolicyReqBody>();
+      createPolicyReqBody.type = 'TERMS_OF_SERVICE';
       const dummyUser = new UserDummyBuilder().setRole('ADMIN').build();
       const accessToken = jwtService.sign(
         { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const res = await request(app.getHttpServer())
+      const initialCreatePolicyResponse = await request(app.getHttpServer())
         .post('/admin/policies')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(createPolicyReqDto);
-      expect(typia.is<ResponseForm<CreatePolicyRes>>(res.body)).toBe(true);
+        .send(createPolicyReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePolicyRes>>(res.body);
+        });
+
       /** main test. */
-      const createPolicyReqDto2 = typia.random<CreatePolicyReqBody>();
-      createPolicyReqDto2.type = 'TERMS_OF_SERVICE';
-      const res2 = await request(app.getHttpServer())
+      const createPolicyReqBody2 = typia.random<CreatePolicyReqBody>();
+      createPolicyReqBody2.type = 'TERMS_OF_SERVICE';
+      const secondCreatePolicyResponse = await request(app.getHttpServer())
         .post('/admin/policies')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(createPolicyReqDto2);
-      expect(typia.is<ResponseForm<CreatePolicyRes>>(res2.body)).toBe(true);
-      expect(res2.body.result.policy.version).toEqual(res.body.result.policy.version + 1);
+        .send(createPolicyReqBody2)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePolicyRes>>(res.body);
+        });
+      expect(secondCreatePolicyResponse.result.policy.version).toEqual(
+        initialCreatePolicyResponse.result.policy.version + 1,
+      );
     });
   });
 
@@ -125,11 +134,13 @@ describe('E2E a-4 admin-policy test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const findPoliciesResponse = await request(app.getHttpServer())
         .get('/admin/policies')
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
-      expect(res.body.result.policies.length).toEqual(policyTypes.length * maxVersion);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindPoliciesRes>>(res.body);
+        });
+      expect(findPoliciesResponse.result.policies.length).toEqual(policyTypes.length * maxVersion);
     });
 
     it('특정 타입의 모든 버전의 약관 가져오기 성공 시', async () => {
@@ -158,13 +169,15 @@ describe('E2E a-4 admin-policy test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const findPoliciesByTypeResponse = await request(app.getHttpServer())
         .get('/admin/policies')
         .query(query)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
-      expect(res.body.result.policies.length).toEqual(policyTypes.length);
-      expect(res.body.result.policies[0].type).toEqual(query.type);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindPoliciesRes>>(res.body);
+        });
+      expect(findPoliciesByTypeResponse.result.policies.length).toEqual(maxVersion);
+      expect(findPoliciesByTypeResponse.result.policies[0].type).toEqual(query.type);
     });
   });
 });

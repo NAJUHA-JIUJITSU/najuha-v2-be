@@ -1,4 +1,4 @@
-import { INestApplication, Res } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Redis } from 'ioredis';
@@ -27,7 +27,7 @@ import {
   UpdatePostRes,
 } from '../../../src/modules/posts/presentation/posts.controller.dto';
 import { ResponseForm } from '../../../src/common/response/response';
-import typia, { assert } from 'typia';
+import typia from 'typia';
 import axios from 'axios';
 import * as FormData from 'form-data';
 import * as fs from 'fs/promises';
@@ -40,7 +40,6 @@ import {
 } from '../../../src/common/response/errorResponse';
 import { IUser } from '../../../src/modules/users/domain/interface/user.interface';
 import { CreateImageRes } from '../../../src/modules/images/presentation/images.controller.dto';
-import exp from 'constants';
 
 describe('E2E u-7 Post TEST', () => {
   let app: INestApplication;
@@ -84,16 +83,18 @@ describe('E2E u-7 Post TEST', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const res = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      expect(typia.is<ResponseForm<CreatePostRes>>(res.body)).toBe(true);
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
     });
 
     it('게시물 + 이미지 생성 성공 시', async () => {
@@ -105,34 +106,41 @@ describe('E2E u-7 Post TEST', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const creatImageRes = await request(app.getHttpServer())
+      const createImageResBody = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send({ format: 'image/jpeg', path: 'post' });
-      const { image, presignedPost } = creatImageRes.body.result;
+        .send({ format: 'image/jpeg', path: 'post' })
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateImageRes>>(res.body);
+        });
+
+      const { image, presignedPost } = createImageResBody.result;
       const { url, fields } = presignedPost;
       const formData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {
         formData.append(key, value as string);
       });
       formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
-      const uploadRes = await axios.post(url, formData, {
+      const uploadResBody = await axios.post(url, formData, {
         headers: {
           ...formData.getHeaders(),
         },
       });
-      expect(uploadRes.status).toBe(204);
-      const postCreateDto: CreatePostReqBody = {
+      expect(uploadResBody.status).toBe(204);
+
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
         imageIds: [image.id],
       };
-      const res = await request(app.getHttpServer())
+      const createPostWithImageResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      expect(typia.is<ResponseForm<CreatePostRes>>(res.body)).toBe(true);
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
     });
   });
 
@@ -145,7 +153,7 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
@@ -153,10 +161,17 @@ describe('E2E u-7 Post TEST', () => {
       await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
       /** main test. */
-      const res = await request(app.getHttpServer()).get('/user/posts').set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<FindPostsRes>>(res.body)).toBe(true);
+      const findPostsResBody = await request(app.getHttpServer())
+        .get('/user/posts')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindPostsRes>>(res.body);
+        });
     });
   });
 
@@ -169,21 +184,26 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const getPostResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<CreatePostRes>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetPostRes>>(res.body);
+        });
     });
   });
 
@@ -196,26 +216,31 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       /** main test. */
-      const postUpdateDto: UpdatePostReqBody = {
+      const postUpdateReqBody: UpdatePostReqBody = {
         title: 'title',
         body: 'body',
       };
-      const res = await request(app.getHttpServer())
+      const updatePostResBody = await request(app.getHttpServer())
         .patch(`/user/posts/${postId}`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postUpdateDto);
-      expect(typia.is<ResponseForm<UpdatePostRes>>(res.body)).toBe(true);
+        .send(postUpdateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdatePostRes>>(res.body);
+        });
     });
 
     it('게시물 + 내용수정, 기존이미지 유지 성공 시', async () => {
@@ -226,53 +251,64 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const creatImageRes = await request(app.getHttpServer())
+
+      const createImageResBody = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send({ format: 'image/jpeg', path: 'post' });
-      const { image, presignedPost } = creatImageRes.body.result;
+        .send({ format: 'image/jpeg', path: 'post' })
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateImageRes>>(res.body);
+        });
+
+      const { image, presignedPost } = createImageResBody.result;
       const { url, fields } = presignedPost;
       const formData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {
         formData.append(key, value as string);
       });
       formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
-      const uploadRes = await axios.post(url, formData, {
+      const uploadResBody = await axios.post(url, formData, {
         headers: {
           ...formData.getHeaders(),
         },
       });
-      expect(uploadRes.status).toBe(204);
-      const postCreateDto: CreatePostReqBody = {
+      expect(uploadResBody.status).toBe(204);
+
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
         imageIds: [image.id],
       };
-      const res = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      expect(typia.is<ResponseForm<CreatePostRes>>(res.body)).toBe(true);
-      const post = res.body.result.post;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+
+      const post = createPostResBody.result.post;
       const latestPostSnapshot = post.postSnapshots[post.postSnapshots.length - 1];
       const imageIds = latestPostSnapshot.postSnapshotImages.map((image) => image.image.id);
 
       /** main test. */
-      const postUpdateDto: UpdatePostReqBody = {
+      const postUpdateReqBody: UpdatePostReqBody = {
         title: 'updated title',
         body: 'updated body',
         imageIds: [...imageIds],
       };
-      const res2 = await request(app.getHttpServer())
+      const updatePostWithImagesResBody = await request(app.getHttpServer())
         .patch(`/user/posts/${post.id}`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postUpdateDto);
-      expect(typia.is<ResponseForm<UpdatePostRes>>(res2.body)).toBe(true);
-      expect(res2.body.result.post.postSnapshots.length).toBe(2);
-      expect(res2.body.result.post.postSnapshots[1].title).toBe('updated title');
-      expect(res2.body.result.post.postSnapshots[1].body).toBe('updated body');
-      expect(res2.body.result.post.postSnapshots[1].postSnapshotImages[0].image.id).toBe(imageIds[0]);
+        .send(postUpdateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdatePostRes>>(res.body);
+        });
+      expect(updatePostWithImagesResBody.result.post.postSnapshots.length).toBe(2);
+      expect(updatePostWithImagesResBody.result.post.postSnapshots[1].title).toBe('updated title');
+      expect(updatePostWithImagesResBody.result.post.postSnapshots[1].body).toBe('updated body');
+      expect(updatePostWithImagesResBody.result.post.postSnapshots[1].postSnapshotImages[0].image.id).toBe(imageIds[0]);
     });
 
     it('게시물 + 새로운 이미지로 수정 성공 시', async () => {
@@ -283,73 +319,80 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
+
       // First image creation and upload
-      const createImageRes1 = await request(app.getHttpServer())
+      const createImageResBody1 = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({ format: 'image/jpeg', path: 'post' })
         .then((res) => {
-          return assert<ResponseForm<CreateImageRes>>(res.body);
+          return typia.assert<ResponseForm<CreateImageRes>>(res.body);
         });
       const formData1 = new FormData();
-      const createImageRet1 = createImageRes1.result;
-      Object.entries(createImageRet1.presignedPost.fields).forEach(([key, value]) => {
+      const { image: image1, presignedPost: presignedPost1 } = createImageResBody1.result;
+      Object.entries(presignedPost1.fields).forEach(([key, value]) => {
         formData1.append(key, value as string);
       });
       formData1.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
-      const uploadRes1 = await axios.post(createImageRet1.presignedPost.url, formData1, {
+      const uploadResBody1 = await axios.post(presignedPost1.url, formData1, {
         headers: {
           ...formData1.getHeaders(),
         },
       });
-      expect(uploadRes1.status).toBe(204);
-      const postCreateDto: CreatePostReqBody = {
+      expect(uploadResBody1.status).toBe(204);
+
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
-        imageIds: [createImageRet1.image.id],
+        imageIds: [image1.id],
       };
-      const res1 = await request(app.getHttpServer())
+      const createPostResBody1 = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      expect(typia.is<ResponseForm<CreatePostRes>>(res1.body)).toBe(true);
-      const postId = res1.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody1.result.post.id;
 
       /** main test. */
       // Second image creation and upload
-      const createImageRes2 = await request(app.getHttpServer())
+      const createImageResBody2 = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({ format: 'image/jpeg', path: 'post' })
         .then((res) => {
-          return assert<ResponseForm<CreateImageRes>>(res.body);
+          return typia.assert<ResponseForm<CreateImageRes>>(res.body);
         });
       const formData2 = new FormData();
-      const createImageRet2 = createImageRes2.result;
-      Object.entries(createImageRet2.presignedPost.fields).forEach(([key, value]) => {
+      const { image: image2, presignedPost: presignedPost2 } = createImageResBody2.result;
+      Object.entries(presignedPost2.fields).forEach(([key, value]) => {
         formData2.append(key, value as string);
       });
       formData2.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
-      const uploadRes2 = await axios.post(createImageRet2.presignedPost.url, formData2, {
+      const uploadResBody2 = await axios.post(presignedPost2.url, formData2, {
         headers: {
           ...formData2.getHeaders(),
         },
       });
-      expect(uploadRes2.status).toBe(204);
-      const postUpdateDto: UpdatePostReqBody = {
+      expect(uploadResBody2.status).toBe(204);
+
+      const postUpdateReqBody: UpdatePostReqBody = {
         title: 'title',
         body: 'body',
-        imageIds: [createImageRet2.image.id],
+        imageIds: [image2.id],
       };
-      const res2 = await request(app.getHttpServer())
+      const updatePostWithNewImageResBody = await request(app.getHttpServer())
         .patch(`/user/posts/${postId}`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postUpdateDto);
-      expect(typia.is<ResponseForm<UpdatePostRes>>(res2.body)).toBe(true);
-      expect(res2.body.result.post.postSnapshots.length).toBe(2);
-      expect(res2.body.result.post.postSnapshots[1].postSnapshotImages.length).toBe(1);
-      expect(res2.body.result.post.postSnapshots[1].postSnapshotImages[0].image.id).toBe(createImageRet2.image.id);
+        .send(postUpdateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdatePostRes>>(res.body);
+        });
+      expect(updatePostWithNewImageResBody.result.post.postSnapshots.length).toBe(2);
+      expect(updatePostWithNewImageResBody.result.post.postSnapshots[1].postSnapshotImages.length).toBe(1);
+      expect(updatePostWithNewImageResBody.result.post.postSnapshots[1].postSnapshotImages[0].image.id).toBe(image2.id);
     });
   });
 
@@ -362,22 +405,27 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       /** main test. */
       await request(app.getHttpServer()).delete(`/user/posts/${postId}`).set('Authorization', `Bearer ${accessToken}`);
-      const res = await request(app.getHttpServer())
+      const getDeletedPostResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ENTITY_NOT_FOUND>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ENTITY_NOT_FOUND>(res.body);
+        });
     });
   });
 
@@ -390,25 +438,30 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       /** main test. */
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/like`)
         .set('Authorization', `Bearer ${accessToken}`);
-      const post = await request(app.getHttpServer())
+      const getPostResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<GetPostRes>>(post.body)).toBe(true);
-      expect(post.body.result.post.userLiked).toBe(true);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetPostRes>>(res.body);
+        });
+      expect(getPostResBody.result.post.userLiked).toBe(true);
     });
 
     it('게시물 중복 좋아요 시', async () => {
@@ -419,24 +472,29 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/like`)
         .set('Authorization', `Bearer ${accessToken}`);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const duplicateLikeResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/like`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<POSTS_POST_LIKE_ALREADY_EXIST>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<POSTS_POST_LIKE_ALREADY_EXIST>(res.body);
+        });
     });
   });
 
@@ -449,16 +507,19 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/like`)
         .set('Authorization', `Bearer ${accessToken}`);
@@ -466,11 +527,13 @@ describe('E2E u-7 Post TEST', () => {
       await request(app.getHttpServer())
         .delete(`/user/posts/${postId}/like`)
         .set('Authorization', `Bearer ${accessToken}`);
-      const post = await request(app.getHttpServer())
+      const getPostResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<GetPostRes>>(post.body)).toBe(true);
-      expect(post.body.result.post.userLiked).toBe(false);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetPostRes>>(res.body);
+        });
+      expect(getPostResBody.result.post.userLiked).toBe(false);
     });
   });
 
@@ -489,31 +552,38 @@ describe('E2E u-7 Post TEST', () => {
           { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
         ),
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessTokens[0]}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       /** main test. */
       const postReport: CreatePostReportReqBody = {
         type: 'SPAM_CLICKBAIT',
       };
       for (const accessToken of accessTokens) {
-        const res = await request(app.getHttpServer())
+        const reportResBody = await request(app.getHttpServer())
           .post(`/user/posts/${postId}/report`)
           .set('Authorization', `Bearer ${accessToken}`)
-          .send(postReport);
-        expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
+          .send(postReport)
+          .then((res) => {
+            return typia.assert<ResponseForm<void>>(res.body);
+          });
       }
-      const res = await request(app.getHttpServer())
+      const getReportedPostResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}`)
-        .set('Authorization', `Bearer ${accessTokens[0]}`);
-      expect(typia.is<ENTITY_NOT_FOUND>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .then((res) => {
+          return typia.assert<ENTITY_NOT_FOUND>(res.body);
+        });
     });
 
     it('게시물 중복 신고 시', async () => {
@@ -524,33 +594,38 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       const postReport: CreatePostReportReqBody = {
         type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postReport);
-      await request(app.getHttpServer())
-        .post(`/user/posts/${postId}/report`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send(postReport);
+        .send(postReport)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const duplicateReportResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postReport);
-      expect(typia.is<POSTS_POST_REPORT_ALREADY_EXIST>(res.body)).toBe(true);
+        .send(postReport)
+        .then((res) => {
+          return typia.assert<POSTS_POST_REPORT_ALREADY_EXIST>(res.body);
+        });
     });
   });
 
@@ -563,37 +638,41 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       const postReport: CreatePostReportReqBody = {
         type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postReport);
-      await request(app.getHttpServer())
-        .post(`/user/posts/${postId}/report`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send(postReport);
+        .send(postReport)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+
       /** main test. */
-      // 신고 취소 후 다시 신고되는 테스트
       await request(app.getHttpServer())
         .delete(`/user/posts/${postId}/report`)
         .set('Authorization', `Bearer ${accessToken}`);
-      const ret = await request(app.getHttpServer())
+      const cancelReportResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postReport);
-      expect(typia.is<ResponseForm<void>>(ret.body)).toBe(true);
+        .send(postReport)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
     });
   });
 
@@ -606,25 +685,30 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
       /** main test. */
-      const commentCreateDto: CreateCommentReqBody = {
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const res = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      expect(typia.is<ResponseForm<CreateCommentRes>>(res.body)).toBe(true);
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
     });
   });
 
@@ -643,33 +727,41 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       /** main test. */
-      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+      const commentReplyCreateReqBody: CreateCommentReplyReqBody = {
         body: 'body',
       };
-      const res = await request(app.getHttpServer())
+      const createCommentReplyResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments/${commentId}/replies`)
         .set('Authorization', `Bearer ${accessToken2}`)
-        .send(commentReplyCreateDto);
-      expect(typia.is<ResponseForm<CreateCommentReplyRes>>(res.body)).toBe(true);
+        .send(commentReplyCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentReplyRes>>(res.body);
+        });
     });
   });
 
@@ -688,28 +780,33 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const tmp = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
+        .send(commentCreateReqBody);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const findCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      expect(typia.is<ResponseForm<FindCommentsRes>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
     });
   });
 
@@ -728,36 +825,44 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
-      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
+      const commentReplyCreateReqBody: CreateCommentReplyReqBody = {
         body: 'body',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments/${commentId}/replies`)
         .set('Authorization', `Bearer ${accessToken2}`)
-        .send(commentReplyCreateDto);
+        .send(commentReplyCreateReqBody);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const findRepliesResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments/${commentId}/replies`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<FindCommentsRes>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
     });
   });
 
@@ -770,33 +875,41 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       /** main test. */
-      const commentUpdateDto: UpdateCommentReqBody = {
+      const commentUpdateReqBody: UpdateCommentReqBody = {
         body: 'body',
       };
-      const res = await request(app.getHttpServer())
+      const updateCommentResBody = await request(app.getHttpServer())
         .patch(`/user/posts/comments/${commentId}`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentUpdateDto);
-      expect(typia.is<ResponseForm<UpdateCommentRes>>(res.body)).toBe(true);
+        .send(commentUpdateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdateCommentRes>>(res.body);
+        });
     });
 
     it('게시물 답글 수정 성공 시', async () => {
@@ -813,41 +926,52 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
-      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
+      const commentReplyCreateReqBody: CreateCommentReplyReqBody = {
         body: 'body',
       };
-      const createCommentReplyRes = await request(app.getHttpServer())
+      const createCommentReplyResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments/${commentId}/replies`)
         .set('Authorization', `Bearer ${accessToken2}`)
-        .send(commentReplyCreateDto);
-      const commentReplyId = createCommentReplyRes.body.result.comment.id;
+        .send(commentReplyCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentReplyRes>>(res.body);
+        });
+      const commentReplyId = createCommentReplyResBody.result.comment.id;
       /** main test. */
-      const commentUpdateDto: UpdateCommentReqBody = {
+      const commentUpdateReqBody: UpdateCommentReqBody = {
         body: 'body',
       };
-      const res = await request(app.getHttpServer())
+      const updateReplyResBody = await request(app.getHttpServer())
         .patch(`/user/posts/comments/${commentReplyId}`)
         .set('Authorization', `Bearer ${accessToken2}`)
-        .send(commentUpdateDto);
-      expect(typia.is<ResponseForm<UpdateCommentRes>>(res.body)).toBe(true);
+        .send(commentUpdateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdateCommentRes>>(res.body);
+        });
     });
   });
 
@@ -866,33 +990,46 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       /** main test. */
       await request(app.getHttpServer())
         .delete(`/user/posts/comments/${commentId}`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      const res = await request(app.getHttpServer())
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+      const findCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      expect(res.body.result.comments.length).toBe(0);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
+      expect(findCommentsResBody.result.comments.length).toBe(0);
     });
+
     it('게시물 답글 삭제 성공 시', async () => {
       /** pre condition. */
       const user = new UserDummyBuilder().build();
@@ -907,40 +1044,55 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
-      const commentReplyCreateDto: CreateCommentReplyReqBody = {
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
+      const commentReplyCreateReqBody: CreateCommentReplyReqBody = {
         body: 'body',
       };
-      const createCommentReplyRes = await request(app.getHttpServer())
+      const createCommentReplyResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments/${commentId}/replies`)
         .set('Authorization', `Bearer ${accessToken2}`)
-        .send(commentReplyCreateDto);
-      const commentReplyId = createCommentReplyRes.body.result.comment.id;
+        .send(commentReplyCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentReplyRes>>(res.body);
+        });
+      const commentReplyId = createCommentReplyResBody.result.comment.id;
       /** main test. */
       await request(app.getHttpServer())
         .delete(`/user/posts/comments/${commentReplyId}`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      const res = await request(app.getHttpServer())
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+      const findRepliesResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments/${commentId}/replies`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(res.body.result.comments.length).toBe(0);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
+      expect(findRepliesResBody.result.comments.length).toBe(0);
     });
   });
 
@@ -959,32 +1111,44 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       /** main test. */
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/like`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      const res = await request(app.getHttpServer())
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+      const findCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      expect(res.body.result.comments[0].userLiked).toBe(true);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
+      expect(findCommentsResBody.result.comments[0].userLiked).toBe(true);
     });
 
     it('게시물 댓글 중복 좋아요 시', async () => {
@@ -1001,32 +1165,43 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/like`)
-        .set('Authorization', `Bearer ${accessToken2}`);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const duplicateLikeResBody = await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/like`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      expect(typia.is<POSTS_COMMENT_LIKE_ALREADY_EXIST>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<POSTS_COMMENT_LIKE_ALREADY_EXIST>(res.body);
+        });
     });
   });
 
@@ -1045,35 +1220,50 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/like`)
-        .set('Authorization', `Bearer ${accessToken2}`);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
       /** main test. */
       await request(app.getHttpServer())
         .delete(`/user/posts/comments/${commentId}/like`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      const res = await request(app.getHttpServer())
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+      const findCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      expect(res.body.result.comments[0].userLiked).toBe(false);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
+      expect(findCommentsResBody.result.comments[0].userLiked).toBe(false);
     });
   });
 
@@ -1092,39 +1282,50 @@ describe('E2E u-7 Post TEST', () => {
           { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
         ),
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessTokens[0]}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessTokens[0]}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       /** main test. */
       const commentReport: CreateCommentReportReqBody = {
         type: 'SPAM_CLICKBAIT',
       };
       for (const accessToken of accessTokens) {
-        const res = await request(app.getHttpServer())
+        const reportResBody = await request(app.getHttpServer())
           .post(`/user/posts/comments/${commentId}/report`)
           .set('Authorization', `Bearer ${accessToken}`)
-          .send(commentReport);
-        expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
+          .send(commentReport)
+          .then((res) => {
+            return typia.assert<ResponseForm<void>>(res.body);
+          });
       }
-      const res = await request(app.getHttpServer())
+      const findCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments`)
-        .set('Authorization', `Bearer ${accessTokens[0]}`);
-      expect(res.body.result.comments.length).toBe(0);
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
+      expect(findCommentsResBody.result.comments.length).toBe(0);
     });
 
     it('게시물 댓글 중복 신고 시', async () => {
@@ -1141,41 +1342,48 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       const commentReport: CreateCommentReportReqBody = {
         type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentReport);
-      await request(app.getHttpServer())
-        .post(`/user/posts/comments/${commentId}/report`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentReport);
+        .send(commentReport)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const duplicateReportResBody = await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentReport);
-      expect(typia.is<POSTS_COMMENT_REPORT_ALREADY_EXIST>(res.body)).toBe(true);
+        .send(commentReport)
+        .then((res) => {
+          return typia.assert<POSTS_COMMENT_REPORT_ALREADY_EXIST>(res.body);
+        });
     });
   });
 
@@ -1194,45 +1402,54 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       const commentReport: CreateCommentReportReqBody = {
         type: 'SPAM_CLICKBAIT',
       };
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentReport);
-      await request(app.getHttpServer())
-        .post(`/user/posts/comments/${commentId}/report`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentReport);
+        .send(commentReport)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
       /** main test. */
-      // 신고 취소 후 다시 신고되는 테스트
       await request(app.getHttpServer())
         .delete(`/user/posts/comments/${commentId}/report`)
-        .set('Authorization', `Bearer ${accessToken}`);
-      const res = await request(app.getHttpServer())
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+      const cancelReportResBody = await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/report`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentReport);
-      expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
+        .send(commentReport)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
     });
   });
 
@@ -1251,39 +1468,53 @@ describe('E2E u-7 Post TEST', () => {
         { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const postCreateDto: CreatePostReqBody = {
+      const postCreateReqBody: CreatePostReqBody = {
         category: 'COMPETITION',
         title: 'title',
         body: 'body',
       };
-      const createPostRes = await request(app.getHttpServer())
+      const createPostResBody = await request(app.getHttpServer())
         .post('/user/posts')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(postCreateDto);
-      const postId = createPostRes.body.result.post.id;
-      const commentCreateDto: CreateCommentReqBody = {
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
         body: 'body',
       };
-      const createCommentRes = await request(app.getHttpServer())
+      const createCommentResBody = await request(app.getHttpServer())
         .post(`/user/posts/${postId}/comments`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(commentCreateDto);
-      const commentId = createCommentRes.body.result.comment.id;
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
       await request(app.getHttpServer())
         .post(`/user/posts/comments/${commentId}/like`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      const res = await request(app.getHttpServer())
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+      const findCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/comments`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      expect(res.body.result.comments[0].userLiked).toBe(true);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
+        });
+      expect(findCommentsResBody.result.comments[0].userLiked).toBe(true);
 
       /** main test. */
-      const findBestCommentsRes = await request(app.getHttpServer())
+      const findBestCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/best-comments`)
-        .set('Authorization', `Bearer ${accessToken2}`);
-      expect(typia.is<ResponseForm<FindBestCommentsRes>>(findBestCommentsRes.body)).toBe(true);
-      expect(!!findBestCommentsRes.body.result.bestComment).toBe(true);
-      expect(findBestCommentsRes.body.result.bestReply).toBe(null);
+        .set('Authorization', `Bearer ${accessToken2}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindBestCommentsRes>>(res.body);
+        });
+      expect(!!findBestCommentsResBody.result.bestComment).toBe(true);
+      expect(findBestCommentsResBody.result.bestReply).toBe(null);
     });
   });
 });

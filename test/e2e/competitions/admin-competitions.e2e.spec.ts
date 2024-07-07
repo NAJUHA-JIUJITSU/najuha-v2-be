@@ -23,6 +23,7 @@ import {
   CreateEarlybirdDiscountSnapshotRes,
   FindCompetitionsRes,
   GetCompetitionRes,
+  UpdateCompetitionRequiredAdditionalInfoRes,
   UpdateCompetitionRes,
   UpdateRequiredAdditionalInfoReqBody,
 } from '../../../src/modules/competitions/presentation/competitions.controller.dto';
@@ -31,7 +32,10 @@ import { UserDummyBuilder } from '../../../src/dummy/user.dummy';
 import { CompetitionDummyBuilder } from '../../../src/dummy/competition.dummy';
 import { generateDummyDivisionPacks } from '../../../src/dummy/division.dummy';
 import { dummyCombinationDiscountRules } from '../../../src/dummy/combination-discount-snapshot.dummy';
-import { CreateCompetitionRequiredAdditionalInfoRet } from '../../../src/modules/competitions/application/competitions.app.dto';
+import {
+  CreateCompetitionRequiredAdditionalInfoRet,
+  DeleteCompetitionRequiredAdditionalInfoRet,
+} from '../../../src/modules/competitions/application/competitions.app.dto';
 import { IRequiredAdditionalInfo } from '../../../src/modules/competitions/domain/interface/required-additional-info.interface';
 import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from '../../../src/database/entity/competition/required-additional-info.entity';
@@ -118,12 +122,14 @@ describe('E2E a-5 competitions TEST', () => {
   describe('a-5-1 POST /admin/competitions -------------------------------------------------------------------------', () => {
     it('대회 생성하기 성공 시', async () => {
       /** main test. */
-      const CreateCompetitionReqDto = typia.random<CreateCompetitionReqBody>();
-      const res = await request(app.getHttpServer())
+      const createCompetitionReqDto = typia.random<CreateCompetitionReqBody>();
+      const createCompetitionResBody = await request(app.getHttpServer())
         .post('/admin/competitions')
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send(CreateCompetitionReqDto);
-      expect(typia.is<ResponseForm<CreateCompetitionRes>>(res.body)).toBe(true);
+        .send(createCompetitionReqDto)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCompetitionRes>>(res.body);
+        });
     });
   });
 
@@ -133,10 +139,12 @@ describe('E2E a-5 competitions TEST', () => {
       const competitions = generateTestDummyCompetitions();
       await entityEntityManager.save(CompetitionEntity, competitions);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const findCompetitionsRes = await request(app.getHttpServer())
         .get('/admin/competitions')
-        .set('Authorization', `Bearer ${adminAccessToken}`);
-      expect(typia.is<ResponseForm<FindCompetitionsRes>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindCompetitionsRes>>(res.body);
+        });
     });
   });
 
@@ -150,10 +158,12 @@ describe('E2E a-5 competitions TEST', () => {
         .build();
       await entityEntityManager.save(CompetitionEntity, competition);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const getCompetitionRes = await request(app.getHttpServer())
         .get(`/admin/competitions/${competition.id}`)
-        .set('Authorization', `Bearer ${adminAccessToken}`);
-      expect(typia.is<ResponseForm<GetCompetitionRes>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetCompetitionRes>>(res.body);
+        });
     });
   });
 
@@ -167,12 +177,14 @@ describe('E2E a-5 competitions TEST', () => {
         .build();
       await entityEntityManager.save(CompetitionEntity, competition);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const updateCompetitionRes = await request(app.getHttpServer())
         .patch(`/admin/competitions/${competition.id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send({ title: '수정된 대회' });
-      expect(typia.is<ResponseForm<UpdateCompetitionRes>>(res.body)).toBe(true);
-      expect(res.body.result.competition.title).toBe('수정된 대회');
+        .send({ title: '수정된 대회' })
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdateCompetitionRes>>(res.body);
+        });
+      expect(updateCompetitionRes.result.competition.title).toBe('수정된 대회');
     });
   });
 
@@ -186,12 +198,14 @@ describe('E2E a-5 competitions TEST', () => {
         .build();
       await entityEntityManager.save(CompetitionEntity, competition);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const updateCompetitionRes = await request(app.getHttpServer())
         .patch(`/admin/competitions/${competition.id}/status`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send({ status: 'ACTIVE' });
-      expect(typia.is<ResponseForm<UpdateCompetitionRes>>(res.body)).toBe(true);
-      expect(res.body.result.competition.status).toBe('ACTIVE');
+        .send({ status: 'ACTIVE' })
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdateCompetitionRes>>(res.body);
+        });
+      expect(updateCompetitionRes.result.competition.status).toBe('ACTIVE');
     });
 
     it('대회 상태 수정 INACTIVE -> ACTIVE 실패 시', async () => {
@@ -207,11 +221,13 @@ describe('E2E a-5 competitions TEST', () => {
         .build();
       await entityEntityManager.save(CompetitionEntity, competition);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const updateCompetitionRes = await request(app.getHttpServer())
         .patch(`/admin/competitions/${competition.id}/status`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send({ status: 'ACTIVE' });
-      expect(typia.is<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(res.body)).toBe(true);
+        .send({ status: 'ACTIVE' })
+        .then((res) => {
+          return typia.assert<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(res.body);
+        });
     });
 
     it('대회 상태 수정 ACTIVE -> INACTIVE 성공 시', async () => {
@@ -224,12 +240,14 @@ describe('E2E a-5 competitions TEST', () => {
         .build();
       await entityEntityManager.save(CompetitionEntity, competition);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const updateCompetitionRes = await request(app.getHttpServer())
         .patch(`/admin/competitions/${competition.id}/status`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send({ status: 'INACTIVE' });
-      expect(typia.is<ResponseForm<UpdateCompetitionRes>>(res.body)).toBe(true);
-      expect(res.body.result.competition.status).toBe('INACTIVE');
+        .send({ status: 'INACTIVE' })
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdateCompetitionRes>>(res.body);
+        });
+      expect(updateCompetitionRes.result.competition.status).toBe('INACTIVE');
     });
   });
 
@@ -244,12 +262,14 @@ describe('E2E a-5 competitions TEST', () => {
       await entityEntityManager.save(CompetitionEntity, competition);
       /** main test. */
       const divisionPacks = generateDummyDivisionPacks();
-      const res = await request(app.getHttpServer())
+      const createCompetitionDivisionsRes = await request(app.getHttpServer())
         .post(`/admin/competitions/${competition.id}/divisions`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send({ divisionPacks });
-      expect(typia.is<ResponseForm<CreateCompetitionDivisionsRes>>(res.body)).toBe(true);
-      expect(res.body.result.competition.divisions.length !== 0).toBe(true);
+        .send({ divisionPacks })
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCompetitionDivisionsRes>>(res.body);
+        });
+      expect(createCompetitionDivisionsRes.result.competition.divisions.length !== 0).toBe(true);
     });
   });
 
@@ -268,12 +288,16 @@ describe('E2E a-5 competitions TEST', () => {
         earlybirdEndDate: new Date(),
         discountAmount: 10000,
       };
-      const res = await request(app.getHttpServer())
+      const createCompetitionEarlybirdDiscountSnapshotRes = await request(app.getHttpServer())
         .post(`/admin/competitions/${competition.id}/earlybird-discount-snapshots`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send(createEarlybirdDiscountSnapshotReqBody);
-      expect(typia.is<ResponseForm<CreateEarlybirdDiscountSnapshotRes>>(res.body)).toBe(true);
-      expect(res.body.result.competition.earlybirdDiscountSnapshots.length).toBe(1);
+        .send(createEarlybirdDiscountSnapshotReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateEarlybirdDiscountSnapshotRes>>(res.body);
+        });
+      expect(createCompetitionEarlybirdDiscountSnapshotRes.result.competition.earlybirdDiscountSnapshots.length).toBe(
+        1,
+      );
     });
   });
 
@@ -290,12 +314,14 @@ describe('E2E a-5 competitions TEST', () => {
       const createCombinationDiscountSnapshotReqBody: CreateCombinationDiscountSnapshotReqBody = {
         combinationDiscountRules: dummyCombinationDiscountRules,
       };
-      const res = await request(app.getHttpServer())
+      const createCombinationDiscountSnapshotResBody = await request(app.getHttpServer())
         .post(`/admin/competitions/${competition.id}/combination-discount-snapshots`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send(createCombinationDiscountSnapshotReqBody);
-      expect(typia.is<ResponseForm<CreateCombinationDiscountSnapshotRes>>(res.body)).toBe(true);
-      expect(res.body.result.competition.combinationDiscountSnapshots.length).toBe(1);
+        .send(createCombinationDiscountSnapshotReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCombinationDiscountSnapshotRes>>(res.body);
+        });
+      expect(createCombinationDiscountSnapshotResBody.result.competition.combinationDiscountSnapshots.length).toBe(1);
     });
   });
 
@@ -313,12 +339,14 @@ describe('E2E a-5 competitions TEST', () => {
         type: 'ADDRESS',
         description: '주소',
       };
-      const res = await request(app.getHttpServer())
+      const createCompetitionRequiredAdditionalInfoResBody = await request(app.getHttpServer())
         .post(`/admin/competitions/${competition.id}/required-additional-infos`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send(createCompetitionRequiredAdditionalInfoReqBody);
-      expect(typia.is<ResponseForm<CreateCompetitionRequiredAdditionalInfoRet>>(res.body)).toBe(true);
-      expect(res.body.result.competition.requiredAdditionalInfos.length).toBe(1);
+        .send(createCompetitionRequiredAdditionalInfoReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCompetitionRequiredAdditionalInfoRet>>(res.body);
+        });
+      expect(createCompetitionRequiredAdditionalInfoResBody.result.competition.requiredAdditionalInfos.length).toBe(1);
     });
   });
 
@@ -344,15 +372,18 @@ describe('E2E a-5 competitions TEST', () => {
       const updateRequiredAdditionalInfoReqBody: UpdateRequiredAdditionalInfoReqBody = {
         description: 'updated description',
       };
-      const res = await request(app.getHttpServer())
+      const updateRequiredAdditionalInfoResBody = await request(app.getHttpServer())
         .patch(`/admin/competitions/${competition.id}/required-additional-infos/${requiredAdditionalInfo.id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send(updateRequiredAdditionalInfoReqBody);
-      expect(typia.is<ResponseForm<CreateCompetitionRequiredAdditionalInfoRet>>(res.body)).toBe(true);
-      const createdRequiredAdditionalInfo: IRequiredAdditionalInfo =
-        res.body.result.competition.requiredAdditionalInfos.find(
+        .send(updateRequiredAdditionalInfoReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdateCompetitionRequiredAdditionalInfoRes>>(res.body);
+        });
+      const createdRequiredAdditionalInfo =
+        updateRequiredAdditionalInfoResBody.result.competition.requiredAdditionalInfos.find(
           (rai: IRequiredAdditionalInfo) => rai.id === requiredAdditionalInfo.id,
         );
+      if (!createdRequiredAdditionalInfo) throw new Error('createdRequiredAdditionalInfo is null');
       expect(createdRequiredAdditionalInfo.description).toBe(updateRequiredAdditionalInfoReqBody.description);
     });
   });
@@ -376,10 +407,12 @@ describe('E2E a-5 competitions TEST', () => {
       await entityEntityManager.save(CompetitionEntity, competition);
       await entityEntityManager.save(RequiredAdditionalInfoEntity, requiredAdditionalInfo);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const deleteRequiredAdditionalInfoResBody = await request(app.getHttpServer())
         .delete(`/admin/competitions/${competition.id}/required-additional-infos/${requiredAdditionalInfo.id}`)
-        .set('Authorization', `Bearer ${adminAccessToken}`);
-      expect(typia.is<ResponseForm<CreateCompetitionRequiredAdditionalInfoRet>>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<DeleteCompetitionRequiredAdditionalInfoRet>>(res.body);
+        });
       const deletedRequiredAdditionalInfo = await entityEntityManager.findOne(RequiredAdditionalInfoEntity, {
         where: { id: requiredAdditionalInfo.id },
       });
@@ -402,6 +435,7 @@ describe('E2E a-5 competitions TEST', () => {
         .setCompetitionBasicDates(new Date())
         .build();
       await entityEntityManager.save(CompetitionEntity, competition);
+
       /** main test. */
       const creatImageRes = await request(app.getHttpServer())
         .post('/user/images')
@@ -424,11 +458,13 @@ describe('E2E a-5 competitions TEST', () => {
       const createCompetitionPosterImageReqBody: CreateCompetitionPosterImageReqBody = {
         imageId: image.id,
       };
-      const res = await request(app.getHttpServer())
+      const createCompetitionPosterImageResBody = await request(app.getHttpServer())
         .post(`/admin/competitions/${competition.id}/poster-image`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send(createCompetitionPosterImageReqBody);
-      expect(typia.is<ResponseForm<CreateCompetitionPosterImageRes>>(res.body)).toBe(true);
+        .send(createCompetitionPosterImageReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCompetitionPosterImageRes>>(res.body);
+        });
     });
   });
 
@@ -473,15 +509,20 @@ describe('E2E a-5 competitions TEST', () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(createCompetitionPosterImageReqBody);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const deleteCompetitionPosterImageResBody = await request(app.getHttpServer())
         .delete(`/admin/competitions/${competition.id}/poster-image`)
-        .set('Authorization', `Bearer ${adminAccessToken}`);
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
 
-      expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
-      const competitionRes = await request(app.getHttpServer())
+      const getCompetitionResBody = await request(app.getHttpServer())
         .get(`/admin/competitions/${competition.id}`)
-        .set('Authorization', `Bearer ${adminAccessToken}`);
-      expect(competitionRes.body.result.competition.competitionPosterImages.length).toBe(0);
+        .set('Authorization', `Bearer ${adminAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetCompetitionRes>>(res.body);
+        });
+      expect(getCompetitionResBody.result.competition.competitionPosterImages.length).toBe(0);
     });
   });
 });

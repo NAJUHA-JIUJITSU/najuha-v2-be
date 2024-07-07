@@ -70,9 +70,12 @@ describe('E2E u-4 user-policies test', () => {
         }),
       );
       /** main test. */
-      const res = await request(app.getHttpServer()).get('/user/policies/latest');
-      expect(typia.is<ResponseForm<FindPoliciesRes>>(res.body)).toBe(true);
-      expect(res.body.result.policies.every((policy) => policyTypes.includes(policy.type))).toBe(true);
+      const getLatestPoliciesResponse = await request(app.getHttpServer())
+        .get('/user/policies/latest')
+        .then((res) => {
+          return typia.assert<ResponseForm<FindPoliciesRes>>(res.body);
+        });
+      expect(getLatestPoliciesResponse.result.policies.every((policy) => policyTypes.includes(policy.type))).toBe(true);
     });
   });
 
@@ -89,9 +92,12 @@ describe('E2E u-4 user-policies test', () => {
         createdAt: new Date(),
       });
       /** main test. */
-      const res = await request(app.getHttpServer()).get(`/user/policies/${policy.id}`);
-      expect(typia.is<ResponseForm<GetPolicyRes>>(res.body)).toBe(true);
-      expect(res.body.result.policy.id).toEqual(policy.id);
+      const getPolicyByIdResponse = await request(app.getHttpServer())
+        .get(`/user/policies/${policy.id}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetPolicyRes>>(res.body);
+        });
+      expect(getPolicyByIdResponse.result.policy.id).toEqual(policy.id);
     });
   });
 });

@@ -71,11 +71,13 @@ describe('E2E u-3 user-users test', () => {
         birth: '19980101',
       };
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const updateUserResBody = await request(app.getHttpServer())
         .patch('/user/users')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(UpdateUserReqDto);
-      expect(typia.is<ResponseForm<UpdateUserRes>>(res.body)).toBe(true);
+        .send(UpdateUserReqDto)
+        .then((res) => {
+          return typia.assert<ResponseForm<UpdateUserRes>>(res.body);
+        });
     });
   });
 
@@ -89,11 +91,13 @@ describe('E2E u-3 user-users test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const getMeResBody = await request(app.getHttpServer())
         .get('/user/users/me')
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<GetMeRes>>(res.body)).toBe(true);
-      expect(res.body.result.user.id).toEqual(dummyUser.id);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetMeRes>>(res.body);
+        });
+      expect(getMeResBody.result.user.id).toEqual(dummyUser.id);
     });
   });
 
@@ -107,11 +111,15 @@ describe('E2E u-3 user-users test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const creatImageRes = await request(app.getHttpServer())
+      const createImageResBody = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send({ format: 'image/jpeg', path: 'user-profile' });
-      const { image, presignedPost } = creatImageRes.body.result;
+        .send({ format: 'image/jpeg', path: 'user-profile' })
+        .then((res) => {
+          return typia.assert<ResponseForm<any>>(res.body);
+        });
+
+      const { image, presignedPost } = createImageResBody.result;
       const { url, fields } = presignedPost;
       const dummy5MbImageBuffer: Buffer = fs.readFileSync('test/resources/test-4.5mb.jpg');
       const formData = new FormData();
@@ -119,18 +127,20 @@ describe('E2E u-3 user-users test', () => {
         formData.append(key, value as string);
       });
       formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
-      const uploadRes = await axios.post(url, formData, {
+      const uploadResBody = await axios.post(url, formData, {
         headers: {
           ...formData.getHeaders(),
         },
       });
-      expect(uploadRes.status).toBe(204);
-      const res = await request(app.getHttpServer())
+      expect(uploadResBody.status).toBe(204);
+      const profileImageResBody = await request(app.getHttpServer())
         .post('/user/users/profile-image')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send({ imageId: image.id });
-      expect(typia.is<ResponseForm<GetMeRes>>(res.body)).toBe(true);
-      expect(res.body.result.user.profileImages.length).toBe(1);
+        .send({ imageId: image.id })
+        .then((res) => {
+          return typia.assert<ResponseForm<GetMeRes>>(res.body);
+        });
+      expect(profileImageResBody.result.user.profileImages.length).toBe(1);
     });
   });
 
@@ -143,11 +153,15 @@ describe('E2E u-3 user-users test', () => {
         { userId: dummyUser.id, userRole: dummyUser.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const creatImageRes = await request(app.getHttpServer())
+      const createImageResBody = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send({ format: 'image/jpeg', path: 'user-profile' });
-      const { image, presignedPost } = creatImageRes.body.result;
+        .send({ format: 'image/jpeg', path: 'user-profile' })
+        .then((res) => {
+          return typia.assert<ResponseForm<any>>(res.body);
+        });
+
+      const { image, presignedPost } = createImageResBody.result;
       const { url, fields } = presignedPost;
       const dummy5MbImageBuffer: Buffer = fs.readFileSync('test/resources/test-4.5mb.jpg');
       const formData = new FormData();
@@ -155,25 +169,34 @@ describe('E2E u-3 user-users test', () => {
         formData.append(key, value as string);
       });
       formData.append('file', dummy5MbImageBuffer, { filename: 'test.jpg', contentType: 'image/jpeg' });
-      const uploadRes = await axios.post(url, formData, {
+      const uploadResBody = await axios.post(url, formData, {
         headers: {
           ...formData.getHeaders(),
         },
       });
-      expect(uploadRes.status).toBe(204);
+      expect(uploadResBody.status).toBe(204);
       await request(app.getHttpServer())
         .post('/user/users/profile-image')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send({ imageId: image.id });
+        .send({ imageId: image.id })
+        .then((res) => {
+          return typia.assert<ResponseForm<GetMeRes>>(res.body);
+        });
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const deleteProfileImageResBody = await request(app.getHttpServer())
         .delete('/user/users/profile-image')
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(typia.is<ResponseForm<void>>(res.body)).toBe(true);
-      const getMeRes = await request(app.getHttpServer())
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<void>>(res.body);
+        });
+
+      const getMeResBody = await request(app.getHttpServer())
         .get('/user/users/me')
-        .set('Authorization', `Bearer ${accessToken}`);
-      expect(getMeRes.body.result.user.profileImages.length).toBe(0);
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<GetMeRes>>(res.body);
+        });
+      expect(getMeResBody.result.user.profileImages.length).toBe(0);
     });
   });
 });

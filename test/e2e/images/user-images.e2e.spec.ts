@@ -67,16 +67,18 @@ describe('E2E u-9 user-images test', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const body: CreateImageReqBody = {
+      const createImageReqBody: CreateImageReqBody = {
         format: 'image/jpeg',
         path: 'post',
       };
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const createImageResBody = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(body);
-      expect(typia.is<ResponseForm<CreateImageRes>>(res.body)).toBe(true);
+        .send(createImageReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateImageRes>>(res.body);
+        });
     });
 
     it('imageEntity 생성 및 presignedPost 반환 성공 + bucket에 이미지 업로드 성공 시', async () => {
@@ -87,18 +89,20 @@ describe('E2E u-9 user-images test', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const body: CreateImageReqBody = {
+      const createImageReqBody: CreateImageReqBody = {
         format: 'image/jpeg',
         path: 'post',
       };
+
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const createImageResBody = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(body);
-      expect(typia.is<ResponseForm<CreateImageRes>>(res.body)).toBe(true);
-      const typedBody = res.body as ResponseForm<CreateImageRes>;
-      const { image, presignedPost } = typedBody.result;
+        .send(createImageReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateImageRes>>(res.body);
+        });
+      const { image, presignedPost } = createImageResBody.result;
       const { url, fields } = presignedPost;
       const formData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {
@@ -121,18 +125,20 @@ describe('E2E u-9 user-images test', () => {
         { userId: user.id, userRole: user.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
-      const body: CreateImageReqBody = {
+      const createImageReqBody: CreateImageReqBody = {
         format: 'image/jpeg',
         path: 'post',
       };
+
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const createImageResBody = await request(app.getHttpServer())
         .post('/user/images')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(body);
-      expect(typia.is<ResponseForm<CreateImageRes>>(res.body)).toBe(true);
-      const typedBody = res.body as ResponseForm<CreateImageRes>;
-      const { image, presignedPost } = typedBody.result;
+        .send(createImageReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateImageRes>>(res.body);
+        });
+      const { image, presignedPost } = createImageResBody.result;
       const { url, fields } = presignedPost;
       const formData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {

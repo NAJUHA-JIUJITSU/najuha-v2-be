@@ -92,9 +92,13 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider: existDummyUser.snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<SnsLoginRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(snsLoginResBody.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -111,9 +115,13 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<SnsLoginRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(snsLoginResBody.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
@@ -128,8 +136,12 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<SNS_AUTH_KAKAO_LOGIN_FAIL>(res.body)).toBe(true);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<SNS_AUTH_KAKAO_LOGIN_FAIL>(res.body);
+        });
     });
 
     it('NAVER 기존 유저 로그인 성공 시', async () => {
@@ -152,9 +164,13 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider: existDummyUser.snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<SnsLoginRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(snsLoginResBody.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -171,9 +187,13 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<SnsLoginRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(snsLoginResBody.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
@@ -188,8 +208,12 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<SNS_AUTH_NAVER_LOGIN_FAIL>(res.body)).toBe(true);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<SNS_AUTH_NAVER_LOGIN_FAIL>(res.body);
+        });
     });
 
     it('GOOGLE 기존 유저 로그인 성공 시', async () => {
@@ -212,9 +236,13 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider: existDummyUser.snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<SnsLoginRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(snsLoginResBody.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -231,9 +259,13 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<ResponseForm<SnsLoginRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<SnsLoginRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(snsLoginResBody.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('TEMPORARY_USER');
     });
 
@@ -248,8 +280,12 @@ describe('E2E u-1 user-auth test', () => {
         snsAuthCode: 'test-sns-auth-code',
         snsAuthProvider,
       };
-      const res = await request(app.getHttpServer()).post('/user/auth/sns-login').send(snsLoginReqBody);
-      expect(typia.is<SNS_AUTH_GOOGLE_LOGIN_FAIL>(res.body)).toBe(true);
+      const snsLoginResBody = await request(app.getHttpServer())
+        .post('/user/auth/sns-login')
+        .send(snsLoginReqBody)
+        .then((res) => {
+          return typia.assert<SNS_AUTH_GOOGLE_LOGIN_FAIL>(res.body);
+        });
     });
   });
 
@@ -266,11 +302,13 @@ describe('E2E u-1 user-auth test', () => {
       });
       await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const refreshTokenRes = await request(app.getHttpServer())
         .post('/user/auth/token')
-        .send({ refreshToken: authorizedRefreshToken });
-      expect(typia.is<ResponseForm<RefreshTokenRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+        .send({ refreshToken: authorizedRefreshToken })
+        .then((res) => {
+          return typia.assert<ResponseForm<RefreshTokenRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(refreshTokenRes.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('USER');
     });
 
@@ -285,10 +323,12 @@ describe('E2E u-1 user-auth test', () => {
         expiresIn: appEnv.jwtRefreshTokenExpirationTime,
       });
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const refreshTokenRes = await request(app.getHttpServer())
         .post('/user/auth/token')
-        .send({ refreshToken: authorizedRefreshToken });
-      expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
+        .send({ refreshToken: authorizedRefreshToken })
+        .then((res) => {
+          return typia.assert<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body);
+        });
     });
 
     it('refresh token이 만료된 경우', async () => {
@@ -304,10 +344,12 @@ describe('E2E u-1 user-auth test', () => {
       await redisClient.set(`userId:${payload.userId}:refreshToken`, authorizedRefreshToken);
       await new Promise((resolve) => setTimeout(resolve, 2));
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const refreshTokenRes = await request(app.getHttpServer())
         .post('/user/auth/token')
-        .send({ refreshToken: authorizedRefreshToken });
-      expect(typia.is<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body)).toBe(true);
+        .send({ refreshToken: authorizedRefreshToken })
+        .then((res) => {
+          return typia.assert<AUTH_REFRESH_TOKEN_UNAUTHORIZED>(res.body);
+        });
     });
   });
 
@@ -325,11 +367,13 @@ describe('E2E u-1 user-auth test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const acquireAdminRoleRes = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')
-        .set('Authorization', `Bearer ${existDummyUserAccessToken}`);
-      expect(typia.is<ResponseForm<AcquireAdminRoleRes>>(res.body)).toBe(true);
-      const decodedToken = jwtService.decode(res.body.result.authTokens.accessToken);
+        .set('Authorization', `Bearer ${existDummyUserAccessToken}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<AcquireAdminRoleRes>>(res.body);
+        });
+      const decodedToken = jwtService.decode(acquireAdminRoleRes.result.authTokens.accessToken);
       expect(decodedToken.userRole).toBe('ADMIN');
     });
 
@@ -346,10 +390,12 @@ describe('E2E u-1 user-auth test', () => {
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       /** main test. */
-      const res = await request(app.getHttpServer())
+      const acquireAdminRoleRes = await request(app.getHttpServer())
         .patch('/user/auth/acquire-admin-role')
-        .set('Authorization', `Bearer ${unregisteredUserAccessToken}`);
-      expect(typia.is<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(res.body)).toBe(true);
+        .set('Authorization', `Bearer ${unregisteredUserAccessToken}`)
+        .then((res) => {
+          return typia.assert<AUTH_UNREGISTERED_ADMIN_CREDENTIALS>(res.body);
+        });
     });
   });
 });
