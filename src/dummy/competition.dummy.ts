@@ -8,7 +8,7 @@ import {
   ICompetitionModelData,
 } from '../modules/competitions/domain/interface/competition.interface';
 import { IEarlybirdDiscountSnapshot } from '../modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
-import { IRequiredAdditionalInfo } from '../modules/competitions/domain/interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../modules/competitions/domain/interface/required-additional-info.interface';
 import typia, { tags } from 'typia';
 import { uuidv7 } from 'uuidv7';
 import { generateDummyDivisionPacks } from './division.dummy';

@@ -4,7 +4,6 @@ import { IApplicationOrder } from '../domain/interface/application-order.interfa
 import {
   IApplication,
   IApplicationCreateDto,
-  IApplicationDetail,
   IApplicationQueryOptions,
   IDoneApplicationUpdateDto,
 } from '../domain/interface/application.interface';
@@ -64,19 +63,19 @@ export interface CancelApplicationOrderParam {
 // applicationsAppService Result
 // ---------------------------------------------------------------------------
 export interface CreateApplicationRet {
-  application: IApplicationDetail;
+  application: IApplication;
 }
 
 export interface GetApplicationRet {
-  application: IApplicationDetail;
+  application: IApplication;
 }
 
 export interface UpdateReadyApplicationRet {
-  application: IApplicationDetail;
+  application: IApplication;
 }
 
 export interface UpdateDoneApplicationRet {
-  application: IApplicationDetail;
+  application: IApplication;
 }
 
 export interface GetExpectedPaymentRet {
@@ -85,17 +84,17 @@ export interface GetExpectedPaymentRet {
 
 export interface FindApplicationsRet
   extends TPaginationRet<{
-    applications: IApplicationDetail[];
+    applications: IApplication[];
   }> {}
 
 export interface CreateApplicationOrderRet {
-  application: IApplicationDetail;
+  application: IApplication;
 }
 
 export interface ApproveApplicationOrderRet {
-  application: IApplicationDetail;
+  application: IApplication;
 }
 
 export interface CancelApplicationOrderRet {
-  application: IApplicationDetail;
+  application: IApplication;
 }

@@ -26,6 +26,6 @@ export class RegistrationValidatorDomainService {
 
   validateRegistration(temporaryUser: TemporaryUserModel, latastPolicies: PolicyModel[]): void {
     temporaryUser.ensurePhoneNumberRegistered();
-    temporaryUser.ensureMandatoryPoliciesConsented(latastPolicies.filter((policy) => policy.getIsMandatory()));
+    temporaryUser.ensureMandatoryPoliciesConsented(latastPolicies.filter((policy) => policy.isMandatory));
   }
 }

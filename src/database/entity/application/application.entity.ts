@@ -78,5 +78,5 @@ export class ApplicationEntity {
   user!: UserEntity;
 
   @OneToMany(() => AdditionalInfoEntity, (additionalInfo) => additionalInfo.application, { cascade: true })
-  additionalInfos!: AdditionalInfoEntity[];
+  additionaInfos!: AdditionalInfoEntity[];
 }

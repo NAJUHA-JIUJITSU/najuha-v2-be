@@ -1,28 +1,41 @@
 import { ICombinationDiscountSnapshotModelData } from '../interface/combination-discount-snapshot.interface';
 
 export class CombinationDiscountSnapshotModel {
-  public readonly id: ICombinationDiscountSnapshotModelData['id'];
-  public readonly combinationDiscountRules: ICombinationDiscountSnapshotModelData['combinationDiscountRules'];
-  public readonly createdAt: ICombinationDiscountSnapshotModelData['createdAt'];
-  public readonly competitionId: ICombinationDiscountSnapshotModelData['competitionId'];
+  /** properties */
+  private readonly _id: ICombinationDiscountSnapshotModelData['id'];
+  private readonly _combinationDiscountRules: ICombinationDiscountSnapshotModelData['combinationDiscountRules'];
+  private readonly _createdAt: ICombinationDiscountSnapshotModelData['createdAt'];
+  private readonly _competitionId: ICombinationDiscountSnapshotModelData['competitionId'];
 
   constructor(combinationDiscountSnapshot: ICombinationDiscountSnapshotModelData) {
-    this.id = combinationDiscountSnapshot.id;
-    this.combinationDiscountRules = combinationDiscountSnapshot.combinationDiscountRules;
-    this.createdAt = combinationDiscountSnapshot.createdAt;
-    this.competitionId = combinationDiscountSnapshot.competitionId;
+    this._id = combinationDiscountSnapshot.id;
+    this._combinationDiscountRules = combinationDiscountSnapshot.combinationDiscountRules;
+    this._createdAt = combinationDiscountSnapshot.createdAt;
+    this._competitionId = combinationDiscountSnapshot.competitionId;
   }
 
   toData(): ICombinationDiscountSnapshotModelData {
     return {
-      id: this.id,
-      combinationDiscountRules: this.combinationDiscountRules,
-      createdAt: this.createdAt,
-      competitionId: this.competitionId,
+      id: this._id,
+      combinationDiscountRules: this._combinationDiscountRules,
+      createdAt: this._createdAt,
+      competitionId: this._competitionId,
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
+  }
+
+  get combinationDiscountRules() {
+    return this._combinationDiscountRules;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get competitionId() {
+    return this._competitionId;
   }
 }

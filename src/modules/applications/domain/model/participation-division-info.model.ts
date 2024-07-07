@@ -6,42 +6,60 @@ import { ApplicationsErrors, BusinessException } from '../../../../common/respon
 import { DivisionModel } from '../../../competitions/domain/model/division.model';
 
 export class ParticipationDivisionInfoModel {
-  private readonly id: IParticipationDivisionInfoModelData['id'];
-  private readonly createdAt: IParticipationDivisionInfoModelData['createdAt'];
-  private status: IParticipationDivisionInfoModelData['status'];
-  private readonly applicationId: IApplication['id'];
-  private readonly participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[];
+  /** properties */
+  private readonly _id: IParticipationDivisionInfoModelData['id'];
+  private readonly _createdAt: IParticipationDivisionInfoModelData['createdAt'];
+  private readonly _applicationId: IApplication['id'];
+  private _status: IParticipationDivisionInfoModelData['status'];
+  /** relations */
+  private _participationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[];
 
   constructor(data: IParticipationDivisionInfoModelData) {
-    this.id = data.id;
-    this.createdAt = data.createdAt;
-    this.status = data.status;
-    this.applicationId = data.applicationId;
-    this.participationDivisionInfoSnapshots = data.participationDivisionInfoSnapshots.map(
+    this._id = data.id;
+    this._createdAt = data.createdAt;
+    this._status = data.status;
+    this._applicationId = data.applicationId;
+    this._participationDivisionInfoSnapshots = data.participationDivisionInfoSnapshots.map(
       (snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot),
     );
   }
 
   toData(): IParticipationDivisionInfoModelData {
     return {
-      id: this.id,
-      createdAt: this.createdAt,
-      status: this.status,
-      applicationId: this.applicationId,
-      participationDivisionInfoSnapshots: this.participationDivisionInfoSnapshots.map((snapshot) => snapshot.toData()),
+      id: this._id,
+      createdAt: this._createdAt,
+      status: this._status,
+      applicationId: this._applicationId,
+      participationDivisionInfoSnapshots: this._participationDivisionInfoSnapshots.map((snapshot) => snapshot.toData()),
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getStatus() {
-    return this.status;
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get status() {
+    return this._status;
+  }
+
+  get applicationId() {
+    return this._applicationId;
+  }
+
+  get participationDivisionInfoSnapshots() {
+    return [...this._participationDivisionInfoSnapshots];
+  }
+
+  getOriginParticipationDivisionInfoSnapshot() {
+    return this._participationDivisionInfoSnapshots[0];
   }
 
   getLatestParticipationDivisionInfoSnapshot() {
-    return this.participationDivisionInfoSnapshots[this.participationDivisionInfoSnapshots.length - 1];
+    return this._participationDivisionInfoSnapshots[this._participationDivisionInfoSnapshots.length - 1];
   }
 
   validateDivisionSuitability(playerBirth: IPlayerSnapshot['birth'], playerGender: IPlayerSnapshot['gender']) {
@@ -52,34 +70,34 @@ export class ParticipationDivisionInfoModel {
 
   private validateDivisionAgeRange(division: DivisionModel, playerBirth: IPlayerSnapshot['birth']) {
     const parsedBirthYear = +playerBirth.slice(0, 4);
-    if (parsedBirthYear < +division.getBirthYearRangeStart() || parsedBirthYear > +division.getBirthYearRangeEnd()) {
+    if (parsedBirthYear < +division.birthYearRangeStart || parsedBirthYear > +division.birthYearRangeEnd) {
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_DIVISION_AGE_NOT_MATCH,
-        `divisionId: ${division.getId()}, division: ${division.getCategory()} ${division.getUniform()} ${division.getGender()} ${division.getBelt()} ${division.getWeight()} ${division.getBirthYearRangeStart()}~${division.getBirthYearRangeEnd()}, playerBirth: ${playerBirth}`,
+        `divisionId: ${division.id}, division: ${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight} ${division.birthYearRangeStart}~${division.birthYearRangeEnd}, playerBirth: ${playerBirth}`,
       );
     }
   }
 
   private validateDivisionGender(division: DivisionModel, playerGender: IPlayerSnapshot['gender']) {
-    if (division.getGender() !== 'MIXED' && playerGender !== division.getGender()) {
+    if (division.gender !== 'MIXED' && playerGender !== division.gender) {
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_DIVISION_GENDER_NOT_MATCH,
-        `divisionId: ${division.getId()}, division: ${division.getCategory()} ${division.getUniform()} ${division.getGender()} ${division.getBelt()} ${division.getWeight()} ${division.getBirthYearRangeStart()}~${division.getBirthYearRangeEnd()}, playerGender: ${playerGender}`,
+        `divisionId: ${division.id}, division: ${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight} ${division.birthYearRangeStart}~${division.birthYearRangeEnd}, playerGender: ${playerGender}`,
       );
     }
   }
 
   addParticipationDivisionInfoSnapshot(snapshot: ParticipationDivisionInfoSnapshotModel) {
-    this.participationDivisionInfoSnapshots.push(snapshot);
+    this._participationDivisionInfoSnapshots.push(snapshot);
   }
 
   approve() {
-    if (this.status !== 'READY') throw new Error('Only READY status can be approved');
-    this.status = 'DONE';
+    if (this._status !== 'READY') throw new Error('Only READY status can be approved');
+    this._status = 'DONE';
   }
 
   cancel() {
-    if (this.status !== 'DONE') throw new Error('Only DONE status can be canceled');
-    this.status = 'CANCELED';
+    if (this._status !== 'DONE') throw new Error('Only DONE status can be canceled');
+    this._status = 'CANCELED';
   }
 }

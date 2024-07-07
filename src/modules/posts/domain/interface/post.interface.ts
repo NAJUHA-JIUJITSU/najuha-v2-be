@@ -75,7 +75,7 @@ export interface IPostModelData {
 // ----------------------------------------------------------------------------
 // return interface
 // ----------------------------------------------------------------------------
-export interface IPostDetail
+export interface IPost
   extends Pick<
     IPost,
     | 'id'

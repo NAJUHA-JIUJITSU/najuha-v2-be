@@ -1,32 +1,41 @@
 import { IPriceSnapshotModelData } from '../interface/price-snapshot.interface';
 
 export class PriceSnapshotModel {
-  private readonly id: IPriceSnapshotModelData['id'];
-  private readonly price: IPriceSnapshotModelData['price'];
-  private readonly createdAt: IPriceSnapshotModelData['createdAt'];
-  private readonly divisionId: IPriceSnapshotModelData['divisionId'];
+  /** properties */
+  private readonly _id: IPriceSnapshotModelData['id'];
+  private readonly _price: IPriceSnapshotModelData['price'];
+  private readonly _createdAt: IPriceSnapshotModelData['createdAt'];
+  private readonly _divisionId: IPriceSnapshotModelData['divisionId'];
 
   constructor(data: IPriceSnapshotModelData) {
-    this.id = data.id;
-    this.price = data.price;
-    this.createdAt = data.createdAt;
-    this.divisionId = data.divisionId;
+    this._id = data.id;
+    this._price = data.price;
+    this._createdAt = data.createdAt;
+    this._divisionId = data.divisionId;
   }
 
   toData(): IPriceSnapshotModelData {
     return {
-      id: this.id,
-      price: this.price,
-      createdAt: this.createdAt,
-      divisionId: this.divisionId,
+      id: this._id,
+      price: this._price,
+      createdAt: this._createdAt,
+      divisionId: this._divisionId,
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getPrice() {
-    return this.price;
+  get price() {
+    return this._price;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get divisionId() {
+    return this._divisionId;
   }
 }

@@ -1,7 +1,6 @@
 import { IUser } from '../../users/domain/interface/user.interface';
 import {
   IComment,
-  ICommentDetail,
   IFindCommentsAndRepliesQueryOptions,
   IFindCommentsQueryOptions,
   IFindRepliesQueryOptions,
@@ -67,23 +66,23 @@ export interface FindBestCommentsParam {
 // commentAppService Result
 // ---------------------------------------------------------------------------
 export interface CreateCommentRet {
-  comment: ICommentDetail;
+  comment: IComment;
 }
 
 export interface CreateCommentReplyRet {
-  comment: ICommentDetail;
+  comment: IComment;
 }
 
 export interface FindCommentsRet
   extends TPaginationRet<{
-    comments: ICommentDetail[];
+    comments: IComment[];
   }> {}
 
 export interface UpdateCommentRet {
-  comment: ICommentDetail;
+  comment: IComment;
 }
 
 export interface FindBestCommentsRet {
-  bestComment: ICommentDetail | null;
-  bestReply: ICommentDetail | null;
+  bestComment: IComment | null;
+  bestReply: IComment | null;
 }

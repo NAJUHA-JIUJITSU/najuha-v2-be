@@ -67,26 +67,6 @@ export interface ICommentModelData {
 }
 
 // ----------------------------------------------------------------------------
-// return interface
-// ----------------------------------------------------------------------------
-export interface ICommentDetail
-  extends Pick<
-    IComment,
-    | 'id'
-    | 'userId'
-    | 'parentId'
-    | 'replyCount'
-    | 'status'
-    | 'createdAt'
-    | 'deletedAt'
-    | 'postId'
-    | 'commentSnapshots'
-    | 'likeCount'
-    | 'userLiked'
-    | 'user'
-  > {}
-
-// ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------
 export interface ICommentCreateDto extends Pick<IComment, 'userId' | 'postId'>, Pick<ICommentSnapshot, 'body'> {}

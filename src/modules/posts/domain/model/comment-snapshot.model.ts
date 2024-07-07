@@ -1,24 +1,40 @@
 import { ICommentSnapshotModelData } from '../interface/comment-snapshot.interface';
 
 export class CommentSnapshotModel {
-  public readonly id: ICommentSnapshotModelData['id'];
-  public readonly commentId: ICommentSnapshotModelData['commentId'];
-  public readonly body: ICommentSnapshotModelData['body'];
-  public readonly createdAt: ICommentSnapshotModelData['createdAt'];
+  private readonly _id: ICommentSnapshotModelData['id'];
+  private readonly _commentId: ICommentSnapshotModelData['commentId'];
+  private readonly _body: ICommentSnapshotModelData['body'];
+  private readonly _createdAt: ICommentSnapshotModelData['createdAt'];
 
   constructor(data: ICommentSnapshotModelData) {
-    this.id = data.id;
-    this.commentId = data.commentId;
-    this.body = data.body;
-    this.createdAt = data.createdAt;
+    this._id = data.id;
+    this._commentId = data.commentId;
+    this._body = data.body;
+    this._createdAt = data.createdAt;
   }
 
   toData(): ICommentSnapshotModelData {
     return {
-      id: this.id,
-      commentId: this.commentId,
-      body: this.body,
-      createdAt: this.createdAt,
+      id: this._id,
+      commentId: this._commentId,
+      body: this._body,
+      createdAt: this._createdAt,
     };
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get commentId() {
+    return this._commentId;
+  }
+
+  get body() {
+    return this._body;
+  }
+
+  get createdAt() {
+    return this._createdAt;
   }
 }

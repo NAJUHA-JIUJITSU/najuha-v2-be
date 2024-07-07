@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 import { IApplication } from './application.interface';
-import { IRequiredAdditionalInfo } from '../../../competitions/domain/interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../../../competitions/domain/interface/required-additional-info.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 
 // ----------------------------------------------------------------------------

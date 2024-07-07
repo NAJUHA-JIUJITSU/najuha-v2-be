@@ -1,32 +1,40 @@
 import { IPolicyConsentModelData } from '../interface/policy-consent.interface';
 
 export class PolicyConsentModel {
-  private readonly id: IPolicyConsentModelData['id'];
-  private readonly createdAt: IPolicyConsentModelData['createdAt'];
-  private readonly userId: IPolicyConsentModelData['userId'];
-  private readonly policyId: IPolicyConsentModelData['policyId'];
+  private readonly _id: IPolicyConsentModelData['id'];
+  private readonly _createdAt: IPolicyConsentModelData['createdAt'];
+  private readonly _userId: IPolicyConsentModelData['userId'];
+  private readonly _policyId: IPolicyConsentModelData['policyId'];
 
   constructor(data: IPolicyConsentModelData) {
-    this.id = data.id;
-    this.createdAt = data.createdAt;
-    this.userId = data.userId;
-    this.policyId = data.policyId;
+    this._id = data.id;
+    this._createdAt = data.createdAt;
+    this._userId = data.userId;
+    this._policyId = data.policyId;
   }
 
   toData(): IPolicyConsentModelData {
     return {
-      id: this.id,
-      createdAt: this.createdAt,
-      userId: this.userId,
-      policyId: this.policyId,
+      id: this._id,
+      createdAt: this._createdAt,
+      userId: this._userId,
+      policyId: this._policyId,
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getPolicId() {
-    return this.policyId;
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get userId() {
+    return this._userId;
+  }
+
+  get policyId() {
+    return this._policyId;
   }
 }

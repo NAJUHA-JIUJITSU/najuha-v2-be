@@ -237,6 +237,7 @@ describe('E2E u-2 register test', () => {
           },
           consentPolicyTypes: policyTypes,
         });
+      console.log(res.body);
       expect(typia.is<ResponseForm<RegisterUserRes>>(res.body)).toBe(true);
     });
 
@@ -315,7 +316,6 @@ describe('E2E u-2 register test', () => {
           },
           consentPolicyTypes: ['TERMS_OF_SERVICE', 'PRIVACY'],
         });
-      console.log(res.body);
       expect(typia.is<REGISTER_POLICY_CONSENT_REQUIRED>(res.body)).toBe(true);
     });
 

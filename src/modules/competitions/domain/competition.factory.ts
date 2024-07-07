@@ -12,7 +12,7 @@ import {
 import {
   IRequiredAdditionalInfoCreateDto,
   IRequiredAdditionalInfoModelData,
-} from './interface/required-addtional-info.interface';
+} from './interface/required-additional-info.interface';
 import {
   ICompetitionPosterImageCreateDto,
   ICompetitionPosterImageModelData,

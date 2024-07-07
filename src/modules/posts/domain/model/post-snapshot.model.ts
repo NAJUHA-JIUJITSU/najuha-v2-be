@@ -2,34 +2,58 @@ import { IPostSnapshotModelData } from '../interface/post-snapshot.interface';
 import { PostSnapshotImageModel } from './post-snapshot-image.model';
 
 export class PostSnapshotModel {
-  public id: IPostSnapshotModelData['id'];
-  private readonly postId: IPostSnapshotModelData['postId'];
-  private readonly title: IPostSnapshotModelData['title'];
-  private readonly body: IPostSnapshotModelData['body'];
-  private readonly createdAt: IPostSnapshotModelData['createdAt'];
-  private postSnapshotImages: PostSnapshotImageModel[];
+  private readonly _id: IPostSnapshotModelData['id'];
+  private readonly _postId: IPostSnapshotModelData['postId'];
+  private readonly _title: IPostSnapshotModelData['title'];
+  private readonly _body: IPostSnapshotModelData['body'];
+  private readonly _createdAt: IPostSnapshotModelData['createdAt'];
+  private _postSnapshotImages: PostSnapshotImageModel[];
 
   constructor(data: IPostSnapshotModelData) {
-    this.id = data.id;
-    this.postId = data.postId;
-    this.title = data.title;
-    this.body = data.body;
-    this.createdAt = data.createdAt;
-    this.postSnapshotImages = data.postSnapshotImages?.map((image) => new PostSnapshotImageModel(image));
+    this._id = data.id;
+    this._postId = data.postId;
+    this._title = data.title;
+    this._body = data.body;
+    this._createdAt = data.createdAt;
+    this._postSnapshotImages = data.postSnapshotImages?.map((image) => new PostSnapshotImageModel(image));
   }
 
   toData(): IPostSnapshotModelData {
     return {
-      id: this.id,
-      postId: this.postId,
-      title: this.title,
-      body: this.body,
-      createdAt: this.createdAt,
-      postSnapshotImages: this.postSnapshotImages.map((postSnapshotImage) => postSnapshotImage.toData()),
+      id: this._id,
+      postId: this._postId,
+      title: this._title,
+      body: this._body,
+      createdAt: this._createdAt,
+      postSnapshotImages: this._postSnapshotImages.map((postSnapshotImage) => postSnapshotImage.toData()),
     };
   }
 
+  get id() {
+    return this._id;
+  }
+
+  get postId() {
+    return this._postId;
+  }
+
+  get title() {
+    return this._title;
+  }
+
+  get body() {
+    return this._body;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get postSnapshotImages() {
+    return this._postSnapshotImages;
+  }
+
   addPostSnapshotImages(postSnapshotImages: PostSnapshotImageModel[]) {
-    this.postSnapshotImages = postSnapshotImages;
+    this._postSnapshotImages = postSnapshotImages;
   }
 }

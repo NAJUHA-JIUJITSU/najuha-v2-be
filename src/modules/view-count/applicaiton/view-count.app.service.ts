@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CompetitionRepository } from '../../../database/custom-repository/competition.repository';
 import { PostRepository } from '../../../database/custom-repository/post.repository';
-import { TEntitytype } from '../domain/view-count.interface';
+import { TEntitytype } from '../domain/interface/view-count.interface';
 import { BusinessException, CommonErrors, ViewCountErrors } from '../../../common/response/errorResponse';
 import { IncrementEntityViewCountParam, IncrementEntityViewCountRet } from './view-count.app.dto';
 import { ViewCountHistoryProvider } from '../../../infrastructure/redis/provider/view-count-history.provider';

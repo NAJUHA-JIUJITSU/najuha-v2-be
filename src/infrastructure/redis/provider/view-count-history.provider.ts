@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
-import { TEntitytype, TUserCredential } from '../../../modules/view-count/domain/view-count.interface';
+import { TEntitytype, TUserCredential } from '../../../modules/view-count/domain/interface/view-count.interface';
 import { TId } from '../../../common/common-types';
 import appEnv from '../../../common/app-env';
 

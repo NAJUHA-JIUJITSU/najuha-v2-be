@@ -9,113 +9,167 @@ import { PolicyConsentModel } from './policy-consent.model';
 import { PolicyModel } from '../../../policy/domain/model/policy.model';
 
 export class TemporaryUserModel {
-  private readonly id: ITemporaryUserModelData['id'];
-  private readonly snsAuthProvider: ITemporaryUserModelData['snsAuthProvider'];
-  private readonly snsId: ITemporaryUserModelData['snsId'];
-  private readonly email: ITemporaryUserModelData['email'];
-  private readonly createdAt: ITemporaryUserModelData['createdAt'];
-  private readonly updatedAt: ITemporaryUserModelData['updatedAt'];
-  private role: ITemporaryUserModelData['role'];
-  private name: ITemporaryUserModelData['name'];
-  private nickname: ITemporaryUserModelData['nickname'];
-  private gender: ITemporaryUserModelData['gender'];
-  private birth: ITemporaryUserModelData['birth'];
-  private belt: ITemporaryUserModelData['belt'];
-  private status: ITemporaryUserModelData['status'];
-  private phoneNumber: ITemporaryUserModelData['phoneNumber'];
-  private policyConsents?: PolicyConsentModel[];
+  /** properties */
+  private readonly _id: ITemporaryUserModelData['id'];
+  private readonly _snsAuthProvider: ITemporaryUserModelData['snsAuthProvider'];
+  private readonly _snsId: ITemporaryUserModelData['snsId'];
+  private readonly _email: ITemporaryUserModelData['email'];
+  private readonly _createdAt: ITemporaryUserModelData['createdAt'];
+  private readonly _updatedAt: ITemporaryUserModelData['updatedAt'];
+  private _role: ITemporaryUserModelData['role'];
+  private _name: ITemporaryUserModelData['name'];
+  private _nickname: ITemporaryUserModelData['nickname'];
+  private _gender: ITemporaryUserModelData['gender'];
+  private _birth: ITemporaryUserModelData['birth'];
+  private _belt: ITemporaryUserModelData['belt'];
+  private _status: ITemporaryUserModelData['status'];
+  private _phoneNumber: ITemporaryUserModelData['phoneNumber'];
+  /** relations */
+  private _policyConsents?: PolicyConsentModel[];
 
   constructor(data: ITemporaryUserModelData) {
-    this.id = data.id;
-    this.role = data.role;
-    this.snsAuthProvider = data.snsAuthProvider;
-    this.snsId = data.snsId;
-    this.email = data.email;
-    this.name = data.name;
-    this.phoneNumber = data.phoneNumber;
-    this.gender = data.gender;
-    this.birth = data.birth;
-    this.nickname = data.nickname;
-    this.belt = data.belt;
-    this.status = data.status;
-    this.createdAt = data.createdAt;
-    this.updatedAt = data.updatedAt;
-    this.policyConsents = data.policyConsents?.map((consent) => new PolicyConsentModel(consent));
+    this._id = data.id;
+    this._role = data.role;
+    this._snsAuthProvider = data.snsAuthProvider;
+    this._snsId = data.snsId;
+    this._email = data.email;
+    this._name = data.name;
+    this._phoneNumber = data.phoneNumber;
+    this._gender = data.gender;
+    this._birth = data.birth;
+    this._nickname = data.nickname;
+    this._belt = data.belt;
+    this._status = data.status;
+    this._createdAt = data.createdAt;
+    this._updatedAt = data.updatedAt;
+    this._policyConsents = data.policyConsents?.map((consent) => new PolicyConsentModel(consent));
   }
 
   toData(): ITemporaryUserModelData {
     return {
-      id: this.id,
-      role: this.role,
-      snsAuthProvider: this.snsAuthProvider,
-      snsId: this.snsId,
-      email: this.email,
-      name: this.name,
-      phoneNumber: this.phoneNumber,
-      gender: this.gender,
-      birth: this.birth,
-      nickname: this.nickname,
-      belt: this.belt,
-      status: this.status,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      policyConsents: this.policyConsents?.map((consent) => consent.toData()),
+      id: this._id,
+      role: this._role,
+      snsAuthProvider: this._snsAuthProvider,
+      snsId: this._snsId,
+      email: this._email,
+      name: this._name,
+      phoneNumber: this._phoneNumber,
+      gender: this._gender,
+      birth: this._birth,
+      nickname: this._nickname,
+      belt: this._belt,
+      status: this._status,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      policyConsents: this._policyConsents?.map((consent) => consent.toData()),
     };
   }
 
   toRegisteredUserModelData() {
     return assert<IRegisteredUserModelData>({
-      id: this.id,
-      role: this.role,
-      snsAuthProvider: this.snsAuthProvider,
-      snsId: this.snsId,
-      email: this.email,
-      name: this.name,
-      phoneNumber: this.phoneNumber,
-      gender: this.gender,
-      birth: this.birth,
-      nickname: this.nickname,
-      belt: this.belt,
-      status: this.status,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      policyConsents: this.policyConsents,
+      id: this._id,
+      role: this._role,
+      snsAuthProvider: this._snsAuthProvider,
+      snsId: this._snsId,
+      email: this._email,
+      name: this._name,
+      phoneNumber: this._phoneNumber,
+      gender: this._gender,
+      birth: this._birth,
+      nickname: this._nickname,
+      belt: this._belt,
+      status: this._status,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      policyConsents: this._policyConsents?.map((consent) => consent.toData()),
     });
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getRole() {
-    return this.role;
+  get snsAuthProvider() {
+    return this._snsAuthProvider;
+  }
+
+  get snsId() {
+    return this._snsId;
+  }
+
+  get email() {
+    return this._email;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get updatedAt() {
+    return this._updatedAt;
+  }
+
+  get role() {
+    return this._role;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  get nickname() {
+    return this._nickname;
+  }
+
+  get gender() {
+    return this._gender;
+  }
+
+  get birth() {
+    return this._birth;
+  }
+
+  get belt() {
+    return this._belt;
+  }
+
+  get status() {
+    return this._status;
+  }
+
+  get phoneNumber() {
+    return this._phoneNumber;
+  }
+
+  get policyConsents() {
+    return this._policyConsents;
   }
 
   updateRegistrationData(policyConsents: PolicyConsentModel[], userRegisterDto: IUserRgistertDto) {
-    this.policyConsents = policyConsents;
-    this.nickname = userRegisterDto.nickname;
-    this.gender = userRegisterDto.gender;
-    this.belt = userRegisterDto.belt;
-    this.birth = userRegisterDto.birth;
-    this.role = 'USER';
+    this._policyConsents = policyConsents;
+    this._nickname = userRegisterDto.nickname;
+    this._gender = userRegisterDto.gender;
+    this._belt = userRegisterDto.belt;
+    this._birth = userRegisterDto.birth;
+    this._role = 'USER';
   }
 
   updataPhoneNumber(phoneNumber: ITemporaryUserModelData['phoneNumber']) {
-    this.phoneNumber = phoneNumber;
+    this._phoneNumber = phoneNumber;
   }
 
   public ensurePhoneNumberRegistered() {
-    if (!this.phoneNumber) {
+    if (!this._phoneNumber) {
       throw new BusinessException(RegisterErrors.REGISTER_PHONE_NUMBER_REQUIRED);
     }
   }
 
   public ensureMandatoryPoliciesConsented(mandatoryPolicies: PolicyModel[]) {
     const missingConsents = mandatoryPolicies.filter(
-      (policy) => !this.policyConsents?.some((consent) => consent.getPolicId() === policy.getId()),
+      (policy) => !this._policyConsents?.some((consent) => consent.policyId === policy.id),
     );
     if (missingConsents.length > 0) {
-      const missingPolicyTypes = missingConsents.map((policy) => policy.getType()).join(', ');
+      const missingPolicyTypes = missingConsents.map((policy) => policy.type).join(', ');
       throw new BusinessException(
         RegisterErrors.REGISTER_POLICY_CONSENT_REQUIRED,
         `다음 필수 약관에 동의하지 않았습니다: ${missingPolicyTypes}`,

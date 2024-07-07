@@ -2,103 +2,139 @@ import { IUserModelData, IUserUpdateDto } from '../interface/user.interface';
 import { UserProfileImageModel } from './user-profile-image.model';
 
 export class UserModel {
-  private readonly id: IUserModelData['id'];
-  private readonly snsAuthProvider: IUserModelData['snsAuthProvider'];
-  private readonly snsId: IUserModelData['snsId'];
-  private readonly createdAt: IUserModelData['createdAt'];
-  private readonly updatedAt: IUserModelData['updatedAt'];
-  private role: IUserModelData['role'];
-  private name: IUserModelData['name'];
-  private email: IUserModelData['email'];
-  private phoneNumber: IUserModelData['phoneNumber'];
-  private nickname: IUserModelData['nickname'];
-  private gender: IUserModelData['gender'];
-  private birth: IUserModelData['birth'];
-  private belt: IUserModelData['belt'];
-  private status: IUserModelData['status'];
-  private profileImages?: UserProfileImageModel[];
+  private readonly _id: IUserModelData['id'];
+  private readonly _snsAuthProvider: IUserModelData['snsAuthProvider'];
+  private readonly _snsId: IUserModelData['snsId'];
+  private readonly _createdAt: IUserModelData['createdAt'];
+  private readonly _updatedAt: IUserModelData['updatedAt'];
+  private _role: IUserModelData['role'];
+  private _name: IUserModelData['name'];
+  private _email: IUserModelData['email'];
+  private _phoneNumber: IUserModelData['phoneNumber'];
+  private _nickname: IUserModelData['nickname'];
+  private _gender: IUserModelData['gender'];
+  private _birth: IUserModelData['birth'];
+  private _belt: IUserModelData['belt'];
+  private _status: IUserModelData['status'];
+  private _profileImages?: UserProfileImageModel[];
 
   constructor(data: IUserModelData) {
-    this.id = data.id;
-    this.role = data.role;
-    this.snsAuthProvider = data.snsAuthProvider;
-    this.snsId = data.snsId;
-    this.name = data.name;
-    this.email = data.email;
-    this.phoneNumber = data.phoneNumber;
-    this.nickname = data.nickname;
-    this.gender = data.gender;
-    this.birth = data.birth;
-    this.belt = data.belt;
-    this.status = data.status;
-    this.createdAt = data.createdAt;
-    this.updatedAt = data.updatedAt;
-    this.profileImages = data.profileImages?.map((profileImage) => new UserProfileImageModel(profileImage));
+    this._id = data.id;
+    this._role = data.role;
+    this._snsAuthProvider = data.snsAuthProvider;
+    this._snsId = data.snsId;
+    this._name = data.name;
+    this._email = data.email;
+    this._phoneNumber = data.phoneNumber;
+    this._nickname = data.nickname;
+    this._gender = data.gender;
+    this._birth = data.birth;
+    this._belt = data.belt;
+    this._status = data.status;
+    this._createdAt = data.createdAt;
+    this._updatedAt = data.updatedAt;
+    this._profileImages = data.profileImages?.map((profileImage) => new UserProfileImageModel(profileImage));
   }
 
   toData(): IUserModelData {
     return {
-      id: this.id,
-      role: this.role,
-      snsAuthProvider: this.snsAuthProvider,
-      snsId: this.snsId,
-      name: this.name,
-      email: this.email,
-      phoneNumber: this.phoneNumber,
-      nickname: this.nickname,
-      gender: this.gender,
-      birth: this.birth,
-      belt: this.belt,
-      status: this.status,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      profileImages: this.profileImages?.map((profileImage) => profileImage.toData()),
+      id: this._id,
+      role: this._role,
+      snsAuthProvider: this._snsAuthProvider,
+      snsId: this._snsId,
+      name: this._name,
+      email: this._email,
+      phoneNumber: this._phoneNumber,
+      nickname: this._nickname,
+      gender: this._gender,
+      birth: this._birth,
+      belt: this._belt,
+      status: this._status,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      profileImages: this._profileImages?.map((profileImage) => profileImage.toData()),
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getName() {
-    return this.name;
+  get snsAuthProvider() {
+    return this._snsAuthProvider;
   }
 
-  getPhoneNumber() {
-    return this.phoneNumber;
+  get snsId() {
+    return this._snsId;
   }
 
-  getGender() {
-    return this.gender;
+  get createdAt() {
+    return this._createdAt;
   }
 
-  getBirth() {
-    return this.birth;
+  get updatedAt() {
+    return this._updatedAt;
   }
 
-  getEmail() {
-    return this.email;
+  get role() {
+    return this._role;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  get email() {
+    return this._email;
+  }
+
+  get phoneNumber() {
+    return this._phoneNumber;
+  }
+
+  get nickname() {
+    return this._nickname;
+  }
+
+  get gender() {
+    return this._gender;
+  }
+
+  get birth() {
+    return this._birth;
+  }
+
+  get belt() {
+    return this._belt;
+  }
+
+  get status() {
+    return this._status;
+  }
+
+  get profileImages() {
+    return this._profileImages;
   }
 
   updateProfile(dto: IUserUpdateDto) {
-    if (dto.name) this.name = dto.name;
-    if (dto.nickname) this.nickname = dto.nickname;
-    if (dto.gender) this.gender = dto.gender;
-    if (dto.birth) this.birth = dto.birth;
-    if (dto.belt) this.belt = dto.belt;
+    if (dto.name) this._name = dto.name;
+    if (dto.nickname) this._nickname = dto.nickname;
+    if (dto.gender) this._gender = dto.gender;
+    if (dto.birth) this._birth = dto.birth;
+    if (dto.belt) this._belt = dto.belt;
   }
 
   updateProfileImage(profileImage: UserProfileImageModel) {
-    if (!this.profileImages) throw new Error('ProfileImages is not initialized');
-    this.profileImages.forEach((profileImage) => {
-      profileImage.delete();
+    if (!this._profileImages) throw new Error('ProfileImages is not initialized');
+    this._profileImages.forEach((image) => {
+      image.delete();
     });
-    this.profileImages.push(profileImage);
+    this._profileImages.push(profileImage);
   }
 
   deleteProfileImage() {
-    if (!this.profileImages) throw new Error('ProfileImages is not initialized');
-    this.profileImages.forEach((profileImage) => {
+    if (!this._profileImages) throw new Error('ProfileImages is not initialized');
+    this._profileImages.forEach((profileImage) => {
       profileImage.delete();
     });
   }

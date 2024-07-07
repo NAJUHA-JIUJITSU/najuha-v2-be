@@ -8,180 +8,210 @@ import { IAdditionalInfoUpdateDto } from '../interface/additional-info.interface
 import { IExpectedPayment } from '../interface/expected-payment.interface';
 import { UserModel } from '../../../users/domain/model/user.model';
 import { ApplicationOrderModel } from './application-order.model';
-import { IApplicationOrder } from '../interface/application-order.interface';
+import { IApplicationOrderModelData } from '../interface/application-order.interface';
 import { TMoneyValue } from '../../../../common/common-types';
-import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
+import { IParticipationDivisionInfoModelData } from '../interface/participation-division-info.interface';
 import { ApplicationOrderPaymentSnapshotModel } from './application-order-payment-snapshot.model';
 import { assert } from 'typia';
 
 export class ApplicationModel {
-  private readonly id: IApplicationModelData['id'];
-  private readonly type: IApplicationModelData['type'];
-  private readonly competitionId: IApplicationModelData['competitionId'];
-  private readonly userId: IApplicationModelData['userId'];
-  private readonly createdAt: IApplicationModelData['createdAt'];
-  private readonly updatedAt: IApplicationModelData['updatedAt'];
-  private status: IApplicationModelData['status'];
-  private deletedAt: IApplicationModelData['deletedAt'];
-  private readonly playerSnapshots: PlayerSnapshotModel[];
-  private readonly participationDivisionInfos: ParticipationDivisionInfoModel[];
-  private readonly additionaInfos: AdditionalInfoModel[];
-  private expectedPayment?: IExpectedPayment;
-  private applicationOrders?: ApplicationOrderModel[];
+  /** properties */
+  private readonly _id: IApplicationModelData['id'];
+  private readonly _type: IApplicationModelData['type'];
+  private readonly _competitionId: IApplicationModelData['competitionId'];
+  private readonly _userId: IApplicationModelData['userId'];
+  private readonly _createdAt: IApplicationModelData['createdAt'];
+  private readonly _updatedAt: IApplicationModelData['updatedAt'];
+  private _deletedAt: IApplicationModelData['deletedAt'];
+  private _status: IApplicationModelData['status'];
+  private _expectedPayment?: IExpectedPayment;
+  /** relations */
+  private _additionaInfos: AdditionalInfoModel[];
+  private _playerSnapshots: PlayerSnapshotModel[];
+  private _participationDivisionInfos: ParticipationDivisionInfoModel[];
+  private _applicationOrders?: ApplicationOrderModel[];
 
   constructor(data: IApplicationModelData) {
-    this.id = data.id;
-    this.type = data.type;
-    this.userId = data.userId;
-    this.competitionId = data.competitionId;
-    this.createdAt = data.createdAt;
-    this.updatedAt = data.updatedAt;
-    this.deletedAt = data.deletedAt;
-    this.status = data.status;
-    this.playerSnapshots = data.playerSnapshots.map((snapshot) => new PlayerSnapshotModel(snapshot));
-    this.participationDivisionInfos = data.participationDivisionInfos.map(
+    this._id = data.id;
+    this._type = data.type;
+    this._userId = data.userId;
+    this._competitionId = data.competitionId;
+    this._createdAt = data.createdAt;
+    this._updatedAt = data.updatedAt;
+    this._deletedAt = data.deletedAt;
+    this._status = data.status;
+    this._playerSnapshots = data.playerSnapshots.map((snapshot) => new PlayerSnapshotModel(snapshot));
+    this._participationDivisionInfos = data.participationDivisionInfos.map(
       (info) => new ParticipationDivisionInfoModel(info),
     );
-    this.additionaInfos = data.additionalInfos.map((info) => new AdditionalInfoModel(info));
-    this.applicationOrders = data.applicationOrders?.map((payment) => new ApplicationOrderModel(payment));
+    this._additionaInfos = data.additionaInfos.map((info) => new AdditionalInfoModel(info));
+    this._applicationOrders = data.applicationOrders?.map((payment) => new ApplicationOrderModel(payment));
   }
 
   toData(): IApplicationModelData {
     return {
-      id: this.id,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      deletedAt: this.deletedAt,
-      type: this.type,
-      status: this.status,
-      competitionId: this.competitionId,
-      userId: this.userId,
-      playerSnapshots: this.playerSnapshots.map((snapshot) => snapshot.toData()),
-      participationDivisionInfos: this.participationDivisionInfos.map((info) => info.toData()),
-      additionalInfos: this.additionaInfos.map((info) => info.toData()),
-      expectedPayment: this.expectedPayment,
-      applicationOrders: this.applicationOrders?.map((order) => order.toData()),
+      id: this._id,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      deletedAt: this._deletedAt,
+      type: this._type,
+      status: this._status,
+      competitionId: this._competitionId,
+      userId: this._userId,
+      playerSnapshots: this._playerSnapshots.map((snapshot) => snapshot.toData()),
+      participationDivisionInfos: this._participationDivisionInfos.map((info) => info.toData()),
+      additionaInfos: this._additionaInfos.map((info) => info.toData()),
+      expectedPayment: this._expectedPayment,
+      applicationOrders: this._applicationOrders?.map((order) => order.toData()),
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getType() {
-    return this.type;
+  get type() {
+    return this._type;
   }
 
-  getStatus() {
-    return this.status;
+  get status() {
+    return this._status;
   }
 
-  getCompetitionId() {
-    return this.competitionId;
+  get competitionId() {
+    return this._competitionId;
   }
 
-  getPaymentKey() {
-    return this.getPayedApplicationOrder().getPaymentKey();
+  get createdAt() {
+    return this._createdAt;
   }
 
-  getLatestPlayerSnapshot() {
-    return this.playerSnapshots[this.playerSnapshots.length - 1];
+  get updatedAt() {
+    return this._updatedAt;
   }
 
-  getParticipationDivisionIds() {
-    return this.participationDivisionInfos.map((info) =>
-      info.getLatestParticipationDivisionInfoSnapshot().division.getId(),
+  get deletedAt() {
+    return this._deletedAt;
+  }
+
+  get expectedPayment() {
+    if (!this._expectedPayment) throw new Error('Expected payment is not set');
+    return this._expectedPayment;
+  }
+
+  get additionaInfos() {
+    return this._additionaInfos;
+  }
+
+  get playerSnapshots() {
+    return this._playerSnapshots;
+  }
+
+  get participationDivisionInfos() {
+    return this._participationDivisionInfos;
+  }
+
+  get applicationOrders() {
+    return this._applicationOrders;
+  }
+
+  get latestPlayerSnapshot() {
+    return this._playerSnapshots[this._playerSnapshots.length - 1];
+  }
+
+  getOriginalParticipationDivisionIds() {
+    return this._participationDivisionInfos.map(
+      (info) => info.getOriginParticipationDivisionInfoSnapshot().division.id,
     );
   }
 
-  getParticipationDivisionInfos() {
-    return this.participationDivisionInfos;
-  }
-
-  getDoneStatusParticipationDivisionInfos() {
-    if (!this.participationDivisionInfos || this.participationDivisionInfos.length === 0)
-      throw new Error('participationDivisionInfos is not initialized');
-    return this.participationDivisionInfos.filter((info) => info.getStatus() === 'DONE');
-  }
-
-  getAdditionalInfos() {
-    return this.additionaInfos;
+  getLatestParticipationDivisionIds() {
+    if (this._participationDivisionInfos.length === 0) throw new Error('participationDivisionInfos is not initialized');
+    return this._participationDivisionInfos.map(
+      (info) => info.getLatestParticipationDivisionInfoSnapshot().division.id,
+    );
   }
 
   getPayedApplicationOrder() {
-    if (!this.applicationOrders || this.applicationOrders.length === 0)
+    if (!this._applicationOrders || this._applicationOrders.length === 0)
       throw new Error('applicationOrders is not initialized');
-    const order = this.applicationOrders.find((order) => order.getIsPayed());
+    const order = this._applicationOrders.find((order) => order.isPayed);
     if (!order) throw new Error('Payed application order is not found');
     return order;
   }
 
+  // --------------------------------------------------------------------------
+  // Common Method
+  // --------------------------------------------------------------------------
   validateApplicationType(user: UserModel) {
-    if (this.type === 'PROXY') return;
-    const playerSnapshot = this.getLatestPlayerSnapshot();
-    playerSnapshot.validateSelfApplication(user);
+    if (this._type === 'PROXY') return;
+    this.latestPlayerSnapshot.validateSelfApplication(user);
   }
 
   validateDivisionSuitability() {
-    const player = this.getLatestPlayerSnapshot();
-    this.participationDivisionInfos.forEach((participationDivisionInfo) => {
-      participationDivisionInfo.validateDivisionSuitability(player.birth, player.gender);
+    this._participationDivisionInfos.forEach((participationDivisionInfo) => {
+      participationDivisionInfo.validateDivisionSuitability(
+        this.latestPlayerSnapshot.birth,
+        this.latestPlayerSnapshot.gender,
+      );
     });
   }
 
-  // READY Status -------------------------------------------------------------
+  // --------------------------------------------------------------------------
+  // READY Status Method
+  // --------------------------------------------------------------------------
   delete() {
     // todo!!: 에러 표준화
-    if (this.status !== 'READY') throw new Error('Application status is not READY');
-    this.deletedAt = new Date();
+    if (this._status !== 'READY') throw new Error('Application status is not READY');
+    this._deletedAt = new Date();
   }
 
   setExpectedPayment(expectedPayment: IExpectedPayment) {
-    if (this.status !== 'READY') throw new Error('Application status is not READY');
-    this.expectedPayment = expectedPayment;
-  }
-
-  getExpectedPayment() {
-    if (this.status !== 'READY') throw new Error('Application status is not READY');
-    if (!this.expectedPayment) throw new Error('Expected payment is not set');
-    return this.expectedPayment;
+    if (this._status !== 'READY') throw new Error('Application status is not READY');
+    this._expectedPayment = expectedPayment;
   }
 
   addApplicationOrder(applicationOrder: ApplicationOrderModel) {
-    if (this.status !== 'READY') throw new Error('Application status is not READY');
-    this.applicationOrders = [...(this.applicationOrders ?? []), applicationOrder];
+    if (this._status !== 'READY') throw new Error('Application status is not READY');
+    this._applicationOrders = [...(this._applicationOrders ?? []), applicationOrder];
   }
 
-  approve(paymentKey: IApplicationOrder['paymentKey'], orderId: IApplicationOrder['orderId'], amount: TMoneyValue) {
-    if (!this.applicationOrders || this.applicationOrders.length === 0)
+  approve(
+    paymentKey: IApplicationOrderModelData['paymentKey'],
+    orderId: IApplicationOrderModelData['orderId'],
+    amount: TMoneyValue,
+  ) {
+    if (!this._applicationOrders || this._applicationOrders.length === 0)
       throw new Error('applicationOrders is not initaliazed');
-    if (this.status !== 'READY') throw new Error('Application status is not READY');
+    if (this._status !== 'READY') throw new Error('Application status is not READY');
 
-    const order = this.applicationOrders.find((order) => order.getOrderId() === orderId);
+    const order = this._applicationOrders.find((order) => order.orderId === orderId);
     if (!order) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'ApplicationOrder not found');
 
     order.approve(amount, paymentKey);
-    this.participationDivisionInfos.forEach((info) => info.approve());
-    this.status = 'DONE';
+    this._participationDivisionInfos.forEach((info) => info.approve());
+    this._status = 'DONE';
   }
 
-  // DONE Status --------------------------------------------------------------
+  // --------------------------------------------------------------------------
+  // DONE or PARTIAL_CANCELED Status Method
+  // --------------------------------------------------------------------------
   addPlayerSnapshot(newPlayerSnapshot: PlayerSnapshotModel) {
     // todo!!: 에러 표준화
-    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL1');
-    this.playerSnapshots.push(newPlayerSnapshot);
+    this._playerSnapshots.push(newPlayerSnapshot);
   }
 
   addParticipationDivisionInfoSnapshots(
     newParticipationDivisionInfoSnapshots: ParticipationDivisionInfoSnapshotModel[],
   ) {
     // todo!!: 에러 표준화
-    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL2');
     newParticipationDivisionInfoSnapshots.forEach((snapshot) => {
-      const participationDivisionInfo = this.participationDivisionInfos.find(
-        (info) => info.getId() === snapshot.participationDivisionInfoId,
+      const participationDivisionInfo = this._participationDivisionInfos.find(
+        (info) => info.id === snapshot.participationDivisionInfoId,
       );
       if (!participationDivisionInfo)
         throw new BusinessException(ApplicationsErrors.APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND);
@@ -191,38 +221,38 @@ export class ApplicationModel {
 
   updateAdditionalInfos(additionalInfoUpdateDtos: IAdditionalInfoUpdateDto[]) {
     // todo!!: 에러 표준화
-    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL3');
     additionalInfoUpdateDtos.forEach((updateDto) => {
-      const additionalInfo = this.additionaInfos.find((info) => info.getType() === updateDto.type);
+      const additionalInfo = this._additionaInfos.find((info) => info.type === updateDto.type);
       if (!additionalInfo) throw new BusinessException(ApplicationsErrors.APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND);
       additionalInfo.updateValue(updateDto.value);
     });
   }
 
   addApplicationOrderPaymentSnapshot(applicationOrderPaymentSnapshot: ApplicationOrderPaymentSnapshotModel) {
-    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL4');
     this.getPayedApplicationOrder().addApplicationOrderPaymentSnapshot(applicationOrderPaymentSnapshot);
   }
 
-  cancel(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
-    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+  cancel(participationDivisionInfoIds: IParticipationDivisionInfoModelData['id'][]) {
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL5');
-    if (this.participationDivisionInfos.length === 0) throw new Error('participationDivisionInfos is not initialized');
+    if (this._participationDivisionInfos.length === 0) throw new Error('participationDivisionInfos is not initialized');
     this.cancelParticipationDivisionInfos(participationDivisionInfoIds);
     this.cancelParticipationDivisionInfoPayment(participationDivisionInfoIds);
-    this.status = assert<IApplicationModelData['status']>(this.getPayedApplicationOrder().getStatus());
+    this._status = assert<IApplicationModelData['status']>(this.getPayedApplicationOrder().status);
   }
 
-  private cancelParticipationDivisionInfos(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
-    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+  private cancelParticipationDivisionInfos(participationDivisionInfoIds: IParticipationDivisionInfoModelData['id'][]) {
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL6');
     if (participationDivisionInfoIds.length === 0) throw new Error('participationDivisionInfoIds is not initialized');
 
     participationDivisionInfoIds.forEach((participationDivisionInfoId) => {
-      const participationDivisionInfo = this.participationDivisionInfos.find(
-        (info) => info.getId() === participationDivisionInfoId,
+      const participationDivisionInfo = this._participationDivisionInfos.find(
+        (info) => info.id === participationDivisionInfoId,
       );
       if (!participationDivisionInfo)
         throw new BusinessException(ApplicationsErrors.APPLICATIONS_PARTICIPATION_DIVISION_INFO_NOT_FOUND);
@@ -230,14 +260,21 @@ export class ApplicationModel {
     });
   }
 
-  private cancelParticipationDivisionInfoPayment(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
-    if (this.status !== 'DONE' && this.status !== 'PARTIAL_CANCELED')
+  private cancelParticipationDivisionInfoPayment(
+    participationDivisionInfoIds: IParticipationDivisionInfoModelData['id'][],
+  ) {
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL7');
     const order = this.getPayedApplicationOrder();
     order.cancelParticipationDivisionInfoPayments(participationDivisionInfoIds);
   }
 
-  getCancelAmount() {
-    return this.getPayedApplicationOrder().getCancelAmount();
+  getCancellationInfo() {
+    const payedApplicationOrder = this.getPayedApplicationOrder();
+    return {
+      paymentKey: payedApplicationOrder.paymentKey,
+      cancelAmount: payedApplicationOrder.calculateCancelAmount(),
+      cancelReason: '고객이 취소를 원함',
+    };
   }
 }

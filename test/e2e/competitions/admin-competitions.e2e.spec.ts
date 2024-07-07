@@ -32,7 +32,7 @@ import { CompetitionDummyBuilder } from '../../../src/dummy/competition.dummy';
 import { generateDummyDivisionPacks } from '../../../src/dummy/division.dummy';
 import { dummyCombinationDiscountRules } from '../../../src/dummy/combination-discount-snapshot.dummy';
 import { CreateCompetitionRequiredAdditionalInfoRet } from '../../../src/modules/competitions/application/competitions.app.dto';
-import { IRequiredAdditionalInfo } from '../../../src/modules/competitions/domain/interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../../../src/modules/competitions/domain/interface/required-additional-info.interface';
 import { uuidv7 } from 'uuidv7';
 import { RequiredAdditionalInfoEntity } from '../../../src/database/entity/competition/required-additional-info.entity';
 import { ICompetition } from '../../../src/modules/competitions/domain/interface/competition.interface';

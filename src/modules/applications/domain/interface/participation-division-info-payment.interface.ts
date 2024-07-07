@@ -52,23 +52,6 @@ export interface IParticipationDivisionInfoPaymentModelData {
 }
 
 // --------------------------------------------------------------
-// Return Interface
-// --------------------------------------------------------------
-export interface IParticipationDivisionInfoPaymentDetail
-  extends Pick<
-    IParticipationDivisionInfoPayment,
-    | 'id'
-    | 'createdAt'
-    | 'status'
-    | 'applicationOrderPaymentSnapshotId'
-    | 'participationDivisionInfoId'
-    | 'divisionId'
-    | 'priceSnapshotId'
-    | 'division'
-    | 'priceSnapshot'
-  > {}
-
-// --------------------------------------------------------------
 // ENUM
 // --------------------------------------------------------------
 type TParticipationDivisionInfoPaymentStatus = 'READY' | 'DONE' | 'CANCELED';

@@ -21,7 +21,7 @@ import { ICombinationDiscountSnapshotCreateDto } from '../domain/interface/combi
 import {
   IRequiredAdditionalInfoCreateDto,
   IRequiredAdditionalInfoUpdateDto,
-} from '../domain/interface/required-addtional-info.interface';
+} from '../domain/interface/required-additional-info.interface';
 import { TPaginationParam } from '../../../common/common-types';
 import { ICompetitionPosterImageCreateDto } from '../domain/interface/competition-poster-image.interface';
 

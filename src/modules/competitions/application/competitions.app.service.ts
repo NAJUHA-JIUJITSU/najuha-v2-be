@@ -31,7 +31,7 @@ import { BusinessException, CommonErrors } from '../../../common/response/errorR
 import { CompetitionFactory } from '../domain/competition.factory';
 import { CompetitionRepository } from '../../../database/custom-repository/competition.repository';
 import { DivisionFactory } from '../domain/division.factory';
-import { RequiredAdditionalInfoModel } from '../domain/model/required-addtional-info.model';
+import { RequiredAdditionalInfoModel } from '../domain/model/required-additional-info.model';
 import { EarlybirdDiscountSnapshotModel } from '../domain/model/earlybird-discount-snapshot.model';
 import { CombinationDiscountSnapshotModel } from '../domain/model/combination-discount-snapshot.model';
 import { assert } from 'typia';
@@ -145,7 +145,7 @@ export class CompetitionsAppService {
           throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
         }),
     );
-    const divisionModels = this.divisionFactory.createDivisions(competition.getId(), divisionPacks).map((division) => {
+    const divisionModels = this.divisionFactory.createDivisions(competition.id, divisionPacks).map((division) => {
       return new DivisionModel(division);
     });
     competition.addDivisions(divisionModels);

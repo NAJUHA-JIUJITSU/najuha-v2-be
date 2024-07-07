@@ -1,30 +1,54 @@
 import { ICommentReportModelData } from '../interface/comment-report.interface';
 
 export class CommentReportModel {
-  public readonly id: ICommentReportModelData['id'];
-  public readonly type: ICommentReportModelData['type'];
-  public readonly status: ICommentReportModelData['status'];
-  public readonly commentId: ICommentReportModelData['commentId'];
-  public readonly userId: ICommentReportModelData['userId'];
-  public readonly createdAt: ICommentReportModelData['createdAt'];
+  private readonly _id: ICommentReportModelData['id'];
+  private readonly _type: ICommentReportModelData['type'];
+  private readonly _status: ICommentReportModelData['status'];
+  private readonly _commentId: ICommentReportModelData['commentId'];
+  private readonly _userId: ICommentReportModelData['userId'];
+  private readonly _createdAt: ICommentReportModelData['createdAt'];
 
   constructor(data: ICommentReportModelData) {
-    this.id = data.id;
-    this.type = data.type;
-    this.status = data.status;
-    this.commentId = data.commentId;
-    this.userId = data.userId;
-    this.createdAt = data.createdAt;
+    this._id = data.id;
+    this._type = data.type;
+    this._status = data.status;
+    this._commentId = data.commentId;
+    this._userId = data.userId;
+    this._createdAt = data.createdAt;
   }
 
   toData(): ICommentReportModelData {
     return {
-      id: this.id,
-      type: this.type,
-      status: this.status,
-      commentId: this.commentId,
-      userId: this.userId,
-      createdAt: this.createdAt,
+      id: this._id,
+      type: this._type,
+      status: this._status,
+      commentId: this._commentId,
+      userId: this._userId,
+      createdAt: this._createdAt,
     };
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get type() {
+    return this._type;
+  }
+
+  get status() {
+    return this._status;
+  }
+
+  get commentId() {
+    return this._commentId;
+  }
+
+  get userId() {
+    return this._userId;
+  }
+
+  get createdAt() {
+    return this._createdAt;
   }
 }

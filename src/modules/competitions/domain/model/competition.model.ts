@@ -9,155 +9,240 @@ import { CombinationDiscountSnapshotModel } from './combination-discount-snapsho
 import { DivisionModel } from './division.model';
 import { EarlybirdDiscountSnapshotModel } from './earlybird-discount-snapshot.model';
 import { IDivision } from '../interface/division.interface';
-import { RequiredAdditionalInfoModel } from './required-addtional-info.model';
-import { IAdditionalInfoCreateDto } from '../../../applications/domain/interface/additional-info.interface';
-import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-addtional-info.interface';
+import { RequiredAdditionalInfoModel } from './required-additional-info.model';
+import { IRequiredAdditionalInfoUpdateDto } from '../interface/required-additional-info.interface';
 import { CalculatePaymentService } from '../calculate-payment.domain.service';
 import { CompetitionHostMapModel } from './competition-host-map.model';
 import { CompetitionPosterImageModel } from './competition-poster-image.model';
 import { AdditionalInfoModel } from '../../../applications/domain/model/additional-info.model';
 
 export class CompetitionModel {
-  private readonly id: ICompetitionModelData['id'];
-  private readonly competitionPaymentId: ICompetitionModelData['competitionPaymentId'];
-  private title: ICompetitionModelData['title'];
-  private address: ICompetitionModelData['address'];
-  private competitionDate: ICompetitionModelData['competitionDate'];
-  private registrationStartDate: ICompetitionModelData['registrationStartDate'];
-  private registrationEndDate: ICompetitionModelData['registrationEndDate'];
-  private refundDeadlineDate: ICompetitionModelData['refundDeadlineDate'];
-  private soloRegistrationAdjustmentStartDate: ICompetitionModelData['soloRegistrationAdjustmentStartDate'];
-  private soloRegistrationAdjustmentEndDate: ICompetitionModelData['soloRegistrationAdjustmentEndDate'];
-  private registrationListOpenDate: ICompetitionModelData['registrationListOpenDate'];
-  private bracketOpenDate: ICompetitionModelData['bracketOpenDate'];
-  private description: ICompetitionModelData['description'];
-  private isPartnership: ICompetitionModelData['isPartnership'];
-  private viewCount: ICompetitionModelData['viewCount'];
-  private status: ICompetitionModelData['status'];
-  private readonly createdAt: ICompetitionModelData['createdAt'];
-  private readonly updatedAt: ICompetitionModelData['updatedAt'];
-  private divisions?: DivisionModel[];
-  private requiredAdditionalInfos?: RequiredAdditionalInfoModel[];
-  private earlybirdDiscountSnapshots?: EarlybirdDiscountSnapshotModel[];
-  private combinationDiscountSnapshots?: CombinationDiscountSnapshotModel[];
-  private competitionHostMaps?: CompetitionHostMapModel[];
-  private competitionPosterImages?: CompetitionPosterImageModel[];
+  /** properties */
+  private readonly _id: ICompetitionModelData['id'];
+  private readonly _competitionPaymentId: ICompetitionModelData['competitionPaymentId'];
+  private readonly _createdAt: ICompetitionModelData['createdAt'];
+  private readonly _updatedAt: ICompetitionModelData['updatedAt'];
+  private _title: ICompetitionModelData['title'];
+  private _address: ICompetitionModelData['address'];
+  private _competitionDate: ICompetitionModelData['competitionDate'];
+  private _registrationStartDate: ICompetitionModelData['registrationStartDate'];
+  private _registrationEndDate: ICompetitionModelData['registrationEndDate'];
+  private _refundDeadlineDate: ICompetitionModelData['refundDeadlineDate'];
+  private _soloRegistrationAdjustmentStartDate: ICompetitionModelData['soloRegistrationAdjustmentStartDate'];
+  private _soloRegistrationAdjustmentEndDate: ICompetitionModelData['soloRegistrationAdjustmentEndDate'];
+  private _registrationListOpenDate: ICompetitionModelData['registrationListOpenDate'];
+  private _bracketOpenDate: ICompetitionModelData['bracketOpenDate'];
+  private _description: ICompetitionModelData['description'];
+  private _isPartnership: ICompetitionModelData['isPartnership'];
+  private _viewCount: ICompetitionModelData['viewCount'];
+  private _status: ICompetitionModelData['status'];
+  /** relations */
+  private _divisions?: DivisionModel[];
+  private _requiredAdditionalInfos?: RequiredAdditionalInfoModel[];
+  private _earlybirdDiscountSnapshots?: EarlybirdDiscountSnapshotModel[];
+  private _combinationDiscountSnapshots?: CombinationDiscountSnapshotModel[];
+  private _competitionHostMaps?: CompetitionHostMapModel[];
+  private _competitionPosterImages?: CompetitionPosterImageModel[];
 
   constructor(data: ICompetitionModelData) {
-    this.id = data.id;
-    this.competitionPaymentId = data.competitionPaymentId;
-    this.title = data.title;
-    this.address = data.address;
-    this.competitionDate = data.competitionDate;
-    this.registrationStartDate = data.registrationStartDate;
-    this.registrationEndDate = data.registrationEndDate;
-    this.refundDeadlineDate = data.refundDeadlineDate;
-    this.soloRegistrationAdjustmentStartDate = data.soloRegistrationAdjustmentStartDate;
-    this.soloRegistrationAdjustmentEndDate = data.soloRegistrationAdjustmentEndDate;
-    this.registrationListOpenDate = data.registrationListOpenDate;
-    this.bracketOpenDate = data.bracketOpenDate;
-    this.description = data.description;
-    this.isPartnership = data.isPartnership;
-    this.viewCount = data.viewCount;
-    this.status = data.status;
-    this.createdAt = data.createdAt;
-    this.updatedAt = data.updatedAt;
-    this.divisions = data.divisions?.map((division) => new DivisionModel(division));
-    this.earlybirdDiscountSnapshots = data.earlybirdDiscountSnapshots?.map(
+    this._id = data.id;
+    this._competitionPaymentId = data.competitionPaymentId;
+    this._createdAt = data.createdAt;
+    this._updatedAt = data.updatedAt;
+    this._title = data.title;
+    this._address = data.address;
+    this._competitionDate = data.competitionDate;
+    this._registrationStartDate = data.registrationStartDate;
+    this._registrationEndDate = data.registrationEndDate;
+    this._refundDeadlineDate = data.refundDeadlineDate;
+    this._soloRegistrationAdjustmentStartDate = data.soloRegistrationAdjustmentStartDate;
+    this._soloRegistrationAdjustmentEndDate = data.soloRegistrationAdjustmentEndDate;
+    this._registrationListOpenDate = data.registrationListOpenDate;
+    this._bracketOpenDate = data.bracketOpenDate;
+    this._description = data.description;
+    this._isPartnership = data.isPartnership;
+    this._viewCount = data.viewCount;
+    this._status = data.status;
+    this._divisions = data.divisions?.map((division) => new DivisionModel(division));
+    this._earlybirdDiscountSnapshots = data.earlybirdDiscountSnapshots?.map(
       (snapshot) => new EarlybirdDiscountSnapshotModel(snapshot),
     );
-    this.combinationDiscountSnapshots = data.combinationDiscountSnapshots?.map(
+    this._combinationDiscountSnapshots = data.combinationDiscountSnapshots?.map(
       (snapshot) => new CombinationDiscountSnapshotModel(snapshot),
     );
-    this.requiredAdditionalInfos = data.requiredAdditionalInfos?.map((info) => new RequiredAdditionalInfoModel(info));
-    this.competitionHostMaps = data.competitionHostMaps?.map((map) => new CompetitionHostMapModel(map));
-    this.competitionPosterImages = data.competitionPosterImages?.map(
+    this._requiredAdditionalInfos = data.requiredAdditionalInfos?.map((info) => new RequiredAdditionalInfoModel(info));
+    this._competitionHostMaps = data.competitionHostMaps?.map((map) => new CompetitionHostMapModel(map));
+    this._competitionPosterImages = data.competitionPosterImages?.map(
       (posterImage) => new CompetitionPosterImageModel(posterImage),
     );
   }
 
   toData(): ICompetitionModelData {
     return {
-      id: this.id,
-      competitionPaymentId: this.competitionPaymentId,
-      title: this.title,
-      address: this.address,
-      competitionDate: this.competitionDate,
-      registrationStartDate: this.registrationStartDate,
-      registrationEndDate: this.registrationEndDate,
-      refundDeadlineDate: this.refundDeadlineDate,
-      soloRegistrationAdjustmentStartDate: this.soloRegistrationAdjustmentStartDate,
-      soloRegistrationAdjustmentEndDate: this.soloRegistrationAdjustmentEndDate,
-      registrationListOpenDate: this.registrationListOpenDate,
-      bracketOpenDate: this.bracketOpenDate,
-      description: this.description,
-      isPartnership: this.isPartnership,
-      viewCount: this.viewCount,
-      status: this.status,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      divisions: this.divisions?.map((division) => division.toData()),
-      earlybirdDiscountSnapshots: this.earlybirdDiscountSnapshots?.map((snapshot) => snapshot.toData()),
-      combinationDiscountSnapshots: this.combinationDiscountSnapshots?.map((snapshot) => snapshot.toData()),
-      requiredAdditionalInfos: this.requiredAdditionalInfos?.map((info) => info.toData()),
-      competitionHostMaps: this.competitionHostMaps?.map((map) => map.toData()),
-      competitionPosterImages: this.competitionPosterImages?.map((posterImage) => posterImage.toData()),
+      id: this._id,
+      competitionPaymentId: this._competitionPaymentId,
+      title: this._title,
+      address: this._address,
+      competitionDate: this._competitionDate,
+      registrationStartDate: this._registrationStartDate,
+      registrationEndDate: this._registrationEndDate,
+      refundDeadlineDate: this._refundDeadlineDate,
+      soloRegistrationAdjustmentStartDate: this._soloRegistrationAdjustmentStartDate,
+      soloRegistrationAdjustmentEndDate: this._soloRegistrationAdjustmentEndDate,
+      registrationListOpenDate: this._registrationListOpenDate,
+      bracketOpenDate: this._bracketOpenDate,
+      description: this._description,
+      isPartnership: this._isPartnership,
+      viewCount: this._viewCount,
+      status: this._status,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
+      divisions: this._divisions?.map((division) => division.toData()),
+      earlybirdDiscountSnapshots: this._earlybirdDiscountSnapshots?.map((snapshot) => snapshot.toData()),
+      combinationDiscountSnapshots: this._combinationDiscountSnapshots?.map((snapshot) => snapshot.toData()),
+      requiredAdditionalInfos: this._requiredAdditionalInfos?.map((info) => info.toData()),
+      competitionHostMaps: this._competitionHostMaps?.map((map) => map.toData()),
+      competitionPosterImages: this._competitionPosterImages?.map((posterImage) => posterImage.toData()),
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getCompetitionPaymentId() {
-    return this.competitionPaymentId;
+  get competitionPaymentId() {
+    return this._competitionPaymentId;
   }
 
-  getTitle() {
-    return this.title;
+  get title() {
+    return this._title;
   }
 
-  getLatestEarlybirdDiscountSnapshot(): EarlybirdDiscountSnapshotModel | null {
-    if (!this.earlybirdDiscountSnapshots)
+  get address() {
+    return this._address;
+  }
+
+  get competitionDate() {
+    return this._competitionDate;
+  }
+
+  get registrationStartDate() {
+    return this._registrationStartDate;
+  }
+
+  get registrationEndDate() {
+    return this._registrationEndDate;
+  }
+
+  get refundDeadlineDate() {
+    return this._refundDeadlineDate;
+  }
+
+  get soloRegistrationAdjustmentStartDate() {
+    return this._soloRegistrationAdjustmentStartDate;
+  }
+
+  get soloRegistrationAdjustmentEndDate() {
+    return this._soloRegistrationAdjustmentEndDate;
+  }
+
+  get registrationListOpenDate() {
+    return this._registrationListOpenDate;
+  }
+
+  get bracketOpenDate() {
+    return this._bracketOpenDate;
+  }
+
+  get description() {
+    return this._description;
+  }
+
+  get isPartnership() {
+    return this._isPartnership;
+  }
+
+  get viewCount() {
+    return this._viewCount;
+  }
+
+  get status() {
+    return this._status;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get updatedAt() {
+    return this._updatedAt;
+  }
+
+  get divisions() {
+    return this._divisions;
+  }
+
+  get requiredAdditionalInfos() {
+    return this._requiredAdditionalInfos;
+  }
+
+  get earlybirdDiscountSnapshots() {
+    return this._earlybirdDiscountSnapshots;
+  }
+
+  get combinationDiscountSnapshots() {
+    return this._combinationDiscountSnapshots;
+  }
+
+  get competitionHostMaps() {
+    return this._competitionHostMaps;
+  }
+
+  get competitionPosterImages() {
+    return this._competitionPosterImages;
+  }
+
+  get latestEarlybirdDiscountSnapshot(): EarlybirdDiscountSnapshotModel | null {
+    if (!this._earlybirdDiscountSnapshots)
       throw new Error('earlybirdDiscountSnapshots is not initialized in CompetitionModel');
-    if (this.earlybirdDiscountSnapshots.length === 0) return null;
-    return this.earlybirdDiscountSnapshots[this.earlybirdDiscountSnapshots.length - 1];
+    if (this._earlybirdDiscountSnapshots.length === 0) return null;
+    return this._earlybirdDiscountSnapshots[this._earlybirdDiscountSnapshots.length - 1];
   }
 
-  getLatestCombinationDiscountSnapshot(): CombinationDiscountSnapshotModel | null {
-    if (!this.combinationDiscountSnapshots)
+  get latestCombinationDiscountSnapshot(): CombinationDiscountSnapshotModel | null {
+    if (!this._combinationDiscountSnapshots)
       throw new Error('combinationDiscountSnapshots is not initialized in CompetitionModel');
-    if (this.combinationDiscountSnapshots.length === 0) return null;
-    return this.combinationDiscountSnapshots[this.combinationDiscountSnapshots.length - 1];
+    if (this._combinationDiscountSnapshots.length === 0) return null;
+    return this._combinationDiscountSnapshots[this._combinationDiscountSnapshots.length - 1];
   }
 
   update(updateDto: ICompetitionUpdateDto) {
-    if (updateDto.title) this.title = updateDto.title;
-    if (updateDto.address) this.address = updateDto.address;
-    if (updateDto.competitionDate) this.competitionDate = updateDto.competitionDate;
-    if (updateDto.registrationStartDate) this.registrationStartDate = updateDto.registrationStartDate;
-    if (updateDto.registrationEndDate) this.registrationEndDate = updateDto.registrationEndDate;
-    if (updateDto.refundDeadlineDate) this.refundDeadlineDate = updateDto.refundDeadlineDate;
+    if (updateDto.title) this._title = updateDto.title;
+    if (updateDto.address) this._address = updateDto.address;
+    if (updateDto.competitionDate) this._competitionDate = updateDto.competitionDate;
+    if (updateDto.registrationStartDate) this._registrationStartDate = updateDto.registrationStartDate;
+    if (updateDto.registrationEndDate) this._registrationEndDate = updateDto.registrationEndDate;
+    if (updateDto.refundDeadlineDate) this._refundDeadlineDate = updateDto.refundDeadlineDate;
     if (updateDto.soloRegistrationAdjustmentStartDate)
-      this.soloRegistrationAdjustmentStartDate = updateDto.soloRegistrationAdjustmentStartDate;
+      this._soloRegistrationAdjustmentStartDate = updateDto.soloRegistrationAdjustmentStartDate;
     if (updateDto.soloRegistrationAdjustmentEndDate)
-      this.soloRegistrationAdjustmentEndDate = updateDto.soloRegistrationAdjustmentEndDate;
-    if (updateDto.registrationListOpenDate) this.registrationListOpenDate = updateDto.registrationListOpenDate;
-    if (updateDto.bracketOpenDate) this.bracketOpenDate = updateDto.bracketOpenDate;
-    if (updateDto.description) this.description = updateDto.description;
-    if (updateDto.isPartnership) this.isPartnership = updateDto.isPartnership;
+      this._soloRegistrationAdjustmentEndDate = updateDto.soloRegistrationAdjustmentEndDate;
+    if (updateDto.registrationListOpenDate) this._registrationListOpenDate = updateDto.registrationListOpenDate;
+    if (updateDto.bracketOpenDate) this._bracketOpenDate = updateDto.bracketOpenDate;
+    if (updateDto.description) this._description = updateDto.description;
+    if (updateDto.isPartnership) this._isPartnership = updateDto.isPartnership;
   }
 
   updateStatus(newStatus: ICompetitionModelData['status']) {
     if (newStatus === 'ACTIVE') {
       const missingProperties: string[] = [];
-      if (this.title === 'DEFAULT TITLE') missingProperties.push('title');
-      if (this.address === 'DEFAULT ADDRESS') missingProperties.push('address');
-      if (this.competitionDate === null) missingProperties.push('competitionDate');
-      if (this.registrationStartDate === null) missingProperties.push('registrationStartDate');
-      if (this.registrationEndDate === null) missingProperties.push('registrationEndDate');
-      if (this.refundDeadlineDate === null) missingProperties.push('refundDeadlineDate');
-      if (this.description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
+      if (this._title === 'DEFAULT TITLE') missingProperties.push('title');
+      if (this._address === 'DEFAULT ADDRESS') missingProperties.push('address');
+      if (this._competitionDate === null) missingProperties.push('competitionDate');
+      if (this._registrationStartDate === null) missingProperties.push('registrationStartDate');
+      if (this._registrationEndDate === null) missingProperties.push('registrationEndDate');
+      if (this._refundDeadlineDate === null) missingProperties.push('refundDeadlineDate');
+      if (this._description === 'DEFAULT DESCRIPTION') missingProperties.push('description');
       if (missingProperties.length > 0) {
         throw new BusinessException(
           CompetitionsErrors.COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE,
@@ -165,19 +250,19 @@ export class CompetitionModel {
         );
       }
     }
-    this.status = newStatus;
+    this._status = newStatus;
   }
 
   addDivisions(newDivisions: DivisionModel[]) {
-    if (!this.divisions) throw new Error('divisions is not initialized in CompetitionModel');
-    const duplicatedDivisions = this.divisions.filter((division) => {
+    if (!this._divisions) throw new Error('divisions is not initialized in CompetitionModel');
+    const duplicatedDivisions = this._divisions.filter((division) => {
       return newDivisions.some(
         (newDivision) =>
-          newDivision.getCategory() === division.getCategory() &&
-          newDivision.getUniform() === division.getUniform() &&
-          newDivision.getGender() === division.getGender() &&
-          newDivision.getBelt() === division.getBelt() &&
-          newDivision.getWeight() === division.getWeight(),
+          newDivision.category === division.category &&
+          newDivision.uniform === division.uniform &&
+          newDivision.gender === division.gender &&
+          newDivision.belt === division.belt &&
+          newDivision.weight === division.weight,
       );
     });
     if (duplicatedDivisions.length > 0) {
@@ -186,31 +271,31 @@ export class CompetitionModel {
         `${duplicatedDivisions
           .map(
             (division) =>
-              `${division.getCategory()} ${division.getUniform()} ${division.getGender()} ${division.getBelt()} ${division.getWeight()}`,
+              `${division.category} ${division.uniform} ${division.gender} ${division.belt} ${division.weight}`,
           )
           .join(', ')}`,
       );
     }
-    this.divisions.push(...newDivisions);
+    this._divisions.push(...newDivisions);
   }
 
   addEarlybirdDiscountSnapshot(newEarlybirdDiscountSnapshot: EarlybirdDiscountSnapshotModel) {
-    if (!this.earlybirdDiscountSnapshots)
+    if (!this._earlybirdDiscountSnapshots)
       throw new Error('earlybirdDiscountSnapshots is not initialized in CompetitionModel');
-    this.earlybirdDiscountSnapshots = [...this.earlybirdDiscountSnapshots, newEarlybirdDiscountSnapshot];
+    this._earlybirdDiscountSnapshots = [...this._earlybirdDiscountSnapshots, newEarlybirdDiscountSnapshot];
   }
 
   addCombinationDiscountSnapshot(newCombinationDiscountSnapshot: CombinationDiscountSnapshotModel) {
-    if (!this.combinationDiscountSnapshots)
+    if (!this._combinationDiscountSnapshots)
       throw new Error('combinationDiscountSnapshots is not initialized in CompetitionModel');
-    this.combinationDiscountSnapshots = [...this.combinationDiscountSnapshots, newCombinationDiscountSnapshot];
+    this._combinationDiscountSnapshots = [...this._combinationDiscountSnapshots, newCombinationDiscountSnapshot];
   }
 
   updateRequiredAdditionalInfo(requiredAdditionalInfoUpdateDto: IRequiredAdditionalInfoUpdateDto) {
-    if (!this.requiredAdditionalInfos)
+    if (!this._requiredAdditionalInfos)
       throw new Error('requiredAdditionalInfos is not initialized in CompetitionModel');
-    const requiredAdditionalInfo = this.requiredAdditionalInfos.find(
-      (info) => info.getId() === requiredAdditionalInfoUpdateDto.id,
+    const requiredAdditionalInfo = this._requiredAdditionalInfos.find(
+      (info) => info.id === requiredAdditionalInfoUpdateDto.id,
     );
     if (!requiredAdditionalInfo)
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
@@ -218,41 +303,39 @@ export class CompetitionModel {
   }
 
   deleteRequiredAdditionalInfo(requiredAdditionalInfoId: RequiredAdditionalInfoModel['id']) {
-    if (!this.requiredAdditionalInfos)
+    if (!this._requiredAdditionalInfos)
       throw new Error('requiredAdditionalInfos is not initialized in CompetitionModel');
-    const requiredAdditionalInfo = this.requiredAdditionalInfos.find(
-      (info) => info.getId() === requiredAdditionalInfoId,
-    );
+    const requiredAdditionalInfo = this._requiredAdditionalInfos.find((info) => info.id === requiredAdditionalInfoId);
     if (!requiredAdditionalInfo)
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'RequiredAdditionalInfo not found');
     requiredAdditionalInfo.delete();
   }
 
   validateApplicationPeriod(now = new Date()) {
-    if (this.registrationStartDate && now < this.registrationStartDate)
+    if (this._registrationStartDate && now < this._registrationStartDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,
-        `registrationStartDate: ${this.registrationStartDate}`,
+        `registrationStartDate: ${this._registrationStartDate}`,
       );
-    if (this.registrationEndDate && now > this.registrationEndDate)
+    if (this._registrationEndDate && now > this._registrationEndDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_ENDED,
-        `registrationEndDate: ${this.registrationEndDate}`,
+        `registrationEndDate: ${this._registrationEndDate}`,
       );
   }
 
   isSoloRegistrationAdjustmentPeriod(now = new Date()) {
-    return this.soloRegistrationAdjustmentStartDate && this.soloRegistrationAdjustmentEndDate
-      ? now >= this.soloRegistrationAdjustmentStartDate && now <= this.soloRegistrationAdjustmentEndDate
+    return this._soloRegistrationAdjustmentStartDate && this._soloRegistrationAdjustmentEndDate
+      ? now >= this._soloRegistrationAdjustmentStartDate && now <= this._soloRegistrationAdjustmentEndDate
       : false;
   }
 
   calculateExpectedPayment(participationDivisionIds: IDivision['id'][]) {
-    if (!this.divisions) throw new Error('divisions is not initialized in CompetitionModel');
-    const divisions = this.divisions.filter((division) => participationDivisionIds.includes(division.getId()));
-    const priceSnapshots = divisions.map((division) => division.getLatestPriceSnapshot());
-    const earlybirdDiscountSnapshot = this.getLatestEarlybirdDiscountSnapshot();
-    const combinationDiscountSnapshot = this.getLatestCombinationDiscountSnapshot();
+    if (!this._divisions) throw new Error('divisions is not initialized in CompetitionModel');
+    const divisions = this._divisions.filter((division) => participationDivisionIds.includes(division.id));
+    const priceSnapshots = divisions.map((division) => division.latestPriceSnapshot);
+    const earlybirdDiscountSnapshot = this.latestEarlybirdDiscountSnapshot;
+    const combinationDiscountSnapshot = this.latestCombinationDiscountSnapshot;
     return CalculatePaymentService.calculate(
       divisions,
       priceSnapshots,
@@ -262,24 +345,27 @@ export class CompetitionModel {
   }
 
   addRequiredAdditionalInfo(newRequiredAdditionalInfo: RequiredAdditionalInfoModel) {
-    if (!this.requiredAdditionalInfos)
+    if (!this._requiredAdditionalInfos)
       throw new Error('requiredAdditionalInfos is not initialized in CompetitionModel');
-    this.requiredAdditionalInfos.forEach((info) => {
-      if (info.getType() === newRequiredAdditionalInfo.getType()) {
+    this._requiredAdditionalInfos.forEach((info) => {
+      if (info.type === newRequiredAdditionalInfo.type) {
         throw new BusinessException(
           CompetitionsErrors.COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED,
-          `type: ${newRequiredAdditionalInfo.getType()}`,
+          `type: ${newRequiredAdditionalInfo.type}`,
         );
       }
     });
-    this.requiredAdditionalInfos.push(newRequiredAdditionalInfo);
+    this._requiredAdditionalInfos.push(newRequiredAdditionalInfo);
   }
 
-  validateAdditionalInfo(addtionalInfos: AdditionalInfoModel[]) {
-    if (!this.requiredAdditionalInfos)
+  validateAdditionalInfo(additionalInfos: ReadonlyArray<AdditionalInfoModel>) {
+    if (!this._requiredAdditionalInfos)
       throw new Error('requiredAdditionalInfos is not initialized in CompetitionModel');
-    const requiredAdditionalInfoTypes = this.requiredAdditionalInfos.map((info) => info.getType());
-    const additionalInfoTypes = addtionalInfos.map((info) => info.getType()) || [];
+    const requiredAdditionalInfoTypes = this._requiredAdditionalInfos.map((info) => info.type);
+    const additionalInfoTypes =
+      additionalInfos.map((info) => {
+        return info.type;
+      }) || [];
     const missingTypes = requiredAdditionalInfoTypes.filter((type) => !additionalInfoTypes.includes(type));
     if (missingTypes.length > 0) {
       throw new BusinessException(
@@ -290,8 +376,8 @@ export class CompetitionModel {
   }
 
   getDivision(divisionId: IDivision['id']): DivisionModel {
-    if (!this.divisions) throw new Error('divisions is not initialized in CompetitionModel');
-    const division = this.divisions.find((division) => division.getId() === divisionId);
+    if (!this._divisions) throw new Error('divisions is not initialized in CompetitionModel');
+    const division = this._divisions.find((division) => division.id === divisionId);
     if (!division) {
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, `Not found DivisionId: ${divisionId}`);
     }
@@ -299,8 +385,8 @@ export class CompetitionModel {
   }
 
   getManyDivisions(divisionIds: IDivision['id'][]): DivisionModel[] {
-    if (!this.divisions) throw new Error('divisions is not initialized in CompetitionModel');
-    const divisions = this.divisions.filter((division) => divisionIds.includes(division.getId()));
+    if (!this._divisions) throw new Error('divisions is not initialized in CompetitionModel');
+    const divisions = this._divisions.filter((division) => divisionIds.includes(division.id));
     if (divisions.length === 0) {
       throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, `Not found DivisionIds: ${divisionIds.join(', ')}`);
     }
@@ -308,18 +394,18 @@ export class CompetitionModel {
   }
 
   updatePosterImage(newPosterImage: CompetitionPosterImageModel) {
-    if (!this.competitionPosterImages)
+    if (!this._competitionPosterImages)
       throw new Error('competitionPosterImages is not initialized in CompetitionModel');
-    this.competitionPosterImages.forEach((posterImage) => {
+    this._competitionPosterImages.forEach((posterImage) => {
       posterImage.delete();
     });
-    this.competitionPosterImages = [...this.competitionPosterImages, newPosterImage];
+    this._competitionPosterImages = [...this._competitionPosterImages, newPosterImage];
   }
 
   deletePosterImage() {
-    if (!this.competitionPosterImages)
+    if (!this._competitionPosterImages)
       throw new Error('competitionPosterImages is not initialized in CompetitionModel');
-    this.competitionPosterImages.forEach((image) => {
+    this._competitionPosterImages.forEach((image) => {
       image.delete();
     });
   }

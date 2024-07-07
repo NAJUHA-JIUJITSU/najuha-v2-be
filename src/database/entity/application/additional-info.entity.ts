@@ -28,6 +28,6 @@ export class AdditionalInfoEntity {
   @Column('uuid')
   applicationId!: IAdditionalInfo['applicationId'];
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.additionalInfos)
+  @ManyToOne(() => ApplicationEntity, (application) => application.additionaInfos)
   application!: ApplicationEntity;
 }

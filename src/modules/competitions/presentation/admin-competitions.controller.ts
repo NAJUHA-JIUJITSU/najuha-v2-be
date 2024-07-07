@@ -27,7 +27,7 @@ import {
   CreateCompetitionPosterImageRes,
 } from './competitions.controller.dto';
 import { ICompetition } from '../domain/interface/competition.interface';
-import { IRequiredAdditionalInfo } from '../domain/interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../domain/interface/required-additional-info.interface';
 
 @Controller('admin/competitions')
 export class AdminCompetitionsController {

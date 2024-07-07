@@ -27,7 +27,7 @@ import { IDivision } from '../modules/competitions/domain/interface/division.int
 import { IPriceSnapshot } from '../modules/competitions/domain/interface/price-snapshot.interface';
 import { IEarlybirdDiscountSnapshot } from '../modules/competitions/domain/interface/earlybird-discount-snapshot.interface';
 import { ICombinationDiscountSnapshot } from '../modules/competitions/domain/interface/combination-discount-snapshot.interface';
-import { IRequiredAdditionalInfo } from '../modules/competitions/domain/interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../modules/competitions/domain/interface/required-additional-info.interface';
 import { IPlayerSnapshot } from '../modules/applications/domain/interface/player-snapshot.interface';
 import { IParticipationDivisionInfo } from '../modules/applications/domain/interface/participation-division-info.interface';
 import { IParticipationDivisionInfoSnapshot } from '../modules/applications/domain/interface/participation-division-info-snapshot.interface';
@@ -91,7 +91,7 @@ export class DataSeederService {
   private playerSnapshotsToSave: IPlayerSnapshot[] = [];
   private participationDivisionInfosToSave: IParticipationDivisionInfo[] = [];
   private participationDivisionInfosSnapshotsToSave: IParticipationDivisionInfoSnapshot[] = [];
-  private additionalInfosToSave: IAdditionalInfo[] = [];
+  private additionaInfosToSave: IAdditionalInfo[] = [];
   // Post
   private postsToSave: IPost[] = [];
   private postSnapshotsToSave: IPostSnapshot[] = [];
@@ -240,7 +240,7 @@ export class DataSeederService {
     this.participationDivisionInfosSnapshotsToSave = this.participationDivisionInfosToSave.flatMap(
       (participationDivisionInfo) => participationDivisionInfo.participationDivisionInfoSnapshots,
     );
-    this.additionalInfosToSave = applications.flatMap((application) => application.additionalInfos);
+    this.additionaInfosToSave = applications.flatMap((application) => application.additionaInfos);
     console.timeEnd('Applications preparation time');
   }
 
@@ -327,7 +327,7 @@ export class DataSeederService {
         this.batchInsert(PlayerSnapshotEntity, this.playerSnapshotsToSave),
         this.batchInsert(ParticipationDivisionInfoEntity, this.participationDivisionInfosToSave),
         this.batchInsert(ParticipationDivisionInfoSnapshotEntity, this.participationDivisionInfosSnapshotsToSave),
-        this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave),
+        this.batchInsert(AdditionalInfoEntity, this.additionaInfosToSave),
         // Post
         this.batchInsert(PostEntity, this.postsToSave),
         this.batchInsert(PostSnapshotEntity, this.postSnapshotsToSave),
@@ -405,7 +405,7 @@ export class DataSeederService {
       await this.batchInsert(PlayerSnapshotEntity, this.playerSnapshotsToSave);
       await this.batchInsert(ParticipationDivisionInfoEntity, this.participationDivisionInfosToSave);
       await this.batchInsert(ParticipationDivisionInfoSnapshotEntity, this.participationDivisionInfosSnapshotsToSave);
-      await this.batchInsert(AdditionalInfoEntity, this.additionalInfosToSave);
+      await this.batchInsert(AdditionalInfoEntity, this.additionaInfosToSave);
       // Post
       await this.batchInsert(PostEntity, this.postsToSave);
       await this.batchInsert(PostSnapshotEntity, this.postSnapshotsToSave);

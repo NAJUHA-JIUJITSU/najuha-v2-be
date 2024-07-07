@@ -1,63 +1,89 @@
 import { IParticipationDivisionInfo } from '../../../../../packages/api/lib/modules/applications/domain/interface/participation-division-info.interface';
 import { IApplicationOrderPaymentSnapshotModelData } from '../interface/application-order-payment-sanpshot.interface';
-import { ParticipationDivisionInfoPaymentModel } from './participation-division-info-pament.model';
+import { ParticipationDivisionInfoPaymentModel } from './participation-division-info-payment.model';
 
 export class ApplicationOrderPaymentSnapshotModel {
-  private id: IApplicationOrderPaymentSnapshotModelData['id'];
-  private createdAt: IApplicationOrderPaymentSnapshotModelData['createdAt'];
-  private normalAmount: IApplicationOrderPaymentSnapshotModelData['normalAmount'];
-  private earlybirdDiscountAmount: IApplicationOrderPaymentSnapshotModelData['earlybirdDiscountAmount'];
-  private combinationDiscountAmount: IApplicationOrderPaymentSnapshotModelData['combinationDiscountAmount'];
-  private totalAmount: IApplicationOrderPaymentSnapshotModelData['totalAmount'];
-  private applicationOrderId: IApplicationOrderPaymentSnapshotModelData['applicationOrderId'];
-  private participationDivisionInfoPayments: ParticipationDivisionInfoPaymentModel[];
+  /** properties */
+  private readonly _id: IApplicationOrderPaymentSnapshotModelData['id'];
+  private readonly _createdAt: IApplicationOrderPaymentSnapshotModelData['createdAt'];
+  private readonly _normalAmount: IApplicationOrderPaymentSnapshotModelData['normalAmount'];
+  private readonly _earlybirdDiscountAmount: IApplicationOrderPaymentSnapshotModelData['earlybirdDiscountAmount'];
+  private readonly _combinationDiscountAmount: IApplicationOrderPaymentSnapshotModelData['combinationDiscountAmount'];
+  private readonly _totalAmount: IApplicationOrderPaymentSnapshotModelData['totalAmount'];
+  private readonly _applicationOrderId: IApplicationOrderPaymentSnapshotModelData['applicationOrderId'];
+  /** relations */
+  private readonly _participationDivisionInfoPayments: ParticipationDivisionInfoPaymentModel[];
 
   constructor(data: IApplicationOrderPaymentSnapshotModelData) {
-    this.id = data.id;
-    this.createdAt = data.createdAt;
-    this.normalAmount = data.normalAmount;
-    this.earlybirdDiscountAmount = data.earlybirdDiscountAmount;
-    this.combinationDiscountAmount = data.combinationDiscountAmount;
-    this.totalAmount = data.totalAmount;
-    this.applicationOrderId = data.applicationOrderId;
-    this.participationDivisionInfoPayments = data.participationDivisionInfoPayments.map(
+    this._id = data.id;
+    this._createdAt = data.createdAt;
+    this._normalAmount = data.normalAmount;
+    this._earlybirdDiscountAmount = data.earlybirdDiscountAmount;
+    this._combinationDiscountAmount = data.combinationDiscountAmount;
+    this._totalAmount = data.totalAmount;
+    this._applicationOrderId = data.applicationOrderId;
+    this._participationDivisionInfoPayments = data.participationDivisionInfoPayments.map(
       (participationDivisionInfoPayment) => new ParticipationDivisionInfoPaymentModel(participationDivisionInfoPayment),
     );
   }
 
   toData(): IApplicationOrderPaymentSnapshotModelData {
     return {
-      id: this.id,
-      createdAt: this.createdAt,
-      normalAmount: this.normalAmount,
-      earlybirdDiscountAmount: this.earlybirdDiscountAmount,
-      combinationDiscountAmount: this.combinationDiscountAmount,
-      totalAmount: this.totalAmount,
-      applicationOrderId: this.applicationOrderId,
-      participationDivisionInfoPayments: this.participationDivisionInfoPayments.map(
+      id: this._id,
+      createdAt: this._createdAt,
+      normalAmount: this._normalAmount,
+      earlybirdDiscountAmount: this._earlybirdDiscountAmount,
+      combinationDiscountAmount: this._combinationDiscountAmount,
+      totalAmount: this._totalAmount,
+      applicationOrderId: this._applicationOrderId,
+      participationDivisionInfoPayments: this._participationDivisionInfoPayments.map(
         (participationDivisionInfoPayment) => participationDivisionInfoPayment.toData(),
       ),
     };
   }
 
   approve() {
-    this.participationDivisionInfoPayments.forEach((participationDivisionInfoPayment) =>
+    this._participationDivisionInfoPayments.forEach((participationDivisionInfoPayment) =>
       participationDivisionInfoPayment.approve(),
     );
   }
 
-  getTotalAmount() {
-    return this.totalAmount;
+  get id() {
+    return this._id;
   }
 
-  getParticipationDivisionInfoPayments() {
-    return this.participationDivisionInfoPayments;
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get normalAmount() {
+    return this._normalAmount;
+  }
+
+  get earlybirdDiscountAmount() {
+    return this._earlybirdDiscountAmount;
+  }
+
+  get combinationDiscountAmount() {
+    return this._combinationDiscountAmount;
+  }
+
+  get totalAmount() {
+    return this._totalAmount;
+  }
+
+  get applicationOrderId() {
+    return this._applicationOrderId;
+  }
+
+  get participationDivisionInfoPayments() {
+    return [...this._participationDivisionInfoPayments];
   }
 
   cancelParticipationDivisionInfoPayments(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
-    this.participationDivisionInfoPayments
+    this._participationDivisionInfoPayments
       .filter((participationDivisionInfoPayment) =>
-        participationDivisionInfoIds.includes(participationDivisionInfoPayment.getParticipationDivisionInfoId()),
+        participationDivisionInfoIds.includes(participationDivisionInfoPayment.participationDivisionInfoId),
       )
       .forEach((participationDivisionInfoPayment) => participationDivisionInfoPayment.cancel());
   }

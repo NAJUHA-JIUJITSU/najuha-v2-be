@@ -137,7 +137,7 @@ export class UserRegisterController {
     return createResponseForm(
       await this.RegisterAppService.registerUser({
         userRegisterDto: { id: req['userId'], ...body.user },
-        consentPolicyTypes: body.consentPolicyTypes,
+        consentPolicyTypes: [...body.consentPolicyTypes],
       }),
     );
   }

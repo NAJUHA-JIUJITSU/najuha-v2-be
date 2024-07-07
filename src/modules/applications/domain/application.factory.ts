@@ -37,7 +37,7 @@ export class ApplicationFactory {
       competition,
       participationDivisionIds,
     );
-    const additionalInfos = this.createAdditionalInfos(applicationId, additionalInfoCreateDtos ?? []);
+    const additionaInfos = this.createAdditionalInfos(applicationId, additionalInfoCreateDtos ?? []);
     return {
       id: applicationId,
       type: applicationType,
@@ -49,7 +49,7 @@ export class ApplicationFactory {
       deletedAt: null,
       playerSnapshots: [playerSnapshot],
       participationDivisionInfos,
-      additionalInfos,
+      additionaInfos,
       applicationOrders: [],
     };
   }
@@ -148,26 +148,26 @@ export class ApplicationFactory {
   ): IApplicationOrderModelData {
     const applicationOrderId = uuidv7();
 
-    const earlybirdDiscountSnapshot = competition.getLatestEarlybirdDiscountSnapshot();
-    const combinationDiscountSnapshot = competition.getLatestCombinationDiscountSnapshot();
-    const expectedPayment = application.getExpectedPayment();
+    const earlybirdDiscountSnapshot = competition.latestEarlybirdDiscountSnapshot;
+    const combinationDiscountSnapshot = competition.latestCombinationDiscountSnapshot;
+    const expectedPayment = application.expectedPayment;
 
     const applicationOrderPaymentSnapshotId = uuidv7();
-    const participationDivisionInfos = application.getParticipationDivisionInfos();
+    const participationDivisionInfos = application.participationDivisionInfos;
 
     return {
       id: applicationOrderId,
       createdAt: new Date(),
-      orderId: `${applicationOrderId}_${competition.getCompetitionPaymentId()}`,
+      orderId: `${applicationOrderId}_${competition.competitionPaymentId}`,
       paymentKey: null,
-      orderName: competition.getTitle().slice(0, 100),
-      customerName: user.getName(),
-      customerEmail: user.getEmail().slice(0, 100),
+      orderName: competition.title.slice(0, 100),
+      customerName: user.name,
+      customerEmail: user.email.slice(0, 100),
       status: 'READY',
       isPayed: false,
-      applicationId: application.getId(),
-      earlybirdDiscountSnapshotId: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.getId() : null,
-      combinationDiscountSnapshotId: combinationDiscountSnapshot ? combinationDiscountSnapshot.getId() : null,
+      applicationId: application.id,
+      earlybirdDiscountSnapshotId: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.id : null,
+      combinationDiscountSnapshotId: combinationDiscountSnapshot ? combinationDiscountSnapshot.id : null,
       earlybirdDiscountSnapshot: earlybirdDiscountSnapshot ? earlybirdDiscountSnapshot.toData() : null,
       combinationDiscountSnapshot: combinationDiscountSnapshot ? combinationDiscountSnapshot.toData() : null,
       applicationOrderPaymentSnapshots: [
@@ -185,18 +185,15 @@ export class ApplicationFactory {
               createdAt: new Date(),
               status: 'READY',
               applicationOrderPaymentSnapshotId,
-              participationDivisionInfoId: participationDivisionInfo.getId(),
-              divisionId: participationDivisionInfo.getLatestParticipationDivisionInfoSnapshot().division.getId(),
-              priceSnapshotId: participationDivisionInfo
-                .getLatestParticipationDivisionInfoSnapshot()
-                .division.getLatestPriceSnapshot()
-                .getId(),
+              participationDivisionInfoId: participationDivisionInfo.id,
+              divisionId: participationDivisionInfo.getLatestParticipationDivisionInfoSnapshot().division.id,
+              priceSnapshotId:
+                participationDivisionInfo.getLatestParticipationDivisionInfoSnapshot().division.latestPriceSnapshot.id,
               participationDivisionInfo: participationDivisionInfo.toData(),
               division: participationDivisionInfo.getLatestParticipationDivisionInfoSnapshot().division.toData(),
               priceSnapshot: participationDivisionInfo
                 .getLatestParticipationDivisionInfoSnapshot()
-                .division.getLatestPriceSnapshot()
-                .toData(),
+                .division.latestPriceSnapshot.toData(),
             };
           }),
         },
@@ -206,42 +203,38 @@ export class ApplicationFactory {
 
   createApplicationOrderPaymentSnapshot(application: ApplicationModel): IApplicationOrderPaymentSnapshotModelData {
     const doneStatusOrder = application.getPayedApplicationOrder();
-    const earlybirdDiscountSnapshot = doneStatusOrder.getEarlybirdDiscountSnapshot();
-    const combinationDiscountSnapshot = doneStatusOrder.getCombinationDiscountSnapshot();
+    const earlybirdDiscountSnapshot = doneStatusOrder.earlybirdDiscountSnapshot;
+    const combinationDiscountSnapshot = doneStatusOrder.combinationDiscountSnapshot;
 
-    const divistion = doneStatusOrder
-      .getLatestApplicationOrderPaymentSnapshot()
-      .getParticipationDivisionInfoPayments()
+    const divisions = doneStatusOrder.latestApplicationOrderPaymentSnapshot.participationDivisionInfoPayments
       .filter((participationDivisionInfoPayment) => {
-        return participationDivisionInfoPayment.getStatus() === 'DONE';
+        return participationDivisionInfoPayment.status === 'DONE';
       })
       .map((participationDivisionInfoPayment) => {
-        return participationDivisionInfoPayment.getDivision();
+        return participationDivisionInfoPayment.division;
       });
 
-    const priceSnapshot = doneStatusOrder
-      .getLatestApplicationOrderPaymentSnapshot()
-      .getParticipationDivisionInfoPayments()
+    const priceSnapshots = doneStatusOrder.latestApplicationOrderPaymentSnapshot.participationDivisionInfoPayments
       .filter((participationDivisionInfoPayment) => {
-        return participationDivisionInfoPayment.getStatus() === 'DONE';
+        return participationDivisionInfoPayment.status === 'DONE';
       })
       .map((participationDivisionInfoPayment) => {
-        return participationDivisionInfoPayment.getPriceSnapshot();
+        return participationDivisionInfoPayment.priceSnapshot;
       });
 
     const reCalculatedPayment = CalculatePaymentService.calculate(
-      divistion,
-      priceSnapshot,
+      divisions,
+      priceSnapshots,
       earlybirdDiscountSnapshot,
       combinationDiscountSnapshot,
     );
 
-    const doneStatusParticipationDivisionInfoPayments = doneStatusOrder
-      .getLatestApplicationOrderPaymentSnapshot()
-      .getParticipationDivisionInfoPayments()
-      .filter((participationDivisionInfoPayment) => {
-        return participationDivisionInfoPayment.getStatus() === 'DONE';
-      });
+    const doneStatusParticipationDivisionInfoPayments =
+      doneStatusOrder.latestApplicationOrderPaymentSnapshot.participationDivisionInfoPayments.filter(
+        (participationDivisionInfoPayment) => {
+          return participationDivisionInfoPayment.status === 'DONE';
+        },
+      );
 
     const newApplicationOrderPaymentSnapshotId = uuidv7();
     return {
@@ -251,7 +244,7 @@ export class ApplicationFactory {
       earlybirdDiscountAmount: reCalculatedPayment.earlybirdDiscountAmount,
       combinationDiscountAmount: reCalculatedPayment.combinationDiscountAmount,
       totalAmount: reCalculatedPayment.totalAmount,
-      applicationOrderId: application.getId(),
+      applicationOrderId: application.id,
       participationDivisionInfoPayments: doneStatusParticipationDivisionInfoPayments.map(
         (participationDivisionInfoPayment) => {
           return {
@@ -259,12 +252,12 @@ export class ApplicationFactory {
             createdAt: new Date(),
             status: 'DONE',
             applicationOrderPaymentSnapshotId: newApplicationOrderPaymentSnapshotId,
-            participationDivisionInfoId: participationDivisionInfoPayment.getParticipationDivisionInfoId(),
-            divisionId: participationDivisionInfoPayment.getDivisionId(),
-            priceSnapshotId: participationDivisionInfoPayment.getPriceSnapshotId(),
-            participationDivisionInfo: participationDivisionInfoPayment.getParticipationDivisionInfo().toData(),
-            division: participationDivisionInfoPayment.getDivision().toData(),
-            priceSnapshot: participationDivisionInfoPayment.getPriceSnapshot().toData(),
+            participationDivisionInfoId: participationDivisionInfoPayment.participationDivisionInfoId,
+            divisionId: participationDivisionInfoPayment.divisionId,
+            priceSnapshotId: participationDivisionInfoPayment.priceSnapshotId,
+            participationDivisionInfo: participationDivisionInfoPayment.participationDivisionInfo.toData(),
+            division: participationDivisionInfoPayment.division.toData(),
+            priceSnapshot: participationDivisionInfoPayment.priceSnapshot.toData(),
           };
         },
       ),

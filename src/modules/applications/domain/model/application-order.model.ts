@@ -6,153 +6,188 @@ import { IParticipationDivisionInfo } from '../interface/participation-division-
 import { ApplicationOrderPaymentSnapshotModel } from './application-order-payment-snapshot.model';
 
 export class ApplicationOrderModel {
-  id: IApplicationOrderModelData['id'];
-  createdAt: IApplicationOrderModelData['createdAt'];
-  orderId: IApplicationOrderModelData['orderId'];
-  orderName: IApplicationOrderModelData['orderName'];
-  paymentKey: IApplicationOrderModelData['paymentKey'];
-  customerName: IApplicationOrderModelData['customerName'];
-  customerEmail: IApplicationOrderModelData['customerEmail'];
-  status: IApplicationOrderModelData['status'];
-  isPayed: IApplicationOrderModelData['isPayed'];
-  applicationId: IApplicationOrderModelData['applicationId'];
-  earlybirdDiscountSnapshotId: IApplicationOrderModelData['earlybirdDiscountSnapshotId'];
-  combinationDiscountSnapshotId: IApplicationOrderModelData['combinationDiscountSnapshotId'];
-  applicationOrderPaymentSanpshots: ApplicationOrderPaymentSnapshotModel[];
-  earlybirdDiscountSnapshot: EarlybirdDiscountSnapshotModel | null;
-  combinationDiscountSnapshot: CombinationDiscountSnapshotModel | null;
+  /** properties */
+  private readonly _id: IApplicationOrderModelData['id'];
+  private readonly _createdAt: IApplicationOrderModelData['createdAt'];
+  private readonly _orderId: IApplicationOrderModelData['orderId'];
+  private readonly _orderName: IApplicationOrderModelData['orderName'];
+  private readonly _customerName: IApplicationOrderModelData['customerName'];
+  private readonly _customerEmail: IApplicationOrderModelData['customerEmail'];
+  private readonly _applicationId: IApplicationOrderModelData['applicationId'];
+  private _paymentKey: IApplicationOrderModelData['paymentKey'];
+  private _status: IApplicationOrderModelData['status'];
+  private _isPayed: IApplicationOrderModelData['isPayed'];
+  /** relations */
+  private readonly _earlybirdDiscountSnapshotId: IApplicationOrderModelData['earlybirdDiscountSnapshotId'];
+  private readonly _combinationDiscountSnapshotId: IApplicationOrderModelData['combinationDiscountSnapshotId'];
+  private readonly _applicationOrderPaymentSanpshots: ApplicationOrderPaymentSnapshotModel[];
+  private readonly _earlybirdDiscountSnapshot: EarlybirdDiscountSnapshotModel | null;
+  private readonly _combinationDiscountSnapshot: CombinationDiscountSnapshotModel | null;
 
   constructor(data: IApplicationOrderModelData) {
-    this.id = data.id;
-    this.createdAt = data.createdAt;
-    this.orderId = data.orderId;
-    this.paymentKey = data.paymentKey;
-    this.orderName = data.orderName;
-    this.customerName = data.customerName;
-    this.customerEmail = data.customerEmail;
-    this.status = data.status;
-    this.isPayed = data.isPayed;
-    this.applicationId = data.applicationId;
-    this.earlybirdDiscountSnapshotId = data.earlybirdDiscountSnapshotId;
-    this.combinationDiscountSnapshotId = data.combinationDiscountSnapshotId;
-    this.applicationOrderPaymentSanpshots = data.applicationOrderPaymentSnapshots.map(
+    this._id = data.id;
+    this._createdAt = data.createdAt;
+    this._orderId = data.orderId;
+    this._paymentKey = data.paymentKey;
+    this._orderName = data.orderName;
+    this._customerName = data.customerName;
+    this._customerEmail = data.customerEmail;
+    this._status = data.status;
+    this._isPayed = data.isPayed;
+    this._applicationId = data.applicationId;
+    this._earlybirdDiscountSnapshotId = data.earlybirdDiscountSnapshotId;
+    this._combinationDiscountSnapshotId = data.combinationDiscountSnapshotId;
+    this._applicationOrderPaymentSanpshots = data.applicationOrderPaymentSnapshots.map(
       (applicationOrderPaymentSnapshot) => new ApplicationOrderPaymentSnapshotModel(applicationOrderPaymentSnapshot),
     );
-    this.earlybirdDiscountSnapshot = data.earlybirdDiscountSnapshot
+    this._earlybirdDiscountSnapshot = data.earlybirdDiscountSnapshot
       ? new EarlybirdDiscountSnapshotModel(data.earlybirdDiscountSnapshot)
       : null;
-    this.combinationDiscountSnapshot = data.combinationDiscountSnapshot
+    this._combinationDiscountSnapshot = data.combinationDiscountSnapshot
       ? new CombinationDiscountSnapshotModel(data.combinationDiscountSnapshot)
       : null;
   }
 
   toData(): IApplicationOrderModelData {
     return {
-      id: this.id,
-      createdAt: this.createdAt,
-      orderId: this.orderId,
-      paymentKey: this.paymentKey,
-      orderName: this.orderName,
-      customerName: this.customerName,
-      customerEmail: this.customerEmail,
-      status: this.status,
-      isPayed: this.isPayed,
-      applicationId: this.applicationId,
-      earlybirdDiscountSnapshotId: this.earlybirdDiscountSnapshotId,
-      combinationDiscountSnapshotId: this.combinationDiscountSnapshotId,
-      applicationOrderPaymentSnapshots: this.applicationOrderPaymentSanpshots.map((applicationOrderPaymentSnapshot) =>
+      id: this._id,
+      createdAt: this._createdAt,
+      orderId: this._orderId,
+      paymentKey: this._paymentKey,
+      orderName: this._orderName,
+      customerName: this._customerName,
+      customerEmail: this._customerEmail,
+      status: this._status,
+      isPayed: this._isPayed,
+      applicationId: this._applicationId,
+      earlybirdDiscountSnapshotId: this._earlybirdDiscountSnapshotId,
+      combinationDiscountSnapshotId: this._combinationDiscountSnapshotId,
+      applicationOrderPaymentSnapshots: this._applicationOrderPaymentSanpshots.map((applicationOrderPaymentSnapshot) =>
         applicationOrderPaymentSnapshot.toData(),
       ),
-      earlybirdDiscountSnapshot: this.earlybirdDiscountSnapshot ? this.earlybirdDiscountSnapshot.toData() : null,
-      combinationDiscountSnapshot: this.combinationDiscountSnapshot ? this.combinationDiscountSnapshot.toData() : null,
+      earlybirdDiscountSnapshot: this._earlybirdDiscountSnapshot ? this._earlybirdDiscountSnapshot.toData() : null,
+      combinationDiscountSnapshot: this._combinationDiscountSnapshot
+        ? this._combinationDiscountSnapshot.toData()
+        : null,
     };
   }
 
-  getOrderId() {
-    return this.orderId;
+  get id() {
+    return this._id;
   }
 
-  getStatus() {
-    return this.status;
+  get createdAt() {
+    return this._createdAt;
   }
 
-  getIsPayed() {
-    return this.isPayed;
+  get orderId() {
+    return this._orderId;
   }
 
-  getPaymentKey() {
-    if (!this.paymentKey) {
-      throw new Error('PaymentKey is null');
-    }
-    return this.paymentKey;
+  get orderName() {
+    return this._orderName;
   }
 
-  getEarlybirdDiscountSnapshot() {
-    return this.earlybirdDiscountSnapshot;
+  get paymentKey() {
+    if (!this._paymentKey) throw new Error('PaymentKey is null, please check the payment status');
+    return this._paymentKey;
   }
 
-  getCombinationDiscountSnapshot() {
-    return this.combinationDiscountSnapshot;
+  get customerName() {
+    return this._customerName;
   }
 
-  getLatestApplicationOrderPaymentSnapshot() {
-    if (this.applicationOrderPaymentSanpshots.length === 0) {
+  get customerEmail() {
+    return this._customerEmail;
+  }
+
+  get status() {
+    return this._status;
+  }
+
+  get isPayed() {
+    return this._isPayed;
+  }
+
+  get applicationId() {
+    return this._applicationId;
+  }
+
+  get earlybirdDiscountSnapshotId() {
+    return this._earlybirdDiscountSnapshotId;
+  }
+
+  get combinationDiscountSnapshotId() {
+    return this._combinationDiscountSnapshotId;
+  }
+
+  get applicationOrderPaymentSanpshots() {
+    return [...this._applicationOrderPaymentSanpshots];
+  }
+
+  get earlybirdDiscountSnapshot() {
+    return this._earlybirdDiscountSnapshot;
+  }
+
+  get combinationDiscountSnapshot() {
+    return this._combinationDiscountSnapshot;
+  }
+
+  get latestApplicationOrderPaymentSnapshot() {
+    if (this._applicationOrderPaymentSanpshots.length === 0) {
       throw new Error('ApplicationOrderPaymentSnapshot is empty');
     }
-    return this.applicationOrderPaymentSanpshots[this.applicationOrderPaymentSanpshots.length - 1];
+    return this._applicationOrderPaymentSanpshots[this._applicationOrderPaymentSanpshots.length - 1];
   }
 
-  getSencodLatestApplicationOrderPaymentSnapshot() {
-    if (this.applicationOrderPaymentSanpshots.length < 2) {
+  get secondToLastApplicationOrderPaymentSnapshot() {
+    if (this._applicationOrderPaymentSanpshots.length < 2) {
       throw new Error('ApplicationOrderPaymentSnapshot is empty');
     }
-    return this.applicationOrderPaymentSanpshots[this.applicationOrderPaymentSanpshots.length - 2];
+    return this._applicationOrderPaymentSanpshots[this._applicationOrderPaymentSanpshots.length - 2];
   }
 
   approve(amount: number, paymentKey: IApplicationOrderModelData['paymentKey']) {
-    if (this.status !== 'READY') throw new Error('Only READY status can be approved');
-    if (this.getLatestApplicationOrderPaymentSnapshot().getTotalAmount() !== amount) {
+    if (this._status !== 'READY') throw new Error('Only READY status can be approved');
+    if (this.latestApplicationOrderPaymentSnapshot.totalAmount !== amount) {
       throw new BusinessException(ApplicationsErrors.APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH);
     }
 
-    const latestApplicationOrderPaymentSnapshot = this.getLatestApplicationOrderPaymentSnapshot();
+    const latestApplicationOrderPaymentSnapshot = this.latestApplicationOrderPaymentSnapshot;
     latestApplicationOrderPaymentSnapshot.approve();
 
-    this.status = 'DONE';
-    this.isPayed = true;
-    this.paymentKey = paymentKey;
+    this._status = 'DONE';
+    this._isPayed = true;
+    this._paymentKey = paymentKey;
   }
 
   addApplicationOrderPaymentSnapshot(applicationOrderPaymentSnapshot: ApplicationOrderPaymentSnapshotModel) {
-    this.applicationOrderPaymentSanpshots.push(applicationOrderPaymentSnapshot);
+    this._applicationOrderPaymentSanpshots.push(applicationOrderPaymentSnapshot);
   }
 
   cancelParticipationDivisionInfoPayments(participationDivisionInfoIds: IParticipationDivisionInfo['id'][]) {
-    const latestApplicationOrderPaymentSnapshot = this.getLatestApplicationOrderPaymentSnapshot();
-    latestApplicationOrderPaymentSnapshot.cancelParticipationDivisionInfoPayments(participationDivisionInfoIds);
+    this.latestApplicationOrderPaymentSnapshot.cancelParticipationDivisionInfoPayments(participationDivisionInfoIds);
     if (
       participationDivisionInfoIds.length ===
-      latestApplicationOrderPaymentSnapshot.getParticipationDivisionInfoPayments().length
+      this.latestApplicationOrderPaymentSnapshot.participationDivisionInfoPayments.length
     ) {
-      this.status = 'CANCELED';
+      this._status = 'CANCELED';
     } else {
-      this.status = 'PARTIAL_CANCELED';
+      this._status = 'PARTIAL_CANCELED';
     }
   }
 
-  getCancelAmount() {
-    if (this.status === 'CANCELED') {
-      return this.getLatestApplicationOrderPaymentSnapshot().getTotalAmount();
-    } else if (this.status === 'PARTIAL_CANCELED') {
-      const latestApplicationOrderPaymentSnapshot = this.getLatestApplicationOrderPaymentSnapshot();
-      const secondLatestApplicationOrderPaymentSnapshot = this.getSencodLatestApplicationOrderPaymentSnapshot();
+  calculateCancelAmount() {
+    if (this._status === 'CANCELED') {
+      return this.latestApplicationOrderPaymentSnapshot.totalAmount;
+    } else if (this._status === 'PARTIAL_CANCELED') {
+      const latestApplicationOrderPaymentSnapshot = this.latestApplicationOrderPaymentSnapshot;
+      const secondLatestApplicationOrderPaymentSnapshot = this.secondToLastApplicationOrderPaymentSnapshot;
 
       return Math.abs(
-        latestApplicationOrderPaymentSnapshot.getTotalAmount() -
-          secondLatestApplicationOrderPaymentSnapshot.getTotalAmount(),
+        latestApplicationOrderPaymentSnapshot.totalAmount - secondLatestApplicationOrderPaymentSnapshot.totalAmount,
       );
     }
-    // todo!!!: 에러 표준화
     throw new Error('Only CANCELED or PARTIAL_CANCELED status can be refunded');
   }
 }

@@ -1153,8 +1153,6 @@ describe('E2E u-6 applications TEST', () => {
       if (!applicationOrders) throw new Error('applicationOrders is not exist in application');
 
       // tosspayment-sdk 위젯에서 결제 요청 동장 시뮬레이션
-      const nextYear = new Date().getFullYear() + 1;
-      const cardExpirationYear = nextYear.toString().slice(-2);
       const { orderId, orderName, customerName, customerEmail } = applicationOrders[applicationOrders.length - 1];
       const amount =
         applicationOrders[applicationOrders.length - 1].applicationOrderPaymentSnapshots[applicationOrders.length - 1]
@@ -1162,7 +1160,7 @@ describe('E2E u-6 applications TEST', () => {
       const keyInRet = await paymentsAppService.keyIn({
         method: 'card',
         cardNumber: '1111222233334444',
-        cardExpirationYear,
+        cardExpirationYear: (new Date().getFullYear() + 1).toString().slice(-2),
         cardExpirationMonth: '04',
         orderId,
         orderName,
@@ -1272,8 +1270,6 @@ describe('E2E u-6 applications TEST', () => {
       if (!applicationOrders) throw new Error('applicationOrders is not exist in application');
 
       // tosspayment-sdk 위젯에서 결제 요청 동장 시뮬레이션
-      const nextYear = new Date().getFullYear() + 1;
-      const cardExpirationYear = nextYear.toString().slice(-2);
       const { orderId, orderName, customerName, customerEmail } = applicationOrders[applicationOrders.length - 1];
       const amount =
         applicationOrders[applicationOrders.length - 1].applicationOrderPaymentSnapshots[applicationOrders.length - 1]
@@ -1281,7 +1277,7 @@ describe('E2E u-6 applications TEST', () => {
       const keyInRet = await paymentsAppService.keyIn({
         method: 'card',
         cardNumber: '1111222233334444',
-        cardExpirationYear,
+        cardExpirationYear: (new Date().getFullYear() + 1).toString().slice(-2),
         cardExpirationMonth: '04',
         orderId,
         orderName,
@@ -1382,8 +1378,6 @@ describe('E2E u-6 applications TEST', () => {
       if (!applicationOrders) throw new Error('applicationOrders is not exist in application');
 
       // tosspayment-sdk 위젯에서 결제 요청 동장 시뮬레이션
-      const nextYear = new Date().getFullYear() + 1;
-      const cardExpirationYear = nextYear.toString().slice(-2);
       const { orderId, orderName, customerName, customerEmail } = applicationOrders[applicationOrders.length - 1];
       const amount =
         applicationOrders[applicationOrders.length - 1].applicationOrderPaymentSnapshots[applicationOrders.length - 1]
@@ -1391,7 +1385,7 @@ describe('E2E u-6 applications TEST', () => {
       const keyInRet = await paymentsAppService.keyIn({
         method: 'card',
         cardNumber: '1111222233334444',
-        cardExpirationYear,
+        cardExpirationYear: (new Date().getFullYear() + 1).toString().slice(-2),
         cardExpirationMonth: '04',
         orderId,
         orderName,
@@ -1547,8 +1541,6 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('todo!!! 결제 주문 승인 실패 - 결제 취소된 주문 승인 요청', async () => {});
-
-    it('todo!!! 결제 주문 승인 실패 - tosspayment error', async () => {});
   });
 
   describe('u-6-10 cancelApplicationOrder', () => {

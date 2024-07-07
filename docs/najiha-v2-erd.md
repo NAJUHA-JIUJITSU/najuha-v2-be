@@ -161,10 +161,12 @@ erDiagram
     uuid id PK
     timestamptz createdAt
     varchar orderId
+    varchar paymentKey "nullable"
     varchar orderName
     varchar customerName
     varchar customerEmail
     varchar status
+    boolean isPayed
     uuid applicationId FK
     uuid earlybirdDiscountSnapshotId FK "nullable"
     uuid combinationDiscountSnapshotId FK "nullable"
@@ -297,10 +299,12 @@ ApplicationOrderEntity
   - `id`
   - `createdAt`
   - `orderId`
+  - `paymentKey`
   - `orderName`
   - `customerName`
   - `customerEmail`
   - `status`
+  - `isPayed`
   - `applicationId`
   - `earlybirdDiscountSnapshotId`
   - `combinationDiscountSnapshotId`

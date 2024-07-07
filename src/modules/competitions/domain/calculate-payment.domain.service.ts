@@ -24,7 +24,7 @@ export class CalculatePaymentService {
 
   private static calculateNormalAmount(priceSnapshots: PriceSnapshotModel[]): number {
     return priceSnapshots.reduce((acc, priceSnapshot) => {
-      acc += priceSnapshot.getPrice();
+      acc += priceSnapshot.price;
       return acc;
     }, 0);
   }
@@ -34,9 +34,9 @@ export class CalculatePaymentService {
     now: Date,
   ): number {
     if (earlybirdDiscountSnapshot === null) return 0;
-    if (now < earlybirdDiscountSnapshot.getEarlybirdStartDate()) return 0;
-    if (now > earlybirdDiscountSnapshot.getEarlybirdEndDate()) return 0;
-    return earlybirdDiscountSnapshot.getDiscountAmount();
+    if (now < earlybirdDiscountSnapshot.earlybirdStartDate) return 0;
+    if (now > earlybirdDiscountSnapshot.earlybirdEndDate) return 0;
+    return earlybirdDiscountSnapshot.discountAmount;
   }
 
   private static calculateCombinationDiscountAmount(
@@ -46,8 +46,8 @@ export class CalculatePaymentService {
     if (combinationDiscountSnapshot === null) return 0;
 
     const divisionUnits = divisions.map((division) => ({
-      weightType: typia.is<Absolute>(division.getWeight()) ? 'ABSOLUTE' : 'WEIGHT',
-      uniformType: division.getUniform(),
+      weightType: typia.is<Absolute>(division.weight) ? 'ABSOLUTE' : 'WEIGHT',
+      uniformType: division.uniform,
     }));
 
     let maxDiscountAmount = 0;

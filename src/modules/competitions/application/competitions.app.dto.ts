@@ -1,13 +1,12 @@
 import { IUser } from '../../users/domain/interface/user.interface';
 import { ICombinationDiscountSnapshotCreateDto } from '../domain/interface/combination-discount-snapshot.interface';
 import {
-  ICompetitionBasicInfo,
   ICompetition,
+  ICompetitionBasicInfo,
   ICompetitionCreateDto,
   ICompetitionSummary,
   ICompetitionQueryOptions,
   ICompetitionUpdateDto,
-  ICompetitionDetail,
 } from '../domain/interface/competition.interface';
 import { IDivisionPack } from '../domain/interface/division-pack.interface';
 import { IEarlybirdDiscountSnapshotCreateDto } from '../domain/interface/earlybird-discount-snapshot.interface';
@@ -15,7 +14,7 @@ import {
   IRequiredAdditionalInfo,
   IRequiredAdditionalInfoCreateDto,
   IRequiredAdditionalInfoUpdateDto,
-} from '../domain/interface/required-addtional-info.interface';
+} from '../domain/interface/required-additional-info.interface';
 import { TPaginationParam, TPaginationRet } from '../../../common/common-types';
 import { ICompetitionPosterImageCreateDto } from '../domain/interface/competition-poster-image.interface';
 
@@ -85,43 +84,43 @@ export interface CreateCompetitionRet {
 }
 
 export interface UpdateCompetitionRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface UpdateCompetitionStatusRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface FindCompetitionsRet extends TPaginationRet<{ competitions: ICompetitionSummary[] }> {}
 
 export interface GetCompetitionRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface CreateCompetitionDivisionsRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface CreateCompetitionEarlybirdDiscountSnapshotRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface CreateCompetitionCombinationDiscountSnapshotRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface CreateCompetitionRequiredAdditionalInfoRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface UpdateCompetitionRequiredAdditionalInfoRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface DeleteCompetitionRequiredAdditionalInfoRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }
 
 export interface CreateCompetitionPosterImageRet {
-  competition: ICompetitionDetail;
+  competition: ICompetition;
 }

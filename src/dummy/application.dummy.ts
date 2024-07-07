@@ -429,7 +429,7 @@ export class ApplicationDummyBuilder {
       deletedAt: null,
       playerSnapshots: [],
       participationDivisionInfos: [],
-      additionalInfos: [],
+      additionaInfos: [],
       applicationOrders: [],
     };
   }
@@ -489,7 +489,7 @@ export class ApplicationDummyBuilder {
         participationDivisionInfoSnapshots: [
           {
             id: uuidv7(),
-            divisionId: division.getId(),
+            divisionId: division.id,
             division: division.toData(),
             participationDivisionInfoId,
             createdAt: new Date(),
@@ -501,7 +501,7 @@ export class ApplicationDummyBuilder {
   }
 
   public setAdditionalInfos(additionalInfoCreateDtos: IAdditionalInfoCreateDto[]): this {
-    this.application.additionalInfos = additionalInfoCreateDtos.map((dto) => ({
+    this.application.additionaInfos = additionalInfoCreateDtos.map((dto) => ({
       id: uuidv7(),
       applicationId: this.application.id,
       type: dto.type,
@@ -540,13 +540,13 @@ export class ApplicationDummyFactory {
       )
       .setParticipationDivisionInfos(
         new CompetitionModel(this.competition),
-        this.getParticipationDivisionIds(participationDivisionCombination),
+        this.getExtractParticipationDivisionIds(participationDivisionCombination),
       )
       .setAdditionalInfos(this.createAdditionalInfos())
       .build();
   }
 
-  private getParticipationDivisionIds(
+  private getExtractParticipationDivisionIds(
     participationDivisionCombination: IParticipationDivisionCombination,
   ): IDivision['id'][] {
     return participationDivisionCombination.map((unit) => {

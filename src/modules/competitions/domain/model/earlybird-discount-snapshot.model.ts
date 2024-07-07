@@ -1,46 +1,55 @@
 import { IEarlybirdDiscountSnapshotModelData } from '../interface/earlybird-discount-snapshot.interface';
 
 export class EarlybirdDiscountSnapshotModel {
-  private readonly id: IEarlybirdDiscountSnapshotModelData['id'];
-  private readonly earlybirdStartDate: IEarlybirdDiscountSnapshotModelData['earlybirdStartDate'];
-  private readonly earlybirdEndDate: IEarlybirdDiscountSnapshotModelData['earlybirdEndDate'];
-  private readonly discountAmount: IEarlybirdDiscountSnapshotModelData['discountAmount'];
-  private readonly createdAt: IEarlybirdDiscountSnapshotModelData['createdAt'];
-  private readonly competitionId: IEarlybirdDiscountSnapshotModelData['competitionId'];
+  /** properties */
+  private readonly _id: IEarlybirdDiscountSnapshotModelData['id'];
+  private readonly _earlybirdStartDate: IEarlybirdDiscountSnapshotModelData['earlybirdStartDate'];
+  private readonly _earlybirdEndDate: IEarlybirdDiscountSnapshotModelData['earlybirdEndDate'];
+  private readonly _discountAmount: IEarlybirdDiscountSnapshotModelData['discountAmount'];
+  private readonly _createdAt: IEarlybirdDiscountSnapshotModelData['createdAt'];
+  private readonly _competitionId: IEarlybirdDiscountSnapshotModelData['competitionId'];
 
   constructor(data: IEarlybirdDiscountSnapshotModelData) {
-    this.id = data.id;
-    this.earlybirdStartDate = data.earlybirdStartDate;
-    this.earlybirdEndDate = data.earlybirdEndDate;
-    this.discountAmount = data.discountAmount;
-    this.createdAt = data.createdAt;
-    this.competitionId = data.competitionId;
+    this._id = data.id;
+    this._earlybirdStartDate = data.earlybirdStartDate;
+    this._earlybirdEndDate = data.earlybirdEndDate;
+    this._discountAmount = data.discountAmount;
+    this._createdAt = data.createdAt;
+    this._competitionId = data.competitionId;
   }
 
   toData(): IEarlybirdDiscountSnapshotModelData {
     return {
-      id: this.id,
-      earlybirdStartDate: this.earlybirdStartDate,
-      earlybirdEndDate: this.earlybirdEndDate,
-      discountAmount: this.discountAmount,
-      createdAt: this.createdAt,
-      competitionId: this.competitionId,
+      id: this._id,
+      earlybirdStartDate: this._earlybirdStartDate,
+      earlybirdEndDate: this._earlybirdEndDate,
+      discountAmount: this._discountAmount,
+      createdAt: this._createdAt,
+      competitionId: this._competitionId,
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getEarlybirdStartDate(): Date {
-    return new Date(this.earlybirdStartDate);
+  get earlybirdStartDate(): Date {
+    return new Date(this._earlybirdStartDate);
   }
 
-  getEarlybirdEndDate(): Date {
-    return new Date(this.earlybirdEndDate);
+  get earlybirdEndDate(): Date {
+    return new Date(this._earlybirdEndDate);
   }
 
-  getDiscountAmount(): number {
-    return this.discountAmount;
+  get discountAmount(): number {
+    return this._discountAmount;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get competitionId() {
+    return this._competitionId;
   }
 }

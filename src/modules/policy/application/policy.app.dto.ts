@@ -1,4 +1,4 @@
-import { IPolicy, IPolicyCreateDto, IPolicyDetail, IPolicySummery } from '../domain/interface/policy.interface';
+import { IPolicy, IPolicyCreateDto, IPolicySummery } from '../domain/interface/policy.interface';
 
 // ---------------------------------------------------------------------------
 // policyAppService Param
@@ -19,7 +19,7 @@ export interface FindPolicyParam {
 // policyAppService Result
 // ---------------------------------------------------------------------------
 export interface CreatePolicyRet {
-  policy: IPolicyDetail;
+  policy: IPolicy;
 }
 
 export interface FindPoliciesRet {
@@ -27,7 +27,7 @@ export interface FindPoliciesRet {
 }
 
 export interface GetPolicyRet {
-  policy: IPolicyDetail;
+  policy: IPolicy;
 }
 
 export interface FindAllTypesOfLatestPoliciesRet {

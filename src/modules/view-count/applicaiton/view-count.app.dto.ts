@@ -1,5 +1,5 @@
 import { TId } from '../../../common/common-types';
-import { TEntitytype, TUserCredential } from '../domain/view-count.interface';
+import { TEntitytype, TUserCredential } from '../domain/interface/view-count.interface';
 
 // ---------------------------------------------------------------------------
 // viewCountAppService Param

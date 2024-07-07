@@ -84,7 +84,7 @@ export class ApplicationsAppService {
     );
     await this.applicationValidationService.validateCreateApplication(userModel, competitionModel, readyApplication);
     readyApplication.setExpectedPayment(
-      competitionModel.calculateExpectedPayment(readyApplication.getParticipationDivisionIds()),
+      competitionModel.calculateExpectedPayment(readyApplication.getOriginalParticipationDivisionIds()),
     );
     return assert<CreateApplicationRet>({
       application: await this.applicationRepository.save(readyApplication.toData()),
@@ -97,7 +97,7 @@ export class ApplicationsAppService {
       .findOneOrFail({
         where: { id: applicationId, userId },
         relations: [
-          'additionalInfos',
+          'additionaInfos',
           'playerSnapshots',
           'participationDivisionInfos',
           'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -127,9 +127,9 @@ export class ApplicationsAppService {
       });
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
-    if (applicationModel.getStatus() === 'READY') {
+    if (applicationModel.status === 'READY') {
       applicationModel.setExpectedPayment(
-        competitionModel.calculateExpectedPayment(applicationModel.getParticipationDivisionIds()),
+        competitionModel.calculateExpectedPayment(applicationModel.getOriginalParticipationDivisionIds()),
       );
     }
     return assert<GetApplicationRet>({ application: applicationModel.toData() });
@@ -162,7 +162,7 @@ export class ApplicationsAppService {
             status: 'READY',
           },
           relations: [
-            'additionalInfos',
+            'additionaInfos',
             'playerSnapshots',
             'participationDivisionInfos',
             'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -201,7 +201,7 @@ export class ApplicationsAppService {
     // todo!!: Transaction
     await this.applicationRepository.save(oldApplicationModel.toData());
     newApplication.setExpectedPayment(
-      competitionModel.calculateExpectedPayment(newApplication.getParticipationDivisionIds()),
+      competitionModel.calculateExpectedPayment(newApplication.getOriginalParticipationDivisionIds()),
     );
     return assert<UpdateReadyApplicationRet>({
       application: await this.applicationRepository.save(newApplication.toData()),
@@ -229,7 +229,7 @@ export class ApplicationsAppService {
         .findOneOrFail({
           where: { userId, id: applicationId, status: 'DONE' },
           relations: [
-            'additionalInfos',
+            'additionaInfos',
             'playerSnapshots',
             'participationDivisionInfos',
             'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -298,7 +298,7 @@ export class ApplicationsAppService {
       .findOneOrFail({
         where: { userId, id: applicationId },
         relations: [
-          'additionalInfos',
+          'additionaInfos',
           'playerSnapshots',
           'participationDivisionInfos',
           'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -326,7 +326,9 @@ export class ApplicationsAppService {
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
     return assert<GetExpectedPaymentRet>({
-      expectedPayment: competitionModel.calculateExpectedPayment(applicationModel.getParticipationDivisionIds()),
+      expectedPayment: competitionModel.calculateExpectedPayment(
+        applicationModel.getOriginalParticipationDivisionIds(),
+      ),
     });
   }
 
@@ -334,7 +336,7 @@ export class ApplicationsAppService {
     const applicationEntities = await this.applicationRepository.find({
       where: { userId, status },
       relations: [
-        'additionalInfos',
+        'additionaInfos',
         'playerSnapshots',
         'participationDivisionInfos',
         'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -351,7 +353,7 @@ export class ApplicationsAppService {
     const applicationModels = applicationEntities.map((applicationEntity) => new ApplicationModel(applicationEntity));
     const competitions = (
       await this.competitionRepository.find({
-        where: { id: In(applicationModels.map((application) => application.getCompetitionId())) },
+        where: { id: In(applicationModels.map((application) => application.competitionId)) },
         relations: [
           'divisions',
           'divisions.priceSnapshots',
@@ -361,10 +363,12 @@ export class ApplicationsAppService {
       })
     ).map((competitionEntity) => new CompetitionModel(competitionEntity));
     applicationModels.forEach((application) => {
-      const competition = competitions.find((competition) => competition.getId() === application.getCompetitionId());
+      const competition = competitions.find((competition) => competition.id === application.competitionId);
       if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
-      if (application.getStatus() === 'READY')
-        application.setExpectedPayment(competition.calculateExpectedPayment(application.getParticipationDivisionIds()));
+      if (application.status === 'READY')
+        application.setExpectedPayment(
+          competition.calculateExpectedPayment(application.getOriginalParticipationDivisionIds()),
+        );
     });
     const ret = assert<FindApplicationsRet>({
       applications: applicationModels.map((application) => application.toData()),
@@ -383,7 +387,7 @@ export class ApplicationsAppService {
         .findOne({
           where: { id: applicationId, userId, status: 'READY' },
           relations: [
-            'additionalInfos',
+            'additionaInfos',
             'playerSnapshots',
             'participationDivisionInfos',
             'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -422,7 +426,7 @@ export class ApplicationsAppService {
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
     applicationModel.setExpectedPayment(
-      competitionModel.calculateExpectedPayment(applicationModel.getParticipationDivisionIds()),
+      competitionModel.calculateExpectedPayment(applicationModel.getOriginalParticipationDivisionIds()),
     );
     const applicationOrder = new ApplicationOrderModel(
       this.applicationFactory.createApplicationOrder(applicationModel, userModel, competitionModel),
@@ -461,7 +465,7 @@ export class ApplicationsAppService {
           .findOne({
             where: { id: applicationId, userId, status: 'READY' },
             relations: [
-              'additionalInfos',
+              'additionaInfos',
               'playerSnapshots',
               'participationDivisionInfos',
               'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -538,7 +542,7 @@ export class ApplicationsAppService {
           .findOne({
             where: { id: applicationId, userId, status: In(['DONE', 'PARTIAL_CANCELED']) },
             relations: [
-              'additionalInfos',
+              'additionaInfos',
               'playerSnapshots',
               'participationDivisionInfos',
               'participationDivisionInfos.participationDivisionInfoSnapshots',
@@ -582,18 +586,14 @@ export class ApplicationsAppService {
       competitionModel.validateApplicationPeriod();
       applicationModel.cancel(participationDivisionInfoIds);
 
-      if (applicationModel.getStatus() === 'PARTIAL_CANCELED') {
+      if (applicationModel.status === 'PARTIAL_CANCELED') {
         const newApplicationOrderPaymentSnapshotModel = new ApplicationOrderPaymentSnapshotModel(
           this.applicationFactory.createApplicationOrderPaymentSnapshot(applicationModel),
         );
         applicationModel.addApplicationOrderPaymentSnapshot(newApplicationOrderPaymentSnapshotModel);
       }
 
-      await this.paymentsAppService.cancelPayment({
-        paymentKey: applicationModel.getPaymentKey(),
-        cancelAmount: applicationModel.getCancelAmount(),
-        cancelReason: '고객이 취소를 원함',
-      });
+      await this.paymentsAppService.cancelPayment(applicationModel.getCancellationInfo());
 
       return assert<CancelApplicationOrderRet>({
         application: await applicationRepository.save(applicationModel.toData()),

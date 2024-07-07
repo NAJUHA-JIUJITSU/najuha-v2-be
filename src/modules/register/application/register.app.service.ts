@@ -96,13 +96,13 @@ export class RegisterAppService {
       (entity) => new PolicyModel(entity),
     );
     const policyConsentModels = latestPolicyModels
-      .filter((policy) => consentPolicyTypes.includes(policy.getType()))
+      .filter((policy) => consentPolicyTypes.includes(policy.type))
       .map(
         (policy) =>
           new PolicyConsentModel(
             this.userFactory.createPolicyConsent({
               userId: userRegisterDto.id,
-              policyId: policy.getId(),
+              policyId: policy.id,
             }),
           ),
       );
@@ -115,10 +115,10 @@ export class RegisterAppService {
     await queryRunner.startTransaction();
     try {
       await this.userRepository.save(temporaryUserModel.toRegisteredUserModelData());
-      await this.temporaryUserRepository.delete(temporaryUserModel.getId());
+      await this.temporaryUserRepository.delete(temporaryUserModel.id);
       const authTokens = await this.authTokenDomainService.createAuthTokens({
-        userId: temporaryUserModel.getId(),
-        userRole: temporaryUserModel.getRole(),
+        userId: temporaryUserModel.id,
+        userRole: temporaryUserModel.role,
       });
       await queryRunner.commitTransaction();
       return { authTokens };

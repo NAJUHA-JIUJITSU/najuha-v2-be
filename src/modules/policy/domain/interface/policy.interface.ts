@@ -66,8 +66,6 @@ export interface IPolicyModelData {
 // ----------------------------------------------------------------------------
 export interface IPolicySummery extends Omit<IPolicy, 'content'> {}
 
-export interface IPolicyDetail extends IPolicy {}
-
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------

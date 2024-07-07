@@ -8,7 +8,7 @@ import {
   IEarlybirdDiscountSnapshot,
   IEarlybirdDiscountSnapshotModelData,
 } from './earlybird-discount-snapshot.interface';
-import { IRequiredAdditionalInfo, IRequiredAdditionalInfoModelData } from './required-addtional-info.interface';
+import { IRequiredAdditionalInfo, IRequiredAdditionalInfoModelData } from './required-additional-info.interface';
 import { TId, TDateOrStringDate } from '../../../../common/common-types';
 import { ICompetitionHostMap, ICompetitionHostMapModelData } from './competition-host-map.interface';
 import { IUser } from '../../../users/domain/interface/user.interface';
@@ -158,8 +158,6 @@ export interface ICompetitionSummary
     ICompetition,
     'divisions' | 'combinationDiscountSnapshots' | 'requiredAdditionalInfos' | 'competitionHostMaps'
   > {}
-
-export interface ICompetitionDetail extends ICompetition {}
 
 // ----------------------------------------------------------------------------
 // DTO

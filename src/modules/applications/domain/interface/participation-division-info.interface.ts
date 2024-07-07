@@ -1,4 +1,4 @@
-import { IDivision, IDivisionModelData } from '../../../competitions/domain/interface/division.interface';
+import { IDivision } from '../../../competitions/domain/interface/division.interface';
 import { IApplication } from './application.interface';
 import {
   IParticipationDivisionInfoSnapshot,
@@ -29,11 +29,8 @@ export interface IParticipationDivisionInfo {
 // ----------------------------------------------------------------------------
 // Model Data
 // ----------------------------------------------------------------------------
-export interface IParticipationDivisionInfoModelData {
-  id: IParticipationDivisionInfo['id'];
-  createdAt: IParticipationDivisionInfo['createdAt'];
-  status: IParticipationDivisionInfo['status'];
-  applicationId: IParticipationDivisionInfo['id'];
+export interface IParticipationDivisionInfoModelData
+  extends Pick<IParticipationDivisionInfo, 'id' | 'createdAt' | 'status' | 'applicationId'> {
   participationDivisionInfoSnapshots: IParticipationDivisionInfoSnapshotModelData[];
 }
 

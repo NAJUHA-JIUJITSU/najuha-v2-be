@@ -1,30 +1,54 @@
 import { IImageModelData } from '../interface/image.interface';
 
 export class ImageModel {
-  private readonly id: IImageModelData['id'];
-  private readonly path: IImageModelData['path'];
-  private readonly format: IImageModelData['format'];
-  private readonly createdAt: IImageModelData['createdAt'];
-  private readonly linkedAt: IImageModelData['linkedAt'];
-  private readonly userId: IImageModelData['userId'];
+  private readonly _id: IImageModelData['id'];
+  private readonly _path: IImageModelData['path'];
+  private readonly _format: IImageModelData['format'];
+  private readonly _createdAt: IImageModelData['createdAt'];
+  private readonly _linkedAt: IImageModelData['linkedAt'];
+  private readonly _userId: IImageModelData['userId'];
 
   constructor(data: IImageModelData) {
-    this.id = data.id;
-    this.path = data.path;
-    this.format = data.format;
-    this.createdAt = data.createdAt;
-    this.linkedAt = data.linkedAt;
-    this.userId = data.userId;
+    this._id = data.id;
+    this._path = data.path;
+    this._format = data.format;
+    this._createdAt = data.createdAt;
+    this._linkedAt = data.linkedAt;
+    this._userId = data.userId;
   }
 
   toData(): IImageModelData {
     return {
-      id: this.id,
-      path: this.path,
-      format: this.format,
-      createdAt: this.createdAt,
-      linkedAt: this.linkedAt,
-      userId: this.userId,
+      id: this._id,
+      path: this._path,
+      format: this._format,
+      createdAt: this._createdAt,
+      linkedAt: this._linkedAt,
+      userId: this._userId,
     };
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get path() {
+    return this._path;
+  }
+
+  get format() {
+    return this._format;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get linkedAt() {
+    return this._linkedAt;
+  }
+
+  get userId() {
+    return this._userId;
   }
 }

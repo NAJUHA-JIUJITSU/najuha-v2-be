@@ -6,7 +6,6 @@ import {
 } from '../../../competitions/domain/interface/earlybird-discount-snapshot.interface';
 import {
   IApplicationOrderPaymentSnapshot,
-  IApplicationOrderPaymentSnapshotDetail,
   IApplicationOrderPaymentSnapshotModelData,
 } from './application-order-payment-sanpshot.interface';
 import { tags } from 'typia';
@@ -87,25 +86,3 @@ export interface IApplicationOrderModelData {
 // ENUM
 // --------------------------------------------------------------
 type TApplicationOrderStatus = 'READY' | 'DONE' | 'FAIL' | 'PARTIAL_CANCELED' | 'CANCELED';
-
-// --------------------------------------------------------------
-// Return Interface
-// --------------------------------------------------------------
-export interface IApplicationOrderDetail
-  extends Pick<
-    IApplicationOrder,
-    | 'id'
-    | 'createdAt'
-    | 'orderId'
-    | 'paymentKey'
-    | 'orderName'
-    | 'customerName'
-    | 'customerEmail'
-    | 'status'
-    | 'isPayed'
-    | 'applicationId'
-    | 'earlybirdDiscountSnapshotId'
-    | 'combinationDiscountSnapshotId'
-  > {
-  applicationOrderPaymentSnapshots: IApplicationOrderPaymentSnapshotDetail[];
-}

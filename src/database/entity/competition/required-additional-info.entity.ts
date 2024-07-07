@@ -11,7 +11,7 @@ import {
 import { CompetitionEntity } from './competition.entity';
 import { ICompetition } from '../../../modules/competitions/domain/interface/competition.interface';
 import { uuidv7 } from 'uuidv7';
-import { IRequiredAdditionalInfo } from '../../../modules/competitions/domain/interface/required-addtional-info.interface';
+import { IRequiredAdditionalInfo } from '../../../modules/competitions/domain/interface/required-additional-info.interface';
 
 /**
  * RequiredAdditionalInfo Entity

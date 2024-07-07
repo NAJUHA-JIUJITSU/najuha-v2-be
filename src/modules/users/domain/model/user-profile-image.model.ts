@@ -2,38 +2,62 @@ import { IUserProfileImageModelData } from '../interface/user-profile-image.inte
 import { ImageModel } from '../../../images/domain/model/image.model';
 
 export class UserProfileImageModel {
-  private readonly id: IUserProfileImageModelData['id'];
-  private readonly userId: IUserProfileImageModelData['userId'];
-  private readonly imageId: IUserProfileImageModelData['imageId'];
-  private readonly createdAt: IUserProfileImageModelData['createdAt'];
-  private deletedAt: IUserProfileImageModelData['deletedAt'];
-  private image?: ImageModel;
+  private readonly _id: IUserProfileImageModelData['id'];
+  private readonly _userId: IUserProfileImageModelData['userId'];
+  private readonly _imageId: IUserProfileImageModelData['imageId'];
+  private readonly _createdAt: IUserProfileImageModelData['createdAt'];
+  private _deletedAt: IUserProfileImageModelData['deletedAt'];
+  private _image?: ImageModel;
 
   constructor(data: IUserProfileImageModelData) {
-    this.id = data.id;
-    this.userId = data.userId;
-    this.imageId = data.imageId;
-    this.createdAt = data.createdAt;
-    this.deletedAt = data.deletedAt;
-    this.image = data.image && new ImageModel(data.image);
+    this._id = data.id;
+    this._userId = data.userId;
+    this._imageId = data.imageId;
+    this._createdAt = data.createdAt;
+    this._deletedAt = data.deletedAt;
+    this._image = data.image && new ImageModel(data.image);
   }
 
   toData(): IUserProfileImageModelData {
     return {
-      id: this.id,
-      userId: this.userId,
-      imageId: this.imageId,
-      createdAt: this.createdAt,
-      deletedAt: this.deletedAt,
-      image: this.image?.toData(),
+      id: this._id,
+      userId: this._userId,
+      imageId: this._imageId,
+      createdAt: this._createdAt,
+      deletedAt: this._deletedAt,
+      image: this._image?.toData(),
     };
   }
 
+  get id() {
+    return this._id;
+  }
+
+  get userId() {
+    return this._userId;
+  }
+
+  get imageId() {
+    return this._imageId;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get deletedAt() {
+    return this._deletedAt;
+  }
+
+  get image() {
+    return this._image;
+  }
+
   delete() {
-    this.deletedAt = new Date();
+    this._deletedAt = new Date();
   }
 
   setImage(image: ImageModel) {
-    this.image = image;
+    this._image = image;
   }
 }

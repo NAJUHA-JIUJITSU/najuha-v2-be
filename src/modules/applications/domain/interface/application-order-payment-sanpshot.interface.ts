@@ -1,9 +1,7 @@
-import { tags } from 'typia';
 import { TMoneyValue, TDateOrStringDate, TId } from '../../../../common/common-types';
 import { IApplicationOrder } from './application-order.interface';
 import {
   IParticipationDivisionInfoPayment,
-  IParticipationDivisionInfoPaymentDetail,
   IParticipationDivisionInfoPaymentModelData,
 } from './participation-division-info-payment.interface';
 
@@ -50,21 +48,4 @@ export interface IApplicationOrderPaymentSnapshotModelData {
   totalAmount: IApplicationOrderPaymentSnapshot['totalAmount'];
   applicationOrderId: IApplicationOrderPaymentSnapshot['applicationOrderId'];
   participationDivisionInfoPayments: IParticipationDivisionInfoPaymentModelData[];
-}
-
-// --------------------------------------------------------------
-// Return Interface
-// --------------------------------------------------------------
-export interface IApplicationOrderPaymentSnapshotDetail
-  extends Pick<
-    IApplicationOrderPaymentSnapshot,
-    | 'id'
-    | 'createdAt'
-    | 'normalAmount'
-    | 'earlybirdDiscountAmount'
-    | 'combinationDiscountAmount'
-    | 'totalAmount'
-    | 'applicationOrderId'
-  > {
-  participationDivisionInfoPayments: IParticipationDivisionInfoPaymentDetail[];
 }

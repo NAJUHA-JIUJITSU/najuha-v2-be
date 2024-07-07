@@ -96,8 +96,6 @@ export interface IUserModelData {
 // ----------------------------------------------------------------------------
 // Return Interface
 // ----------------------------------------------------------------------------
-export interface IUserDetail extends IUser {}
-
 export interface IUserPublicProfile extends Pick<IUser, 'id' | 'role' | 'nickname' | 'profileImages'> {}
 
 // ----------------------------------------------------------------------------

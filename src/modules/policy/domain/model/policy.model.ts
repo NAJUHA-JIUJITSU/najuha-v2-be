@@ -1,50 +1,61 @@
-import { uuidv7 } from 'uuidv7';
-import { IPolicyCreateDto, IPolicyModelData } from '../interface/policy.interface';
+import { IPolicyModelData } from '../interface/policy.interface';
 
 export class PolicyModel {
-  private readonly id: IPolicyModelData['id'];
-  private readonly version: IPolicyModelData['version'];
-  private readonly type: IPolicyModelData['type'];
-  private readonly isMandatory: IPolicyModelData['isMandatory'];
-  private readonly title: IPolicyModelData['title'];
-  private readonly content?: IPolicyModelData['content'];
-  private readonly createdAt: IPolicyModelData['createdAt'];
+  private readonly _id: IPolicyModelData['id'];
+  private readonly _version: IPolicyModelData['version'];
+  private readonly _type: IPolicyModelData['type'];
+  private readonly _isMandatory: IPolicyModelData['isMandatory'];
+  private readonly _title: IPolicyModelData['title'];
+  private readonly _content?: IPolicyModelData['content'];
+  private readonly _createdAt: IPolicyModelData['createdAt'];
 
   constructor(data: IPolicyModelData) {
-    this.id = data.id;
-    this.version = data.version;
-    this.type = data.type;
-    this.isMandatory = data.isMandatory;
-    this.title = data.title;
-    this.content = data.content;
-    this.createdAt = data.createdAt;
+    this._id = data.id;
+    this._version = data.version;
+    this._type = data.type;
+    this._isMandatory = data.isMandatory;
+    this._title = data.title;
+    this._content = data.content;
+    this._createdAt = data.createdAt;
   }
 
   toData(): IPolicyModelData {
     return {
-      id: this.id,
-      version: this.version,
-      type: this.type,
-      isMandatory: this.isMandatory,
-      title: this.title,
-      content: this.content,
-      createdAt: this.createdAt,
+      id: this._id,
+      version: this._version,
+      type: this._type,
+      isMandatory: this._isMandatory,
+      title: this._title,
+      content: this._content,
+      createdAt: this._createdAt,
     };
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this._id;
   }
 
-  getVersion() {
-    return this.version;
+  get version() {
+    return this._version;
   }
 
-  getType() {
-    return this.type;
+  get type() {
+    return this._type;
   }
 
-  getIsMandatory() {
-    return this.isMandatory;
+  get isMandatory() {
+    return this._isMandatory;
+  }
+
+  get title() {
+    return this._title;
+  }
+
+  get content() {
+    return this._content;
+  }
+
+  get createdAt() {
+    return this._createdAt;
   }
 }
