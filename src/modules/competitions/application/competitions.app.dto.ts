@@ -7,6 +7,7 @@ import {
   ICompetitionSummary,
   ICompetitionQueryOptions,
   ICompetitionUpdateDto,
+  ICompetitionDetail,
 } from '../domain/interface/competition.interface';
 import { IDivisionPack } from '../domain/interface/division-pack.interface';
 import { IEarlybirdDiscountSnapshotCreateDto } from '../domain/interface/earlybird-discount-snapshot.interface';
@@ -84,43 +85,43 @@ export interface CreateCompetitionRet {
 }
 
 export interface UpdateCompetitionRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface UpdateCompetitionStatusRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface FindCompetitionsRet extends TPaginationRet<{ competitions: ICompetitionSummary[] }> {}
 
 export interface GetCompetitionRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface CreateCompetitionDivisionsRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface CreateCompetitionEarlybirdDiscountSnapshotRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface CreateCompetitionCombinationDiscountSnapshotRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface CreateCompetitionRequiredAdditionalInfoRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface UpdateCompetitionRequiredAdditionalInfoRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface DeleteCompetitionRequiredAdditionalInfoRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }
 
 export interface CreateCompetitionPosterImageRet {
-  competition: ICompetition;
+  competition: ICompetitionDetail;
 }

@@ -159,6 +159,8 @@ export interface ICompetitionSummary
     'divisions' | 'combinationDiscountSnapshots' | 'requiredAdditionalInfos' | 'competitionHostMaps'
   > {}
 
+export interface ICompetitionDetail extends ICompetition {}
+
 // ----------------------------------------------------------------------------
 // DTO
 // ----------------------------------------------------------------------------

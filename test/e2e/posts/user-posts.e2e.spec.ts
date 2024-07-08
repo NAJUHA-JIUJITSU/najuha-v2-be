@@ -40,6 +40,7 @@ import {
 } from '../../../src/common/response/errorResponse';
 import { IUser } from '../../../src/modules/users/domain/interface/user.interface';
 import { CreateImageRes } from '../../../src/modules/images/presentation/images.controller.dto';
+import { ICommentDetail } from '../../../src/modules/posts/domain/interface/comment.interface';
 
 describe('E2E u-7 Post TEST', () => {
   let app: INestApplication;
@@ -1454,18 +1455,137 @@ describe('E2E u-7 Post TEST', () => {
   });
 
   describe('u-7-20 Get findBestComments /user/posts/best-comments', () => {
-    it('게시물 베스트 댓글 및 베스트 대댓글 조회 성공시', async () => {
+    it('게시물 베스트(likeCount 6 이상) 댓글 조회 성공시', async () => {
+      /** pre condition. */
+      const users: IUser[] = [];
+      for (let i = 0; i < 6; i++) {
+        const user = new UserDummyBuilder().setNickname(`user${i}`).build();
+        await entityEntityManager.save(UserEntity, user);
+        users.push(user);
+      }
+      const accessTokens = users.map((user) =>
+        jwtService.sign(
+          { userId: user.id, userRole: user.role },
+          { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+        ),
+      );
+      const postCreateReqBody: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostResBody = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentResBody = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
+      for (let i = 0; i < 6; i++) {
+        await request(app.getHttpServer())
+          .post(`/user/posts/comments/${commentId}/like`)
+          .set('Authorization', `Bearer ${accessTokens[i]}`)
+          .then((res) => {
+            return typia.assert<ResponseForm<void>>(res.body);
+          });
+      }
+
+      /** main test. */
+      const findBestCommentsResBody = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/best-comments`)
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindBestCommentsRes>>(res.body);
+        });
+      typia.assert<ICommentDetail>(findBestCommentsResBody.result.comment);
+    });
+
+    it('게시물 베스트(likeCount 6 이상) 대댓글 조회 성공시', async () => {
+      /** pre condition. */
+      const users: IUser[] = [];
+      for (let i = 0; i < 6; i++) {
+        const user = new UserDummyBuilder().setNickname(`user${i}`).build();
+        await entityEntityManager.save(UserEntity, user);
+        users.push(user);
+      }
+      const accessTokens = users.map((user) =>
+        jwtService.sign(
+          { userId: user.id, userRole: user.role },
+          { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
+        ),
+      );
+      const postCreateReqBody: CreatePostReqBody = {
+        category: 'COMPETITION',
+        title: 'title',
+        body: 'body',
+      };
+      const createPostResBody = await request(app.getHttpServer())
+        .post('/user/posts')
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .send(postCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreatePostRes>>(res.body);
+        });
+      const postId = createPostResBody.result.post.id;
+      const commentCreateReqBody: CreateCommentReqBody = {
+        body: 'body',
+      };
+      const createCommentResBody = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments`)
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .send(commentCreateReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
+        });
+      const commentId = createCommentResBody.result.comment.id;
+      const createCommentReplyReqBody: CreateCommentReplyReqBody = {
+        body: 'body',
+      };
+      const createCommentReplyResBody = await request(app.getHttpServer())
+        .post(`/user/posts/${postId}/comments/${commentId}/replies`)
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .send(createCommentReplyReqBody)
+        .then((res) => {
+          return typia.assert<ResponseForm<CreateCommentReplyRes>>(res.body);
+        });
+      const commentReplyId = createCommentReplyResBody.result.comment.id;
+      for (let i = 0; i < 6; i++) {
+        await request(app.getHttpServer())
+          .post(`/user/posts/comments/${commentReplyId}/like`)
+          .set('Authorization', `Bearer ${accessTokens[i]}`)
+          .then((res) => {
+            return typia.assert<ResponseForm<void>>(res.body);
+          });
+      }
+
+      /** main test. */
+      const findBestCommentsResBody = await request(app.getHttpServer())
+        .get(`/user/posts/${postId}/best-comments`)
+        .set('Authorization', `Bearer ${accessTokens[0]}`)
+        .then((res) => {
+          return typia.assert<ResponseForm<FindBestCommentsRes>>(res.body);
+        });
+      typia.assert<ICommentDetail>(findBestCommentsResBody.result.comment);
+    });
+
+    it('게시물 베스트(likeCount 6 이하) 댓글 or 베스트 대댓글 조회시 null 반환 성공', async () => {
       /** pre condition. */
       const user = new UserDummyBuilder().build();
       await entityEntityManager.save(UserEntity, user);
-      const user2 = new UserDummyBuilder().build();
-      await entityEntityManager.save(UserEntity, user2);
       const accessToken = jwtService.sign(
         { userId: user.id, userRole: user.role },
-        { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
-      );
-      const accessToken2 = jwtService.sign(
-        { userId: user2.id, userRole: user2.role },
         { secret: appEnv.jwtAccessTokenSecret, expiresIn: appEnv.jwtAccessTokenExpirationTime },
       );
       const postCreateReqBody: CreatePostReqBody = {
@@ -1491,30 +1611,15 @@ describe('E2E u-7 Post TEST', () => {
         .then((res) => {
           return typia.assert<ResponseForm<CreateCommentRes>>(res.body);
         });
-      const commentId = createCommentResBody.result.comment.id;
-      await request(app.getHttpServer())
-        .post(`/user/posts/comments/${commentId}/like`)
-        .set('Authorization', `Bearer ${accessToken2}`)
-        .then((res) => {
-          return typia.assert<ResponseForm<void>>(res.body);
-        });
-      const findCommentsResBody = await request(app.getHttpServer())
-        .get(`/user/posts/${postId}/comments`)
-        .set('Authorization', `Bearer ${accessToken2}`)
-        .then((res) => {
-          return typia.assert<ResponseForm<FindCommentsRes>>(res.body);
-        });
-      expect(findCommentsResBody.result.comments[0].userLiked).toBe(true);
 
       /** main test. */
       const findBestCommentsResBody = await request(app.getHttpServer())
         .get(`/user/posts/${postId}/best-comments`)
-        .set('Authorization', `Bearer ${accessToken2}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .then((res) => {
           return typia.assert<ResponseForm<FindBestCommentsRes>>(res.body);
         });
-      expect(!!findBestCommentsResBody.result.bestComment).toBe(true);
-      expect(findBestCommentsResBody.result.bestReply).toBe(null);
+      typia.assert<null>(findBestCommentsResBody.result.comment);
     });
   });
 });

@@ -75,7 +75,6 @@ export class CommentRepository extends Repository<CommentEntity> {
     const qb = this.createQueryBuilder('comment')
       .where('comment.postId = :postId', { postId })
       .andWhere('comment.status = :status', { status: 'ACTIVE' })
-      .andWhere('comment.parentId IS NULL')
       .leftJoinAndSelect('comment.commentSnapshots', 'commentSnapshots')
       .leftJoinAndSelect('comment.user', 'user')
       .leftJoinAndSelect('user.profileImages', 'profileImages')
@@ -93,32 +92,7 @@ export class CommentRepository extends Repository<CommentEntity> {
 
     const comment = assert<ICommentModelData | null>(await qb.getOne());
     if (!comment) return null;
-    if (comment.likeCount === 0) return null;
-    return comment;
-  }
-
-  async findBestReply(postId: IComment['postId'], userId?: string) {
-    const qb = this.createQueryBuilder('comment')
-      .where('comment.postId = :postId', { postId })
-      .andWhere('comment.status = :status', { status: 'ACTIVE' })
-      .andWhere('comment.parentId IS NOT NULL')
-      .leftJoinAndSelect('comment.commentSnapshots', 'commentSnapshots')
-      .leftJoinAndSelect('comment.user', 'user')
-      .leftJoinAndSelect('user.profileImages', 'profileImages')
-      .leftJoinAndSelect('profileImages.image', 'profileImage')
-      .loadRelationCountAndMap('comment.replyCount', 'comment.replies')
-      .loadRelationCountAndMap('comment.likeCount', 'comment.likes')
-      .addSelect((qb) => {
-        return qb.select('COUNT(likes.id)', 'lc').from('comment_like', 'likes').where('likes.commentId = comment.id');
-      })
-      .orderBy('lc', 'DESC');
-
-    if (userId) {
-      qb.leftJoinAndSelect('comment.likes', 'likes', 'likes.userId = :userId', { userId });
-    }
-    const comment = assert<ICommentModelData | null>(await qb.getOne());
-    if (!comment) return null;
-    if (comment.likeCount === 0) return null;
+    if (!comment.likeCount || comment.likeCount < 6) return null;
     return comment;
   }
 }

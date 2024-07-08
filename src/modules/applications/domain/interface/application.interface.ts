@@ -110,6 +110,10 @@ export interface IApplicationModelData
   additionaInfos: IAdditionalInfoModelData[];
   applicationOrders?: IApplicationOrderModelData[];
 }
+// ----------------------------------------------------------------------------
+// Return interface
+// ----------------------------------------------------------------------------
+export interface IApplicationDetail extends IApplication {}
 
 // ----------------------------------------------------------------------------
 // DTO

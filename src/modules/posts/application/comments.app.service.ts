@@ -144,13 +144,15 @@ export class CommentsAppService {
 
   async createCommentLike({ commentLikeCreateDto }: CreateCommentLikeParam): Promise<void> {
     await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: commentLikeCreateDto.userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      this.userRepository.findOne({ where: { id: commentLikeCreateDto.userId } }).then((user) => {
+        if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        return user;
       }),
       this.commentRepository
-        .findOneOrFail({ where: { id: commentLikeCreateDto.commentId, status: 'ACTIVE' } })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment not found');
+        .findOne({ where: { id: commentLikeCreateDto.commentId, status: 'ACTIVE' } })
+        .then((comment) => {
+          if (!comment) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Comment not found');
+          return comment;
         }),
     ]);
     const commentLike = await this.commentLikeRepository.findOne({
@@ -225,13 +227,10 @@ export class CommentsAppService {
   }
 
   async findBestComments({ postId, userId }: FindBestCommentsParam): Promise<FindBestCommentsRet> {
-    const [bestComment, bestReply] = await Promise.all([
-      this.commentRepository.findBestComment(postId, userId),
-      this.commentRepository.findBestReply(postId, userId),
-    ]);
+    const commentEntity = await this.commentRepository.findBestComment(postId, userId);
+    const comment = commentEntity ? new CommentModel(commentEntity) : null;
     return assert<FindBestCommentsRet>({
-      bestComment: bestComment ? new CommentModel(bestComment).toData() : null,
-      bestReply: bestReply ? new CommentModel(bestReply).toData() : null,
+      comment: comment ? comment.toData() : null,
     });
   }
 }

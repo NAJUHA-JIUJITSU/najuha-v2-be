@@ -1,4 +1,10 @@
-import { IFindPostsQueryOptions, IPost, IPostCreateDto, IPostUpdateDto } from '../domain/interface/post.interface';
+import {
+  IFindPostsQueryOptions,
+  IPost,
+  IPostCreateDto,
+  IPostDetail,
+  IPostUpdateDto,
+} from '../domain/interface/post.interface';
 import { IUser } from '../../users/domain/interface/user.interface';
 import { IPostLikeCreateDto } from '../domain/interface/post-like.interface';
 import { IPostReportCreateDto } from '../domain/interface/post-report.interface';
@@ -49,18 +55,18 @@ export interface DeletePostReportParam {
 // postAppService Result
 // ---------------------------------------------------------------------------
 export interface CreatePostRet {
-  post: IPost;
+  post: IPostDetail;
 }
 
 export interface GetPostRet {
-  post: IPost;
+  post: IPostDetail;
 }
 
 export interface FindPostsRet
   extends TPaginationRet<{
-    posts: IPost[];
+    posts: IPostDetail[];
   }> {}
 
 export interface UpdatePostRet {
-  post: IPost;
+  post: IPostDetail;
 }

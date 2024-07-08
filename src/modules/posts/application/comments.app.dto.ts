@@ -7,6 +7,7 @@ import {
   ICommentCreateDto,
   ICommentReplyCreateDto,
   ICommentUpdateDto,
+  ICommentDetail,
 } from '../domain/interface/comment.interface';
 import { ICommentLikeCreateDto } from '../domain/interface/comment-like.interface';
 import { ICommentReportCreateDto } from '../domain/interface/comment-report.interface';
@@ -66,23 +67,22 @@ export interface FindBestCommentsParam {
 // commentAppService Result
 // ---------------------------------------------------------------------------
 export interface CreateCommentRet {
-  comment: IComment;
+  comment: ICommentDetail;
 }
 
 export interface CreateCommentReplyRet {
-  comment: IComment;
+  comment: ICommentDetail;
 }
 
 export interface FindCommentsRet
   extends TPaginationRet<{
-    comments: IComment[];
+    comments: ICommentDetail[];
   }> {}
 
 export interface UpdateCommentRet {
-  comment: IComment;
+  comment: ICommentDetail;
 }
 
 export interface FindBestCommentsRet {
-  bestComment: IComment | null;
-  bestReply: IComment | null;
+  comment: ICommentDetail | null;
 }
