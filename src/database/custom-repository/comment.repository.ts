@@ -35,7 +35,7 @@ export class CommentRepository extends Repository<CommentEntity> {
         qb = qb.andWhere('comment.parentId IS NULL');
         break;
       case 'REPLY':
-        qb = qb.andWhere('comment.parentId IS NOT NULL');
+        qb = qb.andWhere('comment.parentId = :parentId', { parentId: query.parentId });
         break;
       default:
         // do nothing for search both comments and replies
