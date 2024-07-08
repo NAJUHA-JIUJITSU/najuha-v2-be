@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { IApplication, IApplicationCreateDto, IApplicationModelData } from './interface/application.interface';
 import { IDivisionModelData } from '../../competitions/domain/interface/division.interface';
 import { uuidv7 } from 'uuidv7';
@@ -17,9 +16,8 @@ import { UserModel } from '../../users/domain/model/user.model';
 import { IApplicationOrderPaymentSnapshotModelData } from './interface/application-order-payment-sanpshot.interface';
 import { CalculatePaymentService } from '../../competitions/domain/calculate-payment.domain.service';
 
-@Injectable()
 export class ApplicationFactory {
-  createReadyApplication(
+  static createReadyApplication(
     competition: CompetitionModel,
     {
       userId,
@@ -54,7 +52,7 @@ export class ApplicationFactory {
     };
   }
 
-  createPlayerSnapshot(
+  static createPlayerSnapshot(
     applicationId: IApplication['id'],
     playerSnapshotCreateDto: IPlayerSnapshotCreateDto,
   ): IPlayerSnapshotModelData {
@@ -73,7 +71,7 @@ export class ApplicationFactory {
     };
   }
 
-  createParticipationDivisionInfos(
+  static createParticipationDivisionInfos(
     applicationId: IApplication['id'],
     competition: CompetitionModel,
     participationDivisionIds: IParticipationDivisionInfo['id'][],
@@ -99,7 +97,7 @@ export class ApplicationFactory {
     });
   }
 
-  createParticipationDivisionInfoSnapshot(
+  static createParticipationDivisionInfoSnapshot(
     participationDivisionInfoId: IParticipationDivisionInfo['id'],
     division: IDivisionModelData,
   ): IParticipationDivisionInfoSnapshotModelData {
@@ -112,7 +110,7 @@ export class ApplicationFactory {
     };
   }
 
-  createManyParticipationDivisionInfoSnapshots(
+  static createManyParticipationDivisionInfoSnapshots(
     competition: CompetitionModel,
     participationDivisionInfoUpdateDtos: IParticipationDivisionInfoUpdateDto[],
   ): IParticipationDivisionInfoSnapshotModelData[] {
@@ -125,7 +123,7 @@ export class ApplicationFactory {
     });
   }
 
-  createAdditionalInfos(
+  static createAdditionalInfos(
     applicationId: IApplication['id'],
     additionalInfoCreateDtos: IAdditionalInfoCreateDto[],
   ): IAdditionalInfoModelData[] {
@@ -141,7 +139,7 @@ export class ApplicationFactory {
     });
   }
 
-  createApplicationOrder(
+  static createApplicationOrder(
     application: ApplicationModel,
     user: UserModel,
     competition: CompetitionModel,
@@ -201,7 +199,9 @@ export class ApplicationFactory {
     };
   }
 
-  createApplicationOrderPaymentSnapshot(application: ApplicationModel): IApplicationOrderPaymentSnapshotModelData {
+  static createApplicationOrderPaymentSnapshot(
+    application: ApplicationModel,
+  ): IApplicationOrderPaymentSnapshotModelData {
     const doneStatusOrder = application.getPayedApplicationOrder();
     const earlybirdDiscountSnapshot = doneStatusOrder.earlybirdDiscountSnapshot;
     const combinationDiscountSnapshot = doneStatusOrder.combinationDiscountSnapshot;

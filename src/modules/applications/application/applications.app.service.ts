@@ -32,22 +32,19 @@ import { ParticipationDivisionInfoSnapshotModel } from '../domain/model/particip
 import { ApplicationModel } from '../domain/model/application.model';
 import { DataSource, In } from 'typeorm';
 import { ApplicationOrderModel } from '../domain/model/application-order.model';
-import { ApplicationValidationService } from '../domain/application-validation.service';
+import { ApplicationValidationDomainService } from '../domain/application-validation.domain.service';
 import { PaymentsAppService } from '../../payments/application/payments.app.service';
 import { UserEntity } from '../../../database/entity/user/user.entity';
 import { ApplicationEntity } from '../../../database/entity/application/application.entity';
 import { CompetitionEntity } from '../../../database/entity/competition/competition.entity';
-import { ApplicationOrderPaymentSnapshotModel } from '../domain/model/application-order-payment-snapshot.model';
-import { pay } from 'toss-payments-server-api/lib/functional/v1/billing';
 
 @Injectable()
 export class ApplicationsAppService {
   constructor(
-    private readonly applicationFactory: ApplicationFactory,
     private readonly userRepository: UserRepository,
     private readonly applicationRepository: ApplicationRepository,
     private readonly competitionRepository: CompetitionRepository,
-    private readonly applicationValidationService: ApplicationValidationService,
+    private readonly applicationValidationDomainService: ApplicationValidationDomainService,
     private readonly paymentsAppService: PaymentsAppService,
     private readonly dataSource: DataSource,
   ) {}
@@ -55,16 +52,13 @@ export class ApplicationsAppService {
   /** Create application. */
   async createApplication({ applicationCreateDto }: CreateApplicationParam): Promise<CreateApplicationRet> {
     const [userEntity, competitionEntity] = await Promise.all([
-      this.userRepository
-        .findOneOrFail({
-          where: { id: applicationCreateDto.userId },
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
+      this.userRepository.findOne({ where: { id: applicationCreateDto.userId } }).then((userEntity) => {
+        if (!userEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        return userEntity;
+      }),
       this.competitionRepository
-        .findOneOrFail({
-          where: { id: applicationCreateDto.competitionId, status: 'ACTIVE' },
+        .findOne({
+          where: { id: applicationCreateDto.competitionId },
           relations: [
             'divisions',
             'earlybirdDiscountSnapshots',
@@ -73,19 +67,28 @@ export class ApplicationsAppService {
             'competitionHostMaps',
           ],
         })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+        .then((competition) => {
+          if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          return competition;
         }),
     ]);
+
     const userModel = new UserModel(userEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
     const readyApplication = new ApplicationModel(
-      this.applicationFactory.createReadyApplication(competitionModel, applicationCreateDto),
+      ApplicationFactory.createReadyApplication(competitionModel, applicationCreateDto),
     );
-    await this.applicationValidationService.validateCreateApplication(userModel, competitionModel, readyApplication);
+
+    await this.applicationValidationDomainService.validateCreateApplication(
+      userModel,
+      competitionModel,
+      readyApplication,
+    );
+
     readyApplication.setExpectedPayment(
       competitionModel.calculateExpectedPayment(readyApplication.getOriginalParticipationDivisionIds()),
     );
+
     return assert<CreateApplicationRet>({
       application: await this.applicationRepository.save(readyApplication.toData()),
     });
@@ -94,7 +97,7 @@ export class ApplicationsAppService {
   /** Get application. */
   async getApplication({ userId, applicationId }: GetApplicationParam): Promise<GetApplicationRet> {
     const applicationEntity = await this.applicationRepository
-      .findOneOrFail({
+      .findOne({
         where: { id: applicationId, userId },
         relations: [
           'additionaInfos',
@@ -108,11 +111,13 @@ export class ApplicationsAppService {
           'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
         ],
       })
-      .catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+      .then((applicationEntity) => {
+        if (!applicationEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+        return applicationEntity;
       });
+
     const competitionEntity = await this.competitionRepository
-      .findOneOrFail({
+      .findOne({
         where: { id: applicationEntity.competitionId },
         relations: [
           'divisions',
@@ -122,16 +127,20 @@ export class ApplicationsAppService {
           'competitionHostMaps',
         ],
       })
-      .catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+      .then((competition) => {
+        if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+        return competition;
       });
+
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
+
     if (applicationModel.status === 'READY') {
       applicationModel.setExpectedPayment(
         competitionModel.calculateExpectedPayment(applicationModel.getOriginalParticipationDivisionIds()),
       );
     }
+
     return assert<GetApplicationRet>({ application: applicationModel.toData() });
   }
 
@@ -146,66 +155,97 @@ export class ApplicationsAppService {
     applicationId,
     applicationCreateDto,
   }: UpdateReadyApplicationParam): Promise<UpdateReadyApplicationRet> {
-    const [userEntity, oldApplicationEntity] = await Promise.all([
-      this.userRepository
-        .findOneOrFail({
-          where: { id: applicationCreateDto.userId },
-        })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
-        }),
-      this.applicationRepository
-        .findOneOrFail({
-          where: {
-            id: applicationId,
-            userId: applicationCreateDto.userId,
-            status: 'READY',
-          },
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const userRepository = queryRunner.manager.getRepository(UserEntity);
+      const applicationRepository = queryRunner.manager.getRepository(ApplicationEntity);
+      const competitionRepository = queryRunner.manager.getRepository(CompetitionEntity);
+
+      const [userEntity, oldApplicationEntity] = await Promise.all([
+        userRepository
+          .findOne({
+            where: { id: applicationCreateDto.userId },
+          })
+          .then((userEntity) => {
+            if (!userEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+            return userEntity;
+          }),
+        applicationRepository
+          .findOne({
+            where: {
+              id: applicationId,
+              userId: applicationCreateDto.userId,
+              status: 'READY',
+            },
+            relations: [
+              'additionaInfos',
+              'playerSnapshots',
+              'participationDivisionInfos',
+              'participationDivisionInfos.participationDivisionInfoSnapshots',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division',
+              'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+            ],
+          })
+          .then((applicationEntity) => {
+            if (!applicationEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+            return applicationEntity;
+          }),
+      ]);
+
+      const competitionEntity = await competitionRepository
+        .findOne({
+          where: { id: oldApplicationEntity.competitionId },
           relations: [
-            'additionaInfos',
-            'playerSnapshots',
-            'participationDivisionInfos',
-            'participationDivisionInfos.participationDivisionInfoSnapshots',
-            'participationDivisionInfos.participationDivisionInfoSnapshots.division',
-            'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
+            'divisions',
+            'earlybirdDiscountSnapshots',
+            'combinationDiscountSnapshots',
+            'requiredAdditionalInfos',
+            'competitionHostMaps',
           ],
         })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+        .then((competition) => {
+          if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+          return competition;
+        });
+
+      const userModel = new UserModel(userEntity);
+      const oldApplicationModel = new ApplicationModel(oldApplicationEntity);
+      const competitionModel = new CompetitionModel(competitionEntity);
+
+      const newApplication = new ApplicationModel(
+        ApplicationFactory.createReadyApplication(competitionModel, {
+          ...applicationCreateDto,
         }),
-    ]);
-    const competitionEntity = await this.competitionRepository
-      .findOneOrFail({
-        where: { id: oldApplicationEntity.competitionId },
-        relations: [
-          'divisions',
-          'earlybirdDiscountSnapshots',
-          'combinationDiscountSnapshots',
-          'requiredAdditionalInfos',
-          'competitionHostMaps',
-        ],
-      })
-      .catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+      );
+
+      await this.applicationValidationDomainService.validateUpdateReadyApplication(
+        userModel,
+        competitionModel,
+        oldApplicationModel,
+        newApplication,
+      );
+
+      oldApplicationModel.delete();
+      await applicationRepository.save(oldApplicationModel.toData());
+
+      newApplication.setExpectedPayment(
+        competitionModel.calculateExpectedPayment(newApplication.getOriginalParticipationDivisionIds()),
+      );
+
+      const savedApplication = await applicationRepository.save(newApplication.toData());
+      await queryRunner.commitTransaction();
+
+      return assert<UpdateReadyApplicationRet>({
+        application: savedApplication,
       });
-    const userModel = new UserModel(userEntity);
-    const oldApplicationModel = new ApplicationModel(oldApplicationEntity);
-    const competitionModel = new CompetitionModel(competitionEntity);
-    const newApplication = new ApplicationModel(
-      this.applicationFactory.createReadyApplication(competitionModel, {
-        ...applicationCreateDto,
-      }),
-    );
-    await this.applicationValidationService.validateCreateApplication(userModel, competitionModel, newApplication);
-    oldApplicationModel.delete();
-    // todo!!: Transaction
-    await this.applicationRepository.save(oldApplicationModel.toData());
-    newApplication.setExpectedPayment(
-      competitionModel.calculateExpectedPayment(newApplication.getOriginalParticipationDivisionIds()),
-    );
-    return assert<UpdateReadyApplicationRet>({
-      application: await this.applicationRepository.save(newApplication.toData()),
-    });
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   /** Update done application. */
@@ -221,12 +261,14 @@ export class ApplicationsAppService {
     ) {
       throw new BusinessException(ApplicationsErrors.APPLICATIONS_PLAYER_SNAPSHOT_OR_DIVISION_INFO_REQUIRED);
     }
+
     const [userEntity, applicationEntity] = await Promise.all([
-      this.userRepository.findOneOrFail({ where: { id: userId } }).catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+      this.userRepository.findOne({ where: { id: userId } }).then((userEntity) => {
+        if (!userEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
+        return userEntity;
       }),
       this.applicationRepository
-        .findOneOrFail({
+        .findOne({
           where: { userId, id: applicationId, status: 'DONE' },
           relations: [
             'additionaInfos',
@@ -238,14 +280,20 @@ export class ApplicationsAppService {
             'applicationOrders',
             'applicationOrders.applicationOrderPaymentSnapshots',
             'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.participationDivisionInfo.participationDivisionInfoSnapshots.division.priceSnapshots',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.division',
+            'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.priceSnapshot',
           ],
         })
-        .catch(() => {
-          throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+        .then((applicationEntity) => {
+          if (!applicationEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+          return applicationEntity;
         }),
     ]);
+
     const competitionEntity = await this.competitionRepository
-      .findOneOrFail({
+      .findOne({
         where: { id: applicationEntity.competitionId },
         relations: [
           'divisions',
@@ -255,9 +303,11 @@ export class ApplicationsAppService {
           'competitionHostMaps',
         ],
       })
-      .catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+      .then((competition) => {
+        if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+        return competition;
       });
+
     const userModel = new UserModel(userEntity);
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
@@ -265,24 +315,30 @@ export class ApplicationsAppService {
     if (doneApplicationUpdateDto.playerSnapshotCreateDto) {
       applicationModel.addPlayerSnapshot(
         new PlayerSnapshotModel(
-          this.applicationFactory.createPlayerSnapshot(applicationId, doneApplicationUpdateDto.playerSnapshotCreateDto),
+          ApplicationFactory.createPlayerSnapshot(applicationId, doneApplicationUpdateDto.playerSnapshotCreateDto),
         ),
       );
     }
+
     if (doneApplicationUpdateDto.participationDivisionInfoUpdateDtos) {
       applicationModel.addParticipationDivisionInfoSnapshots(
-        this.applicationFactory
-          .createManyParticipationDivisionInfoSnapshots(
-            competitionModel,
-            doneApplicationUpdateDto.participationDivisionInfoUpdateDtos,
-          )
-          .map((snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot)),
+        ApplicationFactory.createManyParticipationDivisionInfoSnapshots(
+          competitionModel,
+          doneApplicationUpdateDto.participationDivisionInfoUpdateDtos,
+        ).map((snapshot) => new ParticipationDivisionInfoSnapshotModel(snapshot)),
       );
     }
+
     if (doneApplicationUpdateDto.additionalInfoUpdateDtos) {
       applicationModel.updateAdditionalInfos(doneApplicationUpdateDto.additionalInfoUpdateDtos);
     }
-    await this.applicationValidationService.validateCreateApplication(userModel, competitionModel, applicationModel);
+
+    await this.applicationValidationDomainService.validateUpdateDoneApplication(
+      userModel,
+      competitionModel,
+      applicationModel,
+    );
+
     return assert<UpdateDoneApplicationRet>({
       application: await this.applicationRepository.save(applicationModel.toData()),
     });
@@ -295,7 +351,7 @@ export class ApplicationsAppService {
    */
   async getExpectedPayment({ userId, applicationId }: GetExpectedPaymentParam): Promise<GetExpectedPaymentRet> {
     const applicationEntity = await this.applicationRepository
-      .findOneOrFail({
+      .findOne({
         where: { userId, id: applicationId },
         relations: [
           'additionaInfos',
@@ -306,11 +362,13 @@ export class ApplicationsAppService {
           'participationDivisionInfos.participationDivisionInfoSnapshots.division.priceSnapshots',
         ],
       })
-      .catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+      .then((applicationEntity) => {
+        if (!applicationEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+        return applicationEntity;
       });
+
     const competitionEntity = await this.competitionRepository
-      .findOneOrFail({
+      .findOne({
         where: { id: applicationEntity.competitionId },
         relations: [
           'divisions',
@@ -320,11 +378,14 @@ export class ApplicationsAppService {
           'competitionHostMaps',
         ],
       })
-      .catch(() => {
-        throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+      .then((competition) => {
+        if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
+        return competition;
       });
+
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
+
     return assert<GetExpectedPaymentRet>({
       expectedPayment: competitionModel.calculateExpectedPayment(
         applicationModel.getOriginalParticipationDivisionIds(),
@@ -350,6 +411,7 @@ export class ApplicationsAppService {
       skip: page * limit,
       take: limit,
     });
+
     const applicationModels = applicationEntities.map((applicationEntity) => new ApplicationModel(applicationEntity));
     const competitions = (
       await this.competitionRepository.find({
@@ -362,6 +424,7 @@ export class ApplicationsAppService {
         ],
       })
     ).map((competitionEntity) => new CompetitionModel(competitionEntity));
+
     applicationModels.forEach((application) => {
       const competition = competitions.find((competition) => competition.id === application.competitionId);
       if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
@@ -370,14 +433,20 @@ export class ApplicationsAppService {
           competition.calculateExpectedPayment(application.getOriginalParticipationDivisionIds()),
         );
     });
+
     const ret = assert<FindApplicationsRet>({
       applications: applicationModels.map((application) => application.toData()),
     });
+
     if (applicationModels.length === limit) ret.nextPage = page + 1;
+
     return ret;
   }
 
-  async createApplicationOrder({ userId, applicationId }: CreateApplicationOrderParam) {
+  async createApplicationOrder({
+    userId,
+    applicationId,
+  }: CreateApplicationOrderParam): Promise<CreateApplicationOrderRet> {
     const [userEntity, applicationEntity] = await Promise.all([
       this.userRepository.findOne({ where: { id: userId } }).then((user) => {
         if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
@@ -385,7 +454,7 @@ export class ApplicationsAppService {
       }),
       this.applicationRepository
         .findOne({
-          where: { id: applicationId, userId, status: 'READY' },
+          where: { id: applicationId, userId },
           relations: [
             'additionaInfos',
             'playerSnapshots',
@@ -402,11 +471,12 @@ export class ApplicationsAppService {
             'applicationOrders.applicationOrderPaymentSnapshots.participationDivisionInfoPayments.priceSnapshot',
           ],
         })
-        .then((application) => {
-          if (!application) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
-          return application;
+        .then((applicationEntity) => {
+          if (!applicationEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+          return applicationEntity;
         }),
     ]);
+
     const competitionEntity = await this.competitionRepository
       .findOne({
         where: { id: applicationEntity.competitionId },
@@ -422,21 +492,23 @@ export class ApplicationsAppService {
         if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
         return competition;
       });
+
     const userModel = new UserModel(userEntity);
     const applicationModel = new ApplicationModel(applicationEntity);
     const competitionModel = new CompetitionModel(competitionEntity);
+
     applicationModel.setExpectedPayment(
       competitionModel.calculateExpectedPayment(applicationModel.getOriginalParticipationDivisionIds()),
     );
+
     const applicationOrder = new ApplicationOrderModel(
-      this.applicationFactory.createApplicationOrder(applicationModel, userModel, competitionModel),
+      ApplicationFactory.createApplicationOrder(applicationModel, userModel, competitionModel),
     );
+
     applicationModel.addApplicationOrder(applicationOrder);
-    await this.applicationValidationService.validateCreateApplicationOrder(
-      userModel,
-      competitionModel,
-      applicationModel,
-    );
+
+    await this.applicationValidationDomainService.validateCreateApplicationOrder(competitionModel, applicationModel);
+
     return assert<CreateApplicationOrderRet>({
       application: await this.applicationRepository.save(applicationModel.toData()),
     });
@@ -456,6 +528,7 @@ export class ApplicationsAppService {
       const userRepository = queryRunner.manager.getRepository(UserEntity);
       const applicationRepository = queryRunner.manager.getRepository(ApplicationEntity);
       const competitionRepository = queryRunner.manager.getRepository(CompetitionEntity);
+
       const [_userEntity, applicationEntity] = await Promise.all([
         userRepository.findOne({ where: { id: userId } }).then((user) => {
           if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
@@ -463,7 +536,7 @@ export class ApplicationsAppService {
         }),
         applicationRepository
           .findOne({
-            where: { id: applicationId, userId, status: 'READY' },
+            where: { id: applicationId, userId },
             relations: [
               'additionaInfos',
               'playerSnapshots',
@@ -482,11 +555,12 @@ export class ApplicationsAppService {
               'applicationOrders.combinationDiscountSnapshot',
             ],
           })
-          .then((application) => {
-            if (!application) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
-            return application;
+          .then((applicationEntity) => {
+            if (!applicationEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+            return applicationEntity;
           }),
       ]);
+
       const competitionEntity = await competitionRepository
         .findOne({
           where: { id: applicationEntity.competitionId },
@@ -502,16 +576,22 @@ export class ApplicationsAppService {
           if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
           return competition;
         });
+
       const applicationModel = new ApplicationModel(applicationEntity);
       const competitionModel = new CompetitionModel(competitionEntity);
 
-      // todo!!!: validation 로직 service로 분로
-      competitionModel.validateApplicationPeriod();
+      await this.applicationValidationDomainService.validateApproveApplicationOrder(competitionModel, applicationModel);
+
       applicationModel.approve(paymentKey, orderId, amount);
-      const application = await applicationRepository.save(applicationModel.toData());
+
       await this.paymentsAppService.approvePayment({ paymentKey, orderId, amount });
+
+      const savedApplication = await applicationRepository.save(applicationModel.toData());
+
+      await queryRunner.commitTransaction();
+
       return assert<ApproveApplicationOrderRet>({
-        application,
+        application: savedApplication,
       });
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -533,6 +613,7 @@ export class ApplicationsAppService {
       const userRepository = queryRunner.manager.getRepository(UserEntity);
       const applicationRepository = queryRunner.manager.getRepository(ApplicationEntity);
       const competitionRepository = queryRunner.manager.getRepository(CompetitionEntity);
+
       const [_userEntity, applicationEntity] = await Promise.all([
         userRepository.findOne({ where: { id: userId } }).then((user) => {
           if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
@@ -540,7 +621,7 @@ export class ApplicationsAppService {
         }),
         applicationRepository
           .findOne({
-            where: { id: applicationId, userId, status: In(['DONE', 'PARTIAL_CANCELED']) },
+            where: { id: applicationId, userId },
             relations: [
               'additionaInfos',
               'playerSnapshots',
@@ -559,11 +640,12 @@ export class ApplicationsAppService {
               'applicationOrders.combinationDiscountSnapshot',
             ],
           })
-          .then((application) => {
-            if (!application) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
-            return application;
+          .then((applicationEntity) => {
+            if (!applicationEntity) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Application not found');
+            return applicationEntity;
           }),
       ]);
+
       const competitionEntity = await competitionRepository
         .findOne({
           where: { id: applicationEntity.competitionId },
@@ -579,24 +661,21 @@ export class ApplicationsAppService {
           if (!competition) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'Competition not found');
           return competition;
         });
+
       const applicationModel = new ApplicationModel(applicationEntity);
       const competitionModel = new CompetitionModel(competitionEntity);
 
-      // todo!!!: validation 로직 service로 분로
-      competitionModel.validateApplicationPeriod();
-      applicationModel.cancel(participationDivisionInfoIds);
+      await this.applicationValidationDomainService.validateCancelApplicationOrder(competitionModel, applicationModel);
 
-      if (applicationModel.status === 'PARTIAL_CANCELED') {
-        const newApplicationOrderPaymentSnapshotModel = new ApplicationOrderPaymentSnapshotModel(
-          this.applicationFactory.createApplicationOrderPaymentSnapshot(applicationModel),
-        );
-        applicationModel.addApplicationOrderPaymentSnapshot(newApplicationOrderPaymentSnapshotModel);
-      }
+      applicationModel.cancel(participationDivisionInfoIds);
 
       await this.paymentsAppService.cancelPayment(applicationModel.getCancellationInfo());
 
+      const savedApplication = await applicationRepository.save(applicationModel.toData());
+      await queryRunner.commitTransaction();
+
       return assert<CancelApplicationOrderRet>({
-        application: await applicationRepository.save(applicationModel.toData()),
+        application: savedApplication,
       });
     } catch (error) {
       await queryRunner.rollbackTransaction();

@@ -12741,12 +12741,6 @@
             "items": {
               "$ref": "#/components/schemas/IApplicationOrderPaymentSnapshot"
             }
-          },
-          "earlybirdDiscountSnapshot": {
-            "$ref": "#/components/schemas/IEarlybirdDiscountSnapshot.Nullable"
-          },
-          "combinationDiscountSnapshot": {
-            "$ref": "#/components/schemas/ICombinationDiscountSnapshot.Nullable"
           }
         },
         "nullable": false,
@@ -12763,9 +12757,7 @@
           "applicationId",
           "earlybirdDiscountSnapshotId",
           "combinationDiscountSnapshotId",
-          "applicationOrderPaymentSnapshots",
-          "earlybirdDiscountSnapshot",
-          "combinationDiscountSnapshot"
+          "applicationOrderPaymentSnapshots"
         ]
       },
       "TApplicationOrderStatus": {
@@ -12893,86 +12885,6 @@
           "READY",
           "DONE",
           "CANCELED"
-        ]
-      },
-      "IEarlybirdDiscountSnapshot.Nullable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "earlybirdStartDate": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "얼리버드 할인 시작일",
-            "description": "얼리버드 할인 시작일."
-          },
-          "earlybirdEndDate": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "얼리버드 할인 마감일",
-            "description": "얼리버드 할인 마감일."
-          },
-          "discountAmount": {
-            "$ref": "#/components/schemas/TMoneyValue",
-            "title": "얼리버드 할인 가격",
-            "description": "얼리버드 할인 가격.\n- ex) 10000.\n- 단위 : 원.\n- 음수 값은 허용하지 않습니다."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          },
-          "competitionId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Competition id",
-            "description": "Competition id."
-          }
-        },
-        "nullable": true,
-        "required": [
-          "id",
-          "earlybirdStartDate",
-          "earlybirdEndDate",
-          "discountAmount",
-          "createdAt",
-          "competitionId"
-        ]
-      },
-      "ICombinationDiscountSnapshot.Nullable": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "combinationDiscountRules": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICombinationDiscountRule"
-            },
-            "minItems": 1,
-            "title": "조합 할인 규칙",
-            "description": "조합 할인 규칙."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          },
-          "competitionId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Competition id",
-            "description": "Competition id."
-          }
-        },
-        "nullable": true,
-        "required": [
-          "id",
-          "combinationDiscountRules",
-          "createdAt",
-          "competitionId"
         ]
       },
       "ResponseFormGetApplicationRes": {

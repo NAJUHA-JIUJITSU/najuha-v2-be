@@ -38,13 +38,10 @@ import {
   APPLICATIONS_REGISTRATION_ENDED,
   APPLICATIONS_REGISTRATION_NOT_STARTED,
   APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH,
+  APPLICATIONS_STATUS_NOT_READY,
   ENTITY_NOT_FOUND,
 } from '../../../src/common/response/errorResponse';
-import { ITossCardPayment } from 'toss-payments-server-api/lib/structures/ITossCardPayment';
-import toss from 'toss-payments-server-api';
 import { PaymentsAppService } from '../../../src/modules/payments/application/payments.app.service';
-import exp from 'constants';
-import { competition } from '../../../src/api/functional/user/view_count';
 
 const extractDivisionIds = (
   competition: ICompetition,
@@ -117,7 +114,9 @@ describe('E2E u-6 applications TEST', () => {
 
   describe('u-6-1 createApplication', () => {
     it('신청 성공', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -141,7 +140,9 @@ describe('E2E u-6 applications TEST', () => {
         ['노기통합', 'NOGI', 'MALE', '초급', 'ABSOLUTE'],
       ];
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationReqBody: CreateApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -177,7 +178,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('신청 실패 - 대회 신청 기간 시작 전', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -199,7 +202,9 @@ describe('E2E u-6 applications TEST', () => {
         ['노기통합', 'NOGI', 'MALE', '초급', 'ABSOLUTE'],
       ];
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationReqBody: CreateApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -235,7 +240,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('신청 실패 - 대회 신청 기간 종료', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -257,7 +264,9 @@ describe('E2E u-6 applications TEST', () => {
         ['노기통합', 'NOGI', 'MALE', '초급', 'ABSOLUTE'],
       ];
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationReqBody: CreateApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -295,7 +304,9 @@ describe('E2E u-6 applications TEST', () => {
     it('todo!!! 신청 실패 - 단독 출전 조정 기간중, 출전 인원 0명 부문에 신청', async () => {});
 
     it('신청 실패 - 선수 정보와 맞지 않는 부문 성별', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -319,7 +330,9 @@ describe('E2E u-6 applications TEST', () => {
         ['노기통합', 'NOGI', 'FEMALE', '초급', 'ABSOLUTE'],
       ];
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationReqBody: CreateApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -355,7 +368,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('신청 실패 - 선수 정보와 맞지 않는 부문 나이', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -377,7 +392,9 @@ describe('E2E u-6 applications TEST', () => {
         ['초등부34', 'GI', 'MALE', '유색', '-25'],
       ];
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationReqBody: CreateApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -413,7 +430,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('신청 실패 - 필수 추가 정보 누락', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -437,7 +456,9 @@ describe('E2E u-6 applications TEST', () => {
         ['노기통합', 'NOGI', 'MALE', '초급', 'ABSOLUTE'],
       ];
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationReqBody: CreateApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -466,7 +487,9 @@ describe('E2E u-6 applications TEST', () => {
 
   describe('u-6-2 getApplication', () => {
     it('신청 조회 성공', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -523,7 +546,9 @@ describe('E2E u-6 applications TEST', () => {
         });
       const applicationId = createApplicationResBody.result.application.id;
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const getApplicationResBody = await request(app.getHttpServer())
         .get(`/user/applications/${applicationId}`)
         .set('Authorization', `Bearer ${dummyUserAccessToken}`)
@@ -535,7 +560,9 @@ describe('E2E u-6 applications TEST', () => {
 
   describe('u-6-3 updateReadyApplication', () => {
     it('READY(결제전) 신청 수정 성공', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -592,7 +619,9 @@ describe('E2E u-6 applications TEST', () => {
         });
       const applicationId = createApplicationResBody.result.application.id;
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const updateApplicationBody: UpdateReadyApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -628,7 +657,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('READY(결제전) 신청 수정 실패 - 대회 신청 기간 종료', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -686,7 +717,9 @@ describe('E2E u-6 applications TEST', () => {
         registrationEndDate: new Date(new Date().setDate(new Date().getDate() - 1)),
       });
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const updateApplicationBody: UpdateReadyApplicationReqBody = {
         competitionId: dummyCompetition.id,
         applicationType: 'SELF',
@@ -724,7 +757,9 @@ describe('E2E u-6 applications TEST', () => {
     it('todo!!! READY(결제전) 신청 수정 실패 - 단독 출전 조정 기간중, 출전 인원 0명 부문으로 수정', async () => {});
 
     it('READY(결제전) 신청 수정 실패 - 선수 정보와 맞지 않는 부문 성별', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -781,7 +816,9 @@ describe('E2E u-6 applications TEST', () => {
         });
       const applicationId = createApplicationResBody.result.application.id;
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const newParticipationDivisionCombination: IParticipationDivisionCombination = [
         ['어덜트', 'GI', 'FEMALE', '화이트', '-43'],
         ['어덜트', 'GI', 'FEMALE', '화이트', '-58_ABSOLUTE'],
@@ -823,7 +860,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('READY(결제전) 신청 수정 실패 - 선수 정보와 맞지 않는 부문 나이', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -880,7 +919,9 @@ describe('E2E u-6 applications TEST', () => {
         });
       const applicationId = createApplicationResBody.result.application.id;
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const newParticipationDivisionCombination: IParticipationDivisionCombination = [
         ['초등부34', 'GI', 'MALE', '화이트', '-25'],
         ['초등부34', 'GI', 'MALE', '유색', '-25'],
@@ -944,7 +985,9 @@ describe('E2E u-6 applications TEST', () => {
 
   describe('u-6-8 createApplicationOrder', () => {
     it('결제 주문 생성 성공', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -1000,7 +1043,9 @@ describe('E2E u-6 applications TEST', () => {
           return typia.assert<ResponseForm<CreateApplicationRes>>(res.body);
         });
       const applicationId = createApplicationResBody.result.application.id;
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationOrderResBody = await request(app.getHttpServer())
         .post(`/user/applications/${applicationId}/order`)
         .set('Authorization', `Bearer ${dummyUserAccessToken}`)
@@ -1010,7 +1055,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('결제 주문 생성 실패 - 대회 신청 기간 종료', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
         .setTitle('테스트 대회')
@@ -1069,7 +1116,9 @@ describe('E2E u-6 applications TEST', () => {
         registrationEndDate: new Date(new Date().setDate(new Date().getDate() - 1)),
       });
       const applicationId = createApplicationResBody.result.application.id;
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const createApplicationOrderResBody = await request(app.getHttpServer())
         .post(`/user/applications/${applicationId}/order`)
         .set('Authorization', `Bearer ${dummyUserAccessToken}`)
@@ -1083,7 +1132,9 @@ describe('E2E u-6 applications TEST', () => {
 
   describe('u-6-9 approveApplicationOrder', () => {
     it('결제 주문 승인 성공', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       // dummy data
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
@@ -1169,7 +1220,9 @@ describe('E2E u-6 applications TEST', () => {
       });
       const payment = keyInRet.payment;
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const approveApplicationOrderReqBody: ApproveApplicationOrderReqBody = {
         orderId,
         paymentKey: payment.paymentKey,
@@ -1200,7 +1253,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('결제 주문 승인 실패 - 대회 신청 기간 종료', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       // dummy data
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
@@ -1286,7 +1341,9 @@ describe('E2E u-6 applications TEST', () => {
       });
       const payment = keyInRet.payment;
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       await entityEntityManager.update(CompetitionEntity, dummyCompetition.id, {
         registrationEndDate: new Date(new Date().setDate(new Date().getDate() - 1)),
       });
@@ -1308,7 +1365,9 @@ describe('E2E u-6 applications TEST', () => {
     it('todo!!! 결제 주문 승인 실패 - 단독 출전 조정 기간중, 출전 인원 0명 부문을 포함한 신청에 대한 주문 승인', async () => {});
 
     it('결제 주문 승인 실패 - 결제 금액 불일치', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       // dummy data
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
@@ -1394,7 +1453,9 @@ describe('E2E u-6 applications TEST', () => {
       });
       const payment = keyInRet.payment;
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const approveApplicationOrderReqBody: ApproveApplicationOrderReqBody = {
         orderId,
         paymentKey: payment.paymentKey,
@@ -1410,7 +1471,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('결제 주문 승인 실패 - 결제 완료된 주문 승인 요청', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       // dummy data
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
@@ -1525,7 +1588,9 @@ describe('E2E u-6 applications TEST', () => {
         expect(participationDivisionInfo.status).toBe('DONE');
       });
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const approveApplicationOrderReqBody2: ApproveApplicationOrderReqBody = {
         orderId,
         paymentKey: payment.paymentKey,
@@ -1536,7 +1601,7 @@ describe('E2E u-6 applications TEST', () => {
         .set('Authorization', `Bearer ${dummyUserAccessToken}`)
         .send(approveApplicationOrderReqBody2)
         .then((res) => {
-          return typia.assert<ENTITY_NOT_FOUND>(res.body);
+          return typia.assert<APPLICATIONS_STATUS_NOT_READY>(res.body);
         });
     });
 
@@ -1545,7 +1610,9 @@ describe('E2E u-6 applications TEST', () => {
 
   describe('u-6-10 cancelApplicationOrder', () => {
     it('결제 주문 취소 성공 - 전체 취소', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       // dummy data
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
@@ -1659,7 +1726,9 @@ describe('E2E u-6 applications TEST', () => {
         expect(participationDivisionInfo.status).toBe('DONE');
       });
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const participationDivisionInfoIds = approvedApplication.participationDivisionInfos.map(
         (participationDivisionInfo) => participationDivisionInfo.id,
       );
@@ -1696,7 +1765,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('결제 주문 취소 성공 - 부분 취소', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       // dummy data
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
@@ -1810,7 +1881,9 @@ describe('E2E u-6 applications TEST', () => {
         expect(participationDivisionInfo.status).toBe('DONE');
       });
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const participationDivisionInfoIds = approvedApplication.participationDivisionInfos.map(
         (participationDivisionInfo) => participationDivisionInfo.id,
       );
@@ -1847,7 +1920,9 @@ describe('E2E u-6 applications TEST', () => {
     });
 
     it('결제 주문 취소 성공 - 부분 반복으로 전체 취소', async () => {
-      /** pre condition */
+      // --------------------------------------------------------------------------------------------------------------
+      // PRE CONDITION
+      // --------------------------------------------------------------------------------------------------------------
       // dummy data
       const dummyCompetition = new CompetitionDummyBuilder()
         .setIsPartnership(true)
@@ -1961,7 +2036,9 @@ describe('E2E u-6 applications TEST', () => {
         expect(participationDivisionInfo.status).toBe('DONE');
       });
 
-      /** main test */
+      // --------------------------------------------------------------------------------------------------------------
+      // MAIN TEST
+      // --------------------------------------------------------------------------------------------------------------
       const participationDivisionInfoIds = approvedApplication.participationDivisionInfos.map(
         (participationDivisionInfo) => participationDivisionInfo.id,
       );

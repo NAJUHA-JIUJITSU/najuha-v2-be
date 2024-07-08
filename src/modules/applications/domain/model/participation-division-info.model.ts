@@ -66,6 +66,7 @@ export class ParticipationDivisionInfoModel {
     const division = this.getLatestParticipationDivisionInfoSnapshot().division;
     this.validateDivisionAgeRange(division, playerBirth);
     this.validateDivisionGender(division, playerGender);
+    division.validateRegisterabelStatus();
   }
 
   private validateDivisionAgeRange(division: DivisionModel, playerBirth: IPlayerSnapshot['birth']) {

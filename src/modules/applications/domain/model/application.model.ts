@@ -13,6 +13,7 @@ import { TMoneyValue } from '../../../../common/common-types';
 import { IParticipationDivisionInfoModelData } from '../interface/participation-division-info.interface';
 import { ApplicationOrderPaymentSnapshotModel } from './application-order-payment-snapshot.model';
 import { assert } from 'typia';
+import { ApplicationFactory } from '../application.factory';
 
 export class ApplicationModel {
   /** properties */
@@ -143,6 +144,15 @@ export class ApplicationModel {
   // --------------------------------------------------------------------------
   // Common Method
   // --------------------------------------------------------------------------
+  validateBeforePaymentStatus() {
+    if (this._status !== 'READY') throw new BusinessException(ApplicationsErrors.APPLICATIONS_STATUS_NOT_READY);
+  }
+
+  validateAfterPaymentStatus() {
+    if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
+      throw new BusinessException(ApplicationsErrors.APPLICATIONS_STATUS_NOT_DONE_OR_PARTIAL_CANCELED);
+  }
+
   validateApplicationType(user: UserModel) {
     if (this._type === 'PROXY') return;
     this.latestPlayerSnapshot.validateSelfApplication(user);
@@ -243,13 +253,18 @@ export class ApplicationModel {
     this.cancelParticipationDivisionInfos(participationDivisionInfoIds);
     this.cancelParticipationDivisionInfoPayment(participationDivisionInfoIds);
     this._status = assert<IApplicationModelData['status']>(this.getPayedApplicationOrder().status);
+    if (this._status === 'PARTIAL_CANCELED') {
+      const newApplicationOrderPaymentSnapshotModel = new ApplicationOrderPaymentSnapshotModel(
+        ApplicationFactory.createApplicationOrderPaymentSnapshot(this),
+      );
+      this.addApplicationOrderPaymentSnapshot(newApplicationOrderPaymentSnapshotModel);
+    }
   }
 
   private cancelParticipationDivisionInfos(participationDivisionInfoIds: IParticipationDivisionInfoModelData['id'][]) {
     if (this._status !== 'DONE' && this._status !== 'PARTIAL_CANCELED')
       throw new Error('Application status is not DONE or PARTIAL_CANCEL6');
     if (participationDivisionInfoIds.length === 0) throw new Error('participationDivisionInfoIds is not initialized');
-
     participationDivisionInfoIds.forEach((participationDivisionInfoId) => {
       const participationDivisionInfo = this._participationDivisionInfos.find(
         (info) => info.id === participationDivisionInfoId,

@@ -187,7 +187,8 @@ export class ApplicationOrderModel {
       return Math.abs(
         latestApplicationOrderPaymentSnapshot.totalAmount - secondLatestApplicationOrderPaymentSnapshot.totalAmount,
       );
+    } else {
+      throw new Error('Only CANCELED or PARTIAL_CANCELED status can be refunded');
     }
-    throw new Error('Only CANCELED or PARTIAL_CANCELED status can be refunded');
   }
 }

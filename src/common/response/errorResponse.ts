@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import exp from 'constants';
 import typia from 'typia';
 
 export type AllErrorTypes =
@@ -266,10 +267,19 @@ export type COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED = ErrorResponse & {
   result: '대회 추가 정보가 중복되었습니다.';
 };
 
+export type COMPETITIONS_COMPETITION_STATUS_NOT_ACTIVE = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 6003;
+  type: 'COMPETITIONS_COMPETITION_STATUS_NOT_ACTIVE';
+  result: '대회의 상태가 ACTIVE가 아닙니다.';
+};
+
 export const CompetitionsErrors = {
   COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_CANNOT_BE_ACTIVE>(),
   COMPETITIONS_DIVISION_DUPLICATED: typia.random<COMPETITIONS_DIVISION_DUPLICATED>(),
   COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED: typia.random<COMPETITIONS_REQUIRED_ADDITIONAL_INFO_DUPLICATED>(),
+  COMPETITIONS_COMPETITION_STATUS_NOT_ACTIVE: typia.random<COMPETITIONS_COMPETITION_STATUS_NOT_ACTIVE>(),
 };
 
 // -----------------------------------------------------------------------------
@@ -364,6 +374,38 @@ export type APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH = ErrorResponse & {
   result: '결제 금액이 일치하지 않습니다.';
 };
 
+export type APPLICATIONS_REFUND_DEADLINE_ENDED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7012;
+  type: 'APPLICATIONS_REFUND_DEADLINE_ENDED';
+  result: '환불 기간이 종료되었습니다.';
+};
+
+export type APPLICATIONS_STATUS_NOT_READY = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7013;
+  type: 'APPLICATIONS_STATUS_NOT_READY';
+  result: '신청 상태가 READY가 아닙니다.';
+};
+
+export type APPLICATIONS_STATUS_NOT_DONE_OR_PARTIAL_CANCELED = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7014;
+  type: 'APPLICATIONS_STATUS_NOT_DONE_OR_PARTIAL_CANCELED';
+  result: '신청 상태가 DONE이거나 PARTIAL_CANCELED가 아닙니다.';
+};
+
+export type APPLICATIONS_DIVISION_NOT_ACTIVE = ErrorResponse & {
+  isSuccess: false;
+  status: HttpStatus.BAD_REQUEST;
+  code: 7015;
+  type: 'APPLICATIONS_DIVISION_NOT_ACTIVE';
+  result: '대회 부문이 ACTIVE 상태가 아닙니다.';
+};
+
 export const ApplicationsErrors = {
   APPLICATIONS_DIVISION_NOT_FOUND: typia.random<APPLICATIONS_DIVISION_NOT_FOUND>(),
   APPLICATIONS_DIVISION_AGE_NOT_MATCH: typia.random<APPLICATIONS_DIVISION_AGE_NOT_MATCH>(),
@@ -378,6 +420,10 @@ export const ApplicationsErrors = {
   APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH: typia.random<APPLICATIONS_REQUIRED_ADDITIONAL_INFO_NOT_MATCH>(),
   APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND: typia.random<APPLICATIONS_ADDITIONAL_INFO_NOT_FOUND>(),
   APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH: typia.random<APPLICATIONS_ORDRE_PAYMENT_AMOUNT_NOT_MATCH>(),
+  APPLICATIONS_REFUND_DEADLINE_ENDED: typia.random<APPLICATIONS_REFUND_DEADLINE_ENDED>(),
+  APPLICATIONS_STATUS_NOT_READY: typia.random<APPLICATIONS_STATUS_NOT_READY>(),
+  APPLICATIONS_STATUS_NOT_DONE_OR_PARTIAL_CANCELED: typia.random<APPLICATIONS_STATUS_NOT_DONE_OR_PARTIAL_CANCELED>(),
+  APPLICATIONS_DIVISION_NOT_ACTIVE: typia.random<APPLICATIONS_DIVISION_NOT_ACTIVE>(),
 };
 
 // -----------------------------------------------------------------------------

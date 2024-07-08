@@ -311,17 +311,33 @@ export class CompetitionModel {
     requiredAdditionalInfo.delete();
   }
 
-  validateApplicationPeriod(now = new Date()) {
-    if (this._registrationStartDate && now < this._registrationStartDate)
+  validateApplicationRegisterablePeriod(now = new Date()) {
+    if (!this._registrationStartDate) throw new Error('registrationStartDate is not initialized in CompetitionModel');
+    if (!this._registrationEndDate) throw new Error('registrationEndDate is not initialized in CompetitionModel');
+    if (now < this._registrationStartDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,
         `registrationStartDate: ${this._registrationStartDate}`,
       );
-    if (this._registrationEndDate && now > this._registrationEndDate)
+    if (now > this._registrationEndDate)
       throw new BusinessException(
         ApplicationsErrors.APPLICATIONS_REGISTRATION_ENDED,
         `registrationEndDate: ${this._registrationEndDate}`,
       );
+  }
+
+  validateApplicationCancelablePeriod(now = new Date()) {
+    if (!this._refundDeadlineDate) throw new Error('refundDeadlineDate is not initialized in CompetitionModel');
+    if (now > this._refundDeadlineDate)
+      throw new BusinessException(
+        ApplicationsErrors.APPLICATIONS_REFUND_DEADLINE_ENDED,
+        `refundDeadlineDate: ${this._refundDeadlineDate}`,
+      );
+  }
+
+  validateActiveStatus() {
+    if (this._status !== 'ACTIVE')
+      throw new BusinessException(CompetitionsErrors.COMPETITIONS_COMPETITION_STATUS_NOT_ACTIVE);
   }
 
   isSoloRegistrationAdjustmentPeriod(now = new Date()) {

@@ -1,3 +1,4 @@
+import { ApplicationsErrors, BusinessException } from '../../../../common/response/errorResponse';
 import { IDivisionModelData } from '../interface/division.interface';
 import { PriceSnapshotModel } from './price-snapshot.model';
 
@@ -108,5 +109,14 @@ export class DivisionModel {
     if (!this._priceSnapshots || this._priceSnapshots.length === 0)
       throw new Error('PriceSnapshots is not initialized in DivisionModel');
     return this._priceSnapshots[this._priceSnapshots.length - 1];
+  }
+
+  validateRegisterabelStatus() {
+    if (this._status !== 'ACTIVE') {
+      throw new BusinessException(
+        ApplicationsErrors.APPLICATIONS_DIVISION_NOT_ACTIVE,
+        `divisionId: ${this._id} status: ${this._status} : ${this._category} ${this._uniform} ${this.gender} ${this._belt} ${this._weight}`,
+      );
+    }
   }
 }
