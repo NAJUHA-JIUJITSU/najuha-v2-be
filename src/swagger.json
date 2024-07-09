@@ -8555,20 +8555,6 @@
             "title": "UUID v7",
             "description": "UUID v7."
           },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ],
-            "title": "User 상태",
-            "description": "User 상태.\n- ACTIVE: 활성.\n- INACTIVE: 비활성."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          },
           "snsAuthProvider": {
             "type": "string",
             "enum": [
@@ -8613,6 +8599,20 @@
             "pattern": "^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$",
             "title": "User 이름",
             "description": "User 이름.\n- 컬럼길이는 256으로 설정하였으나, 입력값 유효성검사는 64자 이내로 설정하도록 합니다.\n- User 이름은 한글, 영문, 숫자만 입력 가능합니다."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ],
+            "title": "User 상태",
+            "description": "User 상태.\n- ACTIVE: 활성.\n- INACTIVE: 비활성."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
           },
           "updatedAt": {
             "$ref": "#/components/schemas/TDateOrStringDate",
@@ -8670,13 +8670,13 @@
         "nullable": false,
         "required": [
           "id",
-          "status",
-          "createdAt",
           "snsAuthProvider",
           "role",
           "snsId",
           "email",
           "name",
+          "status",
+          "createdAt",
           "updatedAt",
           "nickname",
           "phoneNumber",
@@ -9144,7 +9144,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/IUser"
+            "$ref": "#/components/schemas/IUserDetail"
           }
         },
         "nullable": false,
@@ -9152,7 +9152,7 @@
           "user"
         ]
       },
-      "IUser": {
+      "IUserDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -9441,7 +9441,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/IUser"
+            "$ref": "#/components/schemas/IUserDetail"
           }
         },
         "nullable": false,
@@ -9493,7 +9493,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/IUser"
+            "$ref": "#/components/schemas/IUserDetail"
           }
         },
         "nullable": false,
@@ -9650,7 +9650,7 @@
         "type": "object",
         "properties": {
           "policy": {
-            "$ref": "#/components/schemas/IPolicy"
+            "$ref": "#/components/schemas/IPolicyDetail"
           }
         },
         "nullable": false,
@@ -9658,7 +9658,7 @@
           "policy"
         ]
       },
-      "IPolicy": {
+      "IPolicyDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -9710,8 +9710,7 @@
           "title",
           "content",
           "createdAt"
-        ],
-        "description": "약관.\n- 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.\n- 새로운 약관이 생성될 때마다 버전을 올립니다."
+        ]
       },
       "CreatePolicyReqBody": {
         "type": "object",
@@ -9784,7 +9783,7 @@
         "type": "object",
         "properties": {
           "policy": {
-            "$ref": "#/components/schemas/IPolicy"
+            "$ref": "#/components/schemas/IPolicyDetail"
           }
         },
         "nullable": false,
@@ -9977,11 +9976,6 @@
             "title": "UUID v7",
             "description": "UUID v7."
           },
-          "viewCount": {
-            "type": "integer",
-            "title": "조회수",
-            "description": "조회수."
-          },
           "status": {
             "$ref": "#/components/schemas/TCompetitionStatus",
             "title": "대회의 상태",
@@ -10158,6 +10152,11 @@
             "title": "협약 대회 여부",
             "description": "협약 대회 여부."
           },
+          "viewCount": {
+            "type": "integer",
+            "title": "조회수",
+            "description": "조회수."
+          },
           "earlybirdDiscountSnapshots": {
             "type": "array",
             "items": {
@@ -10176,7 +10175,6 @@
         "nullable": false,
         "required": [
           "id",
-          "viewCount",
           "status",
           "createdAt",
           "updatedAt",
@@ -10193,6 +10191,7 @@
           "bracketOpenDate",
           "description",
           "isPartnership",
+          "viewCount",
           "earlybirdDiscountSnapshots",
           "competitionPosterImages"
         ]
@@ -10332,7 +10331,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -10340,7 +10339,7 @@
           "competition"
         ]
       },
-      "ICompetition": {
+      "ICompetitionDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -11145,11 +11144,6 @@
             "title": "UUID v7",
             "description": "UUID v7."
           },
-          "viewCount": {
-            "type": "integer",
-            "title": "조회수",
-            "description": "조회수."
-          },
           "status": {
             "$ref": "#/components/schemas/TCompetitionStatus",
             "title": "대회의 상태",
@@ -11334,6 +11328,11 @@
             "title": "협약 대회 여부",
             "description": "협약 대회 여부."
           },
+          "viewCount": {
+            "type": "integer",
+            "title": "조회수",
+            "description": "조회수."
+          },
           "competitionPosterImages": {
             "type": "array",
             "items": {
@@ -11344,7 +11343,6 @@
         "nullable": false,
         "required": [
           "id",
-          "viewCount",
           "status",
           "createdAt",
           "updatedAt",
@@ -11362,6 +11360,7 @@
           "bracketOpenDate",
           "description",
           "isPartnership",
+          "viewCount",
           "competitionPosterImages"
         ]
       },
@@ -11555,7 +11554,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -11732,7 +11731,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -11815,7 +11814,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -11871,7 +11870,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -11934,7 +11933,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -11988,7 +11987,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -12026,7 +12025,7 @@
         "type": "object",
         "properties": {
           "competition": {
-            "$ref": "#/components/schemas/ICompetition"
+            "$ref": "#/components/schemas/ICompetitionDetail"
           }
         },
         "nullable": false,
@@ -12292,7 +12291,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -12300,7 +12299,7 @@
           "application"
         ]
       },
-      "IApplication": {
+      "IApplicationDetail": {
         "type": "object",
         "properties": {
           "id": {
@@ -12741,6 +12740,12 @@
             "items": {
               "$ref": "#/components/schemas/IApplicationOrderPaymentSnapshot"
             }
+          },
+          "earlybirdDiscountSnapshot": {
+            "$ref": "#/components/schemas/IEarlybirdDiscountSnapshot.Nullable"
+          },
+          "combinationDiscountSnapshot": {
+            "$ref": "#/components/schemas/ICombinationDiscountSnapshot.Nullable"
           }
         },
         "nullable": false,
@@ -12757,7 +12762,9 @@
           "applicationId",
           "earlybirdDiscountSnapshotId",
           "combinationDiscountSnapshotId",
-          "applicationOrderPaymentSnapshots"
+          "applicationOrderPaymentSnapshots",
+          "earlybirdDiscountSnapshot",
+          "combinationDiscountSnapshot"
         ]
       },
       "TApplicationOrderStatus": {
@@ -12887,6 +12894,86 @@
           "CANCELED"
         ]
       },
+      "IEarlybirdDiscountSnapshot.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "earlybirdStartDate": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "얼리버드 할인 시작일",
+            "description": "얼리버드 할인 시작일."
+          },
+          "earlybirdEndDate": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "얼리버드 할인 마감일",
+            "description": "얼리버드 할인 마감일."
+          },
+          "discountAmount": {
+            "$ref": "#/components/schemas/TMoneyValue",
+            "title": "얼리버드 할인 가격",
+            "description": "얼리버드 할인 가격.\n- ex) 10000.\n- 단위 : 원.\n- 음수 값은 허용하지 않습니다."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "competitionId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Competition id",
+            "description": "Competition id."
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "earlybirdStartDate",
+          "earlybirdEndDate",
+          "discountAmount",
+          "createdAt",
+          "competitionId"
+        ]
+      },
+      "ICombinationDiscountSnapshot.Nullable": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/TId",
+            "title": "UUID v7",
+            "description": "UUID v7."
+          },
+          "combinationDiscountRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICombinationDiscountRule"
+            },
+            "minItems": 1,
+            "title": "조합 할인 규칙",
+            "description": "조합 할인 규칙."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
+          },
+          "competitionId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Competition id",
+            "description": "Competition id."
+          }
+        },
+        "nullable": true,
+        "required": [
+          "id",
+          "combinationDiscountRules",
+          "createdAt",
+          "competitionId"
+        ]
+      },
       "ResponseFormGetApplicationRes": {
         "type": "object",
         "properties": {
@@ -12917,7 +13004,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -13009,7 +13096,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -13102,7 +13189,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -13217,7 +13304,7 @@
           "applications": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IApplication"
+              "$ref": "#/components/schemas/IApplicationDetail"
             }
           }
         },
@@ -13276,7 +13363,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -13330,7 +13417,7 @@
         "type": "object",
         "properties": {
           "application": {
-            "$ref": "#/components/schemas/IApplication"
+            "$ref": "#/components/schemas/IApplicationDetail"
           }
         },
         "nullable": false,
@@ -13341,6 +13428,13 @@
       "CreatePostReqBody": {
         "type": "object",
         "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Post title",
+            "description": "Post title."
+          },
           "category": {
             "type": "string",
             "enum": [
@@ -13351,13 +13445,6 @@
             ],
             "title": "Post category",
             "description": "Post category.\n- FREE: 자유 게시판.\n- COMPETITION: 대회 게시판.\n- SEMINAR: 세미나 게시판.\n- OPEN_MAT: 오픈 매트 게시판."
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 64,
-            "minLength": 1,
-            "title": "Post title",
-            "description": "Post title."
           },
           "body": {
             "type": "string",
@@ -13379,8 +13466,8 @@
         },
         "nullable": false,
         "required": [
-          "category",
           "title",
+          "category",
           "body"
         ]
       },
@@ -13414,7 +13501,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPost"
+            "$ref": "#/components/schemas/IPostDetail"
           }
         },
         "nullable": false,
@@ -13422,13 +13509,23 @@
           "post"
         ]
       },
-      "IPost": {
+      "IPostDetail": {
         "type": "object",
         "properties": {
           "id": {
             "$ref": "#/components/schemas/TId",
             "title": "UUID v7",
             "description": "UUID v7."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TPostStatus",
+            "title": "Post status",
+            "description": "Post status."
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/TDateOrStringDate",
+            "title": "CreatedAt",
+            "description": "CreatedAt."
           },
           "userId": {
             "$ref": "#/components/schemas/TId",
@@ -13440,20 +13537,10 @@
             "title": "Post view count",
             "description": "Post view count."
           },
-          "status": {
-            "$ref": "#/components/schemas/TPostStatus",
-            "title": "Post status",
-            "description": "Post status."
-          },
           "category": {
             "$ref": "#/components/schemas/TPostCategory",
             "title": "Post category",
             "description": "Post category.\n- FREE: 자유 게시판.\n- COMPETITION: 대회 게시판.\n- SEMINAR: 세미나 게시판.\n- OPEN_MAT: 오픈 매트 게시판."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
           },
           "deletedAt": {
             "oneOf": [
@@ -13471,6 +13558,12 @@
             "title": "DeletedAt",
             "description": "DeletedAt."
           },
+          "postSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IPostSnapshot"
+            }
+          },
           "likeCount": {
             "type": "number"
           },
@@ -13480,24 +13573,6 @@
           "userLiked": {
             "type": "boolean"
           },
-          "postSnapshots": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IPostSnapshot"
-            }
-          },
-          "likes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IPostLike"
-            }
-          },
-          "reports": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IPostReport"
-            }
-          },
           "user": {
             "$ref": "#/components/schemas/IUserPublicProfile"
           }
@@ -13505,18 +13580,16 @@
         "nullable": false,
         "required": [
           "id",
+          "status",
+          "createdAt",
           "userId",
           "viewCount",
-          "status",
           "category",
-          "createdAt",
           "deletedAt",
+          "postSnapshots",
           "likeCount",
           "commentCount",
           "userLiked",
-          "postSnapshots",
-          "likes",
-          "reports",
           "user"
         ]
       },
@@ -13629,102 +13702,6 @@
           "sequence",
           "createdAt",
           "image"
-        ]
-      },
-      "IPostLike": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "postId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Post Id",
-            "description": "Post Id."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "User Id",
-            "description": "User Id."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "postId",
-          "userId",
-          "createdAt"
-        ]
-      },
-      "IPostReport": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "type": {
-            "$ref": "#/components/schemas/TPostReportType",
-            "title": "신고 타입",
-            "description": "신고 타입.\n- SPAM_CLICKBAIT: 낚시 / 놀람 / 도배\n- COMMERCIAL_ADVERTISING: 상업적 광고 및 판매\n- SEXUAL_CONTENT: 음란성 / 선정적\n- ABUSE_HARASSMENT: 욕설/비하\n- POLITICAL_DISPARAGEMENT: 정당/정치인 비하 및 선거운동\n- IMPERSONATION_FRAUD: 유출/사칭/사기\n- ILLEGAL_DISTRIBUTION: 불법촬영물 등의 유통\n- RELIGIOUS_PROSELYTIZING: 종교 포교 시도\n- INAPPROPRIATE_CONTENT: 게시판 성격에 부적절함"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TPostReportStatus",
-            "description": "Report Status"
-          },
-          "postId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Post Id",
-            "description": "Post Id."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "User Id",
-            "description": "User Id."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "type",
-          "status",
-          "postId",
-          "userId",
-          "createdAt"
-        ]
-      },
-      "TPostReportType": {
-        "type": "string",
-        "enum": [
-          "SPAM_CLICKBAIT",
-          "COMMERCIAL_ADVERTISING",
-          "SEXUAL_CONTENT",
-          "ABUSE_HARASSMENT",
-          "POLITICAL_DISPARAGEMENT",
-          "IMPERSONATION_FRAUD",
-          "ILLEGAL_DISTRIBUTION",
-          "RELIGIOUS_PROSELYTIZING",
-          "INAPPROPRIATE_CONTENT"
-        ]
-      },
-      "TPostReportStatus": {
-        "type": "string",
-        "enum": [
-          "ACCEPTED",
-          "REJECTED"
         ]
       },
       "IUserPublicProfile": {
@@ -13851,7 +13828,7 @@
           "posts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IPost"
+              "$ref": "#/components/schemas/IPostDetail"
             }
           }
         },
@@ -13890,7 +13867,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPost"
+            "$ref": "#/components/schemas/IPostDetail"
           }
         },
         "nullable": false,
@@ -13962,7 +13939,7 @@
         "type": "object",
         "properties": {
           "post": {
-            "$ref": "#/components/schemas/IPost"
+            "$ref": "#/components/schemas/IPostDetail"
           }
         },
         "nullable": false,
@@ -14041,7 +14018,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/IComment"
+            "$ref": "#/components/schemas/ICommentDetail"
           }
         },
         "nullable": false,
@@ -14049,26 +14026,13 @@
           "comment"
         ]
       },
-      "IComment": {
+      "ICommentDetail": {
         "type": "object",
         "properties": {
           "id": {
             "$ref": "#/components/schemas/TId",
             "title": "UUID v7",
             "description": "UUID v7."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Comment writer",
-            "description": "Comment writer."
-          },
-          "parentId": {
-            "$ref": "#/components/schemas/TId.Nullable",
-            "title": "Comment parent",
-            "description": "Comment parent."
-          },
-          "replyCount": {
-            "type": "number"
           },
           "status": {
             "$ref": "#/components/schemas/TCommentStatus",
@@ -14079,6 +14043,16 @@
             "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Comment writer",
+            "description": "Comment writer."
+          },
+          "postId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "PostId",
+            "description": "PostId."
           },
           "deletedAt": {
             "oneOf": [
@@ -14096,29 +14070,6 @@
             "title": "DeletedAt",
             "description": "DeletedAt."
           },
-          "postId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "PostId",
-            "description": "PostId."
-          },
-          "commentSnapshots": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICommentSnapshot"
-            }
-          },
-          "likes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICommentLike"
-            }
-          },
-          "reports": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICommentReport"
-            }
-          },
           "likeCount": {
             "type": "number"
           },
@@ -14127,24 +14078,36 @@
           },
           "user": {
             "$ref": "#/components/schemas/IUserPublicProfile"
+          },
+          "parentId": {
+            "$ref": "#/components/schemas/TId.Nullable",
+            "title": "Comment parent",
+            "description": "Comment parent."
+          },
+          "replyCount": {
+            "type": "number"
+          },
+          "commentSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICommentSnapshot"
+            }
           }
         },
         "nullable": false,
         "required": [
           "id",
-          "userId",
-          "parentId",
-          "replyCount",
           "status",
           "createdAt",
-          "deletedAt",
+          "userId",
           "postId",
-          "commentSnapshots",
-          "likes",
-          "reports",
+          "deletedAt",
           "likeCount",
           "userLiked",
-          "user"
+          "user",
+          "parentId",
+          "replyCount",
+          "commentSnapshots"
         ]
       },
       "TCommentStatus": {
@@ -14186,102 +14149,6 @@
           "commentId",
           "body",
           "createdAt"
-        ]
-      },
-      "ICommentLike": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "commentId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Comment Id",
-            "description": "Comment Id."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "User Id",
-            "description": "User Id."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "commentId",
-          "userId",
-          "createdAt"
-        ]
-      },
-      "ICommentReport": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/TId",
-            "title": "UUID v7",
-            "description": "UUID v7."
-          },
-          "type": {
-            "$ref": "#/components/schemas/TCommentReportType",
-            "title": "신고 타입",
-            "description": "신고 타입.\n- SPAM_CLICKBAIT: 낚시 / 놀람 / 도배\n- COMMERCIAL_ADVERTISING: 상업적 광고 및 판매\n- SEXUAL_CONTENT: 음란성 / 선정적\n- ABUSE_HARASSMENT: 욕설/비하\n- POLITICAL_DISPARAGEMENT: 정당/정치인 비하 및 선거운동\n- IMPERSONATION_FRAUD: 유출/사칭/사기\n- ILLEGAL_DISTRIBUTION: 불법촬영물 등의 유통\n- RELIGIOUS_PROSELYTIZING: 종교 포교 시도\n- INAPPROPRIATE_CONTENT: 게시판 성격에 부적절함"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TCommentReportStatus",
-            "description": "Report Status"
-          },
-          "commentId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Comment Id",
-            "description": "Comment Id."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "User Id",
-            "description": "User Id."
-          },
-          "createdAt": {
-            "$ref": "#/components/schemas/TDateOrStringDate",
-            "title": "CreatedAt",
-            "description": "CreatedAt."
-          }
-        },
-        "nullable": false,
-        "required": [
-          "id",
-          "type",
-          "status",
-          "commentId",
-          "userId",
-          "createdAt"
-        ]
-      },
-      "TCommentReportType": {
-        "type": "string",
-        "enum": [
-          "SPAM_CLICKBAIT",
-          "COMMERCIAL_ADVERTISING",
-          "SEXUAL_CONTENT",
-          "ABUSE_HARASSMENT",
-          "POLITICAL_DISPARAGEMENT",
-          "IMPERSONATION_FRAUD",
-          "ILLEGAL_DISTRIBUTION",
-          "RELIGIOUS_PROSELYTIZING",
-          "INAPPROPRIATE_CONTENT"
-        ]
-      },
-      "TCommentReportStatus": {
-        "type": "string",
-        "enum": [
-          "ACCEPTED",
-          "REJECTED"
         ]
       },
       "CreateCommentReplyReqBody": {
@@ -14330,7 +14197,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/IComment"
+            "$ref": "#/components/schemas/ICommentDetail"
           }
         },
         "nullable": false,
@@ -14396,7 +14263,7 @@
           "comments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/IComment"
+              "$ref": "#/components/schemas/ICommentDetail"
             }
           }
         },
@@ -14472,7 +14339,7 @@
         "type": "object",
         "properties": {
           "comment": {
-            "$ref": "#/components/schemas/IComment"
+            "$ref": "#/components/schemas/ICommentDetail"
           }
         },
         "nullable": false,
@@ -14534,39 +14401,22 @@
       "FindBestCommentsRes": {
         "type": "object",
         "properties": {
-          "bestComment": {
-            "$ref": "#/components/schemas/IComment.Nullable"
-          },
-          "bestReply": {
-            "$ref": "#/components/schemas/IComment.Nullable"
+          "comment": {
+            "$ref": "#/components/schemas/ICommentDetail.Nullable"
           }
         },
         "nullable": false,
         "required": [
-          "bestComment",
-          "bestReply"
+          "comment"
         ]
       },
-      "IComment.Nullable": {
+      "ICommentDetail.Nullable": {
         "type": "object",
         "properties": {
           "id": {
             "$ref": "#/components/schemas/TId",
             "title": "UUID v7",
             "description": "UUID v7."
-          },
-          "userId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "Comment writer",
-            "description": "Comment writer."
-          },
-          "parentId": {
-            "$ref": "#/components/schemas/TId.Nullable",
-            "title": "Comment parent",
-            "description": "Comment parent."
-          },
-          "replyCount": {
-            "type": "number"
           },
           "status": {
             "$ref": "#/components/schemas/TCommentStatus",
@@ -14577,6 +14427,16 @@
             "$ref": "#/components/schemas/TDateOrStringDate",
             "title": "CreatedAt",
             "description": "CreatedAt."
+          },
+          "userId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "Comment writer",
+            "description": "Comment writer."
+          },
+          "postId": {
+            "$ref": "#/components/schemas/TId",
+            "title": "PostId",
+            "description": "PostId."
           },
           "deletedAt": {
             "oneOf": [
@@ -14594,29 +14454,6 @@
             "title": "DeletedAt",
             "description": "DeletedAt."
           },
-          "postId": {
-            "$ref": "#/components/schemas/TId",
-            "title": "PostId",
-            "description": "PostId."
-          },
-          "commentSnapshots": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICommentSnapshot"
-            }
-          },
-          "likes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICommentLike"
-            }
-          },
-          "reports": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ICommentReport"
-            }
-          },
           "likeCount": {
             "type": "number"
           },
@@ -14625,24 +14462,36 @@
           },
           "user": {
             "$ref": "#/components/schemas/IUserPublicProfile"
+          },
+          "parentId": {
+            "$ref": "#/components/schemas/TId.Nullable",
+            "title": "Comment parent",
+            "description": "Comment parent."
+          },
+          "replyCount": {
+            "type": "number"
+          },
+          "commentSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ICommentSnapshot"
+            }
           }
         },
         "nullable": true,
         "required": [
           "id",
-          "userId",
-          "parentId",
-          "replyCount",
           "status",
           "createdAt",
-          "deletedAt",
+          "userId",
           "postId",
-          "commentSnapshots",
-          "likes",
-          "reports",
+          "deletedAt",
           "likeCount",
           "userLiked",
-          "user"
+          "user",
+          "parentId",
+          "replyCount",
+          "commentSnapshots"
         ]
       },
       "ResponseFormIncrementEntityViewCountRes": {

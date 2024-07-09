@@ -50,6 +50,8 @@ export class CommentRepository extends Repository<CommentEntity> {
       qb = qb.leftJoinAndSelect('comment.likes', 'likes', 'likes.userId = :userId', { userId: query.userId });
     }
 
+    qb = qb.addOrderBy('commentSnapshots.createdAt', 'ASC');
+
     return await qb
       .skip(query.page * query.limit)
       .take(query.limit)
@@ -61,6 +63,7 @@ export class CommentRepository extends Repository<CommentEntity> {
       .where('comment.id = :commentId', { commentId })
       .andWhere('comment.status = :status', { status: 'ACTIVE' })
       .leftJoinAndSelect('comment.commentSnapshots', 'commentSnapshots')
+      .addOrderBy('commentSnapshots.createdAt', 'ASC')
       .loadRelationCountAndMap('comment.replyCount', 'comment.replies')
       .loadRelationCountAndMap('comment.likeCount', 'comment.likes')
       .leftJoinAndSelect('comment.user', 'user')
@@ -72,7 +75,7 @@ export class CommentRepository extends Repository<CommentEntity> {
   }
 
   async findBestComment(postId: IComment['postId'], userId?: string): Promise<ICommentModelData | null> {
-    const qb = this.createQueryBuilder('comment')
+    let qb = this.createQueryBuilder('comment')
       .where('comment.postId = :postId', { postId })
       .andWhere('comment.status = :status', { status: 'ACTIVE' })
       .leftJoinAndSelect('comment.commentSnapshots', 'commentSnapshots')
@@ -85,6 +88,8 @@ export class CommentRepository extends Repository<CommentEntity> {
         return qb.select('COUNT(likes.id)', 'lc').from('comment_like', 'likes').where('likes.commentId = comment.id');
       })
       .orderBy('lc', 'DESC');
+
+    qb = qb.addOrderBy('commentSnapshots.createdAt', 'ASC');
 
     if (userId) {
       qb.leftJoinAndSelect('comment.likes', 'likes', 'likes.userId = :userId', { userId });

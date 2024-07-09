@@ -247,13 +247,15 @@ export class DataSeederService {
   private preparePosts(users: IUser[]) {
     console.time('Posts preparation time');
     const now = new Date();
+    const postCount = 1000;
     let sequence = 0;
+    const timestamps = Array.from({ length: users.length * postCount }, (_, i) => new Date(now.getTime() - i * 1000));
     const posts = users.flatMap((user) => {
-      const postCount = 1000;
-      const posts: IPost[] = [];
-      for (let i = 0; i < postCount; i++)
-        posts.push(new PostDummyBuilder(user.id).setCreatedAt(new Date(now.getTime() + sequence++ * 1000)).build());
-      return posts;
+      const userPosts: IPost[] = [];
+      for (let i = 0; i < postCount; i++) {
+        userPosts.push(new PostDummyBuilder(user.id).setCreatedAt(timestamps[sequence++]).build());
+      }
+      return userPosts;
     });
     this.posts = posts;
     this.postsToSave = posts;
@@ -265,32 +267,41 @@ export class DataSeederService {
 
   private prepareComments(users: IUser[], posts: IPost[]) {
     console.time('Comments preparation time');
+    const now = new Date();
+    const commentCountPerPost = users.length * 10;
+    const timestamps = Array.from(
+      { length: posts.length * commentCountPerPost * 2 },
+      (_, i) => new Date(now.getTime() - i * 1000),
+    );
+    let sequence = 0;
+
     const firstComments: IComment[] = [];
     const comments: IComment[] = [];
-    const now = new Date();
-    let sequence = 0;
+
     posts.forEach((post) => {
       const tmp: IComment[] = [];
       users.forEach((user) => {
-        for (let i = 0; i < 10; i++)
-          tmp.push(
-            new CommentDummyBuilder(user.id, post.id).setCreatedAt(new Date(now.getTime() + sequence++ * 1000)).build(),
-          );
+        for (let i = 0; i < 10; i++) {
+          tmp.push(new CommentDummyBuilder(user.id, post.id).setCreatedAt(timestamps[sequence++]).build());
+        }
       });
       comments.push(...tmp);
       firstComments.push(tmp[0]);
     });
+
     const replies: IComment[] = [];
     firstComments.forEach((firstComment) => {
       users.forEach((user) => {
-        for (let i = 0; i < 10; i++)
+        for (let i = 0; i < 10; i++) {
           replies.push(
             new CommentDummyBuilder(user.id, firstComment.postId, firstComment.id)
-              .setCreatedAt(new Date(now.getTime() + sequence++ * 1000))
+              .setCreatedAt(timestamps[sequence++])
               .build(),
           );
+        }
       });
     });
+
     this.comments = [...comments, ...replies];
     this.commentsToSave = this.comments;
     this.commentSnapshotsToSave = this.comments.flatMap((comment) => comment.commentSnapshots);

@@ -65,8 +65,11 @@ export class PostRepository extends Repository<PostEntity> {
         qb = qb.orderBy('post.viewCount', 'DESC');
         break;
       default:
+        qb = qb.orderBy('post.createdAt', 'DESC');
         break;
     }
+
+    qb = qb.addOrderBy('postSnapshots.createdAt', 'ASC');
 
     const posts = await qb
       .skip(page * limit)
@@ -80,6 +83,7 @@ export class PostRepository extends Repository<PostEntity> {
       .where('post.id = :postId', { postId })
       .andWhere('post.status = :status', { status: 'ACTIVE' })
       .leftJoinAndSelect('post.postSnapshots', 'postSnapshots')
+      .addOrderBy('postSnapshots.createdAt', 'ASC')
       .leftJoinAndSelect('post.likes', 'likes', 'likes.userId = :userId', { userId: userId })
       .loadRelationCountAndMap('post.commentCount', 'post.comments')
       .loadRelationCountAndMap('post.likeCount', 'post.likes')
