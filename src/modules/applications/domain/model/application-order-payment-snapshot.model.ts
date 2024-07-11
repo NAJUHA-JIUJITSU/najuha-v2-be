@@ -1,5 +1,5 @@
-import { IParticipationDivisionInfo } from '../../../../../packages/api/lib/modules/applications/domain/interface/participation-division-info.interface';
 import { IApplicationOrderPaymentSnapshotModelData } from '../interface/application-order-payment-sanpshot.interface';
+import { IParticipationDivisionInfo } from '../interface/participation-division-info.interface';
 import { ParticipationDivisionInfoPaymentModel } from './participation-division-info-payment.model';
 
 export class ApplicationOrderPaymentSnapshotModel {
