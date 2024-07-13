@@ -507,7 +507,11 @@ export class ApplicationsAppService {
 
     applicationModel.addApplicationOrder(applicationOrder);
 
-    await this.applicationValidationDomainService.validateCreateApplicationOrder(competitionModel, applicationModel);
+    await this.applicationValidationDomainService.validateCreateApplicationOrder(
+      userModel,
+      competitionModel,
+      applicationModel,
+    );
 
     return assert<CreateApplicationOrderRet>({
       application: await this.applicationRepository.save(applicationModel.toData()),
@@ -529,7 +533,7 @@ export class ApplicationsAppService {
       const applicationRepository = queryRunner.manager.getRepository(ApplicationEntity);
       const competitionRepository = queryRunner.manager.getRepository(CompetitionEntity);
 
-      const [_userEntity, applicationEntity] = await Promise.all([
+      const [userEntity, applicationEntity] = await Promise.all([
         userRepository.findOne({ where: { id: userId } }).then((user) => {
           if (!user) throw new BusinessException(CommonErrors.ENTITY_NOT_FOUND, 'User not found');
           return user;
@@ -577,10 +581,15 @@ export class ApplicationsAppService {
           return competition;
         });
 
+      const userModel = new UserModel(userEntity);
       const applicationModel = new ApplicationModel(applicationEntity);
       const competitionModel = new CompetitionModel(competitionEntity);
 
-      await this.applicationValidationDomainService.validateApproveApplicationOrder(competitionModel, applicationModel);
+      await this.applicationValidationDomainService.validateApproveApplicationOrder(
+        userModel,
+        competitionModel,
+        applicationModel,
+      );
 
       applicationModel.approve(paymentKey, orderId, amount);
 
