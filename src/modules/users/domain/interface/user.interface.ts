@@ -6,6 +6,12 @@ import { IUserProfileImage, IUserProfileImageModelData } from './user-profile-im
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * User.
+ *
+ * 사용자 정보.
+ * @namespace User
+ */
 export interface IUser {
   /** UUID v7. */
   id: TId;
@@ -19,7 +25,13 @@ export interface IUser {
    */
   role: 'ADMIN' | 'HOST' | 'USER' | 'TEMPORARY_USER';
 
-  /** SNS 공급자. User가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다. */
+  /**
+   * SNS 공급자. User가 로그인하는데 사용한 SNS 플랫폼을 나타냅니다.
+   * - KAKAO: 카카오.
+   * - NAVER: 네이버.
+   * - GOOGLE: 구글.
+   * - APPLE: 애플.
+   */
   snsAuthProvider: 'KAKAO' | 'NAVER' | 'GOOGLE' | 'APPLE';
 
   /** SNS ID. 소셜 로그인을 위한 고유 식별자입니다. */
@@ -63,10 +75,9 @@ export interface IUser {
    */
   status: 'ACTIVE' | 'INACTIVE';
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
-  /** UpdatedAt. */
   updatedAt: TDateOrStringDate;
 
   profileImages: IUserProfileImage[];

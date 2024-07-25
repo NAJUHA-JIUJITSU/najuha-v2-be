@@ -6,6 +6,13 @@ import { TId, TDateOrStringDate } from '../../../../common/common-types';
 // ----------------------------------------------------------------------------
 // Model Data
 // ----------------------------------------------------------------------------
+/**
+ * Division.
+ *
+ * - 대회의 부문 정보.
+ * - 대회의 부문의 가격 정보는 PriceSnapshot Entity를 통해 관리합니다.
+ * - 가격이 수정될때마다 PriceSnapshot Entity에 스냅샷을 생성합니다.
+ */
 export interface IDivision {
   /** UUID v7. */
   id: TId;
@@ -48,10 +55,9 @@ export interface IDivision {
    */
   status: TDivisionStatus;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
-  /** UpdatedAt. */
   updatedAt: TDateOrStringDate;
 
   /** CompetitionId. */

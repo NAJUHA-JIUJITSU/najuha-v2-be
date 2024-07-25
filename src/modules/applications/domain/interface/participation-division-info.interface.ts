@@ -10,13 +10,25 @@ import { TId, TDateOrStringDate } from '../../../../common/common-types';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * ParticipationDivisionInfo.
+ *
+ * 참가신청에 대한 부문 정보 식별하는 Entity.
+ * - 참가신청에 대한 부문 정보가 변경경될때마다 하위 entity인 ParticipationDivisionInfoSnapshot을 생성한다.
+ */
 export interface IParticipationDivisionInfo {
   /** UUID v7. */
   id: TId;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
+  /**
+   * 참가부문 정보 상태.
+   * - READY: 결제 대기중
+   * - DONE: 결제 완료
+   * - CANCELED: 결제 취소
+   */
   status: TParticipationDivisionInfoStatus;
 
   /** Application id. */

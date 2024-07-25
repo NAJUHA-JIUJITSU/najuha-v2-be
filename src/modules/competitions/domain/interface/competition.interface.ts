@@ -17,6 +17,11 @@ import { ICompetitionPosterImage, ICompetitionPosterImageModelData } from './com
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * Competition.
+ *
+ * 대회 정보.
+ */
 export interface ICompetition {
   /** UUID v7. */
   id: TId;
@@ -25,7 +30,7 @@ export interface ICompetition {
    * 대회 결제 ID.
    * - 결제 ID는 26자리 ULID 형식입니다.
    * - 각 대회마다 고유한 결제 ID를 가집니다.
-   * - 해당 대회신청을 결제할때 필요한 orderId에 포함됩니다. `${orderId}_${competitionPaymentId}`
+   * - 해당 대회신청을 결제할때 필요한 orderId에 포함됩니다. `${orderId}_${competitionPaymentId}` (63자)
    * - tosspayments에서 해당 대회의 결제 정보를 조회할때 사용됩니다.
    */
   competitionPaymentId: string & tags.MinLength<26> & tags.MaxLength<26>;
@@ -79,10 +84,9 @@ export interface ICompetition {
    */
   status: TCompetitionStatus;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
-  /** UpdatedAt. */
   updatedAt: TDateOrStringDate;
 
   /** 대회 부문 정보. */

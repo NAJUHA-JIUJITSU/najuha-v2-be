@@ -11,12 +11,18 @@ import { ImageEntity } from '../image/image.entity';
  */
 @Entity('post_snapshot_image')
 export class PostSnapshotImageEntity {
+  /** UUID v7. */
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IPostSnapshotImage['id'];
 
+  /** postSnapshotId. */
   @Column('uuid')
   postSnapshotId!: IPostSnapshotImage['postSnapshotId'];
 
+  /**
+   * imageId.
+   * - u-9-1 createImage 로 생성된 image의 id
+   */
   @Column('uuid')
   imageId!: IPostSnapshotImage['imageId'];
 

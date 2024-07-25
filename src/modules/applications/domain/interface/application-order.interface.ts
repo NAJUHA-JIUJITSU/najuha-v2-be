@@ -17,11 +17,17 @@ import {
 // --------------------------------------------------------------
 // Base Interface
 // --------------------------------------------------------------
+/**
+ * ApplicationOrder.
+ *
+ * 참가신청 주문 정보.
+ * - 참가신청에 대한 주문 정보를 저장합니다.
+ * - 참가신청에 대해 결제 실패 등의 이유로 여려개의 주문이 발생할 수 있습니다.
+ */
 export interface IApplicationOrder {
   /** UUID v7. */
   id: TId;
 
-  /** CreatedAt */
   createdAt: TDateOrStringDate;
 
   /**
@@ -32,25 +38,48 @@ export interface IApplicationOrder {
    *
    * Q. 왜 applicationOrder.id와 competition.competitionPaymentId를 조합하여 생성하나요?
    * A. 정산과정에서 동일한 대회의 주문 번호를 식별하기 위함입니다.
-   *
-   * Q. 버전 1 에서는 대회이름으로 동일한 대회의 주분을 식별했는데, 왜 변경했나요?
-   * A. 대회이름은 변경될 수 있기 때문에 대회이름으로 주문을 식별하면 안됩니다.
    */
   orderId: string & tags.MinLength<63> & tags.MaxLength<63>;
 
+  /**
+   * tosspayments에서 발급받은 결제키.
+   * - 결제가 완료되면 발급받은 결제키를 저장합니다.
+   * - 결제가 완료되지 않은 경우 null.
+   * - 고유한 결제정보를 식별하기 위한 키입니다.
+   */
   paymentKey: (string & tags.MinLength<1> & tags.MaxLength<200>) | null;
 
+  /**
+   * 주문명(총 100자)
+   * - 신청한 대회의 title이 저장됩니다.
+   */
   orderName: string & tags.MinLength<1> & tags.MaxLength<100>;
 
+  /**
+   * 주문자 이름(총 64자)
+   */
   customerName: string & tags.MinLength<1> & tags.MaxLength<64> & tags.Pattern<'^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,64}$'>;
 
+  /**
+   * 주문자 이메일(총 100자)
+   */
   customerEmail: string & tags.MinLength<1> & tags.MaxLength<100> & tags.Format<'email'>;
 
+  /**
+   * 주문 상태.
+   * - READY: 결제 대기중
+   * - DONE: 결제 완료
+   * - FAIL: 결제 실패
+   * - PARTIAL_CANCELED: 부분 취소
+   * - CANCELED: 전체 취소
+   */
   status: TApplicationOrderStatus;
 
+  /**
+   * 결제 여부.
+   */
   isPayed: boolean;
 
-  /** - application id. */
   applicationId: IApplication['id'];
 
   earlybirdDiscountSnapshotId: IEarlybirdDiscountSnapshot['id'] | null;

@@ -311,39 +311,50 @@ export class CompetitionModel {
     requiredAdditionalInfo.delete();
   }
 
-  validateApplicationRegisterablePeriod(now = new Date()) {
+  // validateApplicationRegisterablePeriod(now = new Date()) {
+  //   if (!this._registrationStartDate) throw new Error('registrationStartDate is not initialized in CompetitionModel');
+  //   if (!this._registrationEndDate) throw new Error('registrationEndDate is not initialized in CompetitionModel');
+  //   if (now < this._registrationStartDate)
+  //     throw new BusinessException(
+  //       ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,
+  //       `registrationStartDate: ${this._registrationStartDate}`,
+  //     );
+  //   if (now > this._registrationEndDate)
+  //     throw new BusinessException(
+  //       ApplicationsErrors.APPLICATIONS_REGISTRATION_ENDED,
+  //       `registrationEndDate: ${this._registrationEndDate}`,
+  //     );
+  // }
+
+  isApplicationRegisterablePeriod(now = new Date()) {
     if (!this._registrationStartDate) throw new Error('registrationStartDate is not initialized in CompetitionModel');
     if (!this._registrationEndDate) throw new Error('registrationEndDate is not initialized in CompetitionModel');
-    if (now < this._registrationStartDate)
-      throw new BusinessException(
-        ApplicationsErrors.APPLICATIONS_REGISTRATION_NOT_STARTED,
-        `registrationStartDate: ${this._registrationStartDate}`,
-      );
-    if (now > this._registrationEndDate)
-      throw new BusinessException(
-        ApplicationsErrors.APPLICATIONS_REGISTRATION_ENDED,
-        `registrationEndDate: ${this._registrationEndDate}`,
-      );
+    return this._registrationStartDate <= now && now <= this._registrationEndDate;
   }
 
-  validateApplicationCancelablePeriod(now = new Date()) {
+  isApplicationCancelablePeriod(now = new Date()) {
     if (!this._refundDeadlineDate) throw new Error('refundDeadlineDate is not initialized in CompetitionModel');
-    if (now > this._refundDeadlineDate)
-      throw new BusinessException(
-        ApplicationsErrors.APPLICATIONS_REFUND_DEADLINE_ENDED,
-        `refundDeadlineDate: ${this._refundDeadlineDate}`,
-      );
+    if (now > this._refundDeadlineDate) return false;
+    else return true;
   }
+
+  isSoloRegistrationAdjustmentPeriod(now = new Date()) {
+    if (!this._soloRegistrationAdjustmentStartDate || !this._soloRegistrationAdjustmentEndDate) return false;
+    return this._soloRegistrationAdjustmentStartDate <= now && now <= this._soloRegistrationAdjustmentEndDate;
+  }
+
+  // validateApplicationCancelablePeriod(now = new Date()) {
+  //   if (!this._refundDeadlineDate) throw new Error('refundDeadlineDate is not initialized in CompetitionModel');
+  //   if (now > this._refundDeadlineDate)
+  //     throw new BusinessException(
+  //       ApplicationsErrors.APPLICATIONS_REFUND_DEADLINE_ENDED,
+  //       `refundDeadlineDate: ${this._refundDeadlineDate}`,
+  //     );
+  // }
 
   validateActiveStatus() {
     if (this._status !== 'ACTIVE')
       throw new BusinessException(CompetitionsErrors.COMPETITIONS_COMPETITION_STATUS_NOT_ACTIVE);
-  }
-
-  isSoloRegistrationAdjustmentPeriod(now = new Date()) {
-    return this._soloRegistrationAdjustmentStartDate && this._soloRegistrationAdjustmentEndDate
-      ? now >= this._soloRegistrationAdjustmentStartDate && now <= this._soloRegistrationAdjustmentEndDate
-      : false;
   }
 
   calculateExpectedPayment(participationDivisionIds: IDivision['id'][]) {

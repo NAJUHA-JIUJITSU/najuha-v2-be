@@ -2,3 +2,789 @@
 > najuha-v2-be@0.0.1 test:e2e
 > jest --config ./test/jest-e2e.json --detectOpenHandles test/e2e/applications
 
+  console.log
+    Bucket najuha-v2-bucket exists
+
+      at BucketService.ensureBucket (../src/infrastructure/bucket/bucket.service.ts:28:15)
+          at async Promise.all (index 0)
+
+  console.log
+    Bucket najuha-v2-bucket is now public
+
+      at BucketService.ensureBucket (../src/infrastructure/bucket/bucket.service.ts:58:13)
+          at async Promise.all (index 0)
+
+  console.log
+    Data seeding is only available in development environment. Skipping seeding.
+
+      at DataSeederService.seed (../src/database/data-seeder.service.ts:114:15)
+
+  console.log
+    FakeToss server is running
+
+      at FakeTossModule.onModuleInit (../src/modules/fake-toss/fake-toss.module.ts:20:13)
+
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:47 [32mPOST /user/applications - 201 5080 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"competitionId":"0190aaf6-4aab-764c-a9a0-f221fca1f8d2","applicationType":"SELF","participationDivisionIds":["0190aaf6-4aaf-74d0-8c91-55d25f2cc701","0190aaf6-4aaf-74d0-8c91-55e465bd777c","0190aaf6-4ab1-7c15-9b8c-46a13f972624","0190aaf6-4ab1-7c15-9b8c-46b140096b4e"],"playerSnapshotCreateDto":{"name":"O4IsTJOmdsXTPY5SkZ3VMKJEWdrnR16","gender":"MALE","birth":"19980101","phoneNumber":"01012345678","belt":"화이트","network":"테스트 네트워크","team":"테스트 팀","masterName":"테스트 마스터"},"additionalInfoCreateDtos":[{"type":"SOCIAL_SECURITY_NUMBER","value":"123456-1234567"},{"type":"ADDRESS","value":"테스트 주소"}]}[39m [33m+0ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:47 [32mPOST /user/applications/0190aaf6-50ab-723d-b5a4-d005a2a421bf/order - 201 16338 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {}[39m [33m+182ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:48 [32mPOST /user/applications/0190aaf6-50ab-723d-b5a4-d005a2a421bf/order/approve - 201 16232 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"orderId":"0190aaf6-5161-751f-9ee3-7847fa6d3e6e_01J2NFCJNBR5H7D56V4E1P2TQR","paymentKey":"e816803a-3cc9-408b-a7f3-47ab475cb1a6","amount":160000}[39m [33m+297ms[39m
+  console.log
+    refundDeadlineDate 2024-08-03T14:59:59.566Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:337:13)
+
+  console.log
+    now 2024-07-13T07:19:48.317Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:338:13)
+
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:48 [32mPOST /test/fake-toss-webhook - 201 234 | User-Agent: node | IP: ::1 | Body: {"eventType":"PAYMENT_STATUS_CHANGED","data":{"paymentKey":"e816803a-3cc9-408b-a7f3-47ab475cb1a6","orderId":"0190aaf6-5161-751f-9ee3-7847fa6d3e6e_01J2NFCJNBR5H7D56V4E1P2TQR","status":"CANCELED"}}[39m [33m+207ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:48 [32mPOST /user/applications/0190aaf6-50ab-723d-b5a4-d005a2a421bf/order/cancel - 201 16268 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"participationDivisionInfoIds":["0190aaf6-50ac-7afe-9f64-f397c4f9b392","0190aaf6-50ac-7afe-9f64-f3999ff32173","0190aaf6-50ac-7afe-9f64-f39bb4d9cc20","0190aaf6-50ac-7afe-9f64-f39d4dd3e8a9"]}[39m [33m+28ms[39m
+  console.log
+    {
+      "isSuccess": true,
+      "code": 200,
+      "result": {
+        "application": {
+          "applicationOrders": [
+            {
+              "id": "0190aaf6-5161-751f-9ee3-7847fa6d3e6e",
+              "createdAt": "2024-07-13T07:19:47.809Z",
+              "orderId": "0190aaf6-5161-751f-9ee3-7847fa6d3e6e_01J2NFCJNBR5H7D56V4E1P2TQR",
+              "paymentKey": "e816803a-3cc9-408b-a7f3-47ab475cb1a6",
+              "orderName": "테스트 대회 / 협약 / 신청기간 중, 환불기간 중, 단독출전조정기간 전, 출전명단공개 전, 대진표공개 전 / 얼리버드할인기간 중 / 조합할인적용 / 추가정보요청",
+              "customerName": "O4IsTJOmdsXTPY5SkZ3VMKJEWdrnR16",
+              "customerEmail": "dummy@gmail.com",
+              "status": "CANCELED",
+              "isPayed": true,
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+              "earlybirdDiscountSnapshotId": "0190aaf6-4ab2-7fa7-bc0b-f2903bed1d17",
+              "combinationDiscountSnapshotId": "0190aaf6-4ab2-7fa7-bc0b-f2911c143ca3",
+              "applicationOrderPaymentSnapshots": [
+                {
+                  "id": "0190aaf6-5161-751f-9ee3-78486f3f9ce6",
+                  "createdAt": "2024-07-13T07:19:47.809Z",
+                  "normalAmount": 200000,
+                  "earlybirdDiscountAmount": 10000,
+                  "combinationDiscountAmount": 30000,
+                  "totalAmount": 160000,
+                  "applicationOrderId": "0190aaf6-5161-751f-9ee3-7847fa6d3e6e",
+                  "participationDivisionInfoPayments": [
+                    {
+                      "id": "0190aaf6-5161-751f-9ee3-78495594484c",
+                      "createdAt": "2024-07-13T07:19:47.809Z",
+                      "status": "CANCELED",
+                      "applicationOrderPaymentSnapshotId": "0190aaf6-5161-751f-9ee3-78486f3f9ce6",
+                      "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f397c4f9b392",
+                      "divisionId": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701",
+                      "priceSnapshotId": "0190aaf6-4aaf-74d0-8c91-55d3c2c44d95",
+                      "participationDivisionInfo": {
+                        "id": "0190aaf6-50ac-7afe-9f64-f397c4f9b392",
+                        "createdAt": "2024-07-13T07:19:47.628Z",
+                        "status": "DONE",
+                        "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+                        "participationDivisionInfoSnapshots": [
+                          {
+                            "id": "0190aaf6-50ac-7afe-9f64-f3989fd15529",
+                            "createdAt": "2024-07-13T07:19:47.628Z",
+                            "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f397c4f9b392",
+                            "divisionId": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701",
+                            "division": {
+                              "id": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701",
+                              "category": "어덜트",
+                              "uniform": "GI",
+                              "gender": "MALE",
+                              "belt": "화이트",
+                              "weight": "-58",
+                              "birthYearRangeStart": "1900",
+                              "birthYearRangeEnd": "2004",
+                              "status": "ACTIVE",
+                              "createdAt": "2024-07-13T07:19:46.095Z",
+                              "updatedAt": "2024-07-13T07:19:46.095Z",
+                              "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                              "priceSnapshots": [
+                                {
+                                  "id": "0190aaf6-4aaf-74d0-8c91-55d3c2c44d95",
+                                  "price": 50000,
+                                  "createdAt": "2024-07-13T07:19:46.095Z",
+                                  "divisionId": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "division": {
+                        "id": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701",
+                        "category": "어덜트",
+                        "uniform": "GI",
+                        "gender": "MALE",
+                        "belt": "화이트",
+                        "weight": "-58",
+                        "birthYearRangeStart": "1900",
+                        "birthYearRangeEnd": "2004",
+                        "status": "ACTIVE",
+                        "createdAt": "2024-07-13T07:19:46.095Z",
+                        "updatedAt": "2024-07-13T07:19:46.095Z",
+                        "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                        "priceSnapshots": [
+                          {
+                            "id": "0190aaf6-4aaf-74d0-8c91-55d3c2c44d95",
+                            "price": 50000,
+                            "createdAt": "2024-07-13T07:19:46.095Z",
+                            "divisionId": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701"
+                          }
+                        ]
+                      },
+                      "priceSnapshot": {
+                        "id": "0190aaf6-4aaf-74d0-8c91-55d3c2c44d95",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.095Z",
+                        "divisionId": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701"
+                      }
+                    },
+                    {
+                      "id": "0190aaf6-5161-751f-9ee3-784a483eb1ff",
+                      "createdAt": "2024-07-13T07:19:47.809Z",
+                      "status": "CANCELED",
+                      "applicationOrderPaymentSnapshotId": "0190aaf6-5161-751f-9ee3-78486f3f9ce6",
+                      "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f3999ff32173",
+                      "divisionId": "0190aaf6-4aaf-74d0-8c91-55e465bd777c",
+                      "priceSnapshotId": "0190aaf6-4aaf-74d0-8c91-55e5d195c1c4",
+                      "participationDivisionInfo": {
+                        "id": "0190aaf6-50ac-7afe-9f64-f3999ff32173",
+                        "createdAt": "2024-07-13T07:19:47.628Z",
+                        "status": "DONE",
+                        "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+                        "participationDivisionInfoSnapshots": [
+                          {
+                            "id": "0190aaf6-50ac-7afe-9f64-f39a49e020d0",
+                            "createdAt": "2024-07-13T07:19:47.628Z",
+                            "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f3999ff32173",
+                            "divisionId": "0190aaf6-4aaf-74d0-8c91-55e465bd777c",
+                            "division": {
+                              "id": "0190aaf6-4aaf-74d0-8c91-55e465bd777c",
+                              "category": "어덜트",
+                              "uniform": "GI",
+                              "gender": "MALE",
+                              "belt": "화이트",
+                              "weight": "-76_ABSOLUTE",
+                              "birthYearRangeStart": "1900",
+                              "birthYearRangeEnd": "2004",
+                              "status": "ACTIVE",
+                              "createdAt": "2024-07-13T07:19:46.095Z",
+                              "updatedAt": "2024-07-13T07:19:46.095Z",
+                              "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                              "priceSnapshots": [
+                                {
+                                  "id": "0190aaf6-4aaf-74d0-8c91-55e5d195c1c4",
+                                  "price": 50000,
+                                  "createdAt": "2024-07-13T07:19:46.095Z",
+                                  "divisionId": "0190aaf6-4aaf-74d0-8c91-55e465bd777c"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "division": {
+                        "id": "0190aaf6-4aaf-74d0-8c91-55e465bd777c",
+                        "category": "어덜트",
+                        "uniform": "GI",
+                        "gender": "MALE",
+                        "belt": "화이트",
+                        "weight": "-76_ABSOLUTE",
+                        "birthYearRangeStart": "1900",
+                        "birthYearRangeEnd": "2004",
+                        "status": "ACTIVE",
+                        "createdAt": "2024-07-13T07:19:46.095Z",
+                        "updatedAt": "2024-07-13T07:19:46.095Z",
+                        "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                        "priceSnapshots": [
+                          {
+                            "id": "0190aaf6-4aaf-74d0-8c91-55e5d195c1c4",
+                            "price": 50000,
+                            "createdAt": "2024-07-13T07:19:46.095Z",
+                            "divisionId": "0190aaf6-4aaf-74d0-8c91-55e465bd777c"
+                          }
+                        ]
+                      },
+                      "priceSnapshot": {
+                        "id": "0190aaf6-4aaf-74d0-8c91-55e5d195c1c4",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.095Z",
+                        "divisionId": "0190aaf6-4aaf-74d0-8c91-55e465bd777c"
+                      }
+                    },
+                    {
+                      "id": "0190aaf6-5161-751f-9ee3-784b6c31ff76",
+                      "createdAt": "2024-07-13T07:19:47.809Z",
+                      "status": "CANCELED",
+                      "applicationOrderPaymentSnapshotId": "0190aaf6-5161-751f-9ee3-78486f3f9ce6",
+                      "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f39bb4d9cc20",
+                      "divisionId": "0190aaf6-4ab1-7c15-9b8c-46a13f972624",
+                      "priceSnapshotId": "0190aaf6-4ab1-7c15-9b8c-46a25b796dc0",
+                      "participationDivisionInfo": {
+                        "id": "0190aaf6-50ac-7afe-9f64-f39bb4d9cc20",
+                        "createdAt": "2024-07-13T07:19:47.628Z",
+                        "status": "DONE",
+                        "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+                        "participationDivisionInfoSnapshots": [
+                          {
+                            "id": "0190aaf6-50ac-7afe-9f64-f39c8f3bd5ce",
+                            "createdAt": "2024-07-13T07:19:47.628Z",
+                            "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f39bb4d9cc20",
+                            "divisionId": "0190aaf6-4ab1-7c15-9b8c-46a13f972624",
+                            "division": {
+                              "id": "0190aaf6-4ab1-7c15-9b8c-46a13f972624",
+                              "category": "노기통합",
+                              "uniform": "NOGI",
+                              "gender": "MALE",
+                              "belt": "초급",
+                              "weight": "-50",
+                              "birthYearRangeStart": "1900",
+                              "birthYearRangeEnd": "9999",
+                              "status": "ACTIVE",
+                              "createdAt": "2024-07-13T07:19:46.097Z",
+                              "updatedAt": "2024-07-13T07:19:46.097Z",
+                              "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                              "priceSnapshots": [
+                                {
+                                  "id": "0190aaf6-4ab1-7c15-9b8c-46a25b796dc0",
+                                  "price": 50000,
+                                  "createdAt": "2024-07-13T07:19:46.097Z",
+                                  "divisionId": "0190aaf6-4ab1-7c15-9b8c-46a13f972624"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "division": {
+                        "id": "0190aaf6-4ab1-7c15-9b8c-46a13f972624",
+                        "category": "노기통합",
+                        "uniform": "NOGI",
+                        "gender": "MALE",
+                        "belt": "초급",
+                        "weight": "-50",
+                        "birthYearRangeStart": "1900",
+                        "birthYearRangeEnd": "9999",
+                        "status": "ACTIVE",
+                        "createdAt": "2024-07-13T07:19:46.097Z",
+                        "updatedAt": "2024-07-13T07:19:46.097Z",
+                        "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                        "priceSnapshots": [
+                          {
+                            "id": "0190aaf6-4ab1-7c15-9b8c-46a25b796dc0",
+                            "price": 50000,
+                            "createdAt": "2024-07-13T07:19:46.097Z",
+                            "divisionId": "0190aaf6-4ab1-7c15-9b8c-46a13f972624"
+                          }
+                        ]
+                      },
+                      "priceSnapshot": {
+                        "id": "0190aaf6-4ab1-7c15-9b8c-46a25b796dc0",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.097Z",
+                        "divisionId": "0190aaf6-4ab1-7c15-9b8c-46a13f972624"
+                      }
+                    },
+                    {
+                      "id": "0190aaf6-5161-751f-9ee3-784cc536ccd0",
+                      "createdAt": "2024-07-13T07:19:47.809Z",
+                      "status": "CANCELED",
+                      "applicationOrderPaymentSnapshotId": "0190aaf6-5161-751f-9ee3-78486f3f9ce6",
+                      "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f39d4dd3e8a9",
+                      "divisionId": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e",
+                      "priceSnapshotId": "0190aaf6-4ab1-7c15-9b8c-46b263ef6308",
+                      "participationDivisionInfo": {
+                        "id": "0190aaf6-50ac-7afe-9f64-f39d4dd3e8a9",
+                        "createdAt": "2024-07-13T07:19:47.628Z",
+                        "status": "DONE",
+                        "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+                        "participationDivisionInfoSnapshots": [
+                          {
+                            "id": "0190aaf6-50ac-7afe-9f64-f39ec37e1888",
+                            "createdAt": "2024-07-13T07:19:47.628Z",
+                            "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f39d4dd3e8a9",
+                            "divisionId": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e",
+                            "division": {
+                              "id": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e",
+                              "category": "노기통합",
+                              "uniform": "NOGI",
+                              "gender": "MALE",
+                              "belt": "초급",
+                              "weight": "ABSOLUTE",
+                              "birthYearRangeStart": "1900",
+                              "birthYearRangeEnd": "9999",
+                              "status": "ACTIVE",
+                              "createdAt": "2024-07-13T07:19:46.097Z",
+                              "updatedAt": "2024-07-13T07:19:46.097Z",
+                              "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                              "priceSnapshots": [
+                                {
+                                  "id": "0190aaf6-4ab1-7c15-9b8c-46b263ef6308",
+                                  "price": 50000,
+                                  "createdAt": "2024-07-13T07:19:46.097Z",
+                                  "divisionId": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "division": {
+                        "id": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e",
+                        "category": "노기통합",
+                        "uniform": "NOGI",
+                        "gender": "MALE",
+                        "belt": "초급",
+                        "weight": "ABSOLUTE",
+                        "birthYearRangeStart": "1900",
+                        "birthYearRangeEnd": "9999",
+                        "status": "ACTIVE",
+                        "createdAt": "2024-07-13T07:19:46.097Z",
+                        "updatedAt": "2024-07-13T07:19:46.097Z",
+                        "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                        "priceSnapshots": [
+                          {
+                            "id": "0190aaf6-4ab1-7c15-9b8c-46b263ef6308",
+                            "price": 50000,
+                            "createdAt": "2024-07-13T07:19:46.097Z",
+                            "divisionId": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e"
+                          }
+                        ]
+                      },
+                      "priceSnapshot": {
+                        "id": "0190aaf6-4ab1-7c15-9b8c-46b263ef6308",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.097Z",
+                        "divisionId": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "earlybirdDiscountSnapshot": {
+                "id": "0190aaf6-4ab2-7fa7-bc0b-f2903bed1d17",
+                "earlybirdStartDate": "2024-06-27T15:00:00.566Z",
+                "earlybirdEndDate": "2024-07-27T14:59:59.566Z",
+                "discountAmount": 10000,
+                "createdAt": "2024-07-13T07:19:46.092Z",
+                "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2"
+              },
+              "combinationDiscountSnapshot": {
+                "id": "0190aaf6-4ab2-7fa7-bc0b-f2911c143ca3",
+                "combinationDiscountRules": [
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "GI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 10000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "WEIGHT"
+                      }
+                    ],
+                    "discountAmount": 10000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 10000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "ABSOLUTE"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "WEIGHT"
+                      }
+                    ],
+                    "discountAmount": 10000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "ABSOLUTE"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 10000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 10000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "GI",
+                        "weightType": "ABSOLUTE"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "WEIGHT"
+                      }
+                    ],
+                    "discountAmount": 20000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "GI",
+                        "weightType": "ABSOLUTE"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 20000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 20000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "ABSOLUTE"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 20000
+                  },
+                  {
+                    "combination": [
+                      {
+                        "uniformType": "GI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "GI",
+                        "weightType": "ABSOLUTE"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "WEIGHT"
+                      },
+                      {
+                        "uniformType": "NOGI",
+                        "weightType": "ABSOLUTE"
+                      }
+                    ],
+                    "discountAmount": 30000
+                  }
+                ],
+                "createdAt": "2024-07-13T07:19:46.092Z",
+                "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2"
+              }
+            }
+          ],
+          "id": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+          "createdAt": "2024-07-13T07:19:47.628Z",
+          "updatedAt": "2024-07-13T07:19:48.176Z",
+          "deletedAt": null,
+          "type": "SELF",
+          "status": "CANCELED",
+          "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+          "userId": "0190aaf6-4aa1-7722-b3da-7b554e44a50a",
+          "playerSnapshots": [
+            {
+              "id": "0190aaf6-50ab-723d-b5a4-d0066dc59246",
+              "name": "O4IsTJOmdsXTPY5SkZ3VMKJEWdrnR16",
+              "gender": "MALE",
+              "birth": "19980101",
+              "phoneNumber": "01012345678",
+              "belt": "화이트",
+              "network": "테스트 네트워크",
+              "team": "테스트 팀",
+              "masterName": "테스트 마스터",
+              "createdAt": "2024-07-13T07:19:47.628Z",
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf"
+            }
+          ],
+          "participationDivisionInfos": [
+            {
+              "id": "0190aaf6-50ac-7afe-9f64-f397c4f9b392",
+              "createdAt": "2024-07-13T07:19:47.628Z",
+              "status": "CANCELED",
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+              "participationDivisionInfoSnapshots": [
+                {
+                  "id": "0190aaf6-50ac-7afe-9f64-f3989fd15529",
+                  "createdAt": "2024-07-13T07:19:47.628Z",
+                  "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f397c4f9b392",
+                  "divisionId": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701",
+                  "division": {
+                    "id": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701",
+                    "category": "어덜트",
+                    "uniform": "GI",
+                    "gender": "MALE",
+                    "belt": "화이트",
+                    "weight": "-58",
+                    "birthYearRangeStart": "1900",
+                    "birthYearRangeEnd": "2004",
+                    "status": "ACTIVE",
+                    "createdAt": "2024-07-13T07:19:46.095Z",
+                    "updatedAt": "2024-07-13T07:19:46.095Z",
+                    "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                    "priceSnapshots": [
+                      {
+                        "id": "0190aaf6-4aaf-74d0-8c91-55d3c2c44d95",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.095Z",
+                        "divisionId": "0190aaf6-4aaf-74d0-8c91-55d25f2cc701"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "0190aaf6-50ac-7afe-9f64-f3999ff32173",
+              "createdAt": "2024-07-13T07:19:47.628Z",
+              "status": "CANCELED",
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+              "participationDivisionInfoSnapshots": [
+                {
+                  "id": "0190aaf6-50ac-7afe-9f64-f39a49e020d0",
+                  "createdAt": "2024-07-13T07:19:47.628Z",
+                  "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f3999ff32173",
+                  "divisionId": "0190aaf6-4aaf-74d0-8c91-55e465bd777c",
+                  "division": {
+                    "id": "0190aaf6-4aaf-74d0-8c91-55e465bd777c",
+                    "category": "어덜트",
+                    "uniform": "GI",
+                    "gender": "MALE",
+                    "belt": "화이트",
+                    "weight": "-76_ABSOLUTE",
+                    "birthYearRangeStart": "1900",
+                    "birthYearRangeEnd": "2004",
+                    "status": "ACTIVE",
+                    "createdAt": "2024-07-13T07:19:46.095Z",
+                    "updatedAt": "2024-07-13T07:19:46.095Z",
+                    "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                    "priceSnapshots": [
+                      {
+                        "id": "0190aaf6-4aaf-74d0-8c91-55e5d195c1c4",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.095Z",
+                        "divisionId": "0190aaf6-4aaf-74d0-8c91-55e465bd777c"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "0190aaf6-50ac-7afe-9f64-f39bb4d9cc20",
+              "createdAt": "2024-07-13T07:19:47.628Z",
+              "status": "CANCELED",
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+              "participationDivisionInfoSnapshots": [
+                {
+                  "id": "0190aaf6-50ac-7afe-9f64-f39c8f3bd5ce",
+                  "createdAt": "2024-07-13T07:19:47.628Z",
+                  "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f39bb4d9cc20",
+                  "divisionId": "0190aaf6-4ab1-7c15-9b8c-46a13f972624",
+                  "division": {
+                    "id": "0190aaf6-4ab1-7c15-9b8c-46a13f972624",
+                    "category": "노기통합",
+                    "uniform": "NOGI",
+                    "gender": "MALE",
+                    "belt": "초급",
+                    "weight": "-50",
+                    "birthYearRangeStart": "1900",
+                    "birthYearRangeEnd": "9999",
+                    "status": "ACTIVE",
+                    "createdAt": "2024-07-13T07:19:46.097Z",
+                    "updatedAt": "2024-07-13T07:19:46.097Z",
+                    "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                    "priceSnapshots": [
+                      {
+                        "id": "0190aaf6-4ab1-7c15-9b8c-46a25b796dc0",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.097Z",
+                        "divisionId": "0190aaf6-4ab1-7c15-9b8c-46a13f972624"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "0190aaf6-50ac-7afe-9f64-f39d4dd3e8a9",
+              "createdAt": "2024-07-13T07:19:47.628Z",
+              "status": "CANCELED",
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf",
+              "participationDivisionInfoSnapshots": [
+                {
+                  "id": "0190aaf6-50ac-7afe-9f64-f39ec37e1888",
+                  "createdAt": "2024-07-13T07:19:47.628Z",
+                  "participationDivisionInfoId": "0190aaf6-50ac-7afe-9f64-f39d4dd3e8a9",
+                  "divisionId": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e",
+                  "division": {
+                    "id": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e",
+                    "category": "노기통합",
+                    "uniform": "NOGI",
+                    "gender": "MALE",
+                    "belt": "초급",
+                    "weight": "ABSOLUTE",
+                    "birthYearRangeStart": "1900",
+                    "birthYearRangeEnd": "9999",
+                    "status": "ACTIVE",
+                    "createdAt": "2024-07-13T07:19:46.097Z",
+                    "updatedAt": "2024-07-13T07:19:46.097Z",
+                    "competitionId": "0190aaf6-4aab-764c-a9a0-f221fca1f8d2",
+                    "priceSnapshots": [
+                      {
+                        "id": "0190aaf6-4ab1-7c15-9b8c-46b263ef6308",
+                        "price": 50000,
+                        "createdAt": "2024-07-13T07:19:46.097Z",
+                        "divisionId": "0190aaf6-4ab1-7c15-9b8c-46b140096b4e"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "additionaInfos": [
+            {
+              "id": "0190aaf6-50ac-7afe-9f64-f39f25f22361",
+              "createdAt": "2024-07-13T07:19:47.628Z",
+              "updatedAt": "2024-07-13T07:19:47.628Z",
+              "type": "SOCIAL_SECURITY_NUMBER",
+              "value": "123456-1234567",
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf"
+            },
+            {
+              "id": "0190aaf6-50ac-7afe-9f64-f3a0d6f10884",
+              "createdAt": "2024-07-13T07:19:47.628Z",
+              "updatedAt": "2024-07-13T07:19:47.628Z",
+              "type": "ADDRESS",
+              "value": "테스트 주소",
+              "applicationId": "0190aaf6-50ab-723d-b5a4-d005a2a421bf"
+            }
+          ]
+        }
+      }
+    }
+
+      at e2e/applications/user-application.e2e.spec.ts:1743:19
+
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:49 [32mPOST /user/applications - 201 5080 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"competitionId":"0190aaf6-53fd-729c-95c3-fad319e8507f","applicationType":"SELF","participationDivisionIds":["0190aaf6-5400-7c8d-aedf-006e568ad8d1","0190aaf6-5400-7c8d-aedf-0080842e53d5","0190aaf6-5402-7653-9fa9-29333ade1fc5","0190aaf6-5402-7653-9fa9-2943eb27d030"],"playerSnapshotCreateDto":{"name":"O4IsTJOmdsXTPY5SkZ3VMKJEWdrnR16","gender":"MALE","birth":"19980101","phoneNumber":"01012345678","belt":"화이트","network":"테스트 네트워크","team":"테스트 팀","masterName":"테스트 마스터"},"additionalInfoCreateDtos":[{"type":"SOCIAL_SECURITY_NUMBER","value":"123456-1234567"},{"type":"ADDRESS","value":"테스트 주소"}]}[39m [33m+2s[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:50 [32mPOST /user/applications/0190aaf6-59a6-7ca7-9378-dcc1990a65b4/order - 201 16338 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {}[39m [33m+154ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:50 [32mPOST /user/applications/0190aaf6-59a6-7ca7-9378-dcc1990a65b4/order/approve - 201 16232 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"orderId":"0190aaf6-5a41-7e04-a279-791fed3ef6fc_01J2NFCMZXQ10MWVF8DF1H1RMX","paymentKey":"737158a1-890b-464f-87c1-024675867820","amount":160000}[39m [33m+181ms[39m
+  console.log
+    refundDeadlineDate 2024-08-03T14:59:59.566Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:337:13)
+
+  console.log
+    now 2024-07-13T07:19:50.411Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:338:13)
+
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:50 [32mPOST /test/fake-toss-webhook - 201 242 | User-Agent: node | IP: ::1 | Body: {"eventType":"PAYMENT_STATUS_CHANGED","data":{"paymentKey":"737158a1-890b-464f-87c1-024675867820","orderId":"0190aaf6-5a41-7e04-a279-791fed3ef6fc_01J2NFCMZXQ10MWVF8DF1H1RMX","status":"PARTIAL_CANCELED"}}[39m [33m+143ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:50 [32mPOST /user/applications/0190aaf6-59a6-7ca7-9378-dcc1990a65b4/order/cancel - 201 22570 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"participationDivisionInfoIds":["0190aaf6-59a6-7ca7-9378-dcc3fb8ba356"]}[39m [33m+22ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:51 [32mPOST /user/applications - 201 5080 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"competitionId":"0190aaf6-5c18-7c56-bbef-031881493faf","applicationType":"SELF","participationDivisionIds":["0190aaf6-5c1a-7a14-ac6f-837549bf76a5","0190aaf6-5c1b-7046-817a-abd34916f663","0190aaf6-5c1c-7f52-a58d-b1b9fe964893","0190aaf6-5c1d-7ed3-9fa7-613ccf791a0d"],"playerSnapshotCreateDto":{"name":"O4IsTJOmdsXTPY5SkZ3VMKJEWdrnR16","gender":"MALE","birth":"19980101","phoneNumber":"01012345678","belt":"화이트","network":"테스트 네트워크","team":"테스트 팀","masterName":"테스트 마스터"},"additionalInfoCreateDtos":[{"type":"SOCIAL_SECURITY_NUMBER","value":"123456-1234567"},{"type":"ADDRESS","value":"테스트 주소"}]}[39m [33m+1s[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:52 [32mPOST /user/applications/0190aaf6-612f-7f6f-8ec5-2be4103c7c85/order - 201 16338 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {}[39m [33m+328ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:52 [32mPOST /user/applications/0190aaf6-612f-7f6f-8ec5-2be4103c7c85/order/approve - 201 16232 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"orderId":"0190aaf6-6272-70d5-912a-3cdc3fb47e2f_01J2NFCQ0RJ51ATQG2DG730DR4","paymentKey":"07189d89-2482-48fc-a79e-7c92f5ba57d4","amount":160000}[39m [33m+280ms[39m
+  console.log
+    refundDeadlineDate 2024-08-03T14:59:59.566Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:337:13)
+
+  console.log
+    now 2024-07-13T07:19:52.644Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:338:13)
+
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:52 [32mPOST /test/fake-toss-webhook - 201 242 | User-Agent: node | IP: ::1 | Body: {"eventType":"PAYMENT_STATUS_CHANGED","data":{"paymentKey":"07189d89-2482-48fc-a79e-7c92f5ba57d4","orderId":"0190aaf6-6272-70d5-912a-3cdc3fb47e2f_01J2NFCQ0RJ51ATQG2DG730DR4","status":"PARTIAL_CANCELED"}}[39m [33m+175ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:52 [32mPOST /user/applications/0190aaf6-612f-7f6f-8ec5-2be4103c7c85/order/cancel - 201 22570 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"participationDivisionInfoIds":["0190aaf6-612f-7f6f-8ec5-2be61bf99d5f"]}[39m [33m+19ms[39m
+  console.log
+    refundDeadlineDate 2024-08-03T14:59:59.566Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:337:13)
+
+  console.log
+    now 2024-07-13T07:19:52.807Z
+
+      at CompetitionModel.isApplicationCancelablePeriod (../src/modules/competitions/domain/model/competition.model.ts:338:13)
+
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:52 [32mPOST /test/fake-toss-webhook - 201 234 | User-Agent: node | IP: ::1 | Body: {"eventType":"PAYMENT_STATUS_CHANGED","data":{"paymentKey":"07189d89-2482-48fc-a79e-7c92f5ba57d4","orderId":"0190aaf6-6272-70d5-912a-3cdc3fb47e2f_01J2NFCQ0RJ51ATQG2DG730DR4","status":"CANCELED"}}[39m [33m+142ms[39m
+[32m[Nest][39m [33mInfo[39m	2024-07-13 16:19:52 [32mPOST /user/applications/0190aaf6-612f-7f6f-8ec5-2be4103c7c85/order/cancel - 201 22582 | User-Agent:  | IP: ::ffff:127.0.0.1 | Body: {"participationDivisionInfoIds":["0190aaf6-612f-7f6f-8ec5-2be82e7e7e22","0190aaf6-612f-7f6f-8ec5-2bea1c587ad1","0190aaf6-612f-7f6f-8ec5-2becc69d0f15"]}[39m [33m+19ms[39m
+  console.log
+    FakeToss server is closed
+
+      at FakeTossModule.onModuleDestroy (../src/modules/fake-toss/fake-toss.module.ts:25:13)
+

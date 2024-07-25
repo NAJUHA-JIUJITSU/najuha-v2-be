@@ -43,7 +43,7 @@ export class PostDummyBuilder {
     return this;
   }
 
-  public setCreatedAt(createdAt: Date): this {
+  public setcreatedAt(createdAt: Date): this {
     this.post.createdAt = createdAt;
     return this;
   }

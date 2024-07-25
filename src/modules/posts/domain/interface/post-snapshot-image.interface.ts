@@ -6,6 +6,11 @@ import { IPostSnapshot } from './post-snapshot.interface';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * PostSnapshotImage.
+ *
+ * @namespace Post
+ */
 export interface IPostSnapshotImage {
   /** UUID v7. */
   id: TId;
@@ -21,11 +26,11 @@ export interface IPostSnapshotImage {
 
   /**
    * sequence.
-   * - 이미지의 순서, 0부터 시작.
+   * - 게시물 이미지의 순서.
+   * - 0부터 시작.
    */
   sequence: number & tags.Type<'uint32'> & tags.Minimum<0>;
 
-  /** createdAt. */
   createdAt: TDateOrStringDate;
 
   image: IImage;

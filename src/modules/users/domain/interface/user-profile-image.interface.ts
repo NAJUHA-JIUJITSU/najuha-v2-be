@@ -5,6 +5,16 @@ import { IImage, IImageModelData } from '../../../images/domain/interface/image.
 // --------------------------------------------------------------
 // Base Interface
 // --------------------------------------------------------------
+/**
+ * UserProfileImage.
+ *
+ * 사용자 프로필 이미지 정보.
+ * - ImageEntity 와 UserEntity 를 연결하는 엔티티.
+ * - 실제 이미지 정보는 ImageEntity 에 저장되어 있습니다.
+ *
+ * @namespace User
+ * @erd Image
+ */
 export interface IUserProfileImage {
   /** UUID v7. */
   id: TId;
@@ -18,10 +28,8 @@ export interface IUserProfileImage {
    */
   imageId: IImage['id'];
 
-  /** createdAt */
   createdAt: TDateOrStringDate;
 
-  /** deletedAt */
   deletedAt: TDateOrStringDate | null;
 
   image: IImage;

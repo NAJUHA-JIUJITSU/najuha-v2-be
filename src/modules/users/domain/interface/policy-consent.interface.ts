@@ -4,7 +4,12 @@ import { IUser } from './user.interface';
 // --------------------------------------------------------------
 // Base Interface
 // --------------------------------------------------------------
-/** - 사용자가 동의한 약관 정보. */
+/**
+ * PolicyConsent
+ *
+ * - 사용자가 동의한 약관 정보.
+ * @namespace User
+ */
 export interface IPolicyConsent {
   /** UUID v7. */
   id: TId;

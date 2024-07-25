@@ -7,18 +7,29 @@ import { DivisionEntity } from '../competition/division.entity';
 import { PriceSnapshotEntity } from '../competition/price-snapshot.entity';
 
 /**
- * ParticipationDivisionInfoPaymentEntity
+ * ParticipationDivisionInfoPayment.
+ *
+ * ParticipationDivisionInfo 에 대한 결제 정보.
  * @namespace Application
  */
 @Entity('participation_division_info_payment')
 @Index('IDX_ParticipationDivisionInfoPayment_applicationOrderPaymentSnapshotId', ['applicationOrderPaymentSnapshotId'])
 export class ParticipationDivisionInfoPaymentEntity {
+  /**
+   * UUID v7.
+   */
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IParticipationDivisionInfoPayment['id'];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IParticipationDivisionInfoPayment['createdAt'];
 
+  /**
+   * 결제 상태.
+   * - READY: 결제 대기중
+   * - DONE: 결제 완료
+   * - CANCELED: 결제 취소
+   */
   @Column('varchar', { length: 16 })
   status!: IParticipationDivisionInfoPayment['status'];
 

@@ -38,7 +38,7 @@ export class CommentDummyBuilder {
     return this;
   }
 
-  public setCreatedAt(createdAt: Date): this {
+  public setcreatedAt(createdAt: Date): this {
     this.comment.createdAt = createdAt;
     return this;
   }

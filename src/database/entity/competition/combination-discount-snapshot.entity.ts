@@ -6,15 +6,22 @@ import { uuidv7 } from 'uuidv7';
 import { ApplicationOrderEntity } from '../application/application-order.entity';
 
 /**
- * CombinationDiscountSnapshot Entity
+ * CombinationDiscountSnapshot.
+ *
+ * 부문 조합 할인 스냅샷.
+ * - 조합 할인 규칙이 변경될때마다 스냅샷을 생성한다.
  * @namespace Competition
  */
 @Entity('combination_discount_snapshot')
 @Index('IDX_CombinationDiscountSnapshot_competitionId', ['competitionId'])
 export class CombinationDiscountSnapshotEntity {
+  /**
+   * UUID v7.
+   */
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: ICombinationDiscountSnapshot['id'];
 
+  /** 조합 할인 규칙. */
   @Column('jsonb')
   combinationDiscountRules!: ICombinationDiscountSnapshot['combinationDiscountRules'];
 

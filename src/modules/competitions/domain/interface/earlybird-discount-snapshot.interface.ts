@@ -4,6 +4,12 @@ import { TId, TDateOrStringDate, TMoneyValue } from '../../../../common/common-t
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * EarlybirdDiscountSnapshot.
+ *
+ * 얼리버드 할인 스냅샷.
+ * - 얼리버드 할인 규칙이 변경될때마다 스냅샷을 생성한다.
+ */
 export interface IEarlybirdDiscountSnapshot {
   /**  UUID v7. */
   id: TId;
@@ -22,7 +28,7 @@ export interface IEarlybirdDiscountSnapshot {
    */
   discountAmount: TMoneyValue;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
   /** Competition id. */

@@ -111,6 +111,10 @@ export class DivisionModel {
     return this._priceSnapshots[this._priceSnapshots.length - 1];
   }
 
+  get name() {
+    return `divisionId: ${this.id}, division: ${this.category} ${this.uniform} ${this.gender} ${this.belt} ${this.weight} ${this.birthYearRangeStart}~${this.birthYearRangeEnd}`;
+  }
+
   validateRegisterabelStatus() {
     if (this._status !== 'ACTIVE') {
       throw new BusinessException(

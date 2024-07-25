@@ -3,7 +3,10 @@ import { uuidv7 } from 'uuidv7';
 import { ITemporaryUser } from '../../../modules/users/domain/interface/temporary-user.interface';
 
 /**
- * TemporaryUser Entity
+ * TemporaryUser.
+ *
+ * 회원가입이 완료되지 않은 사용자.
+ * - 회원가입이 완료되면 User로 이동한다.
  * @namespace TemporaryUser
  */
 @Entity('temporary_user')

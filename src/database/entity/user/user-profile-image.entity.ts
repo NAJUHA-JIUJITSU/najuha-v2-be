@@ -5,18 +5,29 @@ import { ImageEntity } from '../image/image.entity';
 import { IUserProfileImage } from '../../../modules/users/domain/interface/user-profile-image.interface';
 
 /**
- * UserProfileImage Entity
+ * UserProfileImage.
+ *
+ * 사용자 프로필 이미지 정보.
+ * - ImageEntity 와 UserEntity 를 연결하는 엔티티.
+ * - 실제 이미지 정보는 ImageEntity 에 저장되어 있습니다.
+ *
  * @namespace User
  * @erd Image
  */
 @Entity('user_profile_image')
 export class UserProfileImageEntity {
+  /** UUID v7. */
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IUserProfileImage['id'];
 
+  /** userId */
   @Column('uuid')
   userId!: IUserProfileImage['userId'];
 
+  /**
+   * imageId
+   * - u-9-1 createImage 로 생성된 image의 id
+   */
   @Column('uuid')
   imageId!: IUserProfileImage['imageId'];
 
