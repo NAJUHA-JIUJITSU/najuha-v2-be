@@ -5,27 +5,37 @@ import { TId, TDateOrStringDate } from '../../../../common/common-types';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
-/*
+/**
+ *  RequiredAdditionalInfo.
+ *
  * 대회신청시 추가 정보 입력 규칙.
- * - ex) 주민번호, 주소
+ * - 대회사가 요청한경우에만 해당 Entity를 생성합니다.
  */
 export interface IRequiredAdditionalInfo {
   /** UUID v7. */
   id: TId;
 
-  /** Type */
+  /**
+   * 추가정보 타입가
+   *
+   * - SOCIAL_SECURITY_NUMBER : 주민등록번호
+   * - ADDRESS : 주소
+   */
   type: 'SOCIAL_SECURITY_NUMBER' | 'ADDRESS';
 
-  /** Description. */
+  /**
+   * 추가정보 설명.
+   * - 추가 정보를 수집하는 이유등을 설명합니다등
+   */
   description: string & tags.MinLength<1> & tags.MaxLength<512>;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
-  /** DeletedAT */
+  /** deletedAt*/
   deletedAt: TDateOrStringDate | null;
 
-  /** Competition Id  */
+  /** competitionId  */
   competitionId: ICompetition['id'];
 }
 

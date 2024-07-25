@@ -41,7 +41,7 @@ export class PostSnapshotDummyBuilder {
     return this;
   }
 
-  public setCreatedAt(createdAt: Date): this {
+  public setcreatedAt(createdAt: Date): this {
     this.postSnaphsot.createdAt = createdAt;
     return this;
   }

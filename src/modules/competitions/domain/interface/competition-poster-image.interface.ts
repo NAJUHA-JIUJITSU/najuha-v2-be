@@ -5,6 +5,12 @@ import { ICompetition } from './competition.interface';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * CompetitionPosterImage.
+ *
+ * - 실제 이미지에 대한 정보는 Image Entity를 통해 관리합니다.
+ * - 해당 Entity는 대회 포스터 이미지와 대회를 매핑하는 역할을 합니다.
+ */
 export interface ICompetitionPosterImage {
   /** UUID v7. */
   id: TId;
@@ -18,12 +24,14 @@ export interface ICompetitionPosterImage {
    */
   imageId: IImage['id'];
 
-  /** createdAt */
   createdAt: TDateOrStringDate;
 
   /** deletedAt */
   deletedAt: TDateOrStringDate | null;
 
+  /**
+   * 실제 이미지 정보를 담고 있는 Image Entity.
+   */
   image: IImage;
 }
 

@@ -38,7 +38,7 @@ export class PostSnapshotImageDummyBuilder {
     return this;
   }
 
-  public setCreatedAt(createdAt: Date): this {
+  public setcreatedAt(createdAt: Date): this {
     this.postSnapshotImage.createdAt = createdAt;
     return this;
   }

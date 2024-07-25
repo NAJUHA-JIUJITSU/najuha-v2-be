@@ -6,6 +6,15 @@ import { tags } from 'typia';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * PostReport.
+ *
+ * 게시글의 신고정보를 담는 Entity입니다.
+ * 신고 횟수가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경되고, 유저에게 노출되지 않습니다.
+ * 동일한 유저가 동일한 게시글을 여러 번 신고할 수 없습니다. (중복신고 불가능)
+ *
+ * @namespace Post
+ */
 export interface IPostReport {
   /** UUID v7. */
   id: TId;
@@ -24,16 +33,21 @@ export interface IPostReport {
    */
   type: TPostReportType;
 
-  /** Report Status */
+  /**
+   * 신고 상태.
+   * `ACCEPTED`상태의 신고가 10회 이상이면 해당 게시글이 `INACTIVE` 상태로 변경됩니다.
+   * - `ACCEPTED`: 신고 승인.
+   * - `REJECTED`: 신고 거부.
+   */
   status: TPostReportStatus;
 
-  /** Post Id. */
-  postId: IPost['id'];
-
-  /** User Id. */
+  /** 신고자 UserId. */
   userId: IUser['id'];
 
-  /** CreatedAt. */
+  /** 신고된 게시글의 Id. */
+  postId: IPost['id'];
+
+  /** 신고일자. */
   createdAt: TDateOrStringDate;
 }
 

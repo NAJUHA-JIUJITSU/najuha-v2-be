@@ -4,6 +4,12 @@ import { TId, TDateOrStringDate, TMoneyValue } from '../../../../common/common-t
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * PriceSnapshot.
+ *
+ * 대회 부문이 가격 스냅샷.
+ * - 대회 부문의 가격이 변경될때마다 스냅샷을 생성한다.
+ */
 export interface IPriceSnapshot {
   /** UUID v7. */
   id: TId;
@@ -11,7 +17,7 @@ export interface IPriceSnapshot {
   /** price, (원). */
   price: TMoneyValue;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
   /** Division id. */

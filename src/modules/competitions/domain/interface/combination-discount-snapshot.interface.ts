@@ -6,6 +6,12 @@ import { TId, TDateOrStringDate } from '../../../../common/common-types';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * CombinationDiscountSnapshot.
+ *
+ * 부문 조합 할인 스냅샷.
+ * - 조합 할인 규칙이 변경될때마다 스냅샷을 생성한다.
+ */
 export interface ICombinationDiscountSnapshot {
   /** UUID v7. */
   id: TId;
@@ -13,7 +19,7 @@ export interface ICombinationDiscountSnapshot {
   /** 조합 할인 규칙. */
   combinationDiscountRules: ICombinationDiscountRule[] & tags.MinItems<1>;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 
   /** Competition id. */

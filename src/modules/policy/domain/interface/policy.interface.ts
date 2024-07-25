@@ -5,7 +5,8 @@ import { tags } from 'typia';
 // Base Interface
 // ----------------------------------------------------------------------------
 /**
- * 약관.
+ * Policy.
+ *
  * - 같은 타입의 약관수정이 필요할때는 업데이트가 아닌 새로운 약관을 생성합니다.
  * - 새로운 약관이 생성될 때마다 버전을 올립니다.
  */
@@ -44,7 +45,7 @@ export interface IPolicy {
    */
   content: string & tags.MinLength<1>;
 
-  /** CreatedAt. */
+  /** createdAt. */
   createdAt: TDateOrStringDate;
 }
 

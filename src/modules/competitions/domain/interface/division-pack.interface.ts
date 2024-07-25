@@ -2,6 +2,13 @@ import { tags } from 'typia';
 import { IDivision } from './division.interface';
 import { IPriceSnapshot } from './price-snapshot.interface';
 
+/**
+ * 대회 부문 중복 정보 압축 패키지.
+ *
+ * - 대회 부문 중복 정보를 압축하여 생성할 수 있는 패키지.
+ * - divisionFactory.createDivisions 메서드를 통하여 각 요소들의 조합으로 대회 부문을 생성할 수 있다.
+ * - category x uniform x gender x belt x weight x birthYearRange x price
+ */
 export interface IDivisionPack {
   /**
    * 생성하고자 하는 카테고리 이름.

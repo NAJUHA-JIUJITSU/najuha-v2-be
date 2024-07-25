@@ -11,12 +11,15 @@ import { ICompetitionHostMap } from '../../../modules/competitions/domain/interf
 @Entity('competition_host_map')
 @Index('IDX_CompetitionHostMap_competitionId', ['competitionId'])
 export class CompetitionHostMapEntity {
+  /** UUID v7. */
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: ICompetitionHostMap['id'];
 
+  /** 주최자 User ID. */
   @Column('uuid')
   hostId!: ICompetitionHostMap['hostId'];
 
+  /** 주체 대회 ID. */
   @Column('uuid')
   competitionId!: ICompetitionHostMap['competitionId'];
 

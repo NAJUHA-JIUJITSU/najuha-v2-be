@@ -6,20 +6,33 @@ import { TId, TDateOrStringDate } from '../../../../common/common-types';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * AdditionalInfo.
+ *
+ * 대회사가 참가자에게 요구하는 추가 정보. ex) 주소, 주민등록번호 등
+ * 대회사가 요청하지 않은경우 추가 정보를 입력하지 않아도 된다.
+ */
 export interface IAdditionalInfo {
   /** UUID v7. */
   id: TId;
 
-  /**  Created at. */
+  /** createdAt.*/
   createdAt: TDateOrStringDate;
 
-  /** Updated at. */
   updatedAt: TDateOrStringDate;
 
-  /** Type. */
+  /**
+   * type.
+   * - SOCIAL_SECURITY_NUMBER: 주민등록번호
+   * - ADDRESS: 주소
+   */
   type: IRequiredAdditionalInfo['type'];
 
-  /** Value. */
+  /**
+   * value. 각 type에 해당하는 값.
+   * - SOCIAL_SECURITY_NUMBER: '123456-1234567'
+   * - ADDRESS: '서울시 강남구 테헤란로 123'
+   */
   value: string;
 
   /** Application id. */

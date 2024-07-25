@@ -21,17 +21,19 @@ import { IApplicationOrder, IApplicationOrderModelData } from './application-ord
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * Application.
+ *
+ * 대회 참가 신청 정보.
+ */
 export interface IApplication {
   /** UUID v7. */
   id: TId;
 
-  /**  Created at. */
   createdAt: TDateOrStringDate;
 
-  /** Updated at. */
   updatedAt: TDateOrStringDate;
 
-  /** Deleted at. */
   deletedAt: TDateOrStringDate | null;
 
   /**

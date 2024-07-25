@@ -86,12 +86,12 @@ export class UserDummyBuilder {
     return this;
   }
 
-  public setCreatedAt(date: Date): this {
+  public setcreatedAt(date: Date): this {
     this.user.createdAt = date;
     return this;
   }
 
-  public setUpdatedAt(date: Date): this {
+  public setupdatedAt(date: Date): this {
     this.user.updatedAt = date;
     return this;
   }

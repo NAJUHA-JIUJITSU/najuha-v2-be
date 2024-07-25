@@ -20,12 +20,17 @@ import { AdditionalInfoEntity } from './additional-info.entity';
 import { ApplicationOrderEntity } from './application-order.entity';
 
 /**
- * Application Entity
+ * Application.
+ *
+ * 대회 참가 신청 정보.
  * @namespace Application
  */
 @Entity('application')
 @Index('IDX_Application_userId_createdAt', ['userId', 'createdAt'])
 export class ApplicationEntity {
+  /**
+   * UUID v7.
+   */
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IApplication['id'];
 
@@ -38,15 +43,29 @@ export class ApplicationEntity {
   @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt!: IApplication['deletedAt'];
 
+  /**
+   * 본인신청과 대리신청을 구별하는 type.
+   * - SELF: 본인 신청
+   * - PROXY: 대리 신청
+   */
   @Column('varchar', { length: 16, default: 'SELF' })
   type!: IApplication['type'];
 
+  /**
+   * 대회 신청 상태.
+   * - READY: 결제 대기중
+   * - DONE: 결제 완료
+   * - PARTIAL_CANCELED: 부분 취소
+   * - CANCELED: 전체 취소
+   */
   @Column('varchar', { length: 16, default: 'READY' })
   status!: IApplication['status'];
 
+  /** 참가 대회 id */
   @Column('uuid')
   competitionId!: CompetitionEntity['id'];
 
+  /** 신청자 계정의 userId */
   @Column('uuid')
   userId!: UserEntity['id'];
 

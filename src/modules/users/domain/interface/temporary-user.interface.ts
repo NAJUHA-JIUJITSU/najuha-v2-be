@@ -5,6 +5,13 @@ import { IUser } from './user.interface';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * TemporaryUser.
+ *
+ * 회원가입이 완료되지 않은 사용자.
+ * - 회원가입이 완료되면 User로 이동한다.
+ * @namespace TemporaryUser
+ */
 export interface ITemporaryUser
   extends Pick<
       IUser,

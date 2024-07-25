@@ -4,6 +4,15 @@ import { IUser } from '../../../users/domain/interface/user.interface';
 // ----------------------------------------------------------------------------
 // Base Interface
 // ----------------------------------------------------------------------------
+/**
+ * Image.
+ *
+ * 이미지 정보.
+ * - bucket에 저장되는 이미지 정보.
+ * - UserImage, CompetitionPosterImage, PostImage 등 에 매핑되어 사용됩니다.
+ * - 이미지는 10분 이후에도 UserImage, CompetitionPosterImage, PostImage 등 에 매핑되지 않으면 삭제됩니다.
+ * - 이미지가 매핑된다면 linkedAt 에 매핑된 시간이 저장됩니다.
+ */
 export interface IImage {
   /**
    * UUID v7.
@@ -21,7 +30,12 @@ export interface IImage {
    */
   path: TImagePath;
 
-  /** image format. */
+  /**
+   * image format.
+   * - 'image/jpeg'
+   * - 'image/png'
+   * - 'image/webp';
+   */
   format: TImageFormat;
 
   /**

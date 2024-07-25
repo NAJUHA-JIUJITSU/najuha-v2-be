@@ -5,14 +5,18 @@ import { IPolicyConsent } from '../../../modules/users/domain/interface/policy-c
 import { uuidv7 } from 'uuidv7';
 
 /**
- * PolicyConsent Entity
+ * PolicyConsent
+ *
+ * - 사용자가 동의한 약관 정보.
  * @namespace User
  */
 @Entity('policy_consent')
 export class PolicyConsentEntity {
+  /** UUID v7. */
   @PrimaryColumn('uuid', { default: uuidv7() })
   id!: IPolicyConsent['id'];
 
+  /** 약관 동의 날짜. */
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: IPolicyConsent['createdAt'];
 

@@ -253,7 +253,7 @@ export class DataSeederService {
     const posts = users.flatMap((user) => {
       const userPosts: IPost[] = [];
       for (let i = 0; i < postCount; i++) {
-        userPosts.push(new PostDummyBuilder(user.id).setCreatedAt(timestamps[sequence++]).build());
+        userPosts.push(new PostDummyBuilder(user.id).setcreatedAt(timestamps[sequence++]).build());
       }
       return userPosts;
     });
@@ -282,7 +282,7 @@ export class DataSeederService {
       const tmp: IComment[] = [];
       users.forEach((user) => {
         for (let i = 0; i < 10; i++) {
-          tmp.push(new CommentDummyBuilder(user.id, post.id).setCreatedAt(timestamps[sequence++]).build());
+          tmp.push(new CommentDummyBuilder(user.id, post.id).setcreatedAt(timestamps[sequence++]).build());
         }
       });
       comments.push(...tmp);
@@ -295,7 +295,7 @@ export class DataSeederService {
         for (let i = 0; i < 10; i++) {
           replies.push(
             new CommentDummyBuilder(user.id, firstComment.postId, firstComment.id)
-              .setCreatedAt(timestamps[sequence++])
+              .setcreatedAt(timestamps[sequence++])
               .build(),
           );
         }
